@@ -42,7 +42,7 @@ ASSET_CATEGORIES = {
         "Crude Oil": "CL=F", "Brent Oil": "BZ=F", "Natural Gas": "NG=F",
         "Gold": "GC=F", "Silver": "SI=F", "Copper": "HG=F",
         "Corn": "ZC=F", 
-        "Wheat": "ZW=F", 
+        "Wheat": "KE=F", 
         "Soybeans": "ZS=F", 
         "Coffee": "KC=F"
     },
