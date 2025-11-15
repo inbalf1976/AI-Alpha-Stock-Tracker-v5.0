@@ -670,21 +670,21 @@ def monitor_6percent_pre_move():
 def initialize_background_threads():
     """Auto-start background threads based on persistent config."""
     
-    # Check and start Learning Daemon
-    daemon_config = load_daemon_config()
-    if daemon_config.get("enabled", False):
-        if "daemon_thread_started" not in st.session_state:
-            st.session_state.daemon_thread_started = True
+    # Use a more reliable check - initialize a flag in session state if not present
+    if "threads_initialized" not in st.session_state:
+        st.session_state.threads_initialized = True
+        
+        # Check and start Learning Daemon
+        daemon_config = load_daemon_config()
+        if daemon_config.get("enabled", False):
             threading.Thread(target=continuous_learning_daemon, daemon=True).start()
             st.session_state.setdefault('learning_log', []).append(
                 "✅ Learning Daemon auto-started on app load"
             )
-    
-    # Check and start 6%+ Monitoring
-    monitoring_config = load_monitoring_config()
-    if monitoring_config.get("enabled", False):
-        if "monitoring_thread_started" not in st.session_state:
-            st.session_state.monitoring_thread_started = True
+        
+        # Check and start 6%+ Monitoring
+        monitoring_config = load_monitoring_config()
+        if monitoring_config.get("enabled", False):
             threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
             st.session_state.setdefault('learning_log', []).append(
                 "✅ 6%+ Pre-Move Monitoring auto-started on app load"
@@ -774,16 +774,17 @@ with st.sidebar:
     with col1:
         if st.button("▶️ Start", use_container_width=True):
             save_daemon_config(True)
-            if "daemon_thread_started" not in st.session_state:
-                st.session_state.daemon_thread_started = True
-                threading.Thread(target=continuous_learning_daemon, daemon=True).start()
+            # Start thread immediately
+            threading.Thread(target=continuous_learning_daemon, daemon=True).start()
             st.success("🧠 Started!")
+            time.sleep(0.5)  # Give thread time to start
             st.rerun()
     
     with col2:
         if st.button("⏹️ Stop", use_container_width=True):
             save_daemon_config(False)
             st.success("Stopped!")
+            time.sleep(0.5)  # Give thread time to stop
             st.rerun()
 
     st.markdown("---")
@@ -812,16 +813,17 @@ with st.sidebar:
     with col1:
         if st.button("▶️ Start Alerts", use_container_width=True):
             save_monitoring_config(True)
-            if "monitoring_thread_started" not in st.session_state:
-                st.session_state.monitoring_thread_started = True
-                threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
+            # Start thread immediately
+            threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
             st.success("Started!")
+            time.sleep(0.5)  # Give thread time to start
             st.rerun()
     
     with col2:
         if st.button("⏹️ Stop Alerts", use_container_width=True):
             save_monitoring_config(False)
             st.success("Stopped!")
+            time.sleep(0.5)  # Give thread time to stop
             st.rerun()
 
 # Main content
