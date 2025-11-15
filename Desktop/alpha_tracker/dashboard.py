@@ -555,9 +555,9 @@ def show_5day_forecast(ticker, asset_name):
     
     if accuracy_log["total_predictions"] > 0:
         st.info(f"🧠 Model learns from {accuracy_log['total_predictions']} validated predictions | "
-               f"Accuracy: {(1 - accuracy_log['avg_error'])*100:.1f}% | "
-               f"Version: {metadata['version']} | "
-               f"Retrains: {metadata['retrain_count']}")
+                f"Accuracy: {(1 - accuracy_log['avg_error'])*100:.1f}% | "
+                f"Version: {metadata['version']} | "
+                f"Retrains: {metadata['retrain_count']}")
 
 # ================================
 # 17. BACKGROUND LEARNING DAEMON
@@ -565,7 +565,6 @@ def show_5day_forecast(ticker, asset_name):
 def continuous_learning_daemon():
     """Background thread that continuously validates and improves models."""
     while True:
-        # Check if daemon should still be running
         daemon_config = load_daemon_config()
         if not daemon_config.get("enabled", False):
             break
@@ -574,7 +573,6 @@ def continuous_learning_daemon():
             all_tickers = [ticker for cat in ASSET_CATEGORIES.values() for _, ticker in cat.items()]
             
             for ticker in all_tickers:
-                # Double-check daemon status
                 daemon_config = load_daemon_config()
                 if not daemon_config.get("enabled", False):
                     break
@@ -591,7 +589,7 @@ def continuous_learning_daemon():
                         )
                         train_self_learning_model(ticker, days=1, force_retrain=True)
             
-            time.sleep(3600)  # Sleep for 1 hour
+            time.sleep(3600)
             
         except Exception as e:
             st.session_state.setdefault('errors', []).append(f"Learning daemon error: {str(e)[:50]}")
@@ -645,13 +643,11 @@ def monitor_6percent_pre_move():
     alerted = set()
     
     while True:
-        # Check if monitoring should still be running
         monitoring_config = load_monitoring_config()
         if not monitoring_config.get("enabled", False):
             break
             
         for name, ticker in all_assets.items():
-            # Double-check monitoring status
             monitoring_config = load_monitoring_config()
             if not monitoring_config.get("enabled", False):
                 break
@@ -670,11 +666,9 @@ def monitor_6percent_pre_move():
 def initialize_background_threads():
     """Auto-start background threads based on persistent config."""
     
-    # Use a more reliable check - initialize a flag in session state if not present
     if "threads_initialized" not in st.session_state:
         st.session_state.threads_initialized = True
         
-        # Check and start Learning Daemon
         daemon_config = load_daemon_config()
         if daemon_config.get("enabled", False):
             threading.Thread(target=continuous_learning_daemon, daemon=True).start()
@@ -682,7 +676,6 @@ def initialize_background_threads():
                 "✅ Learning Daemon auto-started on app load"
             )
         
-        # Check and start 6%+ Monitoring
         monitoring_config = load_monitoring_config()
         if monitoring_config.get("enabled", False):
             threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
@@ -696,15 +689,15 @@ def initialize_background_threads():
 def add_header():
     st.markdown("""
     <div style='text-align:center;padding:15px;background:#1a1a1a;color:#00C853;margin-bottom:20px;border-radius:8px;'>
-        <h2 style='margin:0;'>🧠 AI - ALPHA STOCK TRACKER v4.0</h2>
-        <p style='margin:5px 0;'>True Self-Learning • Persistent 24/7 • Autonomous</p>
+    	<h2 style='margin:0;'>🧠 AI - ALPHA STOCK TRACKER v4.0</h2>
+    	<p style='margin:5px 0;'>True Self-Learning • Persistent 24/7 • Autonomous</p>
     </div>
     """, unsafe_allow_html=True)
 
 def add_footer():
     st.markdown("""
     <div style='text-align:center;padding:20px;background:#1a1a1a;color:#666;margin-top:40px;border-radius:8px;'>
-        <p style='margin:0;'>© 2025 AI - Alpha Stock Tracker | Truly Self-Learning AI with Persistent Threads</p>
+    	<p style='margin:0;'>© 2025 AI - Alpha Stock Tracker | Truly Self-Learning AI with Persistent Threads</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -758,7 +751,6 @@ with st.sidebar:
     st.markdown("---")
     st.subheader("🤖 Learning Daemon")
     
-    # Show current daemon status
     daemon_config = load_daemon_config()
     daemon_status = "🟢 RUNNING" if daemon_config.get("enabled", False) else "🔴 STOPPED"
     st.markdown(f"**Status:** {daemon_status}")
@@ -774,23 +766,21 @@ with st.sidebar:
     with col1:
         if st.button("▶️ Start", use_container_width=True):
             save_daemon_config(True)
-            # Start thread immediately
             threading.Thread(target=continuous_learning_daemon, daemon=True).start()
             st.success("🧠 Started!")
-            time.sleep(0.5)  # Give thread time to start
+            time.sleep(0.5)
             st.rerun()
     
     with col2:
         if st.button("⏹️ Stop", use_container_width=True):
             save_daemon_config(False)
             st.success("Stopped!")
-            time.sleep(0.5)  # Give thread time to stop
+            time.sleep(0.5)
             st.rerun()
 
     st.markdown("---")
     st.subheader("📡 Alert Systems")
     
-    # Show current monitoring status
     monitoring_config = load_monitoring_config()
     monitoring_status = "🟢 RUNNING" if monitoring_config.get("enabled", False) else "🔴 STOPPED"
     st.markdown(f"**6%+ Alerts:** {monitoring_status}")
@@ -813,17 +803,16 @@ with st.sidebar:
     with col1:
         if st.button("▶️ Start Alerts", use_container_width=True):
             save_monitoring_config(True)
-            # Start thread immediately
             threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
             st.success("Started!")
-            time.sleep(0.5)  # Give thread time to start
+            time.sleep(0.5)
             st.rerun()
     
     with col2:
         if st.button("⏹️ Stop Alerts", use_container_width=True):
             save_monitoring_config(False)
             st.success("Stopped!")
-            time.sleep(0.5)  # Give thread time to stop
+            time.sleep(0.5)
             st.rerun()
 
 # Main content
@@ -914,66 +903,14 @@ with st.expander("ℹ️ How Persistent Self-Learning Works"):
     - ✅ Works perfectly with UptimeRobot keeping app alive 24/7
     
     **2. Learning Daemon (All Assets)**
-    - 🔄 Validates predictions for ALL assets automatically
-    - 🧠 Decides when retraining is needed per asset
-    - ⚡ Triggers fine-tuning or full retraining autonomously
-    - 📊 Runs continuously in background (1-hour cycles)
+    - 🔄 Validates yesterday's predictions against today's actual price.
+    - 💡 Calculates model accuracy and average error.
+    - 🧠 **Auto-Retraining Logic:** Forces retraining if accuracy is low, model is too old, or market volatility changes significantly.
+    - ⏱️ Runs automatically in the background every hour (3600 seconds) to maintain model performance 24/7.
     
-    **3. 6%+ Pre-Move Alert System**
-    - 📡 Monitors ALL assets for momentum + volume spikes
-    - 🚨 Sends Telegram alerts for potential big moves
-    - 🎯 Runs independently of daemon (1-minute cycles)
-    - 💬 Prevents duplicate alerts (10-minute cooldown)
-    
-    **4. Thread Independence**
-    - ✅ Both threads run simultaneously without interference
-    - ✅ Clicking buttons doesn't stop background threads
-    - ✅ Threads check persistent config files to know if they should continue
-    - ✅ Close browser → threads keep running (with UptimeRobot)
-    
-    **5. UptimeRobot Integration**
-    - 🔄 Pings every 5 minutes keep Streamlit container alive
-    - 🚀 Threads remain active even when you're not viewing the app
-    - 💾 Configuration persists across container restarts
-    - 🧠 Auto-recovery if Streamlit Cloud restarts the app
-    
-    **6. How to Use:**
-    1. Click "▶️ Start" on Learning Daemon → Trains all assets in background
-    2. Click "▶️ Start Alerts" on Alert System → Monitors for 6%+ moves
-    3. Close the app → Both keep running (UptimeRobot maintains connection)
-    4. Reopen days later → Both still running automatically
-    5. Click "⏹️ Stop" buttons only when you want to disable them
-    
-    **7. File-Based Persistence:**
-    - `config/daemon_config.json` → Remembers if daemon should run
-    - `config/monitoring_config.json` → Remembers if alerts should run
-    - Both files survive app restarts and container recycling
+    **3. Prediction System**
+    - 📉 Uses a deep **LSTM model** for multi-day forecasting.
+    - 💾 Saves models and scalers locally (`models/`, `scalers/`) for fast reloading and persistence.
     """)
-
-# Config display
-with st.expander("⚙️ Self-Learning Configuration"):
-    st.json(LEARNING_CONFIG)
-
-# Persistent Config Files Display
-with st.expander("💾 Persistent Configuration Files"):
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("**Learning Daemon Config:**")
-        daemon_config = load_daemon_config()
-        st.json(daemon_config)
-    with col2:
-        st.markdown("**Monitoring Config:**")
-        monitoring_config = load_monitoring_config()
-        st.json(monitoring_config)
-
-# Manual refresh
-if st.button("🔄 Refresh Dashboard"):
-    st.rerun()
-
-# Errors
-if st.session_state.errors:
-    with st.expander("⚠️ System Errors"):
-        for err in st.session_state.errors[-10:]:
-            st.text(err)
 
 add_footer()
