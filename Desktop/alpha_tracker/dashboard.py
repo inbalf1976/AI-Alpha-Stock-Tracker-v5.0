@@ -696,7 +696,7 @@ def initialize_background_threads():
 def add_header():
     st.markdown("""
     <div style='text-align:center;padding:15px;background:#1a1a1a;color:#00C853;margin-bottom:20px;border-radius:8px;'>
-        <h2 style='margin:0;'>🧠 MICHA STOCKS AI TRADER v4.0</h2>
+        <h2 style='margin:0;'>🧠 AI - ALPHA STOCK TRACKER v4.0</h2>
         <p style='margin:5px 0;'>True Self-Learning • Persistent 24/7 • Autonomous</p>
     </div>
     """, unsafe_allow_html=True)
@@ -704,14 +704,14 @@ def add_header():
 def add_footer():
     st.markdown("""
     <div style='text-align:center;padding:20px;background:#1a1a1a;color:#666;margin-top:40px;border-radius:8px;'>
-        <p style='margin:0;'>© 2025 Micha Stocks | Truly Self-Learning AI with Persistent Threads</p>
+        <p style='margin:0;'>© 2025 AI - Alpha Stock Tracker | Truly Self-Learning AI with Persistent Threads</p>
     </div>
     """, unsafe_allow_html=True)
 
 # ================================
 # 21. MAIN APP
 # ================================
-st.set_page_config(page_title="Micha Stocks AI v4.0", layout="wide")
+st.set_page_config(page_title="AI - Alpha Stock Tracker v4.0", layout="wide")
 
 # 🚀 AUTO-START BACKGROUND THREADS ON APP LOAD
 initialize_background_threads()
@@ -803,7 +803,7 @@ with st.sidebar:
             pass
     
     if st.button("🧪 Test Telegram", use_container_width=True):
-        success = send_telegram_alert("✅ TEST ALERT\nMicha Stocks v4.0\nPersistent Threads Active")
+        success = send_telegram_alert("✅ TEST ALERT\nAI - Alpha Stock Tracker v4.0\nPersistent Threads Active")
         if success:
             st.success("✅ Sent!")
         else:
