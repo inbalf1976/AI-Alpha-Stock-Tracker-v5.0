@@ -32,6 +32,7 @@ tf.get_logger().setLevel('ERROR')
 # 1. CONFIG & KEYS (✅ SECURED)
 # ================================
 try:
+    # Use st.secrets or environment variables for security
     BOT_TOKEN = st.secrets.get("TELEGRAM_BOT_TOKEN") or os.getenv("TELEGRAM_BOT_TOKEN")
     CHAT_ID = st.secrets.get("TELEGRAM_CHAT_ID") or os.getenv("TELEGRAM_CHAT_ID")
     ALPHA_VANTAGE_KEY = st.secrets.get("ALPHA_VANTAGE_KEY") or os.getenv("ALPHA_VANTAGE_KEY")
@@ -1161,5 +1162,3 @@ with col2:
         st.info("No errors recorded.")
 
 add_footer()
-
-
