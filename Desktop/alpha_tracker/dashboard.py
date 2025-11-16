@@ -164,44 +164,81 @@ def get_prediction_path(ticker, date):
     return PREDICTIONS_DIR / f"{get_safe_ticker_name(ticker)}_{date}.json"
 
 # ================================
-# 9. PRICE FETCHING (✅ ENHANCED WITH FALLBACKS)
+# 9. PRICE FETCHING (✅ COMPLETELY REDESIGNED)
 # ================================
-@st.cache_data(ttl=60, show_spinner=False)
+@st.cache_data(ttl=30, show_spinner=False)  # Reduced cache time
 def get_latest_price(ticker):
-    """Fetch latest price with fallback methods for commodities."""
+    """Fetch latest price with smart fallback methods optimized for commodities."""
     try:
-        # Method 1: Try 1-minute interval (works during active trading)
-        data = yf.download(ticker, period="1d", interval="1m", progress=False)
-        if not data.empty and len(data) > 0:
-            price = float(data['Close'].iloc[-1])
-            return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        # Method 1: Try Ticker.info first (most reliable for commodities)
+        try:
+            tick = yf.Ticker(ticker)
+            info = tick.info
+            
+            # Try current market price first
+            if 'currentPrice' in info and info['currentPrice'] and info['currentPrice'] > 0:
+                price = float(info['currentPrice'])
+                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+            
+            # Try regular market price
+            if 'regularMarketPrice' in info and info['regularMarketPrice'] and info['regularMarketPrice'] > 0:
+                price = float(info['regularMarketPrice'])
+                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+            
+            # Try previous close as last resort from info
+            if 'previousClose' in info and info['previousClose'] and info['previousClose'] > 0:
+                price = float(info['previousClose'])
+                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        except:
+            pass
         
-        # Method 2: Fallback to 5-minute interval
-        data = yf.download(ticker, period="1d", interval="5m", progress=False)
-        if not data.empty and len(data) > 0:
-            price = float(data['Close'].iloc[-1])
-            return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        # Method 2: Try recent history with 5-day period (more reliable)
+        try:
+            hist = yf.download(ticker, period="5d", interval="1d", progress=False, auto_adjust=True)
+            if not hist.empty and len(hist) > 0:
+                price = float(hist['Close'].iloc[-1])
+                if price > 0:
+                    return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        except:
+            pass
         
-        # Method 3: Fallback to daily data (most reliable)
-        data = yf.download(ticker, period="5d", interval="1d", progress=False)
-        if not data.empty and len(data) > 0:
-            price = float(data['Close'].iloc[-1])
-            return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        # Method 3: Try 1-hour interval with 2-day period
+        try:
+            data = yf.download(ticker, period="2d", interval="1h", progress=False, auto_adjust=True)
+            if not data.empty and len(data) > 0:
+                price = float(data['Close'].iloc[-1])
+                if price > 0:
+                    return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        except:
+            pass
         
-        # Method 4: Use Ticker object info (alternative method)
-        tick = yf.Ticker(ticker)
-        info = tick.info
-        if 'regularMarketPrice' in info and info['regularMarketPrice']:
-            price = float(info['regularMarketPrice'])
-            return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
-        elif 'previousClose' in info and info['previousClose']:
-            price = float(info['previousClose'])
-            return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        # Method 4: Try 15-minute interval
+        try:
+            data = yf.download(ticker, period="1d", interval="15m", progress=False, auto_adjust=True)
+            if not data.empty and len(data) > 0:
+                price = float(data['Close'].iloc[-1])
+                if price > 0:
+                    return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        except:
+            pass
+        
+        # Method 5: Last resort - try history() method
+        try:
+            tick = yf.Ticker(ticker)
+            hist = tick.history(period="1d")
+            if not hist.empty and len(hist) > 0:
+                price = float(hist['Close'].iloc[-1])
+                if price > 0:
+                    return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        except:
+            pass
         
         return None
+        
     except Exception as e:
-        # Log error to session state for debugging
-        st.session_state.setdefault('errors', []).append(f"Price fetch error {ticker}: {str(e)[:50]}")
+        # Log detailed error
+        error_msg = f"All methods failed for {ticker}: {str(e)[:100]}"
+        st.session_state.setdefault('errors', []).append(error_msg)
         return None
 
 # ================================
@@ -859,12 +896,20 @@ col1, col2, col3 = st.columns([1, 3, 1])
 with col2:
     price = get_latest_price(ticker)
     if price:
+        # Display price with timestamp
+        current_time = datetime.now().strftime("%H:%M:%S")
         st.markdown(
             f"<h2 style='text-align:center;'>LIVE: <code style='font-size:1.5em;background:#333;padding:8px 16px;border-radius:8px;'>${price:.2f}</code></h2>",
             unsafe_allow_html=True
         )
+        st.caption(f"Last updated: {current_time}")
     else:
-        st.warning("⚠️ Market closed or no data")
+        st.warning("⚠️ Market closed or no data available")
+        # Show errors if any
+        if st.session_state.get('errors'):
+            with st.expander("🔍 Debug Info"):
+                for error in st.session_state['errors'][-5:]:
+                    st.text(error)
     
     if st.button("📊 Daily Recommendation", width='stretch'):
         with st.spinner("AI analyzing with self-learning..."):
