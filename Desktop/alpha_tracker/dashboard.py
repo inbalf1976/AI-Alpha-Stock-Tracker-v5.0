@@ -35,14 +35,14 @@ except:
     ALPHA_VANTAGE_KEY = None
 
 # ================================
-# 2. ASSETS
+# 2. ASSETS (✅ FIXED WHEAT TICKER)
 # ================================
 ASSET_CATEGORIES = {
     "Commodities": {
         "Crude Oil": "CL=F", "Brent Oil": "BZ=F", "Natural Gas": "NG=F",
         "Gold": "GC=F", "Silver": "SI=F", "Copper": "HG=F",
         "Corn": "ZC=F", 
-        "Wheat": "KE=F", 
+        "Wheat": "ZW=F",  # ✅ FIXED: Was KE=F, now ZW=F
         "Soybeans": "ZS=F", 
         "Coffee": "KC=F"
     },
@@ -164,17 +164,44 @@ def get_prediction_path(ticker, date):
     return PREDICTIONS_DIR / f"{get_safe_ticker_name(ticker)}_{date}.json"
 
 # ================================
-# 9. PRICE FETCHING
+# 9. PRICE FETCHING (✅ ENHANCED WITH FALLBACKS)
 # ================================
 @st.cache_data(ttl=60, show_spinner=False)
 def get_latest_price(ticker):
+    """Fetch latest price with fallback methods for commodities."""
     try:
+        # Method 1: Try 1-minute interval (works during active trading)
         data = yf.download(ticker, period="1d", interval="1m", progress=False)
-        if data.empty or len(data) == 0:
-            return None
-        price = float(data['Close'].iloc[-1])
-        return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
-    except:
+        if not data.empty and len(data) > 0:
+            price = float(data['Close'].iloc[-1])
+            return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        
+        # Method 2: Fallback to 5-minute interval
+        data = yf.download(ticker, period="1d", interval="5m", progress=False)
+        if not data.empty and len(data) > 0:
+            price = float(data['Close'].iloc[-1])
+            return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        
+        # Method 3: Fallback to daily data (most reliable)
+        data = yf.download(ticker, period="5d", interval="1d", progress=False)
+        if not data.empty and len(data) > 0:
+            price = float(data['Close'].iloc[-1])
+            return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        
+        # Method 4: Use Ticker object info (alternative method)
+        tick = yf.Ticker(ticker)
+        info = tick.info
+        if 'regularMarketPrice' in info and info['regularMarketPrice']:
+            price = float(info['regularMarketPrice'])
+            return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        elif 'previousClose' in info and info['previousClose']:
+            price = float(info['previousClose'])
+            return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        
+        return None
+    except Exception as e:
+        # Log error to session state for debugging
+        st.session_state.setdefault('errors', []).append(f"Price fetch error {ticker}: {str(e)[:50]}")
         return None
 
 # ================================
@@ -640,7 +667,6 @@ def send_telegram_alert(text):
 def monitor_6percent_pre_move():
     """Background monitoring thread for 6%+ moves."""
     all_assets = {name: ticker for cat in ASSET_CATEGORIES.values() for name, ticker in cat.items()}
-    # ALERT_HISTORY is now accessed from st.session_state, which is safer
     
     while True:
         monitoring_config = load_monitoring_config()
@@ -654,31 +680,17 @@ def monitor_6percent_pre_move():
                 
             alert = detect_pre_move_6percent(ticker, name)
             
-            # --- START FIX FOR REPETITIVE ALERTS ---
-            # Check if alert condition is met AND if this specific asset has NOT been alerted in this session
             if alert and alert["asset"] not in st.session_state['alert_history']:
-                
                 text = f"🚨 6%+ MOVE INCOMING\n{alert['asset'].upper()} {alert['direction']}\nCONFIDENCE: {alert['confidence']}%"
                 
-                # Check persistence
                 if send_telegram_alert(text):
-                    # Record the alert in session state to prevent immediate re-sending during this session
                     st.session_state['alert_history'][alert["asset"]] = {
                         "direction": alert["direction"],
                         "timestamp": datetime.now().isoformat()
                     }
-                    # We add a small delay to avoid race conditions with the Telegram API
-                    time.sleep(2)  
-                
-                # We need to rely on Streamlit's cache (ttl=60) in detect_pre_move_6percent
-                # and the session state to prevent immediate, rapid fire alerts.
-                # After 60 seconds (cache TTL), the price check will run again.
-                # The alert will only fire again if the app is re-run and the session state is cleared,
-                # or if we implement more advanced persistence (e.g., to file, which is complex for threads).
-                
-        # Wait 60 seconds (the cache TTL for the detection function) before re-checking all assets
-        time.sleep(60)  
-        # --- END FIX FOR REPETITIVE ALERTS ---
+                    time.sleep(2)
+        
+        time.sleep(60)
 
 # ================================
 # 19. AUTO-RESTART THREADS ON APP LOAD
@@ -727,21 +739,18 @@ def add_footer():
 st.set_page_config(page_title="AI - Alpha Stock Tracker v4.0", layout="wide")
 
 # ================================
-# STREAMLIT APP INITIALIZATION (NEW ADDITION)
+# STREAMLIT APP INITIALIZATION
 # ================================
 # Initialize session state for alert tracking if it doesn't exist
-# This is used by the background monitoring thread to prevent repetitive alerts
 if 'alert_history' not in st.session_state:
-    # Key: Asset Name (e.g., 'Alphabet'), Value: Alert Metadata
     st.session_state['alert_history'] = {} 
-# ================================
 
 # 🚀 AUTO-START BACKGROUND THREADS ON APP LOAD
 initialize_background_threads()
 
 add_header()
 
-# Initialize session state (existing code, moved slightly)
+# Initialize session state
 for key in ["learning_log", "errors"]:
     if key not in st.session_state:
         st.session_state[key] = []
@@ -772,7 +781,7 @@ with st.sidebar:
     else:
         st.info("No model trained yet")
     
-    if st.button("🔄 Force Retrain", use_container_width=True):
+    if st.button("🔄 Force Retrain", width='stretch'):
         with st.spinner("Retraining from scratch..."):
             train_self_learning_model(ticker, days=1, force_retrain=True)
         st.success("✅ Retrained!")
@@ -794,7 +803,7 @@ with st.sidebar:
     
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("▶️ Start", use_container_width=True):
+        if st.button("▶️ Start", width='stretch'):
             save_daemon_config(True)
             threading.Thread(target=continuous_learning_daemon, daemon=True).start()
             st.success("🧠 Started!")
@@ -802,7 +811,7 @@ with st.sidebar:
             st.rerun()
     
     with col2:
-        if st.button("⏹️ Stop", use_container_width=True):
+        if st.button("⏹️ Stop", width='stretch'):
             save_daemon_config(False)
             st.success("Stopped!")
             time.sleep(0.5)
@@ -822,7 +831,7 @@ with st.sidebar:
         except:
             pass
     
-    if st.button("🧪 Test Telegram", use_container_width=True):
+    if st.button("🧪 Test Telegram", width='stretch'):
         success = send_telegram_alert("✅ TEST ALERT\nAI - Alpha Stock Tracker v4.0\nPersistent Threads Active")
         if success:
             st.success("✅ Sent!")
@@ -831,7 +840,7 @@ with st.sidebar:
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("▶️ Start Alerts", use_container_width=True):
+        if st.button("▶️ Start Alerts", width='stretch'):
             save_monitoring_config(True)
             threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
             st.success("Started!")
@@ -839,7 +848,7 @@ with st.sidebar:
             st.rerun()
     
     with col2:
-        if st.button("⏹️ Stop Alerts", use_container_width=True):
+        if st.button("⏹️ Stop Alerts", width='stretch'):
             save_monitoring_config(False)
             st.success("Stopped!")
             time.sleep(0.5)
@@ -857,11 +866,11 @@ with col2:
     else:
         st.warning("⚠️ Market closed or no data")
     
-    if st.button("📊 Daily Recommendation", use_container_width=True):
+    if st.button("📊 Daily Recommendation", width='stretch'):
         with st.spinner("AI analyzing with self-learning..."):
             st.markdown(daily_recommendation(ticker, asset), unsafe_allow_html=True)
     
-    if st.button("📈 5-Day Self-Learning Forecast", use_container_width=True):
+    if st.button("📈 5-Day Self-Learning Forecast", width='stretch'):
         with st.spinner("Self-learning model adapting..."):
             show_5day_forecast(ticker, asset)
 
@@ -883,16 +892,16 @@ with col2:
     st.markdown("**Model Performance:**")
     perf_data = [
         {"Metric": "Average Error (last 30)", "Value": f"{accuracy_log['avg_error']:.2%}" if accuracy_log['total_predictions'] >= LEARNING_CONFIG["min_predictions_for_eval"] else "N/A"},
-        {"Metric": "Total Validated Predictions", "Value": accuracy_log["total_predictions"]},
+        {"Metric": "Total Validated Predictions", "Value": str(accuracy_log["total_predictions"])},
         {"Metric": "Training Volatility", "Value": f"{metadata['training_volatility']:.4f}"},
-        {"Metric": "Model Version", "Value": metadata["version"]},
-        {"Metric": "Retrain Count", "Value": metadata["retrain_count"]},
-        {"Metric": "Lookback Window", "Value": LEARNING_CONFIG["lookback_window"]}
+        {"Metric": "Model Version", "Value": str(metadata["version"])},
+        {"Metric": "Retrain Count", "Value": str(metadata["retrain_count"])},
+        {"Metric": "Lookback Window", "Value": str(LEARNING_CONFIG["lookback_window"])}
     ]
 
     if perf_data:
         df_perf = pd.DataFrame(perf_data)
-        st.dataframe(df_perf.set_index('Metric'), use_container_width=True)
+        st.dataframe(df_perf.set_index('Metric'), width='stretch')
     else:
         st.info("Performance data is not yet available.")
 
