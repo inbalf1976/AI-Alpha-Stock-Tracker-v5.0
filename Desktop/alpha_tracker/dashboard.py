@@ -278,13 +278,15 @@ def find_support_resistance(prices, window=20):
     support_levels = []
     resistance_levels = []
     
-    for i in range(window, len(prices) - window):
+    prices_array = prices.values  # Convert to numpy array for easier comparison
+    
+    for i in range(window, len(prices_array) - window):
         # Check if it's a local minimum (support)
-        if prices.iloc[i] == prices.iloc[i-window:i+window].min():
-            support_levels.append(prices.iloc[i])
+        if prices_array[i] == np.min(prices_array[i-window:i+window+1]):
+            support_levels.append(prices_array[i])
         # Check if it's a local maximum (resistance)
-        if prices.iloc[i] == prices.iloc[i-window:i+window].max():
-            resistance_levels.append(prices.iloc[i])
+        if prices_array[i] == np.max(prices_array[i-window:i+window+1]):
+            resistance_levels.append(prices_array[i])
     
     # Get most recent levels
     nearest_support = max(support_levels[-3:]) if support_levels else prices.min()
