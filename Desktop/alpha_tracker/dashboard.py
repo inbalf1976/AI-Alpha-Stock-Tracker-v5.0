@@ -171,35 +171,13 @@ def get_prediction_path(ticker, date):
     return PREDICTIONS_DIR / f"{get_safe_ticker_name(ticker)}_{date}.json"
 
 # ================================
-# 9. PRICE FETCHING (✅ COMPLETELY REDESIGNED)
+# 9. PRICE FETCHING (✅ REVERTED TO WORKING ORDER)
 # ================================
-@st.cache_data(ttl=30, show_spinner=False)  # Reduced cache time
+@st.cache_data(ttl=30, show_spinner=False)
 def get_latest_price(ticker):
-    """Fetch latest price with smart fallback methods optimized for commodities."""
+    """Fetch latest price - prioritizes historical data over info for accuracy."""
     try:
-        # Method 1: Try Ticker.info first (most reliable for commodities)
-        try:
-            tick = yf.Ticker(ticker)
-            info = tick.info
-            
-            # Try current market price first
-            if 'currentPrice' in info and info['currentPrice'] and info['currentPrice'] > 0:
-                price = float(info['currentPrice'])
-                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
-            
-            # Try regular market price
-            if 'regularMarketPrice' in info and info['regularMarketPrice'] and info['regularMarketPrice'] > 0:
-                price = float(info['regularMarketPrice'])
-                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
-            
-            # Try previous close as last resort from info
-            if 'previousClose' in info and info['previousClose'] and info['previousClose'] > 0:
-                price = float(info['previousClose'])
-                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
-        except:
-            pass
-        
-        # Method 2: Try recent history with 5-day period (more reliable)
+        # Method 1: Try recent history with 5-day period (most reliable for commodities)
         try:
             hist = yf.download(ticker, period="5d", interval="1d", progress=False, auto_adjust=True)
             if not hist.empty and len(hist) > 0:
@@ -209,7 +187,7 @@ def get_latest_price(ticker):
         except:
             pass
         
-        # Method 3: Try 1-hour interval with 2-day period
+        # Method 2: Try 1-hour interval with 2-day period
         try:
             data = yf.download(ticker, period="2d", interval="1h", progress=False, auto_adjust=True)
             if not data.empty and len(data) > 0:
@@ -219,7 +197,7 @@ def get_latest_price(ticker):
         except:
             pass
         
-        # Method 4: Try 15-minute interval
+        # Method 3: Try 15-minute interval
         try:
             data = yf.download(ticker, period="1d", interval="15m", progress=False, auto_adjust=True)
             if not data.empty and len(data) > 0:
@@ -229,7 +207,7 @@ def get_latest_price(ticker):
         except:
             pass
         
-        # Method 5: Last resort - try history() method
+        # Method 4: Try Ticker.history() method
         try:
             tick = yf.Ticker(ticker)
             hist = tick.history(period="1d")
@@ -240,10 +218,28 @@ def get_latest_price(ticker):
         except:
             pass
         
+        # Method 5: Last resort - Ticker.info (can be stale for commodities)
+        try:
+            tick = yf.Ticker(ticker)
+            info = tick.info
+            
+            if 'currentPrice' in info and info['currentPrice'] and info['currentPrice'] > 0:
+                price = float(info['currentPrice'])
+                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+            
+            if 'regularMarketPrice' in info and info['regularMarketPrice'] and info['regularMarketPrice'] > 0:
+                price = float(info['regularMarketPrice'])
+                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+            
+            if 'previousClose' in info and info['previousClose'] and info['previousClose'] > 0:
+                price = float(info['previousClose'])
+                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+        except:
+            pass
+        
         return None
         
     except Exception as e:
-        # Log detailed error
         error_msg = f"All methods failed for {ticker}: {str(e)[:100]}"
         st.session_state.setdefault('errors', []).append(error_msg)
         return None
@@ -684,14 +680,21 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
     return forecast, dates, model
 
 # ================================
-# 15. DAILY RECOMMENDATION
+# 16. DAILY RECOMMENDATION (✅ FIXED CONSISTENCY)
 # ================================
-def daily_recommendation(ticker, asset):
+def daily_recommendation(ticker, asset, forecast_data=None):
+    """Generate daily recommendation - uses shared forecast for consistency."""
     price = get_latest_price(ticker)
     if not price:  
         return "<span style='color:orange'>Market closed or no data</span>"
     
-    forecast, _, _ = train_self_learning_model(ticker, 1)
+    # If forecast data provided, use it (ensures consistency with 5-day forecast)
+    if forecast_data is not None:
+        forecast = forecast_data
+    else:
+        # Generate fresh prediction
+        forecast, _, _ = train_self_learning_model(ticker, 1)
+    
     if forecast is None or len(forecast) == 0:
         return "<span style='color:orange'>Unable to generate forecast</span>"
     
@@ -717,9 +720,10 @@ def daily_recommendation(ticker, asset):
     """
 
 # ================================
-# 16. 5-DAY FORECAST
+# 17. 5-DAY FORECAST (✅ FIXED CONSISTENCY)
 # ================================
 def show_5day_forecast(ticker, asset_name):
+    """Display 5-day forecast with consistent daily recommendation."""
     forecast, dates, _ = train_self_learning_model(ticker, days=5)
     if forecast is None:
         st.error("Failed to generate forecast.")
@@ -779,6 +783,11 @@ def show_5day_forecast(ticker, asset_name):
                 f"Features: {metadata.get('feature_count', 1)} | "
                 f"Version: {metadata['version']} | "
                 f"Retrains: {metadata['retrain_count']}")
+    
+    # ✅ NEW: Show daily recommendation using same forecast data for consistency
+    st.markdown("---")
+    st.markdown("### 📊 Daily Action Based on Day 1 Forecast")
+    st.markdown(daily_recommendation(ticker, asset_name, forecast_data=forecast), unsafe_allow_html=True)
 
 # ================================
 # 17. BACKGROUND LEARNING DAEMON
@@ -1070,7 +1079,8 @@ with col2:
     
     if st.button("📊 Daily Recommendation", width='stretch'):
         with st.spinner("AI analyzing with self-learning..."):
-            st.markdown(daily_recommendation(ticker, asset), unsafe_allow_html=True)
+            st.markdown(daily_recommendation(ticker, asset, forecast_data=None), unsafe_allow_html=True)
+            st.info("💡 Tip: Use '5-Day Forecast' button to see the full prediction with consistent daily action!")
     
     if st.button("📈 5-Day Self-Learning Forecast", width='stretch'):
         with st.spinner("Self-learning model adapting..."):
