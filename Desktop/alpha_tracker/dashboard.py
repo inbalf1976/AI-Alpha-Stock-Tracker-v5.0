@@ -35,26 +35,31 @@ except:
     ALPHA_VANTAGE_KEY = None
 
 # ================================
-# 2. ASSETS (✅ FIXED WHEAT TICKER)
+# 2. ASSETS (✅ UPDATED LIST)
 # ================================
 ASSET_CATEGORIES = {
+    "Tech Stocks": {
+        "Apple": "AAPL",
+        "Tesla": "TSLA",
+        "NVIDIA": "NVDA",
+        "Microsoft": "MSFT",
+        "Alphabet": "GOOGL"
+    },
+    "High Growth": {
+        "Palantir": "PLTR",
+        "MicroStrategy": "MSTR",
+        "Coinbase": "COIN"
+    },
     "Commodities": {
-        "Crude Oil": "CL=F", "Brent Oil": "BZ=F", "Natural Gas": "NG=F",
-        "Gold": "GC=F", "Silver": "SI=F", "Copper": "HG=F",
-        "Corn": "ZC=F", 
-        "Wheat": "ZW=F",  # ✅ FIXED: Was KE=F, now ZW=F
-        "Soybeans": "ZS=F", 
-        "Coffee": "KC=F"
+        "Corn Futures": "ZC=F",
+        "Gold Futures": "GC=F",
+        "Coffee Futures": "KC=F",
+        "Crude Oil": "CL=F",
+        "Wheat": "ZW=F"
     },
-    "Indices": {
-        "S&P 500": "^GSPC", "Dow Jones": "^DJI", "NASDAQ": "^IXIC", "Russell 2000": "^RUT"
-    },
-    "Currencies": {
-        "EUR/USD": "EURUSD=X", "GBP/USD": "GBPUSD=X", "USD/JPY": "USDJPY=X", "AUD/USD": "AUDUSD=X"
-    },
-    "Popular": {
-        "Tesla": "TSLA", "NVIDIA": "NVDA", "Apple": "AAPL", "Microsoft": "MSFT",
-        "Alphabet": "GOOGL", "Coinbase": "COIN", "Palantir": "PLTR"
+    "ETFs": {
+        "S&P 500 ETF": "SPY",
+        "WHEAT": "WEAT"
     }
 }
 
