@@ -547,6 +547,24 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
     df = df[feature_columns].copy()
     df = df.fillna(method='bfill').fillna(method='ffill')
     
+    feature_count = len(feature_columns)
+    
+    # ✅ FORCE RETRAIN IF FEATURE COUNT CHANGED
+    if scaler_path.exists():
+        try:
+            old_scaler = joblib.load(scaler_path)
+            if hasattr(old_scaler, 'n_features_in_') and old_scaler.n_features_in_ != feature_count:
+                # Feature count changed - delete old model and scaler
+                if model_path.exists():
+                    model_path.unlink()
+                scaler_path.unlink()
+                training_type = "full-retrain"
+                st.session_state.setdefault('learning_log', []).append(
+                    f"🔄 Feature count changed for {ticker} - forcing full retrain"
+                )
+        except:
+            pass
+    
     # Scale features
     if training_type == "full-retrain" or not scaler_path.exists():
         scaler = MinMaxScaler()
@@ -568,10 +586,22 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
     if len(X) == 0:
         return None, None, None
     
-    feature_count = len(feature_columns)
-    
+    # ✅ ENSURE MODEL ARCHITECTURE MATCHES FEATURES
     with model_cache_lock:
-        if training_type == "full-retrain":
+        # Check if existing model matches current feature count
+        model_needs_rebuild = False
+        if model_path.exists() and training_type != "full-retrain":
+            try:
+                existing_model = tf.keras.models.load_model(str(model_path))
+                if existing_model.input_shape[2] != feature_count:
+                    model_needs_rebuild = True
+                    st.session_state.setdefault('learning_log', []).append(
+                        f"🔄 Model architecture mismatch for {ticker} - rebuilding"
+                    )
+            except:
+                model_needs_rebuild = True
+        
+        if training_type == "full-retrain" or model_needs_rebuild:
             model = build_lstm_model(feature_count=feature_count)
             epochs = LEARNING_CONFIG["full_retrain_epochs"]
             
