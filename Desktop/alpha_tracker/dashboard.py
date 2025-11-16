@@ -17,6 +17,12 @@ import joblib
 import json
 from pathlib import Path
 
+# New Imports needed for the requested indicators and patterns
+# FIX: Use the 'ta' library you have installed instead of pandas_ta
+import ta
+from scipy.signal import argrelextrema
+# End New Imports
+
 # Suppress warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 warnings.filterwarnings("ignore")
@@ -76,6 +82,7 @@ for dir_path in [MODEL_DIR, SCALER_DIR, ACCURACY_DIR, METADATA_DIR, PREDICTIONS_
 # ================================
 DAEMON_CONFIG_PATH = CONFIG_DIR / "daemon_config.json"
 MONITORING_CONFIG_PATH = CONFIG_DIR / "monitoring_config.json"
+ALERT_HISTORY_PATH = CONFIG_DIR / "alert_history.json" 
 
 # ================================
 # 5. SELF-LEARNING CONFIG
@@ -91,11 +98,20 @@ LEARNING_CONFIG = {
 }
 
 # ================================
+# 5.5 ALERT DEDUPLICATION CONFIG
+# ================================
+ALERT_CONFIG = {
+    "cooldown_hours": 24,  # Wait 24h before re-alerting same asset/direction
+    "magnitude_threshold": 3.0  # Re-alert if confidence changes by 3+ percentage points
+}
+
+# ================================
 # 6. THREAD-SAFE LOCKS
 # ================================
 model_cache_lock = threading.Lock()
 accuracy_lock = threading.Lock()
 config_lock = threading.Lock()
+alert_history_lock = threading.Lock()
 
 # ================================
 # 7. PERSISTENT CONFIG MANAGEMENT
@@ -141,6 +157,53 @@ def save_monitoring_config(enabled):
     with config_lock:
         with open(MONITORING_CONFIG_PATH, 'w') as f:
             json.dump(config, f)
+
+# ================================
+# 7.5 ALERT HISTORY MANAGEMENT
+# ================================
+def load_alert_history():
+    """Load persistent alert history from file."""
+    if ALERT_HISTORY_PATH.exists():
+        try:
+            with alert_history_lock:
+                with open(ALERT_HISTORY_PATH, 'r') as f:
+                    return json.load(f)
+        except:
+            pass
+    return {}
+
+def save_alert_history(history):
+    """Save alert history to file (thread-safe)."""
+    with alert_history_lock:
+        with open(ALERT_HISTORY_PATH, 'w') as f:
+            json.dump(history, f, indent=2)
+
+def should_send_alert(asset, direction, confidence, history):
+    """
+    Enhanced deduplication logic.
+    """
+    if asset not in history:
+        return True
+    
+    last_alert = history[asset]
+    last_time = datetime.fromisoformat(last_alert["timestamp"])
+    time_diff = (datetime.now() - last_time).total_seconds() / 3600
+    
+    # RULE 1: Direction changed (UP→DOWN or DOWN→UP = significant event)
+    if last_alert["direction"] != direction:
+        return True
+    
+    # RULE 2: Magnitude significantly increased 
+    last_confidence = last_alert.get("confidence", 0)
+    magnitude_change = abs(confidence - last_confidence)
+    if magnitude_change >= ALERT_CONFIG["magnitude_threshold"]:
+        return True
+    
+    # RULE 3: Cooldown period expired
+    if time_diff >= ALERT_CONFIG["cooldown_hours"]:
+        return True
+    
+    return False
 
 # ================================
 # 8. HELPER FUNCTIONS
@@ -243,7 +306,7 @@ def validate_predictions(ticker):
                     accuracy_log["predictions"] = accuracy_log["predictions"][-50:]
                     accuracy_log["errors"] = accuracy_log["errors"][-50:]
                     accuracy_log["dates"] = accuracy_log["dates"][-50:]
-                
+                    
                 accuracy_log["avg_error"] = np.mean(accuracy_log["errors"][-30:])
                 
                 save_accuracy_log(ticker, accuracy_log)
@@ -326,25 +389,161 @@ def should_retrain(ticker, accuracy_log, metadata):
     return False, reasons
 
 # ================================
-# 13. LSTM MODEL BUILDER
+# 13. LSTM MODEL BUILDER (OPTIMIZED FOR 9 FEATURES)
 # ================================
-def build_lstm_model():
+def build_lstm_model(n_features):
+    """
+    Optimized LSTM architecture for N-feature input.
+    """
     model = Sequential([
-        LSTM(30, return_sequences=True, input_shape=(LEARNING_CONFIG["lookback_window"], 1)),
-        Dropout(0.2),
-        LSTM(30, return_sequences=False),
-        Dropout(0.2),
-        Dense(15),
+        LSTM(50, return_sequences=True, input_shape=(LEARNING_CONFIG["lookback_window"], n_features)),
+        Dropout(0.3),
+        LSTM(50, return_sequences=False),
+        Dropout(0.3),
+        Dense(25),
         Dense(1)
     ])
     model.compile(optimizer='adam', loss='mse', metrics=['mae'])
     return model
 
 # ================================
+# 13.5. CUP AND HANDLE DETECTION LOGIC
+# ================================
+def detect_cup_and_handle(df, cup_depth_min=0.20, cup_depth_max=0.60, handle_retracement=0.30):
+    """
+    Detects the Cup and Handle pattern (simplified version).
+    Returns 1.0 if detected, 0.0 otherwise.
+    """
+    df_recent = df['Close'].iloc[-200:].copy()
+    prices = df_recent.values
+    
+    minima_idx = argrelextrema(prices, np.less)[0]
+    maxima_idx = argrelextrema(prices, np.greater)[0]
+    
+    if len(maxima_idx) < 2 or len(minima_idx) < 1:
+        return 0.0
+
+    for i in range(len(maxima_idx) - 1):
+        p1_idx = maxima_idx[i]
+        p2_idx = maxima_idx[i+1]
+        
+        if p1_idx >= p2_idx:
+            continue
+            
+        trough_indices = [idx for idx in minima_idx if p1_idx < idx < p2_idx]
+        if not trough_indices:
+            continue
+            
+        trough_idx = trough_indices[np.argmin(prices[trough_indices])]
+        
+        p1_price = prices[p1_idx]
+        p2_price = prices[p2_idx]
+        trough_price = prices[trough_idx]
+        
+        if abs(p1_price - p2_price) / ((p1_price + p2_price) / 2) > 0.10:
+            continue
+            
+        peak_avg = (p1_price + p2_price) / 2
+        cup_depth = (peak_avg - trough_price) / peak_avg
+        if not (cup_depth_min <= cup_depth <= cup_depth_max):
+            continue
+            
+        handle_start_idx = p2_idx
+        handle_data = df_recent.iloc[handle_start_idx:handle_start_idx + 20]['Close']
+        
+        if len(handle_data) < 5:
+            continue
+
+        handle_peak = handle_data.max()
+        handle_trough = handle_data.min()
+        
+        handle_retracement_check = (handle_peak - handle_trough) / peak_avg
+        
+        if (handle_retracement_check < handle_retracement) and (handle_trough > trough_price):
+            return 1.0
+
+    return 0.0
+
+# ================================
+# 13.6. OPTIMAL FEATURE ENGINEERING (9 FEATURES - CORRECTED FOR 'ta' LIBRARY)
+# ================================
+def engineer_optimal_features(df):
+    """
+    Creates optimal 9-feature set for maximum LSTM accuracy, including:
+    Trend (Price_vs_SMA50), Momentum (RSI, MACD_Signal), Volatility (ATR_Normalized, Bollinger_Position), 
+    Volume (Volume_Ratio, OBV_Trend), and Pattern (CupHandle_Signal).
+    
+    Uses the 'ta' library (0.11.0) with explicit submodule calls.
+    """
+    # Ensure OHLCV data is available
+    df = df[['Open', 'High', 'Low', 'Close', 'Volume']].copy()
+    df = df.ffill().bfill()
+    
+    # === 1. TREND FEATURES ===
+    # Use ta.trend.sma
+    df['SMA_50'] = ta.trend.sma(df['Close'], window=50) 
+    df['Price_vs_SMA50'] = (df['Close'] - df['SMA_50']) / df['SMA_50']
+    
+    # === 2. MOMENTUM FEATURES ===
+    # Use ta.momentum.rsi
+    df['RSI'] = ta.momentum.rsi(df['Close'], window=14)
+    
+    # Use ta.trend.macd_diff (MACD Histogram)
+    df['MACD_Signal'] = ta.trend.macd_diff(df['Close'], window_fast=12, window_slow=26, window_sign=9)
+    
+    # === 3. VOLATILITY FEATURES ===
+    # Use ta.volatility.average_true_range
+    df['ATR'] = ta.volatility.average_true_range(df['High'], df['Low'], df['Close'], window=14)
+    df['ATR_Normalized'] = df['ATR'] / df['Close']
+    
+    # Use ta.volatility.bollinger_hband_indicator and lband_indicator to calculate position
+    df['BBL'] = ta.volatility.bollinger_lband(df['Close'], window=20, window_dev=2)
+    df['BBU'] = ta.volatility.bollinger_hband(df['Close'], window=20, window_dev=2)
+    
+    # Bollinger Position: (Close - BBL) / (BBU - BBL)
+    df['Bollinger_Position'] = (df['Close'] - df['BBL']) / (df['BBU'] - df['BBL'])
+    
+    # === 4. VOLUME FEATURES ===
+    df['Volume_MA'] = df['Volume'].rolling(20).mean()
+    df['Volume_Ratio'] = df['Volume'] / df['Volume_MA']
+    
+    # Use ta.volume.on_balance_volume
+    df['OBV'] = ta.volume.on_balance_volume(df['Close'], df['Volume'])
+    df['OBV_Trend'] = df['OBV'].pct_change(periods=10)
+    
+    # === 5. PATTERN FEATURES ===
+    # Apply Cup and Handle detection across the full history
+    df['CupHandle_Signal'] = df.apply(lambda x: detect_cup_and_handle(df), axis=1)
+    
+    # Define optimal feature set (9 features)
+    OPTIMAL_FEATURES = [
+        'Close',              # Target variable (must be the first column for scaling/inverse transform)
+        'Price_vs_SMA50',     # Trend position
+        'RSI',                # Momentum
+        'MACD_Signal',        # Trend strength (MACD Histogram)
+        'ATR_Normalized',     # Volatility percentage
+        'Bollinger_Position', # Overbought/oversold
+        'Volume_Ratio',       # Volume spike detection
+        'OBV_Trend',          # Money flow trend
+        'CupHandle_Signal'    # Pattern detection
+    ]
+    
+    # Drop intermediate columns before returning
+    df = df.drop(columns=['SMA_50', 'BBL', 'BBU', 'ATR', 'OBV', 'Volume_MA'], errors='ignore')
+    
+    # Drop NaN rows (will remove initial rows where indicators cannot be calculated)
+    df = df.dropna()
+    
+    # Ensure all required features are present
+    df_features = df[OPTIMAL_FEATURES].copy()
+    
+    return df_features, len(OPTIMAL_FEATURES)
+
+# ================================
 # 14. SELF-LEARNING TRAINING SYSTEM
 # ================================
 def train_self_learning_model(ticker, days=5, force_retrain=False):
-    """Fully autonomous self-learning training system."""
+    """Fully autonomous self-learning training system with multivariate features (9-Features)."""
     
     model_path = get_model_path(ticker)
     scaler_path = get_scaler_path(ticker)
@@ -369,29 +568,37 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
             )
     
     try:
-        df = yf.download(ticker, period="1y", progress=False) 
-        if len(df) < 100:
+        # Download data (need at least 1 year for indicators)
+        df = yf.download(ticker, period="1y", progress=False)
+        if len(df) < 200:
             return None, None, None
     except:
         return None, None, None
 
-    df = df[['Close']].copy()
-    df = df.ffill().bfill()
+    # --- Feature Engineering (Use 9 Optimal Features) ---
+    df_features, N_FEATURES = engineer_optimal_features(df)
     
+    if len(df_features) < LEARNING_CONFIG["lookback_window"]:
+         return None, None, None
+
     if training_type == "full-retrain" or not scaler_path.exists():
         scaler = MinMaxScaler()
-        scaler.fit(df[['Close']])
+        # Scale all 9 features together
+        scaler.fit(df_features) 
         joblib.dump(scaler, scaler_path)
     else:
         scaler = joblib.load(scaler_path)
     
-    scaled = scaler.transform(df[['Close']])
+    # Scale the 9-feature DataFrame
+    scaled = scaler.transform(df_features)
     
     X, y = [], []
     lookback = LEARNING_CONFIG["lookback_window"]
+    
+    # Reshaping for LSTM - multivariate input
     for i in range(lookback, len(scaled)):
-        X.append(scaled[i-lookback:i])
-        y.append(scaled[i])
+        X.append(scaled[i-lookback:i]) # X is now (60 days, 9 features)
+        y.append(scaled[i, 0]) # y target remains the scaled Close price (index 0)
     X, y = np.array(X), np.array(y)
     
     if len(X) == 0:
@@ -399,7 +606,8 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
     
     with model_cache_lock:
         if training_type == "full-retrain":
-            model = build_lstm_model()
+            # Build model for N_FEATURES (9)
+            model = build_lstm_model(N_FEATURES)
             epochs = LEARNING_CONFIG["full_retrain_epochs"]
             
             model.fit(X, y, epochs=epochs, batch_size=32, verbose=0, 
@@ -408,11 +616,17 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
             
             metadata["retrain_count"] += 1
             st.session_state.setdefault('learning_log', []).append(
-                f"🧠 Full retrain #{metadata['retrain_count']} for {ticker} completed"
+                f"🧠 Full retrain #{metadata['retrain_count']} for {ticker} completed on {N_FEATURES} features"
             )
         else:
             try:
+                # Load model
                 model = tf.keras.models.load_model(str(model_path))
+                
+                # Check model compatibility
+                if model.input_shape[-1] != N_FEATURES:
+                    raise ValueError("Model input shape mismatch, forcing full retrain.")
+                    
                 epochs = LEARNING_CONFIG["fine_tune_epochs"]
                 
                 recent_size = int(len(X) * 0.3)
@@ -420,12 +634,17 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
                           epochs=epochs, batch_size=32, verbose=0)
                 
                 st.session_state.setdefault('learning_log', []).append(
-                    f"⚡ Fine-tuned {ticker} on recent data"
+                    f"⚡ Fine-tuned {ticker} on recent data (using {N_FEATURES} features)"
                 )
             except:
-                model = build_lstm_model()
+                # If loading fails, force new model build
+                model = build_lstm_model(N_FEATURES)
+                metadata["retrain_count"] += 1
                 model.fit(X, y, epochs=LEARNING_CONFIG["full_retrain_epochs"], 
                           batch_size=32, verbose=0, validation_split=0.1)
+                st.session_state.setdefault('learning_log', []).append(
+                    f"⚠️ Model error/mismatch. Full retrain #{metadata['retrain_count']} completed on {N_FEATURES} features."
+                )
         
         try:
             model.save(str(model_path))
@@ -439,14 +658,39 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
         metadata["last_accuracy"] = accuracy_log["avg_error"]
         save_metadata(ticker, metadata)
     
-    last = scaled[-lookback:].reshape(1, lookback, 1)
-    preds = []
-    for _ in range(days):
-        pred = model.predict(last, verbose=0)
-        preds.append(pred[0, 0])
-        last = np.append(last[:, 1:, :], pred.reshape(1, 1, 1), axis=1)
+    # --- Prediction Block (Multi-step forecast) ---
     
-    forecast = scaler.inverse_transform(np.array(preds).reshape(-1, 1)).flatten()
+    # Use the last 'lookback' rows of the scaled, multi-feature data for prediction start
+    last_scaled_features = scaled[-lookback:].reshape(1, lookback, N_FEATURES)
+    preds = []
+    
+    # We must predict for the number of required days
+    for _ in range(days):
+        pred = model.predict(last_scaled_features, verbose=0)
+        
+        # The LSTM predicts the SCALED Close Price (index 0).
+        preds.append(pred[0, 0])
+        
+        # Simulate the next input for the rolling prediction:
+        # 1. Create a new feature vector for the predicted day.
+        new_feature_vector = np.zeros((1, 1, N_FEATURES))
+        # 2. Place the predicted CLOSE price into the first feature column (index 0)
+        new_feature_vector[0, 0, 0] = pred[0, 0] 
+        # 3. For the other N_FEATURES-1 features (indicators), we simply carry forward 
+        # the last known values, as forecasting indicators is complex.
+        # This simplifies the multi-day forecast.
+        new_feature_vector[0, 0, 1:] = last_scaled_features[0, -1, 1:] 
+        
+        # 4. Update the lookback array for the next prediction
+        last_scaled_features = np.append(last_scaled_features[:, 1:, :], new_feature_vector, axis=1)
+
+    # Convert scaled predictions back to actual dollar values
+    # Create a dummy array with 0s for the other N_FEATURES-1 features for inverse_transform
+    dummy_pred_array = np.zeros((len(preds), N_FEATURES))
+    dummy_pred_array[:, 0] = np.array(preds).flatten() # Put predictions in the CLOSE column (index 0)
+
+    # Inverse transform and take only the CLOSE price (index 0)
+    forecast = scaler.inverse_transform(dummy_pred_array)[:, 0] 
     
     tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
     record_prediction(ticker, forecast[0], tomorrow)
@@ -461,7 +705,9 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
     
     tf.keras.backend.clear_session()
     
-    return forecast, dates, model
+    # Returning the trained model (or loaded model) is unnecessary here, changed return signature
+    return forecast, dates, N_FEATURES
+
 
 # ================================
 # 15. DAILY RECOMMENDATION
@@ -471,7 +717,8 @@ def daily_recommendation(ticker, asset):
     if not price:  
         return "<span style='color:orange'>Market closed or no data</span>"
     
-    forecast, _, _ = train_self_learning_model(ticker, 1)
+    # Note: train_self_learning_model returns N_FEATURES as the third value now.
+    forecast, _, N_FEATURES = train_self_learning_model(ticker, 1)
     if forecast is None or len(forecast) == 0:
         return "<span style='color:orange'>Unable to generate forecast</span>"
     
@@ -485,7 +732,7 @@ def daily_recommendation(ticker, asset):
     
     learning_status = ""
     if accuracy_log["total_predictions"] > 0:
-        learning_status = f"<p><small>Model Accuracy: {(1 - accuracy_log['avg_error'])*100:.1f}% | Predictions: {accuracy_log['total_predictions']} | Version: {metadata['version']}</small></p>"
+        learning_status = f"<p><small>Model Accuracy: {(1 - accuracy_log['avg_error'])*100:.1f}% | Features: {N_FEATURES} | Version: {metadata['version']}</small></p>"
     
     return f"""
     <div style="background:#1a1a1a;padding:20px;border-radius:12px;border-left:6px solid {color};color:#fff;margin:15px 0;">
@@ -500,7 +747,8 @@ def daily_recommendation(ticker, asset):
 # 16. 5-DAY FORECAST
 # ================================
 def show_5day_forecast(ticker, asset_name):
-    forecast, dates, _ = train_self_learning_model(ticker, days=5)
+    # Note: train_self_learning_model returns N_FEATURES as the third value now.
+    forecast, dates, N_FEATURES = train_self_learning_model(ticker, days=5)
     if forecast is None:
         st.error("Failed to generate forecast.")
         return
@@ -556,6 +804,7 @@ def show_5day_forecast(ticker, asset_name):
     if accuracy_log["total_predictions"] > 0:
         st.info(f"🧠 Model learns from {accuracy_log['total_predictions']} validated predictions | "
                 f"Accuracy: {(1 - accuracy_log['avg_error'])*100:.1f}% | "
+                f"Features: {N_FEATURES} | "
                 f"Version: {metadata['version']} | "
                 f"Retrains: {metadata['retrain_count']}")
 
@@ -596,7 +845,7 @@ def continuous_learning_daemon():
             time.sleep(600)
 
 # ================================
-# 18. 6%+ DETECTION
+# 18. 6%+ DETECTION (ENHANCED)
 # ================================
 @st.cache_data(ttl=60, show_spinner=False)
 def detect_pre_move_6percent(ticker, name):
@@ -638,9 +887,8 @@ def send_telegram_alert(text):
         return False
 
 def monitor_6percent_pre_move():
-    """Background monitoring thread for 6%+ moves."""
+    """Enhanced background monitoring thread with smart deduplication."""
     all_assets = {name: ticker for cat in ASSET_CATEGORIES.values() for name, ticker in cat.items()}
-    # ALERT_HISTORY is now accessed from st.session_state, which is safer
     
     while True:
         monitoring_config = load_monitoring_config()
@@ -654,31 +902,36 @@ def monitor_6percent_pre_move():
                 
             alert = detect_pre_move_6percent(ticker, name)
             
-            # --- START FIX FOR REPETITIVE ALERTS ---
-            # Check if alert condition is met AND if this specific asset has NOT been alerted in this session
-            if alert and alert["asset"] not in st.session_state['alert_history']:
+            if alert:
+                # Load persistent alert history
+                history = load_alert_history()
                 
-                text = f"🚨 6%+ MOVE INCOMING\n{alert['asset'].upper()} {alert['direction']}\nCONFIDENCE: {alert['confidence']}%"
-                
-                # Check persistence
-                if send_telegram_alert(text):
-                    # Record the alert in session state to prevent immediate re-sending during this session
-                    st.session_state['alert_history'][alert["asset"]] = {
-                        "direction": alert["direction"],
-                        "timestamp": datetime.now().isoformat()
-                    }
-                    # We add a small delay to avoid race conditions with the Telegram API
-                    time.sleep(2)  
-                
-                # We need to rely on Streamlit's cache (ttl=60) in detect_pre_move_6percent
-                # and the session state to prevent immediate, rapid fire alerts.
-                # After 60 seconds (cache TTL), the price check will run again.
-                # The alert will only fire again if the app is re-run and the session state is cleared,
-                # or if we implement more advanced persistence (e.g., to file, which is complex for threads).
-                
-        # Wait 60 seconds (the cache TTL for the detection function) before re-checking all assets
-        time.sleep(60)  
-        # --- END FIX FOR REPETITIVE ALERTS ---
+                # Check if we should send this alert (deduplication logic)
+                if should_send_alert(
+                    alert["asset"], 
+                    alert["direction"], 
+                    alert["confidence"], 
+                    history
+                ):
+                    text = f"🚨 6%+ MOVE INCOMING\n{alert['asset'].upper()} {alert['direction']}\nCONFIDENCE: {alert['confidence']}%"
+                    
+                    if send_telegram_alert(text):
+                        # Update persistent history with new alert
+                        history[alert["asset"]] = {
+                            "direction": alert["direction"],
+                            "confidence": alert["confidence"],
+                            "timestamp": datetime.now().isoformat()
+                        }
+                        save_alert_history(history)
+                        
+                        # Log to session state for UI display
+                        st.session_state.setdefault('learning_log', []).append(
+                            f"📡 Alert sent: {alert['asset']} {alert['direction']} ({alert['confidence']}%)"
+                        )
+                        
+                        time.sleep(2)
+            
+        time.sleep(60)
 
 # ================================
 # 19. AUTO-RESTART THREADS ON APP LOAD
@@ -709,39 +962,33 @@ def initialize_background_threads():
 def add_header():
     st.markdown("""
     <div style='text-align:center;padding:15px;background:#1a1a1a;color:#00C853;margin-bottom:20px;border-radius:8px;'>
-    	<h2 style='margin:0;'>🧠 AI - ALPHA STOCK TRACKER v4.0</h2>
-    	<p style='margin:5px 0;'>True Self-Learning • Persistent 24/7 • Autonomous</p>
+        <h2 style='margin:0;'>🧠 AI - ALPHA STOCK TRACKER v4.2 (9 Optimal Features)</h2>
+        <p style='margin:5px 0;'>Enhanced Accuracy • 9-Feature LSTM • Smart Alerts • Persistent 24/7</p>
     </div>
     """, unsafe_allow_html=True)
 
 def add_footer():
     st.markdown("""
     <div style='text-align:center;padding:20px;background:#1a1a1a;color:#666;margin-top:40px;border-radius:8px;'>
-    	<p style='margin:0;'>© 2025 AI - Alpha Stock Tracker | Truly Self-Learning AI with Persistent Threads</p>
+        <p style='margin:0;'>© 2025 AI - Alpha Stock Tracker v4.2 | 9 Optimal Features: Trend + Momentum + Volatility + Volume + Patterns</p>
     </div>
     """, unsafe_allow_html=True)
 
 # ================================
 # 21. MAIN APP
 # ================================
-st.set_page_config(page_title="AI - Alpha Stock Tracker v4.0", layout="wide")
+st.set_page_config(page_title="AI - Alpha Stock Tracker v4.2", layout="wide")
 
-# ================================
-# STREAMLIT APP INITIALIZATION (NEW ADDITION)
-# ================================
-# Initialize session state for alert tracking if it doesn't exist
-# This is used by the background monitoring thread to prevent repetitive alerts
+# Initialize session state
 if 'alert_history' not in st.session_state:
-    # Key: Asset Name (e.g., 'Alphabet'), Value: Alert Metadata
-    st.session_state['alert_history'] = {} 
-# ================================
+    st.session_state['alert_history'] = {}
 
 # 🚀 AUTO-START BACKGROUND THREADS ON APP LOAD
 initialize_background_threads()
 
 add_header()
 
-# Initialize session state (existing code, moved slightly)
+# Initialize session state
 for key in ["learning_log", "errors"]:
     if key not in st.session_state:
         st.session_state[key] = []
@@ -765,6 +1012,15 @@ with st.sidebar:
         st.metric("Model Version", f"v{metadata['version']}")
         st.metric("Retrains", metadata["retrain_count"])
         
+        # Determine number of features used by the latest model/scaler
+        try:
+            scaler = joblib.load(get_scaler_path(ticker))
+            N_FEATURES_USED = scaler.n_features_in_
+        except:
+            N_FEATURES_USED = "N/A"
+            
+        st.metric("Features Used", N_FEATURES_USED)
+        
         if accuracy_log["total_predictions"] > 0:
             acc_pct = (1 - accuracy_log["avg_error"]) * 100
             st.metric("Accuracy", f"{acc_pct:.1f}%")
@@ -773,7 +1029,7 @@ with st.sidebar:
         st.info("No model trained yet")
     
     if st.button("🔄 Force Retrain", use_container_width=True):
-        with st.spinner("Retraining from scratch..."):
+        with st.spinner("Retraining from scratch (9 Features)..."):
             train_self_learning_model(ticker, days=1, force_retrain=True)
         st.success("✅ Retrained!")
         st.rerun()
@@ -794,7 +1050,7 @@ with st.sidebar:
     
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("▶️ Start", use_container_width=True):
+        if st.button("▶️ Start", key="start_daemon", use_container_width=True):
             save_daemon_config(True)
             threading.Thread(target=continuous_learning_daemon, daemon=True).start()
             st.success("🧠 Started!")
@@ -802,18 +1058,22 @@ with st.sidebar:
             st.rerun()
     
     with col2:
-        if st.button("⏹️ Stop", use_container_width=True):
+        if st.button("⏹️ Stop", key="stop_daemon", use_container_width=True):
             save_daemon_config(False)
             st.success("Stopped!")
             time.sleep(0.5)
             st.rerun()
 
     st.markdown("---")
-    st.subheader("📡 Alert Systems")
+    st.subheader("📡 Smart Alert System")
     
     monitoring_config = load_monitoring_config()
     monitoring_status = "🟢 RUNNING" if monitoring_config.get("enabled", False) else "🔴 STOPPED"
-    st.markdown(f"**6%+ Alerts:** {monitoring_status}")
+    st.markdown(f"**Status:** {monitoring_status}")
+    
+    # Display alert configuration
+    st.caption(f"⏱️ Cooldown: {ALERT_CONFIG['cooldown_hours']}h")
+    st.caption(f"📊 Magnitude Threshold: {ALERT_CONFIG['magnitude_threshold']}%")
     
     if monitoring_config.get("last_started"):
         try:
@@ -822,8 +1082,20 @@ with st.sidebar:
         except:
             pass
     
-    if st.button("🧪 Test Telegram", use_container_width=True):
-        success = send_telegram_alert("✅ TEST ALERT\nAI - Alpha Stock Tracker v4.0\nPersistent Threads Active")
+    # Show recent alerts from persistent storage
+    alert_history = load_alert_history()
+    if alert_history:
+        st.markdown("**Recent Alerts:**")
+        # Display the last 5 alerts
+        for asset, data in list(alert_history.items())[-5:]:
+            try:
+                alert_time = datetime.fromisoformat(data["timestamp"])
+                st.caption(f"• {asset}: {data['direction']} ({data['confidence']}%) - {alert_time.strftime('%H:%M')}")
+            except:
+                pass
+    
+    if st.button("🧪 Test Telegram", key="test_telegram", use_container_width=True):
+        success = send_telegram_alert("✅ TEST ALERT\nAI - Alpha Stock Tracker v4.2\nSmart Alert System Active")
         if success:
             st.success("✅ Sent!")
         else:
@@ -831,7 +1103,7 @@ with st.sidebar:
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("▶️ Start Alerts", use_container_width=True):
+        if st.button("▶️ Start Alerts", key="start_alerts", use_container_width=True):
             save_monitoring_config(True)
             threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
             st.success("Started!")
@@ -839,7 +1111,7 @@ with st.sidebar:
             st.rerun()
     
     with col2:
-        if st.button("⏹️ Stop Alerts", use_container_width=True):
+        if st.button("⏹️ Stop Alerts", key="stop_alerts", use_container_width=True):
             save_monitoring_config(False)
             st.success("Stopped!")
             time.sleep(0.5)
@@ -874,26 +1146,20 @@ col1, col2 = st.columns(2)
 with col1:
     st.markdown("**Recent Learning Events:**")
     if st.session_state.learning_log:
+        # Show the last 10 log entries
         for log_entry in st.session_state.learning_log[-10:]:
             st.text(log_entry)
     else:
-        st.info("No learning activity yet. Start making predictions!")
-
+        st.info("No learning activity yet. Start making predictions or force a retrain.")
+        
 with col2:
-    st.markdown("**Model Performance:**")
-    perf_data = [
-        {"Metric": "Average Error (last 30)", "Value": f"{accuracy_log['avg_error']:.2%}" if accuracy_log['total_predictions'] >= LEARNING_CONFIG["min_predictions_for_eval"] else "N/A"},
-        {"Metric": "Total Validated Predictions", "Value": accuracy_log["total_predictions"]},
-        {"Metric": "Training Volatility", "Value": f"{metadata['training_volatility']:.4f}"},
-        {"Metric": "Model Version", "Value": metadata["version"]},
-        {"Metric": "Retrain Count", "Value": metadata["retrain_count"]},
-        {"Metric": "Lookback Window", "Value": LEARNING_CONFIG["lookback_window"]}
-    ]
-
-    if perf_data:
-        df_perf = pd.DataFrame(perf_data)
-        st.dataframe(df_perf.set_index('Metric'), use_container_width=True)
+    st.markdown("**Errors/Warnings:**")
+    if st.session_state.errors:
+        for error_entry in st.session_state.errors[-10:]:
+            st.error(error_entry)
     else:
-        st.info("Performance data is not yet available.")
+        st.info("No errors recorded.")
 
 add_footer()
+
+
