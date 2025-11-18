@@ -903,7 +903,7 @@ def detect_pre_move_6percent(ticker, name):
             direction = "UP" if recent_momentum > 0 else "DOWN"
             confidence = min(98, 60 + score)
             
-            logger.info(f"🔮 PREDICTIVE 6%+ alert: {name} {direction} (confidence: {confidence}%, factors: {', '.join(factors)})")
+            logger.info(f"[PREDICTIVE] 6%+ alert: {name} {direction} (confidence: {confidence}%, factors: {', '.join(factors)})")
             
             return {
                 "asset": name,
@@ -935,7 +935,7 @@ def send_telegram_alert(text):
         return False
 
 def monitor_6percent_pre_move():
-    logger.info("🔮 Predictive 6%+ monitoring started")
+    logger.info("[PREDICTIVE] 6%+ monitoring started")
     all_assets = {name: ticker for cat in ASSET_CATEGORIES.values() for name, ticker in cat.items()}
     
     while True:
@@ -988,7 +988,7 @@ def monitor_6percent_pre_move():
                                 "timestamp": datetime.now().isoformat(),
                                 "confidence": alert['confidence']
                             }
-                            logger.info(f"🔮 Predictive alert sent for {name}")
+                            logger.info(f"[PREDICTIVE] Alert sent for {name}")
                             time.sleep(2)
                     
                     time.sleep(1)
