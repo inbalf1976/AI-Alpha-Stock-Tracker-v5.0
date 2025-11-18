@@ -435,7 +435,10 @@ def should_retrain(ticker, accuracy_log, metadata):
         
         try:
             df = yf.download(ticker, period="30d", progress=False)
-            if len(df) > 5:
+            if df is not None and len(df) > 5:
+                # Handle MultiIndex
+                if isinstance(df.columns, pd.MultiIndex):
+                    df.columns = df.columns.get_level_values(0)
                 current_vol = df['Close'].pct_change().std()
                 training_vol = metadata.get("training_volatility", 0)
                 if training_vol > 0:
@@ -492,12 +495,12 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
         if reasons:
             st.session_state.setdefault('learning_log', []).append(f"🔄 Retraining {ticker}: {', '.join(reasons)}")
         
-        # Download data
+        # Download data with proper None checks
         df = None
         for attempt in range(3):
             try:
                 df = yf.download(ticker, period="1y", progress=False)
-                if len(df) >= 100:
+                if df is not None and len(df) >= 100:
                     break
                 time.sleep(2)
             except Exception as e:
@@ -511,11 +514,14 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
                       ticker=ticker, user_message=f"Not enough data: {ticker}", show_to_user=False)
             return None, None, None
         
-        # Handle MultiIndex columns from yfinance
+        # Handle MultiIndex columns from yfinance BEFORE accessing columns
         if isinstance(df.columns, pd.MultiIndex):
             df.columns = df.columns.get_level_values(0)
         
-        df = df[['Close']].copy().ffill().bfill()
+        df = df[['Close']].copy()
+        
+        # Use new pandas methods instead of deprecated fillna(method=...)
+        df = df.ffill().bfill()
         
         # Check for NaN values properly - convert to numpy to avoid Series issues
         if df['Close'].isna().values.any():
@@ -571,7 +577,18 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
                         recent_size = int(len(X) * 0.3)
                         model.fit(X[-recent_size:], y[-recent_size:], epochs=epochs, batch_size=32, verbose=0)
                         st.session_state.setdefault('learning_log', []).append(f"⚡ Fine-tuned {ticker}")
-                    except:
+                    except (OSError, IOError) as e:
+                        # Model file corrupted or missing - do full retrain
+                        log_error(ErrorSeverity.WARNING, "train_self_learning_model", e, ticker=ticker, 
+                                  user_message=f"Model load failed, retraining {ticker}", show_to_user=False)
+                        model = build_lstm_model()
+                        if model is None:
+                            return None, None, None
+                        model.fit(X, y, epochs=LEARNING_CONFIG["full_retrain_epochs"], batch_size=32, verbose=0, validation_split=0.1)
+                    except Exception as e:
+                        # Other errors - also do full retrain
+                        log_error(ErrorSeverity.WARNING, "train_self_learning_model", e, ticker=ticker, 
+                                  user_message=f"Fine-tune failed, retraining {ticker}", show_to_user=False)
                         model = build_lstm_model()
                         if model is None:
                             return None, None, None
@@ -579,8 +596,10 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
                 
                 try:
                     model.save(str(model_path))
+                    logger.info(f"Model saved: {ticker}")
                 except Exception as e:
                     log_error(ErrorSeverity.ERROR, "train_self_learning_model", e, ticker=ticker, user_message="Model save failed")
+                    # Continue anyway - model is in memory
                 
                 metadata["trained_date"] = datetime.now().isoformat()
                 metadata["training_samples"] = len(X)
@@ -681,7 +700,11 @@ def show_5day_forecast(ticker, asset_name):
         fig = go.Figure()
         
         try:
-            hist = yf.download(ticker, period="30d", progress=False)['Close']
+            hist = yf.download(ticker, period="30d", progress=False)
+            # Handle MultiIndex columns
+            if isinstance(hist.columns, pd.MultiIndex):
+                hist.columns = hist.columns.get_level_values(0)
+            hist = hist['Close']
             fig.add_trace(go.Scatter(x=hist.index, y=hist.values, mode='lines', name='Historical', line=dict(color='#888')))
         except Exception as e:
             log_error(ErrorSeverity.WARNING, "show_5day_forecast", e, ticker=ticker, user_message="No historical data", show_to_user=False)
@@ -753,8 +776,12 @@ def continuous_learning_daemon():
 def detect_pre_move_6percent(ticker, name):
     try:
         data = yf.download(ticker, period="1d", interval="1m", progress=False)
-        if len(data) < 60:
+        if data is None or len(data) < 60:
             return None
+
+        # Handle MultiIndex
+        if isinstance(data.columns, pd.MultiIndex):
+            data.columns = data.columns.get_level_values(0)
 
         close = data['Close'].values
         volume = data['Volume'].values
@@ -824,13 +851,20 @@ def monitor_6percent_pre_move():
 def initialize_background_threads():
     if "threads_initialized" not in st.session_state:
         st.session_state.threads_initialized = True
+        
+        # Initialize all session state keys BEFORE starting threads
+        st.session_state.setdefault('learning_log', [])
+        st.session_state.setdefault('alert_history', {})
+        st.session_state.setdefault('errors', [])
+        st.session_state.setdefault('error_logs', [])
+        
         logger.info("Initializing threads")
         
         try:
             daemon_config = load_daemon_config()
             if daemon_config.get("enabled", False):
                 threading.Thread(target=continuous_learning_daemon, daemon=True).start()
-                st.session_state.setdefault('learning_log', []).append("✅ Learning Daemon auto-started")
+                st.session_state['learning_log'].append("✅ Learning Daemon auto-started")
                 logger.info("Daemon started")
         except Exception as e:
             log_error(ErrorSeverity.ERROR, "initialize_background_threads", e, user_message="Daemon start failed")
@@ -839,7 +873,7 @@ def initialize_background_threads():
             monitoring_config = load_monitoring_config()
             if monitoring_config.get("enabled", False):
                 threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
-                st.session_state.setdefault('learning_log', []).append("✅ 6%+ Monitoring auto-started")
+                st.session_state['learning_log'].append("✅ 6%+ Monitoring auto-started")
                 logger.info("Monitoring started")
         except Exception as e:
             log_error(ErrorSeverity.ERROR, "initialize_background_threads", e, user_message="Monitoring start failed")
@@ -892,6 +926,7 @@ def add_footer():
 # ================================
 st.set_page_config(page_title="AI - Alpha Stock Tracker v4.0", layout="wide")
 
+# Initialize session state BEFORE threads
 if 'alert_history' not in st.session_state:
     st.session_state['alert_history'] = {}
 
@@ -899,6 +934,7 @@ for key in ["learning_log", "errors", "error_logs"]:
     if key not in st.session_state:
         st.session_state[key] = []
 
+# Now safe to initialize threads
 try:
     initialize_background_threads()
     logger.info("App initialized")
@@ -945,10 +981,13 @@ with st.sidebar:
     if st.button("🔄 Force Retrain", use_container_width=True):
         with st.spinner("Retraining..."):
             try:
-                train_self_learning_model(ticker, days=1, force_retrain=True)
-                st.success("✅ Retrained!")
-                time.sleep(1)
-                st.rerun()
+                result = train_self_learning_model(ticker, days=1, force_retrain=True)
+                if result[0] is not None:
+                    st.success("✅ Retrained!")
+                    time.sleep(1)
+                    st.rerun()
+                else:
+                    st.error("❌ Retraining failed - check error logs")
             except Exception as e:
                 log_error(ErrorSeverity.ERROR, "force_retrain", e, ticker=ticker, user_message="Retrain failed")
 
