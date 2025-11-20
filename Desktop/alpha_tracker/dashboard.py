@@ -102,7 +102,7 @@ logger = setup_logging()
 ERROR_LOG_PATH = LOG_DIR / "error_tracking.json"
 
 def log_error(severity, function_name, error, ticker=None, user_message="An error occurred", show_to_user=True):
-    """Centralized error logging"""
+    """Centralized error logging with thread-safe session state access"""
     error_data = {
         "timestamp": datetime.now().isoformat(),
         "severity": severity.value,
@@ -125,14 +125,20 @@ def log_error(severity, function_name, error, ticker=None, user_message="An erro
     elif severity == ErrorSeverity.CRITICAL:
         logger.critical(log_msg, exc_info=True)
     
-    # Save to tracking file
+    # Save to tracking file with robust error handling
     try:
-        history = json.load(open(ERROR_LOG_PATH, 'r')) if ERROR_LOG_PATH.exists() else []
+        with open(ERROR_LOG_PATH, 'r') as f:
+            history = json.load(f) if ERROR_LOG_PATH.exists() else []
+    except (json.JSONDecodeError, FileNotFoundError):
+        history = []
+    
+    try:
         history.append(error_data)
         history = history[-500:]  # Keep last 500
-        json.dump(history, open(ERROR_LOG_PATH, 'w'), indent=2)
-    except:
-        pass
+        with open(ERROR_LOG_PATH, 'w') as f:
+            json.dump(history, f, indent=2)
+    except Exception as write_error:
+        logger.error(f"Failed to write error log: {write_error}")
     
     # Show to user
     if show_to_user:
@@ -143,23 +149,32 @@ def log_error(severity, function_name, error, ticker=None, user_message="An erro
         elif severity == ErrorSeverity.WARNING:
             st.warning(f"⚠️ {user_message}")
     
-    # Add to session state
-    st.session_state.setdefault('error_logs', []).append(error_data)
+    # Thread-safe session state update
+    try:
+        if hasattr(st, 'session_state'):
+            if 'error_logs' not in st.session_state:
+                st.session_state.error_logs = []
+            st.session_state.error_logs.append(error_data)
+    except Exception:
+        pass  # Fail silently if session state unavailable
 
 def get_error_statistics():
-    """Get error statistics"""
+    """Get error statistics with robust file handling"""
     try:
         if not ERROR_LOG_PATH.exists():
             return {"total": 0, "by_severity": {}, "recent": []}
         
-        errors = json.load(open(ERROR_LOG_PATH, 'r'))
+        with open(ERROR_LOG_PATH, 'r') as f:
+            errors = json.load(f)
+        
         by_severity = {}
         for error in errors:
             sev = error.get('severity', 'UNKNOWN')
             by_severity[sev] = by_severity.get(sev, 0) + 1
         
         return {"total": len(errors), "by_severity": by_severity, "recent": errors[-10:]}
-    except:
+    except (json.JSONDecodeError, FileNotFoundError, Exception) as e:
+        logger.warning(f"Error reading statistics: {e}")
         return {"total": 0, "by_severity": {}, "recent": []}
 
 # ================================
@@ -220,16 +235,32 @@ LEARNING_CONFIG = {
 model_cache_lock = threading.Lock()
 accuracy_lock = threading.Lock()
 config_lock = threading.Lock()
+session_state_lock = threading.Lock()
 
 # ================================
-# PERSISTENT CONFIG
+# HELPER: NORMALIZE DATAFRAME COLUMNS
+# ================================
+def normalize_dataframe_columns(df):
+    """Normalize MultiIndex columns from yfinance to single-level"""
+    if df is None or df.empty:
+        return df
+    
+    if isinstance(df.columns, pd.MultiIndex):
+        # Flatten MultiIndex columns - take first level (the actual column names)
+        df.columns = df.columns.get_level_values(0)
+    
+    return df
+
+# ================================
+# PERSISTENT CONFIG WITH ROBUST FILE HANDLING
 # ================================
 def load_daemon_config():
     try:
         if DAEMON_CONFIG_PATH.exists():
             with config_lock:
-                return json.load(open(DAEMON_CONFIG_PATH, 'r'))
-    except Exception as e:
+                with open(DAEMON_CONFIG_PATH, 'r') as f:
+                    return json.load(f)
+    except (json.JSONDecodeError, FileNotFoundError, Exception) as e:
         log_error(ErrorSeverity.WARNING, "load_daemon_config", e, user_message="Config load failed", show_to_user=False)
     return {"enabled": False, "last_started": None}
 
@@ -237,7 +268,8 @@ def save_daemon_config(enabled):
     try:
         config = {"enabled": enabled, "last_started": datetime.now().isoformat() if enabled else None}
         with config_lock:
-            json.dump(config, open(DAEMON_CONFIG_PATH, 'w'), indent=2)
+            with open(DAEMON_CONFIG_PATH, 'w') as f:
+                json.dump(config, f, indent=2)
         logger.info(f"Daemon config saved: {enabled}")
         return True
     except Exception as e:
@@ -248,8 +280,9 @@ def load_monitoring_config():
     try:
         if MONITORING_CONFIG_PATH.exists():
             with config_lock:
-                return json.load(open(MONITORING_CONFIG_PATH, 'r'))
-    except Exception as e:
+                with open(MONITORING_CONFIG_PATH, 'r') as f:
+                    return json.load(f)
+    except (json.JSONDecodeError, FileNotFoundError, Exception) as e:
         log_error(ErrorSeverity.WARNING, "load_monitoring_config", e, user_message="Config load failed", show_to_user=False)
     return {"enabled": False, "last_started": None}
 
@@ -257,7 +290,8 @@ def save_monitoring_config(enabled):
     try:
         config = {"enabled": enabled, "last_started": datetime.now().isoformat() if enabled else None}
         with config_lock:
-            json.dump(config, open(MONITORING_CONFIG_PATH, 'w'), indent=2)
+            with open(MONITORING_CONFIG_PATH, 'w') as f:
+                json.dump(config, f, indent=2)
         logger.info(f"Monitoring config saved: {enabled}")
         return True
     except Exception as e:
@@ -297,7 +331,8 @@ def get_latest_price(ticker):
         # Method 1: 1-minute interval
         try:
             data = yf.download(ticker, period="1d", interval="1m", progress=False)
-            if not data.empty and len(data) > 0:
+            data = normalize_dataframe_columns(data)
+            if data is not None and not data.empty and len(data) > 0:
                 price = float(data['Close'].iloc[-1])
                 logger.info(f"Price: {ticker} ${price:.2f}")
                 return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
@@ -308,7 +343,8 @@ def get_latest_price(ticker):
         # Method 2: 5-minute
         try:
             data = yf.download(ticker, period="1d", interval="5m", progress=False)
-            if not data.empty:
+            data = normalize_dataframe_columns(data)
+            if data is not None and not data.empty:
                 price = float(data['Close'].iloc[-1])
                 return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
             methods_tried.append("5m-no-data")
@@ -318,7 +354,8 @@ def get_latest_price(ticker):
         # Method 3: Daily
         try:
             data = yf.download(ticker, period="5d", interval="1d", progress=False)
-            if not data.empty:
+            data = normalize_dataframe_columns(data)
+            if data is not None and not data.empty:
                 price = float(data['Close'].iloc[-1])
                 return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
             methods_tried.append("1d-no-data")
@@ -348,21 +385,23 @@ def get_latest_price(ticker):
         return None
 
 # ================================
-# ACCURACY TRACKING
+# ACCURACY TRACKING WITH ROBUST FILE HANDLING
 # ================================
 def load_accuracy_log(ticker):
     try:
         path = get_accuracy_path(ticker)
         if path.exists():
-            return json.load(open(path, 'r'))
-    except Exception as e:
+            with open(path, 'r') as f:
+                return json.load(f)
+    except (json.JSONDecodeError, FileNotFoundError, Exception) as e:
         log_error(ErrorSeverity.WARNING, "load_accuracy_log", e, ticker=ticker, user_message="Accuracy log error", show_to_user=False)
     return {"predictions": [], "errors": [], "dates": [], "avg_error": 0.0, "total_predictions": 0}
 
 def save_accuracy_log(ticker, log_data):
     try:
         with accuracy_lock:
-            json.dump(log_data, open(get_accuracy_path(ticker), 'w'), indent=2)
+            with open(get_accuracy_path(ticker), 'w') as f:
+                json.dump(log_data, f, indent=2)
         return True
     except Exception as e:
         log_error(ErrorSeverity.ERROR, "save_accuracy_log", e, ticker=ticker, user_message="Save failed")
@@ -372,7 +411,8 @@ def record_prediction(ticker, predicted_price, prediction_date):
     try:
         pred_data = {"ticker": ticker, "predicted_price": float(predicted_price), 
                      "prediction_date": prediction_date, "timestamp": datetime.now().isoformat()}
-        json.dump(pred_data, open(get_prediction_path(ticker, prediction_date), 'w'), indent=2)
+        with open(get_prediction_path(ticker, prediction_date), 'w') as f:
+            json.dump(pred_data, f, indent=2)
         logger.info(f"Prediction recorded: {ticker} ${predicted_price:.2f}")
         return True
     except Exception as e:
@@ -389,7 +429,8 @@ def validate_predictions(ticker):
         
         if pred_path.exists():
             try:
-                pred_data = json.load(open(pred_path, 'r'))
+                with open(pred_path, 'r') as f:
+                    pred_data = json.load(f)
                 actual_price = get_latest_price(ticker)
                 
                 if actual_price:
@@ -421,20 +462,22 @@ def validate_predictions(ticker):
     return updated, accuracy_log
 
 # ================================
-# METADATA
+# METADATA WITH ROBUST FILE HANDLING
 # ================================
 def load_metadata(ticker):
     try:
         path = get_metadata_path(ticker)
         if path.exists():
-            return json.load(open(path, 'r'))
-    except Exception as e:
+            with open(path, 'r') as f:
+                return json.load(f)
+    except (json.JSONDecodeError, FileNotFoundError, Exception) as e:
         log_error(ErrorSeverity.WARNING, "load_metadata", e, ticker=ticker, user_message="Metadata error", show_to_user=False)
     return {"trained_date": None, "training_samples": 0, "training_volatility": 0.0, "version": 1, "retrain_count": 0, "last_accuracy": 0.0}
 
 def save_metadata(ticker, metadata):
     try:
-        json.dump(metadata, open(get_metadata_path(ticker), 'w'), indent=2)
+        with open(get_metadata_path(ticker), 'w') as f:
+            json.dump(metadata, f, indent=2)
         return True
     except Exception as e:
         log_error(ErrorSeverity.ERROR, "save_metadata", e, ticker=ticker, user_message="Metadata save failed")
@@ -466,10 +509,8 @@ def should_retrain(ticker, accuracy_log, metadata):
         
         try:
             df = yf.download(ticker, period="30d", progress=False)
+            df = normalize_dataframe_columns(df)
             if df is not None and len(df) > 5:
-                # Handle MultiIndex
-                if isinstance(df.columns, pd.MultiIndex):
-                    df.columns = df.columns.get_level_values(0)
                 current_vol = df['Close'].pct_change().std()
                 training_vol = metadata.get("training_volatility", 0)
                 if training_vol > 0:
@@ -486,9 +527,9 @@ def should_retrain(ticker, accuracy_log, metadata):
     return False, reasons
     
 # ================================
-# HIGH-CONFIDENCE CHECKLIST (ADD THIS FUNCTION ONLY)
+# HIGH-CONFIDENCE CHECKLIST (NOW INTEGRATED)
 # ================================
-def high_confidence_checklist(ticker: str, forecast: list, current_price: float) -> tuple[bool, list]:
+def high_confidence_checklist(ticker: str, forecast: list, current_price: float) -> tuple:
     """
     Returns (passed: bool, failed_reasons: list)
     Only returns True when ALL confidence criteria are met → prediction is shown
@@ -511,18 +552,22 @@ def high_confidence_checklist(ticker: str, forecast: list, current_price: float)
 
     # 3. Model freshness
     if metadata.get("trained_date"):
-        days_old = (datetime.now() - datetime.fromisoformat(metadata["trained_date"])).days
-        if days_old > 14:
-            reasons.append(f"Model {days_old} days old (>14)")
+        try:
+            days_old = (datetime.now() - datetime.fromisoformat(metadata["trained_date"])).days
+            if days_old > 14:
+                reasons.append(f"Model {days_old} days old (>14)")
+        except:
+            pass
 
     # 4. High volatility regime (without recent retrain)
     try:
         df = yf.download(ticker, period="60d", progress=False, threads=False)
-        if not df.empty and isinstance(df.columns, pd.MultiIndex):
-            df = df.droplevel(1, axis=1) if df.columns.nlevels > 1 else df
-        vol_20d = df['Close'].pct_change().rolling(20).std().iloc[-1]
-        if vol_20d > 0.04 and days_old > 7:  # >4% daily std dev
-            reasons.append(f"Extreme volatility {vol_20d:.1%}/day")
+        df = normalize_dataframe_columns(df)
+        if df is not None and not df.empty:
+            vol_20d = df['Close'].pct_change().rolling(20).std().iloc[-1]
+            days_old = (datetime.now() - datetime.fromisoformat(metadata["trained_date"])).days if metadata.get("trained_date") else 999
+            if vol_20d > 0.04 and days_old > 7:  # >4% daily std dev
+                reasons.append(f"Extreme volatility {vol_20d:.1%}/day")
     except:
         pass
 
@@ -535,12 +580,12 @@ def high_confidence_checklist(ticker: str, forecast: list, current_price: float)
     # 6. Sharp reversal vs recent trend
     try:
         hist = yf.download(ticker, period="10d", progress=False, threads=False)
-        if not hist.empty and isinstance(hist.columns, pd.MultiIndex):
-            hist = hist.droplevel(1, axis=1) if hist.columns.nlevels > 1 else hist
-        trend_5d = (hist['Close'].iloc[-1] - hist['Close'].iloc[-6]) / hist['Close'].iloc[-6]
-        pred_move = (forecast[0] - current_price) / current_price if forecast and current_price else 0
-        if trend_5d * pred_move < -0.5:  # strong reversal
-            reasons.append("Predicting sharp reversal")
+        hist = normalize_dataframe_columns(hist)
+        if hist is not None and not hist.empty and len(hist) > 6:
+            trend_5d = (hist['Close'].iloc[-1] - hist['Close'].iloc[-6]) / hist['Close'].iloc[-6]
+            pred_move = (forecast[0] - current_price) / current_price if forecast and current_price else 0
+            if trend_5d * pred_move < -0.5:  # strong reversal
+                reasons.append("Predicting sharp reversal")
     except:
         pass
 
@@ -579,20 +624,25 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
     try:
         updated, accuracy_log = validate_predictions(ticker)
         if updated:
-            st.session_state.setdefault('learning_log', []).append(f"✅ Validated {ticker}")
+            with session_state_lock:
+                if hasattr(st, 'session_state'):
+                    st.session_state.setdefault('learning_log', []).append(f"✅ Validated {ticker}")
         
         metadata = load_metadata(ticker)
         needs_retrain, reasons = should_retrain(ticker, accuracy_log, metadata)
         
         training_type = "full-retrain" if (needs_retrain or force_retrain) else "fine-tune"
         if reasons:
-            st.session_state.setdefault('learning_log', []).append(f"🔄 Retraining {ticker}: {', '.join(reasons)}")
+            with session_state_lock:
+                if hasattr(st, 'session_state'):
+                    st.session_state.setdefault('learning_log', []).append(f"🔄 Retraining {ticker}: {', '.join(reasons)}")
         
         # Download data with proper None checks
         df = None
         for attempt in range(3):
             try:
                 df = yf.download(ticker, period="1y", progress=False)
+                df = normalize_dataframe_columns(df)
                 if df is not None and len(df) >= 100:
                     break
                 time.sleep(2)
@@ -607,17 +657,13 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
                       ticker=ticker, user_message=f"Not enough data: {ticker}", show_to_user=False)
             return None, None, None
         
-        # Handle MultiIndex columns from yfinance BEFORE accessing columns
-        if isinstance(df.columns, pd.MultiIndex):
-            df.columns = df.columns.get_level_values(0)
-        
         df = df[['Close']].copy()
         
-        # Use new pandas methods instead of deprecated fillna(method=...)
+        # Use modern pandas methods - ffill and bfill
         df = df.ffill().bfill()
         
-        # Check for NaN values properly - convert to numpy to avoid Series issues
-        if df['Close'].isna().values.any():
+        # Check for NaN values properly
+        if df['Close'].isna().any():
             log_error(ErrorSeverity.WARNING, "train_self_learning_model", Exception("NaN values found"), 
                       ticker=ticker, user_message=f"Data quality issue: {ticker}", show_to_user=False)
             return None, None, None
@@ -674,14 +720,18 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
                               callbacks=[tf.keras.callbacks.EarlyStopping(patience=5, restore_best_weights=True)])
                     
                     metadata["retrain_count"] += 1
-                    st.session_state.setdefault('learning_log', []).append(f"🧠 Full retrain #{metadata['retrain_count']} {ticker}")
+                    with session_state_lock:
+                        if hasattr(st, 'session_state'):
+                            st.session_state.setdefault('learning_log', []).append(f"🧠 Full retrain #{metadata['retrain_count']} {ticker}")
                 else:
                     try:
                         model = tf.keras.models.load_model(str(model_path))
                         epochs = LEARNING_CONFIG["fine_tune_epochs"]
                         recent_size = int(len(X) * 0.3)
                         model.fit(X[-recent_size:], y[-recent_size:], epochs=epochs, batch_size=32, verbose=0)
-                        st.session_state.setdefault('learning_log', []).append(f"⚡ Fine-tuned {ticker}")
+                        with session_state_lock:
+                            if hasattr(st, 'session_state'):
+                                st.session_state.setdefault('learning_log', []).append(f"⚡ Fine-tuned {ticker}")
                     except (OSError, IOError) as e:
                         # Model file corrupted or missing - do full retrain
                         log_error(ErrorSeverity.WARNING, "train_self_learning_model", e, ticker=ticker, 
@@ -755,7 +805,7 @@ def train_self_learning_model(ticker, days=5, force_retrain=False):
         return None, None, None
 
 # ================================
-# RECOMMENDATIONS
+# RECOMMENDATIONS (WITH HIGH-CONFIDENCE CHECKLIST INTEGRATED)
 # ================================
 def daily_recommendation(ticker, asset):
     try:
@@ -767,6 +817,23 @@ def daily_recommendation(ticker, asset):
         if forecast is None or len(forecast) == 0:
             return "<span style='color:orange'>⚠️ Unable to forecast</span>"
         
+        # Run high-confidence checklist
+        passed, failed_reasons = high_confidence_checklist(ticker, forecast, price)
+        
+        if not passed:
+            # Model not confident enough - show warning instead of recommendation
+            reasons_text = "<br>• ".join(failed_reasons)
+            return f"""
+            <div style="background:#2a2a2a;padding:20px;border-radius:12px;border-left:6px solid #FFA726;color:#fff;margin:15px 0;">
+            <h3 style="margin:0;color:#FFA726;">{asset.upper()} — LOW CONFIDENCE</h3>
+            <p><strong>Current Price:</strong> ${price:.2f}</p>
+            <p><strong>Status:</strong> Model needs more training/validation</p>
+            <p><small><strong>Issues:</strong><br>• {reasons_text}</small></p>
+            <p style="margin-top:15px;"><em>⏳ Recommendation will show when model meets all confidence criteria</em></p>
+            </div>
+            """
+        
+        # High confidence - show full recommendation
         pred_price = round(forecast[0], 2)
         change = (pred_price - price) / price * 100
         action = "BUY" if change >= 1.5 else "SELL" if change <= -1.5 else "HOLD"
@@ -777,7 +844,7 @@ def daily_recommendation(ticker, asset):
         
         learning_status = ""
         if accuracy_log["total_predictions"] > 0:
-            learning_status = f"<p><small>Accuracy: {(1 - accuracy_log['avg_error'])*100:.1f}% | Predictions: {accuracy_log['total_predictions']} | v{metadata['version']}</small></p>"
+            learning_status = f"<p><small>✅ High Confidence | Accuracy: {(1 - accuracy_log['avg_error'])*100:.1f}% | Predictions: {accuracy_log['total_predictions']} | v{metadata['version']}</small></p>"
         
         return f"""
         <div style="background:#1a1a1a;padding:20px;border-radius:12px;border-left:6px solid {color};color:#fff;margin:15px 0;">
@@ -802,23 +869,36 @@ def show_5day_forecast(ticker, asset_name):
         if not current_price:
             current_price = forecast[0] * 0.99
 
+        # Check confidence for 5-day forecast
+        passed, failed_reasons = high_confidence_checklist(ticker, forecast, current_price)
+        
+        if not passed:
+            st.warning(f"⚠️ **Low Confidence Forecast** - Model needs improvement")
+            with st.expander("Why is confidence low?"):
+                for reason in failed_reasons:
+                    st.write(f"• {reason}")
+            st.info("💡 The model will continue learning. Check back after more training cycles.")
+
         fig = go.Figure()
         
         try:
             hist = yf.download(ticker, period="30d", progress=False)
-            # Handle MultiIndex columns
-            if isinstance(hist.columns, pd.MultiIndex):
-                hist.columns = hist.columns.get_level_values(0)
-            hist = hist['Close']
-            fig.add_trace(go.Scatter(x=hist.index, y=hist.values, mode='lines', name='Historical', line=dict(color='#888')))
+            hist = normalize_dataframe_columns(hist)
+            if hist is not None and not hist.empty:
+                hist_close = hist['Close']
+                fig.add_trace(go.Scatter(x=hist_close.index, y=hist_close.values, mode='lines', name='Historical', line=dict(color='#888')))
         except Exception as e:
             log_error(ErrorSeverity.WARNING, "show_5day_forecast", e, ticker=ticker, user_message="No historical data", show_to_user=False)
         
+        # Color forecast line based on confidence
+        forecast_color = '#00C853' if passed else '#FFA726'
         fig.add_trace(go.Scatter(x=dates, y=forecast, mode='lines+markers', name='AI Forecast',
-                                 line=dict(color='#00C853', width=3, dash='dot'), marker=dict(size=10)))
+                                 line=dict(color=forecast_color, width=3, dash='dot'), marker=dict(size=10)))
         
         fig.add_hline(y=current_price, line_dash="dash", line_color="#FFA726", annotation_text=f"Live: ${current_price:.2f}")
-        fig.update_layout(title=f"{asset_name.upper()} — 5-Day Forecast", xaxis_title="Date", yaxis_title="Price (USD)", 
+        
+        title_suffix = " (High Confidence)" if passed else " (Low Confidence)"
+        fig.update_layout(title=f"{asset_name.upper()} — 5-Day Forecast{title_suffix}", xaxis_title="Date", yaxis_title="Price (USD)", 
                           template="plotly_dark", height=500)
         st.plotly_chart(fig, use_container_width=True)
 
@@ -833,14 +913,15 @@ def show_5day_forecast(ticker, asset_name):
         accuracy_log = load_accuracy_log(ticker)
         metadata = load_metadata(ticker)
         
+        confidence_emoji = "✅" if passed else "⚠️"
         if accuracy_log["total_predictions"] > 0:
-            st.info(f"🧠 {accuracy_log['total_predictions']} predictions | Accuracy: {(1 - accuracy_log['avg_error'])*100:.1f}% | v{metadata['version']} | Retrains: {metadata['retrain_count']}")
+            st.info(f"{confidence_emoji} {accuracy_log['total_predictions']} predictions | Accuracy: {(1 - accuracy_log['avg_error'])*100:.1f}% | v{metadata['version']} | Retrains: {metadata['retrain_count']}")
         
     except Exception as e:
         log_error(ErrorSeverity.ERROR, "show_5day_forecast", e, ticker=ticker, user_message="Forecast display failed")
 
 # ================================
-# BACKGROUND DAEMON
+# BACKGROUND DAEMON (THREAD-SAFE)
 # ================================
 def continuous_learning_daemon():
     logger.info("Learning daemon started")
@@ -863,7 +944,9 @@ def continuous_learning_daemon():
                         metadata = load_metadata(ticker)
                         needs_retrain, reasons = should_retrain(ticker, accuracy_log, metadata)
                         if needs_retrain:
-                            st.session_state.setdefault('learning_log', []).append(f"🔄 Auto-retrain {ticker}: {', '.join(reasons)}")
+                            with session_state_lock:
+                                if hasattr(st, 'session_state'):
+                                    st.session_state.setdefault('learning_log', []).append(f"🔄 Auto-retrain {ticker}: {', '.join(reasons)}")
                             train_self_learning_model(ticker, days=1, force_retrain=True)
                     time.sleep(5)
                 except Exception as e:
@@ -889,12 +972,10 @@ def detect_pre_move_6percent(ticker, name):
     try:
         # Get intraday data for pattern analysis
         data = yf.download(ticker, period="1d", interval="1m", progress=False)
+        data = normalize_dataframe_columns(data)
+        
         if data is None or len(data) < 60:
             return None
-
-        # Handle MultiIndex
-        if isinstance(data.columns, pd.MultiIndex):
-            data.columns = data.columns.get_level_values(0)
 
         close = data['Close'].values
         volume = data['Volume'].values
@@ -1045,8 +1126,12 @@ def monitor_6percent_pre_move():
                     
                     alert = detect_pre_move_6percent(ticker, name)
                     
-                    # Check if we haven't alerted on this asset in the last 30 minutes
-                    alert_history = st.session_state.get('alert_history', {})
+                    # Thread-safe session state access
+                    with session_state_lock:
+                        if not hasattr(st, 'session_state'):
+                            continue
+                        alert_history = st.session_state.get('alert_history', {})
+                    
                     last_alert = alert_history.get(name)
                     
                     should_alert = False
@@ -1076,11 +1161,13 @@ def monitor_6percent_pre_move():
                         )
                         
                         if send_telegram_alert(text):
-                            st.session_state.setdefault('alert_history', {})[name] = {
-                                "direction": alert["direction"],
-                                "timestamp": datetime.now().isoformat(),
-                                "confidence": alert['confidence']
-                            }
+                            with session_state_lock:
+                                if hasattr(st, 'session_state'):
+                                    st.session_state.setdefault('alert_history', {})[name] = {
+                                        "direction": alert["direction"],
+                                        "timestamp": datetime.now().isoformat(),
+                                        "confidence": alert['confidence']
+                                    }
                             logger.info(f"[PREDICTIVE] Alert sent for {name}")
                             time.sleep(2)
                     
@@ -1385,7 +1472,7 @@ with tab1:
                 {"Metric": "Retrains", "Value": str(metadata["retrain_count"])},
                 {"Metric": "Lookback", "Value": str(LEARNING_CONFIG["lookback_window"])}
             ]
-            st.dataframe(pd.DataFrame(perf_data).set_index('Metric'), width="stretch")
+            st.dataframe(pd.DataFrame(perf_data).set_index('Metric'), use_container_width=True)
         except Exception as e:
             log_error(ErrorSeverity.WARNING, "performance_display", e, user_message="Performance data error", show_to_user=False)
 
@@ -1415,7 +1502,7 @@ with tab3:
                     })
         
         if all_assets:
-            st.dataframe(pd.DataFrame(all_assets), width="stretch", hide_index=True)
+            st.dataframe(pd.DataFrame(all_assets), use_container_width=True, hide_index=True)
         else:
             st.info("No models trained")
     except Exception as e:
