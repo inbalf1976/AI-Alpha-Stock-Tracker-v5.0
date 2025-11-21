@@ -247,6 +247,65 @@ model_cache_lock = threading.Lock()
 accuracy_lock = threading.Lock()
 config_lock = threading.Lock()
 session_state_lock = threading.Lock()
+heartbeat_lock = threading.Lock()
+
+# ================================
+# THREAD HEALTH MONITORING
+# ================================
+
+# Thread heartbeat tracking
+THREAD_HEARTBEATS = {
+    "learning_daemon": None,
+    "monitoring": None,
+    "watchdog": None
+}
+
+THREAD_START_TIMES = {
+    "learning_daemon": None,
+    "monitoring": None,
+    "watchdog": None
+}
+
+def update_heartbeat(thread_name):
+    """Update heartbeat timestamp for a thread"""
+    with heartbeat_lock:
+        THREAD_HEARTBEATS[thread_name] = datetime.now()
+
+def get_thread_status(thread_name):
+    """Get status of a thread"""
+    with heartbeat_lock:
+        last_heartbeat = THREAD_HEARTBEATS.get(thread_name)
+        start_time = THREAD_START_TIMES.get(thread_name)
+    
+    if last_heartbeat is None:
+        return {"status": "STOPPED", "last_heartbeat": None, "uptime": None}
+    
+    seconds_since_heartbeat = (datetime.now() - last_heartbeat).total_seconds()
+    
+    # If no heartbeat in 5 minutes, consider dead
+    if seconds_since_heartbeat > 300:
+        return {"status": "DEAD", "last_heartbeat": last_heartbeat, "uptime": None}
+    
+    # If no heartbeat in 2 minutes, warning
+    if seconds_since_heartbeat > 120:
+        status = "WARNING"
+    else:
+        status = "HEALTHY"
+    
+    # Calculate uptime
+    uptime = None
+    if start_time:
+        uptime_seconds = (datetime.now() - start_time).total_seconds()
+        hours = int(uptime_seconds // 3600)
+        minutes = int((uptime_seconds % 3600) // 60)
+        uptime = f"{hours}h {minutes}m"
+    
+    return {
+        "status": status,
+        "last_heartbeat": last_heartbeat,
+        "seconds_since": int(seconds_since_heartbeat),
+        "uptime": uptime
+    }
 
 # ================================
 # HELPER: NORMALIZE DATAFRAME COLUMNS
@@ -1117,19 +1176,34 @@ def show_5day_forecast(ticker, asset_name):
 # ================================
 def continuous_learning_daemon():
     logger.info("Learning daemon started")
+    
+    # Record start time
+    with heartbeat_lock:
+        THREAD_START_TIMES["learning_daemon"] = datetime.now()
+    
     while True:
         try:
+            # Update heartbeat
+            update_heartbeat("learning_daemon")
+            
             daemon_config = load_daemon_config()
             if not daemon_config.get("enabled", False):
                 logger.info("Daemon stopped")
+                with heartbeat_lock:
+                    THREAD_HEARTBEATS["learning_daemon"] = None
+                    THREAD_START_TIMES["learning_daemon"] = None
                 break
             
             all_tickers = [ticker for cat in ASSET_CATEGORIES.values() for _, ticker in cat.items()]
             
             for ticker in all_tickers:
                 try:
+                    # Check if daemon should still run
                     if not load_daemon_config().get("enabled", False):
                         break
+                    
+                    # Update heartbeat every iteration
+                    update_heartbeat("learning_daemon")
                     
                     updated, accuracy_log = validate_predictions(ticker)
                     if updated:
@@ -1167,9 +1241,13 @@ def continuous_learning_daemon():
                 except Exception as e:
                     log_error(ErrorSeverity.ERROR, "continuous_learning_daemon", e, ticker=ticker, user_message=f"Daemon error: {ticker}", show_to_user=False)
             
+            # Update heartbeat before sleep
+            update_heartbeat("learning_daemon")
             time.sleep(3600)
+            
         except Exception as e:
             log_error(ErrorSeverity.CRITICAL, "continuous_learning_daemon", e, user_message="Critical daemon error", show_to_user=False)
+            update_heartbeat("learning_daemon")  # Update even on error
             time.sleep(600)
 
 # ================================
@@ -1327,11 +1405,21 @@ def monitor_6percent_pre_move():
     logger.info("[PREDICTIVE] 6%+ monitoring started")
     all_assets = {name: ticker for cat in ASSET_CATEGORIES.values() for name, ticker in cat.items()}
     
+    # Record start time
+    with heartbeat_lock:
+        THREAD_START_TIMES["monitoring"] = datetime.now()
+    
     while True:
         try:
+            # Update heartbeat
+            update_heartbeat("monitoring")
+            
             monitoring_config = load_monitoring_config()
             if not monitoring_config.get("enabled", False):
                 logger.info("Monitoring stopped")
+                with heartbeat_lock:
+                    THREAD_HEARTBEATS["monitoring"] = None
+                    THREAD_START_TIMES["monitoring"] = None
                 break
             
             for name, ticker in all_assets.items():
@@ -1418,13 +1506,102 @@ def monitor_6percent_pre_move():
                     log_error(ErrorSeverity.ERROR, "monitor_6percent_pre_move", e, ticker=ticker, 
                               user_message=f"Monitor error: {name}", show_to_user=False)
             
+            # Update heartbeat before sleep
+            update_heartbeat("monitoring")
             # Check every 30 seconds (more frequent for early detection)
             time.sleep(30)
             
         except Exception as e:
             log_error(ErrorSeverity.CRITICAL, "monitor_6percent_pre_move", e, 
                       user_message="Critical monitor error", show_to_user=False)
+            update_heartbeat("monitoring")  # Update even on error
             time.sleep(300)  # 5 minutes on critical error
+
+# ================================
+# WATCHDOG THREAD
+# ================================
+def thread_watchdog():
+    """Monitors thread health and auto-restarts dead threads"""
+    logger.info("Watchdog started")
+    
+    # Record start time
+    with heartbeat_lock:
+        THREAD_START_TIMES["watchdog"] = datetime.now()
+    
+    restart_count = {"learning_daemon": 0, "monitoring": 0}
+    
+    while True:
+        try:
+            # Update own heartbeat
+            update_heartbeat("watchdog")
+            
+            # Check learning daemon
+            daemon_config = load_daemon_config()
+            if daemon_config.get("enabled", False):
+                daemon_status = get_thread_status("learning_daemon")
+                
+                if daemon_status["status"] == "DEAD":
+                    restart_count["learning_daemon"] += 1
+                    logger.error(f"Learning daemon DEAD! Auto-restarting (attempt #{restart_count['learning_daemon']})")
+                    
+                    # Send Telegram alert
+                    alert_text = (
+                        f"🚨 <b>THREAD RESTART ALERT</b>\n\n"
+                        f"<b>Thread:</b> Learning Daemon\n"
+                        f"<b>Status:</b> DEAD (no heartbeat for 5+ minutes)\n"
+                        f"<b>Action:</b> Auto-restarting now...\n"
+                        f"<b>Restart Count:</b> {restart_count['learning_daemon']}\n\n"
+                        f"⏰ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                    )
+                    send_telegram_alert(alert_text)
+                    
+                    # Restart thread
+                    threading.Thread(target=continuous_learning_daemon, daemon=True).start()
+                    logger.info("Learning daemon restarted by watchdog")
+                    
+                    with session_state_lock:
+                        if hasattr(st, 'session_state'):
+                            st.session_state.setdefault('learning_log', []).append(
+                                f"🔴 Learning Daemon DEAD - Auto-restarted by watchdog (attempt #{restart_count['learning_daemon']})"
+                            )
+            
+            # Check monitoring thread
+            monitoring_config = load_monitoring_config()
+            if monitoring_config.get("enabled", False):
+                monitoring_status = get_thread_status("monitoring")
+                
+                if monitoring_status["status"] == "DEAD":
+                    restart_count["monitoring"] += 1
+                    logger.error(f"Monitoring thread DEAD! Auto-restarting (attempt #{restart_count['monitoring']})")
+                    
+                    # Send Telegram alert
+                    alert_text = (
+                        f"🚨 <b>THREAD RESTART ALERT</b>\n\n"
+                        f"<b>Thread:</b> 6%+ Monitoring\n"
+                        f"<b>Status:</b> DEAD (no heartbeat for 5+ minutes)\n"
+                        f"<b>Action:</b> Auto-restarting now...\n"
+                        f"<b>Restart Count:</b> {restart_count['monitoring']}\n\n"
+                        f"⏰ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                    )
+                    send_telegram_alert(alert_text)
+                    
+                    # Restart thread
+                    threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
+                    logger.info("Monitoring thread restarted by watchdog")
+                    
+                    with session_state_lock:
+                        if hasattr(st, 'session_state'):
+                            st.session_state.setdefault('learning_log', []).append(
+                                f"🔴 Monitoring Thread DEAD - Auto-restarted by watchdog (attempt #{restart_count['monitoring']})"
+                            )
+            
+            # Sleep for 5 minutes before next check
+            time.sleep(300)
+            
+        except Exception as e:
+            log_error(ErrorSeverity.CRITICAL, "thread_watchdog", e, user_message="Watchdog error", show_to_user=False)
+            update_heartbeat("watchdog")
+            time.sleep(60)  # Shorter sleep on error
 
 # ================================
 # AUTO-RESTART THREADS
@@ -1458,6 +1635,15 @@ def initialize_background_threads():
                 logger.info("Monitoring started")
         except Exception as e:
             log_error(ErrorSeverity.ERROR, "initialize_background_threads", e, user_message="Monitoring start failed")
+        
+        # Always start watchdog if either thread is enabled
+        try:
+            if daemon_config.get("enabled", False) or monitoring_config.get("enabled", False):
+                threading.Thread(target=thread_watchdog, daemon=True).start()
+                st.session_state['learning_log'].append("✅ Watchdog auto-started")
+                logger.info("Watchdog started")
+        except Exception as e:
+            log_error(ErrorSeverity.ERROR, "initialize_background_threads", e, user_message="Watchdog start failed")
 
 # ================================
 # ERROR DASHBOARD
