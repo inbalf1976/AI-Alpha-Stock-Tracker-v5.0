@@ -1706,8 +1706,11 @@ with tab4:
             
             status_icon = "✅" if model_exists else "❌"
             trained_date = meta.get('trained_date', 'Never')
-            if trained_date != 'Never':
-                trained_date = trained_date[:10]
+            if trained_date and trained_date != 'Never':
+                try:
+                    trained_date = trained_date[:10]
+                except (TypeError, AttributeError):
+                    trained_date = 'Never'
             
             diagnostic_data.append({
                 "Status": status_icon,
