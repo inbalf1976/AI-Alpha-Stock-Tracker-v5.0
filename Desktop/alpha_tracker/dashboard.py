@@ -331,59 +331,128 @@ def get_prediction_path(ticker, date):
     return PREDICTIONS_DIR / f"{get_safe_ticker_name(ticker)}_{date}.json"
 
 # ================================
-# PRICE FETCHING
+# PRICE FETCHING WITH VALIDATION
 # ================================
+
+# Expected price ranges for validation (approximate, will auto-adjust)
+PRICE_RANGES = {
+    "AAPL": (50, 500),
+    "TSLA": (50, 500),
+    "NVDA": (50, 300),
+    "MSFT": (200, 500),
+    "GOOGL": (50, 300),
+    "PLTR": (5, 100),
+    "MSTR": (50, 800),
+    "COIN": (50, 500),
+    "ZC=F": (300, 700),    # Corn futures
+    "GC=F": (1500, 5000),  # Gold futures
+    "CL=F": (30, 150),     # Crude oil
+    "ZW=F": (400, 800),    # Wheat futures
+    "SPY": (300, 800),     # S&P 500 ETF
+    "WEAT": (3, 15)        # Wheat ETF
+}
+
+def validate_price(ticker, price):
+    """Validate if price is within reasonable range for this ticker"""
+    if price is None or price <= 0:
+        return False
+    
+    if ticker in PRICE_RANGES:
+        min_price, max_price = PRICE_RANGES[ticker]
+        if min_price <= price <= max_price:
+            return True
+        else:
+            logger.warning(f"Price validation failed for {ticker}: ${price:.2f} outside range ${min_price}-${max_price}")
+            return False
+    
+    # If no range defined, accept any positive price
+    return True
+
 @st.cache_data(ttl=60, show_spinner=False)
 def get_latest_price(ticker):
     logger.debug(f"Fetching price for {ticker}")
     methods_tried = []
     
+    # Add delay to avoid rate limiting and cache confusion
+    time.sleep(0.3)
+    
     try:
-        # Method 1: 1-minute interval
-        try:
-            data = yf.download(ticker, period="1d", interval="1m", progress=False)
-            data = normalize_dataframe_columns(data)
-            if data is not None and not data.empty and len(data) > 0:
-                price = float(data['Close'].iloc[-1])
-                logger.info(f"Price: {ticker} ${price:.2f}")
-                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
-            methods_tried.append("1m-no-data")
-        except Exception as e:
-            methods_tried.append(f"1m-{type(e).__name__}")
+        # Method 1: 1-minute interval with validation
+        for attempt in range(2):
+            try:
+                data = yf.download(ticker, period="1d", interval="1m", progress=False, threads=False)
+                data = normalize_dataframe_columns(data)
+                if data is not None and not data.empty and len(data) > 0:
+                    price = float(data['Close'].iloc[-1])
+                    
+                    # Validate price
+                    if validate_price(ticker, price):
+                        logger.info(f"Price: {ticker} ${price:.2f}")
+                        return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+                    else:
+                        methods_tried.append(f"1m-invalid-price-{price:.2f}")
+                        if attempt == 0:
+                            time.sleep(1)  # Wait and retry
+                            continue
+                methods_tried.append("1m-no-data")
+            except Exception as e:
+                methods_tried.append(f"1m-{type(e).__name__}")
+                if attempt == 0:
+                    time.sleep(1)
         
-        # Method 2: 5-minute
+        # Method 2: 5-minute with validation
         try:
-            data = yf.download(ticker, period="1d", interval="5m", progress=False)
+            time.sleep(0.5)
+            data = yf.download(ticker, period="1d", interval="5m", progress=False, threads=False)
             data = normalize_dataframe_columns(data)
             if data is not None and not data.empty:
                 price = float(data['Close'].iloc[-1])
-                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
-            methods_tried.append("5m-no-data")
+                if validate_price(ticker, price):
+                    logger.info(f"Price: {ticker} ${price:.2f} (5m)")
+                    return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+                methods_tried.append(f"5m-invalid-price-{price:.2f}")
+            else:
+                methods_tried.append("5m-no-data")
         except Exception as e:
             methods_tried.append(f"5m-{type(e).__name__}")
         
-        # Method 3: Daily
+        # Method 3: Daily with validation
         try:
-            data = yf.download(ticker, period="5d", interval="1d", progress=False)
+            time.sleep(0.5)
+            data = yf.download(ticker, period="5d", interval="1d", progress=False, threads=False)
             data = normalize_dataframe_columns(data)
             if data is not None and not data.empty:
                 price = float(data['Close'].iloc[-1])
-                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
-            methods_tried.append("1d-no-data")
+                if validate_price(ticker, price):
+                    logger.info(f"Price: {ticker} ${price:.2f} (1d)")
+                    return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
+                methods_tried.append(f"1d-invalid-price-{price:.2f}")
+            else:
+                methods_tried.append("1d-no-data")
         except Exception as e:
             methods_tried.append(f"1d-{type(e).__name__}")
         
-        # Method 4: Ticker info
+        # Method 4: Ticker info with validation
         try:
+            time.sleep(0.5)
             tick = yf.Ticker(ticker)
             info = tick.info
+            price = None
+            
             if 'regularMarketPrice' in info and info['regularMarketPrice']:
                 price = float(info['regularMarketPrice'])
-                return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
             elif 'previousClose' in info and info['previousClose']:
                 price = float(info['previousClose'])
+            elif 'currentPrice' in info and info['currentPrice']:
+                price = float(info['currentPrice'])
+            
+            if price and validate_price(ticker, price):
+                logger.info(f"Price: {ticker} ${price:.2f} (info)")
                 return round(price, 4) if ticker.endswith(("=F", "=X")) else round(price, 2)
-            methods_tried.append("info-no-price")
+            elif price:
+                methods_tried.append(f"info-invalid-price-{price:.2f}")
+            else:
+                methods_tried.append("info-no-price")
         except Exception as e:
             methods_tried.append(f"info-{type(e).__name__}")
         
