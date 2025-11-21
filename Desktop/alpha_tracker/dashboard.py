@@ -336,20 +336,20 @@ def get_prediction_path(ticker, date):
 
 # Expected price ranges for validation (approximate, will auto-adjust)
 PRICE_RANGES = {
-    "AAPL": (50, 500),
-    "TSLA": (50, 500),
-    "NVDA": (50, 300),
-    "MSFT": (200, 500),
-    "GOOGL": (50, 300),
-    "PLTR": (5, 100),
-    "MSTR": (50, 800),
-    "COIN": (50, 500),
-    "ZC=F": (300, 700),    # Corn futures
-    "GC=F": (1500, 5000),  # Gold futures
-    "CL=F": (30, 150),     # Crude oil
-    "ZW=F": (400, 800),    # Wheat futures
-    "SPY": (300, 800),     # S&P 500 ETF
-    "WEAT": (3, 15)        # Wheat ETF
+    "AAPL": (150, 500),      # Apple
+    "TSLA": (150, 600),      # Tesla
+    "NVDA": (100, 400),      # NVIDIA - updated for current levels
+    "MSFT": (300, 600),      # Microsoft - updated
+    "GOOGL": (100, 400),     # Alphabet
+    "PLTR": (5, 200),        # Palantir - UPDATED to allow $156
+    "MSTR": (100, 900),      # MicroStrategy - updated for volatility
+    "COIN": (50, 500),       # Coinbase
+    "ZC=F": (300, 700),      # Corn futures
+    "GC=F": (1500, 5000),    # Gold futures
+    "CL=F": (30, 150),       # Crude oil
+    "ZW=F": (400, 800),      # Wheat futures
+    "SPY": (400, 900),       # S&P 500 ETF - updated
+    "WEAT": (3, 15)          # Wheat ETF
 }
 
 def validate_price(ticker, price):
@@ -1802,6 +1802,12 @@ with tab3:
                     else:
                         health = "💚"  # Dark green = excellent
                     
+                    # Format current price
+                    if current_price:
+                        current_price_str = f"${current_price:.2f}"
+                    else:
+                        current_price_str = "N/A"
+                    
                     # Format prediction
                     if predicted_price and price_change is not None:
                         pred_str = f"${predicted_price:.2f} ({price_change:+.1f}%)"
@@ -1814,6 +1820,7 @@ with tab3:
                         "Health": health,
                         "Asset": asset_name,
                         "Ticker": asset_ticker,
+                        "Last Close": current_price_str,
                         "Tomorrow": pred_str,
                         "Version": meta["version"],
                         "Retrains": meta["retrain_count"],
