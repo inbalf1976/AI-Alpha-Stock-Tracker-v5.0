@@ -1749,13 +1749,6 @@ add_header()
 
 # Sidebar
 with st.sidebar:
-    # 🔍 TEMPORARY DEBUG - Remove after fixing
-    st.error("🔍 DEBUG INFO")
-    st.write(f"Env Var: `{os.getenv('ALLOW_ADMIN_CONTROLS', 'NOT SET')}`")
-    st.write(f"is_admin_user(): `{is_admin_user()}`")
-    st.write(f"Expected: `true` and `True`")
-    st.markdown("---")
-    
     st.header("⚙️ Asset Selection")
     
     try:
