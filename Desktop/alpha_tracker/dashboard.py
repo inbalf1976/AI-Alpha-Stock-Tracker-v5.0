@@ -38,6 +38,14 @@ except (ImportError, AttributeError):
     pass
 
 # ================================
+# ADMIN ACCESS CONTROL
+# ================================
+def is_admin_user():
+    """Check if user has admin privileges (local PC only)"""
+    admin_env = os.getenv("ALLOW_ADMIN_CONTROLS", "false").lower()
+    return admin_env == "true"
+
+# ================================
 # LOGGING SETUP
 # ================================
 LOG_DIR = Path("logs")
@@ -1750,41 +1758,50 @@ with st.sidebar:
         log_error(ErrorSeverity.WARNING, "sidebar_status", e, ticker=ticker, user_message="Status error", show_to_user=False)
         st.warning("Status unavailable")
     
-    if st.button("🔄 Force Retrain", use_container_width=True):
-        with st.spinner("Retraining..."):
-            try:
-                result = train_self_learning_model(ticker, days=1, force_retrain=True)
-                if result[0] is not None:
-                    st.success("✅ Retrained!")
-                    time.sleep(1)
-                    st.rerun()
-                else:
-                    st.error("❌ Retraining failed - check error logs")
-            except Exception as e:
-                log_error(ErrorSeverity.ERROR, "force_retrain", e, ticker=ticker, user_message="Retrain failed")
+    # ADMIN ONLY: Force Retrain Button
+    if is_admin_user():
+        if st.button("🔄 Force Retrain", use_container_width=True):
+            with st.spinner("Retraining..."):
+                try:
+                    result = train_self_learning_model(ticker, days=1, force_retrain=True)
+                    if result[0] is not None:
+                        st.success("✅ Retrained!")
+                        time.sleep(1)
+                        st.rerun()
+                    else:
+                        st.error("❌ Retraining failed - check error logs")
+                except Exception as e:
+                    log_error(ErrorSeverity.ERROR, "force_retrain", e, ticker=ticker, user_message="Retrain failed")
+    else:
+        st.info("🔒 Admin only")
 
     st.markdown("---")
-    if st.button("🚀 Bootstrap All Models", use_container_width=True):
-        with st.spinner("Training all models... This will take 5-10 minutes"):
-            try:
-                all_tickers = [t for cat in ASSET_CATEGORIES.values() for _, t in cat.items()]
-                progress_bar = st.progress(0)
-                total = len(all_tickers)
-                
-                for idx, train_ticker in enumerate(all_tickers):
-                    st.write(f"Training {train_ticker}... ({idx+1}/{total})")
-                    try:
-                        train_self_learning_model(train_ticker, days=5, force_retrain=True)
-                    except Exception as e:
-                        log_error(ErrorSeverity.ERROR, "bootstrap_training", e, ticker=train_ticker, 
-                                  user_message=f"Failed to train {train_ticker}", show_to_user=False)
-                    progress_bar.progress((idx + 1) / total)
-                
-                st.success("✅ All models trained!")
-                time.sleep(2)
-                st.rerun()
-            except Exception as e:
-                log_error(ErrorSeverity.ERROR, "bootstrap_all", e, user_message="Bootstrap failed")
+    
+    # ADMIN ONLY: Bootstrap All Models Button
+    if is_admin_user():
+        if st.button("🚀 Bootstrap All Models", use_container_width=True):
+            with st.spinner("Training all models... This will take 5-10 minutes"):
+                try:
+                    all_tickers = [t for cat in ASSET_CATEGORIES.values() for _, t in cat.items()]
+                    progress_bar = st.progress(0)
+                    total = len(all_tickers)
+                    
+                    for idx, train_ticker in enumerate(all_tickers):
+                        st.write(f"Training {train_ticker}... ({idx+1}/{total})")
+                        try:
+                            train_self_learning_model(train_ticker, days=5, force_retrain=True)
+                        except Exception as e:
+                            log_error(ErrorSeverity.ERROR, "bootstrap_training", e, ticker=train_ticker, 
+                                      user_message=f"Failed to train {train_ticker}", show_to_user=False)
+                        progress_bar.progress((idx + 1) / total)
+                    
+                    st.success("✅ All models trained!")
+                    time.sleep(2)
+                    st.rerun()
+                except Exception as e:
+                    log_error(ErrorSeverity.ERROR, "bootstrap_all", e, user_message="Bootstrap failed")
+    else:
+        st.info("🔒 Admin only")
 
     st.markdown("---")
     st.subheader("🤖 Learning Daemon")
@@ -1802,27 +1819,31 @@ with st.sidebar:
     except Exception as e:
         log_error(ErrorSeverity.WARNING, "daemon_status", e, user_message="Status error", show_to_user=False)
     
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("▶️ Start", use_container_width=True, key="daemon_start"):
-            try:
-                save_daemon_config(True)
-                threading.Thread(target=continuous_learning_daemon, daemon=True).start()
-                st.success("🧠 Started!")
-                time.sleep(0.5)
-                st.rerun()
-            except Exception as e:
-                log_error(ErrorSeverity.ERROR, "daemon_start_btn", e, user_message="Start failed")
-    
-    with col2:
-        if st.button("⏹️ Stop", use_container_width=True, key="daemon_stop"):
-            try:
-                save_daemon_config(False)
-                st.success("Stopped!")
-                time.sleep(0.5)
-                st.rerun()
-            except Exception as e:
-                log_error(ErrorSeverity.ERROR, "daemon_stop_btn", e, user_message="Stop failed")
+    # ADMIN ONLY: Daemon Start/Stop Buttons
+    if is_admin_user():
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("▶️ Start", use_container_width=True, key="daemon_start"):
+                try:
+                    save_daemon_config(True)
+                    threading.Thread(target=continuous_learning_daemon, daemon=True).start()
+                    st.success("🧠 Started!")
+                    time.sleep(0.5)
+                    st.rerun()
+                except Exception as e:
+                    log_error(ErrorSeverity.ERROR, "daemon_start_btn", e, user_message="Start failed")
+        
+        with col2:
+            if st.button("⏹️ Stop", use_container_width=True, key="daemon_stop"):
+                try:
+                    save_daemon_config(False)
+                    st.success("Stopped!")
+                    time.sleep(0.5)
+                    st.rerun()
+                except Exception as e:
+                    log_error(ErrorSeverity.ERROR, "daemon_stop_btn", e, user_message="Stop failed")
+    else:
+        st.info("🔒 Admin controls locked")
 
     st.markdown("---")
     st.subheader("📡 Alert Systems")
@@ -1840,34 +1861,42 @@ with st.sidebar:
     except Exception as e:
         log_error(ErrorSeverity.WARNING, "monitoring_status", e, user_message="Status error", show_to_user=False)
     
-    if st.button("🧪 Test Telegram", use_container_width=True):
-        try:
-            success = send_telegram_alert("✅ TEST ALERT\nAI - Alpha Tracker v4.0")
-            st.success("✅ Sent!") if success else st.error("❌ Check keys")
-        except Exception as e:
-            log_error(ErrorSeverity.ERROR, "telegram_test", e, user_message="Test failed")
+    # ADMIN ONLY: Test Telegram Button
+    if is_admin_user():
+        if st.button("🧪 Test Telegram", use_container_width=True):
+            try:
+                success = send_telegram_alert("✅ TEST ALERT\nAI - Alpha Tracker v4.1")
+                st.success("✅ Sent!") if success else st.error("❌ Check keys")
+            except Exception as e:
+                log_error(ErrorSeverity.ERROR, "telegram_test", e, user_message="Test failed")
+    else:
+        st.info("🔒 Admin only")
 
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("▶️ Start Alerts", use_container_width=True):
-            try:
-                save_monitoring_config(True)
-                threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
-                st.success("Started!")
-                time.sleep(0.5)
-                st.rerun()
-            except Exception as e:
-                log_error(ErrorSeverity.ERROR, "monitoring_start", e, user_message="Start failed")
-    
-    with col2:
-        if st.button("⏹️ Stop Alerts", use_container_width=True):
-            try:
-                save_monitoring_config(False)
-                st.success("Stopped!")
-                time.sleep(0.5)
-                st.rerun()
-            except Exception as e:
-                log_error(ErrorSeverity.ERROR, "monitoring_stop", e, user_message="Stop failed")
+    # ADMIN ONLY: Alert Start/Stop Buttons
+    if is_admin_user():
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("▶️ Start Alerts", use_container_width=True):
+                try:
+                    save_monitoring_config(True)
+                    threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
+                    st.success("Started!")
+                    time.sleep(0.5)
+                    st.rerun()
+                except Exception as e:
+                    log_error(ErrorSeverity.ERROR, "monitoring_start", e, user_message="Start failed")
+        
+        with col2:
+            if st.button("⏹️ Stop Alerts", use_container_width=True):
+                try:
+                    save_monitoring_config(False)
+                    st.success("Stopped!")
+                    time.sleep(0.5)
+                    st.rerun()
+                except Exception as e:
+                    log_error(ErrorSeverity.ERROR, "monitoring_stop", e, user_message="Stop failed")
+    else:
+        st.info("🔒 Admin controls locked")
 
 # Main content
 col1, col2, col3 = st.columns([1, 3, 1])
@@ -2023,8 +2052,8 @@ with tab3:
             **Health Legend:** 💚 Excellent (85%+) | 🟢 Good (70-85%) | 🟡 Fair (50-70%) | 🔴 Poor (<50%) | ⚪ No data
             """)
             
-            # Auto-fix broken models
-            if broken_models:
+            # ADMIN ONLY: Auto-fix broken models
+            if broken_models and is_admin_user():
                 st.warning(f"⚠️ **{len(broken_models)} broken models detected** (negative or very poor accuracy)")
                 
                 if st.button("🔧 Auto-Fix All Broken Models", use_container_width=True):
@@ -2054,6 +2083,8 @@ with tab3:
                         st.success("✅ All broken models fixed!")
                         time.sleep(2)
                         st.rerun()
+            elif broken_models:
+                st.info(f"🔒 **{len(broken_models)} broken models detected** - Admin access required to fix")
         else:
             st.info("No models trained")
     except Exception as e:
