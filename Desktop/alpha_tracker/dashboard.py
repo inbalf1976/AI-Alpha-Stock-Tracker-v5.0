@@ -1619,3 +1619,80 @@ def add_footer():
     	<p style='margin:0;'>© 2025 AI - Alpha Stock Tracker v4.1 | Two-Layer Confidence System</p>
     </div>
     """, unsafe_allow_html=True)
+    
+# ================================
+# MAIN APP
+# ================================
+def main():
+    add_header()
+    initialize_background_threads()
+    
+    # Sidebar or tabs
+    st.sidebar.title("Navigation")
+    page = st.sidebar.radio("Go to", ["Dashboard", "Forecasts", "Admin Controls"])
+    
+    if page == "Dashboard":
+        # Show daily recommendations
+        for category, assets in ASSET_CATEGORIES.items():
+            st.subheader(category)
+            for name, ticker in assets.items():
+                rec = daily_recommendation(ticker, name)
+                st.markdown(rec, unsafe_allow_html=True)
+    
+    elif page == "Forecasts":
+        st.subheader("📈 5-Day AI Forecasts")
+        selected_asset = st.selectbox("Select Asset", 
+                                       [f"{name} ({ticker})" for cat in ASSET_CATEGORIES.values() 
+                                        for name, ticker in cat.items()])
+        if selected_asset:
+            name = selected_asset.split(" (")[0]
+            ticker = selected_asset.split("(")[1].rstrip(")")
+            show_5day_forecast(ticker, name)
+    
+    elif page == "Admin Controls":
+        if not is_admin_user():
+            st.error("🔒 Admin controls are locked in deployment mode")
+            st.info("Set LOCK_ADMIN_CONTROLS=false in environment to unlock")
+        else:
+            st.subheader("⚙️ Admin Panel")
+            
+            # Daemon controls
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("🟢 Start Learning Daemon"):
+                    save_daemon_config(True)
+                    threading.Thread(target=continuous_learning_daemon, daemon=True).start()
+                    st.success("Learning daemon started")
+            with col2:
+                if st.button("🔴 Stop Learning Daemon"):
+                    save_daemon_config(False)
+                    st.warning("Learning daemon stopped")
+            
+            # Monitoring controls
+            col3, col4 = st.columns(2)
+            with col3:
+                if st.button("🟢 Start 6%+ Monitoring"):
+                    save_monitoring_config(True)
+                    threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
+                    st.success("Monitoring started")
+            with col4:
+                if st.button("🔴 Stop 6%+ Monitoring"):
+                    save_monitoring_config(False)
+                    st.warning("Monitoring stopped")
+            
+            # Thread status
+            st.markdown("---")
+            st.subheader("🔧 Thread Health")
+            for thread_name in ["learning_daemon", "monitoring", "watchdog"]:
+                status = get_thread_status(thread_name)
+                color = {"HEALTHY": "green", "WARNING": "orange", "DEAD": "red", "STOPPED": "gray"}[status["status"]]
+                st.markdown(f"**{thread_name}**: <span style='color:{color}'>{status['status']}</span> | Uptime: {status.get('uptime', 'N/A')}", unsafe_allow_html=True)
+            
+            # Error dashboard
+            st.markdown("---")
+            show_error_dashboard()
+    
+    add_footer()
+
+if __name__ == "__main__":
+    main()
