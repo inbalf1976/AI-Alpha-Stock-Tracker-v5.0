@@ -41,14 +41,19 @@ except (ImportError, AttributeError):
 # ADMIN ACCESS CONTROL
 # ================================
 def is_admin_user():
-    """Check if user has admin privileges (local PC only)"""
-    # If DEPLOYMENT_MODE is set to "online", block admin controls
-    deployment_mode = os.getenv("DEPLOYMENT_MODE", "local").lower()
+    """
+    Check if user has admin privileges
+    - Local PC: Set ALLOW_ADMIN_CONTROLS=true (returns True)
+    - Online deployment: Don't set variable (returns False)
+    """
+    # Check environment variable
+    admin_controls = os.getenv("ALLOW_ADMIN_CONTROLS", "false").lower()
     
-    if deployment_mode == "online":
-        return False  # Online users = no admin access
+    # Only allow admin access if explicitly set to "true"
+    if admin_controls == "true":
+        return True  # UNLOCKED - Local PC with admin access
     else:
-        return True  # Local users (default) = full admin access
+        return False  # LOCKED - Online users or not set
 
 # ================================
 # LOGGING SETUP
@@ -1730,6 +1735,13 @@ add_header()
 
 # Sidebar
 with st.sidebar:
+    # 🔍 TEMPORARY DEBUG - Remove after fixing
+    st.error("🔍 DEBUG INFO")
+    st.write(f"Env Var: `{os.getenv('ALLOW_ADMIN_CONTROLS', 'NOT SET')}`")
+    st.write(f"is_admin_user(): `{is_admin_user()}`")
+    st.write(f"Expected: `true` and `True`")
+    st.markdown("---")
+    
     st.header("⚙️ Asset Selection")
     
     try:
