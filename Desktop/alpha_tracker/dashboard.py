@@ -46,14 +46,28 @@ def is_admin_user():
     - Local PC: Set ALLOW_ADMIN_CONTROLS=true (returns True)
     - Online deployment: Don't set variable (returns False)
     """
-    # Check environment variable
+    # Method 1: Check environment variable
     admin_controls = os.getenv("ALLOW_ADMIN_CONTROLS", "false").lower()
-    
-    # Only allow admin access if explicitly set to "true"
     if admin_controls == "true":
-        return True  # UNLOCKED - Local PC with admin access
-    else:
-        return False  # LOCKED - Online users or not set
+        return True
+    
+    # Method 2: Check if running on localhost (fallback for local development)
+    try:
+        # If Streamlit is running on localhost, assume it's local development
+        import socket
+        hostname = socket.gethostname()
+        ip_address = socket.gethostbyname(hostname)
+        
+        # Check if running on local machine
+        if ip_address.startswith("127.") or ip_address.startswith("192.168.") or hostname in ["localhost", "DESKTOP-", "LAPTOP-"]:
+            # Additional check: if this file exists, we're in local dev
+            local_dev_marker = Path("models")  # Your models folder
+            if local_dev_marker.exists():
+                return True
+    except:
+        pass
+    
+    return False  # Default: locked for online deployment
 
 # ================================
 # LOGGING SETUP
