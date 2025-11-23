@@ -97,12 +97,12 @@ def check_auto_patterns(ticker: str, data: pd.DataFrame = None) -> tuple:
         return boost, triggers, direction, confidence
 
     except Exception as e:
-        # You'll need log_error defined later — safe fallback
         try:
             log_error(ErrorSeverity.WARNING, "check_auto_patterns", e, ticker=ticker, show_to_user=False)
         except:
             pass
         return 0, [], "NEUTRAL", 0
+
 # ================================
 # LOGGING SETUP
 # ================================
@@ -802,58 +802,192 @@ def run_backtest(ticker: str, start_date: str = "2022-01-01", end_date: str = No
     return result
 
 # ================================
-# BACKGROUND THREADS
+# FIXED BACKGROUND THREADS
 # ================================
+
 def continuous_learning_daemon():
+    """
+    FIXED: Properly updates heartbeat during sleep and continues forever
+    """
     update_heartbeat("learning_daemon")
     THREAD_START_TIMES["learning_daemon"] = datetime.now()
-    while load_daemon_config().get("enabled", False):
-        update_heartbeat("learning_daemon")
-        for cat in ASSET_CATEGORIES.values():
-            for name, t in cat.items():
-                try:
-                    train_self_learning_model(t, days=1)
-                    time.sleep(2)
-                except: pass
-        time.sleep(3600)
+    logger.info("🤖 Learning Daemon STARTED")
+    
+    cycle_count = 0
+    
+    while True:  # ← FIXED: Always run, check config inside loop
+        try:
+            # Check if daemon is enabled
+            if not load_daemon_config().get("enabled", False):
+                logger.info("Learning Daemon paused (disabled in config)")
+                time.sleep(30)  # Check every 30 seconds if re-enabled
+                update_heartbeat("learning_daemon")
+                continue
+            
+            cycle_count += 1
+            logger.info(f"🔄 Learning Daemon: Starting cycle #{cycle_count}")
+            update_heartbeat("learning_daemon")
+            
+            # Train all assets
+            trained_count = 0
+            for cat in ASSET_CATEGORIES.values():
+                for name, t in cat.items():
+                    try:
+                        update_heartbeat("learning_daemon")  # ← Update during training
+                        train_self_learning_model(t, days=1)
+                        trained_count += 1
+                        logger.debug(f"Trained {t} ({trained_count}/14)")
+                        time.sleep(2)
+                    except Exception as e:
+                        log_error(ErrorSeverity.WARNING, "learning_daemon_train", e, 
+                                ticker=t, show_to_user=False)
+            
+            logger.info(f"✅ Learning Daemon: Cycle #{cycle_count} complete ({trained_count} assets)")
+            
+            # Sleep for 1 hour with heartbeat updates every 60 seconds
+            sleep_duration = 3600  # 1 hour
+            sleep_intervals = sleep_duration // 60  # 60 intervals of 60 seconds
+            
+            logger.info(f"💤 Learning Daemon: Sleeping for {sleep_duration//60} minutes")
+            
+            for i in range(sleep_intervals):
+                time.sleep(60)  # Sleep 60 seconds
+                update_heartbeat("learning_daemon")  # ← FIXED: Update during sleep
+                
+                # Check if disabled during sleep
+                if not load_daemon_config().get("enabled", False):
+                    logger.info("Learning Daemon stopped during sleep")
+                    break
+            
+        except Exception as e:
+            log_error(ErrorSeverity.ERROR, "continuous_learning_daemon", e, 
+                    user_message="Learning daemon error - will retry", show_to_user=False)
+            time.sleep(60)  # Wait before retry
+            update_heartbeat("learning_daemon")
+
 
 def monitor_6percent_pre_move():
+    """
+    FIXED: Properly updates heartbeat during sleep and continues forever
+    """
     update_heartbeat("monitoring")
     THREAD_START_TIMES["monitoring"] = datetime.now()
+    logger.info("📡 6%+ Monitoring STARTED")
+    
     alerted = set()
-    while load_monitoring_config().get("enabled", False):
-        update_heartbeat("monitoring")
-        for cat in ASSET_CATEGORIES.values():
-            for name, t in cat.items():
-                try:
-                    signal = detect_pre_move_6percent(t, name)
-                    if signal and signal["confidence"] >= 90:
-                        key = f"{t}_{signal['direction']}"
-                        if key not in alerted:
-                            # Ultra-confidence check before sending
-                            current_price = get_latest_price(t)
-                            if current_price:
-                                forecast, _, _ = train_self_learning_model(t, days=1)
-                                if forecast:
-                                    ultra_passed, ultra_reasons = ultra_confidence_shield(t, forecast, current_price)
-                                    if ultra_passed:
-                                        text = f"🔮 NUCLEAR PRE-MOVE DETECTED\n\n{signal['asset']} → {signal['direction']}\nConfidence: {signal['confidence']}%\nFactors: {', '.join(signal['factors'])}\n\n✅ ULTRA-CONFIDENCE: PASSED"
-                                        send_telegram_alert(text)
-                                        alerted.add(key)
-                except: pass
-        time.sleep(60)
-    alerted.clear()
+    scan_count = 0
+    
+    while True:  # ← FIXED: Always run, check config inside loop
+        try:
+            # Check if monitoring is enabled
+            if not load_monitoring_config().get("enabled", False):
+                logger.info("6%+ Monitoring paused (disabled in config)")
+                time.sleep(30)
+                update_heartbeat("monitoring")
+                continue
+            
+            scan_count += 1
+            update_heartbeat("monitoring")
+            logger.debug(f"📡 Monitoring: Scan #{scan_count}")
+            
+            alerts_sent = 0
+            
+            # Scan all assets
+            for cat in ASSET_CATEGORIES.values():
+                for name, t in cat.items():
+                    try:
+                        update_heartbeat("monitoring")  # ← Update during scan
+                        
+                        signal = detect_pre_move_6percent(t, name)
+                        
+                        if signal and signal["confidence"] >= 90:
+                            key = f"{t}_{signal['direction']}"
+                            
+                            if key not in alerted:
+                                # Ultra-confidence check before sending
+                                current_price = get_latest_price(t)
+                                if current_price:
+                                    forecast, _, _ = train_self_learning_model(t, days=1)
+                                    if forecast:
+                                        ultra_passed, ultra_reasons = ultra_confidence_shield(t, forecast, current_price)
+                                        
+                                        if ultra_passed:
+                                            text = (f"🔮 NUCLEAR PRE-MOVE DETECTED\n\n"
+                                                   f"{signal['asset']} → {signal['direction']}\n"
+                                                   f"Confidence: {signal['confidence']}%\n"
+                                                   f"Factors: {', '.join(signal['factors'])}\n\n"
+                                                   f"✅ ULTRA-CONFIDENCE: PASSED")
+                                            
+                                            if send_telegram_alert(text):
+                                                alerted.add(key)
+                                                alerts_sent += 1
+                                                logger.info(f"🚨 ALERT SENT: {signal['asset']} → {signal['direction']}")
+                                        else:
+                                            logger.debug(f"Ultra-confidence failed for {t}: {ultra_reasons}")
+                    
+                    except Exception as e:
+                        log_error(ErrorSeverity.WARNING, "monitor_6percent_scan", e, 
+                                ticker=t, show_to_user=False)
+            
+            if alerts_sent > 0:
+                logger.info(f"✅ Monitoring: Scan #{scan_count} complete - {alerts_sent} alert(s) sent")
+            
+            # Sleep for 60 seconds with heartbeat updates every 15 seconds
+            for i in range(4):  # 4 intervals of 15 seconds = 60 seconds
+                time.sleep(15)
+                update_heartbeat("monitoring")
+                
+                if not load_monitoring_config().get("enabled", False):
+                    logger.info("6%+ Monitoring stopped")
+                    alerted.clear()
+                    break
+        
+        except Exception as e:
+            log_error(ErrorSeverity.ERROR, "monitor_6percent_pre_move", e,
+                    user_message="Monitoring error - will retry", show_to_user=False)
+            time.sleep(30)
+            update_heartbeat("monitoring")
+
 
 def thread_watchdog():
+    """
+    FIXED: Better status detection and logging
+    """
     update_heartbeat("watchdog")
     THREAD_START_TIMES["watchdog"] = datetime.now()
+    logger.info("🐕 Watchdog STARTED")
+    
     while True:
-        update_heartbeat("watchdog")
-        for name in ["learning_daemon", "monitoring"]:
-            status = get_thread_status(name)
-            if status["status"] in ["WARNING", "DEAD"]:
-                logger.warning(f"Thread {name} is {status['status']}")
-        time.sleep(30)
+        try:
+            update_heartbeat("watchdog")
+            
+            for name in ["learning_daemon", "monitoring"]:
+                status = get_thread_status(name)
+                
+                # Only log if thread is supposed to be running
+                if name == "learning_daemon":
+                    enabled = load_daemon_config().get("enabled", False)
+                elif name == "monitoring":
+                    enabled = load_monitoring_config().get("enabled", False)
+                else:
+                    enabled = False
+                
+                if enabled:
+                    if status["status"] == "DEAD":
+                        logger.error(f"🔴 Thread {name} is DEAD (no heartbeat for {status['seconds_since']}s)")
+                    elif status["status"] == "WARNING":
+                        logger.warning(f"⚠️ Thread {name} is WARNING (last heartbeat {status['seconds_since']}s ago)")
+                    elif status["status"] == "HEALTHY":
+                        # Only log healthy status every 10 minutes to reduce spam
+                        if status["seconds_since"] < 30:  # Just started or recently updated
+                            logger.debug(f"✅ Thread {name} is HEALTHY (uptime: {status['uptime']})")
+            
+            time.sleep(30)  # Check every 30 seconds
+            
+        except Exception as e:
+            log_error(ErrorSeverity.WARNING, "thread_watchdog", e, show_to_user=False)
+            time.sleep(30)
+
 
 def show_error_dashboard():
     st.subheader("System Diagnostics")
@@ -877,14 +1011,29 @@ if 'learning_log' not in st.session_state: st.session_state.learning_log = []
 if 'error_logs' not in st.session_state: st.session_state.error_logs = []
 
 def initialize_background_threads():
+    """
+    FIXED: Properly start threads and track their state
+    """
     if "threads_initialized" not in st.session_state:
         st.session_state.threads_initialized = True
+        logger.info("🚀 Initializing background threads...")
+        
+        # Always start watchdog
+        watchdog_thread = threading.Thread(target=thread_watchdog, daemon=True, name="WatchdogThread")
+        watchdog_thread.start()
+        logger.info("✅ Watchdog thread started")
+        
+        # Start learning daemon if enabled
         if load_daemon_config().get("enabled", False):
-            threading.Thread(target=continuous_learning_daemon, daemon=True).start()
+            learning_thread = threading.Thread(target=continuous_learning_daemon, daemon=True, name="LearningDaemon")
+            learning_thread.start()
+            logger.info("✅ Learning daemon thread started")
+        
+        # Start monitoring if enabled
         if load_monitoring_config().get("enabled", False):
-            threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
-        if load_daemon_config().get("enabled", False) or load_monitoring_config().get("enabled", False):
-            threading.Thread(target=thread_watchdog, daemon=True).start()
+            monitoring_thread = threading.Thread(target=monitor_6percent_pre_move, daemon=True, name="MonitoringThread")
+            monitoring_thread.start()
+            logger.info("✅ Monitoring thread started")
 
 initialize_background_threads()
 
@@ -932,7 +1081,7 @@ with st.sidebar:
     with c1:
         if st.button("▶️ Start", key="dstart", use_container_width=True):
             save_daemon_config(True)
-            threading.Thread(target=continuous_learning_daemon, daemon=True).start()
+            threading.Thread(target=continuous_learning_daemon, daemon=True, name="LearningDaemon").start()
             st.rerun()
     with c2:
         if st.button("⏹️ Stop", key="dstop", use_container_width=True):
@@ -952,7 +1101,7 @@ with st.sidebar:
     with c1:
         if st.button("▶️ Start", key="mstart", use_container_width=True):
             save_monitoring_config(True)
-            threading.Thread(target=monitor_6percent_pre_move, daemon=True).start()
+            threading.Thread(target=monitor_6percent_pre_move, daemon=True, name="MonitoringThread").start()
             st.rerun()
     with c2:
         if st.button("⏹️ Stop", key="mstop", use_container_width=True):
