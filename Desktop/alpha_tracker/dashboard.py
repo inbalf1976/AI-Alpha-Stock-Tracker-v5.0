@@ -60,12 +60,18 @@ def check_auto_patterns(ticker: str, data: pd.DataFrame = None) -> tuple:
                 continue
             try:
                 pat_time = datetime.strptime(pat.get("timestamp", ""), "%Y-%m-%d %H:%M")
-                if (now - pat_time).total_seconds() > 86400:
+                # Prefer fresh patterns (< 1 hour), but accept up to 6 hours
+                age_hours = (now - pat_time).total_seconds() / 3600
+                if age_hours > 6:  # ← Changed from 24h to 6h for real-time detection
                     continue
+                    
+                # Penalize old patterns
+                freshness_factor = 1.0 if age_hours < 1 else 0.8 if age_hours < 3 else 0.6
+                
             except:
                 continue
 
-            auc = pat.get("auc_mean", 0)
+            auc = pat.get("auc_mean", 0) * freshness_factor  # ← Apply freshness penalty
             if auc > best_auc:
                 best_auc = auc
                 best_match = pat
@@ -73,7 +79,7 @@ def check_auto_patterns(ticker: str, data: pd.DataFrame = None) -> tuple:
         if not best_match:
             return 0, [], "NEUTRAL", 0
 
-        boost = best_match.get("boost", 0)
+        boost = int(best_match.get("boost", 0) * freshness_factor)  # ← Reduce stale boosts
         bias = best_match.get("direction_bias", "NEUTRAL")
         direction = "DOWN" if bias == "DOWN" else "UP" if bias == "UP" else "NEUTRAL"
         timeframe = best_match.get("timeframe", "unknown")
@@ -88,11 +94,6 @@ def check_auto_patterns(ticker: str, data: pd.DataFrame = None) -> tuple:
             f"{timeframe.upper()} ELITE",
             f"Bias {bias}"
         ]
-
-        if ticker_clean == "MSTR" and bias == "DOWN" and boost >= 160:
-            direction = "UP"
-            triggers.append("TRAP to REVERSAL")
-            confidence = 99
 
         return boost, triggers, direction, confidence
 
@@ -130,15 +131,27 @@ def setup_logging():
     logger = logging.getLogger('stock_tracker')
     logger.setLevel(logging.DEBUG)
     logger.handlers.clear()
+    
+    # Console handler with UTF-8 encoding (Windows fix)
     console = logging.StreamHandler()
     console.setLevel(logging.INFO)
     console.setFormatter(logging.Formatter('%(asctime)s | %(levelname)-8s | %(message)s', '%Y-%m-%d %H:%M:%S'))
-    file = RotatingFileHandler(LOG_DIR / 'app.log', maxBytes=10*1024*1024, backupCount=5)
+    # Fix Windows emoji encoding issues
+    if hasattr(console.stream, 'reconfigure'):
+        try:
+            console.stream.reconfigure(encoding='utf-8')
+        except:
+            pass
+    
+    # File handlers with explicit UTF-8 encoding
+    file = RotatingFileHandler(LOG_DIR / 'app.log', maxBytes=10*1024*1024, backupCount=5, encoding='utf-8')
     file.setLevel(logging.DEBUG)
     file.setFormatter(logging.Formatter('%(asctime)s | %(levelname)-8s | %(funcName)s | %(message)s', '%Y-%m-%d %H:%M:%S'))
-    error = RotatingFileHandler(LOG_DIR / 'errors.log', maxBytes=5*1024*1024, backupCount=3)
+    
+    error = RotatingFileHandler(LOG_DIR / 'errors.log', maxBytes=5*1024*1024, backupCount=3, encoding='utf-8')
     error.setLevel(logging.ERROR)
     error.setFormatter(file.formatter)
+    
     logger.addHandler(console)
     logger.addHandler(file)
     logger.addHandler(error)
@@ -613,10 +626,7 @@ def detect_pre_move_6percent(ticker, name):
         except: pass
 
         if score >= 75:
-            if any(x in ticker.upper() for x in ["PLTR", "MSTR", "COIN", "HOOD", "GME", "AMC"]):
-                if score >= 95 and vol_spike_vs_baseline > 10:
-                    direction = "DOWN" if original_direction == "UP" else "UP"
-                    factors.append("TRAP→REVERSAL")
+            # Removed MSTR trap logic - trust the AI pattern miner
             confidence = min(99, 60 + score // 2 + (30 if 'AI→' in ''.join(factors) else 0))
             return {"asset": name, "direction": direction, "confidence": confidence, "factors": factors, "score": score}
         return None
