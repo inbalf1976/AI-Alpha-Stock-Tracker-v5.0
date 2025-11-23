@@ -1418,7 +1418,19 @@ def detect_pre_move_6percent(ticker, name):
         except:
             pass
 
-        # ─────── FINAL THRESHOLD ───────
+                # ─────── FINAL THRESHOLD ───────
+        
+        # === AUTO-DISCOVERED PATTERN SUPER-BOOST (NEW LAYER) ===
+        try:
+            from pattern_checker import check_auto_patterns
+            auto_boost, auto_triggers = check_auto_patterns(ticker, data)
+            score += auto_boost
+            if auto_boost > 0:
+                factors.extend(auto_triggers)
+                logger.info(f"[AUTO-PATTERN] {ticker} +{auto_boost} boost")
+        except Exception as e:
+            pass  # Silent fail — pattern file not ready yet
+
         if score >= 70:  # Raised from 65 → only elite signals
             # Reversal logic for known trap stocks
             REVERSAL_PRONE = ["PLTR", "MSTR", "COIN", "HOOD", "GME", "AMC"]
