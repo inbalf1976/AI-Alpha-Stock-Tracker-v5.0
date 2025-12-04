@@ -778,11 +778,49 @@ def save_metadata(ticker: str, metadata: Dict[str, Any]) -> bool:
         return False
 
 # ================================
-# PREDICTION TRACKING
+# REAL PREDICTION VALIDATION
 # ================================
 
-def record_prediction(ticker: str, prediction: float, date: str) -> bool:
-    """Record prediction for accuracy tracking"""
+def get_actual_price_for_date(ticker: str, target_date: datetime) -> Optional[float]:
+    """Fetch actual historical price for a specific date"""
+    try:
+        # Download data around the target date
+        start_date = target_date - timedelta(days=5)
+        end_date = target_date + timedelta(days=2)
+        
+        df = yf.download(
+            ticker,
+            start=start_date,
+            end=end_date,
+            progress=False,
+            auto_adjust=True
+        )
+        
+        if df is None or df.empty:
+            return None
+        
+        df = normalize_dataframe_columns(df)
+        
+        # Find the closest date (in case target_date is weekend/holiday)
+        df.index = pd.to_datetime(df.index)
+        target_date_normalized = pd.to_datetime(target_date.date())
+        
+        # Get closest available date
+        closest_idx = df.index.get_indexer([target_date_normalized], method='nearest')[0]
+        
+        if closest_idx >= 0 and closest_idx < len(df):
+            actual_price = float(df['Close'].iloc[closest_idx])
+            logger.debug(f"Found actual price for {ticker} on {target_date.date()}: ${actual_price:.2f}")
+            return actual_price
+        
+        return None
+        
+    except Exception as e:
+        logger.warning(f"Failed to get actual price for {ticker} on {target_date.date()}: {e}")
+        return None
+
+def record_prediction(ticker: str, prediction: float, date: str, current_price: Optional[float] = None) -> bool:
+    """Record prediction for accuracy tracking with current price for directional validation"""
     path = get_predictions_path(ticker)
     try:
         if path.exists():
@@ -791,11 +829,15 @@ def record_prediction(ticker: str, prediction: float, date: str) -> bool:
         else:
             predictions = []
         
-        predictions.append({
+        prediction_record = {
             "date": date,
             "prediction": float(prediction),
-            "timestamp": datetime.now().isoformat()
-        })
+            "timestamp": datetime.now().isoformat(),
+            "previous_price": float(current_price) if current_price else None,
+            "validated": False
+        }
+        
+        predictions.append(prediction_record)
         
         # Keep only last 100 predictions
         if len(predictions) > 100:
@@ -805,6 +847,7 @@ def record_prediction(ticker: str, prediction: float, date: str) -> bool:
             json.dump(predictions, f, indent=2)
         
         metrics_collector.increment("predictions_made")
+        logger.info(f"Recorded prediction for {ticker}: ${prediction:.2f} on {date}")
         return True
             
     except Exception as e:
@@ -813,80 +856,198 @@ def record_prediction(ticker: str, prediction: float, date: str) -> bool:
         return False
 
 def load_accuracy_log(ticker: str) -> Dict[str, Any]:
-    """Load accuracy tracking data"""
+    """Load accuracy tracking data with REAL validation against actual prices"""
     path = get_predictions_path(ticker)
     if path.exists():
         try:
             with open(path, 'r') as f:
                 predictions = json.load(f)
             
-            if len(predictions) < 2:
+            if len(predictions) == 0:
                 return {
-                    "total_predictions": len(predictions),
-                    "avg_error": 0.99,
-                    "last_updated": datetime.now().isoformat()
+                    "total_predictions": 0,
+                    "validated_predictions": 0,
+                    "avg_error_mape": 0.0,
+                    "avg_error_mae": 0.0,
+                    "directional_accuracy": 0.0,
+                    "last_updated": datetime.now().isoformat(),
+                    "status": "no_predictions"
                 }
             
-            # Calculate accuracy metrics
-            errors = []
-            for i in range(1, len(predictions)):
+            # Calculate REAL accuracy metrics
+            errors_mape = []  # Mean Absolute Percentage Error
+            errors_mae = []   # Mean Absolute Error
+            directional_correct = []
+            validated_count = 0
+            current_price = get_latest_price(ticker)
+            
+            for pred in predictions:
                 try:
-                    # In a real implementation, you would fetch actual prices
-                    # For now, this is a placeholder
-                    pred_value = predictions[i-1]['prediction']
-                    # actual_value would come from historical data
-                    # error = abs(pred_value - actual_value) / actual_value
-                    # errors.append(error)
+                    pred_date = datetime.fromisoformat(pred['date'])
+                    pred_value = float(pred['prediction'])
+                    
+                    # Only validate predictions that are in the past
+                    if pred_date.date() >= datetime.now().date():
+                        continue
+                    
+                    # Fetch actual price for that date
+                    actual_price = get_actual_price_for_date(ticker, pred_date)
+                    
+                    if actual_price is None:
+                        continue
+                    
+                    validated_count += 1
+                    
+                    # Calculate errors
+                    mae = abs(pred_value - actual_price)
+                    mape = (mae / actual_price) * 100  # Percentage error
+                    
+                    errors_mae.append(mae)
+                    errors_mape.append(mape)
+                    
+                    # Directional accuracy (did we predict up/down correctly?)
+                    if 'previous_price' in pred:
+                        prev_price = float(pred['previous_price'])
+                        predicted_direction = 1 if pred_value > prev_price else -1
+                        actual_direction = 1 if actual_price > prev_price else -1
+                        directional_correct.append(predicted_direction == actual_direction)
+                    elif current_price:
+                        # Use current price as reference if no previous stored
+                        predicted_direction = 1 if pred_value > current_price else -1
+                        actual_direction = 1 if actual_price > current_price else -1
+                        directional_correct.append(predicted_direction == actual_direction)
+                    
+                    # Store validation in prediction record
+                    pred['actual_price'] = actual_price
+                    pred['error_mae'] = mae
+                    pred['error_mape'] = mape
+                    pred['validated_at'] = datetime.now().isoformat()
+                    
                 except Exception as e:
-                    logger.debug(f"Error calculating accuracy for {ticker}: {e}")
+                    logger.debug(f"Error validating prediction for {ticker}: {e}")
                     continue
             
-            if errors:
-                avg_error = np.mean(errors)
-            else:
-                avg_error = 0.99
-                
+            # Save updated predictions with validation data
+            with open(path, 'w') as f:
+                json.dump(predictions, f, indent=2)
+            
+            # Calculate aggregate metrics
+            if validated_count == 0:
+                return {
+                    "total_predictions": len(predictions),
+                    "validated_predictions": 0,
+                    "avg_error_mape": 0.0,
+                    "avg_error_mae": 0.0,
+                    "directional_accuracy": 0.0,
+                    "last_updated": datetime.now().isoformat(),
+                    "status": "no_validated"
+                }
+            
+            avg_mape = np.mean(errors_mape)
+            avg_mae = np.mean(errors_mae)
+            dir_accuracy = (sum(directional_correct) / len(directional_correct) * 100) if directional_correct else 0.0
+            
             return {
                 "total_predictions": len(predictions),
-                "avg_error": avg_error,
-                "last_updated": datetime.now().isoformat()
+                "validated_predictions": validated_count,
+                "avg_error_mape": round(avg_mape, 2),  # Percentage
+                "avg_error_mae": round(avg_mae, 2),     # Dollar amount
+                "directional_accuracy": round(dir_accuracy, 1),  # Percentage
+                "last_updated": datetime.now().isoformat(),
+                "status": "validated",
+                "recent_errors": errors_mape[-10:] if len(errors_mape) > 0 else []
             }
             
         except Exception as e:
             logger.error(f"Failed to load accuracy log for {ticker}: {e}")
+            log_error(ErrorSeverity.ERROR, "load_accuracy_log", e, ticker=ticker, show_to_user=False)
     
     return {
         "total_predictions": 0,
-        "avg_error": 0.99,
-        "last_updated": datetime.now().isoformat()
+        "validated_predictions": 0,
+        "avg_error_mape": 0.0,
+        "avg_error_mae": 0.0,
+        "directional_accuracy": 0.0,
+        "last_updated": datetime.now().isoformat(),
+        "status": "no_file"
     }
 
 def validate_predictions(ticker: str) -> Tuple[bool, Dict[str, Any]]:
-    """Validate and update prediction accuracy"""
-    acc_log = load_accuracy_log(ticker)
-    # In a production system, this would compare predictions to actual outcomes
-    return True, acc_log
-
-# ================================
-# RETRAINING LOGIC
-# ================================
+    """Validate predictions against REAL actual prices and return performance metrics"""
+    logger.info(f"Validating predictions for {ticker} against actual market data...")
+    
+    try:
+        # Load accuracy log which now does REAL validation
+        acc_log = load_accuracy_log(ticker)
+        
+        if acc_log['status'] in ['no_predictions', 'no_file']:
+            logger.info(f"{ticker}: No predictions to validate")
+            return False, acc_log
+        
+        if acc_log['status'] == 'no_validated':
+            logger.warning(f"{ticker}: Predictions exist but none could be validated (all future dates or data unavailable)")
+            return False, acc_log
+        
+        # Check validation quality
+        validated_count = acc_log.get('validated_predictions', 0)
+        avg_mape = acc_log.get('avg_error_mape', 100.0)
+        dir_accuracy = acc_log.get('directional_accuracy', 0.0)
+        
+        logger.info(
+            f"{ticker} Validation Results: "
+            f"{validated_count} predictions | "
+            f"MAPE: {avg_mape:.2f}% | "
+            f"MAE: ${acc_log.get('avg_error_mae', 0):.2f} | "
+            f"Direction: {dir_accuracy:.1f}%"
+        )
+        
+        # Consider validation successful if we have data
+        return True, acc_log
+        
+    except Exception as e:
+        logger.error(f"Failed to validate predictions for {ticker}: {e}")
+        log_error(ErrorSeverity.ERROR, "validate_predictions", e, ticker=ticker, show_to_user=False)
+        return False, {
+            "total_predictions": 0,
+            "validated_predictions": 0,
+            "avg_error_mape": 100.0,
+            "avg_error_mae": 0.0,
+            "directional_accuracy": 0.0,
+            "status": "error"
+        }
 
 def should_retrain(ticker: str, accuracy_log: Dict[str, Any], 
                   metadata: Dict[str, Any]) -> Tuple[bool, List[str]]:
-    """Determine if model should be retrained"""
+    """Determine if model should be retrained using REAL performance metrics"""
     reasons = []
     
-    # Check prediction count
-    if accuracy_log.get("total_predictions", 0) < 10:
-        reasons.append("insufficient_predictions")
+    # Check if we have validated predictions
+    validated_count = accuracy_log.get("validated_predictions", 0)
+    total_predictions = accuracy_log.get("total_predictions", 0)
     
-    # Check error rate
-    if accuracy_log.get("avg_error", 0.99) > 0.08:
-        reasons.append("high_error")
+    if validated_count < 5:
+        if total_predictions < 5:
+            reasons.append("insufficient_predictions")
+        else:
+            reasons.append("insufficient_validated_predictions")
+    
+    # Check REAL error rates (MAPE - Mean Absolute Percentage Error)
+    avg_mape = accuracy_log.get("avg_error_mape", 0.0)
+    if validated_count >= 5:  # Only check error if we have enough validated predictions
+        if avg_mape > 8.0:  # More than 8% average error
+            reasons.append(f"high_error_mape_{avg_mape:.1f}%")
+        elif avg_mape > 5.0:  # Warning level
+            reasons.append(f"elevated_error_mape_{avg_mape:.1f}%")
+    
+    # Check directional accuracy
+    dir_accuracy = accuracy_log.get("directional_accuracy", 0.0)
+    if validated_count >= 5 and dir_accuracy < 55.0:  # Less than 55% correct direction
+        reasons.append(f"poor_direction_accuracy_{dir_accuracy:.1f}%")
     
     # Check initial training
-    if metadata.get("retrain_count", 0) < 2:
-        reasons.append("initial_training")
+    retrain_count = metadata.get("retrain_count", 0)
+    if retrain_count < 2:
+        reasons.append("initial_training_phase")
     
     # Check if model is stale
     if metadata.get("trained_date"):
@@ -894,7 +1055,9 @@ def should_retrain(ticker: str, accuracy_log: Dict[str, Any],
             trained_date = datetime.fromisoformat(metadata["trained_date"])
             days_since_training = (datetime.now() - trained_date).days
             if days_since_training > 14:
-                reasons.append("stale_model")
+                reasons.append(f"stale_model_{days_since_training}d")
+            elif days_since_training > 7 and avg_mape > 6.0:
+                reasons.append(f"aging_model_with_errors_{days_since_training}d")
         except Exception as e:
             logger.warning(f"Invalid training date for {ticker}: {e}")
             reasons.append("invalid_training_date")
@@ -902,6 +1065,13 @@ def should_retrain(ticker: str, accuracy_log: Dict[str, Any],
     # Check data quality issues
     if metadata.get("data_quality") == "WARNING":
         reasons.append("data_quality_issues")
+    
+    # Check recent performance degradation
+    recent_errors = accuracy_log.get("recent_errors", [])
+    if len(recent_errors) >= 3:
+        recent_avg = np.mean(recent_errors[-3:])
+        if recent_avg > avg_mape * 1.5:  # Recent errors 50% worse than average
+            reasons.append(f"performance_degradation_{recent_avg:.1f}%")
     
     return len(reasons) > 0, reasons
 
@@ -1041,7 +1211,7 @@ def prepare_training_data(df: pd.DataFrame, scaler: MinMaxScaler,
         logger.error(f"Error preparing training data: {e}")
         log_error(ErrorSeverity.ERROR, "prepare_training_data", e, show_to_user=False)
         return None, None
-        
+
 # ================================
 # MODEL TRAINING ORCHESTRATION
 # ================================
@@ -1183,6 +1353,7 @@ def generate_forecast(ticker: str, model: Any, scaler: MinMaxScaler,
                  ticker=ticker, show_to_user=False)
         return None, None
 
+
 # ================================
 # ENHANCED TRAINING FUNCTION
 # ================================
@@ -1256,9 +1427,9 @@ def train_self_learning_model_enhanced(ticker: str, days: int = 5,
         if current_price:
             forecast = get_pattern_boosted_forecast(ticker, forecast.tolist(), current_price)
         
-        # Record prediction
+        # Record prediction with current price for directional validation
         tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
-        record_prediction(ticker, forecast[0], tomorrow)
+        record_prediction(ticker, forecast[0], tomorrow, current_price)
         
         # Update metadata
         meta.update({
@@ -1266,7 +1437,7 @@ def train_self_learning_model_enhanced(ticker: str, days: int = 5,
             "training_samples": len(X),
             "training_volatility": float(df['Close'].pct_change().std()),
             "version": meta.get("version", 1) + 1,
-            "last_accuracy": acc_log.get("avg_error", 0),
+            "last_accuracy": acc_log.get("avg_error_mape", 0),
             "data_quality": "GOOD",
             "forecast_days": days
         })
@@ -1565,7 +1736,6 @@ def mine_daily_patterns(ticker: str) -> Tuple[Optional[Tuple], Optional[str]]:
         log_error(ErrorSeverity.WARNING, "mine_daily_patterns", e, 
                  ticker=ticker, show_to_user=False)
         return None, str(e)[:30]
-
 # ================================
 # PATTERN EVALUATION
 # ================================
@@ -1651,7 +1821,8 @@ def train_and_evaluate_patterns(X: pd.DataFrame, y: pd.Series,
         log_error(ErrorSeverity.WARNING, "train_and_evaluate_patterns", e, 
                  show_to_user=False)
         return None
-        
+
+
 # ================================
 # PATTERN MINING FOR TICKER
 # ================================
@@ -1912,23 +2083,37 @@ def get_pattern_boosted_forecast(ticker: str, base_forecast: List[float],
 
 def enhanced_confidence_checklist(ticker: str, forecast: List[float], 
                                  current_price: float) -> Tuple[bool, List[str], int]:
-    """Enhanced confidence checklist with pattern integration"""
+    """Enhanced confidence checklist with REAL accuracy metrics and pattern integration"""
     reasons = []
     meta = load_metadata(ticker)
     acc = load_accuracy_log(ticker)
     
-    # Existing checks
-    if acc.get("total_predictions", 0) < 12: 
-        reasons.append("Few live preds")
+    # Check validated prediction count
+    validated_count = acc.get("validated_predictions", 0)
+    if validated_count < 5: 
+        reasons.append(f"Few validated predictions ({validated_count})")
+    
+    # Check retrain count
     if meta.get("retrain_count", 0) < 2: 
         reasons.append("Low retrains")
-    if acc.get("avg_error", 0.99) > 0.065: 
-        reasons.append(f"Error {acc['avg_error']:.1%}")
+    
+    # Check REAL error rates
+    avg_mape = acc.get("avg_error_mape", 100.0)
+    if avg_mape > 6.5: 
+        reasons.append(f"MAPE {avg_mape:.1f}%")
+    
+    # Check directional accuracy
+    dir_accuracy = acc.get("directional_accuracy", 0.0)
+    if validated_count >= 3 and dir_accuracy < 55.0:
+        reasons.append(f"Direction {dir_accuracy:.0f}%")
+    
+    # Check model staleness
     if meta.get("trained_date"):
         try:
             trained_date = datetime.fromisoformat(meta["trained_date"])
-            if (datetime.now() - trained_date).days > 14:
-                reasons.append("Model stale")
+            days_since = (datetime.now() - trained_date).days
+            if days_since > 14:
+                reasons.append(f"Model {days_since}d old")
         except: 
             pass
     
@@ -1938,8 +2123,9 @@ def enhanced_confidence_checklist(ticker: str, forecast: List[float],
         if len(reasons) > 0:
             # Remove one reason for strong patterns
             reasons.pop()
-        reasons.append(f"Strong pattern boost +{boost}")
+        reasons.append(f"Strong pattern +{boost}")
     
+    # Check forecast reasonableness
     if forecast and current_price:
         move = abs(forecast[0] - current_price) / current_price
         if move > 0.12: 
@@ -1986,7 +2172,6 @@ def get_pattern_influenced_recommendation(ticker: str, base_forecast: List[float
         reasons.extend(triggers)
     
     return action, confidence, reasons
-
 # ================================
 # THREAD HEARTBEAT AND MONITORING
 # ================================
@@ -1998,13 +2183,15 @@ class ApplicationState:
             "learning_daemon": None,
             "monitoring": None,
             "pattern_miner": None,
-            "watchdog": None
+            "watchdog": None,
+            "auto_validator": None
         }
         self.thread_start_times: Dict[str, Optional[datetime]] = {
             "learning_daemon": None,
             "monitoring": None,
             "pattern_miner": None,
-            "watchdog": None
+            "watchdog": None,
+            "auto_validator": None
         }
         self._lock = threading.RLock()
         self.logging_queue = queue.Queue()
@@ -2064,6 +2251,7 @@ class ApplicationState:
 
 # Global application state
 app_state = ApplicationState()
+
 
 # ================================
 # BACKGROUND THREADS
@@ -2282,7 +2470,7 @@ def thread_watchdog_managed(stop_event: threading.Event) -> None:
                     logger.debug(f"[SUCCESS] Thread {name} is HEALTHY")
             
             # Also check legacy heartbeat threads
-            for name in ["learning_daemon", "monitoring", "pattern_miner"]:
+            for name in ["learning_daemon", "monitoring", "pattern_miner", "auto_validator"]:
                 if name not in thread_status:
                     status = app_state.get_thread_status(name)
                     if status["status"] == "DEAD":
@@ -2304,7 +2492,68 @@ def thread_watchdog_managed(stop_event: threading.Event) -> None:
                 time.sleep(1)
     
     logger.info("[WATCHDOG] Enhanced Watchdog STOPPED")
+
+def auto_validate_predictions_background(stop_event: threading.Event) -> None:
+    """Background thread to automatically validate predictions daily"""
+    app_state.update_heartbeat("auto_validator")
+    app_state.set_thread_start_time("auto_validator")
+    logger.info("[AUTO VALIDATOR] Started")
     
+    while not stop_event.is_set():
+        try:
+            app_state.update_heartbeat("auto_validator")
+            
+            # Run validation once per day at 9 AM
+            now = datetime.now()
+            if now.hour == 9 and now.minute < 5:
+                logger.info("[AUTO VALIDATOR] Running daily validation...")
+                app_state.add_log_message(f"[AUTO VALIDATOR] Daily validation started")
+                
+                all_tickers = [t for cat in ASSET_CATEGORIES.values() for t in cat.values()]
+                validated_count = 0
+                
+                for ticker in all_tickers:
+                    try:
+                        success, acc_data = validate_predictions(ticker)
+                        if success and acc_data.get('validated_predictions', 0) > 0:
+                            validated_count += 1
+                            
+                            # Check if performance is poor and send alert
+                            mape = acc_data.get('avg_error_mape', 0)
+                            if mape > 10.0:
+                                logger.warning(f"[AUTO VALIDATOR] {ticker} has poor accuracy: {mape:.2f}% MAPE")
+                                app_state.add_log_message(f"[ALERT] {ticker} accuracy degraded: {mape:.2f}% MAPE")
+                    except Exception as e:
+                        logger.error(f"[AUTO VALIDATOR] Failed to validate {ticker}: {e}")
+                
+                logger.info(f"[AUTO VALIDATOR] Validated {validated_count} tickers")
+                app_state.add_log_message(f"[AUTO VALIDATOR] Complete - {validated_count} tickers validated")
+                
+                # Sleep for an hour to avoid running again
+                for _ in range(3600):
+                    if stop_event.is_set():
+                        break
+                    time.sleep(1)
+                    app_state.update_heartbeat("auto_validator")
+            
+            # Check every 5 minutes
+            for _ in range(300):
+                if stop_event.is_set():
+                    break
+                time.sleep(1)
+                app_state.update_heartbeat("auto_validator")
+                
+        except Exception as e:
+            logger.error(f"[AUTO VALIDATOR] Error: {e}")
+            log_error(ErrorSeverity.ERROR, "auto_validate_predictions_background", e, show_to_user=False)
+            
+            for _ in range(60):
+                if stop_event.is_set():
+                    break
+                time.sleep(1)
+    
+    logger.info("[AUTO VALIDATOR] Stopped")
+
 # ================================
 # SYSTEM RESOURCE MONITORING
 # ================================
@@ -2396,6 +2645,10 @@ def initialize_background_threads_enhanced() -> None:
         thread_manager.start_thread("watchdog", thread_watchdog_managed)
         logger.info("[SUCCESS] Watchdog thread started")
         
+        # Start auto validator
+        thread_manager.start_thread("auto_validator", auto_validate_predictions_background)
+        logger.info("[SUCCESS] Auto validator thread started")
+        
         # Start learning daemon if enabled
         if load_daemon_config().get("enabled", False):
             thread_manager.start_thread("learning_daemon", continuous_learning_daemon_managed)
@@ -2416,6 +2669,7 @@ def shutdown_background_threads() -> None:
     logger.info("Shutting down background threads...")
     thread_manager.stop_all()
     logger.info("All background threads stopped")
+
 
 # ================================
 # STREAMLIT UI COMPONENTS
@@ -2625,6 +2879,224 @@ def show_pattern_dashboard() -> None:
         st.error(f"❌ Error loading pattern data: {e}")
         log_error(ErrorSeverity.ERROR, "show_pattern_dashboard", e, show_to_user=True)
 
+def show_accuracy_dashboard(ticker: str) -> None:
+    """Show detailed accuracy metrics for a ticker with REAL validation data"""
+    st.subheader(f"📊 Prediction Accuracy - {ticker}")
+    
+    acc = load_accuracy_log(ticker)
+    
+    if acc['status'] == 'no_predictions':
+        st.info("ℹ️ No predictions recorded yet. Generate some forecasts to see accuracy metrics.")
+        return
+    
+    if acc['status'] == 'no_file':
+        st.info("ℹ️ No prediction history available.")
+        return
+    
+    # Overall metrics
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        total_preds = acc.get('total_predictions', 0)
+        st.metric("📊 Total Predictions", total_preds)
+    
+    with col2:
+        validated = acc.get('validated_predictions', 0)
+        validation_rate = (validated / total_preds * 100) if total_preds > 0 else 0
+        st.metric("✅ Validated", f"{validated}", delta=f"{validation_rate:.0f}%")
+    
+    with col3:
+        mape = acc.get('avg_error_mape', 0.0)
+        mape_color = "normal" if mape < 5.0 else "inverse" if mape < 8.0 else "off"
+        st.metric("📉 Avg Error (MAPE)", f"{mape:.2f}%", delta_color=mape_color)
+    
+    with col4:
+        dir_acc = acc.get('directional_accuracy', 0.0)
+        dir_color = "normal" if dir_acc > 60 else "inverse" if dir_acc > 50 else "off"
+        st.metric("🎯 Direction Accuracy", f"{dir_acc:.1f}%", delta_color=dir_color)
+    
+    st.markdown("---")
+    
+    # Additional metrics
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        mae = acc.get('avg_error_mae', 0.0)
+        st.metric("💵 Avg Error (MAE)", f"${mae:.2f}")
+    
+    with col2:
+        last_updated = acc.get('last_updated', 'Never')
+        try:
+            update_time = datetime.fromisoformat(last_updated)
+            time_ago = datetime.now() - update_time
+            if time_ago.days > 0:
+                time_str = f"{time_ago.days}d ago"
+            else:
+                hours = time_ago.seconds // 3600
+                time_str = f"{hours}h ago"
+            st.metric("🕐 Last Validation", time_str)
+        except:
+            st.metric("🕐 Last Validation", "Unknown")
+    
+    with col3:
+        status = acc.get('status', 'unknown')
+        status_emoji = {
+            'validated': '✅',
+            'no_validated': '⚠️',
+            'no_predictions': 'ℹ️',
+            'error': '❌'
+        }.get(status, '❓')
+        st.metric("Status", f"{status_emoji} {status.upper()}")
+    
+    # Performance interpretation
+    st.markdown("---")
+    st.subheader("📈 Performance Analysis")
+    
+    if validated < 5:
+        st.warning("⚠️ **Insufficient Data**: Need at least 5 validated predictions for reliable analysis.")
+    else:
+        # MAPE interpretation
+        if mape < 3.0:
+            st.success(f"🎉 **Excellent Performance**: {mape:.2f}% MAPE is very accurate!")
+        elif mape < 5.0:
+            st.success(f"✅ **Good Performance**: {mape:.2f}% MAPE is acceptable for trading.")
+        elif mape < 8.0:
+            st.warning(f"⚠️ **Moderate Performance**: {mape:.2f}% MAPE suggests room for improvement.")
+        else:
+            st.error(f"❌ **Poor Performance**: {mape:.2f}% MAPE indicates model needs retraining.")
+        
+        # Direction accuracy interpretation
+        if dir_acc > 65:
+            st.success(f"🎯 **Strong Direction Prediction**: {dir_acc:.1f}% correct direction is excellent!")
+        elif dir_acc > 55:
+            st.info(f"📊 **Decent Direction Prediction**: {dir_acc:.1f}% is better than random.")
+        elif dir_acc > 45:
+            st.warning(f"⚠️ **Weak Direction Prediction**: {dir_acc:.1f}% is close to random.")
+        else:
+            st.error(f"❌ **Poor Direction Prediction**: {dir_acc:.1f}% is worse than random!")
+    
+    # Load detailed prediction history
+    if st.button("📋 View Detailed History", key=f"history_{ticker}"):
+        show_prediction_history(ticker)
+
+def show_prediction_history(ticker: str) -> None:
+    """Show detailed prediction vs actual history"""
+    path = get_predictions_path(ticker)
+    
+    if not path.exists():
+        st.info("No prediction history available.")
+        return
+    
+    try:
+        with open(path, 'r') as f:
+            predictions = json.load(f)
+        
+        if not predictions:
+            st.info("No predictions recorded.")
+            return
+        
+        # Filter validated predictions
+        validated_preds = [p for p in predictions if p.get('actual_price') is not None]
+        
+        if not validated_preds:
+            st.info("No validated predictions yet. Predictions can only be validated after their target date has passed.")
+            return
+        
+        # Create comparison table
+        history_data = []
+        for pred in validated_preds:
+            try:
+                pred_date = datetime.fromisoformat(pred['date']).strftime("%Y-%m-%d")
+                predicted = pred['prediction']
+                actual = pred['actual_price']
+                error_pct = pred.get('error_mape', 0)
+                error_abs = pred.get('error_mae', 0)
+                
+                # Direction
+                if pred.get('previous_price'):
+                    prev = pred['previous_price']
+                    pred_dir = "⬆️" if predicted > prev else "⬇️"
+                    actual_dir = "⬆️" if actual > prev else "⬇️"
+                    correct_dir = "✅" if pred_dir == actual_dir else "❌"
+                else:
+                    pred_dir = "-"
+                    actual_dir = "-"
+                    correct_dir = "-"
+                
+                history_data.append({
+                    "Date": pred_date,
+                    "Predicted": f"${predicted:.2f}",
+                    "Actual": f"${actual:.2f}",
+                    "Error $": f"${error_abs:.2f}",
+                    "Error %": f"{error_pct:.2f}%",
+                    "Pred Dir": pred_dir,
+                    "Actual Dir": actual_dir,
+                    "Correct": correct_dir
+                })
+            except Exception as e:
+                logger.debug(f"Error displaying prediction: {e}")
+                continue
+        
+        if history_data:
+            st.dataframe(
+                pd.DataFrame(history_data),
+                use_container_width=True,
+                hide_index=True
+            )
+            
+            # Create chart of predicted vs actual
+            chart_data = []
+            for pred in validated_preds:
+                try:
+                    date = datetime.fromisoformat(pred['date'])
+                    chart_data.append({
+                        'Date': date,
+                        'Predicted': pred['prediction'],
+                        'Actual': pred['actual_price']
+                    })
+                except:
+                    continue
+            
+            if chart_data:
+                df_chart = pd.DataFrame(chart_data).sort_values('Date')
+                
+                fig = go.Figure()
+                
+                fig.add_trace(go.Scatter(
+                    x=df_chart['Date'],
+                    y=df_chart['Predicted'],
+                    mode='lines+markers',
+                    name='Predicted',
+                    line=dict(color='blue', width=2),
+                    marker=dict(size=8)
+                ))
+                
+                fig.add_trace(go.Scatter(
+                    x=df_chart['Date'],
+                    y=df_chart['Actual'],
+                    mode='lines+markers',
+                    name='Actual',
+                    line=dict(color='green', width=2),
+                    marker=dict(size=8)
+                ))
+                
+                fig.update_layout(
+                    title=f"{ticker} - Predicted vs Actual Prices",
+                    xaxis_title="Date",
+                    yaxis_title="Price ($)",
+                    showlegend=True,
+                    hovermode='x unified',
+                    height=400
+                )
+                
+                st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.info("No validated predictions to display.")
+            
+    except Exception as e:
+        st.error(f"Error loading prediction history: {e}")
+        log_error(ErrorSeverity.ERROR, "show_prediction_history", e, ticker=ticker, show_to_user=True)
+
 def show_error_dashboard() -> None:
     """Show error dashboard"""
     st.subheader("⚠️ Error Dashboard")
@@ -2709,7 +3181,8 @@ def show_learning_log() -> None:
             st.text(message)
     else:
         st.info("ℹ️ No learning activity yet.")
-
+		 
+		 
 # ================================
 # MAIN STREAMLIT APPLICATION
 # ================================
@@ -2717,24 +3190,25 @@ def show_learning_log() -> None:
 def main():
     """Main Streamlit application"""
     st.set_page_config(
-        page_title="AI Alpha Trader v4.2 Enhanced",
+        page_title="AI Alpha Trader v4.2 - 100% Real",
         page_icon="📈",
         layout="wide",
         initial_sidebar_state="expanded"
     )
     
-    st.title("📈 AI Alpha Trader v4.2 Enhanced")
-    st.markdown("*Advanced AI-Powered Trading Platform with Pattern Mining*")
+    st.title("📈 AI Alpha Trader v4.2 - 100% Real Validation")
+    st.markdown("*Advanced AI-Powered Trading Platform with Real Prediction Validation*")
     st.markdown("---")
     
     # Initialize enhanced background threads
     initialize_background_threads_enhanced()
     
     # Create tabs
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
         "📊 Dashboard", 
         "🔮 Forecast", 
-        "📈 Analysis", 
+        "📈 Analysis",
+        "🎯 Accuracy",
         "⚙️ Settings", 
         "🔧 Diagnostics",
         "📝 Logs"
@@ -2857,6 +3331,14 @@ def main():
     with tab1:
         st.header("📊 Trading Dashboard")
         
+        # Show accuracy dashboard if requested
+        if st.session_state.get('show_accuracy_detail', False):
+            show_accuracy_dashboard(ticker)
+            if st.button("⬅️ Back to Dashboard"):
+                st.session_state.show_accuracy_detail = False
+                st.rerun()
+            st.markdown("---")
+        
         col1, col2 = st.columns([2, 1])
         
         with col1:
@@ -2921,8 +3403,26 @@ def main():
             acc = load_accuracy_log(ticker)
             
             st.write(f"**🔄 Retrain Count:** {meta.get('retrain_count', 0)}")
-            st.write(f"**📊 Predictions:** {acc.get('total_predictions', 0)}")
-            st.write(f"**📉 Avg Error:** {acc.get('avg_error', 0)*100:.1f}%")
+            st.write(f"**📊 Total Predictions:** {acc.get('total_predictions', 0)}")
+            st.write(f"**✅ Validated:** {acc.get('validated_predictions', 0)}")
+            
+            # Show REAL metrics
+            if acc.get('validated_predictions', 0) > 0:
+                mape = acc.get('avg_error_mape', 0)
+                st.write(f"**📉 MAPE:** {mape:.2f}%")
+                
+                dir_acc = acc.get('directional_accuracy', 0)
+                st.write(f"**🎯 Direction:** {dir_acc:.1f}%")
+                
+                # Color code performance
+                if mape < 5.0:
+                    st.success("✅ Good accuracy")
+                elif mape < 8.0:
+                    st.warning("⚠️ Moderate accuracy")
+                else:
+                    st.error("❌ Needs retraining")
+            else:
+                st.info("No validated predictions yet")
             
             if meta.get('trained_date'):
                 try:
@@ -2940,11 +3440,16 @@ def main():
                     with st.expander("🔍 Pattern Details"):
                         for trigger in triggers:
                             st.write(f"• {trigger}")
+            
+            # Button to view detailed accuracy
+            if st.button("📊 View Accuracy Details", key=f"acc_detail_{ticker}"):
+                st.session_state.show_accuracy_detail = True
+                st.rerun()
     
-# ================================
-# TAB 2: FORECAST (CORRECTED)
-# ================================
-
+    # ================================
+    # TAB 2: FORECAST
+    # ================================
+    
     with tab2:
         st.header("🔮 Price Forecast")
         
@@ -3067,10 +3572,186 @@ def main():
         st.write("**Want a specific feature?** Let us know!")
     
     # ================================
-    # TAB 4: SETTINGS
+    # TAB 4: ACCURACY TRACKING
     # ================================
     
     with tab4:
+        st.header("🎯 Prediction Accuracy Tracking")
+        
+        st.info("💡 **How it works**: Every prediction is validated against actual market prices once the target date has passed. This provides real-world performance metrics.")
+        
+        # Validate predictions button
+        col1, col2, col3 = st.columns([2, 1, 1])
+        with col1:
+            if st.button("🔄 Validate All Predictions", type="primary", use_container_width=True):
+                with st.spinner("Validating predictions against actual prices..."):
+                    all_tickers = [t for cat in ASSET_CATEGORIES.values() for t in cat.values()]
+                    progress = st.progress(0)
+                    results = []
+                    
+                    for idx, t in enumerate(all_tickers):
+                        try:
+                            success, acc_data = validate_predictions(t)
+                            if success and acc_data.get('validated_predictions', 0) > 0:
+                                results.append({
+                                    'Ticker': t,
+                                    'Validated': acc_data.get('validated_predictions', 0),
+                                    'MAPE': f"{acc_data.get('avg_error_mape', 0):.2f}%",
+                                    'Direction': f"{acc_data.get('directional_accuracy', 0):.1f}%"
+                                })
+                        except Exception as e:
+                            logger.error(f"Validation failed for {t}: {e}")
+                        
+                        progress.progress((idx + 1) / len(all_tickers))
+                    
+                    if results:
+                        st.success(f"✅ Validated predictions for {len(results)} tickers!")
+                        st.dataframe(pd.DataFrame(results), use_container_width=True)
+                    else:
+                        st.warning("⚠️ No predictions available for validation yet.")
+        
+        with col2:
+            if st.button("📊 Current Ticker", type="secondary", use_container_width=True):
+                st.session_state.show_current_ticker_accuracy = True
+                st.rerun()
+        
+        with col3:
+            if st.button("🗑️ Clear History", type="secondary", use_container_width=True):
+                try:
+                    count = 0
+                    for file in PREDICTIONS_DIR.glob("*.json"):
+                        file.unlink()
+                        count += 1
+                    st.success(f"✅ Cleared {count} files!")
+                    time.sleep(1)
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"❌ Error: {e}")
+        
+        st.markdown("---")
+        
+        # Show current ticker accuracy if requested
+        if st.session_state.get('show_current_ticker_accuracy', False):
+            show_accuracy_dashboard(ticker)
+            if st.button("⬅️ Back to Overview"):
+                st.session_state.show_current_ticker_accuracy = False
+                st.rerun()
+        else:
+            # Show overview of all tickers
+            st.subheader("📊 Accuracy Overview - All Assets")
+            
+            all_tickers = [t for cat in ASSET_CATEGORIES.values() for t in cat.values()]
+            overview_data = []
+            
+            for t in all_tickers:
+                try:
+                    acc = load_accuracy_log(t)
+                    if acc.get('validated_predictions', 0) > 0:
+                        overview_data.append({
+                            'Ticker': t,
+                            'Total Preds': acc.get('total_predictions', 0),
+                            'Validated': acc.get('validated_predictions', 0),
+                            'MAPE': acc.get('avg_error_mape', 0),
+                            'MAPE_str': f"{acc.get('avg_error_mape', 0):.2f}%",
+                            'MAE': f"${acc.get('avg_error_mae', 0):.2f}",
+                            'Direction': f"{acc.get('directional_accuracy', 0):.1f}%",
+                            'Status': acc.get('status', 'unknown')
+                        })
+                except Exception as e:
+                    logger.debug(f"Error loading accuracy for {t}: {e}")
+            
+            if overview_data:
+                df_overview = pd.DataFrame(overview_data)
+                
+                # Summary statistics
+                col1, col2, col3, col4 = st.columns(4)
+                
+                with col1:
+                    st.metric("📊 Tickers Tracked", len(df_overview))
+                
+                with col2:
+                    avg_mape = df_overview['MAPE'].mean()
+                    st.metric("📉 Avg MAPE", f"{avg_mape:.2f}%")
+                
+                with col3:
+                    total_validated = df_overview['Validated'].sum()
+                    st.metric("✅ Total Validated", total_validated)
+                
+                with col4:
+                    # Count good performers (MAPE < 5%)
+                    good_performers = len(df_overview[df_overview['MAPE'] < 5.0])
+                    st.metric("🎯 Good Models", good_performers)
+                
+                st.markdown("---")
+                
+                # Display table
+                display_df = df_overview.drop(columns=['MAPE'])
+                st.dataframe(
+                    display_df.sort_values('MAPE_str'),
+                    use_container_width=True,
+                    hide_index=True
+                )
+                
+                # Performance distribution chart
+                st.markdown("---")
+                st.subheader("📊 Performance Distribution")
+                
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    # MAPE distribution
+                    fig_mape = go.Figure()
+                    fig_mape.add_trace(go.Bar(
+                        x=df_overview['Ticker'],
+                        y=df_overview['MAPE'],
+                        marker_color=['green' if x < 5 else 'orange' if x < 8 else 'red' 
+                                     for x in df_overview['MAPE']],
+                        text=[f"{x:.2f}%" for x in df_overview['MAPE']],
+                        textposition='outside'
+                    ))
+                    fig_mape.update_layout(
+                        title="MAPE by Ticker",
+                        xaxis_title="Ticker",
+                        yaxis_title="MAPE (%)",
+                        showlegend=False,
+                        height=400
+                    )
+                    fig_mape.add_hline(y=5.0, line_dash="dash", line_color="green", 
+                                       annotation_text="Good (5%)")
+                    fig_mape.add_hline(y=8.0, line_dash="dash", line_color="orange",
+                                       annotation_text="Acceptable (8%)")
+                    st.plotly_chart(fig_mape, use_container_width=True)
+                
+                with col2:
+                    # Performance categories
+                    excellent = len(df_overview[df_overview['MAPE'] < 3])
+                    good = len(df_overview[(df_overview['MAPE'] >= 3) & (df_overview['MAPE'] < 5)])
+                    moderate = len(df_overview[(df_overview['MAPE'] >= 5) & (df_overview['MAPE'] < 8)])
+                    poor = len(df_overview[df_overview['MAPE'] >= 8])
+                    
+                    fig_pie = go.Figure(data=[go.Pie(
+                        labels=['Excellent (<3%)', 'Good (3-5%)', 'Moderate (5-8%)', 'Poor (>8%)'],
+                        values=[excellent, good, moderate, poor],
+                        marker_colors=['darkgreen', 'lightgreen', 'orange', 'red']
+                    )])
+                    fig_pie.update_layout(
+                        title="Performance Categories",
+                        height=400
+                    )
+                    st.plotly_chart(fig_pie, use_container_width=True)
+                
+            else:
+                st.info("ℹ️ No validated predictions yet. Models need to make predictions, then wait for target dates to pass for validation.")
+                st.markdown("**To get started:**")
+                st.markdown("1. Generate forecasts for assets in the Forecast tab")
+                st.markdown("2. Wait for prediction dates to pass")
+                st.markdown("3. Return here and click 'Validate All Predictions'")
+    
+    # ================================
+    # TAB 5: SETTINGS
+    # ================================
+    
+    with tab5:
         st.header("⚙️ Settings")
         
         col1, col2 = st.columns(2)
@@ -3171,10 +3852,10 @@ def main():
                     st.error(f"❌ Error: {e}")
     
     # ================================
-    # TAB 5: DIAGNOSTICS
+    # TAB 6: DIAGNOSTICS
     # ================================
     
-    with tab5:
+    with tab6:
         show_pattern_dashboard()
         st.markdown("---")
         show_error_dashboard()
@@ -3195,10 +3876,10 @@ def main():
             st.json(metrics)
     
     # ================================
-    # TAB 6: LOGS
+    # TAB 7: LOGS
     # ================================
     
-    with tab6:
+    with tab7:
         col1, col2 = st.columns([3, 1])
         
         with col1:
@@ -3255,4 +3936,3 @@ if __name__ == "__main__":
             pass
     finally:
         logger.info("Application shutdown complete")
-
