@@ -300,9 +300,10 @@ def download_from_alpha_vantage(ticker: str, outputsize: str = "full") -> Option
         df = convert_alpha_vantage_to_yfinance_format(df)
         
         if df is not None and len(df) > 0:
-            logger.info(f"✅ Successfully downloaded {len(df)} rows from Alpha Vantage for {ticker}")
-            metrics_collector.increment("data_downloads")
-            return df
+           logger.info(f"✅ Successfully downloaded {len(df)} rows from yfinance for {ticker}")
+           metrics_collector.increment("data_downloads")
+           metrics_collector.increment("yfinance_downloads")
+           return df
         else:
             logger.warning(f"Alpha Vantage returned empty data for {ticker}")
             return None
@@ -358,8 +359,10 @@ def download_with_timeout(ticker: str, period: str = "1y",
         outputsize = "full"  # 20+ years
     
     av_df = download_from_alpha_vantage(ticker, outputsize=outputsize)
-    
+
     if av_df is not None:
+        metrics_collector.increment("alphavantage_downloads")
+    
         # Filter to match requested period if needed
         if period != "max":
             try:
@@ -3030,19 +3033,31 @@ def add_enhanced_controls() -> None:
             disk_color = "normal" if resources['disk_usage'] < DISK_WARNING_THRESHOLD_PERCENT else "off"
             st.metric("Disk", f"{resources['disk_usage']:.1f}%", delta_color=disk_color)
     
-    # Metrics display
-    st.markdown("#### 📈 Application Metrics")
-    metrics = metrics_collector.get_metrics()
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        st.metric("Predictions Made", metrics.get('predictions_made', 0))
-        st.metric("Models Trained", metrics.get('models_trained', 0))
-        st.metric("Elite Patterns", metrics.get('elite_patterns_found', 0))
-    with col2:
-        st.metric("Models Retrained", metrics.get('models_retrained', 0))
-        st.metric("Errors", metrics.get('errors_encountered', 0))
-        st.metric("Mining Cycles", metrics.get('pattern_mining_cycles', 0))
+# Metrics display
+st.markdown("#### 📈 Application Metrics")
+metrics = metrics_collector.get_metrics()
+
+col1, col2 = st.columns(2)
+with col1:
+    st.metric("Predictions Made", metrics.get('predictions_made', 0))
+    st.metric("Models Trained", metrics.get('models_trained', 0))
+    st.metric("Elite Patterns", metrics.get('elite_patterns_found', 0))
+with col2:
+    st.metric("Models Retrained", metrics.get('models_retrained', 0))
+    st.metric("Errors", metrics.get('errors_encountered', 0))
+    st.metric("Mining Cycles", metrics.get('pattern_mining_cycles', 0))
+
+# Data source metrics
+st.markdown("#### 📊 Data Source Usage")
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric("Total Downloads", metrics.get('data_downloads', 0))
+with col2:
+    yf_downloads = metrics.get('yfinance_downloads', 0)
+    st.metric("yfinance", yf_downloads)
+with col3:
+    av_downloads = metrics.get('alphavantage_downloads', 0)
+    st.metric("Alpha Vantage", av_downloads)
 
 def show_pattern_dashboard() -> None:
     """Show pattern mining dashboard"""
@@ -3459,6 +3474,14 @@ def main():
     
     with st.sidebar:
         st.header("🎯 Configuration")
+    
+        # Data source status
+        if ALPHA_VANTAGE_API_KEY:
+            st.success("✅ Alpha Vantage: Configured")
+        else:
+           st.warning("⚠️ Alpha Vantage: Not configured (using yfinance only)")
+    
+        st.markdown("---")
         
         # Asset selection
         category = st.selectbox("📁 Category", list(ASSET_CATEGORIES.keys()))
@@ -3992,8 +4015,78 @@ def main():
     
     with tab5:
         st.header("⚙️ Settings")
-        
+    
+        # Alpha Vantage Configuration Section
+        st.subheader("🔌 Data Source Configuration")
+    
         col1, col2 = st.columns(2)
+    
+        with col1:
+            st.markdown("**Primary Data Source:** yfinance")
+            st.info("ℹ️ Free, real-time data from Yahoo Finance")
+    
+        with col2:
+            st.markdown("**Backup Data Source:** Alpha Vantage")
+            if ALPHA_VANTAGE_API_KEY:
+                st.success("✅ API Key Configured")
+                # Mask the API key for security
+                masked_key = ALPHA_VANTAGE_API_KEY[:4] + "..." + ALPHA_VANTAGE_API_KEY[-4:] if len(ALPHA_VANTAGE_API_KEY) > 8 else "****"
+                st.text(f"Key: {masked_key}")
+            else:
+                st.warning("⚠️ No API Key")
+                st.markdown("Set `ALPHA_VANTAGE_API_KEY` in `.env` file")
+    
+      with st.expander("📖 About Data Sources"):
+        st.markdown("""
+        **How it works:**
+        1. **Primary**: System attempts to fetch data from yfinance (free, no API key needed)
+        2. **Fallback**: If yfinance fails, system automatically switches to Alpha Vantage
+        3. **Validation**: All historical prices are validated against actual market data
+        
+        **Alpha Vantage Benefits:**
+        - ✅ Reliable backup when yfinance is down
+        - ✅ More stable for international tickers
+        - ✅ Better rate limiting for intensive operations
+        - ⚠️ Free tier: 25 requests/day, 5 requests/minute
+        
+        **Get Free API Key:**
+        1. Visit: https://www.alphavantage.co/support/#api-key
+        2. Get free API key (takes 30 seconds)
+        3. Add to `.env` file: `ALPHA_VANTAGE_API_KEY=your_key_here`
+        4. Restart application
+        """)
+        
+        # Test Alpha Vantage connection
+        if ALPHA_VANTAGE_API_KEY:
+            if st.button("🧪 Test Alpha Vantage Connection", type="secondary"):
+                with st.spinner("Testing Alpha Vantage API..."):
+                    try:
+                        # Test with a simple quote request
+                        params = {
+                            'function': 'GLOBAL_QUOTE',
+                            'symbol': 'AAPL',
+                            'apikey': ALPHA_VANTAGE_API_KEY
+                        }
+                        response = requests.get(ALPHA_VANTAGE_BASE_URL, params=params, timeout=10)
+                        data = response.json()
+                        
+                        if 'Global Quote' in data:
+                            price = data['Global Quote'].get('05. price', 'N/A')
+                            st.success(f"✅ Connection successful! AAPL price: ${price}")
+                        elif 'Error Message' in data:
+                            st.error(f"❌ API Error: {data['Error Message']}")
+                        elif 'Note' in data:
+                            st.warning(f"⚠️ Rate limit: {data['Note']}")
+                        else:
+                            st.error("❌ Unexpected response format")
+                    except Exception as e:
+                        st.error(f"❌ Connection failed: {e}")
+        else:
+            st.info("ℹ️ Configure API key to test connection")
+    
+    st.markdown("---")
+    
+    col1, col2 = st.columns(2)
         
         with col1:
             st.subheader("🤖 Model Configuration")
