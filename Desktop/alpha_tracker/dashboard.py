@@ -1,7 +1,7 @@
-import streamlit as st
 import yfinance as yf
 import pandas as pd
 import numpy as np
+import streamlit as st
 from datetime import datetime, timedelta
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
@@ -60,6 +60,10 @@ DISK_WARNING_THRESHOLD_PERCENT = 90
 NETWORK_TIMEOUT_SECONDS = 30
 MAX_RETRIES = 3
 CACHE_TTL_SECONDS = 300  # 5 minutes
+
+# Alpha Vantage Configuration
+ALPHA_VANTAGE_API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY', '')
+ALPHA_VANTAGE_BASE_URL = "https://www.alphavantage.co/query"
 
 # Learning configuration
 LEARNING_CONFIG = {
@@ -206,11 +210,120 @@ def normalize_dataframe_columns(df: pd.DataFrame) -> pd.DataFrame:
         df.columns = df.columns.get_level_values(0)
     return df
 
+def convert_alpha_vantage_to_yfinance_format(df: pd.DataFrame) -> pd.DataFrame:
+    """Convert Alpha Vantage dataframe format to yfinance format"""
+    try:
+        # Alpha Vantage columns: date, open, high, low, close, volume
+        # Rename to match yfinance format
+        column_mapping = {
+            '1. open': 'Open',
+            '2. high': 'High',
+            '3. low': 'Low',
+            '4. close': 'Close',
+            '5. volume': 'Volume',
+            'open': 'Open',
+            'high': 'High',
+            'low': 'Low',
+            'close': 'Close',
+            'volume': 'Volume'
+        }
+        
+        # Rename columns
+        df = df.rename(columns=column_mapping)
+        
+        # Ensure index is datetime
+        if not isinstance(df.index, pd.DatetimeIndex):
+            df.index = pd.to_datetime(df.index)
+        
+        # Sort by date ascending (oldest first)
+        df = df.sort_index()
+        
+        # Convert to numeric
+        for col in ['Open', 'High', 'Low', 'Close', 'Volume']:
+            if col in df.columns:
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+        
+        # Drop any NaN rows
+        df = df.dropna()
+        
+        logger.info(f"Converted Alpha Vantage data: {len(df)} rows")
+        return df
+        
+    except Exception as e:
+        logger.error(f"Failed to convert Alpha Vantage data: {e}")
+        return None
+
+def download_from_alpha_vantage(ticker: str, outputsize: str = "full") -> Optional[pd.DataFrame]:
+    """Download historical data from Alpha Vantage API"""
+    if not ALPHA_VANTAGE_API_KEY:
+        logger.warning("Alpha Vantage API key not configured")
+        return None
+    
+    try:
+        logger.info(f"Attempting to download {ticker} from Alpha Vantage...")
+        
+        # Clean ticker for Alpha Vantage (remove =F for futures, etc.)
+        av_ticker = ticker.replace('=F', '').replace('^', '')
+        
+        params = {
+            'function': 'TIME_SERIES_DAILY',
+            'symbol': av_ticker,
+            'outputsize': outputsize,  # 'compact' = 100 days, 'full' = 20+ years
+            'apikey': ALPHA_VANTAGE_API_KEY
+        }
+        
+        response = requests.get(ALPHA_VANTAGE_BASE_URL, params=params, timeout=NETWORK_TIMEOUT_SECONDS)
+        response.raise_for_status()
+        
+        data = response.json()
+        
+        # Check for error messages
+        if 'Error Message' in data:
+            logger.error(f"Alpha Vantage error: {data['Error Message']}")
+            return None
+        
+        if 'Note' in data:
+            logger.warning(f"Alpha Vantage rate limit: {data['Note']}")
+            return None
+        
+        # Extract time series data
+        if 'Time Series (Daily)' not in data:
+            logger.error(f"No time series data in Alpha Vantage response for {ticker}")
+            return None
+        
+        time_series = data['Time Series (Daily)']
+        
+        # Convert to DataFrame
+        df = pd.DataFrame.from_dict(time_series, orient='index')
+        
+        # Convert to yfinance format
+        df = convert_alpha_vantage_to_yfinance_format(df)
+        
+        if df is not None and len(df) > 0:
+            logger.info(f"✅ Successfully downloaded {len(df)} rows from Alpha Vantage for {ticker}")
+            metrics_collector.increment("data_downloads")
+            return df
+        else:
+            logger.warning(f"Alpha Vantage returned empty data for {ticker}")
+            return None
+            
+    except requests.exceptions.Timeout:
+        logger.error(f"Alpha Vantage request timeout for {ticker}")
+        return None
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Alpha Vantage request failed for {ticker}: {e}")
+        return None
+    except Exception as e:
+        logger.error(f"Error downloading from Alpha Vantage for {ticker}: {e}")
+        log_error(ErrorSeverity.ERROR, "download_from_alpha_vantage", e, ticker=ticker, show_to_user=False)
+        return None
+
 def download_with_timeout(ticker: str, period: str = "1y", 
                          interval: str = "1d", 
                          timeout: int = NETWORK_TIMEOUT_SECONDS) -> Optional[pd.DataFrame]:
-    """Download data with timeout protection"""
+    """Download data with timeout protection and Alpha Vantage fallback"""
     try:
+        logger.info(f"Attempting to download {ticker} from yfinance...")
         with ThreadPoolExecutor(max_workers=1) as executor:
             future = executor.submit(
                 yf.download, 
@@ -221,13 +334,50 @@ def download_with_timeout(ticker: str, period: str = "1y",
                 auto_adjust=True
             )
             df = future.result(timeout=timeout)
-            return normalize_dataframe_columns(df)
+            df = normalize_dataframe_columns(df)
+            
+            if df is not None and len(df) > 0:
+                logger.info(f"✅ Successfully downloaded {len(df)} rows from yfinance for {ticker}")
+                metrics_collector.increment("data_downloads")
+                return df
+            else:
+                logger.warning(f"yfinance returned empty data for {ticker}, trying Alpha Vantage...")
+                
     except TimeoutError:
-        logger.error(f"Timeout downloading data for {ticker}")
-        return None
+        logger.error(f"Timeout downloading data from yfinance for {ticker}, trying Alpha Vantage...")
     except Exception as e:
-        logger.error(f"Error downloading data for {ticker}: {e}")
-        return None
+        logger.error(f"Error downloading from yfinance for {ticker}: {e}, trying Alpha Vantage...")
+    
+    # Fallback to Alpha Vantage
+    logger.info(f"🔄 Falling back to Alpha Vantage for {ticker}...")
+    
+    # Determine outputsize based on period
+    if period in ["1mo", "3mo"]:
+        outputsize = "compact"  # Last 100 days
+    else:
+        outputsize = "full"  # 20+ years
+    
+    av_df = download_from_alpha_vantage(ticker, outputsize=outputsize)
+    
+    if av_df is not None:
+        # Filter to match requested period if needed
+        if period != "max":
+            try:
+                days_map = {
+                    "1d": 1, "5d": 5, "1mo": 30, "3mo": 90, 
+                    "6mo": 180, "1y": 365, "2y": 730, "5y": 1825, "10y": 3650
+                }
+                days = days_map.get(period, 365)
+                cutoff_date = datetime.now() - timedelta(days=days)
+                av_df = av_df[av_df.index >= cutoff_date]
+                logger.info(f"Filtered Alpha Vantage data to last {days} days: {len(av_df)} rows")
+            except Exception as e:
+                logger.warning(f"Could not filter Alpha Vantage data by period: {e}")
+        
+        return av_df
+    
+    logger.error(f"❌ All data sources failed for {ticker}")
+    return None
 
 # ================================
 # CONFIGURATION MANAGEMENT
@@ -653,6 +803,8 @@ class MetricsCollector:
             "models_retrained": 0,
             "errors_encountered": 0,
             "data_downloads": 0,
+            "yfinance_downloads": 0,
+            "alphavantage_downloads": 0,
             "cache_hits": 0,
             "cache_misses": 0,
             "avg_prediction_time": [],
@@ -782,9 +934,10 @@ def save_metadata(ticker: str, metadata: Dict[str, Any]) -> bool:
 # ================================
 
 def get_actual_price_for_date(ticker: str, target_date: datetime) -> Optional[float]:
-    """Fetch actual historical price for a specific date"""
+    """Fetch actual historical price for a specific date with Alpha Vantage fallback"""
     try:
-        # Download data around the target date
+        # Try yfinance first
+        logger.debug(f"Fetching actual price for {ticker} on {target_date.date()} from yfinance...")
         start_date = target_date - timedelta(days=5)
         end_date = target_date + timedelta(days=2)
         
@@ -796,27 +949,71 @@ def get_actual_price_for_date(ticker: str, target_date: datetime) -> Optional[fl
             auto_adjust=True
         )
         
-        if df is None or df.empty:
+        if df is not None and not df.empty:
+            df = normalize_dataframe_columns(df)
+            
+            # Find the closest date (in case target_date is weekend/holiday)
+            df.index = pd.to_datetime(df.index)
+            target_date_normalized = pd.to_datetime(target_date.date())
+            
+            # Get closest available date
+            closest_idx = df.index.get_indexer([target_date_normalized], method='nearest')[0]
+            
+            if closest_idx >= 0 and closest_idx < len(df):
+                actual_price = float(df['Close'].iloc[closest_idx])
+                logger.debug(f"✅ Found actual price from yfinance for {ticker} on {target_date.date()}: ${actual_price:.2f}")
+                return actual_price
+        
+        logger.warning(f"yfinance failed to get price for {ticker} on {target_date.date()}, trying Alpha Vantage...")
+        
+    except Exception as e:
+        logger.warning(f"yfinance failed for {ticker} on {target_date.date()}: {e}, trying Alpha Vantage...")
+    
+    # Fallback to Alpha Vantage
+    if not ALPHA_VANTAGE_API_KEY:
+        logger.warning("Alpha Vantage API key not configured")
+        return None
+    
+    try:
+        logger.info(f"🔄 Fetching from Alpha Vantage for {ticker} on {target_date.date()}...")
+        av_ticker = ticker.replace('=F', '').replace('^', '')
+        
+        params = {
+            'function': 'TIME_SERIES_DAILY',
+            'symbol': av_ticker,
+            'outputsize': 'compact',  # Last 100 days should be enough
+            'apikey': ALPHA_VANTAGE_API_KEY
+        }
+        
+        response = requests.get(ALPHA_VANTAGE_BASE_URL, params=params, timeout=15)
+        response.raise_for_status()
+        
+        data = response.json()
+        
+        if 'Time Series (Daily)' not in data:
+            logger.warning(f"No time series data from Alpha Vantage for {ticker}")
             return None
         
-        df = normalize_dataframe_columns(df)
+        time_series = data['Time Series (Daily)']
+        df = pd.DataFrame.from_dict(time_series, orient='index')
+        df = convert_alpha_vantage_to_yfinance_format(df)
         
-        # Find the closest date (in case target_date is weekend/holiday)
-        df.index = pd.to_datetime(df.index)
-        target_date_normalized = pd.to_datetime(target_date.date())
+        if df is not None and not df.empty:
+            # Find closest date
+            target_date_normalized = pd.to_datetime(target_date.date())
+            closest_idx = df.index.get_indexer([target_date_normalized], method='nearest')[0]
+            
+            if closest_idx >= 0 and closest_idx < len(df):
+                actual_price = float(df['Close'].iloc[closest_idx])
+                actual_date = df.index[closest_idx].date()
+                logger.info(f"✅ Found actual price from Alpha Vantage for {ticker} on {actual_date}: ${actual_price:.2f}")
+                return actual_price
         
-        # Get closest available date
-        closest_idx = df.index.get_indexer([target_date_normalized], method='nearest')[0]
-        
-        if closest_idx >= 0 and closest_idx < len(df):
-            actual_price = float(df['Close'].iloc[closest_idx])
-            logger.debug(f"Found actual price for {ticker} on {target_date.date()}: ${actual_price:.2f}")
-            return actual_price
-        
+        logger.warning(f"Could not find price in Alpha Vantage data for {ticker}")
         return None
         
     except Exception as e:
-        logger.warning(f"Failed to get actual price for {ticker} on {target_date.date()}: {e}")
+        logger.error(f"Alpha Vantage failed for {ticker} on {target_date.date()}: {e}")
         return None
 
 def record_prediction(ticker: str, prediction: float, date: str, current_price: Optional[float] = None) -> bool:
@@ -1080,10 +1277,11 @@ def should_retrain(ticker: str, accuracy_log: Dict[str, Any],
 # ================================
 
 def get_latest_price(ticker: str) -> Optional[float]:
-    """Get latest price for a ticker with retry logic"""
+    """Get latest price for a ticker with retry logic and Alpha Vantage fallback"""
     max_retries = MAX_RETRIES
     retry_delay = 1
     
+    # Try yfinance first
     for attempt in range(max_retries):
         try:
             stock = yf.Ticker(ticker)
@@ -1091,7 +1289,9 @@ def get_latest_price(ticker: str) -> Optional[float]:
             
             if not hist.empty:
                 metrics_collector.increment("data_downloads")
-                return float(hist['Close'].iloc[-1])
+                price = float(hist['Close'].iloc[-1])
+                logger.debug(f"Got latest price from yfinance for {ticker}: ${price:.2f}")
+                return price
             
         except Exception as e:
             logger.warning(f"Attempt {attempt + 1}/{max_retries} failed for {ticker}: {e}")
@@ -1099,7 +1299,40 @@ def get_latest_price(ticker: str) -> Optional[float]:
                 time.sleep(retry_delay)
                 retry_delay *= 2  # Exponential backoff
     
-    logger.error(f"Failed to get price for {ticker} after {max_retries} attempts")
+    # Fallback to Alpha Vantage
+    logger.info(f"🔄 Falling back to Alpha Vantage for latest price of {ticker}...")
+    
+    if not ALPHA_VANTAGE_API_KEY:
+        logger.error(f"Failed to get price for {ticker} - No Alpha Vantage API key")
+        metrics_collector.increment("errors_encountered")
+        return None
+    
+    try:
+        av_ticker = ticker.replace('=F', '').replace('^', '')
+        
+        params = {
+            'function': 'GLOBAL_QUOTE',
+            'symbol': av_ticker,
+            'apikey': ALPHA_VANTAGE_API_KEY
+        }
+        
+        response = requests.get(ALPHA_VANTAGE_BASE_URL, params=params, timeout=10)
+        response.raise_for_status()
+        
+        data = response.json()
+        
+        if 'Global Quote' in data and '05. price' in data['Global Quote']:
+            price = float(data['Global Quote']['05. price'])
+            logger.info(f"✅ Got latest price from Alpha Vantage for {ticker}: ${price:.2f}")
+            metrics_collector.increment("data_downloads")
+            return price
+        else:
+            logger.error(f"No price data in Alpha Vantage response for {ticker}")
+            
+    except Exception as e:
+        logger.error(f"Alpha Vantage latest price failed for {ticker}: {e}")
+    
+    logger.error(f"❌ Failed to get price for {ticker} after all attempts")
     metrics_collector.increment("errors_encountered")
     return None
 
@@ -1353,6 +1586,7 @@ def generate_forecast(ticker: str, model: Any, scaler: MinMaxScaler,
                  ticker=ticker, show_to_user=False)
         return None, None
 
+# Continue to Part 3...
 
 # ================================
 # ENHANCED TRAINING FUNCTION
@@ -1736,6 +1970,7 @@ def mine_daily_patterns(ticker: str) -> Tuple[Optional[Tuple], Optional[str]]:
         log_error(ErrorSeverity.WARNING, "mine_daily_patterns", e, 
                  ticker=ticker, show_to_user=False)
         return None, str(e)[:30]
+
 # ================================
 # PATTERN EVALUATION
 # ================================
@@ -1822,6 +2057,7 @@ def train_and_evaluate_patterns(X: pd.DataFrame, y: pd.Series,
                  show_to_user=False)
         return None
 
+# Continuing with more functions...
 
 # ================================
 # PATTERN MINING FOR TICKER
@@ -2172,6 +2408,7 @@ def get_pattern_influenced_recommendation(ticker: str, base_forecast: List[float
         reasons.extend(triggers)
     
     return action, confidence, reasons
+
 # ================================
 # THREAD HEARTBEAT AND MONITORING
 # ================================
@@ -2252,6 +2489,7 @@ class ApplicationState:
 # Global application state
 app_state = ApplicationState()
 
+# Continue to Part 5 with background threads...
 
 # ================================
 # BACKGROUND THREADS
@@ -2670,6 +2908,7 @@ def shutdown_background_threads() -> None:
     thread_manager.stop_all()
     logger.info("All background threads stopped")
 
+# Continue to Part 6 with UI components...
 
 # ================================
 # STREAMLIT UI COMPONENTS
