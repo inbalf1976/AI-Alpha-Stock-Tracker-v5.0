@@ -1,3 +1,76 @@
+# ================================
+# INSTALLATION CHECK AND FALLBACKS
+# ================================
+import subprocess
+import sys
+import warnings
+import os
+
+# Suppress all warnings first
+warnings.filterwarnings("ignore")
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+# Try to import sqlalchemy, install if missing
+try:
+    from sqlalchemy import create_engine, Column, Integer, Float, String, DateTime, Index
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.orm import sessionmaker
+    SQLALCHEMY_AVAILABLE = True
+except ImportError:
+    print("sqlalchemy not found. Installing...")
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "sqlalchemy"])
+        from sqlalchemy import create_engine, Column, Integer, Float, String, DateTime, Index
+        from sqlalchemy.ext.declarative import declarative_base
+        from sqlalchemy.orm import sessionmaker
+        SQLALCHEMY_AVAILABLE = True
+        print("sqlalchemy installed successfully.")
+    except:
+        print("Failed to install sqlalchemy. Using fallback JSON storage.")
+        SQLALCHEMY_AVAILABLE = False
+
+# Try to import psutil, install if missing
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    print("psutil not found. Installing...")
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "psutil"])
+        import psutil
+        PSUTIL_AVAILABLE = True
+        print("psutil installed successfully.")
+    except:
+        print("psutil not available. Resource monitoring disabled.")
+        PSUTIL_AVAILABLE = False
+
+# Try to install other potential missing packages
+required_packages = [
+    'yfinance',
+    'tensorflow',
+    'scikit-learn',
+    'joblib',
+    'plotly',
+    'python-dotenv',
+    'aiohttp'
+]
+
+for package in required_packages:
+    try:
+        __import__(package.replace('-', '_'))
+    except ImportError:
+        print(f"{package} not found. Installing...")
+        try:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+            print(f"{package} installed successfully.")
+        except:
+            print(f"Failed to install {package}.")
+
+# ================================
+# MAIN IMPORTS (AFTER INSTALLATION)
+# ================================
+
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -11,9 +84,6 @@ import requests
 import plotly.graph_objs as go
 import time
 import threading
-import os
-import warnings
-import joblib
 import json
 from pathlib import Path
 import logging
@@ -29,23 +99,215 @@ import queue
 import gc
 import re
 from dotenv import load_dotenv
+import asyncio
+import aiohttp
+
+# TensorFlow warning suppression
+tf.get_logger().setLevel('ERROR')
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 # Load environment variables
 load_dotenv()
 
-# Suppress warnings
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-warnings.filterwarnings("ignore")
-tf.get_logger().setLevel('ERROR')
+# ================================
+# DATABASE SETUP (WITH FALLBACK)
+# ================================
 
-# Suppress Streamlit thread warnings
-try:
-    from streamlit.runtime.scriptrunner import script_run_context
-    if hasattr(script_run_context, '_LOGGER'):
-        script_run_context._LOGGER.setLevel('ERROR')
-except:
-    pass
+if SQLALCHEMY_AVAILABLE:
+    Base = declarative_base()
+    
+    class Prediction(Base):
+        __tablename__ = 'predictions'
+        
+        id = Column(Integer, primary_key=True)
+        ticker = Column(String(20), index=True)
+        prediction_date = Column(DateTime, index=True)
+        predicted_price = Column(Float)
+        actual_price = Column(Float, nullable=True)
+        created_at = Column(DateTime, default=datetime.utcnow)
+        error_mape = Column(Float, nullable=True)
+        error_mae = Column(Float, nullable=True)
+        previous_price = Column(Float, nullable=True)
+        validated = Column(Integer, default=0)
+    
+    # Initialize database
+    try:
+        engine = create_engine('sqlite:///predictions.db')
+        Base.metadata.create_all(engine)
+        Session = sessionmaker(bind=engine)
+        
+        # Create indexes
+        try:
+            Index('ix_predictions_ticker_date', Prediction.ticker, Prediction.prediction_date).create(engine)
+            Index('ix_predictions_created', Prediction.created_at).create(engine)
+        except:
+            pass
+    except Exception as e:
+        print(f"Database initialization failed: {e}")
+        SQLALCHEMY_AVAILABLE = False
+else:
+    # Fallback: JSON-based storage
+    class FakeSession:
+        def __init__(self):
+            self.predictions = []
+        
+        def query(self, model):
+            return FakeQuery(self.predictions)
+        
+        def add(self, obj):
+            self.predictions.append(obj)
+        
+        def commit(self):
+            pass
+        
+        def close(self):
+            pass
+    
+    class FakeQuery:
+        def __init__(self, predictions):
+            self.predictions = predictions
+        
+        def filter(self, *args):
+            return self
+        
+        def order_by(self, *args):
+            return self
+        
+        def all(self):
+            return self.predictions
+        
+        def first(self):
+            return self.predictions[0] if self.predictions else None
+    
+    Session = FakeSession
+
+# ================================
+# THREAD-SAFE SESSION STATE
+# ================================
+
+class ThreadSafeSessionState:
+    """Thread-safe wrapper for Streamlit session state"""
+    def __init__(self):
+        self._lock = threading.RLock()
+        self._state: Dict[str, Any] = {}
+    
+    def get(self, key: str, default: Any = None) -> Any:
+        with self._lock:
+            return self._state.get(key, default)
+    
+    def set(self, key: str, value: Any) -> None:
+        with self._lock:
+            self._state[key] = value
+    
+    def update(self, updates: Dict[str, Any]) -> None:
+        with self._lock:
+            self._state.update(updates)
+
+# Create thread-safe session state
+safe_state = ThreadSafeSessionState()
+
+# ================================
+# RATE LIMITING
+# ================================
+
+class RateLimiter:
+    """Token bucket rate limiter"""
+    def __init__(self, requests_per_minute: int = 5, requests_per_day: int = 25):
+        self.rpm = requests_per_minute
+        self.rpd = requests_per_day
+        
+        self.minute_tokens = requests_per_minute
+        self.day_tokens = requests_per_day
+        
+        self.last_minute_reset = datetime.now()
+        self.last_day_reset = datetime.now()
+        
+        self._lock = threading.Lock()
+    
+    def acquire(self, timeout: int = 30) -> bool:
+        """Acquire permission to make request"""
+        start_time = time.time()
+        
+        while time.time() - start_time < timeout:
+            with self._lock:
+                now = datetime.now()
+                
+                # Reset minute bucket
+                if (now - self.last_minute_reset).seconds >= 60:
+                    self.minute_tokens = self.rpm
+                    self.last_minute_reset = now
+                
+                # Reset day bucket
+                if (now - self.last_day_reset).days >= 1:
+                    self.day_tokens = self.rpd
+                    self.last_day_reset = now
+                
+                # Check if tokens available
+                if self.minute_tokens > 0 and self.day_tokens > 0:
+                    self.minute_tokens -= 1
+                    self.day_tokens -= 1
+                    return True
+            
+            # Wait before retry
+            time.sleep(1)
+        
+        return False
+
+# Global rate limiter
+alpha_vantage_limiter = RateLimiter()
+
+# ================================
+# PERFORMANCE MONITORING
+# ================================
+
+class PerformanceMonitor:
+    """Monitor application performance metrics"""
+    def __init__(self):
+        self.metrics = {
+            'api_latency': [],
+            'prediction_time': [],
+            'training_time': [],
+            'memory_usage': [],
+            'download_latency': [],
+            'validation_time': []
+        }
+    
+    def record_latency(self, operation: str, duration: float):
+        self.metrics.setdefault(f'{operation}_latency', []).append(duration)
+    
+    def get_p95_latency(self, operation: str) -> float:
+        """Get 95th percentile latency"""
+        latencies = self.metrics.get(f'{operation}_latency', [])
+        if not latencies:
+            return 0.0
+        return np.percentile(latencies, 95)
+
+# Global performance monitor
+performance_monitor = PerformanceMonitor()
+
+# ================================
+# ALERTING SYSTEM
+# ================================
+
+class AlertManager:
+    """Centralized alerting"""
+    def __init__(self):
+        self.channels = {}
+    
+    def send_alert(self, severity: str, message: str, channels: List[str] = None):
+        """Send alert to multiple channels"""
+        if channels is None:
+            channels = ['telegram']
+        
+        for channel in channels:
+            if channel in self.channels:
+                try:
+                    self.channels[channel].send(severity, message)
+                except Exception as e:
+                    logger.error(f"Alert failed for {channel}: {e}")
+
+# Global alert manager
+alert_manager = AlertManager()
 
 # ================================
 # CONSTANTS
@@ -254,9 +516,14 @@ def convert_alpha_vantage_to_yfinance_format(df: pd.DataFrame) -> pd.DataFrame:
         return None
 
 def download_from_alpha_vantage(ticker: str, outputsize: str = "full") -> Optional[pd.DataFrame]:
-    """Download historical data from Alpha Vantage API"""
+    """Download historical data from Alpha Vantage API with rate limiting"""
     if not ALPHA_VANTAGE_API_KEY:
         logger.warning("Alpha Vantage API key not configured")
+        return None
+    
+    # Apply rate limiting
+    if not alpha_vantage_limiter.acquire(timeout=30):
+        logger.warning(f"Rate limit reached for Alpha Vantage")
         return None
     
     try:
@@ -300,10 +567,9 @@ def download_from_alpha_vantage(ticker: str, outputsize: str = "full") -> Option
         df = convert_alpha_vantage_to_yfinance_format(df)
         
         if df is not None and len(df) > 0:
-           logger.info(f"✅ Successfully downloaded {len(df)} rows from yfinance for {ticker}")
-           metrics_collector.increment("data_downloads")
-           metrics_collector.increment("yfinance_downloads")
-           return df
+            logger.info(f"✅ Successfully downloaded {len(df)} rows from Alpha Vantage for {ticker}")
+            metrics_collector.increment("alphavantage_downloads")
+            return df
         else:
             logger.warning(f"Alpha Vantage returned empty data for {ticker}")
             return None
@@ -340,6 +606,7 @@ def download_with_timeout(ticker: str, period: str = "1y",
             if df is not None and len(df) > 0:
                 logger.info(f"✅ Successfully downloaded {len(df)} rows from yfinance for {ticker}")
                 metrics_collector.increment("data_downloads")
+                metrics_collector.increment("yfinance_downloads")
                 return df
             else:
                 logger.warning(f"yfinance returned empty data for {ticker}, trying Alpha Vantage...")
@@ -647,12 +914,13 @@ thread_manager = ThreadManager()
 # TENSORFLOW AND MODEL MANAGEMENT
 # ================================
 
-class ModelManager:
-    """Manage TensorFlow models and memory with caching"""
+class EnhancedModelManager:
+    """Enhanced ModelManager with better resource cleanup"""
     def __init__(self):
         self._models: Dict[str, Tuple[Any, float]] = {}  # ticker -> (model, timestamp)
         self._lock = threading.RLock()
         self._cache_ttl = CACHE_TTL_SECONDS
+        self._active_sessions = set()
         
         # Configure GPU memory growth
         self._configure_gpu()
@@ -688,6 +956,14 @@ class ModelManager:
         try:
             model = tf.keras.models.load_model(str(model_path))
             
+            # Track session
+            try:
+                session = tf.compat.v1.get_default_session()
+                if session:
+                    self._active_sessions.add(id(session))
+            except:
+                pass
+            
             # Cache the model
             if use_cache:
                 with self._lock:
@@ -715,6 +991,22 @@ class ModelManager:
         except Exception as e:
             logger.warning(f"Error clearing model: {e}")
     
+    def cleanup_all_sessions(self):
+        """Aggressively cleanup all TensorFlow sessions"""
+        with self._lock:
+            for ticker, (model, _) in self._models.items():
+                self.clear_model(model)
+            self._models.clear()
+            
+            # Clear all tracked sessions
+            tf.keras.backend.clear_session()
+            self._active_sessions.clear()
+            
+            # Force garbage collection
+            gc.collect()
+            
+            logger.info(f"Cleaned up all TensorFlow resources")
+    
     def clear_cache(self) -> None:
         """Clear all cached models"""
         with self._lock:
@@ -736,7 +1028,7 @@ class ModelManager:
             gc.collect()
 
 # Global model manager
-model_manager = ModelManager()
+model_manager = EnhancedModelManager()
 
 # ================================
 # CIRCUIT BREAKER PATTERN
@@ -933,349 +1225,6 @@ def save_metadata(ticker: str, metadata: Dict[str, Any]) -> bool:
         return False
 
 # ================================
-# REAL PREDICTION VALIDATION
-# ================================
-
-def get_actual_price_for_date(ticker: str, target_date: datetime) -> Optional[float]:
-    """Fetch actual historical price for a specific date with Alpha Vantage fallback"""
-    try:
-        # Try yfinance first
-        logger.debug(f"Fetching actual price for {ticker} on {target_date.date()} from yfinance...")
-        start_date = target_date - timedelta(days=5)
-        end_date = target_date + timedelta(days=2)
-        
-        df = yf.download(
-            ticker,
-            start=start_date,
-            end=end_date,
-            progress=False,
-            auto_adjust=True
-        )
-        
-        if df is not None and not df.empty:
-            df = normalize_dataframe_columns(df)
-            
-            # Find the closest date (in case target_date is weekend/holiday)
-            df.index = pd.to_datetime(df.index)
-            target_date_normalized = pd.to_datetime(target_date.date())
-            
-            # Get closest available date
-            closest_idx = df.index.get_indexer([target_date_normalized], method='nearest')[0]
-            
-            if closest_idx >= 0 and closest_idx < len(df):
-                actual_price = float(df['Close'].iloc[closest_idx])
-                logger.debug(f"✅ Found actual price from yfinance for {ticker} on {target_date.date()}: ${actual_price:.2f}")
-                return actual_price
-        
-        logger.warning(f"yfinance failed to get price for {ticker} on {target_date.date()}, trying Alpha Vantage...")
-        
-    except Exception as e:
-        logger.warning(f"yfinance failed for {ticker} on {target_date.date()}: {e}, trying Alpha Vantage...")
-    
-    # Fallback to Alpha Vantage
-    if not ALPHA_VANTAGE_API_KEY:
-        logger.warning("Alpha Vantage API key not configured")
-        return None
-    
-    try:
-        logger.info(f"🔄 Fetching from Alpha Vantage for {ticker} on {target_date.date()}...")
-        av_ticker = ticker.replace('=F', '').replace('^', '')
-        
-        params = {
-            'function': 'TIME_SERIES_DAILY',
-            'symbol': av_ticker,
-            'outputsize': 'compact',  # Last 100 days should be enough
-            'apikey': ALPHA_VANTAGE_API_KEY
-        }
-        
-        response = requests.get(ALPHA_VANTAGE_BASE_URL, params=params, timeout=15)
-        response.raise_for_status()
-        
-        data = response.json()
-        
-        if 'Time Series (Daily)' not in data:
-            logger.warning(f"No time series data from Alpha Vantage for {ticker}")
-            return None
-        
-        time_series = data['Time Series (Daily)']
-        df = pd.DataFrame.from_dict(time_series, orient='index')
-        df = convert_alpha_vantage_to_yfinance_format(df)
-        
-        if df is not None and not df.empty:
-            # Find closest date
-            target_date_normalized = pd.to_datetime(target_date.date())
-            closest_idx = df.index.get_indexer([target_date_normalized], method='nearest')[0]
-            
-            if closest_idx >= 0 and closest_idx < len(df):
-                actual_price = float(df['Close'].iloc[closest_idx])
-                actual_date = df.index[closest_idx].date()
-                logger.info(f"✅ Found actual price from Alpha Vantage for {ticker} on {actual_date}: ${actual_price:.2f}")
-                return actual_price
-        
-        logger.warning(f"Could not find price in Alpha Vantage data for {ticker}")
-        return None
-        
-    except Exception as e:
-        logger.error(f"Alpha Vantage failed for {ticker} on {target_date.date()}: {e}")
-        return None
-
-def record_prediction(ticker: str, prediction: float, date: str, current_price: Optional[float] = None) -> bool:
-    """Record prediction for accuracy tracking with current price for directional validation"""
-    path = get_predictions_path(ticker)
-    try:
-        if path.exists():
-            with open(path, 'r') as f:
-                predictions = json.load(f)
-        else:
-            predictions = []
-        
-        prediction_record = {
-            "date": date,
-            "prediction": float(prediction),
-            "timestamp": datetime.now().isoformat(),
-            "previous_price": float(current_price) if current_price else None,
-            "validated": False
-        }
-        
-        predictions.append(prediction_record)
-        
-        # Keep only last 100 predictions
-        if len(predictions) > 100:
-            predictions = predictions[-100:]
-        
-        with open(path, 'w') as f:
-            json.dump(predictions, f, indent=2)
-        
-        metrics_collector.increment("predictions_made")
-        logger.info(f"Recorded prediction for {ticker}: ${prediction:.2f} on {date}")
-        return True
-            
-    except Exception as e:
-        logger.error(f"Failed to record prediction for {ticker}: {e}")
-        log_error(ErrorSeverity.WARNING, "record_prediction", e, ticker=ticker, show_to_user=False)
-        return False
-
-def load_accuracy_log(ticker: str) -> Dict[str, Any]:
-    """Load accuracy tracking data with REAL validation against actual prices"""
-    path = get_predictions_path(ticker)
-    if path.exists():
-        try:
-            with open(path, 'r') as f:
-                predictions = json.load(f)
-            
-            if len(predictions) == 0:
-                return {
-                    "total_predictions": 0,
-                    "validated_predictions": 0,
-                    "avg_error_mape": 0.0,
-                    "avg_error_mae": 0.0,
-                    "directional_accuracy": 0.0,
-                    "last_updated": datetime.now().isoformat(),
-                    "status": "no_predictions"
-                }
-            
-            # Calculate REAL accuracy metrics
-            errors_mape = []  # Mean Absolute Percentage Error
-            errors_mae = []   # Mean Absolute Error
-            directional_correct = []
-            validated_count = 0
-            current_price = get_latest_price(ticker)
-            
-            for pred in predictions:
-                try:
-                    pred_date = datetime.fromisoformat(pred['date'])
-                    pred_value = float(pred['prediction'])
-                    
-                    # Only validate predictions that are in the past
-                    if pred_date.date() >= datetime.now().date():
-                        continue
-                    
-                    # Fetch actual price for that date
-                    actual_price = get_actual_price_for_date(ticker, pred_date)
-                    
-                    if actual_price is None:
-                        continue
-                    
-                    validated_count += 1
-                    
-                    # Calculate errors
-                    mae = abs(pred_value - actual_price)
-                    mape = (mae / actual_price) * 100  # Percentage error
-                    
-                    errors_mae.append(mae)
-                    errors_mape.append(mape)
-                    
-                    # Directional accuracy (did we predict up/down correctly?)
-                    if 'previous_price' in pred:
-                        prev_price = float(pred['previous_price'])
-                        predicted_direction = 1 if pred_value > prev_price else -1
-                        actual_direction = 1 if actual_price > prev_price else -1
-                        directional_correct.append(predicted_direction == actual_direction)
-                    elif current_price:
-                        # Use current price as reference if no previous stored
-                        predicted_direction = 1 if pred_value > current_price else -1
-                        actual_direction = 1 if actual_price > current_price else -1
-                        directional_correct.append(predicted_direction == actual_direction)
-                    
-                    # Store validation in prediction record
-                    pred['actual_price'] = actual_price
-                    pred['error_mae'] = mae
-                    pred['error_mape'] = mape
-                    pred['validated_at'] = datetime.now().isoformat()
-                    
-                except Exception as e:
-                    logger.debug(f"Error validating prediction for {ticker}: {e}")
-                    continue
-            
-            # Save updated predictions with validation data
-            with open(path, 'w') as f:
-                json.dump(predictions, f, indent=2)
-            
-            # Calculate aggregate metrics
-            if validated_count == 0:
-                return {
-                    "total_predictions": len(predictions),
-                    "validated_predictions": 0,
-                    "avg_error_mape": 0.0,
-                    "avg_error_mae": 0.0,
-                    "directional_accuracy": 0.0,
-                    "last_updated": datetime.now().isoformat(),
-                    "status": "no_validated"
-                }
-            
-            avg_mape = np.mean(errors_mape)
-            avg_mae = np.mean(errors_mae)
-            dir_accuracy = (sum(directional_correct) / len(directional_correct) * 100) if directional_correct else 0.0
-            
-            return {
-                "total_predictions": len(predictions),
-                "validated_predictions": validated_count,
-                "avg_error_mape": round(avg_mape, 2),  # Percentage
-                "avg_error_mae": round(avg_mae, 2),     # Dollar amount
-                "directional_accuracy": round(dir_accuracy, 1),  # Percentage
-                "last_updated": datetime.now().isoformat(),
-                "status": "validated",
-                "recent_errors": errors_mape[-10:] if len(errors_mape) > 0 else []
-            }
-            
-        except Exception as e:
-            logger.error(f"Failed to load accuracy log for {ticker}: {e}")
-            log_error(ErrorSeverity.ERROR, "load_accuracy_log", e, ticker=ticker, show_to_user=False)
-    
-    return {
-        "total_predictions": 0,
-        "validated_predictions": 0,
-        "avg_error_mape": 0.0,
-        "avg_error_mae": 0.0,
-        "directional_accuracy": 0.0,
-        "last_updated": datetime.now().isoformat(),
-        "status": "no_file"
-    }
-
-def validate_predictions(ticker: str) -> Tuple[bool, Dict[str, Any]]:
-    """Validate predictions against REAL actual prices and return performance metrics"""
-    logger.info(f"Validating predictions for {ticker} against actual market data...")
-    
-    try:
-        # Load accuracy log which now does REAL validation
-        acc_log = load_accuracy_log(ticker)
-        
-        if acc_log['status'] in ['no_predictions', 'no_file']:
-            logger.info(f"{ticker}: No predictions to validate")
-            return False, acc_log
-        
-        if acc_log['status'] == 'no_validated':
-            logger.warning(f"{ticker}: Predictions exist but none could be validated (all future dates or data unavailable)")
-            return False, acc_log
-        
-        # Check validation quality
-        validated_count = acc_log.get('validated_predictions', 0)
-        avg_mape = acc_log.get('avg_error_mape', 100.0)
-        dir_accuracy = acc_log.get('directional_accuracy', 0.0)
-        
-        logger.info(
-            f"{ticker} Validation Results: "
-            f"{validated_count} predictions | "
-            f"MAPE: {avg_mape:.2f}% | "
-            f"MAE: ${acc_log.get('avg_error_mae', 0):.2f} | "
-            f"Direction: {dir_accuracy:.1f}%"
-        )
-        
-        # Consider validation successful if we have data
-        return True, acc_log
-        
-    except Exception as e:
-        logger.error(f"Failed to validate predictions for {ticker}: {e}")
-        log_error(ErrorSeverity.ERROR, "validate_predictions", e, ticker=ticker, show_to_user=False)
-        return False, {
-            "total_predictions": 0,
-            "validated_predictions": 0,
-            "avg_error_mape": 100.0,
-            "avg_error_mae": 0.0,
-            "directional_accuracy": 0.0,
-            "status": "error"
-        }
-
-def should_retrain(ticker: str, accuracy_log: Dict[str, Any], 
-                  metadata: Dict[str, Any]) -> Tuple[bool, List[str]]:
-    """Determine if model should be retrained using REAL performance metrics"""
-    reasons = []
-    
-    # Check if we have validated predictions
-    validated_count = accuracy_log.get("validated_predictions", 0)
-    total_predictions = accuracy_log.get("total_predictions", 0)
-    
-    if validated_count < 5:
-        if total_predictions < 5:
-            reasons.append("insufficient_predictions")
-        else:
-            reasons.append("insufficient_validated_predictions")
-    
-    # Check REAL error rates (MAPE - Mean Absolute Percentage Error)
-    avg_mape = accuracy_log.get("avg_error_mape", 0.0)
-    if validated_count >= 5:  # Only check error if we have enough validated predictions
-        if avg_mape > 8.0:  # More than 8% average error
-            reasons.append(f"high_error_mape_{avg_mape:.1f}%")
-        elif avg_mape > 5.0:  # Warning level
-            reasons.append(f"elevated_error_mape_{avg_mape:.1f}%")
-    
-    # Check directional accuracy
-    dir_accuracy = accuracy_log.get("directional_accuracy", 0.0)
-    if validated_count >= 5 and dir_accuracy < 55.0:  # Less than 55% correct direction
-        reasons.append(f"poor_direction_accuracy_{dir_accuracy:.1f}%")
-    
-    # Check initial training
-    retrain_count = metadata.get("retrain_count", 0)
-    if retrain_count < 2:
-        reasons.append("initial_training_phase")
-    
-    # Check if model is stale
-    if metadata.get("trained_date"):
-        try:
-            trained_date = datetime.fromisoformat(metadata["trained_date"])
-            days_since_training = (datetime.now() - trained_date).days
-            if days_since_training > 14:
-                reasons.append(f"stale_model_{days_since_training}d")
-            elif days_since_training > 7 and avg_mape > 6.0:
-                reasons.append(f"aging_model_with_errors_{days_since_training}d")
-        except Exception as e:
-            logger.warning(f"Invalid training date for {ticker}: {e}")
-            reasons.append("invalid_training_date")
-    
-    # Check data quality issues
-    if metadata.get("data_quality") == "WARNING":
-        reasons.append("data_quality_issues")
-    
-    # Check recent performance degradation
-    recent_errors = accuracy_log.get("recent_errors", [])
-    if len(recent_errors) >= 3:
-        recent_avg = np.mean(recent_errors[-3:])
-        if recent_avg > avg_mape * 1.5:  # Recent errors 50% worse than average
-            reasons.append(f"performance_degradation_{recent_avg:.1f}%")
-    
-    return len(reasons) > 0, reasons
-
-# ================================
 # PRICE DATA FUNCTIONS
 # ================================
 
@@ -1383,6 +1332,7 @@ def load_or_create_scaler(ticker: str, df: pd.DataFrame,
     
     if not force_create and scaler_path.exists():
         try:
+            import joblib
             scaler = joblib.load(scaler_path)
             
             # Validate scaler works
@@ -1399,6 +1349,7 @@ def load_or_create_scaler(ticker: str, df: pd.DataFrame,
     try:
         scaler = MinMaxScaler()
         scaler.fit(df[['Close']])
+        import joblib
         joblib.dump(scaler, scaler_path)
         logger.info(f"Created and saved new scaler for {ticker}")
         return scaler
@@ -1589,7 +1540,477 @@ def generate_forecast(ticker: str, model: Any, scaler: MinMaxScaler,
                  ticker=ticker, show_to_user=False)
         return None, None
 
-# Continue to Part 3...
+# ================================
+# PREDICTION VALIDATION FUNCTIONS
+# ================================
+
+def get_actual_price_for_date(ticker: str, target_date: datetime) -> Optional[float]:
+    """Fetch actual historical price for a specific date with Alpha Vantage fallback"""
+    try:
+        # Try yfinance first
+        logger.debug(f"Fetching actual price for {ticker} on {target_date.date()} from yfinance...")
+        start_date = target_date - timedelta(days=5)
+        end_date = target_date + timedelta(days=2)
+        
+        df = yf.download(
+            ticker,
+            start=start_date,
+            end=end_date,
+            progress=False,
+            auto_adjust=True
+        )
+        
+        if df is not None and not df.empty:
+            df = normalize_dataframe_columns(df)
+            
+            # Find the closest date (in case target_date is weekend/holiday)
+            df.index = pd.to_datetime(df.index)
+            target_date_normalized = pd.to_datetime(target_date.date())
+            
+            # Get closest available date
+            closest_idx = df.index.get_indexer([target_date_normalized], method='nearest')[0]
+            
+            if closest_idx >= 0 and closest_idx < len(df):
+                actual_price = float(df['Close'].iloc[closest_idx])
+                logger.debug(f"✅ Found actual price from yfinance for {ticker} on {target_date.date()}: ${actual_price:.2f}")
+                return actual_price
+        
+        logger.warning(f"yfinance failed to get price for {ticker} on {target_date.date()}, trying Alpha Vantage...")
+        
+    except Exception as e:
+        logger.warning(f"yfinance failed for {ticker} on {target_date.date()}: {e}, trying Alpha Vantage...")
+    
+    # Fallback to Alpha Vantage
+    if not ALPHA_VANTAGE_API_KEY:
+        logger.warning("Alpha Vantage API key not configured")
+        return None
+    
+    try:
+        logger.info(f"🔄 Fetching from Alpha Vantage for {ticker} on {target_date.date()}...")
+        av_ticker = ticker.replace('=F', '').replace('^', '')
+        
+        params = {
+            'function': 'TIME_SERIES_DAILY',
+            'symbol': av_ticker,
+            'outputsize': 'compact',  # Last 100 days should be enough
+            'apikey': ALPHA_VANTAGE_API_KEY
+        }
+        
+        response = requests.get(ALPHA_VANTAGE_BASE_URL, params=params, timeout=15)
+        response.raise_for_status()
+        
+        data = response.json()
+        
+        if 'Time Series (Daily)' not in data:
+            logger.warning(f"No time series data from Alpha Vantage for {ticker}")
+            return None
+        
+        time_series = data['Time Series (Daily)']
+        df = pd.DataFrame.from_dict(time_series, orient='index')
+        df = convert_alpha_vantage_to_yfinance_format(df)
+        
+        if df is not None and not df.empty:
+            # Find closest date
+            target_date_normalized = pd.to_datetime(target_date.date())
+            closest_idx = df.index.get_indexer([target_date_normalized], method='nearest')[0]
+            
+            if closest_idx >= 0 and closest_idx < len(df):
+                actual_price = float(df['Close'].iloc[closest_idx])
+                actual_date = df.index[closest_idx].date()
+                logger.info(f"✅ Found actual price from Alpha Vantage for {ticker} on {actual_date}: ${actual_price:.2f}")
+                return actual_price
+        
+        logger.warning(f"Could not find price in Alpha Vantage data for {ticker}")
+        return None
+        
+    except Exception as e:
+        logger.error(f"Alpha Vantage failed for {ticker} on {target_date.date()}: {e}")
+        return None
+
+def record_prediction(ticker: str, prediction: float, date: str, current_price: Optional[float] = None) -> bool:
+    """Record prediction for accuracy tracking with current price for directional validation"""
+    try:
+        if SQLALCHEMY_AVAILABLE:
+            # Use database
+            db_session = Session()
+            
+            # Convert date string to datetime
+            try:
+                pred_date = datetime.strptime(date, "%Y-%m-%d")
+            except:
+                pred_date = datetime.strptime(date, "%Y-%m-%d %H:%M:%S") if ":" in date else datetime.strptime(date, "%Y-%m-%d")
+            
+            # Check if prediction already exists
+            existing = db_session.query(Prediction).filter(
+                Prediction.ticker == ticker,
+                Prediction.prediction_date == pred_date
+            ).first()
+            
+            if existing:
+                # Update existing prediction
+                existing.predicted_price = float(prediction)
+                existing.previous_price = float(current_price) if current_price else None
+            else:
+                # Create new prediction
+                new_prediction = Prediction(
+                    ticker=ticker,
+                    prediction_date=pred_date,
+                    predicted_price=float(prediction),
+                    previous_price=float(current_price) if current_price else None,
+                    created_at=datetime.now()
+                )
+                db_session.add(new_prediction)
+            
+            db_session.commit()
+            db_session.close()
+        else:
+            # Use JSON file as fallback
+            predictions_path = get_predictions_path(ticker)
+            if predictions_path.exists():
+                with open(predictions_path, 'r') as f:
+                    predictions_data = json.load(f)
+            else:
+                predictions_data = []
+            
+            # Add new prediction
+            predictions_data.append({
+                "ticker": ticker,
+                "prediction_date": date,
+                "predicted_price": float(prediction),
+                "previous_price": float(current_price) if current_price else None,
+                "created_at": datetime.now().isoformat(),
+                "actual_price": None,
+                "error_mape": None,
+                "error_mae": None,
+                "validated": 0
+            })
+            
+            with open(predictions_path, 'w') as f:
+                json.dump(predictions_data, f, indent=2)
+        
+        metrics_collector.increment("predictions_made")
+        logger.info(f"Recorded prediction for {ticker}: ${prediction:.2f} on {date}")
+        return True
+            
+    except Exception as e:
+        logger.error(f"Failed to record prediction for {ticker}: {e}")
+        log_error(ErrorSeverity.WARNING, "record_prediction", e, ticker=ticker, show_to_user=False)
+        return False
+
+def load_accuracy_log(ticker: str) -> Dict[str, Any]:
+    """Load accuracy tracking data with REAL validation against actual prices"""
+    try:
+        if SQLALCHEMY_AVAILABLE:
+            # Use database
+            db_session = Session()
+            
+            # Get all predictions for this ticker
+            predictions = db_session.query(Prediction).filter(
+                Prediction.ticker == ticker
+            ).order_by(Prediction.prediction_date).all()
+            
+            if len(predictions) == 0:
+                db_session.close()
+                return {
+                    "total_predictions": 0,
+                    "validated_predictions": 0,
+                    "avg_error_mape": 0.0,
+                    "avg_error_mae": 0.0,
+                    "directional_accuracy": 0.0,
+                    "last_updated": datetime.now().isoformat(),
+                    "status": "no_predictions"
+                }
+            
+            # Calculate REAL accuracy metrics
+            errors_mape = []  # Mean Absolute Percentage Error
+            errors_mae = []   # Mean Absolute Error
+            directional_correct = []
+            validated_count = 0
+            current_price = get_latest_price(ticker)
+            
+            for pred in predictions:
+                try:
+                    pred_date = pred.prediction_date
+                    pred_value = pred.predicted_price
+                    
+                    # Only validate predictions that are in the past
+                    if pred_date.date() >= datetime.now().date():
+                        continue
+                    
+                    # Fetch actual price for that date if not already validated
+                    if pred.actual_price is None:
+                        actual_price = get_actual_price_for_date(ticker, pred_date)
+                        
+                        if actual_price is None:
+                            continue
+                        
+                        # Update prediction with actual price
+                        pred.actual_price = actual_price
+                        validated_count += 1
+                    else:
+                        actual_price = pred.actual_price
+                        validated_count += 1
+                    
+                    # Calculate errors
+                    mae = abs(pred_value - actual_price)
+                    mape = (mae / actual_price) * 100  # Percentage error
+                    
+                    errors_mae.append(mae)
+                    errors_mape.append(mape)
+                    
+                    # Store errors in database
+                    pred.error_mae = mae
+                    pred.error_mape = mape
+                    pred.validated = 1
+                    
+                    # Directional accuracy (did we predict up/down correctly?)
+                    if pred.previous_price:
+                        prev_price = float(pred.previous_price)
+                        predicted_direction = 1 if pred_value > prev_price else -1
+                        actual_direction = 1 if actual_price > prev_price else -1
+                        directional_correct.append(predicted_direction == actual_direction)
+                    elif current_price:
+                        # Use current price as reference if no previous stored
+                        predicted_direction = 1 if pred_value > current_price else -1
+                        actual_direction = 1 if actual_price > current_price else -1
+                        directional_correct.append(predicted_direction == actual_direction)
+                    
+                except Exception as e:
+                    logger.debug(f"Error validating prediction for {ticker}: {e}")
+                    continue
+            
+            # Save updated predictions with validation data
+            db_session.commit()
+            db_session.close()
+        else:
+            # Use JSON file fallback
+            predictions_path = get_predictions_path(ticker)
+            if not predictions_path.exists():
+                return {
+                    "total_predictions": 0,
+                    "validated_predictions": 0,
+                    "avg_error_mape": 0.0,
+                    "avg_error_mae": 0.0,
+                    "directional_accuracy": 0.0,
+                    "last_updated": datetime.now().isoformat(),
+                    "status": "no_predictions"
+                }
+            
+            with open(predictions_path, 'r') as f:
+                predictions_data = json.load(f)
+            
+            # Calculate REAL accuracy metrics
+            errors_mape = []
+            errors_mae = []
+            directional_correct = []
+            validated_count = 0
+            current_price = get_latest_price(ticker)
+            
+            for pred in predictions_data:
+                try:
+                    pred_date = datetime.strptime(pred["prediction_date"], "%Y-%m-%d")
+                    pred_value = pred["predicted_price"]
+                    
+                    # Only validate predictions that are in the past
+                    if pred_date.date() >= datetime.now().date():
+                        continue
+                    
+                    # Fetch actual price if not already validated
+                    if pred.get("actual_price") is None:
+                        actual_price = get_actual_price_for_date(ticker, pred_date)
+                        
+                        if actual_price is None:
+                            continue
+                        
+                        # Update prediction with actual price
+                        pred["actual_price"] = actual_price
+                        pred["validated"] = 1
+                        validated_count += 1
+                    else:
+                        actual_price = pred["actual_price"]
+                        validated_count += 1
+                    
+                    # Calculate errors
+                    mae = abs(pred_value - actual_price)
+                    mape = (mae / actual_price) * 100
+                    
+                    errors_mae.append(mae)
+                    errors_mape.append(mape)
+                    
+                    # Update errors in data
+                    pred["error_mae"] = mae
+                    pred["error_mape"] = mape
+                    
+                    # Directional accuracy
+                    if pred.get("previous_price"):
+                        prev_price = float(pred["previous_price"])
+                        predicted_direction = 1 if pred_value > prev_price else -1
+                        actual_direction = 1 if actual_price > prev_price else -1
+                        directional_correct.append(predicted_direction == actual_direction)
+                    elif current_price:
+                        predicted_direction = 1 if pred_value > current_price else -1
+                        actual_direction = 1 if actual_price > current_price else -1
+                        directional_correct.append(predicted_direction == actual_direction)
+                    
+                except Exception as e:
+                    logger.debug(f"Error validating prediction for {ticker}: {e}")
+                    continue
+            
+            # Save updated predictions
+            with open(predictions_path, 'w') as f:
+                json.dump(predictions_data, f, indent=2)
+        
+        # Calculate aggregate metrics
+        if validated_count == 0:
+            total_predictions = len(predictions) if SQLALCHEMY_AVAILABLE else len(predictions_data)
+            return {
+                "total_predictions": total_predictions,
+                "validated_predictions": 0,
+                "avg_error_mape": 0.0,
+                "avg_error_mae": 0.0,
+                "directional_accuracy": 0.0,
+                "last_updated": datetime.now().isoformat(),
+                "status": "no_validated"
+            }
+        
+        avg_mape = np.mean(errors_mape) if errors_mape else 0.0
+        avg_mae = np.mean(errors_mae) if errors_mae else 0.0
+        dir_accuracy = (sum(directional_correct) / len(directional_correct) * 100) if directional_correct else 0.0
+        
+        total_predictions = len(predictions) if SQLALCHEMY_AVAILABLE else len(predictions_data)
+        
+        return {
+            "total_predictions": total_predictions,
+            "validated_predictions": validated_count,
+            "avg_error_mape": round(avg_mape, 2),  # Percentage
+            "avg_error_mae": round(avg_mae, 2),     # Dollar amount
+            "directional_accuracy": round(dir_accuracy, 1),  # Percentage
+            "last_updated": datetime.now().isoformat(),
+            "status": "validated",
+            "recent_errors": errors_mape[-10:] if len(errors_mape) > 0 else []
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to load accuracy log for {ticker}: {e}")
+        log_error(ErrorSeverity.ERROR, "load_accuracy_log", e, ticker=ticker, show_to_user=False)
+        if SQLALCHEMY_AVAILABLE:
+            try:
+                db_session.close()
+            except:
+                pass
+    
+    return {
+        "total_predictions": 0,
+        "validated_predictions": 0,
+        "avg_error_mape": 0.0,
+        "avg_error_mae": 0.0,
+        "directional_accuracy": 0.0,
+        "last_updated": datetime.now().isoformat(),
+        "status": "no_file"
+    }
+
+def validate_predictions(ticker: str) -> Tuple[bool, Dict[str, Any]]:
+    """Validate predictions against REAL actual prices and return performance metrics"""
+    logger.info(f"Validating predictions for {ticker} against actual market data...")
+    
+    try:
+        # Load accuracy log which now does REAL validation
+        acc_log = load_accuracy_log(ticker)
+        
+        if acc_log['status'] in ['no_predictions', 'no_file']:
+            logger.info(f"{ticker}: No predictions to validate")
+            return False, acc_log
+        
+        if acc_log['status'] == 'no_validated':
+            logger.warning(f"{ticker}: Predictions exist but none could be validated (all future dates or data unavailable)")
+            return False, acc_log
+        
+        # Check validation quality
+        validated_count = acc_log.get('validated_predictions', 0)
+        avg_mape = acc_log.get('avg_error_mape', 100.0)
+        dir_accuracy = acc_log.get('directional_accuracy', 0.0)
+        
+        logger.info(
+            f"{ticker} Validation Results: "
+            f"{validated_count} predictions | "
+            f"MAPE: {avg_mape:.2f}% | "
+            f"MAE: ${acc_log.get('avg_error_mae', 0):.2f} | "
+            f"Direction: {dir_accuracy:.1f}%"
+        )
+        
+        # Consider validation successful if we have data
+        return True, acc_log
+        
+    except Exception as e:
+        logger.error(f"Failed to validate predictions for {ticker}: {e}")
+        log_error(ErrorSeverity.ERROR, "validate_predictions", e, ticker=ticker, show_to_user=False)
+        return False, {
+            "total_predictions": 0,
+            "validated_predictions": 0,
+            "avg_error_mape": 100.0,
+            "avg_error_mae": 0.0,
+            "directional_accuracy": 0.0,
+            "status": "error"
+        }
+
+def should_retrain(ticker: str, accuracy_log: Dict[str, Any], 
+                  metadata: Dict[str, Any]) -> Tuple[bool, List[str]]:
+    """Determine if model should be retrained using REAL performance metrics"""
+    reasons = []
+    
+    # Check if we have validated predictions
+    validated_count = accuracy_log.get("validated_predictions", 0)
+    total_predictions = accuracy_log.get("total_predictions", 0)
+    
+    if validated_count < 5:
+        if total_predictions < 5:
+            reasons.append("insufficient_predictions")
+        else:
+            reasons.append("insufficient_validated_predictions")
+    
+    # Check REAL error rates (MAPE - Mean Absolute Percentage Error)
+    avg_mape = accuracy_log.get("avg_error_mape", 0.0)
+    if validated_count >= 5:  # Only check error if we have enough validated predictions
+        if avg_mape > 8.0:  # More than 8% average error
+            reasons.append(f"high_error_mape_{avg_mape:.1f}%")
+        elif avg_mape > 5.0:  # Warning level
+            reasons.append(f"elevated_error_mape_{avg_mape:.1f}%")
+    
+    # Check directional accuracy
+    dir_accuracy = accuracy_log.get("directional_accuracy", 0.0)
+    if validated_count >= 5 and dir_accuracy < 55.0:  # Less than 55% correct direction
+        reasons.append(f"poor_direction_accuracy_{dir_accuracy:.1f}%")
+    
+    # Check initial training
+    retrain_count = metadata.get("retrain_count", 0)
+    if retrain_count < 2:
+        reasons.append("initial_training_phase")
+    
+    # Check if model is stale
+    if metadata.get("trained_date"):
+        try:
+            trained_date = datetime.fromisoformat(metadata["trained_date"])
+            days_since_training = (datetime.now() - trained_date).days
+            if days_since_training > 14:
+                reasons.append(f"stale_model_{days_since_training}d")
+            elif days_since_training > 7 and avg_mape > 6.0:
+                reasons.append(f"aging_model_with_errors_{days_since_training}d")
+        except Exception as e:
+            logger.warning(f"Invalid training date for {ticker}: {e}")
+            reasons.append("invalid_training_date")
+    
+    # Check data quality issues
+    if metadata.get("data_quality") == "WARNING":
+        reasons.append("data_quality_issues")
+    
+    # Check recent performance degradation
+    recent_errors = accuracy_log.get("recent_errors", [])
+    if len(recent_errors) >= 3:
+        recent_avg = np.mean(recent_errors[-3:])
+        if recent_avg > avg_mape * 1.5:  # Recent errors 50% worse than average
+            reasons.append(f"performance_degradation_{recent_avg:.1f}%")
+    
+    return len(reasons) > 0, reasons
 
 # ================================
 # ENHANCED TRAINING FUNCTION
@@ -1659,13 +2080,21 @@ def train_self_learning_model_enhanced(ticker: str, days: int = 5,
             logger.warning(f"Forecast generation failed for {ticker}")
             return None, None, None
         
-        # Apply pattern boosts
-        current_price = get_latest_price(ticker)
-        if current_price:
-            forecast = get_pattern_boosted_forecast(ticker, forecast.tolist(), current_price)
+        # Apply pattern boosts if available
+        try:
+            current_price = get_latest_price(ticker)
+            if current_price:
+                # Try to apply pattern boosts (if pattern functions are available)
+                try:
+                    forecast = get_pattern_boosted_forecast(ticker, forecast.tolist(), current_price)
+                except:
+                    pass
+        except:
+            pass
         
         # Record prediction with current price for directional validation
         tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+        current_price = get_latest_price(ticker)
         record_prediction(ticker, forecast[0], tomorrow, current_price)
         
         # Update metadata
@@ -2060,8 +2489,6 @@ def train_and_evaluate_patterns(X: pd.DataFrame, y: pd.Series,
                  show_to_user=False)
         return None
 
-# Continuing with more functions...
-
 # ================================
 # PATTERN MINING FOR TICKER
 # ================================
@@ -2232,7 +2659,8 @@ def check_auto_patterns(ticker: str, data: Optional[pd.DataFrame] = None) -> Tup
         return 0, [], "NEUTRAL", 0
 
     try:
-        raw = json.loads(AUTO_PATTERNS_FILE.read_text(encoding="utf-8"))
+        with open(AUTO_PATTERNS_FILE, 'r') as f:
+            raw = json.load(f)
         if "patterns" not in raw:
             return 0, [], "NEUTRAL", 0
 
@@ -2491,8 +2919,6 @@ class ApplicationState:
 
 # Global application state
 app_state = ApplicationState()
-
-# Continue to Part 5 with background threads...
 
 # ================================
 # BACKGROUND THREADS
@@ -2801,9 +3227,14 @@ def auto_validate_predictions_background(stop_event: threading.Event) -> None:
 
 def monitor_system_resources() -> Optional[Dict[str, Any]]:
     """Monitor system resources"""
+    if not PSUTIL_AVAILABLE:
+        return {
+            'memory_mb': 0,
+            'cpu_percent': 0,
+            'disk_usage': 0
+        }
+    
     try:
-        import psutil
-        
         # Memory usage
         process = psutil.Process()
         memory_mb = process.memory_info().rss / 1024 / 1024
@@ -2830,9 +3261,6 @@ def monitor_system_resources() -> Optional[Dict[str, Any]]:
             'disk_usage': disk_usage
         }
         
-    except ImportError:
-        logger.warning("psutil not available for resource monitoring")
-        return None
     except Exception as e:
         logger.error(f"Error monitoring resources: {e}")
         return None
@@ -2910,8 +3338,6 @@ def shutdown_background_threads() -> None:
     logger.info("Shutting down background threads...")
     thread_manager.stop_all()
     logger.info("All background threads stopped")
-
-# Continue to Part 6 with UI components...
 
 # ================================
 # STREAMLIT UI COMPONENTS
@@ -3033,31 +3459,31 @@ def add_enhanced_controls() -> None:
             disk_color = "normal" if resources['disk_usage'] < DISK_WARNING_THRESHOLD_PERCENT else "off"
             st.metric("Disk", f"{resources['disk_usage']:.1f}%", delta_color=disk_color)
     
-# Metrics display
-st.markdown("#### 📈 Application Metrics")
-metrics = metrics_collector.get_metrics()
-
-col1, col2 = st.columns(2)
-with col1:
-    st.metric("Predictions Made", metrics.get('predictions_made', 0))
-    st.metric("Models Trained", metrics.get('models_trained', 0))
-    st.metric("Elite Patterns", metrics.get('elite_patterns_found', 0))
-with col2:
-    st.metric("Models Retrained", metrics.get('models_retrained', 0))
-    st.metric("Errors", metrics.get('errors_encountered', 0))
-    st.metric("Mining Cycles", metrics.get('pattern_mining_cycles', 0))
-
-# Data source metrics
-st.markdown("#### 📊 Data Source Usage")
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.metric("Total Downloads", metrics.get('data_downloads', 0))
-with col2:
-    yf_downloads = metrics.get('yfinance_downloads', 0)
-    st.metric("yfinance", yf_downloads)
-with col3:
-    av_downloads = metrics.get('alphavantage_downloads', 0)
-    st.metric("Alpha Vantage", av_downloads)
+    # Metrics display
+    st.markdown("#### 📈 Application Metrics")
+    metrics = metrics_collector.get_metrics()
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Predictions Made", metrics.get('predictions_made', 0))
+        st.metric("Models Trained", metrics.get('models_trained', 0))
+        st.metric("Elite Patterns", metrics.get('elite_patterns_found', 0))
+    with col2:
+        st.metric("Models Retrained", metrics.get('models_retrained', 0))
+        st.metric("Errors", metrics.get('errors_encountered', 0))
+        st.metric("Mining Cycles", metrics.get('pattern_mining_cycles', 0))
+    
+    # Data source metrics
+    st.markdown("#### 📊 Data Source Usage")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Total Downloads", metrics.get('data_downloads', 0))
+    with col2:
+        yf_downloads = metrics.get('yfinance_downloads', 0)
+        st.metric("yfinance", yf_downloads)
+    with col3:
+        av_downloads = metrics.get('alphavantage_downloads', 0)
+        st.metric("Alpha Vantage", av_downloads)
 
 def show_pattern_dashboard() -> None:
     """Show pattern mining dashboard"""
@@ -3235,61 +3661,115 @@ def show_accuracy_dashboard(ticker: str) -> None:
 
 def show_prediction_history(ticker: str) -> None:
     """Show detailed prediction vs actual history"""
-    path = get_predictions_path(ticker)
-    
-    if not path.exists():
-        st.info("No prediction history available.")
-        return
-    
     try:
-        with open(path, 'r') as f:
-            predictions = json.load(f)
-        
-        if not predictions:
-            st.info("No predictions recorded.")
-            return
-        
-        # Filter validated predictions
-        validated_preds = [p for p in predictions if p.get('actual_price') is not None]
-        
-        if not validated_preds:
-            st.info("No validated predictions yet. Predictions can only be validated after their target date has passed.")
-            return
-        
-        # Create comparison table
-        history_data = []
-        for pred in validated_preds:
-            try:
-                pred_date = datetime.fromisoformat(pred['date']).strftime("%Y-%m-%d")
-                predicted = pred['prediction']
-                actual = pred['actual_price']
-                error_pct = pred.get('error_mape', 0)
-                error_abs = pred.get('error_mae', 0)
-                
-                # Direction
-                if pred.get('previous_price'):
-                    prev = pred['previous_price']
-                    pred_dir = "⬆️" if predicted > prev else "⬇️"
-                    actual_dir = "⬆️" if actual > prev else "⬇️"
-                    correct_dir = "✅" if pred_dir == actual_dir else "❌"
-                else:
-                    pred_dir = "-"
-                    actual_dir = "-"
-                    correct_dir = "-"
-                
-                history_data.append({
-                    "Date": pred_date,
-                    "Predicted": f"${predicted:.2f}",
-                    "Actual": f"${actual:.2f}",
-                    "Error $": f"${error_abs:.2f}",
-                    "Error %": f"{error_pct:.2f}%",
-                    "Pred Dir": pred_dir,
-                    "Actual Dir": actual_dir,
-                    "Correct": correct_dir
-                })
-            except Exception as e:
-                logger.debug(f"Error displaying prediction: {e}")
-                continue
+        if SQLALCHEMY_AVAILABLE:
+            db_session = Session()
+            
+            # Get all predictions for this ticker
+            predictions = db_session.query(Prediction).filter(
+                Prediction.ticker == ticker
+            ).order_by(Prediction.prediction_date).all()
+            
+            if not predictions:
+                st.info("No predictions recorded.")
+                db_session.close()
+                return
+            
+            # Filter validated predictions
+            validated_preds = [p for p in predictions if p.actual_price is not None]
+            
+            if not validated_preds:
+                st.info("No validated predictions yet. Predictions can only be validated after their target date has passed.")
+                db_session.close()
+                return
+            
+            # Create comparison table
+            history_data = []
+            for pred in validated_preds:
+                try:
+                    pred_date = pred.prediction_date.strftime("%Y-%m-%d")
+                    predicted = pred.predicted_price
+                    actual = pred.actual_price
+                    error_pct = pred.error_mape if pred.error_mape else 0
+                    error_abs = pred.error_mae if pred.error_mae else 0
+                    
+                    # Direction
+                    if pred.previous_price:
+                        prev = pred.previous_price
+                        pred_dir = "⬆️" if predicted > prev else "⬇️"
+                        actual_dir = "⬆️" if actual > prev else "⬇️"
+                        correct_dir = "✅" if pred_dir == actual_dir else "❌"
+                    else:
+                        pred_dir = "-"
+                        actual_dir = "-"
+                        correct_dir = "-"
+                    
+                    history_data.append({
+                        "Date": pred_date,
+                        "Predicted": f"${predicted:.2f}",
+                        "Actual": f"${actual:.2f}",
+                        "Error $": f"${error_abs:.2f}",
+                        "Error %": f"{error_pct:.2f}%",
+                        "Pred Dir": pred_dir,
+                        "Actual Dir": actual_dir,
+                        "Correct": correct_dir
+                    })
+                except Exception as e:
+                    logger.debug(f"Error displaying prediction: {e}")
+                    continue
+            
+            db_session.close()
+        else:
+            # JSON fallback
+            predictions_path = get_predictions_path(ticker)
+            if not predictions_path.exists():
+                st.info("No predictions recorded.")
+                return
+            
+            with open(predictions_path, 'r') as f:
+                predictions_data = json.load(f)
+            
+            # Filter validated predictions
+            validated_preds = [p for p in predictions_data if p.get("actual_price") is not None]
+            
+            if not validated_preds:
+                st.info("No validated predictions yet. Predictions can only be validated after their target date has passed.")
+                return
+            
+            # Create comparison table
+            history_data = []
+            for pred in validated_preds:
+                try:
+                    pred_date = pred["prediction_date"]
+                    predicted = pred["predicted_price"]
+                    actual = pred["actual_price"]
+                    error_pct = pred.get("error_mape", 0)
+                    error_abs = pred.get("error_mae", 0)
+                    
+                    # Direction
+                    if pred.get("previous_price"):
+                        prev = pred["previous_price"]
+                        pred_dir = "⬆️" if predicted > prev else "⬇️"
+                        actual_dir = "⬆️" if actual > prev else "⬇️"
+                        correct_dir = "✅" if pred_dir == actual_dir else "❌"
+                    else:
+                        pred_dir = "-"
+                        actual_dir = "-"
+                        correct_dir = "-"
+                    
+                    history_data.append({
+                        "Date": pred_date,
+                        "Predicted": f"${predicted:.2f}",
+                        "Actual": f"${actual:.2f}",
+                        "Error $": f"${error_abs:.2f}",
+                        "Error %": f"{error_pct:.2f}%",
+                        "Pred Dir": pred_dir,
+                        "Actual Dir": actual_dir,
+                        "Correct": correct_dir
+                    })
+                except Exception as e:
+                    logger.debug(f"Error displaying prediction: {e}")
+                    continue
         
         if history_data:
             st.dataframe(
@@ -3302,12 +3782,20 @@ def show_prediction_history(ticker: str) -> None:
             chart_data = []
             for pred in validated_preds:
                 try:
-                    date = datetime.fromisoformat(pred['date'])
-                    chart_data.append({
-                        'Date': date,
-                        'Predicted': pred['prediction'],
-                        'Actual': pred['actual_price']
-                    })
+                    if SQLALCHEMY_AVAILABLE:
+                        date = pred.prediction_date
+                        chart_data.append({
+                            'Date': date,
+                            'Predicted': pred.predicted_price,
+                            'Actual': pred.actual_price
+                        })
+                    else:
+                        date = datetime.strptime(pred["prediction_date"], "%Y-%m-%d")
+                        chart_data.append({
+                            'Date': date,
+                            'Predicted': pred["predicted_price"],
+                            'Actual': pred["actual_price"]
+                        })
                 except:
                     continue
             
@@ -3435,8 +3923,7 @@ def show_learning_log() -> None:
             st.text(message)
     else:
         st.info("ℹ️ No learning activity yet.")
-		 
-		 
+
 # ================================
 # MAIN STREAMLIT APPLICATION
 # ================================
@@ -3612,14 +4099,24 @@ def main():
                         forecast_val = float(np.array(forecast).flatten()[0])
                         
                         # Use enhanced confidence check with patterns
-                        passed, reasons, pattern_boost = enhanced_confidence_checklist(
-                            ticker, [forecast_val], price or 100
-                        )
+                        try:
+                            passed, reasons, pattern_boost = enhanced_confidence_checklist(
+                                ticker, [forecast_val], price or 100
+                            )
+                        except:
+                            passed = False
+                            reasons = ["Pattern checking not available"]
+                            pattern_boost = 0
                         
                         # Get pattern-influenced recommendation
-                        action, confidence, pattern_reasons = get_pattern_influenced_recommendation(
-                            ticker, [forecast_val], price
-                        )
+                        try:
+                            action, confidence, pattern_reasons = get_pattern_influenced_recommendation(
+                                ticker, [forecast_val], price
+                            )
+                        except:
+                            action = "HOLD"
+                            confidence = 50
+                            pattern_reasons = []
                         
                         if passed:
                             change_pct = (forecast_val - price) / price * 100 if price else 0
@@ -3695,13 +4192,16 @@ def main():
                     st.write("**📅 Last Trained:** Unknown")
             
             # Pattern status
-            boost, triggers, direction, confidence = check_auto_patterns(ticker)
-            if boost > 0:
-                st.metric("⚡ Pattern Boost", f"+{boost}", f"Direction: {direction}")
-                if triggers:
-                    with st.expander("🔍 Pattern Details"):
-                        for trigger in triggers:
-                            st.write(f"• {trigger}")
+            try:
+                boost, triggers, direction, confidence = check_auto_patterns(ticker)
+                if boost > 0:
+                    st.metric("⚡ Pattern Boost", f"+{boost}", f"Direction: {direction}")
+                    if triggers:
+                        with st.expander("🔍 Pattern Details"):
+                            for trigger in triggers:
+                                st.write(f"• {trigger}")
+            except:
+                pass
             
             # Button to view detailed accuracy
             if st.button("📊 View Accuracy Details", key=f"acc_detail_{ticker}"):
@@ -3880,11 +4380,20 @@ def main():
         with col3:
             if st.button("🗑️ Clear History", type="secondary", use_container_width=True):
                 try:
-                    count = 0
-                    for file in PREDICTIONS_DIR.glob("*.json"):
-                        file.unlink()
-                        count += 1
-                    st.success(f"✅ Cleared {count} files!")
+                    # Clear predictions
+                    if SQLALCHEMY_AVAILABLE:
+                        db_session = Session()
+                        db_session.query(Prediction).delete()
+                        db_session.commit()
+                        db_session.close()
+                    else:
+                        # Clear JSON files
+                        for ticker in all_tickers:
+                            predictions_path = get_predictions_path(ticker)
+                            if predictions_path.exists():
+                                predictions_path.unlink()
+                    
+                    st.success("✅ Cleared all predictions!")
                     time.sleep(1)
                     st.rerun()
                 except Exception as e:
@@ -4009,7 +4518,7 @@ def main():
                 st.markdown("2. Wait for prediction dates to pass")
                 st.markdown("3. Return here and click 'Validate All Predictions'")
     
-# ================================
+    # ================================
     # TAB 5: SETTINGS
     # ================================
     
@@ -4175,11 +4684,24 @@ def main():
             
             if st.button("🗑️ Clear Predictions", type="secondary", use_container_width=True):
                 try:
-                    count = 0
-                    for file in PREDICTIONS_DIR.glob("*.json"):
-                        file.unlink()
-                        count += 1
-                    st.success(f"✅ Cleared {count} prediction files!")
+                    # Clear predictions
+                    if SQLALCHEMY_AVAILABLE:
+                        db_session = Session()
+                        count = db_session.query(Prediction).count()
+                        db_session.query(Prediction).delete()
+                        db_session.commit()
+                        db_session.close()
+                        st.success(f"✅ Cleared {count} predictions!")
+                    else:
+                        # Clear JSON files
+                        all_tickers = [t for cat in ASSET_CATEGORIES.values() for t in cat.values()]
+                        count = 0
+                        for ticker in all_tickers:
+                            predictions_path = get_predictions_path(ticker)
+                            if predictions_path.exists():
+                                predictions_path.unlink()
+                                count += 1
+                        st.success(f"✅ Cleared {count} prediction files!")
                 except Exception as e:
                     st.error(f"❌ Error: {e}")
     
