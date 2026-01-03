@@ -4826,6 +4826,61 @@ class ApplicationState:
 # Global application state
 app_state = ApplicationState()
 
+# ============================================================================
+# SECTION 11: REPORTING & UTILITIES
+# ============================================================================
+
+def generate_monthly_performance_report():
+    """Aggregates accuracy data and sends a monthly summary via Telegram"""
+    logger.info("📊 Monthly Report: Aggregating all ticker data...")
+    
+    # Get all tickers from your categories
+    all_tickers = [t for cat in ASSET_CATEGORIES.values() for t in cat.values()]
+    
+    report_lines = [
+        f"🗓️ **MONTHLY AI PERFORMANCE REPORT** 🗓️",
+        f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}",
+        "---"
+    ]
+    
+    validated_count = 0
+    total_mape = 0
+    
+    for ticker in all_tickers:
+        acc = load_accuracy_log(ticker)
+        # Only report tickers that have actually been validated
+        if acc.get('validated_predictions', 0) > 0:
+            mape = acc.get('avg_error_mape', 0)
+            directional = acc.get('directional_accuracy', 0)
+            
+            report_lines.append(f"• **{ticker}**: {mape:.2f}% Error | {directional:.1f}% Dir")
+            
+            total_mape += mape
+            validated_count += 1
+            
+    if validated_count > 0:
+        avg_overall = total_mape / validated_count
+        report_lines.append("---")
+        report_lines.append(f"📈 **Portfolio Avg MAPE: {avg_overall:.2f}%**")
+        report_lines.append(f"✅ Tickers Monitored: {validated_count}")
+    else:
+        report_lines.append("⚠️ No validation data available for this month yet.")
+
+    full_report = "\n".join(report_lines)
+    
+    # Send to Telegram
+    try:
+        send_telegram_alert(full_report)
+    except Exception as e:
+        logger.error(f"Could not send monthly report to Telegram: {e}")
+        
+    # Save a permanent copy
+    report_file = LOGS_DIR / f"report_{datetime.now().strftime('%Y_%m')}.txt"
+    with open(report_file, "w", encoding='utf-8') as f:
+        f.write(full_report)
+
+    logger.info(f"✅ Monthly report generated and saved to {report_file}")
+
 # ================================
 # BACKGROUND THREADS
 # ================================
@@ -5030,7 +5085,7 @@ def thread_watchdog_managed(stop_event: threading.Event) -> None:
     logger.info("[WATCHDOG] Enhanced Watchdog STOPPED")
 
 def auto_validate_predictions_background(stop_event: threading.Event) -> None:
-    """Background thread to automatically validate predictions daily"""
+    """Background thread to automatically validate predictions daily + Monthly Report"""
     app_state.update_heartbeat("auto_validator")
     app_state.set_thread_start_time("auto_validator")
     logger.info("[AUTO VALIDATOR] Started")
@@ -5054,7 +5109,6 @@ def auto_validate_predictions_background(stop_event: threading.Event) -> None:
                         if success and acc_data.get('validated_predictions', 0) > 0:
                             validated_count += 1
                             
-                            # Check if performance is poor and send alert
                             mape = acc_data.get('avg_error_mape', 0)
                             if mape > 10.0:
                                 logger.warning(f"[AUTO VALIDATOR] {ticker} has poor accuracy: {mape:.2f}% MAPE")
@@ -5064,15 +5118,27 @@ def auto_validate_predictions_background(stop_event: threading.Event) -> None:
                 
                 logger.info(f"[AUTO VALIDATOR] Validated {validated_count} tickers")
                 app_state.add_log_message(f"[AUTO VALIDATOR] Complete - {validated_count} tickers validated")
+
+                # ============================================================
+                # 📊 NEW: MONTHLY PERFORMANCE REPORT IMPLANT
+                # ============================================================
+                if now.day == 1:
+                    logger.info("[REPORT] Generating Monthly Performance Report...")
+                    try:
+                        generate_monthly_performance_report()
+                        app_state.add_log_message("✅ Monthly Performance Report Generated")
+                    except Exception as re:
+                        logger.error(f"Failed to generate monthly report: {re}")
+                # ============================================================
                 
-                # Sleep for an hour to avoid running again
+                # Sleep for an hour to avoid running again immediately
                 for _ in range(3600):
                     if stop_event.is_set():
                         break
                     time.sleep(1)
                     app_state.update_heartbeat("auto_validator")
             
-            # Check every 5 minutes
+            # Check every 5 minutes during the rest of the day
             for _ in range(300):
                 if stop_event.is_set():
                     break
