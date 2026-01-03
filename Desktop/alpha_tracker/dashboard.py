@@ -4358,142 +4358,51 @@ def run_prediction_scan(scan_time: str) -> List[Dict[str, Any]]:
     
     return predictions
 
-# ================================
-# ALERT FORMATTING
-# ================================
+# ============================================================================
+# SECTION 13: ALERT FORMATTING (UPDATED FOR THE WINNING EQUATION)
+# ============================================================================
 
 def format_prediction_alert(predictions: List[Dict[str, Any]], scan_time: str) -> str:
-    """Format prediction results as Telegram alert"""
-    
+    """Format results using the Winning Equation (Hybrid Signal)"""
     if not predictions:
-        return f"🔍 {scan_time.upper()} SCAN: No high-probability movers detected today."
-    
-    # Header
-    if scan_time == "morning":
-        header = "🌅 DAILY WATCHLIST ALERT\n\n📊 High Probability Movers Today:\n\n"
-    else:
-        header = "🌆 MIDDAY UPDATE\n\n📊 Updated Predictions:\n\n"
-    
+        return f"🔍 {scan_time.upper()} SCAN: No high-probability movers detected."
+
+    header = "🔥 **AI ALPHA ELITE ALERTS** 🔥\n\n" if scan_time == "morning" else "🌆 **MIDDAY HYBRID UPDATE**\n\n"
     message = header
-    
-    # Add each prediction
+    valid_alerts = 0
+
     for idx, pred in enumerate(predictions, 1):
         ticker = pred['ticker']
-        prob = pred['probability'] * 100
-        direction = pred['direction']
+        current_price = get_latest_price(ticker) # Your existing price fetcher
         
-        # Direction emoji
-        dir_emoji = "📈" if direction == "UP" else "📉" if direction == "DOWN" else "➡️"
+        if not current_price: continue
         
-        # Get asset name
-        asset_name = get_asset_name_from_ticker(ticker)
+        # Calculate target based on AI's predicted percentage change
+        target_price = current_price * (1 + (pred['lstm_change'] / 100))
         
-        message += f"{idx}. **{asset_name} ({ticker})** - {prob:.0f}% chance of 6%+ move\n"
-        message += f"   • Direction: {dir_emoji} {direction} bias\n"
-        
-        # Pre-market info
-        gap = pred['premarket']['gap_percent']
-        if abs(gap) > 0.5:
-            message += f"   • Pre-market: {gap:+.1f}%"
-            vol_ratio = pred['premarket']['volume_ratio']
-            if vol_ratio > 1.2:
-                message += f" on {vol_ratio:.1f}x volume"
-            message += "\n"
-        
-        # Pattern info
-        if pred['pattern_boost'] > 0:
-            message += f"   • Pattern: ELITE (+{pred['pattern_boost']} boost)\n"
-        
-        # LSTM prediction
-        lstm_change = pred['lstm_change']
-        if abs(lstm_change) > 1:
-            message += f"   • LSTM: Predicts {lstm_change:+.1f}%\n"
-        
-        # Momentum (midday only)
-        if pred['momentum'] is not None and pred['momentum'] > 0.5:
-            message += f"   • Momentum: {'STRONG' if pred['momentum'] > 0.7 else 'BUILDING'}\n"
-        
-        # Triggers (if available)
-        if pred['pattern_triggers']:
-            triggers_str = ", ".join(pred['pattern_triggers'][:3])  # First 3 triggers
-            message += f"   • Signals: {triggers_str}\n"
-        
-        message += "\n"
-    
-    # Footer
-    if scan_time == "morning":
-        message += "📝 Note: Monitor these closely today\n"
-        message += "⏰ Next scan: 1:00 PM\n"
-    else:
-        message += "📝 Note: Afternoon session predictions\n"
-        message += "⏰ Next scan: Tomorrow 9:30 AM\n"
-    
-    message += f"\n_{scan_time.title()} Scan - AI Alpha Trader v4.2_"
-    
-    return message
+        # --- RUN THE WINNING EQUATION ---
+        analysis = get_hybrid_signal(
+            ticker, 
+            target_price, 
+            current_price, 
+            pred['probability']
+        )
 
-def format_midday_comparison(morning_preds: List[Dict], midday_preds: List[Dict]) -> str:
-    """Compare morning and midday predictions, highlight changes"""
-    
-    message = "🌆 MIDDAY UPDATE\n\n"
-    
-    # Find increased probabilities
-    increased = []
-    decreased = []
-    new_entries = []
-    
-    morning_dict = {p['ticker']: p for p in morning_preds}
-    midday_dict = {p['ticker']: p for p in midday_preds}
-    
-    for ticker, midday_pred in midday_dict.items():
-        if ticker in morning_dict:
-            morning_prob = morning_dict[ticker]['probability']
-            midday_prob = midday_pred['probability']
-            
-            if midday_prob > morning_prob + 0.05:  # 5% increase
-                increased.append((ticker, morning_prob, midday_prob, midday_pred))
-            elif midday_prob < morning_prob - 0.05:  # 5% decrease
-                decreased.append((ticker, morning_prob, midday_prob))
-        else:
-            new_entries.append((ticker, midday_pred))
-    
-    # Format increased probabilities
-    if increased:
-        message += "📈 **PROBABILITY INCREASED:**\n"
-        for ticker, morning_p, midday_p, pred in increased:
-            message += f"\n**{ticker}** - {midday_p*100:.0f}% (was {morning_p*100:.0f}%)\n"
-            message += f"   • Move so far: {pred['premarket']['gap_percent']:+.1f}%\n"
-            if pred['momentum']:
-                message += f"   • Momentum: {'ACCELERATING' if pred['momentum'] > 0.7 else 'BUILDING'}\n"
-            message += f"   • Action: 🎯 {'HIGH' if midday_p > 0.8 else 'MODERATE'} ALERT\n"
-        message += "\n"
-    
-    # Format decreased probabilities
-    if decreased:
-        message += "📉 **PROBABILITY DECREASED:**\n"
-        for ticker, morning_p, midday_p in decreased:
-            message += f"\n**{ticker}** - {midday_p*100:.0f}% (was {morning_p*100:.0f}%)\n"
-            message += f"   • Momentum: FADING\n"
-            if midday_p < 0.5:
-                message += f"   • Removed from watch list\n"
-        message += "\n"
-    
-    # Format new entries
-    if new_entries:
-        message += "⚠️ **NEW ENTRIES:**\n"
-        for ticker, pred in new_entries:
-            message += f"\n**{ticker}** - {pred['probability']*100:.0f}% probability\n"
-            message += f"   • Not in morning scan\n"
-            if pred['momentum']:
-                message += f"   • Sudden momentum spike\n"
-            message += f"   • Direction: {pred['direction']}\n"
-        message += "\n"
-    
-    if not increased and not decreased and not new_entries:
-        message += "ℹ️ No significant changes from morning scan\n\n"
-    
-    message += "_Midday Update - AI Alpha Trader v4.2_"
-    
+        # Only alert if the Reward is 3x the Risk (The Math Edge)
+        if analysis["should_alert"]:
+            valid_alerts += 1
+            asset_name = get_asset_name_from_ticker(ticker)
+            message += f"{analysis['emoji']} **{valid_alerts}. {asset_name} ({ticker})**\n"
+            message += f" • **{analysis['status']}**\n"
+            message += f" • R:R Ratio: **{analysis['rr_ratio']}:1**\n"
+            message += f" • Target: ${target_price:.2f} ({pred['lstm_change']:+.1f}%)\n"
+            message += f" • Stop Loss: ${analysis['stop_loss']:.2f} (-1.5%)\n\n"
+
+    # If AI liked stocks but the math was bad, we save your capital
+    if valid_alerts == 0:
+        return f"🔍 {scan_time.upper()} SCAN: AI identified {len(predictions)} moves, but none met the 3:1 Reward/Risk criteria. (Capital Protected 🛡️)"
+
+    message += f"_{scan_time.title()} Scan - Powered by The Winning Equation_"
     return message
 
 # ================================
@@ -4848,7 +4757,6 @@ def generate_monthly_performance_report():
     
     for ticker in all_tickers:
         acc = load_accuracy_log(ticker)
-        # Only report tickers that have actually been validated
         if acc.get('validated_predictions', 0) > 0:
             mape = acc.get('avg_error_mape', 0)
             directional = acc.get('directional_accuracy', 0)
@@ -4868,18 +4776,58 @@ def generate_monthly_performance_report():
 
     full_report = "\n".join(report_lines)
     
-    # Send to Telegram
     try:
         send_telegram_alert(full_report)
     except Exception as e:
         logger.error(f"Could not send monthly report to Telegram: {e}")
         
-    # Save a permanent copy
     report_file = LOGS_DIR / f"report_{datetime.now().strftime('%Y_%m')}.txt"
     with open(report_file, "w", encoding='utf-8') as f:
         f.write(full_report)
 
     logger.info(f"✅ Monthly report generated and saved to {report_file}")
+
+def get_hybrid_signal(ticker, predicted_price, current_price, confidence_score):
+    """
+    Combines AI Predictive Accuracy with the 'Winning Equation' (Asymmetry).
+    The Goal: Only alert if (AI is confident) AND (Reward > 3x Risk).
+    """
+    # 1. Define the 'If I'm Wrong' boundary (Stop Loss)
+    # Using a 1.5% volatility buffer
+    stop_loss = current_price * 0.985 
+    
+    # 2. Calculate the Math of the Equation
+    risk = current_price - stop_loss
+    potential_gain = predicted_price - current_price
+    
+    # Avoid division by zero
+    rr_ratio = potential_gain / risk if risk > 0 else 0
+    
+    # 3. Hybrid Logic Gate
+    is_ai_confident = confidence_score > 0.70  # Scout is happy
+    is_math_asymmetric = rr_ratio >= 3.0       # General is happy
+    
+    status = "IGNORE"
+    emoji = "💤"
+    
+    if is_ai_confident and is_math_asymmetric:
+        status = "ELITE SETUP"
+        emoji = "🔥"
+    elif is_math_asymmetric:
+        status = "MATH EDGE"
+        emoji = "⚖️"
+    elif is_ai_confident:
+        status = "ACCURACY ONLY"
+        emoji = "🎯"
+        
+    return {
+        "status": status,
+        "emoji": emoji,
+        "rr_ratio": round(rr_ratio, 2),
+        "stop_loss": round(stop_loss, 2),
+        "potential_gain_pct": round(((predicted_price / current_price) - 1) * 100, 2),
+        "should_alert": is_math_asymmetric
+    }
 
 # ================================
 # BACKGROUND THREADS
