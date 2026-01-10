@@ -1,92 +1,76 @@
 """
 ================================================================================
-ALPHA TRACKER v4.2 - ELITE HYBRID MASTER
+ALPHA TRACKER v4.2 - FOREX TRADING DASHBOARD
 ================================================================================
 MASTER FILE - ALL WORKING CODE IN ONE PLACE
-Last Stable Version: 2026-01-05
-Total Lines: 6952 (Hybrid Upgrade Applied)
-
+Last Stable Version: 2025-12-29
+Total Lines: 6952 (cleaned 2025-12-29)
 ⚠️  IMPORTANT: This file is WORKING. Do not refactor or split without backup.
-
 ================================================================================
 FILE STRUCTURE:
 ================================================================================
-
 SECTION 1: IMPORTS & SETUP (Lines 1-200)
-- All imports (Added: dotenv, requests)
-- Environment setup (load_dotenv)
+- All imports
+- Environment setup
 - TensorFlow configuration
-
 SECTION 2: CONFIGURATION (Lines 201-600)
 - Asset categories (forex, commodities, stocks)
-- Constants (Alpha Vantage API Keys, Network Timeouts)
+- Constants (AUC_TO_BOOST_MULTIPLIER, MAX_DATA_AGE_DAYS, etc.)
 - Learning configuration
 - Path configurations
-
 SECTION 3: TICKER BLACKLIST & VALIDATION (Lines 601-800)
 - TICKER_BLACKLIST (thread-safe)
 - is_ticker_blacklisted()
 - add_to_blacklist()
 - validate_ticker_availability()
-
 SECTION 4: UTILITY FUNCTIONS (Lines 801-1000)
 - sanitize_ticker()
 - get_asset_name_from_ticker()
 - normalize_dataframe_columns()
 - get_ticker_type() - forex/commodity detection
-
 SECTION 5: DATA FETCHING (Lines 1001-1400)
 - download_with_timeout() - with Alpha Vantage fallback
 - download_from_alpha_vantage()
 - get_latest_price() - forex-aware
 - validate_commodity_data()
 - get_market_info()
-
 SECTION 6: CACHING SYSTEM (Lines 1401-1600)
 - SmartCache class
 - data_cache instance
-
 SECTION 7: DATABASE & STORAGE (Lines 1601-1900)
 - Prediction model (SQLAlchemy)
 - Session management
 - Fallback JSON storage
-
 SECTION 8: ERROR HANDLING & LOGGING (Lines 1901-2100)
 - log_error()
 - ErrorSeverity enum
 - Circuit breaker
-
 SECTION 9: MODEL MANAGEMENT (Lines 2101-2400)
 - ModelManager class
 - build_lstm_model()
 - load_model() / save_model()
-
 SECTION 10: TRAINING & PREDICTION (Lines 2401-2800)
-- train_self_learning_model_enhanced() (HYBRID ENABLED)
+- train_self_learning_model_enhanced()
 - generate_forecast_with_confidence()
 - prepare_training_data()
-
-SECTION 11: SIGNALING & HYBRID GATE (Lines 2801-3200)
-- get_hybrid_signal() - 3:1 RR Logic
-- send_telegram_alert() - Advanced Formatting
+SECTION 11: PATTERN MINING (Lines 2801-3200)
 - mine_intraday_patterns()
-
+- mine_daily_patterns()
+- train_and_evaluate_patterns()
+- run_pattern_mining_cycle()
 SECTION 12: PREDICTION VALIDATION (Lines 3201-3600)
 - load_accuracy_log() - REAL validation
 - validate_predictions()
 - should_retrain()
-
-SECTION 13: MONITORING & REPORTS (Lines 3601-4000)
-- generate_monthly_performance_report()
+SECTION 13: MONITORING & ALERTS (Lines 3601-4000)
 - monitor_6percent_pre_move_managed()
+- send_telegram_alert()
 - Monitoring configuration
-
 SECTION 14: BACKGROUND THREADS (Lines 4001-4400)
 - continuous_learning_daemon_managed()
-- run_monthly_auditor_thread() (HYBRID ENGINE)
+- continuous_pattern_miner_managed()
 - thread_watchdog_managed()
 - ApplicationState class
-
 SECTION 15: STREAMLIT UI (Lines 4401-6952)
 - main() function
 - Sidebar configuration
@@ -97,64 +81,56 @@ SECTION 15: STREAMLIT UI (Lines 4401-6952)
 - Tab 5: Settings
 - Tab 6: Diagnostics
 - Tab 7: Logs
-
 ================================================================================
 RECENT CHANGES LOG:
 ================================================================================
-2026-01-05: UPGRADED TO HYBRID (3:1 RR Gate + Monthly Auditor)
 2025-12-29: Removed duplicate is_ticker_blacklisted() function (-4 lines)
 2025-12-29: Cleaned codebase - 0 duplicates confirmed
 2025-12-27: Added forex support (XAUUSD=X, EURUSD=X, etc.)
 2025-12-27: Fixed commodity price handling (7-day lookback)
 2025-12-27: Added get_market_info() for all ticker types
 2025-12-26: Implemented thread-safe blacklist system
-
+2025-12-26: Fixed pattern mining pandas errors
+2025-12-25: Added Alpha Vantage fallback
 ================================================================================
 KNOWN WORKING FEATURES:
 ================================================================================
-✅ Hybrid 3:1 Reward-to-Risk Validation
-✅ Monthly Performance Auditor (Self-Healing)
 ✅ Forex price fetching (4-5 decimal places)
 ✅ Commodity spot prices (XAU/USD, XAG/USD)
+✅ Stock predictions with confidence intervals
 ✅ Pattern mining (5 elite patterns found!)
 ✅ 6%+ monitoring with Telegram alerts
 ✅ Real prediction validation against actual prices
-
+✅ Thread-safe operations
+✅ Blacklist auto-detection
+✅ No duplicate code (verified 2025-12-29)
 ================================================================================
 KNOWN ISSUES:
 ================================================================================
 ⚠️  Pattern mining slow (30 min/cycle) - acceptable for now
+⚠️  Some agricultural commodities blacklisted (ZW=F, ZC=F, ZS=F) - delisted
+⚠️  Some indices have stale data (^NDX) - blacklisted
 ⚠️  HG=F (Copper) has poor accuracy - monitoring for potential blacklist
-⚠️  Monthly Auditor requires .env TELEGRAM_CHAT_ID to be active
-
 ================================================================================
 STATISTICS:
 ================================================================================
-Total Functions: 87 (Added Hybrid Logic)
+Total Functions: 83
 Total Lines: 6952
 Duplicates: 0
-Hybrid Mode: ACTIVE
+Backups: 3 (STABLE_2025-12-27, before_duplicate_removal, STABLE_2025-12-29)
 ================================================================================
 """
-
 # ================================
-# SYSTEM & ENCODING INITIALIZATION
+# INSTALLATION CHECK AND FALLBACKS
 # ================================
+import subprocess
 import sys
-import io
-import os
-
-# PERMANENT FIX: Force UTF-8 for Windows consoles to handle emojis/special chars
-if sys.platform == "win32":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
-
-# Existing warning suppressions
 import warnings
+import os
+# Suppress all warnings first
 warnings.filterwarnings("ignore")
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-
 # Try to import sqlalchemy, install if missing
 try:
     from sqlalchemy import create_engine, Column, Integer, Float, String, DateTime, Index
@@ -173,7 +149,6 @@ except ImportError:
     except:
         print("Failed to install sqlalchemy. Using fallback JSON storage.")
         SQLALCHEMY_AVAILABLE = False
-
 # Try to import psutil, install if missing
 try:
     import psutil
@@ -188,7 +163,6 @@ except ImportError:
     except:
         print("psutil not available. Resource monitoring disabled.")
         PSUTIL_AVAILABLE = False
-
 # Try to install other potential missing packages
 required_packages = [
     'yfinance',
@@ -199,35 +173,19 @@ required_packages = [
     'python-dotenv',
     'aiohttp'
 ]
-
-# ================================
-# FINAL IMPORT VERIFICATION
-# ================================
-import importlib.util
-
-# Use the actual module names found in your site-packages
-required_packages = {
-    'yfinance': 'yfinance',
-    'tensorflow': 'tensorflow',
-    'scikit-learn': 'sklearn',
-    'joblib': 'joblib',
-    'plotly': 'plotly',
-    'python-dotenv': 'dotenv',
-    'aiohttp': 'aiohttp'
-}
-
-for pip_name, module_name in required_packages.items():
-    if importlib.util.find_spec(module_name) is None:
-        print(f"⚠️ CRITICAL: {pip_name} is missing.")
-        print(f"Please run: pip install {pip_name}")
-    else:
-        # Success - no message needed, keep the console clean
-        pass
-
+for package in required_packages:
+    try:
+        __import__(package.replace('-', '_'))
+    except ImportError:
+        print(f"{package} not found. Installing...")
+        try:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+            print(f"{package} installed successfully.")
+        except:
+            print(f"Failed to install {package}.")
 # ================================
 # MAIN IMPORTS (AFTER INSTALLATION)
 # ================================
-
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -246,7 +204,7 @@ from pathlib import Path
 import logging
 from logging.handlers import RotatingFileHandler
 from enum import Enum
-from typing import Tuple, List, Optional, Dict, Any, Union
+from typing import Tuple, List, Optional, Dict, Any
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import TimeSeriesSplit
@@ -258,18 +216,24 @@ import re
 from dotenv import load_dotenv
 import asyncio
 import aiohttp
-
 # TensorFlow warning suppression
 tf.get_logger().setLevel('ERROR')
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-
+# CPU OPTIMIZATION - Limit TensorFlow threads
+os.environ['OMP_NUM_THREADS'] = '2'
+os.environ['TF_NUM_INTRAOP_PARALLELISM_THREADS'] = '2'
+os.environ['TF_NUM_INTEROP_PARALLELISM_THREADS'] = '2'
+try:
+    tf.config.threading.set_inter_op_parallelism_threads(2)
+    tf.config.threading.set_intra_op_parallelism_threads(2)
+    print("[CPU] Limited TensorFlow to 2 threads")  # Changed to print
+except Exception as e:
+    print(f"[CPU] Could not limit TF threads: {e}")  # Changed to print  
 # Load environment variables
 load_dotenv()
-
 # ================================
 # SMART CACHING SYSTEM
 # ================================
-
 class SmartCache:
     """Smart caching with TTL and size limits"""
     def __init__(self, max_size_mb: int = 100, default_ttl: int = 300):
@@ -325,15 +289,139 @@ class SmartCache:
                 key, _ = sorted_items.pop(0)
                 total_size -= self.cache[key]['size']
                 del self.cache[key]
-
 # Global cache instance
 data_cache = SmartCache()
+# ============================================================================
+# MEMORY MANAGER - Fixed for Pandas Series
+# ============================================================================
+class MemoryManager:
+    """Aggressive memory management for resource-constrained systems"""
+    
+    def __init__(self, memory_limit_mb: int = 8000):
+        self.memory_limit_mb = memory_limit_mb
+        self.last_cleanup = time.time()
+        self.cleanup_interval = 300  # 5 minutes
+    
+    def get_memory_usage_mb(self) -> float:
+        """Get current process memory in MB"""
+        if PSUTIL_AVAILABLE:
+            try:
+                process = psutil.Process()
+                return process.memory_info().rss / 1024 / 1024
+            except:
+                return 0
+        return 0
+    
+    def needs_cleanup(self) -> bool:
+        """Check if cleanup is needed"""
+        current_usage = self.get_memory_usage_mb()
+        time_passed = time.time() - self.last_cleanup
+        
+        return current_usage > self.memory_limit_mb or time_passed > self.cleanup_interval
+    
+    def aggressive_cleanup(self):
+        """Perform aggressive memory cleanup"""
+        before = self.get_memory_usage_mb()
+        print(f"[MEMORY] Starting cleanup ({before:.1f} MB)")
+        
+        # 1. Clear model cache
+        try:
+            model_manager.clear_cache()
+        except Exception as e:
+            print(f"[MEMORY] Model cache clear failed: {e}")
+        
+        # 2. Clear data cache - FIXED VERSION
+        try:
+            # Direct cache manipulation without pandas operations
+            if hasattr(data_cache, 'cache') and isinstance(data_cache.cache, dict):
+                cache_items = list(data_cache.cache.items())
+                total_size = sum(entry.get('size', 0) for entry in data_cache.cache.values())
+                
+                if total_size > data_cache.max_size_mb * 0.6:
+                    # Sort by last access time
+                    sorted_items = sorted(
+                        cache_items,
+                        key=lambda x: x[1].get('last_access', 0)
+                    )
+                    
+                    # Remove oldest items until we're at 40% capacity
+                    target_size = data_cache.max_size_mb * 0.4
+                    for key, entry in sorted_items:
+                        if total_size <= target_size:
+                            break
+                        total_size -= entry.get('size', 0)
+                        data_cache.cache.pop(key, None)
+                    
+                    print(f"[MEMORY] Cleared {len(cache_items) - len(data_cache.cache)} cache entries")
+        except Exception as e:
+            print(f"[MEMORY] Data cache clear failed: {e}")
+        
+        # 3. Clear TensorFlow session
+        try:
+            tf.keras.backend.clear_session()
+        except Exception as e:
+            print(f"[MEMORY] TF clear failed: {e}")
+        
+        # 4. Force garbage collection (3 passes)
+        collected = 0
+        for i in range(3):
+            collected += gc.collect()
+        print(f"[MEMORY] Garbage collected {collected} objects")
+        
+        self.last_cleanup = time.time()
+        
+        after = self.get_memory_usage_mb()
+        freed = max(0, before - after)
+        print(f"[MEMORY] Cleanup complete ({after:.1f} MB, freed {freed:.1f} MB)")
+    
+    def monitor_and_cleanup(self):
+        """Check and cleanup if needed"""
+        try:
+            if self.needs_cleanup():
+                self.aggressive_cleanup()
+        except Exception as e:
+            print(f"[MEMORY] Monitor failed: {e}")
+# Global memory manager
+memory_manager = MemoryManager(memory_limit_mb=8000)
+print("[INIT] Memory manager initialized (8 GB limit)")
+# ============================================================================
+# NETWORK MONITOR - Add right after MemoryManager
+# ============================================================================
+class NetworkMonitor:
+    """Monitor and limit network usage"""
+    
+    def __init__(self):
+        self.telegram_alerts_today = 0
+        self.last_reset = datetime.now()
+        self._lock = threading.RLock()
+    
+    def can_send_telegram(self) -> Tuple[bool, str]:
+        """Check if we can send Telegram alert"""
+        with self._lock:
+            # Reset counter daily
+            if (datetime.now() - self.last_reset).days >= 1:
+                self.telegram_alerts_today = 0
+                self.last_reset = datetime.now()
+            
+            # Limit to 50 alerts per day
+            if self.telegram_alerts_today >= 50:
+                return False, f"Daily limit reached ({self.telegram_alerts_today}/50)"
+            
+            return True, "OK"
+    
+    def log_telegram_alert(self):
+        """Log a Telegram alert sent"""
+        with self._lock:
+            self.telegram_alerts_today += 1
+            if self.telegram_alerts_today % 10 == 0:  # Log every 10 alerts
+                logger.warning(f"[TELEGRAM] {self.telegram_alerts_today} alerts sent today!")
+# Global network monitor
+network_monitor = NetworkMonitor()
+print("[INIT] Network monitor initialized (50 alerts/day limit)")
 _error_log_lock = threading.RLock()
-
 # ================================
 # DATABASE SETUP (WITH FALLBACK)
 # ================================
-
 if SQLALCHEMY_AVAILABLE:
     Base = declarative_base()
     
@@ -401,11 +489,9 @@ else:
             return self.predictions[0] if self.predictions else None
     
     Session = FakeSession
-
 # ================================
 # THREAD-SAFE SESSION STATE
 # ================================
-
 class ThreadSafeSessionState:
     """Thread-safe wrapper for Streamlit session state"""
     def __init__(self):
@@ -423,14 +509,11 @@ class ThreadSafeSessionState:
     def update(self, updates: Dict[str, Any]) -> None:
         with self._lock:
             self._state.update(updates)
-
 # Create thread-safe session state
 safe_state = ThreadSafeSessionState()
-
 # ================================
 # ENHANCED CIRCUIT BREAKER
 # ================================
-
 class EnhancedCircuitBreaker:
     """Enhanced circuit breaker with exponential backoff"""
     def __init__(self, failure_threshold: int = 5, timeout: int = 60):
@@ -509,14 +592,11 @@ class EnhancedCircuitBreaker:
             'last_failure': self.last_failure,
             'uptime': 'OPEN' if self.state == 'OPEN' else 'CLOSED'
         }
-
 # Global enhanced rate limiter
 alpha_vantage_limiter = EnhancedCircuitBreaker()
-
 # ================================
 # PERFORMANCE MONITORING
 # ================================
-
 class PerformanceMonitor:
     """Monitor application performance metrics"""
     def __init__(self):
@@ -538,14 +618,11 @@ class PerformanceMonitor:
         if not latencies:
             return 0.0
         return np.percentile(latencies, 95)
-
 # Global performance monitor
 performance_monitor = PerformanceMonitor()
-
 # ================================
 # ALERTING SYSTEM
 # ================================
-
 class AlertManager:
     """Centralized alerting"""
     def __init__(self):
@@ -562,14 +639,11 @@ class AlertManager:
                     self.channels[channel].send(severity, message)
                 except Exception as e:
                     logger.error(f"Alert failed for {channel}: {e}")
-
 # Global alert manager
 alert_manager = AlertManager()
-
 # ================================
 # CONSTANTS
 # ================================
-
 # System Configuration
 AUC_TO_BOOST_MULTIPLIER = 180
 MAX_DATA_AGE_DAYS = 30
@@ -579,23 +653,19 @@ DISK_WARNING_THRESHOLD_PERCENT = 90
 NETWORK_TIMEOUT_SECONDS = 30
 MAX_RETRIES = 3
 CACHE_TTL_SECONDS = 300  # 5 minutes
-
 # Alpha Vantage Configuration
 ALPHA_VANTAGE_API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY', '')
 ALPHA_VANTAGE_BASE_URL = "https://www.alphavantage.co/query"
-
-
 # Learning configuration
 LEARNING_CONFIG = {
     "lookback_window": 60,
-    "full_retrain_epochs": 50,
-    "fine_tune_epochs": 10,
+    "full_retrain_epochs": 30,      
+    "fine_tune_epochs": 5,           
     "prediction_days": 5,
     "batch_size": 32,
     "validation_split": 0.1,
-    "early_stopping_patience": 5
+    "early_stopping_patience": 3     
 }
-
 # Asset categories
 ASSET_CATEGORIES = {
     "Commodities": {
@@ -647,42 +717,34 @@ ASSET_CATEGORIES = {
         "Mastercard": "MA"
     }
 }
-
 # ================================
 # TICKER BLACKLIST SYSTEM
 # ================================
-
 TICKER_BLACKLIST = set([
     "ZW=F",  # Wheat futures - delisted
     "ZC=F",  # Corn futures - delisted  
     "ZS=F",  # Soybean futures - delisted
 ])
-
 def add_to_blacklist(ticker: str, reason: str = "Failed validation"):
     """Add ticker to blacklist with logging"""
     if ticker not in TICKER_BLACKLIST:
         TICKER_BLACKLIST.add(ticker)
         logger.warning(f"⚫ Added {ticker} to blacklist: {reason}")
-
 # ================================
 # TICKER BLACKLIST & VALIDATION
 # ================================
-
 # CLEARED: Removed Wheat, Corn, and Soybeans from blacklist to allow fetching
 TICKER_BLACKLIST = set([
     # Add known truly delisted tickers here if they cause crashes
 ])
-
 def is_ticker_blacklisted(ticker: str) -> bool:
     """Check if ticker is blacklisted"""
     return ticker in TICKER_BLACKLIST
-
 def add_to_blacklist(ticker: str, reason: str = "Failed validation"):
     """Add ticker to blacklist with logging"""
     if ticker not in TICKER_BLACKLIST:
         TICKER_BLACKLIST.add(ticker)
         logger.warning(f"⚫ Added {ticker} to blacklist: {reason}")
-
 def validate_ticker_with_retry(ticker: str, max_retries: int = 3) -> Tuple[bool, str]:
     """
     Refined validation to handle yfinance 'ghost delisting' errors.
@@ -731,24 +793,20 @@ def validate_ticker_with_retry(ticker: str, max_retries: int = 3) -> Tuple[bool,
             return False, f"Error: {str(e)[:30]}"
     
     return False, "Validation failed"
-
 # Path configurations
 MODELS_DIR = Path("models")
 SCALERS_DIR = Path("scalers")
 METADATA_DIR = Path("metadata")
 PREDICTIONS_DIR = Path("predictions")
 CONFIG_DIR = Path("config")
-
 for directory in [MODELS_DIR, SCALERS_DIR, METADATA_DIR, PREDICTIONS_DIR, CONFIG_DIR]:
     directory.mkdir(exist_ok=True)
-
 # Configuration files
 AUTO_PATTERNS_FILE = Path("auto_patterns.json")
 PATTERN_MINING_CONFIG = CONFIG_DIR / "pattern_mining.json"
 DAEMON_CONFIG = CONFIG_DIR / "daemon.json"
 MONITORING_CONFIG = CONFIG_DIR / "monitoring.json"
 ERROR_LOG = Path("error_log.json")
-
 # Pattern mining watchlist - generated from all assets in ASSET_CATEGORIES
 # Automatically filters out blacklisted tickers
 PATTERN_WATCHLIST = []
@@ -758,30 +816,19 @@ for category in ASSET_CATEGORIES.values():
             PATTERN_WATCHLIST.append(ticker)
         # Note: Blacklisted tickers are silently excluded here
         # Logging happens later when logger is initialized
-
 # ================================
 # LOGGING AND ERROR HANDLING
 # ================================
-
-# Setup logging with UTF-8 support for emojis and special characters
+# Setup logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        # 1. File Handler: Explicitly set encoding to utf-8
-        RotatingFileHandler(
-            'app.log', 
-            maxBytes=10*1024*1024, 
-            backupCount=5, 
-            encoding='utf-8'
-        ),
-        # 2. Stream Handler: Use sys.stdout (which we wrapped in the previous step)
-        logging.StreamHandler(sys.stdout)
+        RotatingFileHandler('app.log', maxBytes=10*1024*1024, backupCount=5),
+        logging.StreamHandler()
     ]
 )
-
 logger = logging.getLogger(__name__)
-
 # Log watchlist initialization (now that logger exists)
 excluded_count = sum(1 for cat in ASSET_CATEGORIES.values() for _ in cat.values()) - len(PATTERN_WATCHLIST)
 if excluded_count > 0:
@@ -790,14 +837,12 @@ if excluded_count > 0:
         logger.info(f"Blacklisted tickers: {', '.join(sorted(TICKER_BLACKLIST))}")
 else:
     logger.info(f"Pattern watchlist initialized: {len(PATTERN_WATCHLIST)} active tickers")
-
 class ErrorSeverity(Enum):
     """Error severity levels"""
     INFO = 1
     WARNING = 2
     ERROR = 3
     CRITICAL = 4
-
 def log_error(severity: ErrorSeverity, function: str, error: Exception, 
               ticker: Optional[str] = None, user_message: Optional[str] = None, 
               show_to_user: bool = True) -> None:
@@ -858,7 +903,6 @@ def log_error(severity: ErrorSeverity, function: str, error: Exception,
 # ================================
 # TICKER VALIDATION
 # ================================
-
 def validate_ticker_availability(ticker: str) -> Tuple[bool, str]:
     """
     Test if a ticker is available and has recent data
@@ -918,7 +962,6 @@ def validate_ticker_availability(ticker: str) -> Tuple[bool, str]:
         if "delisted" in error_msg or "no price data found" in error_msg:
             return False, "Delisted/No data"
         return False, f"Error: {str(e)[:50]}"
-
 def get_validated_watchlist() -> List[str]:
     """Get watchlist with only validated tickers"""
     validated = []
@@ -950,16 +993,13 @@ def get_validated_watchlist() -> List[str]:
         logger.info(f"Current blacklist: {', '.join(sorted(TICKER_BLACKLIST))}")
     
     return validated
-
 # ================================
 # UTILITY FUNCTIONS
 # ================================
-
 def sanitize_ticker(ticker: str) -> str:
     """Sanitize ticker for safe file operations"""
     # Allow only alphanumeric, dash, underscore
     return re.sub(r'[^a-zA-Z0-9_-]', '_', ticker)
-
 def get_asset_name_from_ticker(ticker: str) -> str:
     """Get human-readable asset name from ticker symbol"""
     # Search through all categories
@@ -970,13 +1010,11 @@ def get_asset_name_from_ticker(ticker: str) -> str:
     
     # Fallback: return ticker if not found in categories
     return ticker
-
 def normalize_dataframe_columns(df: pd.DataFrame) -> pd.DataFrame:
     """Normalize dataframe columns from multi-index to single index"""
     if isinstance(df.columns, pd.MultiIndex):
         df.columns = df.columns.get_level_values(0)
     return df
-
 def convert_alpha_vantage_to_yfinance_format(df: pd.DataFrame) -> pd.DataFrame:
     """Convert Alpha Vantage dataframe format to yfinance format"""
     try:
@@ -1019,7 +1057,6 @@ def convert_alpha_vantage_to_yfinance_format(df: pd.DataFrame) -> pd.DataFrame:
     except Exception as e:
         logger.error(f"Failed to convert Alpha Vantage data: {e}")
         return None
-
 def download_from_alpha_vantage(ticker: str, outputsize: str = "full") -> Optional[pd.DataFrame]:
     """Download historical data from Alpha Vantage API with rate limiting"""
     if not ALPHA_VANTAGE_API_KEY:
@@ -1084,7 +1121,6 @@ def download_from_alpha_vantage(ticker: str, outputsize: str = "full") -> Option
         logger.error(f"Error downloading from Alpha Vantage for {ticker}: {e}")
         log_error(ErrorSeverity.ERROR, "download_from_alpha_vantage", e, ticker=ticker, show_to_user=False)
         return None
-
 # ============================================================================
 # LINE 1066: download_with_timeout() - Core data fetching
 # STATUS: WORKING - Forex support added 2025-12-27
@@ -1159,7 +1195,6 @@ def download_with_timeout(ticker: str, period: str = "1y",
         outputsize = "full"
     
     av_df = download_from_alpha_vantage(ticker, outputsize=outputsize)
-
     if av_df is not None:
         metrics_collector.increment("alphavantage_downloads")
     
@@ -1188,11 +1223,9 @@ def download_with_timeout(ticker: str, period: str = "1y",
     logger.error(f"❌ All data sources failed for {ticker}")
     metrics_collector.increment("cache_misses")
     return None
-
 # ================================
 # DATA QUALITY METRICS
 # ================================
-
 def calculate_data_quality_metrics(df: pd.DataFrame) -> Dict[str, float]:
     """Calculate comprehensive data quality metrics"""
     metrics = {}
@@ -1240,11 +1273,9 @@ def calculate_data_quality_metrics(df: pd.DataFrame) -> Dict[str, float]:
     except Exception as e:
         logger.error(f"Data quality metrics calculation failed: {e}")
         return {}
-
 # ================================
 # CONFIGURATION MANAGEMENT
 # ================================
-
 class ConfigManager:
     """Manage configuration with validation and backup"""
     
@@ -1358,11 +1389,9 @@ class ConfigManager:
         except Exception as e:
             logger.error(f"Failed to save config {config_path}: {e}")
             return False
-
 # ================================
 # DATA VALIDATION
 # ================================
-
 def validate_financial_data(df: pd.DataFrame, ticker: str, 
                            min_rows: int = 100, 
                            max_null_percent: float = 0.1) -> Tuple[bool, str]:
@@ -1409,11 +1438,9 @@ def validate_financial_data(df: pd.DataFrame, ticker: str,
                 return False, f"Data is stale: {data_age} days old"
     
     return True, "Data validation passed"
-
 # ================================
 # THREAD MANAGEMENT
 # ================================
-
 class ThreadManager:
     """Manage thread lifecycle and resource cleanup"""
     def __init__(self):
@@ -1501,14 +1528,11 @@ class ThreadManager:
         """Check if a specific thread is running"""
         with self._lock:
             return name in self._threads and self._threads[name].is_alive()
-
 # Global thread manager
 thread_manager = ThreadManager()
-
 # ================================
 # TENSORFLOW AND MODEL MANAGEMENT
 # ================================
-
 class EnhancedModelManager:
     """Enhanced ModelManager with better resource cleanup"""
     def __init__(self):
@@ -1633,14 +1657,11 @@ class EnhancedModelManager:
         finally:
             # Clear session to free memory (but keep model in cache)
             gc.collect()
-
 # Global model manager
 model_manager = EnhancedModelManager()
-
 # ================================
 # METRICS COLLECTION
 # ================================
-
 class MetricsCollector:
     """Collect and track application metrics"""
     def __init__(self):
@@ -1702,34 +1723,26 @@ class MetricsCollector:
                     self.metrics[key] = 0
                 elif isinstance(self.metrics[key], list):
                     self.metrics[key] = []
-
 # Global metrics collector
 metrics_collector = MetricsCollector()
-
 # ================================
 # MODEL PATH FUNCTIONS
 # ================================
-
 def get_model_path(ticker: str) -> Path:
     """Get sanitized model path"""
     return MODELS_DIR / f"{sanitize_ticker(ticker)}.h5"
-
 def get_scaler_path(ticker: str) -> Path:
     """Get sanitized scaler path"""
     return SCALERS_DIR / f"{sanitize_ticker(ticker)}.pkl"
-
 def get_metadata_path(ticker: str) -> Path:
     """Get sanitized metadata path"""
     return METADATA_DIR / f"{sanitize_ticker(ticker)}.json"
-
 def get_predictions_path(ticker: str) -> Path:
     """Get sanitized predictions path"""
     return PREDICTIONS_DIR / f"{sanitize_ticker(ticker)}.json"
-
 # ================================
 # MODEL BUILDING
 # ================================
-
 def build_lstm_model(input_shape: Tuple[int, int] = (60, 1)) -> Sequential:
     """Build LSTM model architecture"""
     model = Sequential([
@@ -1744,11 +1757,9 @@ def build_lstm_model(input_shape: Tuple[int, int] = (60, 1)) -> Sequential:
     ])
     model.compile(optimizer='adam', loss='mse')
     return model
-
 # ================================
 # METADATA MANAGEMENT
 # ================================
-
 def load_metadata(ticker: str) -> Dict[str, Any]:
     """Load model metadata"""
     path = get_metadata_path(ticker)
@@ -1764,7 +1775,6 @@ def load_metadata(ticker: str) -> Dict[str, Any]:
         "version": 1,
         "created_date": datetime.now().isoformat()
     }
-
 def save_metadata(ticker: str, metadata: Dict[str, Any]) -> bool:
     """Save model metadata"""
     path = get_metadata_path(ticker)
@@ -1776,11 +1786,9 @@ def save_metadata(ticker: str, metadata: Dict[str, Any]) -> bool:
         logger.error(f"Failed to save metadata for {ticker}: {e}")
         log_error(ErrorSeverity.ERROR, "save_metadata", e, ticker=ticker, show_to_user=False)
         return False
-
 # ================================
 # PRICE DATA FUNCTIONS
 # ================================
-
 # ============================================================================
 # LINE 1756: get_latest_price() - Real-time price fetching
 # STATUS: WORKING - Forex-aware (4 decimals), commodity support
@@ -1934,8 +1942,6 @@ def validate_commodity_data(ticker: str, df: pd.DataFrame) -> Tuple[bool, str]:
     
     last_price = valid_prices.iloc[-1]
     return True, f"Valid (last: ${last_price:.2f})"
-
-
 def get_commodity_info(ticker: str) -> Dict[str, Any]:
     """Get detailed info about a commodity ticker"""
     if not ticker.endswith('=F'):
@@ -1976,36 +1982,19 @@ def get_commodity_info(ticker: str) -> Dict[str, Any]:
         
     except Exception as e:
         return {"is_commodity": True, "status": f"Error: {str(e)[:50]}"}
-
 # ================================
 # DATA DOWNLOAD AND VALIDATION
 # ================================
-
-def download_and_validate_data(ticker, period="2y", interval="1d"):
-    """Downloads data with a fallback to ensure at least 100 rows."""
+def download_and_validate_data(ticker: str, period: str = "1y", 
+                               interval: str = "1d") -> Optional[pd.DataFrame]:
+    """Download and validate financial data"""
     try:
-        # Step 1: Attempt download with the specified period
-        df = yf.download(ticker, period=period, interval=interval, progress=False)
+        # Download with timeout
+        df = download_with_timeout(ticker, period=period, interval=interval)
         
-        # Step 2: If rows are insufficient (common on Mondays/Holidays), force 'max'
-        if df is None or len(df) < 100:
-            logger.info(f"Low row count ({len(df) if df is not None else 0}) for {ticker}. Retrying with 'max' period...")
-            df = yf.download(ticker, period="max", interval=interval, progress=False)
-
-        # Step 3: Final validation
-        if df is None or len(df) < 100:
-            row_count = len(df) if df is not None else 0
-            logger.warning(f"❌ Data validation failed for {ticker}: Insufficient rows ({row_count} < 100)")
+        if df is None:
+            logger.warning(f"Download failed for {ticker}")
             return None
-            
-        # Clean the data to ensure no NaN values break the LSTM
-        df = df.ffill().dropna()
-        logger.info(f"✅ Successfully downloaded and validated {len(df)} rows for {ticker}")
-        return df
-        
-    except Exception as e:
-        logger.error(f"Error downloading {ticker}: {str(e)}")
-        return None
         
         # Validate data
         is_valid, message = validate_financial_data(df, ticker)
@@ -2024,11 +2013,9 @@ def download_and_validate_data(ticker, period="2y", interval="1d"):
                  ticker=ticker, show_to_user=False)
         metrics_collector.increment("errors_encountered")
         return None
-
 # ================================
 # SCALER MANAGEMENT
 # ================================
-
 def load_or_create_scaler(ticker: str, df: pd.DataFrame, 
                           force_create: bool = False) -> Optional[MinMaxScaler]:
     """Load existing scaler or create new one"""
@@ -2063,52 +2050,46 @@ def load_or_create_scaler(ticker: str, df: pd.DataFrame,
         log_error(ErrorSeverity.ERROR, "load_or_create_scaler", e, 
                  ticker=ticker, show_to_user=False)
         return None
-
 # ================================
 # TRAINING DATA PREPARATION
 # ================================
-
-def prepare_training_data(df, lookback=60, *args, **kwargs):
-    """
-    ELITE STABILITY FIX: 
-    The *args and **kwargs catch redundant arguments passed by the daemon.
-    """
+def prepare_training_data(df: pd.DataFrame, scaler: MinMaxScaler, 
+                         lookback: int = 60) -> Tuple[Optional[np.ndarray], 
+                                                       Optional[np.ndarray]]:
+    """Prepare training data from dataframe"""
     try:
-        # 1. Handle None or Empty Data
-        if df is None or (isinstance(df, pd.DataFrame) and df.empty):
-            return None, None
-            
-        if 'Close' not in df.columns:
-            logger.warning("Missing 'Close' column for training prep.")
-            return None, None
-            
-        data = df['Close'].values.reshape(-1, 1)
+        # Select and clean data
+        df_close = df[['Close']].ffill().bfill()
         
-        # 2. Check if we have enough history to create a window
-        if len(data) <= lookback:
+        if df_close['Close'].isna().any():
+            logger.warning("NaN values remain after filling")
             return None, None
-            
+        
+        # Scale data
+        scaled = scaler.transform(df_close[['Close']])
+        
+        # Create sequences
         X, y = [], []
-        for i in range(lookback, len(data)):
-            X.append(data[i-lookback:i, 0])
-            y.append(data[i, 0])
-            
+        for i in range(lookback, len(scaled)):
+            X.append(scaled[i-lookback:i])
+            y.append(scaled[i])
+        
         X, y = np.array(X), np.array(y)
         
-        # 3. Final reshape for LSTM [samples, time steps, features]
-        if len(X) > 0:
-            X = np.reshape(X, (X.shape[0], X.shape[1], 1))
-            return X, y
+        if len(X) == 0:
+            logger.warning("No training samples created")
+            return None, None
         
-        return None, None
+        logger.info(f"Prepared {len(X)} training samples with lookback {lookback}")
+        return X, y
+        
     except Exception as e:
-        logger.error(f"Data Prep Error: {e}")
+        logger.error(f"Error preparing training data: {e}")
+        log_error(ErrorSeverity.ERROR, "prepare_training_data", e, show_to_user=False)
         return None, None
-
 # ================================
 # MODEL TRAINING ORCHESTRATION
 # ================================
-
 def train_model(ticker: str, X: np.ndarray, y: np.ndarray, 
                 force_retrain: bool = False, 
                 metadata: Dict[str, Any] = None) -> Optional[Any]:
@@ -2196,11 +2177,9 @@ def train_model(ticker: str, X: np.ndarray, y: np.ndarray,
         if model is not None:
             model_manager.clear_model(model)
         return None
-
 # ================================
 # FORECAST GENERATION WITH CONFIDENCE
 # ================================
-
 # ============================================================================
 # LINE 2145: generate_forecast_with_confidence() - Prediction with CI
 # STATUS: WORKING - Monte Carlo simulation for confidence intervals
@@ -2208,26 +2187,16 @@ def train_model(ticker: str, X: np.ndarray, y: np.ndarray,
 # CRITICAL: Generates all forecasts - handle errors carefully
 # ============================================================================
 def generate_forecast_with_confidence(ticker: str, model: Any, scaler: MinMaxScaler,
-                                     scaled_data: Union[np.ndarray, pd.DataFrame], lookback: int = 60,
-                                     days: int = 5, n_simulations: int = 100) -> Tuple[
+                                     scaled_data: np.ndarray, lookback: int = 60,
+                                     days: int = 5, n_simulations: int = 50) -> Tuple[
                                          Optional[np.ndarray], Optional[np.ndarray], 
                                          Optional[np.ndarray], Optional[List]]:
+    """Generate forecast with confidence intervals using Monte Carlo simulation"""
     try:
-        # Convert input to a clean numpy array
-        data_array = scaled_data.values if hasattr(scaled_data, 'values') else scaled_data
+        # Base forecast
+        last_sequence = scaled_data[-lookback:].reshape(1, lookback, 1)
         
-        # SAFETY FIX: If the data has multiple columns (size 300 = 60 days * 5 columns),
-        # extract only the last column (Close price) to match (1, 60, 1)
-        if data_array.ndim > 1 and data_array.shape[1] > 1:
-            data_array = data_array[:, -1].reshape(-1, 1)
-        elif data_array.ndim == 1:
-            data_array = data_array.reshape(-1, 1)
-
-        # Now the reshape will always result in (1, 60, 1)
-        last_sequence = data_array[-lookback:].reshape(1, lookback, 1)
-
-        # 1. Generate Base Forecast
-        last_sequence = data_array[-lookback:].reshape(1, lookback, 1)
+        # Generate predictions
         base_predictions = []
         current_sequence = last_sequence.copy()
         
@@ -2239,8 +2208,7 @@ def generate_forecast_with_confidence(ticker: str, model: Any, scaler: MinMaxSca
                 return None, None, None, None
             
             base_predictions.append(pred[0, 0])
-            
-            # Update sequence for the next day's prediction (rolling window)
+            # Update sequence for next prediction
             current_sequence = np.append(
                 current_sequence[:, 1:, :],
                 pred.reshape(1, 1, 1),
@@ -2250,51 +2218,52 @@ def generate_forecast_with_confidence(ticker: str, model: Any, scaler: MinMaxSca
         prediction_time = time.time() - start_time
         metrics_collector.record_time("avg_prediction_time", prediction_time)
         
+        # Inverse transform predictions
         base_forecast = scaler.inverse_transform(
             np.array(base_predictions).reshape(-1, 1)
         ).flatten()
         
-        # 2. Monte Carlo Simulations for Confidence Intervals
+        # Monte Carlo simulations for confidence intervals
         simulations = []
-        # Extract the specific slice once for efficiency
-        last_known_data = data_array[-lookback:]
-        
         for _ in range(n_simulations):
-            # Add small Gaussian noise to simulate market volatility
-            noise = np.random.normal(0, 0.01, last_known_data.shape)
-            noisy_sequence = (last_known_data + noise).reshape(1, lookback, 1)
+            # Add small noise to input sequence
+            noise = np.random.normal(0, 0.01, scaled_data[-lookback:].shape)
+            noisy_sequence = scaled_data[-lookback:] + noise
+            noisy_sequence = noisy_sequence.reshape(1, lookback, 1)
             
-            current_sim_sequence = noisy_sequence.copy()
-            sim_predictions = []
+            # Generate prediction with dropout (if model has dropout)
+            current_sequence = noisy_sequence.copy()
+            predictions = []
             
             for _ in range(days):
-                pred = model_manager.predict_with_cleanup(model, current_sim_sequence)
+                pred = model_manager.predict_with_cleanup(model, current_sequence)
                 if pred is None:
                     break
-                sim_predictions.append(pred[0, 0])
-                
-                current_sim_sequence = np.append(
-                    current_sim_sequence[:, 1:, :],
+                predictions.append(pred[0, 0])
+                current_sequence = np.append(
+                    current_sequence[:, 1:, :],
                     pred.reshape(1, 1, 1),
                     axis=1
                 )
             
-            if len(sim_predictions) == days:
+            if len(predictions) == days:
                 sim_forecast = scaler.inverse_transform(
-                    np.array(sim_predictions).reshape(-1, 1)
+                    np.array(predictions).reshape(-1, 1)
                 ).flatten()
                 simulations.append(sim_forecast)
         
-        # 3. Calculate Percentiles (95% Confidence Interval)
         if not simulations:
             logger.warning(f"No simulations generated for {ticker}")
-            lower_95 = upper_95 = None
+            lower_95 = None
+            upper_95 = None
         else:
             simulations = np.array(simulations)
+            
+            # Calculate confidence intervals
             lower_95 = np.percentile(simulations, 2.5, axis=0)
             upper_95 = np.percentile(simulations, 97.5, axis=0)
         
-        # 4. Generate Business Days (Excluding Weekends)
+        # Generate business days
         dates = []
         day_offset = 1
         while len(dates) < days:
@@ -2311,11 +2280,9 @@ def generate_forecast_with_confidence(ticker: str, model: Any, scaler: MinMaxSca
         log_error(ErrorSeverity.ERROR, "generate_forecast_with_confidence", e, 
                  ticker=ticker, show_to_user=False)
         return None, None, None, None
-
 # ================================
 # PARALLEL PATTERN MINING
 # ================================
-
 def mine_patterns_parallel(tickers: List[str], max_workers: int = 4) -> List[Dict[str, Any]]:
     """Mine patterns for multiple tickers in parallel"""
     patterns = []
@@ -2333,11 +2300,9 @@ def mine_patterns_parallel(tickers: List[str], max_workers: int = 4) -> List[Dic
                 logger.error(f"Parallel pattern mining failed for {ticker}: {e}")
     
     return patterns
-
 # ================================
 # PREDICTION VALIDATION FUNCTIONS
 # ================================
-
 def get_actual_price_for_date(ticker: str, target_date: datetime) -> Optional[float]:
     """Fetch actual historical price for a specific date with Alpha Vantage fallback"""
     try:
@@ -2420,7 +2385,6 @@ def get_actual_price_for_date(ticker: str, target_date: datetime) -> Optional[fl
     except Exception as e:
         logger.error(f"Alpha Vantage failed for {ticker} on {target_date.date()}: {e}")
         return None
-
 def record_prediction(ticker: str, prediction: float, date: str, current_price: Optional[float] = None) -> bool:
     """Record prediction for accuracy tracking with current price for directional validation"""
     try:
@@ -2490,7 +2454,6 @@ def record_prediction(ticker: str, prediction: float, date: str, current_price: 
         logger.error(f"Failed to record prediction for {ticker}: {e}")
         log_error(ErrorSeverity.WARNING, "record_prediction", e, ticker=ticker, show_to_user=False)
         return False
-
 # ============================================================================
 # LINE 2419: load_accuracy_log() - REAL validation
 # STATUS: WORKING - Validates predictions against actual prices
@@ -2708,7 +2671,6 @@ def load_accuracy_log(ticker: str) -> Dict[str, Any]:
         "last_updated": datetime.now().isoformat(),
         "status": "no_file"
     }
-
 def validate_predictions(ticker: str) -> Tuple[bool, Dict[str, Any]]:
     """Validate predictions against REAL actual prices and return performance metrics"""
     logger.info(f"Validating predictions for {ticker} against actual market data...")
@@ -2752,53 +2714,13 @@ def validate_predictions(ticker: str) -> Tuple[bool, Dict[str, Any]]:
             "directional_accuracy": 0.0,
             "status": "error"
         }
-
-def should_retrain(ticker, accuracy_log, metadata):
-    """
-    Determines if a model needs retraining.
-    Returns: (bool, list_of_reasons)
-    """
+def should_retrain(ticker: str, accuracy_log: Dict[str, Any], 
+                   metadata: Dict[str, Any]) -> Tuple[bool, List[str]]:
+    """Determine if model should be retrained using REAL performance metrics"""
     reasons = []
     
-    # 1. Extract the error metric (MAPE) from the accuracy log
-    # load_accuracy_log returns a dict with 'avg_error_mape'
-    avg_mape = 0.0
-    if isinstance(accuracy_log, dict):
-        avg_mape = accuracy_log.get('avg_error_mape', 0.0)
-    else:
-        try: avg_mape = float(accuracy_log)
-        except: avg_mape = 0.0
-
-    # 2. SMART-RESET (Critical for Commodities like CL=F and SI=F)
-    # If error is massive (>50%), the model is 'poisoned' and needs a fresh start
-    if avg_mape > 50.0:
-        logger.warning(f"💥 [SMART-RESET] Extreme error for {ticker}: {avg_mape:.1f}%")
-        model_path = f"models/{ticker.replace('=', '_')}_lstm.h5"
-        if os.path.exists(model_path):
-            try: os.remove(model_path)
-            except: pass
-        reasons.append(f"SMART_RESET_EXTREME_ERROR_{avg_mape:.1f}%")
-        return True, reasons
-
-    # 3. Standard Accuracy Checks
-    validated_count = accuracy_log.get("validated_predictions", 0) if isinstance(accuracy_log, dict) else 0
-    
-    if validated_count >= 5:
-        if avg_mape > 15.0:
-            reasons.append(f"high_error_mape_{avg_mape:.1f}%")
-            
-    # 4. Check if model is stale (older than 14 days)
-    if isinstance(metadata, dict) and metadata.get("trained_date"):
-        try:
-            trained_date = datetime.fromisoformat(metadata["trained_date"])
-            days_since = (datetime.now() - trained_date).days
-            if days_since > 14:
-                reasons.append(f"stale_model_{days_since}d")
-        except:
-            reasons.append("invalid_training_date")
-
-    # Return a TUPLE: (True if reasons exist, the list of reasons)
-    return len(reasons) > 0, reasons
+    # Check REAL error rates (MAPE - Mean Absolute Percentage Error)
+    avg_mape = accuracy_log.get("avg_error_mape", 0.0)
     
     # ============================================================
     # 🚨 SMART-RESET IMPLANT (Critical for Commodities)
@@ -2878,132 +2800,174 @@ def should_retrain(ticker, accuracy_log, metadata):
             reasons.append(f"performance_degradation_{recent_avg:.1f}%")
     
     return len(reasons) > 0, reasons
-
 # ================================
 # ENHANCED TRAINING FUNCTION
 # ================================
-
 # ============================================================================
 # LINE 2738: train_self_learning_model_enhanced() - Main training function
 # STATUS: WORKING - Generates forecasts with confidence intervals
 # DEPENDENCIES: ModelManager, download_and_validate_data, pattern boosting
 # CRITICAL: Core ML functionality - DO NOT modify without backup
 # ============================================================================
-def train_self_learning_model_enhanced(
-    ticker: str,
-    days: int = 5,
-    force_retrain: bool = False,
-    skip_validation: bool = False
-) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], Optional[List], Optional[Any]]:
-    """Enhanced training with Hybrid signaling and memory management"""
-    logger.info(f"Training {ticker} (force={force_retrain})")
-    model = None
+def train_self_learning_model_enhanced(ticker: str, days: int = 5,
+                                       force_retrain: bool = False,
+                                       skip_validation: bool = False) -> Tuple[
+                                           Optional[np.ndarray],
+                                           Optional[np.ndarray],
+                                           Optional[np.ndarray],
+                                           Optional[List],
+                                           Optional[Any]
+                                       ]:
+    """Enhanced training with proper memory management and all fixes"""
+    logger.info(f"Training {ticker} (force={force_retrain}, skip_validation={skip_validation})")
     
+    model = None
     try:
-        # 1. Validation Logic
+        # Quick check: if model exists and is recent, skip validation for speed
         meta = load_metadata(ticker)
         model_path = get_model_path(ticker)
         
-        # Skip validation if model is very fresh (<24h)
-        if not force_retrain and model_path.exists():
+        # If model exists and is less than 24 hours old, skip validation unless forced
+        if not force_retrain and model_path.exists() and not skip_validation:
             trained_date_str = meta.get("trained_date")
             if trained_date_str:
                 try:
                     trained_date = datetime.fromisoformat(trained_date_str)
-                    if (datetime.now() - trained_date).total_seconds() / 3600 < 24:
+                    hours_since = (datetime.now() - trained_date).total_seconds() / 3600
+                    if hours_since < 24:
+                        logger.info(f"Using recent model for {ticker} (trained {hours_since:.1f}h ago)")
                         skip_validation = True
-                except: pass
-
+                except:
+                    pass
+        
+        # Validate predictions (can be slow, so skip if model is recent)
         if not skip_validation:
-            _, acc_log = validate_predictions(ticker)
+            updated, acc_log = validate_predictions(ticker)
         else:
+            # Use cached accuracy log
             acc_log = load_accuracy_log(ticker)
         
         needs_retrain, reasons = should_retrain(ticker, acc_log, meta)
         
-        # 2. Training Flow & Data Preparation
-        lookback = LEARNING_CONFIG.get("lookback_window", 60)
+        # Check for critical errors that require full rebuild
+        force_full_rebuild = any("FORCE_REBUILD" in reason for reason in reasons)
+        
+        if force_full_rebuild:
+            logger.warning(f"🚨 CRITICAL ERROR DETECTED for {ticker} - Forcing complete rebuild!")
+            logger.warning(f"   Reasons: {', '.join(reasons)}")
+            force_retrain = True  # Override to force full retrain
+            
+            # Delete existing model to force fresh start
+            model_path = get_model_path(ticker)
+            if model_path.exists():
+                model_path.unlink()
+                logger.info(f"   Deleted corrupted model: {model_path}")
         
         if needs_retrain or force_retrain:
-            logger.info(f"Retraining triggered for {ticker}. Reasons: {reasons}")
-            df = download_and_validate_data(ticker, period="1y")
-            if df is None: return None, None, None, None, None
-            
-            # Scaler is used for the model, but NOT as an argument for prepare_training_data
-            scaler = load_or_create_scaler(ticker, df, force_create=True)
-            
-            # --- FIX APPLIED HERE: Removed 'scaler' positional argument ---
-            X, y = prepare_training_data(df, lookback=lookback)
-            
+            logger.info(f"Retraining {ticker}: {', '.join(reasons)}")
+        
+        # Download and validate data
+        df = download_and_validate_data(ticker, period="1y")
+        if df is None:
+            logger.warning(f"Failed to download data for {ticker}")
+            return None, None, None, None, None
+        
+        # Calculate data quality metrics
+        quality_metrics = calculate_data_quality_metrics(df)
+        if quality_metrics:
+            logger.info(f"Data quality metrics for {ticker}: {quality_metrics}")
+        
+        # Load or create scaler
+        scaler = load_or_create_scaler(ticker, df, force_create=force_retrain or needs_retrain)
+        if scaler is None:
+            logger.warning(f"Failed to create scaler for {ticker}")
+            return None, None, None, None, None
+        
+        # Prepare training data
+        lookback = LEARNING_CONFIG["lookback_window"]
+        X, y = prepare_training_data(df, scaler, lookback=lookback)
+        
+        if X is None or y is None:
+            logger.warning(f"Failed to prepare training data for {ticker}")
+            return None, None, None, None, None
+        
+        # Train or fine-tune model
+        if force_retrain or needs_retrain:
             model = train_model(ticker, X, y, force_retrain=force_retrain, metadata=meta)
+            if model is None:
+                logger.warning(f"Training failed for {ticker}")
+                return None, None, None, None, None
         else:
-            df = download_and_validate_data(ticker, period="1y")
-            if df is None: return None, None, None, None, None
-            
-            scaler = load_or_create_scaler(ticker, df, force_create=False)
+            # Load existing model
+            model_path = get_model_path(ticker)
             model = model_manager.load_model(model_path)
-
-        # Safety check
-        if model is None:
-            logger.error(f"Model unavailable for {ticker}, aborted.")
-            return None, None, None, None, None
-
-        # 3. Generate the Forecast
+            if model is None:
+                logger.warning(f"Failed to load model for {ticker}, retraining")
+                model = train_model(ticker, X, y, force_retrain=True, metadata=meta)
+                if model is None:
+                    return None, None, None, None, None
+        
+        # Generate forecast with confidence intervals
+        scaled_data = scaler.transform(df[['Close']])
         forecast, lower_ci, upper_ci, dates = generate_forecast_with_confidence(
-            ticker, model, scaler, df, days=days
+            ticker, model, scaler, scaled_data, 
+            lookback=lookback, days=days
         )
-
-        if forecast is None:
-            logger.error(f"Forecast generation failed for {ticker}")
+        
+        if forecast is None or dates is None:
+            logger.warning(f"Forecast generation failed for {ticker}")
             return None, None, None, None, None
-
-        # 4. Hybrid Signal Generation & Simplified Alerting
-        current_price = float(df['Close'].iloc[-1])
         
-        # AI Confidence calculation
-        avg_mape = acc_log.get("avg_error_mape", 10)
-        confidence_score = 1.0 - (avg_mape / 100)
+        # Apply pattern boosts if available
+        try:
+            current_price = get_latest_price(ticker)
+            if current_price:
+                # Try to apply pattern boosts (if pattern functions are available)
+                try:
+                    forecast = get_pattern_boosted_forecast(ticker, forecast.tolist(), current_price)
+                except:
+                    pass
+        except:
+            pass
         
-        # Determine Direction and Target Date
-        direction = "UP" if forecast[0] > current_price else "DOWN"
-        target_date = dates[0].strftime("%m/%d/%Y")
-        today_date = datetime.now().strftime("%m/%d/%Y")
-        asset_name = get_asset_name_from_ticker(ticker)
+        # Record prediction with current price for directional validation
+        tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+        current_price = get_latest_price(ticker)
+        record_prediction(ticker, forecast[0], tomorrow, current_price)
         
-        # Calculate expected % move
-        pct_change = ((forecast[0] - current_price) / current_price) * 100
+        # Update metadata with quality metrics
+        meta.update({
+            "trained_date": datetime.now().isoformat(),
+            "training_samples": len(X),
+            "training_volatility": float(df['Close'].pct_change().std()),
+            "version": meta.get("version", 1) + 1,
+            "last_accuracy": acc_log.get("avg_error_mape", 0),
+            "data_quality": "GOOD",
+            "forecast_days": days,
+            "quality_metrics": quality_metrics
+        })
+        save_metadata(ticker, meta)
         
-        # Check for Elite Hybrid Signal
-        analysis = get_hybrid_signal(ticker, forecast[0], current_price, confidence_score)
-        
-        if analysis.get("should_alert", False):
-            # NEW SIMPLIFIED FORMAT: 
-            # TODAY ( XX/XX/XXXX ) ASSET ( actual name ) , UP/DOWN (by xx/xx/xxxx) BY %
-            msg = (
-                f"TODAY ({today_date}) ASSET ({asset_name}), "
-                f"{direction} (by {target_date}) BY {abs(pct_change):.2f}%"
-            )
-            send_telegram_alert(msg)
-
+        logger.info(f"Successfully trained {ticker}, forecast: {forecast[0]:.2f}")
         return forecast, lower_ci, upper_ci, dates, model
         
     except Exception as e:
-        logger.error(f"Hybrid Training failed for {ticker}: {e}")
+        logger.error(f"Training failed for {ticker}: {e}")
+        log_error(ErrorSeverity.ERROR, "train_self_learning_model_enhanced", e, 
+                 ticker=ticker, user_message=f"Training failed for {ticker}", 
+                 show_to_user=False)
+        metrics_collector.increment("errors_encountered")
         return None, None, None, None, None
+        
     finally:
-        # CRITICAL: Clean up memory to prevent crash on small RAM machines
+        # Always clear TensorFlow session
         if model is not None:
-            try:
-                tf.keras.backend.clear_session()
-                del model
-                gc.collect()
-            except Exception as e:
-                logger.error(f"Cleanup failed: {e}")
+            del model
+        model_manager._cleanup_gpu_memory()
         
 # ================================
 # FAST FORECAST GENERATION
 # ================================
-
 def generate_fast_forecast(ticker: str, days: int = 5) -> Tuple[
     Optional[np.ndarray], Optional[np.ndarray], 
     Optional[np.ndarray], Optional[List]
@@ -3062,11 +3026,9 @@ def generate_fast_forecast(ticker: str, days: int = 5) -> Tuple[
     except Exception as e:
         logger.error(f"Fast forecast failed for {ticker}: {e}")
         return None, None, None, None
-
 # ================================
 # PATTERN MINING CONFIGURATION
 # ================================
-
 def load_pattern_mining_config() -> Dict[str, Any]:
     """Load pattern mining configuration with validation"""
     default_config = {
@@ -3078,22 +3040,19 @@ def load_pattern_mining_config() -> Dict[str, Any]:
     return ConfigManager.load_config_with_backup(
         PATTERN_MINING_CONFIG, "pattern_mining", default_config
     )
-
 def save_pattern_mining_config(config: Dict[str, Any]) -> bool:
     """Save pattern mining configuration with validation"""
     return ConfigManager.save_config(PATTERN_MINING_CONFIG, config, "pattern_mining")
-
 def load_daemon_config() -> Dict[str, Any]:
     """Load daemon configuration"""
     default_config = {
         "enabled": False,
-        "sleep_minutes": 10,
-        "max_retrain_per_cycle": 5
+        "sleep_minutes": 15,
+        "max_retrain_per_cycle": 3
     }
     return ConfigManager.load_config_with_backup(
         DAEMON_CONFIG, "daemon", default_config
     )
-
 def save_daemon_config(enabled: bool) -> bool:
     """Save daemon configuration"""
     try:
@@ -3106,7 +3065,6 @@ def save_daemon_config(enabled: bool) -> bool:
     except Exception as e:
         logger.error(f"Failed to save daemon config: {e}")
         return False
-
 def load_monitoring_config() -> Dict[str, Any]:
     """Load monitoring configuration with enhanced options"""
     default_config = {
@@ -3120,7 +3078,6 @@ def load_monitoring_config() -> Dict[str, Any]:
     return ConfigManager.load_config_with_backup(
         MONITORING_CONFIG, "monitoring", default_config
     )
-
 def save_monitoring_config(enabled: bool, check_interval: int = 5, 
                           threshold_percent: float = 6.0, 
                           cooldown_minutes: int = 30) -> bool:
@@ -3141,7 +3098,6 @@ def save_monitoring_config(enabled: bool, check_interval: int = 5,
     except Exception as e:
         logger.error(f"Failed to save monitoring config: {e}")
         return False
-
 def load_pattern_overrides() -> Dict[str, Any]:
     """Load pattern override configuration"""
     override_config_path = CONFIG_DIR / "pattern_overrides.json"
@@ -3152,11 +3108,9 @@ def load_pattern_overrides() -> Dict[str, Any]:
     return ConfigManager.load_config_with_backup(
         override_config_path, "pattern_overrides", default_config
     )
-
 # ================================
 # PATTERN MINING - INTRADAY
 # ================================
-
 def mine_intraday_patterns(ticker: str) -> Tuple[Optional[Tuple], Optional[str]]:
     """Mine patterns from 1-minute data (7 days, ±6% in 3 hours)"""
     try:
@@ -3253,11 +3207,9 @@ def mine_intraday_patterns(ticker: str) -> Tuple[Optional[Tuple], Optional[str]]
         log_error(ErrorSeverity.WARNING, "mine_intraday_patterns", e, 
                  ticker=ticker, show_to_user=False)
         return None, str(e)[:30]
-
 # ================================
 # PATTERN MINING - DAILY
 # ================================
-
 # ============================================================================
 # LINE 3152: mine_daily_patterns() - Daily pattern detection
 # STATUS: WORKING - Fixed pandas errors 2025-12-26
@@ -3355,11 +3307,9 @@ def mine_daily_patterns(ticker: str) -> Tuple[Optional[Tuple], Optional[str]]:
         log_error(ErrorSeverity.WARNING, "mine_daily_patterns", e, 
                  ticker=ticker, show_to_user=False)
         return None, str(e)[:30]
-
 # ================================
 # PATTERN EVALUATION
 # ================================
-
 def train_and_evaluate_patterns(X: pd.DataFrame, y: pd.Series, 
                                 timeframe: str) -> Optional[Dict[str, Any]]:
     """Train models and return best AUC"""
@@ -3441,11 +3391,9 @@ def train_and_evaluate_patterns(X: pd.DataFrame, y: pd.Series,
         log_error(ErrorSeverity.WARNING, "train_and_evaluate_patterns", e, 
                  show_to_user=False)
         return None
-
 # ================================
 # PATTERN MINING FOR TICKER
 # ================================
-
 def mine_patterns_for_ticker(ticker: str) -> Optional[Dict[str, Any]]:
     """Mine patterns for a single ticker"""
     try:
@@ -3527,11 +3475,9 @@ def mine_patterns_for_ticker(ticker: str) -> Optional[Dict[str, Any]]:
         log_error(ErrorSeverity.WARNING, "mine_patterns_for_ticker", e, 
                  ticker=ticker, show_to_user=False)
         return None
-
 # ================================
 # PATTERN MINING CYCLE
 # ================================
-
 # ============================================================================
 # LINE 3420: run_pattern_mining_cycle() - Pattern discovery
 # STATUS: WORKING - Finds elite trading patterns
@@ -3585,11 +3531,9 @@ def run_pattern_mining_cycle() -> int:
     
     metrics_collector.increment("pattern_mining_cycles")
     return len(patterns)
-
 # ================================
 # PATTERN INTEGRATION
 # ================================
-
 def check_pattern_override(ticker: str, bias: str, boost: int) -> Tuple[str, List[str], int]:
     """Check for pattern overrides from configuration"""
     overrides_config = load_pattern_overrides()
@@ -3614,25 +3558,21 @@ def check_pattern_override(ticker: str, bias: str, boost: int) -> Tuple[str, Lis
                 return new_bias, triggers, confidence_bonus
     
     return bias, [], 0
-
 def check_auto_patterns(ticker: str, data: Optional[pd.DataFrame] = None) -> Tuple[
     int, List[str], str, int
 ]:
     """Enhanced pattern checking with better integration"""
     if not AUTO_PATTERNS_FILE.exists():
         return 0, [], "NEUTRAL", 0
-
     try:
         with open(AUTO_PATTERNS_FILE, 'r') as f:
             raw = json.load(f)
         if "patterns" not in raw:
             return 0, [], "NEUTRAL", 0
-
         ticker_clean = ticker.replace('=F', '').replace('^', '').split('.')[0].upper()
         now = datetime.now()
         best_match = None
         best_auc = 0
-
         for pat in raw["patterns"]:
             if pat.get("ticker", "").upper() != ticker_clean:
                 continue
@@ -3642,31 +3582,25 @@ def check_auto_patterns(ticker: str, data: Optional[pd.DataFrame] = None) -> Tup
                     continue
             except:
                 continue
-
             auc = pat.get("auc_mean", 0)
             if auc > best_auc:
                 best_auc = auc
                 best_match = pat
-
         if not best_match:
             return 0, [], "NEUTRAL", 0
-
         boost = best_match.get("boost", 0)
         bias = best_match.get("direction_bias", "NEUTRAL")
         direction = "DOWN" if bias == "DOWN" else "UP" if bias == "UP" else "NEUTRAL"
         timeframe = best_match.get("timeframe", "unknown")
         model = best_match.get("model", "unknown").upper()
         auc_val = best_match.get("auc_mean", 0)
-
         confidence = min(99, int(auc_val * 100 + boost // 2.5))
-
         triggers = [
             f"{model} AUC {auc_val:.3f}",
             f"Boost +{boost}",
             f"{timeframe.upper()} ELITE",
             f"Bias {bias}"
         ]
-
         # Check for overrides
         override_direction, override_triggers, confidence_bonus = check_pattern_override(
             ticker, direction, boost
@@ -3675,15 +3609,12 @@ def check_auto_patterns(ticker: str, data: Optional[pd.DataFrame] = None) -> Tup
             direction = override_direction
             triggers.extend(override_triggers)
             confidence = min(99, confidence + confidence_bonus)
-
         return boost, triggers, direction, confidence
-
     except Exception as e:
         logger.warning(f"Error checking patterns for {ticker}: {e}")
         log_error(ErrorSeverity.WARNING, "check_auto_patterns", e, 
                  ticker=ticker, show_to_user=False)
         return 0, [], "NEUTRAL", 0
-
 def get_pattern_boosted_forecast(ticker: str, base_forecast: List[float], 
                                 current_price: float) -> List[float]:
     """Apply pattern mining boosts to the base forecast"""
@@ -3711,7 +3642,6 @@ def get_pattern_boosted_forecast(ticker: str, base_forecast: List[float],
         logger.info(f"Applied DOWN reduction of {boost_factor:.3f}x to {ticker} forecast")
     
     return forecast_array.tolist()
-
 def enhanced_confidence_checklist(ticker: str, forecast: List[float], 
                                  current_price: float) -> Tuple[bool, List[str], int]:
     """Enhanced confidence checklist with REAL accuracy metrics and pattern integration"""
@@ -3763,7 +3693,6 @@ def enhanced_confidence_checklist(ticker: str, forecast: List[float],
             reasons.append(f"Extreme move {move:+.1%}")
     
     return len(reasons) == 0, reasons, boost
-
 def get_pattern_influenced_recommendation(ticker: str, base_forecast: List[float], 
                                          current_price: float) -> Tuple[str, int, List[str]]:
     """Get recommendation influenced by pattern mining"""
@@ -3803,11 +3732,302 @@ def get_pattern_influenced_recommendation(ticker: str, base_forecast: List[float
         reasons.extend(triggers)
     
     return action, confidence, reasons
-
-# ================================
-# IMPLEMENTED 6%+ MOVE TELEGRAM ALERT SYSTEM
-# ================================
-
+# ============================================================================
+# ELITE SETUP DETECTOR
+# Add this function after get_pattern_influenced_recommendation() (~line 3750)
+# ============================================================================
+def detect_elite_setup(ticker: str, forecast: List[float], current_price: float,
+                       lower_ci: Optional[np.ndarray] = None,
+                       upper_ci: Optional[np.ndarray] = None) -> Tuple[bool, Dict[str, Any]]:
+    """
+    Detect Elite Trading Setup
+    
+    Criteria:
+    1. AI Confidence > 70%
+    2. Risk/Reward Ratio >= 3:1
+    3. Pattern confirmation
+    4. Low prediction error (MAPE < 6%)
+    
+    Returns:
+        (is_elite, setup_details)
+    """
+    
+    if not forecast or not current_price:
+        return False, {}
+    
+    # Initialize setup details
+    setup = {
+        'is_elite': False,
+        'confidence': 0,
+        'risk_reward_ratio': 0,
+        'signals': [],
+        'warnings': [],
+        'entry_price': current_price,
+        'target_price': 0,
+        'stop_loss': 0,
+        'position_size': 0  # Percentage of portfolio
+    }
+    
+    # ========================================================================
+    # 1. CALCULATE AI CONFIDENCE
+    # ========================================================================
+    
+    confidence_score = 50  # Base confidence
+    confidence_factors = []
+    
+    # Factor 1: Pattern Mining Boost
+    boost, triggers, direction, pattern_confidence = check_auto_patterns(ticker)
+    
+    if boost > 0:
+        # Convert boost to confidence contribution (max 30 points)
+        pattern_contrib = min(30, pattern_confidence // 2)
+        confidence_score += pattern_contrib
+        confidence_factors.append(f"Pattern: +{pattern_contrib}% (Boost: {boost})")
+        setup['signals'].extend(triggers[:3])  # Top 3 pattern triggers
+    
+    # Factor 2: Prediction Accuracy
+    acc_log = load_accuracy_log(ticker)
+    mape = acc_log.get('avg_error_mape', 100)
+    dir_accuracy = acc_log.get('directional_accuracy', 50)
+    
+    if acc_log.get('validated_predictions', 0) >= 5:
+        # Reward low error
+        if mape < 3.0:
+            confidence_score += 20
+            confidence_factors.append(f"Accuracy: +20% (MAPE {mape:.1f}%)")
+        elif mape < 6.0:
+            confidence_score += 10
+            confidence_factors.append(f"Accuracy: +10% (MAPE {mape:.1f}%)")
+        
+        # Reward good directional accuracy
+        if dir_accuracy > 70:
+            confidence_score += 15
+            confidence_factors.append(f"Direction: +15% ({dir_accuracy:.0f}%)")
+        elif dir_accuracy > 60:
+            confidence_score += 5
+            confidence_factors.append(f"Direction: +5% ({dir_accuracy:.0f}%)")
+    else:
+        setup['warnings'].append("Few validated predictions")
+    
+    # Factor 3: Confidence Interval Width (if available)
+    if lower_ci is not None and upper_ci is not None and len(lower_ci) > 0:
+        ci_width = (upper_ci[0] - lower_ci[0]) / current_price * 100
+        
+        if ci_width < 5:  # Narrow CI = high confidence
+            confidence_score += 10
+            confidence_factors.append(f"Narrow CI: +10% ({ci_width:.1f}% width)")
+        elif ci_width < 10:
+            confidence_score += 5
+            confidence_factors.append(f"CI: +5% ({ci_width:.1f}% width)")
+        else:
+            setup['warnings'].append(f"Wide CI: {ci_width:.1f}%")
+    
+    # Cap confidence at 99%
+    setup['confidence'] = min(99, confidence_score)
+    
+    # ========================================================================
+    # 2. CALCULATE RISK/REWARD RATIO
+    # ========================================================================
+    
+    predicted_price = float(np.array(forecast).flatten()[0])
+    price_move = predicted_price - current_price
+    move_percent = (price_move / current_price) * 100
+    
+    # Determine stop loss based on confidence and CI
+    if lower_ci is not None and len(lower_ci) > 0:
+        # Use CI for stop loss calculation
+        if move_percent > 0:  # Bullish
+            stop_loss = lower_ci[0]
+        else:  # Bearish
+            stop_loss = upper_ci[0]
+    else:
+        # Fallback: Use 2% stop loss
+        stop_loss = current_price * (0.98 if move_percent > 0 else 1.02)
+    
+    # Calculate risk and reward
+    risk = abs(current_price - stop_loss)
+    reward = abs(predicted_price - current_price)
+    
+    if risk > 0:
+        risk_reward_ratio = reward / risk
+        setup['risk_reward_ratio'] = risk_reward_ratio
+    else:
+        risk_reward_ratio = 0
+        setup['warnings'].append("Cannot calculate R/R (zero risk)")
+    
+    # Set trade parameters
+    setup['target_price'] = predicted_price
+    setup['stop_loss'] = stop_loss
+    
+    # ========================================================================
+    # 3. ELITE SETUP CRITERIA CHECK
+    # ========================================================================
+    
+    elite_requirements = []
+    
+    # Requirement 1: Confidence >= 70%
+    if setup['confidence'] >= 70:
+        elite_requirements.append("✅ High Confidence (≥70%)")
+    else:
+        elite_requirements.append(f"❌ Low Confidence ({setup['confidence']}% < 70%)")
+    
+    # Requirement 2: Risk/Reward >= 3:1
+    if risk_reward_ratio >= 3.0:
+        elite_requirements.append(f"✅ Excellent R/R ({risk_reward_ratio:.1f}:1 ≥ 3:1)")
+    else:
+        elite_requirements.append(f"❌ Poor R/R ({risk_reward_ratio:.1f}:1 < 3:1)")
+    
+    # Requirement 3: Minimum move (at least 4%)
+    if abs(move_percent) >= 4.0:
+        elite_requirements.append(f"✅ Significant Move ({abs(move_percent):.1f}% ≥ 4%)")
+    else:
+        elite_requirements.append(f"❌ Small Move ({abs(move_percent):.1f}% < 4%)")
+    
+    # Requirement 4: Pattern confirmation
+    if boost >= 80:
+        elite_requirements.append(f"✅ Strong Pattern (Boost {boost} ≥ 80)")
+    else:
+        elite_requirements.append(f"⚠️ Weak Pattern (Boost {boost} < 80)")
+    
+    # Requirement 5: Good accuracy history
+    if mape < 6.0 and acc_log.get('validated_predictions', 0) >= 5:
+        elite_requirements.append(f"✅ Low Error (MAPE {mape:.1f}% < 6%)")
+    else:
+        elite_requirements.append(f"⚠️ High Error or Few Predictions")
+    
+    # ========================================================================
+    # 4. DETERMINE IF ELITE
+    # ========================================================================
+    
+    # Must meet core requirements: confidence + R/R + move
+    is_elite = (
+        setup['confidence'] >= 70 and
+        risk_reward_ratio >= 3.0 and
+        abs(move_percent) >= 4.0
+    )
+    
+    setup['is_elite'] = is_elite
+    setup['requirements'] = elite_requirements
+    setup['confidence_breakdown'] = confidence_factors
+    
+    # ========================================================================
+    # 5. CALCULATE POSITION SIZE (Kelly Criterion)
+    # ========================================================================
+    
+    if is_elite:
+        # Kelly Criterion: f = (bp - q) / b
+        # where b = R/R ratio, p = win probability, q = 1-p
+        
+        # Use directional accuracy as win probability
+        win_prob = min(0.75, dir_accuracy / 100) if dir_accuracy > 0 else 0.55
+        
+        # Kelly fraction
+        kelly_fraction = (
+            (risk_reward_ratio * win_prob - (1 - win_prob)) / risk_reward_ratio
+        )
+        
+        # Use half Kelly for safety
+        position_size = max(0, min(25, kelly_fraction * 50))  # Cap at 25% of portfolio
+        
+        setup['position_size'] = round(position_size, 2)
+        setup['signals'].append(f"Position Size: {position_size:.1f}% (Half-Kelly)")
+    else:
+        setup['position_size'] = 0
+        setup['warnings'].append("Not Elite - No position recommended")
+    
+    # ========================================================================
+    # 6. GENERATE SUMMARY
+    # ========================================================================
+    
+    setup['summary'] = {
+        'ticker': ticker,
+        'direction': 'LONG' if move_percent > 0 else 'SHORT',
+        'current_price': round(current_price, 2),
+        'entry': round(current_price, 2),
+        'target': round(predicted_price, 2),
+        'stop': round(stop_loss, 2),
+        'move_expected': f"{move_percent:+.1f}%",
+        'risk_per_share': f"${risk:.2f}",
+        'reward_per_share': f"${reward:.2f}",
+        'confidence': f"{setup['confidence']}%",
+        'r_r_ratio': f"{risk_reward_ratio:.1f}:1"
+    }
+    
+    return is_elite, setup
+# ============================================================================
+# UI DISPLAY FUNCTION FOR ELITE SETUPS
+# ============================================================================
+def display_elite_setup_ui(ticker: str, setup: Dict[str, Any]):
+    """Display Elite Setup in Streamlit UI"""
+    
+    if setup['is_elite']:
+        st.success("🌟 **ELITE SETUP DETECTED** 🌟")
+        
+        # Summary Box
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.metric("🎯 Confidence", setup['summary']['confidence'])
+        with col2:
+            st.metric("📊 R/R Ratio", setup['summary']['r_r_ratio'])
+        with col3:
+            st.metric("📈 Expected Move", setup['summary']['move_expected'])
+        with col4:
+            st.metric("💼 Position Size", f"{setup['position_size']:.1f}%")
+        
+        # Trade Details
+        st.markdown("---")
+        st.subheader("📋 Trade Details")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.write(f"**Direction:** {setup['summary']['direction']}")
+            st.write(f"**Entry:** ${setup['summary']['entry']}")
+            st.write(f"**Target:** ${setup['summary']['target']}")
+            st.write(f"**Stop Loss:** ${setup['summary']['stop']}")
+        
+        with col2:
+            st.write(f"**Risk/Share:** {setup['summary']['risk_per_share']}")
+            st.write(f"**Reward/Share:** {setup['summary']['reward_per_share']}")
+            st.write(f"**R/R Ratio:** {setup['summary']['r_r_ratio']}")
+            st.write(f"**Position:** {setup['position_size']:.1f}% of portfolio")
+        
+        # Confidence Breakdown
+        st.markdown("---")
+        st.subheader("🔍 Confidence Breakdown")
+        for factor in setup['confidence_breakdown']:
+            st.write(f"• {factor}")
+        
+        # Pattern Signals
+        if setup['signals']:
+            st.markdown("---")
+            st.subheader("⚡ Pattern Signals")
+            for signal in setup['signals']:
+                st.write(f"• {signal}")
+        
+        # Requirements Check
+        st.markdown("---")
+        with st.expander("✅ Elite Requirements Check"):
+            for req in setup['requirements']:
+                st.write(req)
+        
+        # Warnings
+        if setup['warnings']:
+            st.markdown("---")
+            st.warning("⚠️ **Considerations:**")
+            for warning in setup['warnings']:
+                st.write(f"• {warning}")
+    
+    else:
+        st.info("ℹ️ **Not an Elite Setup**")
+        st.write(f"**Confidence:** {setup['confidence']}% (need ≥70%)")
+        st.write(f"**R/R Ratio:** {setup['risk_reward_ratio']:.1f}:1 (need ≥3:1)")
+        
+        st.markdown("---")
+        st.subheader("📊 Requirements Not Met:")
+        for req in setup['requirements']:
+            st.write(req)
 # ============================================================================
 # LINE 3690: monitor_6percent_pre_move_managed() - Price monitoring
 # STATUS: WORKING - Sends Telegram alerts for 6%+ moves
@@ -3820,122 +4040,266 @@ def monitor_6percent_pre_move_managed(stop_event: threading.Event) -> None:
     app_state.set_thread_start_time("monitoring")
     logger.info("[MONITORING] Enhanced Daily Monitor STARTED")
     
-    # This dictionary remembers when an alert was last sent for each ticker
+    # Cooldown tracking to prevent duplicate alerts (ticker -> last_alert_time)
     alert_cooldown: Dict[str, datetime] = {}
     
-    # Get validated watchlist
+    # Get validated watchlist (skip delisted/problematic tickers)
+    logger.info("[MONITORING] Validating watchlist...")
     watchlist_tickers = [t for t in PATTERN_WATCHLIST if not is_ticker_blacklisted(t)]
+    logger.info(f"[MONITORING] Monitoring {len(watchlist_tickers)} validated tickers")
+    if TICKER_BLACKLIST:
+        logger.info(f"[MONITORING] Excluding {len(TICKER_BLACKLIST)} blacklisted tickers: {', '.join(sorted(TICKER_BLACKLIST))}")
     
     while not stop_event.is_set():
         try:
-            # Check if monitoring is enabled in Streamlit settings
+            # Check if monitoring is enabled
             config = load_monitoring_config()
             if not config.get("enabled", False):
+                logger.info("[MONITORING] Monitoring paused (disabled in config)")
                 time.sleep(30)
+                app_state.update_heartbeat("monitoring")
                 continue
             
+            # Check if market is open (skip weekends)
             now = datetime.now()
-            if now.weekday() >= 5: # Weekend check
-                time.sleep(3600)
+            is_weekend = now.weekday() >= 5  # 5=Saturday, 6=Sunday
+            
+            if is_weekend:
+                logger.info(f"[MONITORING] Markets closed (Weekend: {now.strftime('%A')}), sleeping 1 hour...")
+                for _ in range(3600):
+                    if stop_event.is_set():
+                        break
+                    time.sleep(1)
+                    app_state.update_heartbeat("monitoring")
                 continue
             
-            # Market hours check (9 AM - 5 PM)
-            if now.hour < 9 or now.hour > 17:
-                time.sleep(1800)
+            # Also check market hours (before 9 AM or after 5 PM)
+            hour = now.hour
+            if hour < 9 or hour > 17:
+                logger.info(f"[MONITORING] Outside market hours ({hour}:00), sleeping 30 min...")
+                for _ in range(1800):
+                    if stop_event.is_set():
+                        break
+                    time.sleep(1)
+                    app_state.update_heartbeat("monitoring")
                 continue
-
             current_time = datetime.now()
+            
+            # Get config values
             threshold = config.get("threshold_percent", 6.0)
-            # Set this in your Sidebar - e.g., 240 for 4 hours
-            cooldown_minutes = config.get("cooldown_minutes", 240) 
+            cooldown_minutes = config.get("cooldown_minutes", 30)
+            
+            logger.info(f"[MONITORING] Checking {len(watchlist_tickers)} tickers for {threshold}%+ daily moves...")
+            
+            # Track alerts in this cycle
+            alerts_sent = 0
+            checks_performed = 0
             
             for ticker in watchlist_tickers:
                 if stop_event.is_set():
                     break
                 
+                # Skip blacklisted tickers (double-check)
+                if is_ticker_blacklisted(ticker):
+                    logger.debug(f"[MONITORING] ⚫ Skipping blacklisted ticker: {ticker}")
+                    continue
+                    
                 try:
-                    # 1. IMMEDIATE COOLDOWN CHECK
-                    # If we already sent an alert recently, skip this ticker entirely
-                    last_sent = alert_cooldown.get(ticker)
-                    if last_sent:
-                        seconds_since = (current_time - last_sent).total_seconds()
-                        if seconds_since < (cooldown_minutes * 60):
-                            continue # Skip to next ticker
-
-                    # 2. DOWNLOAD DATA
-                    df = yf.download(ticker, period="5d", interval="1d", progress=False, auto_adjust=True)
-                    if isinstance(df.columns, pd.MultiIndex):
-                        df.columns = df.columns.get_level_values(0)
+                    # Skip if in cooldown
+                    last_alert = alert_cooldown.get(ticker)
+                    if last_alert:
+                        minutes_since = (current_time - last_alert).total_seconds() / 60
+                        if minutes_since < cooldown_minutes:
+                            logger.debug(f"[MONITORING] {ticker}: In cooldown ({minutes_since:.0f}min / {cooldown_minutes}min)")
+                            continue
                     
-                    if df is None or len(df) < 2:
-                        continue
-                        
-                    current_price = float(df['Close'].iloc[-1])
-                    previous_price = float(df['Close'].iloc[-2])
-                    change_pct = (current_price - previous_price) / previous_price * 100
-                    
-                    # 3. THRESHOLD CHECK
-                    if abs(change_pct) >= threshold:
-                        # Prepare Data
-                        today_str = datetime.now().strftime("%m/%d/%Y")
-                        asset_name = get_asset_name_from_ticker(ticker)
-                        direction_simple = "UP" if change_pct > 0 else "DOWN"
-
-                        # Get Confidence score
-                        try:
-                            acc_log = load_accuracy_log().get(ticker, {})
-                            avg_mape = acc_log.get("avg_error_mape", 15)
-                            confidence_val = max(0, 100 - avg_mape)
-                        except Exception:
-                            confidence_val = 75.0
-
-                        # 4. CREATE SIDE-BY-SIDE MESSAGE
-                        message = (
-                            f"TODAY - {today_str}\n"
-                            f"ASSET - {asset_name}\n"
-                            f"DIRECTION - {direction_simple}\n"
-                            f"BY - {abs(change_pct):.2f}%\n"
-                            f"CONFIDENCE - {confidence_val:.1f}%"
+                    # Get fresh data - NO CACHE
+                    try:
+                        df = yf.download(
+                            ticker, 
+                            period="5d",
+                            interval="1d",
+                            progress=False,
+                            auto_adjust=True
                         )
-
-                        # 5. SEND AND UPDATE COOLDOWN
-                        success = send_telegram_alert(message)
-                        if success:
-                            alert_cooldown[ticker] = current_time # Update timestamp
-                            logger.info(f"✅ Alert sent for {ticker} ({change_pct:.2f}%)")
-
-                    # Small sleep between tickers to prevent Yahoo Finance blocking
+                        
+                        # Normalize columns
+                        if isinstance(df.columns, pd.MultiIndex):
+                            df.columns = df.columns.get_level_values(0)
+                        
+                        if df is None or len(df) < 2:
+                            logger.warning(f"[MONITORING] {ticker}: Insufficient data ({len(df) if df is not None else 0} days)")
+                            continue
+                        
+                        # Ensure we have close prices
+                        if 'Close' not in df.columns or df['Close'].isnull().all():
+                            logger.warning(f"[MONITORING] {ticker}: No close prices")
+                            continue
+                        
+                        # Sort by index (datetime) ascending
+                        df = df.sort_index()
+                        
+                        # Get today's price (most recent)
+                        current_price = float(df['Close'].iloc[-1])
+                        current_date = df.index[-1]
+                        
+                        # Get previous day's price
+                        previous_price = float(df['Close'].iloc[-2])
+                        previous_date = df.index[-2]
+                        
+                        # Calculate percentage change from previous day
+                        if previous_price == 0:
+                            logger.warning(f"[MONITORING] {ticker}: Previous price is zero")
+                            continue
+                        
+                        change_pct = (current_price - previous_price) / previous_price * 100
+                        
+                        checks_performed += 1
+                        
+                        # ALWAYS log the change for visibility
+                        logger.info(
+                            f"[MONITORING] {ticker}: "
+                            f"${previous_price:.2f} → ${current_price:.2f} = {change_pct:+.2f}% "
+                            f"(threshold: {threshold}%)"
+                        )
+                        
+                        # Check for threshold move
+                        if abs(change_pct) >= threshold:
+                            direction = "📈 UP" if change_pct > 0 else "📉 DOWN"
+                            move_type = "RISE" if change_pct > 0 else "DROP"
+                            
+                            # Calculate time difference
+                            time_diff = (current_date - previous_date).days
+                            time_desc = f"{time_diff} day{'s' if time_diff > 1 else ''}"
+                            
+                            # Get asset name
+                            asset_name = get_asset_name_from_ticker(ticker)
+                            
+                            # Prepare alert message
+                            message = (
+                                f"🚨 **{move_type} ALERT** 🚨\n\n"
+                                f"**{asset_name} ({ticker})**: {abs(change_pct):.1f}% {direction} in {time_desc}!\n\n"
+                                f"• Price {time_desc} ago: ${previous_price:.2f}\n"
+                                f"• Current price: ${current_price:.2f}\n"
+                                f"• Change: ${current_price - previous_price:+.2f}\n"
+                                f"• Date: {current_date.strftime('%Y-%m-%d')}\n"
+                                f"• Direction: {direction}\n\n"
+                                f"_Monitor: AI Alpha Trader v4.2_"
+                            )
+                            
+                            # Check volume spike (optional)
+                            if 'Volume' in df.columns and len(df) >= 2:
+                                try:
+                                    current_volume = df['Volume'].iloc[-1]
+                                    avg_volume = df['Volume'].iloc[-5:-1].mean() if len(df) >= 5 else df['Volume'].iloc[:-1].mean()
+                                    
+                                    if avg_volume > 0 and not pd.isna(current_volume) and not pd.isna(avg_volume):
+                                        volume_ratio = current_volume / avg_volume
+                                        if volume_ratio > 2.0:
+                                            message += f"\n📊 **Volume spike**: {volume_ratio:.1f}x average!"
+                                except Exception as ve:
+                                    logger.debug(f"Volume check failed for {ticker}: {ve}")
+                            
+                            # Log before attempting to send
+                            logger.info(f"[MONITORING] 🚨 Attempting to send alert for {ticker}: {change_pct:+.2f}%")
+                            print(f"\n{'='*60}")
+                            print(f"🚨 ALERT TRIGGERED: {ticker} {change_pct:+.2f}%")
+                            print(f"{'='*60}\n")
+                            
+                            # Send Telegram alert
+                            success = send_telegram_alert(message)
+                            
+                            if success:
+                                alerts_sent += 1
+                                alert_cooldown[ticker] = current_time
+                                metrics_collector.increment("monitoring_alerts_sent")
+                                
+                                logger.info(
+                                    f"[ALERT] ✅ Sent {ticker} {move_type} alert: "
+                                    f"{abs(change_pct):.1f}% in {time_desc}"
+                                )
+                                app_state.add_log_message(
+                                    f"[ALERT] {ticker}: {abs(change_pct):.1f}% {direction} "
+                                    f"in {time_desc}"
+                                )
+                                
+                                # Also log to console with emoji
+                                print(f"✅ TELEGRAM ALERT SENT: {ticker} {move_type} {abs(change_pct):.1f}%")
+                            else:
+                                logger.error(f"[ALERT] ❌ Failed to send Telegram alert for {ticker}")
+                                print(f"❌ TELEGRAM FAILED for {ticker}")
+                                
+                                # Print the message that would have been sent
+                                print(f"\nMessage that failed to send:\n{message}\n")
+                        
+                    except Exception as e:
+                        error_msg = str(e)
+                        if "delisted" in error_msg.lower() or "no price data found" in error_msg.lower():
+                            add_to_blacklist(ticker, "Delisted during monitoring")
+                            logger.warning(f"[MONITORING] ⚫ Blacklisted {ticker} during check")
+                        else:
+                            logger.error(f"[MONITORING] Error downloading {ticker}: {e}")
+                        continue
+                    
+                    # Small delay between tickers to avoid rate limiting
                     time.sleep(0.5)
                     
                 except Exception as e:
-                    logger.error(f"Error checking {ticker}: {e}")
+                    logger.error(f"[MONITORING] Unexpected error for {ticker}: {e}")
                     continue
             
-            # Sleep until next cycle (Check Interval)
-            sleep_min = config.get("check_interval_minutes", 5)
-            for _ in range(sleep_min * 60):
-                if stop_event.is_set(): break
+            # Log summary of this monitoring cycle
+            logger.info(
+                f"[MONITORING] Cycle complete: "
+                f"Checked {checks_performed}/{len(watchlist_tickers)} tickers, "
+                f"Sent {alerts_sent} alerts"
+            )
+            
+            if alerts_sent > 0:
+                print(f"\n✅ {alerts_sent} alerts sent this cycle!\n")
+            
+            app_state.update_heartbeat("monitoring")
+            
+            # Sleep until next check (using configured interval)
+            sleep_minutes = config.get("check_interval_minutes", 5)
+            sleep_seconds = sleep_minutes * 60
+            
+            logger.info(f"[MONITORING] Sleeping for {sleep_minutes} minutes until next cycle...")
+            
+            # Sleep in smaller intervals to check stop_event
+            for _ in range(sleep_seconds):
+                if stop_event.is_set():
+                    break
                 time.sleep(1)
+                app_state.update_heartbeat("monitoring")
+                
+                # Check if disabled during sleep
+                if not load_monitoring_config().get("enabled", False):
+                    logger.info("[MONITORING] Monitoring stopped during sleep")
+                    break
                 
         except Exception as e:
-            logger.error(f"Monitoring loop error: {e}")
-            time.sleep(60)
-
+            logger.error(f"[CRITICAL] Monitoring error: {e}")
+            log_error(ErrorSeverity.ERROR, "monitor_6percent_daily", e,
+                     user_message="Monitoring error - will retry", show_to_user=False)
+            
+            # Wait before retry, but check stop_event
+            for _ in range(60):
+                if stop_event.is_set():
+                    break
+                time.sleep(1)
+    
     logger.info("[MONITORING] Enhanced Daily Monitor STOPPED")
 # ================================
 # 2X DAILY PREDICTION SCANNER
 # Add this to dashboard.py after line 1916 (after monitor_6percent_pre_move_managed)
 # ================================
-
 import pytz
 from typing import List, Dict, Tuple, Optional
-
 # ================================
 # PREDICTION SCANNER CONFIGURATION
 # ================================
-
 PREDICTION_CONFIG_FILE = CONFIG_DIR / "prediction_scanner.json"
-
 def load_prediction_config() -> Dict[str, Any]:
     """Load prediction scanner configuration"""
     default_config = {
@@ -3950,15 +4314,12 @@ def load_prediction_config() -> Dict[str, Any]:
     return ConfigManager.load_config_with_backup(
         PREDICTION_CONFIG_FILE, "prediction_scanner", default_config
     )
-
 def save_prediction_config(config: Dict[str, Any]) -> bool:
     """Save prediction scanner configuration"""
     return ConfigManager.save_config(PREDICTION_CONFIG_FILE, config, "prediction_scanner")
-
 # ================================
 # PRE-MARKET ANALYSIS
 # ================================
-
 def analyze_premarket(ticker: str) -> Dict[str, Any]:
     """
     Analyze pre-market activity for prediction
@@ -4026,11 +4387,9 @@ def analyze_premarket(ticker: str) -> Dict[str, Any]:
     except Exception as e:
         logger.error(f"Pre-market analysis failed for {ticker}: {e}")
         return {'gap_percent': 0, 'volume_ratio': 0, 'score': 0.2, 'signal': 'Error'}
-
 # ================================
 # MORNING MOMENTUM ANALYSIS
 # ================================
-
 def analyze_morning_momentum(ticker: str) -> float:
     """
     Analyze morning trading momentum (9:30-10:30 AM)
@@ -4085,11 +4444,9 @@ def analyze_morning_momentum(ticker: str) -> float:
     except Exception as e:
         logger.error(f"Morning momentum analysis failed for {ticker}: {e}")
         return 0.3
-
 # ================================
 # DAILY LSTM PREDICTION
 # ================================
-
 def get_daily_prediction(ticker: str) -> Dict[str, Any]:
     """
     Get LSTM prediction for today's move
@@ -4149,11 +4506,9 @@ def get_daily_prediction(ticker: str) -> Dict[str, Any]:
     except Exception as e:
         logger.error(f"Daily prediction failed for {ticker}: {e}")
         return {'predicted_change': 0, 'score': 0.3, 'confidence': 0}
-
 # ================================
 # MAIN PREDICTION SCAN
 # ================================
-
 def run_prediction_scan(scan_time: str) -> List[Dict[str, Any]]:
     """
     Run comprehensive prediction scan
@@ -4248,58 +4603,144 @@ def run_prediction_scan(scan_time: str) -> List[Dict[str, Any]]:
     logger.info(f"[PREDICTION SCAN] {scan_time} scan complete: {len(predictions)} high-probability tickers found")
     
     return predictions
-
-# ============================================================================
-# SECTION 13: ALERT FORMATTING (UPDATED FOR THE WINNING EQUATION)
-# ============================================================================
-
+# ================================
+# ALERT FORMATTING
+# ================================
 def format_prediction_alert(predictions: List[Dict[str, Any]], scan_time: str) -> str:
-    """Format results using the Winning Equation (Hybrid Signal)"""
+    """Format prediction results as Telegram alert"""
+    
     if not predictions:
-        return f"🔍 {scan_time.upper()} SCAN: No high-probability movers detected."
-
-    header = "🔥 **AI ALPHA ELITE ALERTS** 🔥\n\n" if scan_time == "morning" else "🌆 **MIDDAY HYBRID UPDATE**\n\n"
+        return f"🔍 {scan_time.upper()} SCAN: No high-probability movers detected today."
+    
+    # Header
+    if scan_time == "morning":
+        header = "🌅 DAILY WATCHLIST ALERT\n\n📊 High Probability Movers Today:\n\n"
+    else:
+        header = "🌆 MIDDAY UPDATE\n\n📊 Updated Predictions:\n\n"
+    
     message = header
-    valid_alerts = 0
-
+    
+    # Add each prediction
     for idx, pred in enumerate(predictions, 1):
         ticker = pred['ticker']
-        current_price = get_latest_price(ticker) # Your existing price fetcher
+        prob = pred['probability'] * 100
+        direction = pred['direction']
         
-        if not current_price: continue
+        # Direction emoji
+        dir_emoji = "📈" if direction == "UP" else "📉" if direction == "DOWN" else "➡️"
         
-        # Calculate target based on AI's predicted percentage change
-        target_price = current_price * (1 + (pred['lstm_change'] / 100))
+        # Get asset name
+        asset_name = get_asset_name_from_ticker(ticker)
         
-        # --- RUN THE WINNING EQUATION ---
-        analysis = get_hybrid_signal(
-            ticker, 
-            target_price, 
-            current_price, 
-            pred['probability']
-        )
-
-        # Only alert if the Reward is 3x the Risk (The Math Edge)
-        if analysis["should_alert"]:
-            valid_alerts += 1
-            asset_name = get_asset_name_from_ticker(ticker)
-            message += f"{analysis['emoji']} **{valid_alerts}. {asset_name} ({ticker})**\n"
-            message += f" • **{analysis['status']}**\n"
-            message += f" • R:R Ratio: **{analysis['rr_ratio']}:1**\n"
-            message += f" • Target: ${target_price:.2f} ({pred['lstm_change']:+.1f}%)\n"
-            message += f" • Stop Loss: ${analysis['stop_loss']:.2f} (-1.5%)\n\n"
-
-    # If AI liked stocks but the math was bad, we save your capital
-    if valid_alerts == 0:
-        return f"🔍 {scan_time.upper()} SCAN: AI identified {len(predictions)} moves, but none met the 3:1 Reward/Risk criteria. (Capital Protected 🛡️)"
-
-    message += f"_{scan_time.title()} Scan - Powered by The Winning Equation_"
+        message += f"{idx}. **{asset_name} ({ticker})** - {prob:.0f}% chance of 6%+ move\n"
+        message += f"   • Direction: {dir_emoji} {direction} bias\n"
+        
+        # Pre-market info
+        gap = pred['premarket']['gap_percent']
+        if abs(gap) > 0.5:
+            message += f"   • Pre-market: {gap:+.1f}%"
+            vol_ratio = pred['premarket']['volume_ratio']
+            if vol_ratio > 1.2:
+                message += f" on {vol_ratio:.1f}x volume"
+            message += "\n"
+        
+        # Pattern info
+        if pred['pattern_boost'] > 0:
+            message += f"   • Pattern: ELITE (+{pred['pattern_boost']} boost)\n"
+        
+        # LSTM prediction
+        lstm_change = pred['lstm_change']
+        if abs(lstm_change) > 1:
+            message += f"   • LSTM: Predicts {lstm_change:+.1f}%\n"
+        
+        # Momentum (midday only)
+        if pred['momentum'] is not None and pred['momentum'] > 0.5:
+            message += f"   • Momentum: {'STRONG' if pred['momentum'] > 0.7 else 'BUILDING'}\n"
+        
+        # Triggers (if available)
+        if pred['pattern_triggers']:
+            triggers_str = ", ".join(pred['pattern_triggers'][:3])  # First 3 triggers
+            message += f"   • Signals: {triggers_str}\n"
+        
+        message += "\n"
+    
+    # Footer
+    if scan_time == "morning":
+        message += "📝 Note: Monitor these closely today\n"
+        message += "⏰ Next scan: 1:00 PM\n"
+    else:
+        message += "📝 Note: Afternoon session predictions\n"
+        message += "⏰ Next scan: Tomorrow 9:30 AM\n"
+    
+    message += f"\n_{scan_time.title()} Scan - AI Alpha Trader v4.2_"
+    
     return message
-
+def format_midday_comparison(morning_preds: List[Dict], midday_preds: List[Dict]) -> str:
+    """Compare morning and midday predictions, highlight changes"""
+    
+    message = "🌆 MIDDAY UPDATE\n\n"
+    
+    # Find increased probabilities
+    increased = []
+    decreased = []
+    new_entries = []
+    
+    morning_dict = {p['ticker']: p for p in morning_preds}
+    midday_dict = {p['ticker']: p for p in midday_preds}
+    
+    for ticker, midday_pred in midday_dict.items():
+        if ticker in morning_dict:
+            morning_prob = morning_dict[ticker]['probability']
+            midday_prob = midday_pred['probability']
+            
+            if midday_prob > morning_prob + 0.05:  # 5% increase
+                increased.append((ticker, morning_prob, midday_prob, midday_pred))
+            elif midday_prob < morning_prob - 0.05:  # 5% decrease
+                decreased.append((ticker, morning_prob, midday_prob))
+        else:
+            new_entries.append((ticker, midday_pred))
+    
+    # Format increased probabilities
+    if increased:
+        message += "📈 **PROBABILITY INCREASED:**\n"
+        for ticker, morning_p, midday_p, pred in increased:
+            message += f"\n**{ticker}** - {midday_p*100:.0f}% (was {morning_p*100:.0f}%)\n"
+            message += f"   • Move so far: {pred['premarket']['gap_percent']:+.1f}%\n"
+            if pred['momentum']:
+                message += f"   • Momentum: {'ACCELERATING' if pred['momentum'] > 0.7 else 'BUILDING'}\n"
+            message += f"   • Action: 🎯 {'HIGH' if midday_p > 0.8 else 'MODERATE'} ALERT\n"
+        message += "\n"
+    
+    # Format decreased probabilities
+    if decreased:
+        message += "📉 **PROBABILITY DECREASED:**\n"
+        for ticker, morning_p, midday_p in decreased:
+            message += f"\n**{ticker}** - {midday_p*100:.0f}% (was {morning_p*100:.0f}%)\n"
+            message += f"   • Momentum: FADING\n"
+            if midday_p < 0.5:
+                message += f"   • Removed from watch list\n"
+        message += "\n"
+    
+    # Format new entries
+    if new_entries:
+        message += "⚠️ **NEW ENTRIES:**\n"
+        for ticker, pred in new_entries:
+            message += f"\n**{ticker}** - {pred['probability']*100:.0f}% probability\n"
+            message += f"   • Not in morning scan\n"
+            if pred['momentum']:
+                message += f"   • Sudden momentum spike\n"
+            message += f"   • Direction: {pred['direction']}\n"
+        message += "\n"
+    
+    if not increased and not decreased and not new_entries:
+        message += "ℹ️ No significant changes from morning scan\n\n"
+    
+    message += "_Midday Update - AI Alpha Trader v4.2_"
+    
+    return message
 # ================================
 # SCHEDULED SCANNER THREAD
 # ================================
-
 def scheduled_prediction_scanner(stop_event: threading.Event) -> None:
     """
     Run prediction scans at scheduled times
@@ -4437,11 +4878,9 @@ def scheduled_prediction_scanner(stop_event: threading.Event) -> None:
                 time.sleep(1)
     
     logger.info("[PREDICTION SCANNER] Scheduled scanner STOPPED")
-
 # ================================
 # UI CONTROLS (add to sidebar)
 # ================================
-
 def add_prediction_scanner_controls():
     """Add prediction scanner controls to Streamlit sidebar"""
     st.markdown("---")
@@ -4454,7 +4893,7 @@ def add_prediction_scanner_controls():
     
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("▶️ Start", key="ps_start", type="primary", width="stretch"):
+        if st.button("▶️ Start", key="ps_start", type="primary", use_container_width=True):
             config["enabled"] = True
             save_prediction_config(config)
             thread_manager.start_thread("prediction_scanner", scheduled_prediction_scanner)
@@ -4462,7 +4901,7 @@ def add_prediction_scanner_controls():
             time.sleep(1)
             st.rerun()
     with col2:
-        if st.button("⏹️ Stop", key="ps_stop", type="secondary", width="stretch"):
+        if st.button("⏹️ Stop", key="ps_stop", type="secondary", use_container_width=True):
             config["enabled"] = False
             save_prediction_config(config)
             thread_manager.stop_thread("prediction_scanner")
@@ -4473,7 +4912,7 @@ def add_prediction_scanner_controls():
     # Manual trigger
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("🌅 Run Morning Scan", type="secondary", width="stretch"):
+        if st.button("🌅 Run Morning Scan", type="secondary", use_container_width=True):
             with st.spinner("Running morning scan..."):
                 predictions = run_prediction_scan("morning")
                 if predictions:
@@ -4484,7 +4923,7 @@ def add_prediction_scanner_controls():
                     st.info("No high-probability movers detected")
     
     with col2:
-        if st.button("🌆 Run Midday Scan", type="secondary", width="stretch"):
+        if st.button("🌆 Run Midday Scan", type="secondary", use_container_width=True):
             with st.spinner("Running midday scan..."):
                 predictions = run_prediction_scan("midday")
                 if predictions:
@@ -4521,23 +4960,18 @@ def add_prediction_scanner_controls():
                 st.success("✅ Config updated!")
             else:
                 st.error("❌ Failed to save config")
-
 # ================================
 # REGISTER THREAD IN ApplicationState
 # ================================
-
 # Add to ApplicationState.__init__ thread_heartbeats dict:
 # "prediction_scanner": None
-
 # Add to initialize_background_threads_enhanced():
 # if load_prediction_config().get("enabled", False):
 #     thread_manager.start_thread("prediction_scanner", scheduled_prediction_scanner)
 #     logger.info("[SUCCESS] Prediction scanner thread started")
-
 # ================================
 # THREAD HEARTBEAT AND MONITORING
 # ================================
-
 class ApplicationState:
     """Encapsulate application state with improved thread-safety"""
     
@@ -4622,14 +5056,11 @@ class ApplicationState:
                 except queue.Empty:
                     break
         return messages
-
 # Global application state
 app_state = ApplicationState()
-
 # ============================================================================
 # SECTION 11: REPORTING & UTILITIES
 # ============================================================================
-
 def generate_monthly_performance_report():
     """Aggregates accuracy data and sends a monthly summary via Telegram"""
     logger.info("📊 Monthly Report: Aggregating all ticker data...")
@@ -4648,6 +5079,7 @@ def generate_monthly_performance_report():
     
     for ticker in all_tickers:
         acc = load_accuracy_log(ticker)
+        # Only report tickers that have actually been validated
         if acc.get('validated_predictions', 0) > 0:
             mape = acc.get('avg_error_mape', 0)
             directional = acc.get('directional_accuracy', 0)
@@ -4664,205 +5096,291 @@ def generate_monthly_performance_report():
         report_lines.append(f"✅ Tickers Monitored: {validated_count}")
     else:
         report_lines.append("⚠️ No validation data available for this month yet.")
-
     full_report = "\n".join(report_lines)
     
+    # Send to Telegram
     try:
         send_telegram_alert(full_report)
     except Exception as e:
         logger.error(f"Could not send monthly report to Telegram: {e}")
         
+    # Save a permanent copy
     report_file = LOGS_DIR / f"report_{datetime.now().strftime('%Y_%m')}.txt"
     with open(report_file, "w", encoding='utf-8') as f:
         f.write(full_report)
-
     logger.info(f"✅ Monthly report generated and saved to {report_file}")
-
-def get_hybrid_signal(ticker, predicted_price, current_price, confidence_score):
-    """
-    Combines AI Predictive Accuracy with the 'Winning Equation' (Asymmetry).
-    The Goal: Only alert if (AI is confident) AND (Reward > 3x Risk).
-    """
-    # 1. Define the 'If I'm Wrong' boundary (Stop Loss)
-    # Using a 1.5% volatility buffer
-    stop_loss = current_price * 0.985 
-    
-    # 2. Calculate the Math of the Equation
-    risk = current_price - stop_loss
-    potential_gain = predicted_price - current_price
-    
-    # Avoid division by zero
-    rr_ratio = potential_gain / risk if risk > 0 else 0
-    
-    # 3. Hybrid Logic Gate
-    is_ai_confident = confidence_score > 0.70  # Scout is happy
-    is_math_asymmetric = rr_ratio >= 3.0       # General is happy
-    
-    status = "IGNORE"
-    emoji = "💤"
-    
-    if is_ai_confident and is_math_asymmetric:
-        status = "ELITE SETUP"
-        emoji = "🔥"
-    elif is_math_asymmetric:
-        status = "MATH EDGE"
-        emoji = "⚖️"
-    elif is_ai_confident:
-        status = "ACCURACY ONLY"
-        emoji = "🎯"
-        
-    return {
-        "status": status,
-        "emoji": emoji,
-        "rr_ratio": round(rr_ratio, 2),
-        "stop_loss": round(stop_loss, 2),
-        "potential_gain_pct": round(((predicted_price / current_price) - 1) * 100, 2),
-        "should_alert": is_math_asymmetric
-    }
-
+# ================================
+# BACKGROUND THREADS
+# ================================
 # ============================================================================
-# SECTION 14: HYBRID BACKGROUND THREADS
+# LINE 4746: continuous_learning_daemon_managed() - Auto retraining
+# STATUS: WORKING - Monitors accuracy and retrains as needed
+# DEPENDENCIES: train_self_learning_model_enhanced, should_retrain
+# RUNS: Background thread, checks every 10 minutes
 # ============================================================================
-
-def run_monthly_auditor_thread(stop_event: threading.Event) -> None:
-    """Elite Hybrid Auditor: Purges models < 60% accuracy on the 1st of the month."""
-    app_state.update_heartbeat("monthly_auditor")
-    logger.info("🛡️ [AUDITOR] Monthly Auditor Engine STARTED")
-    while not stop_event.is_set():
-        try:
-            now = datetime.now()
-            if now.day == 1 and now.hour == 0:
-                logger.info("🛡️ [AUDITOR] Starting monthly performance purge...")
-                meta_dir, model_dir = Path("models/metadata"), Path("models/saved_models")
-                if meta_dir.exists():
-                    purged_count = 0
-                    for meta_file in meta_dir.glob("*.json"):
-                        try:
-                            with open(meta_file, 'r') as f: meta_data = json.load(f)
-                            if meta_data.get("accuracy", 1.0) < 0.60:
-                                ticker = meta_data.get("ticker", meta_file.stem)
-                                model_path = model_dir / f"{ticker}_model.h5"
-                                if model_path.exists(): model_path.unlink()
-                                meta_file.unlink()
-                                purged_count += 1
-                        except Exception as e: logger.error(f"❌ Audit fail: {e}")
-                    if purged_count > 0:
-                        send_telegram_alert(f"🛡️ Audit complete: Purged {purged_count} models.")
-                generate_monthly_performance_report()
-                for _ in range(86400): 
-                    if stop_event.is_set(): break
-                    time.sleep(1)
-            for _ in range(3600):
-                if stop_event.is_set(): break
-                time.sleep(1)
-                app_state.update_heartbeat("monthly_auditor")
-        except Exception as e:
-            logger.error(f"[CRITICAL] Auditor error: {e}")
-            time.sleep(60)
-
 def continuous_learning_daemon_managed(stop_event: threading.Event) -> None:
     """Enhanced learning daemon with resource management"""
     app_state.update_heartbeat("learning_daemon")
-    logger.info("[LEARNING] Daemon STARTED")
+    app_state.set_thread_start_time("learning_daemon")
+    logger.info("[LEARNING] Enhanced Learning Daemon STARTED")
+    
+    cycle_count = 0
     
     while not stop_event.is_set():
         try:
-            config = load_daemon_config()
-            if not config.get("enabled", False):
-                time.sleep(30); continue
+            if not load_daemon_config().get("enabled", False):
+                logger.info("[LEARNING] Learning paused (disabled in config)")
+                time.sleep(30)
+                app_state.update_heartbeat("learning_daemon")
+                continue
             
-            # Get all tickers from all categories
+            cycle_count += 1
+            app_state.update_heartbeat("learning_daemon")
+            logger.info(f"[CYCLE] Learning: Starting cycle #{cycle_count}")
+            app_state.add_log_message(f"[CYCLE {cycle_count}] Learning daemon cycle started")
+            
+            # Get all tickers
             all_tickers = [t for cat in ASSET_CATEGORIES.values() for t in cat.values()]
-            trained_count, max_retrain = 0, config.get("max_retrain_per_cycle", 5)
+            config = load_daemon_config()
+            max_retrain = config.get("max_retrain_per_cycle", 5)
             
+            # Train models with limit
+            trained_count = 0
             for ticker in all_tickers:
-                if stop_event.is_set() or trained_count >= max_retrain: break
-                
+                if stop_event.is_set():
+                    break
+                    
+                if trained_count >= max_retrain:
+                    break
+                    
                 try:
-                    # Safely load data for checks
+                    # Check if retraining is needed
                     acc_log = load_accuracy_log(ticker)
                     meta = load_metadata(ticker)
-                    
-                    # Call should_retrain and unpack the results
                     needs_retrain, reasons = should_retrain(ticker, acc_log, meta)
                     
                     if needs_retrain:
-                        logger.info(f"🔄 Retraining {ticker}. Reasons: {reasons}")
-                        # Trigger the actual training function
-                        result = train_self_learning_model_enhanced(ticker, days=5)
-                        if result and result[0] is not None:
+                        logger.info(f"[RETRAIN] {ticker}: {', '.join(reasons)}")
+                        app_state.add_log_message(f"[RETRAIN] {ticker}: {', '.join(reasons)}")
+                        
+                        forecast, lower_ci, upper_ci, dates, model = train_self_learning_model_enhanced(ticker, days=5)
+                        if forecast is not None:
                             trained_count += 1
-                            
-                    time.sleep(2) # Prevent CPU spikes
-                except Exception as ticker_err:
-                    logger.error(f"Error processing {ticker} in daemon: {ticker_err}")
+                            logger.info(f"[SUCCESS] Retrained {ticker}")
+                            app_state.add_log_message(f"[SUCCESS] Retrained {ticker}")
+                        else:
+                            logger.warning(f"[FAILED] Failed to retrain {ticker}")
+                    
+                    # Small delay between tickers
+                    time.sleep(2)
+                    app_state.update_heartbeat("learning_daemon")
+                    
+                except Exception as e:
+                    logger.error(f"[ERROR] Failed to process {ticker}: {e}")
+                    log_error(ErrorSeverity.ERROR, "learning_daemon_ticker", e, 
+                             ticker=ticker, show_to_user=False)
                     continue
             
-            # Sleep until next cycle (default 10 mins)
-            for _ in range(config.get("sleep_minutes", 10) * 60):
-                if stop_event.is_set(): break
-                time.sleep(1)
-        except Exception as e:
-            logger.error(f"Learning Daemon Main Loop Error: {e}")
-            time.sleep(60)
-
-def continuous_pattern_miner_managed(stop_event: threading.Event) -> None:
-    """Background thread for mining intraday price patterns."""
-    app_state.update_heartbeat("pattern_miner")
-    logger.info("🔍 [MINER] Pattern Mining STARTED")
-    while not stop_event.is_set():
-        try:
-            # Logic for mining patterns across all tickers
-            # run_pattern_mining_cycle() 
-            app_state.update_heartbeat("pattern_miner")
-            time.sleep(1800) # Run every 30 mins
-        except Exception as e:
-            logger.error(f"Miner error: {e}"); time.sleep(60)
-
-def thread_watchdog_managed(stop_event: threading.Event) -> None:
-    """Watchdog that monitors all threads and restarts if necessary."""
-    app_state.update_heartbeat("watchdog")
-    logger.info("🐕 [WATCHDOG] Watchdog STARTED")
-    while not stop_event.is_set():
-        try:
-            # Check heartbeats of other threads
-            app_state.update_heartbeat("watchdog")
-            time.sleep(30)
-        except Exception as e:
-            logger.error(f"Watchdog error: {e}"); time.sleep(10)
-
-def auto_validate_predictions_background(stop_event: threading.Event) -> None:
-    """Daily validation thread for past predictions."""
-    app_state.update_heartbeat("auto_validator")
-    while not stop_event.is_set():
-        # Validation logic...
-        app_state.update_heartbeat("auto_validator")
-        time.sleep(3600)
-
-def initialize_background_threads():
-    """Starts all core engines including the Elite Monthly Auditor"""
-    try:
-        if 'stop_event' not in st.session_state:
-            st.session_state.stop_event = threading.Event()
+            logger.info(f"[SUCCESS] Learning: Cycle #{cycle_count} complete - {trained_count} models updated")
+            app_state.add_log_message(f"[CYCLE {cycle_count}] Complete - {trained_count} models updated")
             
-        # These now exist because they are defined ABOVE this function
-        threads = [
-            threading.Thread(target=continuous_learning_daemon_managed, args=(st.session_state.stop_event,), daemon=True),
-            threading.Thread(target=continuous_pattern_miner_managed, args=(st.session_state.stop_event,), daemon=True),
-            threading.Thread(target=thread_watchdog_managed, args=(st.session_state.stop_event,), daemon=True),
-            threading.Thread(target=run_monthly_auditor_thread, args=(st.session_state.stop_event,), daemon=True),
-            threading.Thread(target=auto_validate_predictions_background, args=(st.session_state.stop_event,), daemon=True)
-        ]
-        for t in threads:
-            t.start()
-        logger.info("[SYSTEM] Hybrid Threads Active.")
-    except Exception as e:
-        logger.error(f"[ERROR] Thread Init: {e}")
-
+            # Sleep with interrupt checking
+            sleep_minutes = config.get("sleep_minutes", 10)
+            sleep_seconds = sleep_minutes * 60
+            logger.info(f"[SLEEP] Learning: Sleeping for {sleep_minutes} minutes")
+            
+            for _ in range(sleep_seconds):
+                if stop_event.is_set():
+                    break
+                time.sleep(1)
+                app_state.update_heartbeat("learning_daemon")
+                
+        except Exception as e:
+            logger.error(f"[CRITICAL] Learning daemon error: {e}")
+            log_error(ErrorSeverity.ERROR, "continuous_learning_daemon", e,
+                     user_message="Learning daemon error - will retry", show_to_user=False)
+            
+            for _ in range(60):
+                if stop_event.is_set():
+                    break
+                time.sleep(1)
+    
+    logger.info("[LEARNING] Enhanced Learning Daemon STOPPED")
+def continuous_pattern_miner_managed(stop_event: threading.Event) -> None:
+    """Pattern miner with proper resource management"""
+    app_state.update_heartbeat("pattern_miner")
+    app_state.set_thread_start_time("pattern_miner")
+    logger.info("[PATTERN MINER] Pattern Mining Daemon STARTED (Managed)")
+    
+    cycle_count = 0
+    
+    while not stop_event.is_set():
+        try:
+            # Check if pattern mining is enabled
+            if not load_pattern_mining_config().get("enabled", False):
+                logger.info("[PATTERN MINER] Pattern Mining paused (disabled in config)")
+                time.sleep(30)
+                app_state.update_heartbeat("pattern_miner")
+                continue
+            
+            cycle_count += 1
+            app_state.update_heartbeat("pattern_miner")
+            logger.info(f"[CYCLE] Pattern Mining: Starting cycle #{cycle_count}")
+            app_state.add_log_message(f"[PATTERN CYCLE {cycle_count}] Mining started")
+            
+            # Run mining cycle
+            patterns_found = run_pattern_mining_cycle()
+            
+            logger.info(f"[SUCCESS] Pattern Mining: Cycle #{cycle_count} complete - {patterns_found} patterns found")
+            app_state.add_log_message(f"[PATTERN CYCLE {cycle_count}] Complete - {patterns_found} elite patterns")
+            
+            # Sleep for configured interval with proper interrupt handling
+            config = load_pattern_mining_config()
+            sleep_minutes = config.get('cycle_interval_minutes', 30)
+            sleep_seconds = sleep_minutes * 60
+            
+            logger.info(f"[SLEEP] Pattern Mining: Sleeping for {sleep_minutes} minutes")
+            
+            # Sleep in smaller intervals to check stop_event
+            for _ in range(sleep_seconds):
+                if stop_event.is_set():
+                    break
+                time.sleep(1)
+                app_state.update_heartbeat("pattern_miner")
+                
+                # Check if disabled during sleep
+                if not load_pattern_mining_config().get("enabled", False):
+                    logger.info("[PATTERN MINER] Pattern Mining stopped during sleep")
+                    break
+            
+        except Exception as e:
+            logger.error(f"[CRITICAL] Pattern mining error: {e}")
+            log_error(ErrorSeverity.ERROR, "continuous_pattern_miner", e, 
+                    user_message="Pattern mining error - will retry", show_to_user=False)
+            
+            # Wait before retry, but check stop_event
+            for _ in range(60):
+                if stop_event.is_set():
+                    break
+                time.sleep(1)
+    
+    logger.info("[PATTERN MINER] Pattern Mining Daemon STOPPED (Managed)")
+def thread_watchdog_managed(stop_event: threading.Event) -> None:
+    """Enhanced watchdog with managed threads"""
+    app_state.update_heartbeat("watchdog")
+    app_state.set_thread_start_time("watchdog")
+    logger.info("[WATCHDOG] Enhanced Watchdog STARTED")
+    
+    while not stop_event.is_set():
+        try:
+            app_state.update_heartbeat("watchdog")
+            
+            # Check all thread statuses through thread manager
+            thread_status = thread_manager.get_status()
+            
+            for name, status in thread_status.items():
+                if not status['alive']:
+                    logger.error(f"[ERROR] Thread {name} is DEAD")
+                    app_state.add_log_message(f"[ALERT] Thread {name} is DEAD")
+                else:
+                    logger.debug(f"[SUCCESS] Thread {name} is HEALTHY")
+            
+            # Also check legacy heartbeat threads
+            for name in ["learning_daemon", "monitoring", "pattern_miner", "auto_validator"]:
+                if name not in thread_status:
+                    status = app_state.get_thread_status(name)
+                    if status["status"] == "DEAD":
+                        logger.warning(f"[WARNING] Legacy thread {name} is DEAD")
+            
+            # Sleep with interrupt check
+            for _ in range(30):
+                if stop_event.is_set():
+                    break
+                time.sleep(1)
+            
+        except Exception as e:
+            logger.error(f"[ERROR] Watchdog error: {e}")
+            log_error(ErrorSeverity.WARNING, "thread_watchdog", e, show_to_user=False)
+            
+            for _ in range(30):
+                if stop_event.is_set():
+                    break
+                time.sleep(1)
+    
+    logger.info("[WATCHDOG] Enhanced Watchdog STOPPED")
+def auto_validate_predictions_background(stop_event: threading.Event) -> None:
+    """Background thread to automatically validate predictions daily + Monthly Report"""
+    app_state.update_heartbeat("auto_validator")
+    app_state.set_thread_start_time("auto_validator")
+    logger.info("[AUTO VALIDATOR] Started")
+    
+    while not stop_event.is_set():
+        try:
+            app_state.update_heartbeat("auto_validator")
+            
+            # Run validation once per day at 9 AM
+            now = datetime.now()
+            if now.hour == 9 and now.minute < 5:
+                logger.info("[AUTO VALIDATOR] Running daily validation...")
+                app_state.add_log_message(f"[AUTO VALIDATOR] Daily validation started")
+                
+                all_tickers = [t for cat in ASSET_CATEGORIES.values() for t in cat.values()]
+                validated_count = 0
+                
+                for ticker in all_tickers:
+                    try:
+                        success, acc_data = validate_predictions(ticker)
+                        if success and acc_data.get('validated_predictions', 0) > 0:
+                            validated_count += 1
+                            
+                            mape = acc_data.get('avg_error_mape', 0)
+                            if mape > 10.0:
+                                logger.warning(f"[AUTO VALIDATOR] {ticker} has poor accuracy: {mape:.2f}% MAPE")
+                                app_state.add_log_message(f"[ALERT] {ticker} accuracy degraded: {mape:.2f}% MAPE")
+                    except Exception as e:
+                        logger.error(f"[AUTO VALIDATOR] Failed to validate {ticker}: {e}")
+                
+                logger.info(f"[AUTO VALIDATOR] Validated {validated_count} tickers")
+                app_state.add_log_message(f"[AUTO VALIDATOR] Complete - {validated_count} tickers validated")
+                # ============================================================
+                # 📊 NEW: MONTHLY PERFORMANCE REPORT IMPLANT
+                # ============================================================
+                if now.day == 1:
+                    logger.info("[REPORT] Generating Monthly Performance Report...")
+                    try:
+                        generate_monthly_performance_report()
+                        app_state.add_log_message("✅ Monthly Performance Report Generated")
+                    except Exception as re:
+                        logger.error(f"Failed to generate monthly report: {re}")
+                # ============================================================
+                
+                # Sleep for an hour to avoid running again immediately
+                for _ in range(3600):
+                    if stop_event.is_set():
+                        break
+                    time.sleep(1)
+                    app_state.update_heartbeat("auto_validator")
+            
+            # Check every 5 minutes during the rest of the day
+            for _ in range(300):
+                if stop_event.is_set():
+                    break
+                time.sleep(1)
+                app_state.update_heartbeat("auto_validator")
+                
+        except Exception as e:
+            logger.error(f"[AUTO VALIDATOR] Error: {e}")
+            log_error(ErrorSeverity.ERROR, "auto_validate_predictions_background", e, show_to_user=False)
+            
+            for _ in range(60):
+                if stop_event.is_set():
+                    break
+                time.sleep(1)
+    
+    logger.info("[AUTO VALIDATOR] Stopped")
 # ================================
 # SYSTEM RESOURCE MONITORING
 # ================================
-
 def monitor_system_resources() -> Optional[Dict[str, Any]]:
     """Monitor system resources"""
     if not PSUTIL_AVAILABLE:
@@ -4902,11 +5420,9 @@ def monitor_system_resources() -> Optional[Dict[str, Any]]:
     except Exception as e:
         logger.error(f"Error monitoring resources: {e}")
         return None
-
 # ================================
 # RESOURCE MONITORING DASHBOARD
 # ================================
-
 def show_resource_dashboard():
     """Show detailed resource usage dashboard"""
     st.subheader("💻 System Resource Dashboard")
@@ -4959,11 +5475,9 @@ def show_resource_dashboard():
             st.write(f"**Threads:** {process.num_threads()}")
             st.write(f"**Open Files:** {len(process.open_files())}")
             st.write(f"**Connections:** {len(process.connections())}")
-
 # ================================
 # STREAMLIT UI OPTIMIZATION
 # ================================
-
 def lazy_plotly_chart(fig_func: callable, key: str):
     """Lazy load Plotly charts to improve UI performance"""
     if key not in st.session_state:
@@ -4972,81 +5486,58 @@ def lazy_plotly_chart(fig_func: callable, key: str):
             st.session_state[key] = fig
     
     fig = st.session_state[key]
-    st.plotly_chart(fig, width="stretch")
-
-# ============================================================================
-# SECTION 11: HYBRID SIGNALING & TELEGRAM
-# ============================================================================
-
-def get_hybrid_signal(ticker, predicted_price, current_price, confidence_score):
-    """
-    Elite Hybrid Gate: Combines AI Accuracy with Risk Asymmetry.
-    The Goal: Only alert if (AI is confident) AND (Reward > 3x Risk).
-    """
-    # 1. Fixed Risk Management (1.5% Stop Loss buffer)
-    stop_loss = current_price * 0.985
-    risk = current_price - stop_loss
-    potential_gain = predicted_price - current_price
-    
-    # 2. Calculate the Math of the Equation
-    rr_ratio = potential_gain / risk if risk > 0 else 0
-    
-    # 3. Hybrid Logic Gate
-    is_ai_confident = confidence_score >= 0.70  # Scout Threshold
-    is_math_asymmetric = rr_ratio >= 3.0        # General Threshold
-    
-    if is_ai_confident and is_math_asymmetric:
-        status, emoji = "ELITE SETUP", "🔥"
-    elif is_math_asymmetric:
-        status, emoji = "MATH EDGE", "⚖️"
-    elif is_ai_confident:
-        status, emoji = "ACCURACY ONLY", "🎯"
-    else:
-        status, emoji = "IGNORE", "💤"
-    
-    return {
-        "status": status,
-        "emoji": emoji,
-        "rr_ratio": round(rr_ratio, 2),
-        "stop_loss": round(stop_loss, 4),
-        "potential_gain_pct": round(((predicted_price / current_price) - 1) * 100, 2),
-        "should_alert": is_math_asymmetric # Trigger alert on math edge
-    }
-
+    st.plotly_chart(fig, use_container_width=True)
+# ================================
+# TELEGRAM INTEGRATION
+# ================================
 def send_telegram_alert(message: str) -> bool:
-    """Send Telegram alert using Hybrid credentials"""
+    """Send Telegram alert with rate limiting"""
+    
+    # Check rate limit FIRST
+    allowed, reason = network_monitor.can_send_telegram()
+    if not allowed:
+        logger.warning(f"[TELEGRAM] Rate limit: {reason} - Alert BLOCKED")
+        return False
+    
     try:
         bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
         chat_id = os.getenv('TELEGRAM_CHAT_ID')
         
         if not bot_token or not chat_id:
-            logger.warning("Telegram credentials not configured in .env")
+            logger.warning("Telegram credentials not configured")
             return False
         
         url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+        
+        # Truncate message if too long (Telegram limit: 4096 chars)
+        if len(message) > 4000:
+            message = message[:3900] + "\n\n... (truncated)"
+        
         payload = {
             'chat_id': chat_id,
             'text': message,
-            'parse_mode': 'HTML'
+            'parse_mode': 'Markdown'
         }
         
-        response = requests.post(url, json=payload, timeout=30)
+        response = requests.post(url, json=payload, timeout=10)
         
         if response.status_code == 200:
-            logger.info(f"Hybrid alert sent: {message[:30]}...")
+            network_monitor.log_telegram_alert()
+            logger.info(f"[TELEGRAM] Alert sent successfully (#{network_monitor.telegram_alerts_today} today)")
             return True
         else:
-            logger.error(f"Telegram failed: {response.status_code}")
+            logger.error(f"[TELEGRAM] Failed: HTTP {response.status_code}")
             return False
             
-    except Exception as e:
-        logger.error(f"Failed to send Telegram alert: {e}")
+    except requests.exceptions.Timeout:
+        logger.error("[TELEGRAM] Request timeout (10s)")
         return False
-
+    except Exception as e:
+        logger.error(f"[TELEGRAM] Error: {e}")
+        return False
 # ================================
 # INITIALIZATION
 # ================================
-
 def initialize_background_threads_enhanced() -> None:
     """Initialize background threads with proper management"""
     if "threads_initialized" not in st.session_state:
@@ -5080,17 +5571,14 @@ def initialize_background_threads_enhanced() -> None:
         if load_pattern_mining_config().get("enabled", False):
             thread_manager.start_thread("pattern_miner", continuous_pattern_miner_managed)
             logger.info("[SUCCESS] Pattern miner thread started")
-
 def shutdown_background_threads() -> None:
     """Gracefully shutdown all background threads"""
     logger.info("Shutting down background threads...")
     thread_manager.stop_all()
     logger.info("All background threads stopped")
-
 # ================================
 # STREAMLIT UI COMPONENTS
 # ================================
-
 def add_pattern_mining_controls() -> None:
     """Add pattern mining controls to sidebar"""
     st.markdown("---")
@@ -5103,7 +5591,7 @@ def add_pattern_mining_controls() -> None:
     
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("▶️ Start", key="pm_start", type="primary", width="stretch"):
+        if st.button("▶️ Start", key="pm_start", type="primary", use_container_width=True):
             pm_config["enabled"] = True
             save_pattern_mining_config(pm_config)
             thread_manager.start_thread("pattern_miner", continuous_pattern_miner_managed)
@@ -5111,7 +5599,7 @@ def add_pattern_mining_controls() -> None:
             time.sleep(1)
             st.rerun()
     with col2:
-        if st.button("⏹️ Stop", key="pm_stop", type="secondary", width="stretch"):
+        if st.button("⏹️ Stop", key="pm_stop", type="secondary", use_container_width=True):
             pm_config["enabled"] = False
             save_pattern_mining_config(pm_config)
             thread_manager.stop_thread("pattern_miner")
@@ -5119,7 +5607,7 @@ def add_pattern_mining_controls() -> None:
             time.sleep(1)
             st.rerun()
     
-    if st.button("🔄 Run Single Cycle", type="secondary", width="stretch"):
+    if st.button("🔄 Run Single Cycle", type="secondary", use_container_width=True):
         with st.spinner("Mining patterns..."):
             patterns_found = run_pattern_mining_cycle()
             st.success(f"✅ Found {patterns_found} elite patterns!")
@@ -5155,7 +5643,6 @@ def add_pattern_mining_controls() -> None:
                 st.success("✅ Config updated!")
             else:
                 st.error("❌ Failed to update config")
-
 def add_enhanced_controls() -> None:
     """Add enhanced controls to sidebar"""
     st.markdown("---")
@@ -5164,14 +5651,14 @@ def add_enhanced_controls() -> None:
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("🔄 Initialize", key="init_threads", type="primary", width="stretch"):
+        if st.button("🔄 Initialize", key="init_threads", type="primary", use_container_width=True):
             initialize_background_threads_enhanced()
             st.success("✅ Threads initialized!")
             time.sleep(1)
             st.rerun()
     
     with col2:
-        if st.button("🛑 Shutdown", key="shutdown_threads", type="secondary", width="stretch"):
+        if st.button("🛑 Shutdown", key="shutdown_threads", type="secondary", use_container_width=True):
             shutdown_background_threads()
             st.warning("⚠️ Threads shutdown")
             time.sleep(1)
@@ -5233,7 +5720,6 @@ def add_enhanced_controls() -> None:
         st.metric("Cache Hit Rate", f"{hit_rate:.1f}%")
     with col2:
         st.metric("Cache Hits", cache_hits)
-
 def show_pattern_dashboard() -> None:
     """Show pattern mining dashboard"""
     st.subheader("🔍 Pattern Mining Dashboard")
@@ -5280,7 +5766,7 @@ def show_pattern_dashboard() -> None:
                     logger.warning(f"Error displaying pattern: {e}")
                     continue
             
-            st.dataframe(pd.DataFrame(pattern_display), width="stretch")
+            st.dataframe(pd.DataFrame(pattern_display), use_container_width=True)
             
             # Pattern statistics
             st.markdown("---")
@@ -5307,7 +5793,6 @@ def show_pattern_dashboard() -> None:
     except Exception as e:
         st.error(f"❌ Error loading pattern data: {e}")
         log_error(ErrorSeverity.ERROR, "show_pattern_dashboard", e, show_to_user=True)
-
 def show_accuracy_dashboard(ticker: str) -> None:
     """Show detailed accuracy metrics for a ticker with REAL validation data"""
     st.subheader(f"📊 Prediction Accuracy - {ticker}")
@@ -5407,7 +5892,6 @@ def show_accuracy_dashboard(ticker: str) -> None:
     # Load detailed prediction history
     if st.button("📋 View Detailed History", key=f"history_{ticker}"):
         show_prediction_history(ticker)
-
 def show_prediction_history(ticker: str) -> None:
     """Show detailed prediction vs actual history"""
     try:
@@ -5523,7 +6007,7 @@ def show_prediction_history(ticker: str) -> None:
         if history_data:
             st.dataframe(
                 pd.DataFrame(history_data),
-                width="stretch",
+                use_container_width=True,
                 hide_index=True
             )
             
@@ -5590,7 +6074,6 @@ def show_prediction_history(ticker: str) -> None:
     except Exception as e:
         st.error(f"Error loading prediction history: {e}")
         log_error(ErrorSeverity.ERROR, "show_prediction_history", e, ticker=ticker, show_to_user=True)
-
 def show_error_dashboard() -> None:
     """Show error dashboard"""
     st.subheader("⚠️ Error Dashboard")
@@ -5640,7 +6123,7 @@ def show_error_dashboard() -> None:
                 "Ticker": error.get('ticker', 'N/A')
             })
         
-        st.dataframe(pd.DataFrame(error_display), width="stretch")
+        st.dataframe(pd.DataFrame(error_display), use_container_width=True)
         
         # Clear errors button
         if st.button("🗑️ Clear Error Log", type="secondary"):
@@ -5653,7 +6136,6 @@ def show_error_dashboard() -> None:
     except Exception as e:
         st.error(f"❌ Error loading error log: {e}")
         logger.error(f"Error in show_error_dashboard: {e}")
-
 def show_learning_log() -> None:
     """Show learning daemon log"""
     st.subheader("📝 Learning Log")
@@ -5675,16 +6157,214 @@ def show_learning_log() -> None:
             st.text(message)
     else:
         st.info("ℹ️ No learning activity yet.")
-
 # ================================
 # MAIN STREAMLIT APPLICATION
 # ================================
-
 # ============================================================================
 # LINE 5787: main() - Streamlit UI entry point
 # STATUS: WORKING - 7 tabs, forex support, all features
 # DEPENDENCIES: All functions above
 # UI ONLY: Minimal logic, mostly display code
+# ============================================================================
+# ============================================================================
+# ELITE SETUP DETECTOR
+# Add RIGHT BEFORE def main()
+# ============================================================================
+def detect_elite_setup(ticker: str, forecast: List[float], current_price: float,
+                       lower_ci: Optional[np.ndarray] = None,
+                       upper_ci: Optional[np.ndarray] = None) -> Tuple[bool, Dict[str, Any]]:
+    """
+    Detect Elite Trading Setup
+    
+    Criteria:
+    1. AI Confidence > 70%
+    2. Risk/Reward Ratio >= 3:1
+    3. Pattern confirmation
+    4. Low prediction error (MAPE < 6%)
+    """
+    
+    if not forecast or not current_price:
+        return False, {}
+    
+    setup = {
+        'is_elite': False,
+        'confidence': 0,
+        'risk_reward_ratio': 0,
+        'signals': [],
+        'warnings': [],
+        'entry_price': current_price,
+        'target_price': 0,
+        'stop_loss': 0,
+        'position_size': 0
+    }
+    
+    # Calculate AI Confidence
+    confidence_score = 50
+    confidence_factors = []
+    
+    # Factor 1: Pattern Mining
+    try:
+        boost, triggers, direction, pattern_confidence = check_auto_patterns(ticker)
+        if boost > 0:
+            pattern_contrib = min(30, pattern_confidence // 2)
+            confidence_score += pattern_contrib
+            confidence_factors.append(f"Pattern: +{pattern_contrib}% (Boost: {boost})")
+            setup['signals'].extend(triggers[:3])
+    except:
+        pass
+    
+    # Factor 2: Accuracy
+    try:
+        acc_log = load_accuracy_log(ticker)
+        mape = acc_log.get('avg_error_mape', 100)
+        dir_accuracy = acc_log.get('directional_accuracy', 50)
+        
+        if acc_log.get('validated_predictions', 0) >= 5:
+            if mape < 3.0:
+                confidence_score += 20
+                confidence_factors.append(f"Accuracy: +20% (MAPE {mape:.1f}%)")
+            elif mape < 6.0:
+                confidence_score += 10
+                confidence_factors.append(f"Accuracy: +10% (MAPE {mape:.1f}%)")
+            
+            if dir_accuracy > 70:
+                confidence_score += 15
+                confidence_factors.append(f"Direction: +15% ({dir_accuracy:.0f}%)")
+            elif dir_accuracy > 60:
+                confidence_score += 5
+                confidence_factors.append(f"Direction: +5% ({dir_accuracy:.0f}%)")
+    except:
+        pass
+    
+    # Factor 3: Confidence Interval
+    if lower_ci is not None and upper_ci is not None and len(lower_ci) > 0:
+        try:
+            ci_width = (upper_ci[0] - lower_ci[0]) / current_price * 100
+            if ci_width < 5:
+                confidence_score += 10
+                confidence_factors.append(f"Narrow CI: +10% ({ci_width:.1f}%)")
+            elif ci_width < 10:
+                confidence_score += 5
+                confidence_factors.append(f"CI: +5% ({ci_width:.1f}%)")
+        except:
+            pass
+    
+    setup['confidence'] = min(99, confidence_score)
+    
+    # Calculate Risk/Reward
+    try:
+        predicted_price = float(np.array(forecast).flatten()[0])
+        price_move = predicted_price - current_price
+        move_percent = (price_move / current_price) * 100
+        
+        # Stop loss
+        if lower_ci is not None and len(lower_ci) > 0:
+            stop_loss = lower_ci[0] if move_percent > 0 else upper_ci[0]
+        else:
+            stop_loss = current_price * (0.98 if move_percent > 0 else 1.02)
+        
+        risk = abs(current_price - stop_loss)
+        reward = abs(predicted_price - current_price)
+        
+        risk_reward_ratio = reward / risk if risk > 0 else 0
+        setup['risk_reward_ratio'] = risk_reward_ratio
+        setup['target_price'] = predicted_price
+        setup['stop_loss'] = stop_loss
+        
+        # Elite Criteria
+        is_elite = (
+            setup['confidence'] >= 70 and
+            risk_reward_ratio >= 3.0 and
+            abs(move_percent) >= 4.0
+        )
+        
+        setup['is_elite'] = is_elite
+        
+        # Position sizing
+        if is_elite:
+            try:
+                win_prob = min(0.75, dir_accuracy / 100) if dir_accuracy > 0 else 0.55
+                kelly_fraction = (risk_reward_ratio * win_prob - (1 - win_prob)) / risk_reward_ratio
+                position_size = max(0, min(25, kelly_fraction * 50))
+                setup['position_size'] = round(position_size, 2)
+            except:
+                setup['position_size'] = 5.0
+        
+        setup['summary'] = {
+            'ticker': ticker,
+            'direction': 'LONG' if move_percent > 0 else 'SHORT',
+            'current_price': round(current_price, 2),
+            'target': round(predicted_price, 2),
+            'stop': round(stop_loss, 2),
+            'move_expected': f"{move_percent:+.1f}%",
+            'confidence': f"{setup['confidence']}%",
+            'r_r_ratio': f"{risk_reward_ratio:.1f}:1"
+        }
+    except Exception as e:
+        logger.error(f"Elite setup calculation error: {e}")
+    
+    setup['confidence_breakdown'] = confidence_factors
+    
+    return setup.get('is_elite', False), setup
+def display_elite_setup_ui(ticker: str, setup: Dict[str, Any]):
+    """Display Elite Setup in Streamlit UI"""
+    
+    if setup.get('is_elite', False):
+        st.success("🌟 **ELITE SETUP DETECTED** 🌟")
+        
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.metric("🎯 Confidence", setup['summary']['confidence'])
+        with col2:
+            st.metric("📊 R/R Ratio", setup['summary']['r_r_ratio'])
+        with col3:
+            st.metric("📈 Expected Move", setup['summary']['move_expected'])
+        with col4:
+            st.metric("💼 Position Size", f"{setup.get('position_size', 0):.1f}%")
+        
+        st.markdown("---")
+        st.subheader("📋 Trade Details")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.write(f"**Direction:** {setup['summary']['direction']}")
+            st.write(f"**Entry:** ${setup['summary']['current_price']}")
+            st.write(f"**Target:** ${setup['summary']['target']}")
+            st.write(f"**Stop Loss:** ${setup['summary']['stop']}")
+        
+        with col2:
+            risk = abs(setup['entry_price'] - setup['stop_loss'])
+            reward = abs(setup['target_price'] - setup['entry_price'])
+            st.write(f"**Risk/Share:** ${risk:.2f}")
+            st.write(f"**Reward/Share:** ${reward:.2f}")
+            st.write(f"**R/R Ratio:** {setup['summary']['r_r_ratio']}")
+            st.write(f"**Position:** {setup.get('position_size', 0):.1f}% portfolio")
+        
+        if setup.get('confidence_breakdown'):
+            st.markdown("---")
+            st.subheader("🔍 Confidence Breakdown")
+            for factor in setup['confidence_breakdown']:
+                st.write(f"• {factor}")
+        
+        if setup.get('signals'):
+            st.markdown("---")
+            st.subheader("⚡ Pattern Signals")
+            for signal in setup['signals'][:5]:  # Show top 5
+                st.write(f"• {signal}")
+    
+    else:
+        st.info("ℹ️ **Not an Elite Setup**")
+        st.write(f"**Confidence:** {setup.get('confidence', 0)}% (need ≥70%)")
+        st.write(f"**R/R Ratio:** {setup.get('risk_reward_ratio', 0):.1f}:1 (need ≥3:1)")
+        
+        if setup.get('confidence_breakdown'):
+            with st.expander("🔍 Why Not Elite?"):
+                for factor in setup['confidence_breakdown']:
+                    st.write(f"• {factor}")
+# ============================================================================
+# MAIN STREAMLIT APPLICATION
 # ============================================================================
 def main():
     """Main Streamlit application"""
@@ -5736,22 +6416,64 @@ def main():
         asset = st.selectbox("💰 Asset", list(ASSET_CATEGORIES[category].keys()))
         ticker = ASSET_CATEGORIES[category][asset]
         
-        # Get current price
+        # Get current price with color-coded change
         price = get_latest_price(ticker)
         if price:
+            try:
+                # Get today's data to find opening price
+                df_today = yf.download(ticker, period="1d", interval="1m", progress=False)
+                
+                if df_today is not None and len(df_today) > 0:
+                    df_today = normalize_dataframe_columns(df_today)
+                    
+                    # Get opening price (first price of the day)
+                    open_price = float(df_today['Open'].iloc[0])
+                    
+                    # Calculate change
+                    price_change = price - open_price
+                    price_change_pct = (price_change / open_price * 100) if open_price > 0 else 0
+                    
+                    # Determine color based on direction
+                    if price >= open_price:
+                        # Price UP - Green
+                        st.markdown(f"""
+                        <div style='padding: 10px; background-color: #1e3a1e; border-radius: 5px; border-left: 4px solid #00ff00;'>
+                            <p style='color: #888; margin: 0; font-size: 12px;'>💵 Current Price</p>
+                            <p style='color: #00ff00; margin: 5px 0 0 0; font-size: 32px; font-weight: bold;'>${price:.2f}</p>
+                            <p style='color: #00ff00; margin: 5px 0 0 0; font-size: 16px;'>
+                                ▲ ${price_change:+.2f} ({price_change_pct:+.2f}%)
+                            </p>
+                            <p style='color: #666; margin: 5px 0 0 0; font-size: 11px;'>Open: ${open_price:.2f}</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+                    else:
+                        # Price DOWN - Red
+                        st.markdown(f"""
+                        <div style='padding: 10px; background-color: #3a1e1e; border-radius: 5px; border-left: 4px solid #ff0000;'>
+                            <p style='color: #888; margin: 0; font-size: 12px;'>💵 Current Price</p>
+                            <p style='color: #ff0000; margin: 5px 0 0 0; font-size: 32px; font-weight: bold;'>${price:.2f}</p>
+                            <p style='color: #ff0000; margin: 5px 0 0 0; font-size: 16px;'>
+                                ▼ ${price_change:.2f} ({price_change_pct:.2f}%)
+                            </p>
+                            <p style='color: #666; margin: 5px 0 0 0; font-size: 11px;'>Open: ${open_price:.2f}</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+                else:
+                    # Fallback if can't get opening price - just show current price
+                    st.metric("💵 Current Price", f"${price:.2f}")
+                    st.caption("⚠️ Unable to get opening price")
+                    
+            except Exception as e:
+                logger.debug(f"Error getting price change for {ticker}: {e}")
+                # Fallback to simple display
+                st.metric("💵 Current Price", f"${price:.2f}")
+            
             # Check if commodity and show age warning
             if ticker.endswith('=F'):
                 commodity_info = get_commodity_info(ticker)
                 days_old = commodity_info.get('days_old', 0)
                 
                 if days_old > 0:
-                    # Show price with age indicator
-                    st.metric(
-                        "💵 Current Price", 
-                        f"${price:.2f}",
-                        help=f"Last updated {days_old} day(s) ago"
-                    )
-                    
                     # Warning for stale data
                     if days_old > 3:
                         st.caption(f"⚠️ {days_old} days old")
@@ -5761,14 +6483,16 @@ def main():
                     # Show 5-day change if available
                     if commodity_info.get('price_change_5d') is not None:
                         change = commodity_info['price_change_5d']
-                        st.caption(f"5d change: {change:+.2f}%")
-                else:
-                    st.metric("💵 Current Price", f"${price:.2f}")
-            else:
-                # Regular stock - just show price
-                st.metric("💵 Current Price", f"${price:.2f}")
+                        color = "green" if change >= 0 else "red"
+                        st.caption(f"5d change: :{color}[{change:+.2f}%]")
         else:
             st.warning("⚠️ Price unavailable")
+            
+            # Show detailed status for commodities
+            if ticker.endswith('=F'):
+                commodity_info = get_commodity_info(ticker)
+                status = commodity_info.get('status', 'Unknown')
+                st.caption(f"Status: {status}")
             
             # Show detailed status for commodities
             if ticker.endswith('=F'):
@@ -5779,7 +6503,7 @@ def main():
         st.markdown("---")
         st.subheader("🔧 Quick Actions")
         
-        if st.button("🔄 Force Retrain", type="secondary", width="stretch"):
+        if st.button("🔄 Force Retrain", type="secondary", use_container_width=True):
             with st.spinner("Retraining model..."):
                 forecast, lower_ci, upper_ci, dates, model = train_self_learning_model_enhanced(ticker, force_retrain=True)
                 if forecast is not None:
@@ -5789,7 +6513,7 @@ def main():
                 time.sleep(2)
                 st.rerun()
         
-        if st.button("🚀 Bootstrap All Models", type="secondary", width="stretch"):
+        if st.button("🚀 Bootstrap All Models", type="secondary", use_container_width=True):
             with st.spinner("Training all models with confidence intervals... (5-10 min)"):
                 all_tickers = [t for cat in ASSET_CATEGORIES.values() for _, t in cat.items()]
                 progress = st.progress(0)
@@ -5823,14 +6547,14 @@ def main():
         
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("▶️ Start", key="dstart", type="primary", width="stretch"):
+            if st.button("▶️ Start", key="dstart", type="primary", use_container_width=True):
                 if save_daemon_config(True):
                     thread_manager.start_thread("learning_daemon", continuous_learning_daemon_managed)
                     st.success("✅ Started!")
                     time.sleep(1)
                     st.rerun()
         with col2:
-            if st.button("⏹️ Stop", key="dstop", type="secondary", width="stretch"):
+            if st.button("⏹️ Stop", key="dstop", type="secondary", use_container_width=True):
                 if save_daemon_config(False):
                     thread_manager.stop_thread("learning_daemon")
                     st.warning("⚠️ Stopped!")
@@ -5844,7 +6568,7 @@ def main():
         status_emoji = "🟢" if mc.get("enabled") else "🔴"
         st.write(f"**Status:** {status_emoji} {status}")
         
-        if st.button("📱 Test Telegram", type="secondary", width="stretch"):
+        if st.button("📱 Test Telegram", type="secondary", use_container_width=True):
             success = send_telegram_alert("🧪 TEST ALERT\n<b>AI Alpha Trader v4.2 - Enhanced</b>\nSystem is operational with confidence intervals!")
             if success:
                 st.success("✅ Alert sent!")
@@ -5853,14 +6577,14 @@ def main():
         
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("▶️ Start", key="mstart", type="primary", width="stretch"):
+            if st.button("▶️ Start", key="mstart", type="primary", use_container_width=True):
                 if save_monitoring_config(True):
                     thread_manager.start_thread("monitoring", monitor_6percent_pre_move_managed)
                     st.success("✅ Started!")
                     time.sleep(1)
                     st.rerun()
         with col2:
-            if st.button("⏹️ Stop", key="mstop", type="secondary", width="stretch"):
+            if st.button("⏹️ Stop", key="mstop", type="secondary", use_container_width=True):
                 if save_monitoring_config(False):
                     thread_manager.stop_thread("monitoring")
                     st.warning("⚠️ Stopped!")
@@ -5885,7 +6609,7 @@ def main():
         col1, col2 = st.columns([2, 1])
         
         with col1:
-            if st.button("🎯 Daily Recommendation", type="primary", width="stretch"):
+            if st.button("🎯 Daily Recommendation", type="primary", use_container_width=True):
                 with st.spinner("🔍 Analyzing (fast mode)..."):
                     # Use fast forecast for speed
                     forecast, lower_ci, upper_ci, dates = generate_fast_forecast(ticker, days=1)
@@ -5893,73 +6617,102 @@ def main():
                     if forecast is not None and len(np.array(forecast).flatten()) > 0:
                         forecast_val = float(np.array(forecast).flatten()[0])
                         
-                        # Use enhanced confidence check with patterns
-                        try:
-                            passed, reasons, pattern_boost = enhanced_confidence_checklist(
-                                ticker, [forecast_val], price or 100
-                            )
-                        except:
-                            passed = False
-                            reasons = ["Pattern checking not available"]
-                            pattern_boost = 0
+                        # ================================================
+                        # DETECT ELITE SETUP
+                        # ================================================
+                        is_elite, setup = detect_elite_setup(
+                            ticker, 
+                            [forecast_val], 
+                            price,
+                            lower_ci,
+                            upper_ci
+                        )
                         
-                        # Get pattern-influenced recommendation
-                        try:
-                            action, confidence, pattern_reasons = get_pattern_influenced_recommendation(
-                                ticker, [forecast_val], price
-                            )
-                        except:
-                            action = "HOLD"
-                            confidence = 50
-                            pattern_reasons = []
-                        
-                        if passed:
-                            change_pct = (forecast_val - price) / price * 100 if price else 0
-                            
-                            # Display with pattern influence
-                            if "BUY" in action:
-                                st.success(f"**{action}** | Confidence: {confidence}%")
-                            elif "SELL" in action:
-                                st.error(f"**{action}** | Confidence: {confidence}%")
-                            else:
-                                st.info(f"**{action}** | Confidence: {confidence}%")
-                            
-                            # Show confidence interval if available
-                            if lower_ci is not None and upper_ci is not None:
-                                ci_lower = lower_ci[0]
-                                ci_upper = upper_ci[0]
-                                st.metric(
-                                    "AI Prediction with 95% CI", 
-                                    f"${forecast_val:.2f}",
-                                    f"{change_pct:+.2f}%",
-                                    delta_color="normal",
-                                    help=f"95% Confidence Interval: ${ci_lower:.2f} - ${ci_upper:.2f}"
-                                )
-                            else:
-                                st.metric(
-                                    "AI Prediction", 
-                                    f"${forecast_val:.2f}",
-                                    f"{change_pct:+.2f}%"
-                                )
-                            
-                            # Show pattern influence if any
-                            if pattern_boost > 0:
-                                st.metric(
-                                    "Pattern Boost", 
-                                    f"+{pattern_boost}", 
-                                    f"Confidence: {min(99, int(pattern_boost // 2.5))}%"
-                                )
-                                
-                            if pattern_reasons:
-                                with st.expander("🔍 Pattern Analysis"):
-                                    for reason in pattern_reasons:
-                                        st.write(f"• {reason}")
+                        if is_elite:
+                            # Display Elite Setup
+                            display_elite_setup_ui(ticker, setup)
                         else:
-                            st.warning("⚠️ Low Confidence Recommendation")
-                            st.info(f"AI Predicts: ${forecast_val:.2f}")
-                            st.write("**Confidence Issues:**")
-                            for reason in reasons:
-                                st.write(f"• {reason}")
+                            # Standard recommendation
+                            try:
+                                passed, reasons, pattern_boost = enhanced_confidence_checklist(
+                                    ticker, [forecast_val], price or 100
+                                )
+                            except:
+                                passed = False
+                                reasons = ["Pattern checking not available"]
+                                pattern_boost = 0
+                            
+                            try:
+                                action, confidence, pattern_reasons = get_pattern_influenced_recommendation(
+                                    ticker, [forecast_val], price
+                                )
+                            except:
+                                action = "HOLD"
+                                confidence = 50
+                                pattern_reasons = []
+                            
+                            if passed:
+                                change_pct = (forecast_val - price) / price * 100 if price else 0
+                                
+                                # Display with pattern influence
+                                if "BUY" in action:
+                                    st.success(f"**{action}** | Confidence: {confidence}%")
+                                elif "SELL" in action:
+                                    st.error(f"**{action}** | Confidence: {confidence}%")
+                                else:
+                                    st.info(f"**{action}** | Confidence: {confidence}%")
+                                
+                                # Show confidence interval if available
+                                if lower_ci is not None and upper_ci is not None:
+                                    ci_lower = lower_ci[0]
+                                    ci_upper = upper_ci[0]
+                                    st.metric(
+                                        "AI Prediction with 95% CI", 
+                                        f"${forecast_val:.2f}",
+                                        f"{change_pct:+.2f}%",
+                                        delta_color="normal",
+                                        help=f"95% Confidence Interval: ${ci_lower:.2f} - ${ci_upper:.2f}"
+                                    )
+                                else:
+                                    st.metric(
+                                        "AI Prediction", 
+                                        f"${forecast_val:.2f}",
+                                        f"{change_pct:+.2f}%"
+                                    )
+                                
+                                # Show pattern influence if any
+                                if pattern_boost > 0:
+                                    st.metric(
+                                        "Pattern Boost", 
+                                        f"+{pattern_boost}", 
+                                        f"Confidence: {min(99, int(pattern_boost // 2.5))}%"
+                                    )
+                                    
+                                if pattern_reasons:
+                                    with st.expander("🔍 Pattern Analysis"):
+                                        for reason in pattern_reasons:
+                                            st.write(f"• {reason}")
+                                
+                                # Show why not elite
+                                st.markdown("---")
+                                st.write("**📊 Elite Setup Analysis:**")
+                                st.write(f"• Confidence: {setup.get('confidence', 0)}% (need ≥70%)")
+                                st.write(f"• R/R Ratio: {setup.get('risk_reward_ratio', 0):.1f}:1 (need ≥3:1)")
+                                
+                                if setup.get('confidence_breakdown'):
+                                    with st.expander("🔍 Confidence Details"):
+                                        for factor in setup.get('confidence_breakdown', []):
+                                            st.write(f"• {factor}")
+                            else:
+                                st.warning("⚠️ Low Confidence Recommendation")
+                                st.info(f"AI Predicts: ${forecast_val:.2f}")
+                                st.write("**Confidence Issues:**")
+                                for reason in reasons:
+                                    st.write(f"• {reason}")
+                                
+                                # Show elite analysis even on low confidence
+                                st.markdown("---")
+                                display_elite_setup_ui(ticker, setup)
                     else:
                         st.error("❌ Forecast failed or no data")
         
@@ -6036,12 +6789,12 @@ def main():
         col1, col2 = st.columns([3, 1])
         
         with col1:
-            if st.button("📈 Generate Fast Forecast", type="primary", width="stretch"):
+            if st.button("📈 Generate Fast Forecast", type="primary", use_container_width=True):
                 with st.spinner("🔍 Generating forecast (fast mode)..."):
                     forecast, lower_ci, upper_ci, dates = generate_fast_forecast(ticker, days=days_to_forecast)
         
         with col2:
-            if st.button("🔄 Full Retrain", type="secondary", width="stretch"):
+            if st.button("🔄 Full Retrain", type="secondary", use_container_width=True):
                 with st.spinner("🔍 Retraining model (slow)..."):
                     forecast, lower_ci, upper_ci, dates, model = train_self_learning_model_enhanced(
                         ticker, days=days_to_forecast, force_retrain=True
@@ -6132,7 +6885,7 @@ def main():
                         
                         forecast_data.append(row_data)
                     
-                    st.dataframe(pd.DataFrame(forecast_data), width="stretch")
+                    st.dataframe(pd.DataFrame(forecast_data), use_container_width=True)
                     
                     # Summary statistics
                     st.markdown("---")
@@ -6282,7 +7035,7 @@ def main():
         # Validate predictions button
         col1, col2, col3 = st.columns([2, 1, 1])
         with col1:
-            if st.button("🔄 Validate All Predictions", type="primary", width="stretch"):
+            if st.button("🔄 Validate All Predictions", type="primary", use_container_width=True):
                 with st.spinner("Validating predictions against actual prices..."):
                     all_tickers = [t for cat in ASSET_CATEGORIES.values() for t in cat.values()]
                     progress = st.progress(0)
@@ -6305,17 +7058,17 @@ def main():
                     
                     if results:
                         st.success(f"✅ Validated predictions for {len(results)} tickers!")
-                        st.dataframe(pd.DataFrame(results), width="stretch")
+                        st.dataframe(pd.DataFrame(results), use_container_width=True)
                     else:
                         st.warning("⚠️ No predictions available for validation yet.")
         
         with col2:
-            if st.button("📊 Current Ticker", type="secondary", width="stretch"):
+            if st.button("📊 Current Ticker", type="secondary", use_container_width=True):
                 st.session_state.show_current_ticker_accuracy = True
                 st.rerun()
         
         with col3:
-            if st.button("🗑️ Clear History", type="secondary", width="stretch"):
+            if st.button("🗑️ Clear History", type="secondary", use_container_width=True):
                 try:
                     # Clear predictions
                     if SQLALCHEMY_AVAILABLE:
@@ -6398,7 +7151,7 @@ def main():
                 display_df = df_overview.drop(columns=['MAPE'])
                 st.dataframe(
                     display_df.sort_values('MAPE_str'),
-                    width="stretch",
+                    use_container_width=True,
                     hide_index=True
                 )
                 
@@ -6635,7 +7388,7 @@ def main():
             
             st.subheader("🗑️ Maintenance")
             
-            if st.button("🗑️ Clear All Models", type="secondary", width="stretch"):
+            if st.button("🗑️ Clear All Models", type="secondary", use_container_width=True):
                 try:
                     count = 0
                     for file in MODELS_DIR.glob("*.h5"):
@@ -6650,19 +7403,19 @@ def main():
                 except Exception as e:
                     st.error(f"❌ Error: {e}")
             
-            if st.button("🧹 Clear Model Cache", type="secondary", width="stretch"):
+            if st.button("🧹 Clear Model Cache", type="secondary", use_container_width=True):
                 model_manager.clear_cache()
                 st.success("✅ Model cache cleared!")
             
-            if st.button("🧹 Clear Data Cache", type="secondary", width="stretch"):
+            if st.button("🧹 Clear Data Cache", type="secondary", use_container_width=True):
                 data_cache.cache.clear()
                 st.success("✅ Data cache cleared!")
             
-            if st.button("📊 Reset Metrics", type="secondary", width="stretch"):
+            if st.button("📊 Reset Metrics", type="secondary", use_container_width=True):
                 metrics_collector.reset()
                 st.success("✅ Metrics reset!")
             
-            if st.button("🗑️ Clear Predictions", type="secondary", width="stretch"):
+            if st.button("🗑️ Clear Predictions", type="secondary", use_container_width=True):
                 try:
                     # Clear predictions
                     if SQLALCHEMY_AVAILABLE:
@@ -6747,9 +7500,9 @@ def main():
             st.subheader("📝 Learning Activity Log")
         
         with col2:
-            if st.button("🔄 Refresh", type="secondary", width="stretch"):
+            if st.button("🔄 Refresh", type="secondary", use_container_width=True):
                 st.rerun()
-            if st.button("🗑️ Clear", type="secondary", width="stretch"):
+            if st.button("🗑️ Clear", type="secondary", use_container_width=True):
                 st.session_state.learning_log = []
                 st.success("✅ Logs cleared!")
                 time.sleep(1)
@@ -6773,11 +7526,9 @@ def main():
             )
         except Exception as e:
             st.warning(f"⚠️ Could not read log file: {e}")
-
 # ================================
 # APPLICATION ENTRY POINT
 # ================================
-
 if __name__ == "__main__":
     try:
         main()
