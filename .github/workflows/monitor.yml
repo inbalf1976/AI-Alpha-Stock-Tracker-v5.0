@@ -1,0 +1,46 @@
+name: Wheat Monitor 24/7
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install packages
+      run: |
+        pip install yfinance pandas numpy scikit-learn requests
+        pip install tensorflow-cpu keras
+    
+    - name: Download state
+      uses: actions/download-artifact@v3
+      continue-on-error: true
+      with:
+        name: monitor-state
+    
+    - name: Run monitor
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: python wheat_monitor_github.py
+    
+    - name: Upload state
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: monitor-state
+        path: wheat_monitor_state.json
+        retention-days: 7
