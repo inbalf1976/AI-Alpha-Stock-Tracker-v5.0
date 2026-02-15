@@ -19,7 +19,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import requests
 
 # Import our modules
-from weather_analyzer import WeatherAnalyzer
+from live_weather_analyzer import LiveWeatherAnalyzer
 from wasde_scraper import WASDEScraper
 from volume_analyzer import VolumeAnalyzer
 from ensemble_predictor import EnsemblePredictor
@@ -178,57 +178,75 @@ def add_indicators(df):
 
 def should_alert(direction, price, state):
     """
-    Determine if alert should be sent
-    FIXED: Proper state persistence
+    SIMPLIFIED: Only alert once per hour + significant changes
     """
     from datetime import datetime
     
-    # Get current date
-    current_date = datetime.now().date().isoformat()
-    last_alert_date = state.get('last_alert_date', None)
+    last_alert_time = state.get('last_alert_time', None)
+    last_direction = state.get('last_direction', None)
+    last_price = state.get('last_price', None)
     
-    print(f"   State check: last_alert_date={last_alert_date}, current={current_date}")
-    print(f"   daily_alert_sent={state.get('daily_alert_sent', False)}")
-    print(f"   last_direction={state.get('last_direction', None)}, current={direction}")
+    current_time = datetime.now()
     
-    # New trading day - always send first alert
-    if last_alert_date != current_date:
-        state['last_alert_date'] = current_date
-        state['daily_alert_sent'] = True  # Mark as sent NOW
-        print(f"   → New day detected, sending first alert")
-        return True, f"First prediction of {current_date}"
+    print(f"\n📢 Alert Check:")
+    print(f"   Last alert: {last_alert_time}")
+    print(f"   Last direction: {last_direction} → Current: {direction}")
     
-    # Same day - check if we already alerted
-    if state.get('daily_alert_sent', False):
-        # We already sent an alert today
-        # Only send another if direction changed AND 2.5%+ move
-        
-        if direction == state.get('last_direction'):
-            print(f"   → Same direction, no alert")
-            return False, "Same direction - already alerted today"
-        
-        # Direction changed - check magnitude
-        last_price = state.get('last_price')
+    # First run ever
+    if last_alert_time is None:
+        print(f"   → First run ever - SENDING")
+        state['last_alert_time'] = current_time.isoformat()
+        return True, "First prediction"
+    
+    # Calculate time since last alert
+    try:
+        last_alert_dt = datetime.fromisoformat(last_alert_time)
+        minutes_since_alert = (current_time - last_alert_dt).total_seconds() / 60
+        print(f"   Minutes since last alert: {minutes_since_alert:.1f}")
+    except:
+        print(f"   → Could not parse time, sending alert")
+        state['last_alert_time'] = current_time.isoformat()
+        return True, "Time parse error"
+    
+    # RULE 1: Must wait at least 60 minutes between alerts
+    if minutes_since_alert < 60:
+        print(f"   → Too soon (< 60 min) - NO ALERT")
+        return False, f"Only {minutes_since_alert:.0f} min since last alert"
+    
+    # RULE 2: If same direction, need 2.5%+ price move
+    if direction == last_direction:
         if last_price:
             change_pct = abs((price - last_price) / last_price)
-            print(f"   → Direction changed, price move: {change_pct:.2%}")
+            print(f"   → Same direction, price change: {change_pct:.2%}")
             
             if change_pct >= DIRECTION_CHANGE_THRESHOLD:
-                state['daily_alert_sent'] = True  # Still mark as sent
-                print(f"   → Significant move, sending alert")
-                return True, f"Direction changed with {change_pct:.1%} move"
+                print(f"   → Significant move - SENDING")
+                state['last_alert_time'] = current_time.isoformat()
+                return True, f"Same direction but {change_pct:.1%} move"
             else:
-                print(f"   → Insufficient move (<2.5%), no alert")
-                return False, f"Direction changed but only {change_pct:.1%} move (need 2.5%+)"
+                print(f"   → Insufficient move - NO ALERT")
+                return False, f"Same direction, only {change_pct:.1%} move"
         else:
-            # No previous price, but direction changed
-            state['daily_alert_sent'] = True
-            print(f"   → Direction changed (no prev price), sending alert")
-            return True, "Direction changed"
+            print(f"   → Same direction, no price history - NO ALERT")
+            return False, "Same direction"
     
-    # Shouldn't reach here, but just in case
-    print(f"   → Fallback: no alert")
-    return False, "No significant change"
+    # RULE 3: Direction changed
+    print(f"   → Direction changed!")
+    if last_price:
+        change_pct = abs((price - last_price) / last_price)
+        print(f"      Price change: {change_pct:.2%}")
+        
+        if change_pct >= DIRECTION_CHANGE_THRESHOLD:
+            print(f"   → Significant change - SENDING")
+            state['last_alert_time'] = current_time.isoformat()
+            return True, f"Direction changed with {change_pct:.1%} move"
+        else:
+            print(f"   → Small change - NO ALERT")
+            return False, f"Direction changed but only {change_pct:.1%} move"
+    else:
+        print(f"   → Direction changed (no price history) - SENDING")
+        state['last_alert_time'] = current_time.isoformat()
+        return True, "Direction changed"
 
 def main():
     print(f"\n{'='*80}")
@@ -253,7 +271,7 @@ def main():
         
         # Initialize analyzers
         print("\n🔬 Initializing advanced analyzers...")
-        weather = WeatherAnalyzer()
+        weather = LiveWeatherAnalyzer()
         wasde = WASDEScraper()
         volume = VolumeAnalyzer()
         
@@ -262,8 +280,8 @@ def main():
         seasonal = get_seasonal_bias()
         print(f"  ✓ Seasonal: {seasonal['direction']}")
         
-        weather_signal = weather.get_weather_signal()
-        print(f"  ✓ Weather: {weather_signal['signal']}")
+        weather_signal = weather.get_multi_region_signal()  # LIVE WEATHER!
+        print(f"  ✓ Weather: {weather_signal['signal']} ({weather_signal['bullish_regions']}/{weather_signal['regional_count']} regions)")
         
         wasde_signal = wasde.get_fundamental_score()
         print(f"  ✓ WASDE: {wasde_signal['signal']}")
