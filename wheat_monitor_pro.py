@@ -67,10 +67,52 @@ def load_state():
     if STATE_FILE.exists():
         try:
             with open(STATE_FILE,'r') as f:
-                return json.load(f)
+                state = json.load(f)
+                
+                # Check if model needs reset (every 2 years)
+                last_reset = state.get('last_model_reset', None)
+                if last_reset:
+                    from datetime import datetime
+                    last_reset_date = datetime.fromisoformat(last_reset)
+                    days_since_reset = (datetime.now() - last_reset_date).days
+                    
+                    if days_since_reset >= 730:  # 2 years = 730 days
+                        print("⚠️  MODEL RESET: 2+ years since last reset")
+                        print(f"   Last reset: {last_reset_date.strftime('%Y-%m-%d')}")
+                        print(f"   Days: {days_since_reset}")
+                        print("   Resetting to prevent overfitting...")
+                        
+                        # Reset model-related state but keep alert history
+                        state['last_model_reset'] = datetime.now().isoformat()
+                        state['model_version'] = state.get('model_version', 1) + 1
+                        state['reset_count'] = state.get('reset_count', 0) + 1
+                        
+                        # Optionally clear prediction history (uncomment if desired)
+                        # state['last_direction'] = None
+                        # state['last_price'] = None
+                        
+                        return state
+                else:
+                    # First time - set initial reset date
+                    from datetime import datetime
+                    state['last_model_reset'] = datetime.now().isoformat()
+                    state['model_version'] = 1
+                    state['reset_count'] = 0
+                
+                return state
         except:
             pass
-    return {'last_direction':None,'last_price':None,'alerts_sent':0}
+    
+    # New state
+    from datetime import datetime
+    return {
+        'last_direction': None,
+        'last_price': None,
+        'alerts_sent': 0,
+        'last_model_reset': datetime.now().isoformat(),
+        'model_version': 1,
+        'reset_count': 0
+    }
 
 def save_state(state):
     state['last_check'] = datetime.now().isoformat()
@@ -125,18 +167,69 @@ def add_indicators(df):
     df['ATR'] = ranges.max(axis=1).rolling(14).mean()
     return df.dropna()
 
-def should_alert(direction,price,state):
+def should_alert(direction, price, state):
+    """
+    Determine if alert should be sent
+    Rules:
+    1. First prediction of the day → Alert
+    2. Direction changed + 2.5%+ price move → Alert
+    3. Same direction OR small move → No alert
+    4. Reset at start of new trading day
+    """
+    from datetime import datetime
+    
+    # Get current date
+    current_date = datetime.now().date().isoformat()
+    last_alert_date = state.get('last_alert_date', None)
+    
+    # Check if it's a new trading day
+    if last_alert_date != current_date:
+        # New trading day - reset and send first alert
+        state['daily_alert_sent'] = False
+        state['last_alert_date'] = current_date
+        return True, f"First prediction of {current_date}"
+    
+    # Check if we already sent an alert today
+    if state.get('daily_alert_sent', False):
+        # Already sent alert today, check if significant change
+        if state['last_direction'] is None:
+            return True, "First prediction"
+        
+        if direction == state['last_direction']:
+            return False, "Same direction - no alert"
+        
+        # Direction changed - check price movement
+        if state['last_price'] is None:
+            return True, "Direction changed"
+        
+        change_pct = abs((price - state['last_price']) / state['last_price'])
+        
+        if change_pct >= DIRECTION_CHANGE_THRESHOLD:  # 2.5%
+            state['daily_alert_sent'] = True  # Mark as sent
+            return True, f"Direction changed with {change_pct:.1%} move"
+        else:
+            return False, f"Direction changed but only {change_pct:.1%} move (need 2.5%+)"
+    
+    # Haven't sent alert today yet
     if state['last_direction'] is None:
-        return True,"First prediction"
-    if direction==state['last_direction']:
-        return False,"Same direction"
+        state['daily_alert_sent'] = True
+        return True, "First prediction of session"
+    
+    if direction == state['last_direction']:
+        return False, "Same direction - no alert"
+    
+    # Direction changed
     if state['last_price'] is None:
-        return True,"Direction changed"
-    change_pct = abs((price-state['last_price'])/state['last_price'])
-    if change_pct>=DIRECTION_CHANGE_THRESHOLD:
-        return True,f"Direction changed with {change_pct:.1%} move"
+        state['daily_alert_sent'] = True
+        return True, "Direction changed"
+    
+    change_pct = abs((price - state['last_price']) / state['last_price'])
+    
+    if change_pct >= DIRECTION_CHANGE_THRESHOLD:
+        state['daily_alert_sent'] = True
+        return True, f"Direction changed with {change_pct:.1%} move"
     else:
-        return False,f"Only {change_pct:.1%} move"
+        return False, f"Direction changed but only {change_pct:.1%} move (need 2.5%+)"
 
 def main():
     print(f"\n{'='*80}")
@@ -275,12 +368,19 @@ def main():
             stop = price*(1-STOP_LOSS_PCT) if direction=="UP" else price*(1+STOP_LOSS_PCT)
             target = price*(1+TAKE_PROFIT_PCT) if direction=="UP" else price*(1-TAKE_PROFIT_PCT)
             
+            # Check if model was just reset
+            reset_notice = ""
+            if state.get('reset_count', 0) > 0:
+                days_since_reset = (datetime.now() - datetime.fromisoformat(state['last_model_reset'])).days
+                if days_since_reset < 1:  # Reset happened today
+                    reset_notice = f"\n🔄 *MODEL RESET:* Version {state['model_version']} (preventing overfitting)\n"
+            
             message = f"""
 🌾 *WHEAT ALERT - ULTIMATE v3.0* 🌾
 
 {'🟢' if direction=='UP' else '🔴'} *{direction}* ({enhanced_conf:.1%})
 💰 *{price:.2f}¢* (${price/100:.2f}/bu)
-
+{reset_notice}
 🤖 *ENSEMBLE AI:*
 LSTM: {prediction['model_details']['LSTM']}
 RF: {prediction['model_details']['RandomForest']}
