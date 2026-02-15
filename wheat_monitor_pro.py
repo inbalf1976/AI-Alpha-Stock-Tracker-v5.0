@@ -1,0 +1,48 @@
+name: Wheat Monitor PRO - Ultimate Edition
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # Every 30 minutes (more complex, runs longer)
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15  # Extended for ensemble training
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install --no-cache-dir yfinance pandas numpy scikit-learn requests
+        pip install --no-cache-dir tensorflow-cpu keras
+        pip install --no-cache-dir xgboost beautifulsoup4 lxml
+    
+    - name: Download previous state
+      uses: actions/download-artifact@v4
+      continue-on-error: true
+      with:
+        name: monitor-state
+    
+    - name: Run Professional Monitor
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: python wheat_monitor_pro.py
+    
+    - name: Upload state
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: monitor-state
+        path: wheat_monitor_state.json
+        retention-days: 7
