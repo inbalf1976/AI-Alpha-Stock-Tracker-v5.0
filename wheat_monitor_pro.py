@@ -64,10 +64,15 @@ def get_market_context(price):
         return {'position':'NORMAL','signal':'NEUTRAL'}
 
 def load_state():
+    print(f"\n📂 Loading state...")
+    
     if STATE_FILE.exists():
+        print(f"   ✓ State file exists")
         try:
             with open(STATE_FILE,'r') as f:
                 state = json.load(f)
+                
+                print(f"   ✓ Loaded - last_alert_date: {state.get('last_alert_date')}, daily_sent: {state.get('daily_alert_sent')}")
                 
                 # Check if model needs reset (every 2 years)
                 last_reset = state.get('last_model_reset', None)
@@ -87,10 +92,6 @@ def load_state():
                         state['model_version'] = state.get('model_version', 1) + 1
                         state['reset_count'] = state.get('reset_count', 0) + 1
                         
-                        # Optionally clear prediction history (uncomment if desired)
-                        # state['last_direction'] = None
-                        # state['last_price'] = None
-                        
                         return state
                 else:
                     # First time - set initial reset date
@@ -100,8 +101,10 @@ def load_state():
                     state['reset_count'] = 0
                 
                 return state
-        except:
-            pass
+        except Exception as e:
+            print(f"   ❌ Error: {e}")
+    else:
+        print(f"   ⚠️  No state file")
     
     # New state
     from datetime import datetime
@@ -118,6 +121,12 @@ def save_state(state):
     state['last_check'] = datetime.now().isoformat()
     with open(STATE_FILE,'w') as f:
         json.dump(state,f,indent=2)
+    print(f"\n💾 State saved:")
+    print(f"   last_direction: {state.get('last_direction')}")
+    print(f"   last_price: {state.get('last_price')}")
+    print(f"   last_alert_date: {state.get('last_alert_date')}")
+    print(f"   daily_alert_sent: {state.get('daily_alert_sent')}")
+    print(f"   alerts_sent: {state.get('alerts_sent')}")
 
 def send_telegram(message):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
@@ -170,11 +179,7 @@ def add_indicators(df):
 def should_alert(direction, price, state):
     """
     Determine if alert should be sent
-    Rules:
-    1. First prediction of the day → Alert
-    2. Direction changed + 2.5%+ price move → Alert
-    3. Same direction OR small move → No alert
-    4. Reset at start of new trading day
+    FIXED: Proper state persistence
     """
     from datetime import datetime
     
@@ -182,54 +187,48 @@ def should_alert(direction, price, state):
     current_date = datetime.now().date().isoformat()
     last_alert_date = state.get('last_alert_date', None)
     
-    # Check if it's a new trading day
+    print(f"   State check: last_alert_date={last_alert_date}, current={current_date}")
+    print(f"   daily_alert_sent={state.get('daily_alert_sent', False)}")
+    print(f"   last_direction={state.get('last_direction', None)}, current={direction}")
+    
+    # New trading day - always send first alert
     if last_alert_date != current_date:
-        # New trading day - reset and send first alert
-        state['daily_alert_sent'] = False
         state['last_alert_date'] = current_date
+        state['daily_alert_sent'] = True  # Mark as sent NOW
+        print(f"   → New day detected, sending first alert")
         return True, f"First prediction of {current_date}"
     
-    # Check if we already sent an alert today
+    # Same day - check if we already alerted
     if state.get('daily_alert_sent', False):
-        # Already sent alert today, check if significant change
-        if state['last_direction'] is None:
-            return True, "First prediction"
+        # We already sent an alert today
+        # Only send another if direction changed AND 2.5%+ move
         
-        if direction == state['last_direction']:
-            return False, "Same direction - no alert"
+        if direction == state.get('last_direction'):
+            print(f"   → Same direction, no alert")
+            return False, "Same direction - already alerted today"
         
-        # Direction changed - check price movement
-        if state['last_price'] is None:
-            return True, "Direction changed"
-        
-        change_pct = abs((price - state['last_price']) / state['last_price'])
-        
-        if change_pct >= DIRECTION_CHANGE_THRESHOLD:  # 2.5%
-            state['daily_alert_sent'] = True  # Mark as sent
-            return True, f"Direction changed with {change_pct:.1%} move"
+        # Direction changed - check magnitude
+        last_price = state.get('last_price')
+        if last_price:
+            change_pct = abs((price - last_price) / last_price)
+            print(f"   → Direction changed, price move: {change_pct:.2%}")
+            
+            if change_pct >= DIRECTION_CHANGE_THRESHOLD:
+                state['daily_alert_sent'] = True  # Still mark as sent
+                print(f"   → Significant move, sending alert")
+                return True, f"Direction changed with {change_pct:.1%} move"
+            else:
+                print(f"   → Insufficient move (<2.5%), no alert")
+                return False, f"Direction changed but only {change_pct:.1%} move (need 2.5%+)"
         else:
-            return False, f"Direction changed but only {change_pct:.1%} move (need 2.5%+)"
+            # No previous price, but direction changed
+            state['daily_alert_sent'] = True
+            print(f"   → Direction changed (no prev price), sending alert")
+            return True, "Direction changed"
     
-    # Haven't sent alert today yet
-    if state['last_direction'] is None:
-        state['daily_alert_sent'] = True
-        return True, "First prediction of session"
-    
-    if direction == state['last_direction']:
-        return False, "Same direction - no alert"
-    
-    # Direction changed
-    if state['last_price'] is None:
-        state['daily_alert_sent'] = True
-        return True, "Direction changed"
-    
-    change_pct = abs((price - state['last_price']) / state['last_price'])
-    
-    if change_pct >= DIRECTION_CHANGE_THRESHOLD:
-        state['daily_alert_sent'] = True
-        return True, f"Direction changed with {change_pct:.1%} move"
-    else:
-        return False, f"Direction changed but only {change_pct:.1%} move (need 2.5%+)"
+    # Shouldn't reach here, but just in case
+    print(f"   → Fallback: no alert")
+    return False, "No significant change"
 
 def main():
     print(f"\n{'='*80}")
