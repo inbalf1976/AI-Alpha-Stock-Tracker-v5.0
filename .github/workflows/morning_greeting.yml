@@ -1,0 +1,32 @@
+name: Morning Greeting
+
+on:
+  schedule:
+    # Run at 9:00 AM Israel time (7:00 AM UTC) Mon-Fri + Sunday
+    # Cron runs in UTC, so 7:00 AM UTC = 9:00 AM Israel (UTC+2)
+    - cron: '0 7 * * 0-5'  # Sunday through Friday at 7 AM UTC (9 AM Israel)
+  
+  workflow_dispatch:  # Manual trigger for testing
+
+jobs:
+  send-greeting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: Install requests
+      run: pip install requests
+    
+    - name: Send Morning Greeting
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: python morning_greeting.py
