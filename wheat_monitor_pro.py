@@ -12,14 +12,190 @@ from sklearn.preprocessing import MinMaxScaler
 import json
 from pathlib import Path
 import os
+import sys
 import warnings
 warnings.filterwarnings('ignore')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
+# Fix imports for GitHub Actions
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 import requests
 
-# Import our modules
-from live_weather_analyzer import LiveWeatherAnalyzer
+# ============================================================================
+# LIVE WEATHER ANALYZER - Embedded to avoid import issues
+# ============================================================================
+
+class LiveWeatherAnalyzer:
+    """Analyze weather impact on wheat using Visual Crossing agricultural data"""
+    
+    def __init__(self):
+        self.api_key = os.getenv("VISUAL_CROSSING_API_KEY", "W2FNC8VKT94JKH9ZRZYHUE63P")
+        self.base_url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
+        self.wheat_regions = {
+            'Kansas': '38.5,-98.0',
+            'Oklahoma': '35.5,-98.0',
+            'North Dakota': '47.5,-100.5',
+            'Montana': '47.0,-110.0'
+        }
+    
+    def fetch_weather_data(self, location, days=7):
+        try:
+            end_date = datetime.now()
+            start_date = end_date - timedelta(days=days)
+            url = f"{self.base_url}/{location}/{start_date.strftime('%Y-%m-%d')}/{end_date.strftime('%Y-%m-%d')}"
+            params = {
+                'key': self.api_key,
+                'unitGroup': 'metric',
+                'include': 'days',
+                'elements': 'datetime,temp,tempmax,tempmin,precip',
+                'contentType': 'json'
+            }
+            response = requests.get(url, params=params, timeout=15)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                print(f"Weather API error: {response.status_code}")
+                return None
+        except Exception as e:
+            print(f"Weather fetch error: {e}")
+            return None
+    
+    def analyze_agricultural_impact(self, weather_data):
+        if not weather_data or 'days' not in weather_data:
+            return self._get_neutral_signal()
+        
+        days = weather_data['days']
+        recent_days = days[-7:]
+        
+        total_precip = sum(day.get('precip', 0) for day in recent_days)
+        avg_temp = sum(day.get('temp', 0) for day in recent_days) / len(recent_days)
+        max_temp = max(day.get('tempmax', 0) for day in recent_days)
+        min_temp = min(day.get('tempmin', 0) for day in recent_days)
+        
+        drought_score = 0
+        temperature_score = 0
+        
+        if total_precip < 5:
+            drought_score = 0.15
+            precip_note = f"Dry conditions ({total_precip:.1f}mm/week)"
+        elif total_precip > 50:
+            drought_score = -0.10
+            precip_note = f"Heavy rain ({total_precip:.1f}mm/week)"
+        else:
+            drought_score = 0.05
+            precip_note = f"Adequate moisture ({total_precip:.1f}mm/week)"
+        
+        month = datetime.now().month
+        if month in [12, 1, 2]:
+            if min_temp < -10:
+                temperature_score = 0.20
+                temp_note = f"Freeze risk! Min {min_temp:.1f}°C"
+            elif min_temp < 0:
+                temperature_score = 0.10
+                temp_note = f"Cold temps {min_temp:.1f}°C"
+            else:
+                temperature_score = 0.0
+                temp_note = f"Mild winter {avg_temp:.1f}°C"
+        elif month in [5, 6, 7]:
+            if max_temp > 35:
+                temperature_score = 0.18
+                temp_note = f"Heat stress! Max {max_temp:.1f}°C"
+            elif max_temp > 30:
+                temperature_score = 0.08
+                temp_note = f"Warm temps {max_temp:.1f}°C"
+            else:
+                temperature_score = 0.0
+                temp_note = f"Good temps {avg_temp:.1f}°C"
+        else:
+            temperature_score = 0.0
+            temp_note = f"Normal temps {avg_temp:.1f}°C"
+        
+        total_score = drought_score + temperature_score
+        
+        if total_score > 0.15:
+            signal = "BULLISH"
+            confidence = 0.75
+        elif total_score > 0.08:
+            signal = "BULLISH"
+            confidence = 0.65
+        elif total_score < -0.05:
+            signal = "BEARISH"
+            confidence = 0.60
+        else:
+            signal = "NEUTRAL"
+            confidence = 0.50
+        
+        return {
+            'signal': signal,
+            'score': total_score,
+            'confidence': confidence,
+            'factors': [precip_note, temp_note],
+            'explanation': f"{precip_note}, {temp_note}"
+        }
+    
+    def _get_neutral_signal(self):
+        return {
+            'signal': 'NEUTRAL',
+            'score': 0.0,
+            'confidence': 0.50,
+            'factors': ['Weather data unavailable'],
+            'explanation': 'Using seasonal average'
+        }
+    
+    def get_multi_region_signal(self):
+        regional_signals = []
+        print("   🌾 Fetching live weather for wheat regions...")
+        
+        for region_name, coords in self.wheat_regions.items():
+            print(f"      {region_name}...", end=" ")
+            weather_data = self.fetch_weather_data(coords, days=7)
+            
+            if weather_data:
+                analysis = self.analyze_agricultural_impact(weather_data)
+                analysis['region'] = region_name
+                regional_signals.append(analysis)
+                print(f"{analysis['signal']}")
+            else:
+                print("Failed")
+        
+        if not regional_signals:
+            print("   ⚠️ No weather data available")
+            return self._get_neutral_signal()
+        
+        avg_score = sum(s['score'] for s in regional_signals) / len(regional_signals)
+        bullish_count = sum(1 for s in regional_signals if s['signal'] == 'BULLISH')
+        
+        if bullish_count >= 3:
+            signal = 'BULLISH'
+            confidence = 0.70
+        elif bullish_count >= 2:
+            signal = 'BULLISH'
+            confidence = 0.60
+        elif avg_score < -0.05:
+            signal = 'BEARISH'
+            confidence = 0.60
+        else:
+            signal = 'NEUTRAL'
+            confidence = 0.55
+        
+        all_factors = []
+        for s in regional_signals:
+            if s['signal'] != 'NEUTRAL':
+                all_factors.append(f"{s['region']}: {s['factors'][0]}")
+        
+        return {
+            'signal': signal,
+            'score': avg_score,
+            'confidence': confidence,
+            'regional_count': len(regional_signals),
+            'bullish_regions': bullish_count,
+            'factors': all_factors[:3],
+            'explanation': f"Weather in {bullish_count}/{len(regional_signals)} regions"
+        }
+
+# ============================================================================
+
 from wasde_scraper import WASDEScraper
 from volume_analyzer import VolumeAnalyzer
 from ensemble_predictor import EnsemblePredictor
