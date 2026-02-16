@@ -33,10 +33,17 @@ class LiveWeatherAnalyzer:
         self.api_key = os.getenv("VISUAL_CROSSING_API_KEY", "W2FNC8VKT94JKH9ZRZYHUE63P")
         self.base_url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
         self.wheat_regions = {
-            'Kansas': '38.5,-98.0',
-            'Oklahoma': '35.5,-98.0',
-            'North Dakota': '47.5,-100.5',
-            'Montana': '47.0,-110.0'
+            # === USA (Top 4 states) ===
+            'Kansas': '38.5,-98.0',          # #1 US producer
+            'Oklahoma': '35.5,-98.0',        # Winter wheat
+            'North Dakota': '47.5,-100.5',   # Spring wheat
+            'Montana': '47.0,-110.0',        # Hard red spring
+            
+            # === GLOBAL (Top 4 exporters) ===
+            'Ukraine': '46.5,32.0',          # Odessa region - Black Sea wheat
+            'Russia': '45.0,39.0',           # Krasnodar - Southern wheat belt
+            'Canada': '52.0,-106.0',         # Saskatchewan - Spring wheat
+            'Australia': '-32.0,148.0'       # New South Wales - Southern hemisphere
         }
     
     def fetch_weather_data(self, location, days=7):
@@ -166,12 +173,13 @@ class LiveWeatherAnalyzer:
         avg_score = sum(s['score'] for s in regional_signals) / len(regional_signals)
         bullish_count = sum(1 for s in regional_signals if s['signal'] == 'BULLISH')
         
-        if bullish_count >= 3:
+        # Determine combined signal (adjusted for 8 regions)
+        if bullish_count >= 5:  # Majority bullish (5+ out of 8)
             signal = 'BULLISH'
-            confidence = 0.70
-        elif bullish_count >= 2:
+            confidence = 0.75
+        elif bullish_count >= 3:  # Significant bullish (3-4 out of 8)
             signal = 'BULLISH'
-            confidence = 0.60
+            confidence = 0.65
         elif avg_score < -0.05:
             signal = 'BEARISH'
             confidence = 0.60
