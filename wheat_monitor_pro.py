@@ -734,6 +734,25 @@ _🚀 Professional Edition_
             if send_telegram(message):
                 print("✅ Professional alert sent!")
                 state['alerts_sent'] += 1
+                
+                # LOG PREDICTION FOR PERFORMANCE TRACKING
+                try:
+                    from performance_tracker import PerformanceTracker
+                    tracker = PerformanceTracker()
+                    tracker.log_prediction(
+                        direction=direction,
+                        price=price,
+                        confidence=enhanced_conf,
+                        factors={
+                            'seasonal': seasonal['direction'],
+                            'weather': weather_signal['signal'],
+                            'wasde': wasde_signal['signal'],
+                            'volume': volume_signal['signal'],
+                            'ensemble': f"{prediction['agreement']} ({prediction['votes_up']}/3)"
+                        }
+                    )
+                except Exception as e:
+                    print(f"⚠️ Performance tracking skipped: {e}")
             else:
                 print("❌ Alert failed")
         else:
