@@ -570,10 +570,6 @@ def should_alert(direction, price, state):
         print(f"   → Direction changed (no price history) - SENDING")
         state['last_alert_time'] = current_time.isoformat()
         return True, "Direction changed"
-    else:
-        print(f"   → Direction changed (no price history) - SENDING")
-        state['last_alert_time'] = current_time.isoformat()
-        return True, "Direction changed"
 
 def main():
     print(f"\n{'='*80}")
