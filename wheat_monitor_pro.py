@@ -488,27 +488,40 @@ def add_indicators(df):
 
 def should_alert(direction, price, state):
     """
-    SIMPLIFIED: Only alert once per hour + significant changes
+    Alert rules:
+    1. First alert of new trading day → Always send
+    2. After that: Only if direction change + 2.5% move + 60min passed
     """
     from datetime import datetime
     
+    current_time = datetime.now()
+    current_date = current_time.date().isoformat()
+    
     last_alert_time = state.get('last_alert_time', None)
+    last_alert_date = state.get('last_alert_date', None)
     last_direction = state.get('last_direction', None)
     last_price = state.get('last_price', None)
     
-    current_time = datetime.now()
-    
     print(f"\n📢 Alert Check:")
     print(f"   Last alert: {last_alert_time}")
+    print(f"   Last alert date: {last_alert_date} vs today: {current_date}")
     print(f"   Last direction: {last_direction} → Current: {direction}")
     
-    # First run ever
+    # RULE 0: First run ever
     if last_alert_time is None:
         print(f"   → First run ever - SENDING")
         state['last_alert_time'] = current_time.isoformat()
+        state['last_alert_date'] = current_date
         return True, "First prediction"
     
-    # Calculate time since last alert
+    # RULE 1: New trading day → Send first alert
+    if last_alert_date != current_date:
+        print(f"   → New trading day - SENDING first alert of {current_date}")
+        state['last_alert_time'] = current_time.isoformat()
+        state['last_alert_date'] = current_date
+        return True, f"First prediction of {current_date}"
+    
+    # RULE 2: Same day - check timing and movement
     try:
         last_alert_dt = datetime.fromisoformat(last_alert_time)
         minutes_since_alert = (current_time - last_alert_dt).total_seconds() / 60
@@ -518,12 +531,12 @@ def should_alert(direction, price, state):
         state['last_alert_time'] = current_time.isoformat()
         return True, "Time parse error"
     
-    # RULE 1: Must wait at least 60 minutes between alerts
+    # Must wait at least 60 minutes
     if minutes_since_alert < 60:
         print(f"   → Too soon (< 60 min) - NO ALERT")
         return False, f"Only {minutes_since_alert:.0f} min since last alert"
     
-    # RULE 2: If same direction, need 2.5%+ price move
+    # Same direction - need significant move
     if direction == last_direction:
         if last_price:
             change_pct = abs((price - last_price) / last_price)
@@ -540,7 +553,7 @@ def should_alert(direction, price, state):
             print(f"   → Same direction, no price history - NO ALERT")
             return False, "Same direction"
     
-    # RULE 3: Direction changed
+    # Direction changed - check magnitude
     print(f"   → Direction changed!")
     if last_price:
         change_pct = abs((price - last_price) / last_price)
@@ -553,6 +566,10 @@ def should_alert(direction, price, state):
         else:
             print(f"   → Small change - NO ALERT")
             return False, f"Direction changed but only {change_pct:.1%} move"
+    else:
+        print(f"   → Direction changed (no price history) - SENDING")
+        state['last_alert_time'] = current_time.isoformat()
+        return True, "Direction changed"
     else:
         print(f"   → Direction changed (no price history) - SENDING")
         state['last_alert_time'] = current_time.isoformat()
