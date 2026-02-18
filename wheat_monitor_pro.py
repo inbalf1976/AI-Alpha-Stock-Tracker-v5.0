@@ -286,8 +286,12 @@ class LiveWASDEScraper:
         estimated_use_millions = 2000  # Million bushels
         stocks_to_use = stocks_millions / estimated_use_millions if estimated_use_millions > 0 else 0.20
         
-        # Cap at reasonable range (0-100%)
-        stocks_to_use = max(0.0, min(1.0, stocks_to_use))
+        print(f"         Raw stocks: {stocks_value:,.0f} bushels")
+        print(f"         Stocks (millions): {stocks_millions:.1f}")
+        print(f"         Stocks-to-use: {stocks_to_use:.1%}")
+        
+        # Cap at reasonable range (0-200% - sometimes stocks can be very high)
+        stocks_to_use = max(0.0, min(2.0, stocks_to_use))
         
         if stocks_to_use < 0.15:
             score += 0.30
