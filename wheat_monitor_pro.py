@@ -342,6 +342,8 @@ class LiveWASDEScraper:
 
 from volume_analyzer import VolumeAnalyzer
 from ensemble_predictor import EnsemblePredictor
+from move_analyzer import MoveAnalyzer
+
 
 # CONFIG
 PRIMARY_TICKER = "ZW=F"
@@ -727,6 +729,11 @@ def main():
                 if days_since_reset < 1:  # Reset happened today
                     reset_notice = f"\n🔄 *MODEL RESET:* Version {state['model_version']} (preventing overfitting)\n"
             
+            # Analyze typical moves and generate recommendations
+            move_analyzer = MoveAnalyzer()
+            move_stats = move_analyzer.analyze_typical_moves(df, direction)
+            recommendations = move_analyzer.format_recommendation_message(price, direction, move_stats)
+            
             message = f"""
 🌾 *WHEAT ALERT - ULTIMATE v3.0* 🌾
 
@@ -751,6 +758,8 @@ Entry: {price:.2f}¢
 Stop: {stop:.2f}¢ ({STOP_LOSS_PCT:.1%})
 Target: {target:.2f}¢ ({TAKE_PROFIT_PCT:.1%})
 R:R = 1.67:1
+
+{recommendations}
 
 _{reason}_
 _🚀 Professional Edition_
