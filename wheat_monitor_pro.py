@@ -605,23 +605,83 @@ def main():
         
         # Initialize analyzers
         print("\n🔬 Initializing advanced analyzers...")
+        
+        # CHECK CACHE BEFORE FETCHING
+        current_hour = datetime.now().hour
+        should_fetch_fresh = current_hour in [9, 17]  # 9 AM and 5 PM UTC (11 AM & 7 PM Israel)
+        
+        if should_fetch_fresh:
+            print("🔄 Fetching FRESH weather & WASDE data (2x daily schedule)")
+        else:
+            print("💾 Using CACHED weather & WASDE data (saves API calls)")
+        
+        # Weather with caching
         weather = LiveWeatherAnalyzer()
-        wasde = LiveWASDEScraper()  # LIVE USDA data!
-        volume = VolumeAnalyzer()
+        weather_cache_file = Path("weather_cache.json")
         
-        # Get all signals
-        print("📡 Gathering signals...")
-        seasonal = get_seasonal_bias()
-        print(f"  ✓ Seasonal: {seasonal['direction']}")
+        if should_fetch_fresh or not weather_cache_file.exists():
+            weather_signal = weather.get_multi_region_signal()  # LIVE FETCH
+            # Cache the result
+            try:
+                cache_data = {
+                    'timestamp': datetime.now().isoformat(),
+                    'data': weather_signal
+                }
+                with open(weather_cache_file, 'w') as f:
+                    json.dump(cache_data, f)
+                print("  ✓ Weather data cached")
+            except:
+                pass
+        else:
+            # Use cached data
+            try:
+                with open(weather_cache_file, 'r') as f:
+                    cache_data = json.load(f)
+                    weather_signal = cache_data['data']
+                    cache_age = datetime.now() - datetime.fromisoformat(cache_data['timestamp'])
+                    print(f"  ✓ Using cached weather (age: {cache_age.seconds//3600}h {(cache_age.seconds%3600)//60}m)")
+            except:
+                # Cache failed, fetch fresh
+                weather_signal = weather.get_multi_region_signal()
         
-        weather_signal = weather.get_multi_region_signal()  # LIVE WEATHER!
         if 'bullish_regions' in weather_signal and 'regional_count' in weather_signal:
             print(f"  ✓ Weather: {weather_signal['signal']} ({weather_signal['bullish_regions']}/{weather_signal['regional_count']} regions)")
         else:
             print(f"  ✓ Weather: {weather_signal['signal']} (data unavailable)")
         
-        wasde_signal = wasde.get_fundamental_score()
+        # WASDE with caching
+        wasde = LiveWASDEScraper()
+        wasde_cache_file = Path("wasde_cache.json")
+        
+        if should_fetch_fresh or not wasde_cache_file.exists():
+            wasde_signal = wasde.get_fundamental_score()  # LIVE FETCH
+            # Cache the result
+            try:
+                cache_data = {
+                    'timestamp': datetime.now().isoformat(),
+                    'data': wasde_signal
+                }
+                with open(wasde_cache_file, 'w') as f:
+                    json.dump(cache_data, f)
+                print("  ✓ WASDE data cached")
+            except:
+                pass
+        else:
+            # Use cached data
+            try:
+                with open(wasde_cache_file, 'r') as f:
+                    cache_data = json.load(f)
+                    wasde_signal = cache_data['data']
+                    cache_age = datetime.now() - datetime.fromisoformat(cache_data['timestamp'])
+                    print(f"  ✓ Using cached WASDE (age: {cache_age.seconds//3600}h {(cache_age.seconds%3600)//60}m)")
+            except:
+                # Cache failed, fetch fresh
+                wasde_signal = wasde.get_fundamental_score()
+        
         print(f"  ✓ WASDE: {wasde_signal['signal']}")
+        
+        # Volume analyzer (no caching needed - uses local data)
+        volume = VolumeAnalyzer()
         
         volume_signal = volume.analyze_volume(df)
         print(f"  ✓ Volume: {volume_signal['signal']}")
