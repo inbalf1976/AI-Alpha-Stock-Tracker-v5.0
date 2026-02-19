@@ -683,6 +683,11 @@ def main():
         # Volume analyzer (no caching needed - uses local data)
         volume = VolumeAnalyzer()
         
+        # Get all signals
+        print("📡 Gathering signals...")
+        seasonal = get_seasonal_bias()
+        print(f"  ✓ Seasonal: {seasonal['direction']}")
+        
         volume_signal = volume.analyze_volume(df)
         print(f"  ✓ Volume: {volume_signal['signal']}")
         
