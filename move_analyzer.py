@@ -152,6 +152,7 @@ class MoveAnalyzer:
             moderate_price = entry_price * (1 - recs['moderate']['percent'] / 100)
             aggressive_price = entry_price * (1 - recs['aggressive']['percent'] / 100)
         
+        # FIXED: Removed unbalanced underscores that caused Markdown parsing error
         message = f"""
 📊 *TYPICAL {direction} MOVES* (Last {self.lookback_days} days):
 
@@ -160,7 +161,7 @@ class MoveAnalyzer:
 • Moderate: {moderate_price:.2f}¢ ({recs['moderate']['percent']:+.1f}%) - {recs['moderate']['probability']}
 • Aggressive: {aggressive_price:.2f}¢ ({recs['aggressive']['percent']:+.1f}%) - {recs['aggressive']['probability']}
 
-_Based on {stats['sample_size']} {direction} days_
+Based on {stats['sample_size']} {direction} days
 """
         return message.strip()
 
