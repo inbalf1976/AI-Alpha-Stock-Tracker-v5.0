@@ -4,6 +4,7 @@ Combines: Ensemble AI + Weather + WASDE + Volume + Seasonal + Context
 Expected Accuracy: 75-85%
 
 FIXED: Only update alert state AFTER Telegram confirms success
+ADDED: Debug logging to see Telegram API responses
 """
 
 import yfinance as yf
@@ -452,16 +453,57 @@ def save_state(state):
     print(f"   alerts_sent: {state.get('alerts_sent')}")
 
 def send_telegram(message):
+    """
+    Send message to Telegram with debug logging
+    """
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("❌ Telegram not configured")
+        print(f"   Bot token exists: {bool(TELEGRAM_BOT_TOKEN)}")
+        print(f"   Chat ID exists: {bool(TELEGRAM_CHAT_ID)}")
         return False
+    
     try:
         url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
         data = {"chat_id":TELEGRAM_CHAT_ID,"text":message,"parse_mode":"Markdown"}
-        response = requests.post(url,data=data,timeout=10)
-        return response.status_code == 200
+        
+        print(f"\n🔍 TELEGRAM DEBUG:")
+        print(f"   Bot token: {'SET' if TELEGRAM_BOT_TOKEN else 'MISSING'} (length: {len(TELEGRAM_BOT_TOKEN) if TELEGRAM_BOT_TOKEN else 0})")
+        print(f"   Chat ID: {TELEGRAM_CHAT_ID}")
+        print(f"   Message length: {len(message)} chars")
+        print(f"   First 200 chars of message:")
+        print(f"   {message[:200]}")
+        print(f"   Sending to Telegram API...")
+        
+        response = requests.post(url, data=data, timeout=10)
+        
+        print(f"   Response status code: {response.status_code}")
+        print(f"   Response headers: {dict(response.headers)}")
+        print(f"   Response body:")
+        print(f"   {response.text}")
+        
+        if response.status_code == 200:
+            print("   ✅ Telegram accepted the message!")
+            return True
+        else:
+            print(f"   ❌ Telegram rejected the message!")
+            print(f"   Status: {response.status_code}")
+            try:
+                error_data = response.json()
+                print(f"   Error details: {error_data}")
+            except:
+                pass
+            return False
+            
+    except requests.exceptions.Timeout:
+        print(f"   ❌ Timeout connecting to Telegram (10s)")
+        return False
+    except requests.exceptions.ConnectionError as e:
+        print(f"   ❌ Connection error: {e}")
+        return False
     except Exception as e:
-        print(f"Telegram error: {e}")
+        print(f"   ❌ Unexpected exception: {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
 def fetch_data(ticker,days=730):
@@ -580,7 +622,7 @@ def should_alert(direction, price, state):
 
 def main():
     print(f"\n{'='*80}")
-    print(f"🌾 PROFESSIONAL WHEAT MONITOR - ULTIMATE EDITION v3.0")
+    print(f"🌾 PROFESSIONAL WHEAT MONITOR - ULTIMATE EDITION v3.0 + DEBUG")
     print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print(f"Features: Ensemble AI + Weather + WASDE + Volume + Seasonal")
     print(f"{'='*80}\n")
@@ -829,7 +871,7 @@ _🚀 Professional Edition_
             telegram_success = send_telegram(message)
             
             if telegram_success:
-                print("✅ Professional alert sent!")
+                print("\n✅ Professional alert sent!")
                 # FIXED: Only update state AFTER Telegram confirms success
                 state['last_alert_time'] = datetime.now().isoformat()
                 state['last_alert_date'] = datetime.now().date().isoformat()
@@ -854,7 +896,7 @@ _🚀 Professional Edition_
                 except Exception as e:
                     print(f"⚠️ Performance tracking skipped: {e}")
             else:
-                print("❌ Alert failed - state NOT updated, will retry next run")
+                print("\n❌ Alert failed - state NOT updated, will retry next run")
         else:
             print(f"⏸️ No alert: {reason if not send_alert else f'Confidence {enhanced_conf:.1%} below {MIN_CONFIDENCE:.0%}'}")
         
