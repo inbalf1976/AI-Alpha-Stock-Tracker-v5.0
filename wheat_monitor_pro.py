@@ -2,6 +2,8 @@
 PROFESSIONAL WHEAT TRADING SYSTEM - ULTIMATE EDITION
 Combines: Ensemble AI + Weather + WASDE + Volume + Seasonal + Context
 Expected Accuracy: 75-85%
+
+FIXED: Only update alert state AFTER Telegram confirms success
 """
 
 import yfinance as yf
@@ -446,7 +448,7 @@ def save_state(state):
     print(f"   last_direction: {state.get('last_direction')}")
     print(f"   last_price: {state.get('last_price')}")
     print(f"   last_alert_date: {state.get('last_alert_date')}")
-    print(f"   daily_alert_sent: {state.get('daily_alert_sent')}")
+    print(f"   last_alert_time: {state.get('last_alert_time')}")
     print(f"   alerts_sent: {state.get('alerts_sent')}")
 
 def send_telegram(message):
@@ -502,6 +504,8 @@ def should_alert(direction, price, state):
     Alert rules:
     1. First alert of new trading day → Always send
     2. After that: Only if direction change + 2.5% move + 60min passed
+    
+    FIXED: Does NOT update state - that happens AFTER Telegram confirms success
     """
     from datetime import datetime
     
@@ -521,15 +525,11 @@ def should_alert(direction, price, state):
     # RULE 0: First run ever
     if last_alert_time is None:
         print(f"   → First run ever - SENDING")
-        state['last_alert_time'] = current_time.isoformat()
-        state['last_alert_date'] = current_date
         return True, "First prediction"
     
     # RULE 1: New trading day → Send first alert
     if last_alert_date != current_date:
         print(f"   → New trading day - SENDING first alert of {current_date}")
-        state['last_alert_time'] = current_time.isoformat()
-        state['last_alert_date'] = current_date
         return True, f"First prediction of {current_date}"
     
     # RULE 2: Same day - check timing and movement
@@ -539,7 +539,6 @@ def should_alert(direction, price, state):
         print(f"   Minutes since last alert: {minutes_since_alert:.1f}")
     except:
         print(f"   → Could not parse time, sending alert")
-        state['last_alert_time'] = current_time.isoformat()
         return True, "Time parse error"
     
     # Must wait at least 60 minutes
@@ -555,7 +554,6 @@ def should_alert(direction, price, state):
             
             if change_pct >= DIRECTION_CHANGE_THRESHOLD:
                 print(f"   → Significant move - SENDING")
-                state['last_alert_time'] = current_time.isoformat()
                 return True, f"Same direction but {change_pct:.1%} move"
             else:
                 print(f"   → Insufficient move - NO ALERT")
@@ -572,14 +570,12 @@ def should_alert(direction, price, state):
         
         if change_pct >= DIRECTION_CHANGE_THRESHOLD:
             print(f"   → Significant change - SENDING")
-            state['last_alert_time'] = current_time.isoformat()
             return True, f"Direction changed with {change_pct:.1%} move"
         else:
             print(f"   → Small change - NO ALERT")
             return False, f"Direction changed but only {change_pct:.1%} move"
     else:
         print(f"   → Direction changed (no price history) - SENDING")
-        state['last_alert_time'] = current_time.isoformat()
         return True, "Direction changed"
 
 def main():
@@ -830,8 +826,13 @@ _{reason}_
 _🚀 Professional Edition_
 """
             
-            if send_telegram(message):
+            telegram_success = send_telegram(message)
+            
+            if telegram_success:
                 print("✅ Professional alert sent!")
+                # FIXED: Only update state AFTER Telegram confirms success
+                state['last_alert_time'] = datetime.now().isoformat()
+                state['last_alert_date'] = datetime.now().date().isoformat()
                 state['alerts_sent'] += 1
                 
                 # LOG PREDICTION FOR PERFORMANCE TRACKING
@@ -853,7 +854,7 @@ _🚀 Professional Edition_
                 except Exception as e:
                     print(f"⚠️ Performance tracking skipped: {e}")
             else:
-                print("❌ Alert failed")
+                print("❌ Alert failed - state NOT updated, will retry next run")
         else:
             print(f"⏸️ No alert: {reason if not send_alert else f'Confidence {enhanced_conf:.1%} below {MIN_CONFIDENCE:.0%}'}")
         
