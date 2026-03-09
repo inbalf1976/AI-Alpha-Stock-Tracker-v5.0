@@ -1,12 +1,12 @@
 {
   "last_direction": "DOWN",
-  "last_price": 626.5,
+  "last_price": 622.75,
   "alerts_sent": 22,
   "last_model_reset": "2026-02-15T14:35:19.561201",
   "model_version": 1,
   "reset_count": 0,
   "last_alert_date": "2026-03-08",
   "daily_alert_sent": true,
-  "last_check": "2026-03-09T09:39:43.055313",
+  "last_check": "2026-03-09T10:37:18.437117",
   "last_alert_time": "2026-03-09T01:14:17.029503"
 }
