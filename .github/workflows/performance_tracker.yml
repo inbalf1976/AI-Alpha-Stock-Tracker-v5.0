@@ -2,8 +2,6 @@ name: Performance Tracker
 
 on:
   schedule:
-    # Monday 3 AM Israel time (1 AM UTC)
-    - cron: '0 1 * * 1'
     # Daily validation at 10 AM UTC (12 PM Israel)
     - cron: '0 10 * * *'
     # Weekly report on Sunday at 20:00 UTC (10 PM Israel)
@@ -27,29 +25,56 @@ jobs:
         python-version: '3.10'
     
     - name: Install packages
-      run: pip install yfinance pandas requests scikit-learn numpy
-    
-    - name: Run Wheat Monitor (Monday 3 AM)
-      if: github.event.schedule == '0 1 * * 1'
-      env:
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      run: python wheat_monitor_pro.py
+      run: pip install yfinance pandas requests
     
     - name: Validate Predictions
-      run: python -c "from performance_tracker import PerformanceTracker; tracker = PerformanceTracker(); validated = tracker.validate_predictions(); print(f'✓ Validated {validated} predictions')"
+      run: |
+        python -c "
+        from performance_tracker import PerformanceTracker
+        tracker = PerformanceTracker()
+        validated = tracker.validate_predictions()
+        print(f'✓ Validated {validated} predictions')
+        "
     
     - name: Generate Weekly Report
       if: github.event.schedule == '0 20 * * 0'
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      run: python -c "import os; import requests; from performance_tracker import PerformanceTracker; tracker = PerformanceTracker(); summary = tracker.generate_weekly_summary(); bot_token = os.getenv('TELEGRAM_BOT_TOKEN'); chat_id = os.getenv('TELEGRAM_CHAT_ID'); url = f'https://api.telegram.org/bot{bot_token}/sendMessage' if bot_token and chat_id else None; data = {'chat_id': chat_id, 'text': summary, 'parse_mode': 'Markdown'} if url else None; response = requests.post(url, data=data, timeout=10) if url else None; print('✓ Weekly report sent to Telegram' if response and response.status_code == 200 else f'✗ Failed: {response.status_code if response else \"No creds\"}')"
+      run: |
+        python -c "
+        import os
+        import requests
+        from performance_tracker import PerformanceTracker
+        
+        tracker = PerformanceTracker()
+        summary = tracker.generate_weekly_summary()
+        
+        bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
+        chat_id = os.getenv('TELEGRAM_CHAT_ID')
+        
+        if bot_token and chat_id:
+            url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
+            data = {
+                'chat_id': chat_id,
+                'text': summary,
+                'parse_mode': 'Markdown'
+            }
+            response = requests.post(url, data=data, timeout=10)
+            
+            if response.status_code == 200:
+                print('✓ Weekly report sent to Telegram')
+            else:
+                print(f'✗ Failed to send report: {response.status_code}')
+                print(f'Response: {response.text}')
+        else:
+            print('✗ Telegram credentials not configured')
+        "
     
     - name: Commit updated logs
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add -f prediction_log.json performance_stats.json wheat_monitor_state.json || true
+        git add -f prediction_log.json performance_stats.json || true
         git diff --quiet && git diff --staged --quiet || git commit -m "Update performance tracking [skip ci]"
         git push || echo "Nothing to push"
