@@ -26,11 +26,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import requests
 
 # ============================================================================
-# DEBUG LOGGER - Import for comprehensive error tracking
-# ============================================================================
-from debug_logger import create_logger
-
-# ============================================================================
 # LIVE WEATHER ANALYZER - Embedded to avoid import issues
 # ============================================================================
 
@@ -626,19 +621,13 @@ def should_alert(direction, price, state):
         return True, "Direction changed"
 
 def main():
-    # ========================================================================
-    # INITIALIZE DEBUG LOGGER
-    # ========================================================================
-    logger = create_logger(log_dir="logs", telegram_alerts=True)
+    print(f"\n{'='*80}")
+    print(f"🌾 PROFESSIONAL WHEAT MONITOR - ULTIMATE EDITION v3.0 + DEBUG")
+    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
+    print(f"Features: Ensemble AI + Weather + WASDE + Volume + Seasonal")
+    print(f"{'='*80}\n")
     
-    try:
-        print(f"\n{'='*80}")
-        print(f"🌾 PROFESSIONAL WHEAT MONITOR - ULTIMATE EDITION v3.0 + DEBUG")
-        print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
-        print(f"Features: Ensemble AI + Weather + WASDE + Volume + Seasonal")
-        print(f"{'='*80}\n")
-        
-        state = load_state()
+    state = load_state()
     
     try:
         # Fetch data
@@ -922,15 +911,9 @@ _🚀 Professional Edition_
         print(f"{'='*80}\n")
         
     except Exception as e:
-        # Log detailed exception with traceback
-        logger.exception("System error occurred during execution")
         print(f"\n❌ ERROR: {e}")
         import traceback
         traceback.print_exc()
-    
-    finally:
-        # Always close logger to save metrics
-        logger.close()
 
 if __name__ == "__main__":
     main()
