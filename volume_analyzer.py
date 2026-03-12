@@ -28,6 +28,17 @@ class VolumeAnalyzer:
             avg_volume = df['Volume'].rolling(window=self.lookback).mean().iloc[-1]
             volume_std = df['Volume'].rolling(window=self.lookback).std().iloc[-1]
             
+            # Handle zero or missing volume
+            if current_volume == 0 or pd.isna(current_volume) or avg_volume == 0 or pd.isna(avg_volume):
+                return {
+                    'signal': 'NEUTRAL',
+                    'score': 0.0,
+                    'confidence': 0.5,
+                    'volume_ratio': 1.0,
+                    'explanation': 'Volume data unavailable',
+                    'factors': ['No volume data']
+                }
+            
             # Price change
             price_change = (df['Close'].iloc[-1] - df['Close'].iloc[-2]) / df['Close'].iloc[-2]
             
@@ -46,7 +57,8 @@ class VolumeAnalyzer:
                 'score': 0.0,
                 'confidence': 0.5,
                 'volume_ratio': 1.0,
-                'explanation': 'Volume data unavailable'
+                'explanation': 'Volume data unavailable',
+                'factors': ['Analysis error']
             }
     
     def _interpret_volume(self, volume_ratio, price_change, df):
