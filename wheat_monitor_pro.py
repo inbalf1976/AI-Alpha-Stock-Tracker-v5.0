@@ -245,63 +245,90 @@ class LiveWASDEScraper:
         return url
 
     def _parse_wheat_page(self, pdf_bytes):
-        """Extract wheat stocks-to-use from WASDE PDF page 11"""
+        """Extract wheat stocks-to-use from WASDE PDF"""
         try:
             import pdfplumber
             import io
             import re
 
             with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
-                # Wheat Supply & Use is on page 11 (index 10)
-                wheat_pages = []
+                print(f"         PDF has {len(pdf.pages)} pages")
+
+                # Search ALL pages for the wheat supply/use TABLE
+                # The summary text on page 1 has no numbers — the table is later
                 for i, page in enumerate(pdf.pages):
                     text = page.extract_text() or ''
-                    if 'WHEAT' in text.upper() and ('STOCKS' in text.upper() or 'USE' in text.upper()):
-                        wheat_pages.append((i, text))
 
-                if not wheat_pages:
-                    print("         Could not find wheat page in PDF")
-                    return None
+                    # Skip pages without both wheat AND numeric data
+                    if 'WHEAT' not in text.upper():
+                        continue
 
-                # Use first wheat page found
-                page_num, text = wheat_pages[0]
-                print(f"         Found wheat data on page {page_num + 1}")
+                    # Look for the actual numbers — ending stocks + total use
+                    # WASDE table format: numbers like "1,631" or "1631" in rows
+                    # Stocks/Use ratio appears as decimal like "31.5" or "31.5%"
 
-                # Look for stocks-to-use percentage pattern
-                # WASDE shows it as "Stocks/Use" with a percentage
-                stu_patterns = [
-                    r'[Ss]tocks[/\-][Uu]se[^\d]*(\d+\.\d+)',
-                    r'[Ss]tocks to [Uu]se[^\d]*(\d+\.\d+)',
-                    r'STU[^\d]*(\d+\.\d+)',
-                ]
-                for pattern in stu_patterns:
-                    match = re.search(pattern, text)
-                    if match:
-                        stu_value = float(match.group(1))
-                        # Sanity check: wheat STU is typically 10-50%
-                        if 5 <= stu_value <= 60:
-                            print(f"         Wheat Stocks/Use: {stu_value}%")
-                            return {'stocks_to_use_pct': stu_value / 100, 'source': 'WASDE PDF'}
+                    # Pattern 1: explicit Stocks/Use ratio
+                    stu_match = re.search(
+                        r'[Ss]tocks[- /]+[Uu]se\s*[\|:\s]+(\d{1,2}\.\d)',
+                        text
+                    )
+                    if stu_match:
+                        stu = float(stu_match.group(1))
+                        if 5 <= stu <= 60:
+                            print(f"         Found STU on page {i+1}: {stu}%")
+                            return {'stocks_to_use_pct': stu / 100, 'source': 'WASDE PDF'}
 
-                # Fallback: look for ending stocks and total use numbers
-                # and calculate manually
-                ending_stocks = None
-                total_use = None
+                    # Pattern 2: look for ending stocks row and total use row
+                    # Extract all numbers from page and find the ratio
+                    lines = text.split('\n')
+                    ending_stocks = None
+                    total_use = None
 
-                stocks_match = re.search(r'[Ee]nding [Ss]tocks[^\d]*(\d+)', text)
-                use_match = re.search(r'[Tt]otal [Uu]se[^\d]*(\d+)', text)
+                    for line in lines:
+                        line_lower = line.lower()
+                        # Find ending stocks line
+                        if ('ending' in line_lower and 'stock' in line_lower) or \
+                           ('stocks' in line_lower and 'ending' in line_lower):
+                            nums = re.findall(r'\b(\d{2,4}(?:\.\d)?)\b', line)
+                            if nums:
+                                # Take the most recent year's value (last number usually)
+                                for n in reversed(nums):
+                                    val = float(n)
+                                    if 100 <= val <= 3000:  # Reasonable wheat stocks range (M bu)
+                                        ending_stocks = val
+                                        break
 
-                if stocks_match and use_match:
-                    ending_stocks = float(stocks_match.group(1))
-                    total_use = float(use_match.group(1))
-                    if total_use > 0:
+                        # Find total use/disappearance line
+                        if ('total' in line_lower and 'use' in line_lower) or \
+                           'disappear' in line_lower:
+                            nums = re.findall(r'\b(\d{3,4}(?:\.\d)?)\b', line)
+                            if nums:
+                                for n in reversed(nums):
+                                    val = float(n)
+                                    if 500 <= val <= 3000:  # Reasonable total use range
+                                        total_use = val
+                                        break
+
+                    if ending_stocks and total_use and total_use > 0:
                         stu = ending_stocks / total_use
                         if 0.05 <= stu <= 0.60:
-                            print(f"         Calculated STU: {stu:.1%} ({ending_stocks}/{total_use})")
+                            print(f"         Calculated STU page {i+1}: {stu:.1%} ({ending_stocks}/{total_use})")
                             return {'stocks_to_use_pct': stu, 'source': 'WASDE PDF calculated'}
 
-                print("         Could not extract STU from text, raw snippet:")
-                print(f"         {text[:500]}")
+                # Last resort: extract from page 1 summary text
+                # "stocks-to-use of 31.5 percent" pattern
+                full_text = ' '.join(page.extract_text() or '' for page in pdf.pages[:5])
+                stu_text = re.search(
+                    r'stocks.{0,10}use.{0,20}(\d{1,2}\.\d).{0,10}percent',
+                    full_text, re.IGNORECASE
+                )
+                if stu_text:
+                    stu = float(stu_text.group(1))
+                    if 5 <= stu <= 60:
+                        print(f"         Found STU in summary text: {stu}%")
+                        return {'stocks_to_use_pct': stu / 100, 'source': 'WASDE PDF summary'}
+
+                print("         STU not found in PDF — using seasonal fallback")
                 return None
 
         except ImportError:
