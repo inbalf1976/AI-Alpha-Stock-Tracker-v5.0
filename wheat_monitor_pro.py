@@ -341,10 +341,11 @@ class LiveWASDEScraper:
 
         try:
             # FAS PSD Online API — no API key required
-            # commodityCode 0410000 = Wheat, countryCode 9000000 = United States
-            # attributeId 176 = Ending Stocks, 125 = Total Distribution
+            # Commodity 0410000 = All Wheat, marketYear = start year of marketing year
+            # e.g. 2025 for the 2025/26 marketing year
             current_year = datetime.now().year
-            url = f"https://apps.fas.usda.gov/psdonline/api/psd/commodity/0410000/country/9000000/years/{current_year-1}"
+            market_year = current_year - 1  # 2025 for 2025/26
+            url = f"https://apps.fas.usda.gov/OpenData/api/psd/commodity/0410000/country/9000000/year/{market_year}"
             headers = {
                 'Accept': 'application/json',
                 'User-Agent': 'Mozilla/5.0 (compatible; WheatMonitor/3.0)'
@@ -359,12 +360,12 @@ class LiveWASDEScraper:
                 for record in data:
                     attr_id = record.get('attributeId', 0)
                     value = record.get('value', 0) or 0
-                    # Convert 1000 MT to million bushels (1 MT wheat = 36.744 bu)
+                    # Values in 1000 MT — convert to million bushels (1 MT = 36.744 bu)
                     value_mbu = (value * 36.744) / 1000
 
                     if attr_id == 176:   # Ending Stocks
                         ending_stocks_mbu = value_mbu
-                    elif attr_id == 125: # Total Distribution (use)
+                    elif attr_id == 125: # Total Distribution
                         total_use_mbu = value_mbu
 
                 if ending_stocks_mbu and total_use_mbu and total_use_mbu > 0:
