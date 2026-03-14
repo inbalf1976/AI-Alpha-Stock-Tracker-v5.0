@@ -316,85 +316,129 @@ class LiveWASDEScraper:
             return None
 
     def get_fundamental_score(self):
-        """Fetch WASDE PDF and extract wheat stocks-to-use for scoring"""
-        print("      Fetching WASDE PDF...", end=" ")
-
-        # Mimic a real browser to bypass USDA's bot detection (HTTP 403)
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-            'Accept': 'application/pdf,application/octet-stream,*/*',
-            'Accept-Language': 'en-US,en;q=0.9',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Referer': 'https://www.usda.gov/oce/commodity/wasde/',
-            'Connection': 'keep-alive',
+        """
+        Fetch US wheat ending stocks and total use from USDA FAS PSD Online API.
+        This API is designed for programmatic access and works from GitHub Actions.
+        
+        API endpoint: https://apps.fas.usda.gov/psdonline/app/index.html
+        Commodity code: 0410000 (Wheat)
+        Country code: 9000000 (United States)
+        Attributes: 176 = Ending Stocks, 125 = Total Domestic Consumption + Exports
+        
+        ── MANUAL FALLBACK ─────────────────────────────────────────────────
+        If API fails, update WASDE_FALLBACK below after each monthly release.
+        Source: https://southernagtoday.org (search "WASDE recap")
+        Current: March 2026 — Ending Stocks: 931M bu, Total Use: 2,028M bu
+        ─────────────────────────────────────────────────────────────────────
+        """
+        # Manual fallback — update monthly if API fails
+        WASDE_FALLBACK = {
+            '2026-03': (931, 2028),   # March 10, 2026 — WASDE-669
+            # '2026-04': (XXX, XXXX), # Add after April 9 release
         }
 
+        print("      Fetching USDA FAS PSD wheat data...", end=" ")
+
         try:
-            url = self._get_wasde_url()
-            response = requests.get(url, headers=headers, timeout=30)
-
-            if response.status_code != 200:
-                print(f"Failed (HTTP {response.status_code}) - using estimates")
-                return self._get_default_estimates()
-
-            print("Success")
-            wheat_data = self._parse_wheat_page(response.content)
-
-            if not wheat_data:
-                print("         PDF parse failed - using estimates")
-                return self._get_default_estimates()
-
-            stu = wheat_data['stocks_to_use_pct']
-            score = 0.0
-            factors = []
-
-            # Score based on real WASDE wheat stocks-to-use
-            if stu < 0.15:
-                score = 0.30
-                factors.append(f"Very tight wheat stocks ({stu:.1%})")
-            elif stu < 0.18:
-                score = 0.20
-                factors.append(f"Tight wheat stocks ({stu:.1%})")
-            elif stu < 0.22:
-                score = 0.10
-                factors.append(f"Snug wheat stocks ({stu:.1%})")
-            elif stu < 0.28:
-                score = 0.0
-                factors.append(f"Normal wheat stocks ({stu:.1%})")
-            elif stu < 0.35:
-                score = -0.10
-                factors.append(f"Comfortable wheat stocks ({stu:.1%})")
-            else:
-                score = -0.20
-                factors.append(f"Ample wheat stocks ({stu:.1%})")
-
-            if score > 0.10:
-                signal = 'BULLISH'
-            elif score < -0.05:
-                signal = 'BEARISH'
-            else:
-                signal = 'NEUTRAL'
-
-            print(f"         WASDE Wheat STU: {stu:.1%} → {signal}")
-
-            return {
-                'signal': signal,
-                'score': score,
-                'data': {
-                    'stocks_to_use': stu,
-                    'stocks_change': 0,
-                    'last_updated': datetime.now().strftime('%Y-%m-%d'),
-                    'source': wheat_data['source']
-                },
-                'factors': factors
+            # FAS PSD Online API — no API key required
+            # Commodity 0410000 = Wheat, Country 9000000 = United States
+            url = "https://apps.fas.usda.gov/psdonline/api/psd/commodity/0410000/country/9000000/years"
+            headers = {
+                'Accept': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (compatible; WheatMonitor/3.0)'
             }
+            response = requests.get(url, headers=headers, timeout=20)
 
-        except requests.exceptions.Timeout:
-            print("Timeout - using estimates")
-            return self._get_default_estimates()
+            if response.status_code == 200:
+                data = response.json()
+
+                # Find most recent marketing year data
+                # Marketing year for wheat = June/May
+                # Filter to get current/projected year
+                current_year = datetime.now().year
+                marketing_year = f"{current_year-1}/{str(current_year)[-2:]}"  # e.g. "2025/26"
+
+                ending_stocks = None
+                total_use = None
+
+                for record in data:
+                    my = record.get('marketYear', '') or record.get('marketing_year', '')
+                    attr = record.get('attributeId', 0) or record.get('attribute_id', 0)
+                    value = record.get('value', 0) or record.get('Value', 0)
+
+                    # Attribute 176 = Ending Stocks (1000 MT) — convert to million bushels
+                    # 1 metric ton wheat = 36.744 bushels
+                    if attr == 176 and str(current_year-1) in str(my):
+                        ending_stocks = (value * 36.744) / 1000  # to million bushels
+
+                    # Attribute 125 = Total Distribution (use + exports)
+                    if attr == 125 and str(current_year-1) in str(my):
+                        total_use = (value * 36.744) / 1000
+
+                if ending_stocks and total_use and total_use > 0:
+                    stu = ending_stocks / total_use
+                    print(f"Success (PSD API)")
+                    print(f"         Ending Stocks: {ending_stocks:.0f}M bu")
+                    print(f"         Total Use: {total_use:.0f}M bu")
+                    print(f"         STU: {stu:.1%}")
+                    return self._score_from_stu(stu, 'USDA FAS PSD API')
+                else:
+                    print("API returned no matching data — trying fallback")
+
         except Exception as e:
-            print(f"Error: {e} - using estimates")
-            return self._get_default_estimates()
+            print(f"API error: {e} — using fallback")
+
+        # Use manual fallback
+        now = datetime.now()
+        key = now.strftime('%Y-%m') if now.day >= 10 else (now.replace(day=1) - timedelta(days=1)).strftime('%Y-%m')
+
+        for k in sorted(WASDE_FALLBACK.keys(), reverse=True):
+            if k <= key:
+                ending_stocks, total_use = WASDE_FALLBACK[k]
+                stu = ending_stocks / total_use
+                print(f"Using fallback ({k})")
+                print(f"         STU: {stu:.1%}")
+                return self._score_from_stu(stu, f'WASDE fallback {k}')
+
+        return self._get_default_estimates()
+
+    def _score_from_stu(self, stu, source):
+        """Convert stocks-to-use ratio to trading signal"""
+        score = 0.0
+
+        if stu < 0.15:
+            score = 0.30
+            label = f"Very tight wheat stocks ({stu:.1%})"
+        elif stu < 0.18:
+            score = 0.20
+            label = f"Tight wheat stocks ({stu:.1%})"
+        elif stu < 0.22:
+            score = 0.10
+            label = f"Snug wheat stocks ({stu:.1%})"
+        elif stu < 0.30:
+            score = 0.0
+            label = f"Normal wheat stocks ({stu:.1%})"
+        elif stu < 0.40:
+            score = -0.10
+            label = f"Comfortable wheat stocks ({stu:.1%})"
+        else:
+            score = -0.20
+            label = f"Ample wheat stocks ({stu:.1%})"
+
+        signal = 'BULLISH' if score > 0.10 else 'BEARISH' if score < -0.05 else 'NEUTRAL'
+        print(f"         WASDE Signal: {signal} ({label})")
+
+        return {
+            'signal': signal,
+            'score': score,
+            'data': {
+                'stocks_to_use': stu,
+                'stocks_change': 0,
+                'last_updated': datetime.now().strftime('%Y-%m-%d'),
+                'source': source
+            },
+            'factors': [label]
+        }
 
     def _get_default_estimates(self):
         """Seasonal fallback estimates when PDF unavailable"""
