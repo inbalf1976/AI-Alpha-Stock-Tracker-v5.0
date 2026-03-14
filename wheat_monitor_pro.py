@@ -209,200 +209,204 @@ class LiveWeatherAnalyzer:
 # LIVE WASDE SCRAPER - Embedded (USDA QuickStats API)
 # ============================================================================
 
+# ============================================================================
+# LIVE WASDE SCRAPER - Scrapes official USDA WASDE PDF monthly report
+# URL pattern: https://www.usda.gov/oce/commodity/wasde/wasde{MM}{YY}.pdf
+# Wheat data is on page 11 of the PDF
+# ============================================================================
+
 class LiveWASDEScraper:
-    """Fetch and analyze live USDA WASDE data for wheat"""
-    
+    """Scrape and analyze live USDA WASDE PDF report for wheat supply/use data"""
+
     def __init__(self):
-        self.api_key = os.getenv("USDA_API_KEY", "3338B84E-694D-3E6A-925C-F35064C59BAE")
-        self.base_url = "https://quickstats.nass.usda.gov/api/api_GET/"
-    
-    def fetch_wheat_stocks(self):
+        self.base_url = "https://www.usda.gov/oce/commodity/wasde"
+
+    def _get_wasde_url(self):
+        """Build the URL for the most recent WASDE PDF"""
+        now = datetime.now()
+        # WASDE release dates 2026: Jan 12, Feb 10, Mar 10, Apr 9, May 12...
+        # Released around the 10th of each month — use current month if past day 10, else previous
+        if now.day >= 10:
+            month = now.month
+            year = now.year
+        else:
+            # Before the 10th — use previous month's report
+            if now.month == 1:
+                month = 12
+                year = now.year - 1
+            else:
+                month = now.month - 1
+                year = now.year
+
+        mm = str(month).zfill(2)
+        yy = str(year)[-2:]
+        url = f"{self.base_url}/wasde{mm}{yy}.pdf"
+        print(f"         WASDE URL: {url}")
+        return url
+
+    def _parse_wheat_page(self, pdf_bytes):
+        """Extract wheat stocks-to-use from WASDE PDF page 11"""
         try:
-            # Fetch WHEAT-ONLY stocks
-            # Adding short_desc filter to get only ALL WHEAT - STORED stocks
-            params = {
-                'key': self.api_key,
-                'source_desc': 'SURVEY',
-                'commodity_desc': 'WHEAT',
-                'statisticcat_desc': 'STOCKS',
-                'unit_desc': 'BU',
-                'agg_level_desc': 'NATIONAL',
-                'format': 'JSON',
-                'year__GE': 2020
-            }
-            response = requests.get(self.base_url, params=params, timeout=15)
-            if response.status_code == 200:
-                data = response.json()
-                if 'data' in data and data['data']:
-                    all_records = data['data']
+            import pdfplumber
+            import io
+            import re
 
-                    # Try to find records with short_desc containing WHEAT & STORED/ON HAND
-                    # Real wheat stocks are typically < 1,500M bushels
-                    # Filter out combined grain records (those tend to be > 1,500M bushels)
-                    wheat_only = [
-                        r for r in all_records
-                        if 'WHEAT' in r.get('commodity_desc', '').upper()
-                        and 'GRAIN' not in r.get('group_desc', '').upper()
-                    ]
+            with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+                # Wheat Supply & Use is on page 11 (index 10)
+                wheat_pages = []
+                for i, page in enumerate(pdf.pages):
+                    text = page.extract_text() or ''
+                    if 'WHEAT' in text.upper() and ('STOCKS' in text.upper() or 'USE' in text.upper()):
+                        wheat_pages.append((i, text))
 
-                    # Further filter: exclude any record where value > 1,500,000,000
-                    # (that would be all-grain combined, not wheat alone)
-                    realistic_wheat = []
-                    for r in (wheat_only or all_records):
-                        try:
-                            val = float(r.get('Value', '0').replace(',', ''))
-                            if val < 1_500_000_000:  # Real wheat stocks < 1.5B bushels
-                                realistic_wheat.append(r)
-                        except:
-                            continue
+                if not wheat_pages:
+                    print("         Could not find wheat page in PDF")
+                    return None
 
-                    records_to_parse = realistic_wheat if realistic_wheat else (wheat_only or all_records)
-                    return self._parse_stocks_data(records_to_parse)
+                # Use first wheat page found
+                page_num, text = wheat_pages[0]
+                print(f"         Found wheat data on page {page_num + 1}")
+
+                # Look for stocks-to-use percentage pattern
+                # WASDE shows it as "Stocks/Use" with a percentage
+                stu_patterns = [
+                    r'[Ss]tocks[/\-][Uu]se[^\d]*(\d+\.\d+)',
+                    r'[Ss]tocks to [Uu]se[^\d]*(\d+\.\d+)',
+                    r'STU[^\d]*(\d+\.\d+)',
+                ]
+                for pattern in stu_patterns:
+                    match = re.search(pattern, text)
+                    if match:
+                        stu_value = float(match.group(1))
+                        # Sanity check: wheat STU is typically 10-50%
+                        if 5 <= stu_value <= 60:
+                            print(f"         Wheat Stocks/Use: {stu_value}%")
+                            return {'stocks_to_use_pct': stu_value / 100, 'source': 'WASDE PDF'}
+
+                # Fallback: look for ending stocks and total use numbers
+                # and calculate manually
+                ending_stocks = None
+                total_use = None
+
+                stocks_match = re.search(r'[Ee]nding [Ss]tocks[^\d]*(\d+)', text)
+                use_match = re.search(r'[Tt]otal [Uu]se[^\d]*(\d+)', text)
+
+                if stocks_match and use_match:
+                    ending_stocks = float(stocks_match.group(1))
+                    total_use = float(use_match.group(1))
+                    if total_use > 0:
+                        stu = ending_stocks / total_use
+                        if 0.05 <= stu <= 0.60:
+                            print(f"         Calculated STU: {stu:.1%} ({ending_stocks}/{total_use})")
+                            return {'stocks_to_use_pct': stu, 'source': 'WASDE PDF calculated'}
+
+                print("         Could not extract STU from text, raw snippet:")
+                print(f"         {text[:500]}")
+                return None
+
+        except ImportError:
+            print("         pdfplumber not installed")
             return None
         except Exception as e:
-            print(f"WASDE fetch error: {e}")
+            print(f"         PDF parse error: {e}")
             return None
 
-    def fetch_wheat_annual_use(self):
-        """Fetch wheat total disappearance (annual use) for accurate stocks-to-use"""
-        try:
-            params = {
-                'key': self.api_key,
-                'source_desc': 'SURVEY',
-                'commodity_desc': 'WHEAT',
-                'unit_desc': 'BU',
-                'agg_level_desc': 'NATIONAL',
-                'format': 'JSON',
-                'year__GE': 2022
-            }
-            response = requests.get(self.base_url, params=params, timeout=15)
-            if response.status_code == 200:
-                data = response.json()
-                if 'data' in data and data['data']:
-                    # Find total disappearance = total use records
-                    use_records = [
-                        r for r in data['data']
-                        if 'DISAPPEAR' in r.get('short_desc', '').upper()
-                        or 'TOTAL USE' in r.get('short_desc', '').upper()
-                    ]
-                    if use_records:
-                        sorted_use = sorted(use_records, key=lambda x: x.get('year', 0), reverse=True)
-                        use_value = float(sorted_use[0].get('Value', '0').replace(',', ''))
-                        return use_value / 1_000_000  # Convert to millions bushels
-            return None
-        except Exception as e:
-            print(f"Annual use fetch error: {e}")
-            return None
-    
-    def _parse_stocks_data(self, data):
-        sorted_data = sorted(data, key=lambda x: (x.get('year', 0), x.get('reference_period_desc', '')), reverse=True)
-        if not sorted_data:
-            return None
-        
-        latest = sorted_data[0]
-        latest_value = float(latest.get('Value', 0).replace(',', ''))
-        latest_year = latest.get('year')
-        
-        previous_value = None
-        for record in sorted_data[1:]:
-            if record.get('year') != latest_year:
-                try:
-                    previous_value = float(record.get('Value', 0).replace(',', ''))
-                    break
-                except:
-                    continue
-        
-        yoy_change = 0
-        if previous_value and previous_value > 0:
-            yoy_change = ((latest_value - previous_value) / previous_value) * 100
-        
-        return {
-            'current_stocks': latest_value,
-            'yoy_change_pct': yoy_change,
-            'year': latest_year
-        }
-    
     def get_fundamental_score(self):
-        print("      Fetching USDA wheat data...", end=" ")
-        stocks_data = self.fetch_wheat_stocks()
-        
-        if not stocks_data:
-            print("Failed - using estimates")
+        """Fetch WASDE PDF and extract wheat stocks-to-use for scoring"""
+        print("      Fetching WASDE PDF...", end=" ")
+
+        try:
+            url = self._get_wasde_url()
+            response = requests.get(url, timeout=30)
+
+            if response.status_code != 200:
+                print(f"Failed (HTTP {response.status_code}) - using estimates")
+                return self._get_default_estimates()
+
+            print("Success")
+            wheat_data = self._parse_wheat_page(response.content)
+
+            if not wheat_data:
+                print("         PDF parse failed - using estimates")
+                return self._get_default_estimates()
+
+            stu = wheat_data['stocks_to_use_pct']
+            score = 0.0
+            factors = []
+
+            # Score based on real WASDE wheat stocks-to-use
+            if stu < 0.15:
+                score = 0.30
+                factors.append(f"Very tight wheat stocks ({stu:.1%})")
+            elif stu < 0.18:
+                score = 0.20
+                factors.append(f"Tight wheat stocks ({stu:.1%})")
+            elif stu < 0.22:
+                score = 0.10
+                factors.append(f"Snug wheat stocks ({stu:.1%})")
+            elif stu < 0.28:
+                score = 0.0
+                factors.append(f"Normal wheat stocks ({stu:.1%})")
+            elif stu < 0.35:
+                score = -0.10
+                factors.append(f"Comfortable wheat stocks ({stu:.1%})")
+            else:
+                score = -0.20
+                factors.append(f"Ample wheat stocks ({stu:.1%})")
+
+            if score > 0.10:
+                signal = 'BULLISH'
+            elif score < -0.05:
+                signal = 'BEARISH'
+            else:
+                signal = 'NEUTRAL'
+
+            print(f"         WASDE Wheat STU: {stu:.1%} → {signal}")
+
+            return {
+                'signal': signal,
+                'score': score,
+                'data': {
+                    'stocks_to_use': stu,
+                    'stocks_change': 0,
+                    'last_updated': datetime.now().strftime('%Y-%m-%d'),
+                    'source': wheat_data['source']
+                },
+                'factors': factors
+            }
+
+        except requests.exceptions.Timeout:
+            print("Timeout - using estimates")
             return self._get_default_estimates()
-        
-        print("Success")
-        
-        score = 0.0
-        factors = []
-        
-        stocks_value = stocks_data['current_stocks']
-        yoy_change = stocks_data['yoy_change_pct']
-        
-        stocks_millions = stocks_value / 1_000_000
+        except Exception as e:
+            print(f"Error: {e} - using estimates")
+            return self._get_default_estimates()
 
-        # Try to fetch real wheat annual use for accurate stocks-to-use ratio
-        # US wheat annual disappearance (use) is ~900M bushels — NOT 2000M (which was all grains)
-        annual_use_millions = self.fetch_wheat_annual_use()
-        if not annual_use_millions or annual_use_millions < 500 or annual_use_millions > 2500:
-            # Fallback: use known US wheat-only annual consumption (~900M bu)
-            annual_use_millions = 900.0
-            print(f"         Using wheat-specific use estimate: {annual_use_millions:.0f}M bu/year")
-        else:
-            print(f"         Live wheat annual use: {annual_use_millions:.0f}M bu/year")
-
-        stocks_to_use = stocks_millions / annual_use_millions if annual_use_millions > 0 else 0.20
-        
-        print(f"         Raw wheat stocks: {stocks_value:,.0f} bushels")
-        print(f"         Wheat stocks (millions): {stocks_millions:.1f}")
-        print(f"         Wheat annual use (millions): {annual_use_millions:.1f}")
-        print(f"         Stocks-to-use (WHEAT ONLY): {stocks_to_use:.1%}")
-        
-        stocks_to_use = max(0.0, min(2.0, stocks_to_use))
-        
-        if stocks_to_use < 0.15:
-            score += 0.30
-            factors.append(f"Very tight stocks ({stocks_to_use:.1%})")
-        elif stocks_to_use < 0.18:
-            score += 0.20
-            factors.append(f"Tight stocks ({stocks_to_use:.1%})")
-        elif stocks_to_use > 0.25:
-            score -= 0.15
-            factors.append(f"Ample stocks ({stocks_to_use:.1%})")
-        
-        if yoy_change < -5:
-            score += 0.15
-            factors.append(f"Stocks down {abs(yoy_change):.1f}% YoY")
-        elif yoy_change > 5:
-            score -= 0.10
-            factors.append(f"Stocks up {yoy_change:.1f}% YoY")
-        
-        if score > 0.20:
-            signal = 'BULLISH'
-        elif score < -0.10:
-            signal = 'BEARISH'
-        else:
-            signal = 'NEUTRAL'
-        
-        return {
-            'signal': signal,
-            'score': score,
-            'data': {
-                'stocks_to_use': stocks_to_use,
-                'stocks_change': yoy_change,
-                'last_updated': datetime.now().strftime('%Y-%m-%d'),
-                'source': 'USDA QuickStats LIVE'
-            },
-            'factors': factors[:2]
-        }
-    
     def _get_default_estimates(self):
+        """Seasonal fallback estimates when PDF unavailable"""
         month = datetime.now().month
-        if month in [1, 2, 3]:
-            return {'signal': 'BULLISH', 'score': 0.20, 'data': {'stocks_to_use': 0.18, 'stocks_change': -2, 'source': 'ESTIMATED'}, 'factors': ['Seasonal estimate']}
+        # March 2026: drought + geopolitical = tight supply (~22%)
+        if month in [1, 2, 3, 4]:
+            return {
+                'signal': 'BULLISH',
+                'score': 0.15,
+                'data': {'stocks_to_use': 0.22, 'stocks_change': -5, 'source': 'ESTIMATED'},
+                'factors': ['Tight wheat supply estimate (drought + geopolitical)']
+            }
         elif month in [7, 8, 9]:
-            return {'signal': 'BEARISH', 'score': -0.10, 'data': {'stocks_to_use': 0.22, 'stocks_change': 3, 'source': 'ESTIMATED'}, 'factors': ['Post-harvest']}
+            return {
+                'signal': 'BEARISH',
+                'score': -0.10,
+                'data': {'stocks_to_use': 0.28, 'stocks_change': 3, 'source': 'ESTIMATED'},
+                'factors': ['Post-harvest seasonal estimate']
+            }
         else:
-            return {'signal': 'NEUTRAL', 'score': 0.10, 'data': {'stocks_to_use': 0.20, 'stocks_change': 0, 'source': 'ESTIMATED'}, 'factors': ['Balanced']}
+            return {
+                'signal': 'NEUTRAL',
+                'score': 0.05,
+                'data': {'stocks_to_use': 0.25, 'stocks_change': 0, 'source': 'ESTIMATED'},
+                'factors': ['Seasonal average estimate']
+            }
 
 # ============================================================================
 
