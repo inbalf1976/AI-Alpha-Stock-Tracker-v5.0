@@ -328,6 +328,15 @@ class LiveWASDEScraper:
                         print(f"         Found STU in summary text: {stu}%")
                         return {'stocks_to_use_pct': stu / 100, 'source': 'WASDE PDF summary'}
 
+                # DEBUG: print snippet from every page containing WHEAT to diagnose format
+                print("         === DEBUG: Wheat pages raw text ===")
+                for i, page in enumerate(pdf.pages):
+                    text = page.extract_text() or ''
+                    if 'WHEAT' in text.upper() and any(c.isdigit() for c in text):
+                        print(f"         -- Page {i+1} snippet --")
+                        print(f"         {text[200:800]}")
+                        print()
+
                 print("         STU not found in PDF — using seasonal fallback")
                 return None
 
