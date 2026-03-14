@@ -218,11 +218,13 @@ class LiveWASDEScraper:
     
     def fetch_wheat_stocks(self):
         try:
+            # Fetch WHEAT-ONLY stocks — unit_desc BU ensures bushels only, not acres/farms
             params = {
                 'key': self.api_key,
                 'source_desc': 'SURVEY',
                 'commodity_desc': 'WHEAT',
                 'statisticcat_desc': 'STOCKS',
+                'unit_desc': 'BU',
                 'agg_level_desc': 'NATIONAL',
                 'format': 'JSON',
                 'year__GE': 2020
@@ -231,10 +233,48 @@ class LiveWASDEScraper:
             if response.status_code == 200:
                 data = response.json()
                 if 'data' in data and data['data']:
-                    return self._parse_stocks_data(data['data'])
+                    # Filter strictly to wheat-only records, exclude combined grain surveys
+                    wheat_records = [
+                        r for r in data['data']
+                        if 'WHEAT' in r.get('commodity_desc', '').upper()
+                        and 'GRAIN' not in r.get('group_desc', '').upper()
+                    ]
+                    records_to_parse = wheat_records if wheat_records else data['data']
+                    return self._parse_stocks_data(records_to_parse)
             return None
         except Exception as e:
             print(f"WASDE fetch error: {e}")
+            return None
+
+    def fetch_wheat_annual_use(self):
+        """Fetch wheat total disappearance (annual use) for accurate stocks-to-use"""
+        try:
+            params = {
+                'key': self.api_key,
+                'source_desc': 'SURVEY',
+                'commodity_desc': 'WHEAT',
+                'unit_desc': 'BU',
+                'agg_level_desc': 'NATIONAL',
+                'format': 'JSON',
+                'year__GE': 2022
+            }
+            response = requests.get(self.base_url, params=params, timeout=15)
+            if response.status_code == 200:
+                data = response.json()
+                if 'data' in data and data['data']:
+                    # Find total disappearance = total use records
+                    use_records = [
+                        r for r in data['data']
+                        if 'DISAPPEAR' in r.get('short_desc', '').upper()
+                        or 'TOTAL USE' in r.get('short_desc', '').upper()
+                    ]
+                    if use_records:
+                        sorted_use = sorted(use_records, key=lambda x: x.get('year', 0), reverse=True)
+                        use_value = float(sorted_use[0].get('Value', '0').replace(',', ''))
+                        return use_value / 1_000_000  # Convert to millions bushels
+            return None
+        except Exception as e:
+            print(f"Annual use fetch error: {e}")
             return None
     
     def _parse_stocks_data(self, data):
@@ -266,7 +306,7 @@ class LiveWASDEScraper:
         }
     
     def get_fundamental_score(self):
-        print("      Fetching USDA data...", end=" ")
+        print("      Fetching USDA wheat data...", end=" ")
         stocks_data = self.fetch_wheat_stocks()
         
         if not stocks_data:
@@ -282,12 +322,23 @@ class LiveWASDEScraper:
         yoy_change = stocks_data['yoy_change_pct']
         
         stocks_millions = stocks_value / 1_000_000
-        estimated_use_millions = 2000
-        stocks_to_use = stocks_millions / estimated_use_millions if estimated_use_millions > 0 else 0.20
+
+        # Try to fetch real wheat annual use for accurate stocks-to-use ratio
+        # US wheat annual disappearance (use) is ~900M bushels — NOT 2000M (which was all grains)
+        annual_use_millions = self.fetch_wheat_annual_use()
+        if not annual_use_millions or annual_use_millions < 500 or annual_use_millions > 2500:
+            # Fallback: use known US wheat-only annual consumption (~900M bu)
+            annual_use_millions = 900.0
+            print(f"         Using wheat-specific use estimate: {annual_use_millions:.0f}M bu/year")
+        else:
+            print(f"         Live wheat annual use: {annual_use_millions:.0f}M bu/year")
+
+        stocks_to_use = stocks_millions / annual_use_millions if annual_use_millions > 0 else 0.20
         
-        print(f"         Raw stocks: {stocks_value:,.0f} bushels")
-        print(f"         Stocks (millions): {stocks_millions:.1f}")
-        print(f"         Stocks-to-use: {stocks_to_use:.1%}")
+        print(f"         Raw wheat stocks: {stocks_value:,.0f} bushels")
+        print(f"         Wheat stocks (millions): {stocks_millions:.1f}")
+        print(f"         Wheat annual use (millions): {annual_use_millions:.1f}")
+        print(f"         Stocks-to-use (WHEAT ONLY): {stocks_to_use:.1%}")
         
         stocks_to_use = max(0.0, min(2.0, stocks_to_use))
         
