@@ -218,7 +218,8 @@ class LiveWASDEScraper:
     
     def fetch_wheat_stocks(self):
         try:
-            # Fetch WHEAT-ONLY stocks — unit_desc BU ensures bushels only, not acres/farms
+            # Fetch WHEAT-ONLY stocks
+            # Adding short_desc filter to get only ALL WHEAT - STORED stocks
             params = {
                 'key': self.api_key,
                 'source_desc': 'SURVEY',
@@ -233,13 +234,29 @@ class LiveWASDEScraper:
             if response.status_code == 200:
                 data = response.json()
                 if 'data' in data and data['data']:
-                    # Filter strictly to wheat-only records, exclude combined grain surveys
-                    wheat_records = [
-                        r for r in data['data']
+                    all_records = data['data']
+
+                    # Try to find records with short_desc containing WHEAT & STORED/ON HAND
+                    # Real wheat stocks are typically < 1,500M bushels
+                    # Filter out combined grain records (those tend to be > 1,500M bushels)
+                    wheat_only = [
+                        r for r in all_records
                         if 'WHEAT' in r.get('commodity_desc', '').upper()
                         and 'GRAIN' not in r.get('group_desc', '').upper()
                     ]
-                    records_to_parse = wheat_records if wheat_records else data['data']
+
+                    # Further filter: exclude any record where value > 1,500,000,000
+                    # (that would be all-grain combined, not wheat alone)
+                    realistic_wheat = []
+                    for r in (wheat_only or all_records):
+                        try:
+                            val = float(r.get('Value', '0').replace(',', ''))
+                            if val < 1_500_000_000:  # Real wheat stocks < 1.5B bushels
+                                realistic_wheat.append(r)
+                        except:
+                            continue
+
+                    records_to_parse = realistic_wheat if realistic_wheat else (wheat_only or all_records)
                     return self._parse_stocks_data(records_to_parse)
             return None
         except Exception as e:
@@ -767,11 +784,11 @@ def main():
             boost_details.append(f"Weather: -{penalty:.2%}")
         
         if (direction=="UP" and wasde_signal['signal']=='BULLISH') or (direction=="DOWN" and wasde_signal['signal']=='BEARISH'):
-            boost = abs(wasde_signal['score'])*0.5
+            boost = min(abs(wasde_signal['score'])*0.5, 0.05)  # Cap WASDE boost at 5%
             enhanced_conf += boost
             boost_details.append(f"WASDE: +{boost:.2%}")
         elif wasde_signal['signal']!='NEUTRAL':
-            penalty = abs(wasde_signal['score'])*0.3
+            penalty = min(abs(wasde_signal['score'])*0.3, 0.05)  # Cap WASDE penalty at 5%
             enhanced_conf -= penalty
             boost_details.append(f"WASDE: -{penalty:.2%}")
         
