@@ -341,8 +341,10 @@ class LiveWASDEScraper:
 
         try:
             # FAS PSD Online API — no API key required
-            # Commodity 0410000 = Wheat, Country 9000000 = United States
-            url = "https://apps.fas.usda.gov/psdonline/api/psd/commodity/0410000/country/9000000/years"
+            # commodityCode 0410000 = Wheat, countryCode 9000000 = United States
+            # attributeId 176 = Ending Stocks, 125 = Total Distribution
+            current_year = datetime.now().year
+            url = f"https://apps.fas.usda.gov/psdonline/api/psd/commodity/0410000/country/9000000/years/{current_year-1}"
             headers = {
                 'Accept': 'application/json',
                 'User-Agent': 'Mozilla/5.0 (compatible; WheatMonitor/3.0)'
@@ -351,39 +353,31 @@ class LiveWASDEScraper:
 
             if response.status_code == 200:
                 data = response.json()
-
-                # Find most recent marketing year data
-                # Marketing year for wheat = June/May
-                # Filter to get current/projected year
-                current_year = datetime.now().year
-                marketing_year = f"{current_year-1}/{str(current_year)[-2:]}"  # e.g. "2025/26"
-
-                ending_stocks = None
-                total_use = None
+                ending_stocks_mbu = None
+                total_use_mbu = None
 
                 for record in data:
-                    my = record.get('marketYear', '') or record.get('marketing_year', '')
-                    attr = record.get('attributeId', 0) or record.get('attribute_id', 0)
-                    value = record.get('value', 0) or record.get('Value', 0)
+                    attr_id = record.get('attributeId', 0)
+                    value = record.get('value', 0) or 0
+                    # Convert 1000 MT to million bushels (1 MT wheat = 36.744 bu)
+                    value_mbu = (value * 36.744) / 1000
 
-                    # Attribute 176 = Ending Stocks (1000 MT) — convert to million bushels
-                    # 1 metric ton wheat = 36.744 bushels
-                    if attr == 176 and str(current_year-1) in str(my):
-                        ending_stocks = (value * 36.744) / 1000  # to million bushels
+                    if attr_id == 176:   # Ending Stocks
+                        ending_stocks_mbu = value_mbu
+                    elif attr_id == 125: # Total Distribution (use)
+                        total_use_mbu = value_mbu
 
-                    # Attribute 125 = Total Distribution (use + exports)
-                    if attr == 125 and str(current_year-1) in str(my):
-                        total_use = (value * 36.744) / 1000
-
-                if ending_stocks and total_use and total_use > 0:
-                    stu = ending_stocks / total_use
+                if ending_stocks_mbu and total_use_mbu and total_use_mbu > 0:
+                    stu = ending_stocks_mbu / total_use_mbu
                     print(f"Success (PSD API)")
-                    print(f"         Ending Stocks: {ending_stocks:.0f}M bu")
-                    print(f"         Total Use: {total_use:.0f}M bu")
+                    print(f"         Ending Stocks: {ending_stocks_mbu:.0f}M bu")
+                    print(f"         Total Use: {total_use_mbu:.0f}M bu")
                     print(f"         STU: {stu:.1%}")
                     return self._score_from_stu(stu, 'USDA FAS PSD API')
                 else:
                     print("API returned no matching data — trying fallback")
+            else:
+                print(f"API HTTP {response.status_code} — trying fallback")
 
         except Exception as e:
             print(f"API error: {e} — using fallback")
