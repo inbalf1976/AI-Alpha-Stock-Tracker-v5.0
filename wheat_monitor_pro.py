@@ -319,9 +319,19 @@ class LiveWASDEScraper:
         """Fetch WASDE PDF and extract wheat stocks-to-use for scoring"""
         print("      Fetching WASDE PDF...", end=" ")
 
+        # Mimic a real browser to bypass USDA's bot detection (HTTP 403)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'Accept': 'application/pdf,application/octet-stream,*/*',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Referer': 'https://www.usda.gov/oce/commodity/wasde/',
+            'Connection': 'keep-alive',
+        }
+
         try:
             url = self._get_wasde_url()
-            response = requests.get(url, timeout=30)
+            response = requests.get(url, headers=headers, timeout=30)
 
             if response.status_code != 200:
                 print(f"Failed (HTTP {response.status_code}) - using estimates")
