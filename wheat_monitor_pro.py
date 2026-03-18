@@ -209,257 +209,132 @@ class LiveWeatherAnalyzer:
 # LIVE WASDE SCRAPER - Embedded (USDA QuickStats API)
 # ============================================================================
 
-# ============================================================================
-# LIVE WASDE SCRAPER - Scrapes official USDA WASDE PDF monthly report
-# URL pattern: https://www.usda.gov/oce/commodity/wasde/wasde{MM}{YY}.pdf
-# Wheat data is on page 11 of the PDF
-# ============================================================================
-
 class LiveWASDEScraper:
-    """Scrape and analyze live USDA WASDE PDF report for wheat supply/use data"""
-
+    """Fetch and analyze live USDA WASDE data for wheat"""
+    
     def __init__(self):
-        self.base_url = "https://www.usda.gov/oce/commodity/wasde"
-
-    def _get_wasde_url(self):
-        """Build the URL for the most recent WASDE PDF"""
-        now = datetime.now()
-        # WASDE release dates 2026: Jan 12, Feb 10, Mar 10, Apr 9, May 12...
-        # Released around the 10th of each month — use current month if past day 10, else previous
-        if now.day >= 10:
-            month = now.month
-            year = now.year
-        else:
-            # Before the 10th — use previous month's report
-            if now.month == 1:
-                month = 12
-                year = now.year - 1
-            else:
-                month = now.month - 1
-                year = now.year
-
-        mm = str(month).zfill(2)
-        yy = str(year)[-2:]
-        url = f"{self.base_url}/wasde{mm}{yy}.pdf"
-        print(f"         WASDE URL: {url}")
-        return url
-
-    def _parse_wheat_page(self, pdf_bytes):
-        """Extract US wheat stocks-to-use from WASDE PDF page 11.
-        
-        From debug output, page 11 format is:
-            Use, Total    1,815    1,969    2,028    2,028
-            Ending Stocks   696      855      931      931
-        Last column = current projection (Mar 2026)
-        US wheat STU = Ending Stocks / Use Total = 931/2028 = 45.9%
-        """
+        self.api_key = os.getenv("USDA_API_KEY", "3338B84E-694D-3E6A-925C-F35064C59BAE")
+        self.base_url = "https://quickstats.nass.usda.gov/api/api_GET/"
+    
+    def fetch_wheat_stocks(self):
         try:
-            import pdfplumber
-            import io
-            import re
-
-            with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
-                # Page 11 confirmed from debug — try it first, then neighbors
-                for page_idx in [10, 9, 11, 12]:
-                    if page_idx >= len(pdf.pages):
-                        continue
-
-                    text = pdf.pages[page_idx].extract_text() or ''
-
-                    # Must contain both Use Total and Ending Stocks rows
-                    has_use = bool(re.search(r'Use,?\s*Total', text, re.IGNORECASE))
-                    has_stocks = bool(re.search(r'Ending\s+Stocks', text, re.IGNORECASE))
-
-                    if not (has_use and has_stocks):
-                        continue
-
-                    print(f"         Parsing page {page_idx + 1} for US wheat STU...")
-                    lines = text.split('\n')
-
-                    use_total = None
-                    ending_stocks = None
-
-                    for line in lines:
-                        # "Use, Total  1,815  1,969  2,028  2,028"
-                        if re.search(r'Use,?\s*Total', line, re.IGNORECASE):
-                            nums = [float(n.replace(',', '')) for n in re.findall(r'[\d,]+', line)
-                                    if float(n.replace(',', '')) > 100]
-                            if nums:
-                                use_total = nums[-1]  # Last = most recent projection
-                                print(f"         Use Total: {use_total}")
-
-                        # "Ending Stocks  696  855  931  931"
-                        if re.search(r'Ending\s+Stocks', line, re.IGNORECASE):
-                            nums = [float(n.replace(',', '')) for n in re.findall(r'[\d,]+', line)
-                                    if float(n.replace(',', '')) > 10]
-                            if nums:
-                                ending_stocks = nums[-1]
-                                print(f"         Ending Stocks: {ending_stocks}")
-
-                    if use_total and ending_stocks and use_total > 0:
-                        stu = ending_stocks / use_total
-                        # US wheat STU is typically 30-60%
-                        if 0.15 <= stu <= 0.80:
-                            print(f"         ✅ US Wheat STU: {stu:.1%} ({ending_stocks:.0f}/{use_total:.0f})")
-                            return {'stocks_to_use_pct': stu, 'source': 'WASDE PDF page 11'}
-                        else:
-                            print(f"         ⚠️ STU {stu:.1%} out of range — skipping")
-
-                print("         STU not found — using seasonal fallback")
-                return None
-
-        except ImportError:
-            print("         pdfplumber not installed")
-            return None
-        except Exception as e:
-            print(f"         PDF parse error: {e}")
-            return None
-
-    def get_fundamental_score(self):
-        """
-        Fetch US wheat ending stocks and total use from USDA FAS PSD Online API.
-        This API is designed for programmatic access and works from GitHub Actions.
-        
-        API endpoint: https://apps.fas.usda.gov/psdonline/app/index.html
-        Commodity code: 0410000 (Wheat)
-        Country code: 9000000 (United States)
-        Attributes: 176 = Ending Stocks, 125 = Total Domestic Consumption + Exports
-        
-        ── MANUAL FALLBACK ─────────────────────────────────────────────────
-        If API fails, update WASDE_FALLBACK below after each monthly release.
-        Source: https://southernagtoday.org (search "WASDE recap")
-        Current: March 2026 — Ending Stocks: 931M bu, Total Use: 2,028M bu
-        ─────────────────────────────────────────────────────────────────────
-        """
-        # Manual fallback — update monthly if API fails
-        WASDE_FALLBACK = {
-            '2026-03': (931, 2028),   # March 10, 2026 — WASDE-669
-            # '2026-04': (XXX, XXXX), # Add after April 9 release
-        }
-
-        print("      Fetching USDA FAS PSD wheat data...", end=" ")
-
-        try:
-            # FAS PSD Online API — no API key required
-            # Commodity 0410000 = All Wheat, marketYear = start year of marketing year
-            # e.g. 2025 for the 2025/26 marketing year
-            current_year = datetime.now().year
-            market_year = current_year - 1  # 2025 for 2025/26
-            url = f"https://apps.fas.usda.gov/OpenData/api/psd/commodity/0410000/country/9000000/year/{market_year}"
-            headers = {
-                'Accept': 'application/json',
-                'User-Agent': 'Mozilla/5.0 (compatible; WheatMonitor/3.0)'
+            params = {
+                'key': self.api_key,
+                'source_desc': 'SURVEY',
+                'commodity_desc': 'WHEAT',
+                'statisticcat_desc': 'STOCKS',
+                'agg_level_desc': 'NATIONAL',
+                'format': 'JSON',
+                'year__GE': 2020
             }
-            response = requests.get(url, headers=headers, timeout=20)
-
+            response = requests.get(self.base_url, params=params, timeout=15)
             if response.status_code == 200:
                 data = response.json()
-                ending_stocks_mbu = None
-                total_use_mbu = None
-
-                for record in data:
-                    attr_id = record.get('attributeId', 0)
-                    value = record.get('value', 0) or 0
-                    # Values in 1000 MT — convert to million bushels (1 MT = 36.744 bu)
-                    value_mbu = (value * 36.744) / 1000
-
-                    if attr_id == 176:   # Ending Stocks
-                        ending_stocks_mbu = value_mbu
-                    elif attr_id == 125: # Total Distribution
-                        total_use_mbu = value_mbu
-
-                if ending_stocks_mbu and total_use_mbu and total_use_mbu > 0:
-                    stu = ending_stocks_mbu / total_use_mbu
-                    print(f"Success (PSD API)")
-                    print(f"         Ending Stocks: {ending_stocks_mbu:.0f}M bu")
-                    print(f"         Total Use: {total_use_mbu:.0f}M bu")
-                    print(f"         STU: {stu:.1%}")
-                    return self._score_from_stu(stu, 'USDA FAS PSD API')
-                else:
-                    print("API returned no matching data — trying fallback")
-            else:
-                print(f"API HTTP {response.status_code} — trying fallback")
-
+                if 'data' in data and data['data']:
+                    return self._parse_stocks_data(data['data'])
+            return None
         except Exception as e:
-            print(f"API error: {e} — using fallback")
-
-        # Use manual fallback
-        now = datetime.now()
-        key = now.strftime('%Y-%m') if now.day >= 10 else (now.replace(day=1) - timedelta(days=1)).strftime('%Y-%m')
-
-        for k in sorted(WASDE_FALLBACK.keys(), reverse=True):
-            if k <= key:
-                ending_stocks, total_use = WASDE_FALLBACK[k]
-                stu = ending_stocks / total_use
-                print(f"Using fallback ({k})")
-                print(f"         STU: {stu:.1%}")
-                return self._score_from_stu(stu, f'WASDE fallback {k}')
-
-        return self._get_default_estimates()
-
-    def _score_from_stu(self, stu, source):
-        """Convert stocks-to-use ratio to trading signal"""
+            print(f"WASDE fetch error: {e}")
+            return None
+    
+    def _parse_stocks_data(self, data):
+        sorted_data = sorted(data, key=lambda x: (x.get('year', 0), x.get('reference_period_desc', '')), reverse=True)
+        if not sorted_data:
+            return None
+        
+        latest = sorted_data[0]
+        latest_value = float(latest.get('Value', 0).replace(',', ''))
+        latest_year = latest.get('year')
+        
+        previous_value = None
+        for record in sorted_data[1:]:
+            if record.get('year') != latest_year:
+                try:
+                    previous_value = float(record.get('Value', 0).replace(',', ''))
+                    break
+                except:
+                    continue
+        
+        yoy_change = 0
+        if previous_value and previous_value > 0:
+            yoy_change = ((latest_value - previous_value) / previous_value) * 100
+        
+        return {
+            'current_stocks': latest_value,
+            'yoy_change_pct': yoy_change,
+            'year': latest_year
+        }
+    
+    def get_fundamental_score(self):
+        print("      Fetching USDA data...", end=" ")
+        stocks_data = self.fetch_wheat_stocks()
+        
+        if not stocks_data:
+            print("Failed - using estimates")
+            return self._get_default_estimates()
+        
+        print("Success")
+        
         score = 0.0
-
-        if stu < 0.15:
-            score = 0.30
-            label = f"Very tight wheat stocks ({stu:.1%})"
-        elif stu < 0.18:
-            score = 0.20
-            label = f"Tight wheat stocks ({stu:.1%})"
-        elif stu < 0.22:
-            score = 0.10
-            label = f"Snug wheat stocks ({stu:.1%})"
-        elif stu < 0.30:
-            score = 0.0
-            label = f"Normal wheat stocks ({stu:.1%})"
-        elif stu < 0.40:
-            score = -0.10
-            label = f"Comfortable wheat stocks ({stu:.1%})"
+        factors = []
+        
+        stocks_value = stocks_data['current_stocks']
+        yoy_change = stocks_data['yoy_change_pct']
+        
+        stocks_millions = stocks_value / 1_000_000
+        estimated_use_millions = 2000
+        stocks_to_use = stocks_millions / estimated_use_millions if estimated_use_millions > 0 else 0.20
+        
+        print(f"         Raw stocks: {stocks_value:,.0f} bushels")
+        print(f"         Stocks (millions): {stocks_millions:.1f}")
+        print(f"         Stocks-to-use: {stocks_to_use:.1%}")
+        
+        stocks_to_use = max(0.0, min(2.0, stocks_to_use))
+        
+        if stocks_to_use < 0.15:
+            score += 0.30
+            factors.append(f"Very tight stocks ({stocks_to_use:.1%})")
+        elif stocks_to_use < 0.18:
+            score += 0.20
+            factors.append(f"Tight stocks ({stocks_to_use:.1%})")
+        elif stocks_to_use > 0.25:
+            score -= 0.15
+            factors.append(f"Ample stocks ({stocks_to_use:.1%})")
+        
+        if yoy_change < -5:
+            score += 0.15
+            factors.append(f"Stocks down {abs(yoy_change):.1f}% YoY")
+        elif yoy_change > 5:
+            score -= 0.10
+            factors.append(f"Stocks up {yoy_change:.1f}% YoY")
+        
+        if score > 0.20:
+            signal = 'BULLISH'
+        elif score < -0.10:
+            signal = 'BEARISH'
         else:
-            score = -0.20
-            label = f"Ample wheat stocks ({stu:.1%})"
-
-        signal = 'BULLISH' if score > 0.10 else 'BEARISH' if score < -0.05 else 'NEUTRAL'
-        print(f"         WASDE Signal: {signal} ({label})")
-
+            signal = 'NEUTRAL'
+        
         return {
             'signal': signal,
             'score': score,
             'data': {
-                'stocks_to_use': stu,
-                'stocks_change': 0,
+                'stocks_to_use': stocks_to_use,
+                'stocks_change': yoy_change,
                 'last_updated': datetime.now().strftime('%Y-%m-%d'),
-                'source': source
+                'source': 'USDA QuickStats LIVE'
             },
-            'factors': [label]
+            'factors': factors[:2]
         }
-
+    
     def _get_default_estimates(self):
-        """Seasonal fallback estimates when PDF unavailable"""
         month = datetime.now().month
-        # March 2026: drought + geopolitical = tight supply (~22%)
-        if month in [1, 2, 3, 4]:
-            return {
-                'signal': 'BULLISH',
-                'score': 0.15,
-                'data': {'stocks_to_use': 0.22, 'stocks_change': -5, 'source': 'ESTIMATED'},
-                'factors': ['Tight wheat supply estimate (drought + geopolitical)']
-            }
+        if month in [1, 2, 3]:
+            return {'signal': 'BULLISH', 'score': 0.20, 'data': {'stocks_to_use': 0.18, 'stocks_change': -2, 'source': 'ESTIMATED'}, 'factors': ['Seasonal estimate']}
         elif month in [7, 8, 9]:
-            return {
-                'signal': 'BEARISH',
-                'score': -0.10,
-                'data': {'stocks_to_use': 0.28, 'stocks_change': 3, 'source': 'ESTIMATED'},
-                'factors': ['Post-harvest seasonal estimate']
-            }
+            return {'signal': 'BEARISH', 'score': -0.10, 'data': {'stocks_to_use': 0.22, 'stocks_change': 3, 'source': 'ESTIMATED'}, 'factors': ['Post-harvest']}
         else:
-            return {
-                'signal': 'NEUTRAL',
-                'score': 0.05,
-                'data': {'stocks_to_use': 0.25, 'stocks_change': 0, 'source': 'ESTIMATED'},
-                'factors': ['Seasonal average estimate']
-            }
+            return {'signal': 'NEUTRAL', 'score': 0.10, 'data': {'stocks_to_use': 0.20, 'stocks_change': 0, 'source': 'ESTIMATED'}, 'factors': ['Balanced']}
 
 # ============================================================================
 
@@ -841,11 +716,11 @@ def main():
             boost_details.append(f"Weather: -{penalty:.2%}")
         
         if (direction=="UP" and wasde_signal['signal']=='BULLISH') or (direction=="DOWN" and wasde_signal['signal']=='BEARISH'):
-            boost = min(abs(wasde_signal['score'])*0.5, 0.05)  # Cap WASDE boost at 5%
+            boost = abs(wasde_signal['score'])*0.5
             enhanced_conf += boost
             boost_details.append(f"WASDE: +{boost:.2%}")
         elif wasde_signal['signal']!='NEUTRAL':
-            penalty = min(abs(wasde_signal['score'])*0.3, 0.05)  # Cap WASDE penalty at 5%
+            penalty = abs(wasde_signal['score'])*0.3
             enhanced_conf -= penalty
             boost_details.append(f"WASDE: -{penalty:.2%}")
         
