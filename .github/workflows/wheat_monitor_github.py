@@ -28,7 +28,6 @@ jobs:
         pip install yfinance pandas numpy scikit-learn requests
         pip install tensorflow-cpu keras
         pip install xgboost beautifulsoup4 lxml
-        pip install pdfplumber
     
     - name: Run Professional Monitor
       env:
