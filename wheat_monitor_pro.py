@@ -506,13 +506,21 @@ def send_telegram(message):
         traceback.print_exc()
         return False
 
-def fetch_data(ticker,days=730):
+def fetch_data(ticker, days=730):
     try:
         end_date = datetime.now()
         start_date = end_date - timedelta(days=days)
         stock = yf.Ticker(ticker)
-        df = stock.history(start=start_date,end=end_date,auto_adjust=False)
-        return None if df.empty else df
+        df = stock.history(start=start_date, end=end_date, auto_adjust=False)
+        if df.empty:
+            return None
+        
+        # DROP today's incomplete candle if market is open
+        today = datetime.now().date()
+        if df.index[-1].date() == today:
+            df = df.iloc[:-1]  # ← THIS IS THE FIX
+        
+        return df
     except Exception as e:
         print(f"Data fetch error: {e}")
         return None
