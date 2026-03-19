@@ -686,10 +686,17 @@ def should_alert(direction, price, state):
     Two fixed alerts per day based on Israel local time:
     - Morning alert: 01:00 AM Israel (auto-adjusts winter/summer)
     - Afternoon alert: 16:00 PM Israel (auto-adjusts winter/summer)
-    
-    Workflow runs 4 crons (22,23 UTC morning + 13,14 UTC afternoon).
-    Python checks actual Israel time and sends only at correct hour.
+
+    Override: Set FORCE_ALERT=true in GitHub Actions env to send immediately.
     """
+    # ── FORCE OVERRIDE ───────────────────────────────────────────────────
+    force_alert = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
+    if force_alert:
+        print(f"\n📢 Alert Check:")
+        print(f"   ⚡ FORCE_ALERT=true — sending immediately")
+        return True, "⚡ Forced manual alert"
+    # ─────────────────────────────────────────────────────────────────────
+
     israel_time, utc_offset, tz_name = get_israel_time()
     israel_hour = israel_time.hour
     israel_date = israel_time.date().isoformat()
@@ -708,10 +715,6 @@ def should_alert(direction, price, state):
     else:
         print(f"   → Not a scheduled alert hour ({israel_hour}:00 Israel) — NO ALERT")
         print(f"   → Scheduled hours: 01:00 and 16:00 Israel time")
-        # Allow manual/workflow_dispatch runs to still send
-        if state.get('last_alert_time') is None:
-            print(f"   → First run ever — allowing manual send")
-            return True, f"First run (manual trigger {israel_hour}:00 Israel)"
         return False, f"Not a scheduled hour ({israel_hour}:00 Israel)"
 
     # Check if this slot was already sent today
