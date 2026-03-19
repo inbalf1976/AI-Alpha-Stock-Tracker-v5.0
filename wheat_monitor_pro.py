@@ -647,51 +647,83 @@ def add_indicators(df):
     df['ATR'] = ranges.max(axis=1).rolling(14).mean()
     return df.dropna()
 
+def get_israel_time():
+    """Get current Israel time, auto-adjusting for DST (no pytz needed)"""
+    import time
+    now_utc = datetime.utcnow()
+    
+    # Israel DST rules:
+    # Clocks spring forward last Friday before April 2 at 02:00
+    # Clocks fall back last Sunday before October 10 at 02:00
+    year = now_utc.year
+    
+    # Find DST start: last Friday before April 2
+    april2 = datetime(year, 4, 2)
+    days_to_friday = (april2.weekday() - 4) % 7  # 4 = Friday
+    dst_start = april2 - timedelta(days=days_to_friday)
+    dst_start = dst_start.replace(hour=0, minute=0, second=0)  # midnight UTC = 2AM Israel
+    
+    # Find DST end: last Sunday before October 10
+    oct10 = datetime(year, 10, 10)
+    days_to_sunday = (oct10.weekday() - 6) % 7  # 6 = Sunday
+    dst_end = oct10 - timedelta(days=days_to_sunday)
+    dst_end = dst_end.replace(hour=0, minute=0, second=0)
+    
+    # Determine offset
+    if dst_start <= now_utc < dst_end:
+        offset = 3  # IDT (summer)
+        tz_name = "IDT (UTC+3)"
+    else:
+        offset = 2  # IST (winter)
+        tz_name = "IST (UTC+2)"
+    
+    israel_time = now_utc + timedelta(hours=offset)
+    return israel_time, offset, tz_name
+
+
 def should_alert(direction, price, state):
     """
-    Two fixed alerts per day:
-    - Alert 1: 23:00 UTC (01:00 AM Israel winter) — Morning alert
-    - Alert 2: 14:00 UTC (16:00 PM Israel winter) — Afternoon alert
+    Two fixed alerts per day based on Israel local time:
+    - Morning alert: 01:00 AM Israel (auto-adjusts winter/summer)
+    - Afternoon alert: 16:00 PM Israel (auto-adjusts winter/summer)
     
-    Logic: Send if this scheduled slot hasn't been sent yet today.
-    Track morning and afternoon slots separately in state.
+    Workflow runs 4 crons (22,23 UTC morning + 13,14 UTC afternoon).
+    Python checks actual Israel time and sends only at correct hour.
     """
-    current_time = datetime.now()
-    current_date = current_time.date().isoformat()
-    current_hour_utc = current_time.hour
-
-    # Determine which slot we're in
-    # Morning slot: runs at 23:00 UTC (previous calendar day)
-    # So if hour == 23, it's the morning slot for the NEXT Israel day
-    # Afternoon slot: runs at 14:00 UTC
-    if current_hour_utc == 23:
-        slot = 'morning'
-        slot_label = 'Morning Alert (01:00 Israel)'
-    elif current_hour_utc == 14:
-        slot = 'afternoon'
-        slot_label = 'Afternoon Alert (16:00 Israel)'
-    else:
-        # Manual trigger or unexpected time — use hour-based slot
-        slot = f'manual_{current_hour_utc}h'
-        slot_label = f'Manual trigger ({current_hour_utc}:00 UTC)'
+    israel_time, utc_offset, tz_name = get_israel_time()
+    israel_hour = israel_time.hour
+    israel_date = israel_time.date().isoformat()
 
     print(f"\n📢 Alert Check:")
-    print(f"   Current UTC hour: {current_hour_utc}:00 → Slot: {slot_label}")
+    print(f"   Israel time: {israel_time.strftime('%Y-%m-%d %H:%M')} {tz_name}")
+    print(f"   Israel hour: {israel_hour}:00")
+
+    # Determine slot based on Israel local time
+    if israel_hour == 1:
+        slot = 'morning'
+        slot_label = f'Morning Alert (01:00 {tz_name})'
+    elif israel_hour == 16:
+        slot = 'afternoon'
+        slot_label = f'Afternoon Alert (16:00 {tz_name})'
+    else:
+        print(f"   → Not a scheduled alert hour ({israel_hour}:00 Israel) — NO ALERT")
+        print(f"   → Scheduled hours: 01:00 and 16:00 Israel time")
+        # Allow manual/workflow_dispatch runs to still send
+        if state.get('last_alert_time') is None:
+            print(f"   → First run ever — allowing manual send")
+            return True, f"First run (manual trigger {israel_hour}:00 Israel)"
+        return False, f"Not a scheduled hour ({israel_hour}:00 Israel)"
 
     # Check if this slot was already sent today
     alerts_today = state.get('alerts_today', {})
-    today_key = current_date
-
-    # For morning slot (23:00 UTC), the Israel date is tomorrow
-    # so we use UTC date as the key
-    slot_key = f"{today_key}_{slot}"
+    slot_key = f"{israel_date}_{slot}"
     already_sent = alerts_today.get(slot_key, False)
 
     if already_sent:
         print(f"   → {slot_label} already sent today — NO ALERT")
         return False, f"{slot_label} already sent"
 
-    print(f"   → {slot_label} not yet sent — SENDING")
+    print(f"   → {slot_label} — SENDING")
     return True, slot_label
 
 
@@ -919,11 +951,12 @@ _🚀 Professional Edition_
                 state['last_alert_date'] = datetime.now().date().isoformat()
                 state['alerts_sent'] += 1
 
-                # Track which slot was sent to prevent duplicates
-                current_hour_utc = datetime.now().hour
-                slot = 'morning' if current_hour_utc == 23 else 'afternoon' if current_hour_utc == 14 else f'manual_{current_hour_utc}h'
-                today_key = datetime.now().date().isoformat()
-                slot_key = f"{today_key}_{slot}"
+                # Track which slot was sent using Israel local time
+                israel_time, _, _ = get_israel_time()
+                israel_hour = israel_time.hour
+                israel_date = israel_time.date().isoformat()
+                slot = 'morning' if israel_hour == 1 else 'afternoon' if israel_hour == 16 else f'manual_{israel_hour}h'
+                slot_key = f"{israel_date}_{slot}"
 
                 if 'alerts_today' not in state:
                     state['alerts_today'] = {}
