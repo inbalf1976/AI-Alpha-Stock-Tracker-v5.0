@@ -691,9 +691,10 @@ def should_alert(direction, price, state):
     """
     # ── FORCE OVERRIDE ───────────────────────────────────────────────────
     force_alert = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
-    if force_alert:
+    github_event = os.getenv('GITHUB_EVENT_NAME', '').lower()
+    if force_alert or github_event == 'workflow_dispatch':
         print(f"\n📢 Alert Check:")
-        print(f"   ⚡ FORCE_ALERT=true — sending immediately")
+        print(f"   ⚡ Manual trigger detected (FORCE_ALERT={force_alert}, event={github_event}) — sending immediately")
         return True, "⚡ Forced manual alert"
     # ─────────────────────────────────────────────────────────────────────
 
