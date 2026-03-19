@@ -5,6 +5,7 @@ Expected Accuracy: 75-85%
 
 FIXED: Only update alert state AFTER Telegram confirms success
 ADDED: Debug logging to see Telegram API responses
+FIXED: Drop today's incomplete candle to ensure prediction always uses closed candles
 """
 
 import yfinance as yf
@@ -176,11 +177,10 @@ class LiveWeatherAnalyzer:
         avg_score = sum(s['score'] for s in regional_signals) / len(regional_signals)
         bullish_count = sum(1 for s in regional_signals if s['signal'] == 'BULLISH')
         
-        # Determine combined signal (adjusted for 8 regions)
-        if bullish_count >= 5:  # Majority bullish (5+ out of 8)
+        if bullish_count >= 5:
             signal = 'BULLISH'
             confidence = 0.75
-        elif bullish_count >= 3:  # Significant bullish (3-4 out of 8)
+        elif bullish_count >= 3:
             signal = 'BULLISH'
             confidence = 0.65
         elif avg_score < -0.05:
@@ -206,140 +206,260 @@ class LiveWeatherAnalyzer:
         }
 
 # ============================================================================
-
-# ============================================================================
 # LIVE WASDE SCRAPER - Embedded (USDA QuickStats API)
 # ============================================================================
 
+# ============================================================================
+# LIVE WASDE SCRAPER - Scrapes official USDA WASDE PDF monthly report
+# URL pattern: https://www.usda.gov/oce/commodity/wasde/wasde{MM}{YY}.pdf
+# Wheat data is on page 11 of the PDF
+# ============================================================================
+
 class LiveWASDEScraper:
-    """Fetch and analyze live USDA WASDE data for wheat"""
-    
+    """Scrape and analyze live USDA WASDE PDF report for wheat supply/use data"""
+
     def __init__(self):
-        self.api_key = os.getenv("USDA_API_KEY", "3338B84E-694D-3E6A-925C-F35064C59BAE")
-        self.base_url = "https://quickstats.nass.usda.gov/api/api_GET/"
-    
-    def fetch_wheat_stocks(self):
+        self.base_url = "https://www.usda.gov/oce/commodity/wasde"
+
+    def _get_wasde_url(self):
+        """Build the URL for the most recent WASDE PDF"""
+        now = datetime.now()
+        # WASDE release dates 2026: Jan 12, Feb 10, Mar 10, Apr 9, May 12...
+        # Released around the 10th of each month — use current month if past day 10, else previous
+        if now.day >= 10:
+            month = now.month
+            year = now.year
+        else:
+            # Before the 10th — use previous month's report
+            if now.month == 1:
+                month = 12
+                year = now.year - 1
+            else:
+                month = now.month - 1
+                year = now.year
+
+        mm = str(month).zfill(2)
+        yy = str(year)[-2:]
+        url = f"{self.base_url}/wasde{mm}{yy}.pdf"
+        print(f"         WASDE URL: {url}")
+        return url
+
+    def _parse_wheat_page(self, pdf_bytes):
+        """Extract US wheat stocks-to-use from WASDE PDF page 11.
+        
+        From debug output, page 11 format is:
+            Use, Total    1,815    1,969    2,028    2,028
+            Ending Stocks   696      855      931      931
+        Last column = current projection (Mar 2026)
+        US wheat STU = Ending Stocks / Use Total = 931/2028 = 45.9%
+        """
         try:
-            params = {
-                'key': self.api_key,
-                'source_desc': 'SURVEY',
-                'commodity_desc': 'WHEAT',
-                'statisticcat_desc': 'STOCKS',
-                'agg_level_desc': 'NATIONAL',
-                'format': 'JSON',
-                'year__GE': 2020
-            }
-            response = requests.get(self.base_url, params=params, timeout=15)
-            if response.status_code == 200:
-                data = response.json()
-                if 'data' in data and data['data']:
-                    return self._parse_stocks_data(data['data'])
+            import pdfplumber
+            import io
+            import re
+
+            with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+                # Page 11 confirmed from debug — try it first, then neighbors
+                for page_idx in [10, 9, 11, 12]:
+                    if page_idx >= len(pdf.pages):
+                        continue
+
+                    text = pdf.pages[page_idx].extract_text() or ''
+
+                    # Must contain both Use Total and Ending Stocks rows
+                    has_use = bool(re.search(r'Use,?\s*Total', text, re.IGNORECASE))
+                    has_stocks = bool(re.search(r'Ending\s+Stocks', text, re.IGNORECASE))
+
+                    if not (has_use and has_stocks):
+                        continue
+
+                    print(f"         Parsing page {page_idx + 1} for US wheat STU...")
+                    lines = text.split('\n')
+
+                    use_total = None
+                    ending_stocks = None
+
+                    for line in lines:
+                        # "Use, Total  1,815  1,969  2,028  2,028"
+                        if re.search(r'Use,?\s*Total', line, re.IGNORECASE):
+                            nums = [float(n.replace(',', '')) for n in re.findall(r'[\d,]+', line)
+                                    if float(n.replace(',', '')) > 100]
+                            if nums:
+                                use_total = nums[-1]  # Last = most recent projection
+                                print(f"         Use Total: {use_total}")
+
+                        # "Ending Stocks  696  855  931  931"
+                        if re.search(r'Ending\s+Stocks', line, re.IGNORECASE):
+                            nums = [float(n.replace(',', '')) for n in re.findall(r'[\d,]+', line)
+                                    if float(n.replace(',', '')) > 10]
+                            if nums:
+                                ending_stocks = nums[-1]
+                                print(f"         Ending Stocks: {ending_stocks}")
+
+                    if use_total and ending_stocks and use_total > 0:
+                        stu = ending_stocks / use_total
+                        # US wheat STU is typically 30-60%
+                        if 0.15 <= stu <= 0.80:
+                            print(f"         ✅ US Wheat STU: {stu:.1%} ({ending_stocks:.0f}/{use_total:.0f})")
+                            return {'stocks_to_use_pct': stu, 'source': 'WASDE PDF page 11'}
+                        else:
+                            print(f"         ⚠️ STU {stu:.1%} out of range — skipping")
+
+                print("         STU not found — using seasonal fallback")
+                return None
+
+        except ImportError:
+            print("         pdfplumber not installed")
             return None
         except Exception as e:
-            print(f"WASDE fetch error: {e}")
+            print(f"         PDF parse error: {e}")
             return None
-    
-    def _parse_stocks_data(self, data):
-        sorted_data = sorted(data, key=lambda x: (x.get('year', 0), x.get('reference_period_desc', '')), reverse=True)
-        if not sorted_data:
-            return None
-        
-        latest = sorted_data[0]
-        latest_value = float(latest.get('Value', 0).replace(',', ''))
-        latest_year = latest.get('year')
-        
-        previous_value = None
-        for record in sorted_data[1:]:
-            if record.get('year') != latest_year:
-                try:
-                    previous_value = float(record.get('Value', 0).replace(',', ''))
-                    break
-                except:
-                    continue
-        
-        yoy_change = 0
-        if previous_value and previous_value > 0:
-            yoy_change = ((latest_value - previous_value) / previous_value) * 100
-        
-        return {
-            'current_stocks': latest_value,
-            'yoy_change_pct': yoy_change,
-            'year': latest_year
-        }
-    
+
     def get_fundamental_score(self):
-        print("      Fetching USDA data...", end=" ")
-        stocks_data = self.fetch_wheat_stocks()
+        """
+        Fetch US wheat ending stocks and total use from USDA FAS PSD Online API.
+        This API is designed for programmatic access and works from GitHub Actions.
         
-        if not stocks_data:
-            print("Failed - using estimates")
-            return self._get_default_estimates()
+        API endpoint: https://apps.fas.usda.gov/psdonline/app/index.html
+        Commodity code: 0410000 (Wheat)
+        Country code: 9000000 (United States)
+        Attributes: 176 = Ending Stocks, 125 = Total Domestic Consumption + Exports
         
-        print("Success")
-        
+        ── MANUAL FALLBACK ─────────────────────────────────────────────────
+        If API fails, update WASDE_FALLBACK below after each monthly release.
+        Source: https://southernagtoday.org (search "WASDE recap")
+        Current: March 2026 — Ending Stocks: 931M bu, Total Use: 2,028M bu
+        ─────────────────────────────────────────────────────────────────────
+        """
+        # Manual fallback — update monthly if API fails
+        WASDE_FALLBACK = {
+            '2026-03': (931, 2028),   # March 10, 2026 — WASDE-669
+            # '2026-04': (XXX, XXXX), # Add after April 9 release
+        }
+
+        print("      Fetching USDA FAS PSD wheat data...", end=" ")
+
+        try:
+            # FAS PSD Online API — no API key required
+            # Commodity 0410000 = All Wheat, marketYear = start year of marketing year
+            # e.g. 2025 for the 2025/26 marketing year
+            current_year = datetime.now().year
+            market_year = current_year - 1  # 2025 for 2025/26
+            url = f"https://apps.fas.usda.gov/OpenData/api/psd/commodity/0410000/country/9000000/year/{market_year}"
+            headers = {
+                'Accept': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (compatible; WheatMonitor/3.0)'
+            }
+            response = requests.get(url, headers=headers, timeout=20)
+
+            if response.status_code == 200:
+                data = response.json()
+                ending_stocks_mbu = None
+                total_use_mbu = None
+
+                for record in data:
+                    attr_id = record.get('attributeId', 0)
+                    value = record.get('value', 0) or 0
+                    # Values in 1000 MT — convert to million bushels (1 MT = 36.744 bu)
+                    value_mbu = (value * 36.744) / 1000
+
+                    if attr_id == 176:   # Ending Stocks
+                        ending_stocks_mbu = value_mbu
+                    elif attr_id == 125: # Total Distribution
+                        total_use_mbu = value_mbu
+
+                if ending_stocks_mbu and total_use_mbu and total_use_mbu > 0:
+                    stu = ending_stocks_mbu / total_use_mbu
+                    print(f"Success (PSD API)")
+                    print(f"         Ending Stocks: {ending_stocks_mbu:.0f}M bu")
+                    print(f"         Total Use: {total_use_mbu:.0f}M bu")
+                    print(f"         STU: {stu:.1%}")
+                    return self._score_from_stu(stu, 'USDA FAS PSD API')
+                else:
+                    print("API returned no matching data — trying fallback")
+            else:
+                print(f"API HTTP {response.status_code} — trying fallback")
+
+        except Exception as e:
+            print(f"API error: {e} — using fallback")
+
+        # Use manual fallback
+        now = datetime.now()
+        key = now.strftime('%Y-%m') if now.day >= 10 else (now.replace(day=1) - timedelta(days=1)).strftime('%Y-%m')
+
+        for k in sorted(WASDE_FALLBACK.keys(), reverse=True):
+            if k <= key:
+                ending_stocks, total_use = WASDE_FALLBACK[k]
+                stu = ending_stocks / total_use
+                print(f"Using fallback ({k})")
+                print(f"         STU: {stu:.1%}")
+                return self._score_from_stu(stu, f'WASDE fallback {k}')
+
+        return self._get_default_estimates()
+
+    def _score_from_stu(self, stu, source):
+        """Convert stocks-to-use ratio to trading signal"""
         score = 0.0
-        factors = []
-        
-        stocks_value = stocks_data['current_stocks']
-        yoy_change = stocks_data['yoy_change_pct']
-        
-        # Estimate stocks-to-use (US typical use ~2000 million bushels/year)
-        # stocks_value is in bushels, convert to millions
-        stocks_millions = stocks_value / 1_000_000
-        estimated_use_millions = 2000  # Million bushels
-        stocks_to_use = stocks_millions / estimated_use_millions if estimated_use_millions > 0 else 0.20
-        
-        print(f"         Raw stocks: {stocks_value:,.0f} bushels")
-        print(f"         Stocks (millions): {stocks_millions:.1f}")
-        print(f"         Stocks-to-use: {stocks_to_use:.1%}")
-        
-        # Cap at reasonable range (0-200% - sometimes stocks can be very high)
-        stocks_to_use = max(0.0, min(2.0, stocks_to_use))
-        
-        if stocks_to_use < 0.15:
-            score += 0.30
-            factors.append(f"Very tight stocks ({stocks_to_use:.1%})")
-        elif stocks_to_use < 0.18:
-            score += 0.20
-            factors.append(f"Tight stocks ({stocks_to_use:.1%})")
-        elif stocks_to_use > 0.25:
-            score -= 0.15
-            factors.append(f"Ample stocks ({stocks_to_use:.1%})")
-        
-        if yoy_change < -5:
-            score += 0.15
-            factors.append(f"Stocks down {abs(yoy_change):.1f}% YoY")
-        elif yoy_change > 5:
-            score -= 0.10
-            factors.append(f"Stocks up {yoy_change:.1f}% YoY")
-        
-        if score > 0.20:
-            signal = 'BULLISH'
-        elif score < -0.10:
-            signal = 'BEARISH'
+
+        if stu < 0.15:
+            score = 0.30
+            label = f"Very tight wheat stocks ({stu:.1%})"
+        elif stu < 0.18:
+            score = 0.20
+            label = f"Tight wheat stocks ({stu:.1%})"
+        elif stu < 0.22:
+            score = 0.10
+            label = f"Snug wheat stocks ({stu:.1%})"
+        elif stu < 0.30:
+            score = 0.0
+            label = f"Normal wheat stocks ({stu:.1%})"
+        elif stu < 0.40:
+            score = -0.10
+            label = f"Comfortable wheat stocks ({stu:.1%})"
         else:
-            signal = 'NEUTRAL'
-        
+            score = -0.20
+            label = f"Ample wheat stocks ({stu:.1%})"
+
+        signal = 'BULLISH' if score > 0.10 else 'BEARISH' if score < -0.05 else 'NEUTRAL'
+        print(f"         WASDE Signal: {signal} ({label})")
+
         return {
             'signal': signal,
             'score': score,
             'data': {
-                'stocks_to_use': stocks_to_use,
-                'stocks_change': yoy_change,
+                'stocks_to_use': stu,
+                'stocks_change': 0,
                 'last_updated': datetime.now().strftime('%Y-%m-%d'),
-                'source': 'USDA QuickStats LIVE'
+                'source': source
             },
-            'factors': factors[:2]
+            'factors': [label]
         }
-    
+
     def _get_default_estimates(self):
+        """Seasonal fallback estimates when PDF unavailable"""
         month = datetime.now().month
-        if month in [1, 2, 3]:
-            return {'signal': 'BULLISH', 'score': 0.20, 'data': {'stocks_to_use': 0.18, 'stocks_change': -2, 'source': 'ESTIMATED'}, 'factors': ['Seasonal estimate']}
+        # March 2026: drought + geopolitical = tight supply (~22%)
+        if month in [1, 2, 3, 4]:
+            return {
+                'signal': 'BULLISH',
+                'score': 0.15,
+                'data': {'stocks_to_use': 0.22, 'stocks_change': -5, 'source': 'ESTIMATED'},
+                'factors': ['Tight wheat supply estimate (drought + geopolitical)']
+            }
         elif month in [7, 8, 9]:
-            return {'signal': 'BEARISH', 'score': -0.10, 'data': {'stocks_to_use': 0.22, 'stocks_change': 3, 'source': 'ESTIMATED'}, 'factors': ['Post-harvest']}
+            return {
+                'signal': 'BEARISH',
+                'score': -0.10,
+                'data': {'stocks_to_use': 0.28, 'stocks_change': 3, 'source': 'ESTIMATED'},
+                'factors': ['Post-harvest seasonal estimate']
+            }
         else:
-            return {'signal': 'NEUTRAL', 'score': 0.10, 'data': {'stocks_to_use': 0.20, 'stocks_change': 0, 'source': 'ESTIMATED'}, 'factors': ['Balanced']}
+            return {
+                'signal': 'NEUTRAL',
+                'score': 0.05,
+                'data': {'stocks_to_use': 0.25, 'stocks_change': 0, 'source': 'ESTIMATED'},
+                'factors': ['Seasonal average estimate']
+            }
 
 # ============================================================================
 
@@ -395,30 +515,21 @@ def load_state():
         try:
             with open(STATE_FILE,'r') as f:
                 state = json.load(f)
-                
                 print(f"   ✓ Loaded - last_alert_date: {state.get('last_alert_date')}, daily_sent: {state.get('daily_alert_sent')}")
                 
-                # Check if model needs reset (every 2 years)
                 last_reset = state.get('last_model_reset', None)
                 if last_reset:
                     from datetime import datetime
                     last_reset_date = datetime.fromisoformat(last_reset)
                     days_since_reset = (datetime.now() - last_reset_date).days
                     
-                    if days_since_reset >= 730:  # 2 years = 730 days
+                    if days_since_reset >= 730:
                         print("⚠️  MODEL RESET: 2+ years since last reset")
-                        print(f"   Last reset: {last_reset_date.strftime('%Y-%m-%d')}")
-                        print(f"   Days: {days_since_reset}")
-                        print("   Resetting to prevent overfitting...")
-                        
-                        # Reset model-related state but keep alert history
                         state['last_model_reset'] = datetime.now().isoformat()
                         state['model_version'] = state.get('model_version', 1) + 1
                         state['reset_count'] = state.get('reset_count', 0) + 1
-                        
                         return state
                 else:
-                    # First time - set initial reset date
                     from datetime import datetime
                     state['last_model_reset'] = datetime.now().isoformat()
                     state['model_version'] = 1
@@ -430,7 +541,6 @@ def load_state():
     else:
         print(f"   ⚠️  No state file")
     
-    # New state
     from datetime import datetime
     return {
         'last_direction': None,
@@ -453,13 +563,8 @@ def save_state(state):
     print(f"   alerts_sent: {state.get('alerts_sent')}")
 
 def send_telegram(message):
-    """
-    Send message to Telegram with debug logging
-    """
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("❌ Telegram not configured")
-        print(f"   Bot token exists: {bool(TELEGRAM_BOT_TOKEN)}")
-        print(f"   Chat ID exists: {bool(TELEGRAM_CHAT_ID)}")
         return False
     
     try:
@@ -470,28 +575,18 @@ def send_telegram(message):
         print(f"   Bot token: {'SET' if TELEGRAM_BOT_TOKEN else 'MISSING'} (length: {len(TELEGRAM_BOT_TOKEN) if TELEGRAM_BOT_TOKEN else 0})")
         print(f"   Chat ID: {TELEGRAM_CHAT_ID}")
         print(f"   Message length: {len(message)} chars")
-        print(f"   First 200 chars of message:")
-        print(f"   {message[:200]}")
         print(f"   Sending to Telegram API...")
         
         response = requests.post(url, data=data, timeout=10)
         
-        print(f"   Response status code: {response.status_code}")
-        print(f"   Response headers: {dict(response.headers)}")
-        print(f"   Response body:")
-        print(f"   {response.text}")
+        print(f"   Response status: {response.status_code}")
+        print(f"   Response body: {response.text}")
         
         if response.status_code == 200:
             print("   ✅ Telegram accepted the message!")
             return True
         else:
             print(f"   ❌ Telegram rejected the message!")
-            print(f"   Status: {response.status_code}")
-            try:
-                error_data = response.json()
-                print(f"   Error details: {error_data}")
-            except:
-                pass
             return False
             
     except requests.exceptions.Timeout:
@@ -514,12 +609,15 @@ def fetch_data(ticker, days=730):
         df = stock.history(start=start_date, end=end_date, auto_adjust=False)
         if df.empty:
             return None
-        
-        # DROP today's incomplete candle if market is open
+
+        # ✅ FIX: Always drop today's incomplete candle
+        # This ensures predictions are always based on fully closed candles,
+        # regardless of what time of day the script runs.
         today = datetime.now().date()
         if df.index[-1].date() == today:
-            df = df.iloc[:-1] 
-        
+            df = df.iloc[:-1]
+            print(f"   ℹ️  Dropped today's incomplete candle - using {df.index[-1].date()} as latest")
+
         return df
     except Exception as e:
         print(f"Data fetch error: {e}")
@@ -551,82 +649,51 @@ def add_indicators(df):
 
 def should_alert(direction, price, state):
     """
-    Alert rules:
-    1. First alert of new trading day → Always send
-    2. After that: Only if direction change + 2.5% move + 60min passed
+    Two fixed alerts per day:
+    - Alert 1: 23:00 UTC (01:00 AM Israel winter) — Morning alert
+    - Alert 2: 14:00 UTC (16:00 PM Israel winter) — Afternoon alert
     
-    FIXED: Does NOT update state - that happens AFTER Telegram confirms success
+    Logic: Send if this scheduled slot hasn't been sent yet today.
+    Track morning and afternoon slots separately in state.
     """
-    from datetime import datetime
-    
     current_time = datetime.now()
     current_date = current_time.date().isoformat()
-    
-    last_alert_time = state.get('last_alert_time', None)
-    last_alert_date = state.get('last_alert_date', None)
-    last_direction = state.get('last_direction', None)
-    last_price = state.get('last_price', None)
-    
-    print(f"\n📢 Alert Check:")
-    print(f"   Last alert: {last_alert_time}")
-    print(f"   Last alert date: {last_alert_date} vs today: {current_date}")
-    print(f"   Last direction: {last_direction} → Current: {direction}")
-    
-    # RULE 0: First run ever
-    if last_alert_time is None:
-        print(f"   → First run ever - SENDING")
-        return True, "First prediction"
-    
-    # RULE 1: New trading day → Send first alert
-    if last_alert_date != current_date:
-        print(f"   → New trading day - SENDING first alert of {current_date}")
-        return True, f"First prediction of {current_date}"
-    
-    # RULE 2: Same day - check timing and movement
-    try:
-        last_alert_dt = datetime.fromisoformat(last_alert_time)
-        minutes_since_alert = (current_time - last_alert_dt).total_seconds() / 60
-        print(f"   Minutes since last alert: {minutes_since_alert:.1f}")
-    except:
-        print(f"   → Could not parse time, sending alert")
-        return True, "Time parse error"
-    
-    # Must wait at least 60 minutes
-    if minutes_since_alert < 60:
-        print(f"   → Too soon (< 60 min) - NO ALERT")
-        return False, f"Only {minutes_since_alert:.0f} min since last alert"
-    
-    # Same direction - need significant move
-    if direction == last_direction:
-        if last_price:
-            change_pct = abs((price - last_price) / last_price)
-            print(f"   → Same direction, price change: {change_pct:.2%}")
-            
-            if change_pct >= DIRECTION_CHANGE_THRESHOLD:
-                print(f"   → Significant move - SENDING")
-                return True, f"Same direction but {change_pct:.1%} move"
-            else:
-                print(f"   → Insufficient move - NO ALERT")
-                return False, f"Same direction, only {change_pct:.1%} move"
-        else:
-            print(f"   → Same direction, no price history - NO ALERT")
-            return False, "Same direction"
-    
-    # Direction changed - check magnitude
-    print(f"   → Direction changed!")
-    if last_price:
-        change_pct = abs((price - last_price) / last_price)
-        print(f"      Price change: {change_pct:.2%}")
-        
-        if change_pct >= DIRECTION_CHANGE_THRESHOLD:
-            print(f"   → Significant change - SENDING")
-            return True, f"Direction changed with {change_pct:.1%} move"
-        else:
-            print(f"   → Small change - NO ALERT")
-            return False, f"Direction changed but only {change_pct:.1%} move"
+    current_hour_utc = current_time.hour
+
+    # Determine which slot we're in
+    # Morning slot: runs at 23:00 UTC (previous calendar day)
+    # So if hour == 23, it's the morning slot for the NEXT Israel day
+    # Afternoon slot: runs at 14:00 UTC
+    if current_hour_utc == 23:
+        slot = 'morning'
+        slot_label = 'Morning Alert (01:00 Israel)'
+    elif current_hour_utc == 14:
+        slot = 'afternoon'
+        slot_label = 'Afternoon Alert (16:00 Israel)'
     else:
-        print(f"   → Direction changed (no price history) - SENDING")
-        return True, "Direction changed"
+        # Manual trigger or unexpected time — use hour-based slot
+        slot = f'manual_{current_hour_utc}h'
+        slot_label = f'Manual trigger ({current_hour_utc}:00 UTC)'
+
+    print(f"\n📢 Alert Check:")
+    print(f"   Current UTC hour: {current_hour_utc}:00 → Slot: {slot_label}")
+
+    # Check if this slot was already sent today
+    alerts_today = state.get('alerts_today', {})
+    today_key = current_date
+
+    # For morning slot (23:00 UTC), the Israel date is tomorrow
+    # so we use UTC date as the key
+    slot_key = f"{today_key}_{slot}"
+    already_sent = alerts_today.get(slot_key, False)
+
+    if already_sent:
+        print(f"   → {slot_label} already sent today — NO ALERT")
+        return False, f"{slot_label} already sent"
+
+    print(f"   → {slot_label} not yet sent — SENDING")
+    return True, slot_label
+
 
 def main():
     print(f"\n{'='*80}")
@@ -638,7 +705,6 @@ def main():
     state = load_state()
     
     try:
-        # Fetch data
         print(f"📊 Fetching {PRIMARY_TICKER}...")
         df = fetch_data(PRIMARY_TICKER)
         if df is None:
@@ -649,12 +715,10 @@ def main():
         price = df['Close'].iloc[-1]
         print(f"✓ Price: {price:.2f}¢")
         
-        # Initialize analyzers
         print("\n🔬 Initializing advanced analyzers...")
         
-        # CHECK CACHE BEFORE FETCHING
         current_hour = datetime.now().hour
-        should_fetch_fresh = current_hour in [9, 17]  # 9 AM and 5 PM UTC (11 AM & 7 PM Israel)
+        should_fetch_fresh = current_hour in [9, 17]
         
         if should_fetch_fresh:
             print("🔄 Fetching FRESH weather & WASDE data (2x daily schedule)")
@@ -666,20 +730,14 @@ def main():
         weather_cache_file = Path("weather_cache.json")
         
         if should_fetch_fresh or not weather_cache_file.exists():
-            weather_signal = weather.get_multi_region_signal()  # LIVE FETCH
-            # Cache the result
+            weather_signal = weather.get_multi_region_signal()
             try:
-                cache_data = {
-                    'timestamp': datetime.now().isoformat(),
-                    'data': weather_signal
-                }
                 with open(weather_cache_file, 'w') as f:
-                    json.dump(cache_data, f)
+                    json.dump({'timestamp': datetime.now().isoformat(), 'data': weather_signal}, f)
                 print("  ✓ Weather data cached")
             except:
                 pass
         else:
-            # Use cached data
             try:
                 with open(weather_cache_file, 'r') as f:
                     cache_data = json.load(f)
@@ -687,7 +745,6 @@ def main():
                     cache_age = datetime.now() - datetime.fromisoformat(cache_data['timestamp'])
                     print(f"  ✓ Using cached weather (age: {cache_age.seconds//3600}h {(cache_age.seconds%3600)//60}m)")
             except:
-                # Cache failed, fetch fresh
                 weather_signal = weather.get_multi_region_signal()
         
         if 'bullish_regions' in weather_signal and 'regional_count' in weather_signal:
@@ -700,20 +757,14 @@ def main():
         wasde_cache_file = Path("wasde_cache.json")
         
         if should_fetch_fresh or not wasde_cache_file.exists():
-            wasde_signal = wasde.get_fundamental_score()  # LIVE FETCH
-            # Cache the result
+            wasde_signal = wasde.get_fundamental_score()
             try:
-                cache_data = {
-                    'timestamp': datetime.now().isoformat(),
-                    'data': wasde_signal
-                }
                 with open(wasde_cache_file, 'w') as f:
-                    json.dump(cache_data, f)
+                    json.dump({'timestamp': datetime.now().isoformat(), 'data': wasde_signal}, f)
                 print("  ✓ WASDE data cached")
             except:
                 pass
         else:
-            # Use cached data
             try:
                 with open(wasde_cache_file, 'r') as f:
                     cache_data = json.load(f)
@@ -721,15 +772,12 @@ def main():
                     cache_age = datetime.now() - datetime.fromisoformat(cache_data['timestamp'])
                     print(f"  ✓ Using cached WASDE (age: {cache_age.seconds//3600}h {(cache_age.seconds%3600)//60}m)")
             except:
-                # Cache failed, fetch fresh
                 wasde_signal = wasde.get_fundamental_score()
         
         print(f"  ✓ WASDE: {wasde_signal['signal']}")
         
-        # Volume analyzer (no caching needed - uses local data)
         volume = VolumeAnalyzer()
         
-        # Get all signals
         print("📡 Gathering signals...")
         seasonal = get_seasonal_bias()
         print(f"  ✓ Seasonal: {seasonal['direction']}")
@@ -740,12 +788,10 @@ def main():
         context = get_market_context(price)
         print(f"  ✓ Context: {context['position']}")
         
-        # Train ensemble model
         print("\n🤖 Training ensemble AI (LSTM + RF + XGB)...")
         ensemble = EnsemblePredictor()
         ensemble.train_all_models(df)
         
-        # Get ensemble prediction
         print("🎯 Making ensemble prediction...")
         prediction = ensemble.predict_ensemble(df)
         
@@ -758,12 +804,10 @@ def main():
         print(f"   Agreement: {prediction['agreement']} ({prediction['votes_up']}/3 UP)")
         print(f"   Models: LSTM={prediction['lstm_pred']:.3f}, RF={prediction['rf_pred']:.3f}, XGB={prediction['xgb_pred']:.3f}")
         
-        # ENHANCE with all factors
         print("\n⚡ Enhancing with fundamental factors...")
         enhanced_conf = base_confidence
         boost_details = []
         
-        # Seasonal
         if (direction=="UP" and seasonal['bias']>0) or (direction=="DOWN" and seasonal['bias']<0):
             boost = abs(seasonal['bias'])
             enhanced_conf += boost
@@ -773,7 +817,6 @@ def main():
             enhanced_conf -= penalty
             boost_details.append(f"Seasonal: -{penalty:.2%}")
         
-        # Weather
         if (direction=="UP" and weather_signal['signal']=='BULLISH') or (direction=="DOWN" and weather_signal['signal']=='BEARISH'):
             boost = weather_signal['score']
             enhanced_conf += boost
@@ -783,17 +826,15 @@ def main():
             enhanced_conf -= penalty
             boost_details.append(f"Weather: -{penalty:.2%}")
         
-        # WASDE
         if (direction=="UP" and wasde_signal['signal']=='BULLISH') or (direction=="DOWN" and wasde_signal['signal']=='BEARISH'):
-            boost = abs(wasde_signal['score'])*0.5
+            boost = min(abs(wasde_signal['score'])*0.5, 0.05)  # Cap WASDE boost at 5%
             enhanced_conf += boost
             boost_details.append(f"WASDE: +{boost:.2%}")
         elif wasde_signal['signal']!='NEUTRAL':
-            penalty = abs(wasde_signal['score'])*0.3
+            penalty = min(abs(wasde_signal['score'])*0.3, 0.05)  # Cap WASDE penalty at 5%
             enhanced_conf -= penalty
             boost_details.append(f"WASDE: -{penalty:.2%}")
         
-        # Volume
         if (direction=="UP" and volume_signal['signal']=='BULLISH') or (direction=="DOWN" and volume_signal['signal']=='BEARISH'):
             boost = abs(volume_signal['score'])
             enhanced_conf += boost
@@ -803,7 +844,6 @@ def main():
             enhanced_conf -= penalty
             boost_details.append(f"Volume: -{penalty:.2%}")
         
-        # Context
         if context['signal']!='NEUTRAL':
             if (direction=="UP" and context['signal']=='BUY') or (direction=="DOWN" and context['signal']=='SELL'):
                 boost = 0.05
@@ -814,8 +854,7 @@ def main():
                 enhanced_conf -= penalty
                 boost_details.append(f"Context: -{penalty:.2%}")
         
-        # Clip
-        enhanced_conf = max(0.5,min(1.0,enhanced_conf))
+        enhanced_conf = max(0.5, min(1.0, enhanced_conf))
         
         print(f"\n🎯 FINAL ENHANCED PREDICTION:")
         print(f"   Direction: {direction}")
@@ -824,23 +863,19 @@ def main():
         print(f"   Boost: {enhanced_conf-base_confidence:+.1%}")
         print(f"   Details: {', '.join(boost_details)}")
         
-        # Check alert
-        send_alert,reason = should_alert(direction,price,state)
+        send_alert, reason = should_alert(direction, price, state)
         print(f"\n📢 Alert: {reason}")
         
-        # Send if needed
-        if send_alert and enhanced_conf>=MIN_CONFIDENCE:
+        if send_alert and enhanced_conf >= MIN_CONFIDENCE:
             stop = price*(1-STOP_LOSS_PCT) if direction=="UP" else price*(1+STOP_LOSS_PCT)
             target = price*(1+TAKE_PROFIT_PCT) if direction=="UP" else price*(1-TAKE_PROFIT_PCT)
             
-            # Check if model was just reset
             reset_notice = ""
             if state.get('reset_count', 0) > 0:
                 days_since_reset = (datetime.now() - datetime.fromisoformat(state['last_model_reset'])).days
-                if days_since_reset < 1:  # Reset happened today
+                if days_since_reset < 1:
                     reset_notice = f"\n🔄 *MODEL RESET:* Version {state['model_version']} (preventing overfitting)\n"
             
-            # Analyze typical moves and generate recommendations
             move_analyzer = MoveAnalyzer()
             move_stats = move_analyzer.analyze_typical_moves(df, direction)
             recommendations = move_analyzer.format_recommendation_message(price, direction, move_stats)
@@ -880,12 +915,26 @@ _🚀 Professional Edition_
             
             if telegram_success:
                 print("\n✅ Professional alert sent!")
-                # FIXED: Only update state AFTER Telegram confirms success
                 state['last_alert_time'] = datetime.now().isoformat()
                 state['last_alert_date'] = datetime.now().date().isoformat()
                 state['alerts_sent'] += 1
+
+                # Track which slot was sent to prevent duplicates
+                current_hour_utc = datetime.now().hour
+                slot = 'morning' if current_hour_utc == 23 else 'afternoon' if current_hour_utc == 14 else f'manual_{current_hour_utc}h'
+                today_key = datetime.now().date().isoformat()
+                slot_key = f"{today_key}_{slot}"
+
+                if 'alerts_today' not in state:
+                    state['alerts_today'] = {}
+
+                # Clean old entries (keep only last 3 days)
+                state['alerts_today'] = {
+                    k: v for k, v in state['alerts_today'].items()
+                    if k >= (datetime.now() - timedelta(days=3)).date().isoformat()
+                }
+                state['alerts_today'][slot_key] = True
                 
-                # LOG PREDICTION FOR PERFORMANCE TRACKING
                 try:
                     from performance_tracker import PerformanceTracker
                     tracker = PerformanceTracker()
@@ -908,7 +957,6 @@ _🚀 Professional Edition_
         else:
             print(f"⏸️ No alert: {reason if not send_alert else f'Confidence {enhanced_conf:.1%} below {MIN_CONFIDENCE:.0%}'}")
         
-        # Save state
         state['last_direction'] = direction
         state['last_price'] = price
         save_state(state)
