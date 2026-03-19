@@ -623,7 +623,50 @@ def fetch_data(ticker, days=730):
         print(f"Data fetch error: {e}")
         return None
 
-def add_indicators(df):
+def fetch_session2_data(ticker, days=730):
+    """
+    For Session 2 alert (14:00 UTC):
+    - Include today's Session 1 candle as the latest data point
+    - This allows the model to use today's morning move for prediction
+    - Session 1 runs 19:00 UTC prev day → 13:30 UTC today
+    - At 14:00 UTC the session 1 candle is essentially complete
+    """
+    try:
+        end_date = datetime.now()
+        start_date = end_date - timedelta(days=days)
+        stock = yf.Ticker(ticker)
+        df = stock.history(start=start_date, end=end_date, auto_adjust=False)
+        if df.empty:
+            return None, None
+
+        today = datetime.now().date()
+
+        # Get today's intraday data for session context
+        today_data = None
+        if df.index[-1].date() == today:
+            today_row = df.iloc[-1]
+            today_data = {
+                'open': today_row['Open'],
+                'high': today_row['High'],
+                'low': today_row['Low'],
+                'close': today_row['Close'],
+                'volume': today_row['Volume'],
+                'session1_move_pct': ((today_row['Close'] - df.iloc[-2]['Close']) / df.iloc[-2]['Close']) * 100,
+                'prev_close': df.iloc[-2]['Close']
+            }
+            print(f"   ✓ Session 1 data: Open={today_data['open']:.2f}¢ High={today_data['high']:.2f}¢ Low={today_data['low']:.2f}¢ Close={today_data['close']:.2f}¢")
+            print(f"   ✓ Session 1 move: {today_data['session1_move_pct']:+.2f}% from yesterday's close {today_data['prev_close']:.2f}¢")
+            # Keep today's candle in df for Session 2 prediction
+        else:
+            print(f"   ⚠️ No today's candle available — using yesterday's data")
+            # Drop nothing — use as-is
+
+        return df, today_data
+    except Exception as e:
+        print(f"Session 2 data fetch error: {e}")
+        return None, None
+
+
     df['Returns'] = df['Close'].pct_change()
     df['SMA_20'] = df['Close'].rolling(window=20).mean()
     df['SMA_50'] = df['Close'].rolling(window=50).mean()
@@ -743,19 +786,53 @@ def main():
     print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print(f"Features: Ensemble AI + Weather + WASDE + Volume + Seasonal")
     print(f"{'='*80}\n")
-    
+
     state = load_state()
-    
+
+    # Detect if this is a Session 2 run (14:00 UTC = 16:00 Israel)
+    israel_time, utc_offset, tz_name = get_israel_time()
+    israel_hour = israel_time.hour
+    force_alert = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
+    github_event = os.getenv('GITHUB_EVENT_NAME', '')
+    is_manual = force_alert or 'workflow_dispatch' in github_event
+    is_session2 = (israel_hour == 16) or (is_manual and state.get('last_session') == 'morning')
+
+    if is_session2:
+        print(f"📊 SESSION 2 MODE — Using today's Session 1 data for afternoon prediction")
+    else:
+        print(f"📊 SESSION 1 MODE — Using yesterday's closed candle for daily prediction")
+
     try:
-        print(f"📊 Fetching {PRIMARY_TICKER}...")
-        df = fetch_data(PRIMARY_TICKER)
-        if df is None:
-            print("❌ No data")
-            return
-        
+        print(f"\n📊 Fetching {PRIMARY_TICKER}...")
+
+        if is_session2:
+            df, session1_data = fetch_session2_data(PRIMARY_TICKER)
+            if df is None:
+                print("❌ No data")
+                return
+            # Use current price from session 1 close if available
+            if session1_data:
+                price = session1_data['close']
+                print(f"✓ Session 2 entry price: {price:.2f}¢ (Session 1 close)")
+            else:
+                df_clean = df.copy()
+                today = datetime.now().date()
+                if df_clean.index[-1].date() == today:
+                    df_clean = df_clean.iloc[:-1]
+                price = df_clean['Close'].iloc[-1]
+                session1_data = None
+                print(f"✓ Price: {price:.2f}¢ (no session 1 data)")
+        else:
+            df = fetch_data(PRIMARY_TICKER)
+            if df is None:
+                print("❌ No data")
+                return
+            session1_data = None
+            price = df['Close'].iloc[-1]
+            print(f"✓ Price: {price:.2f}¢")
+
         df = add_indicators(df)
-        price = df['Close'].iloc[-1]
-        print(f"✓ Price: {price:.2f}¢")
+        session_label = "🌙 SESSION 2 - Afternoon" if is_session2 else "☀️ SESSION 1 - Morning"
         
         print("\n🔬 Initializing advanced analyzers...")
         
@@ -921,13 +998,21 @@ def main():
             move_analyzer = MoveAnalyzer()
             move_stats = move_analyzer.analyze_typical_moves(df, direction)
             recommendations = move_analyzer.format_recommendation_message(price, direction, move_stats)
-            
+
+            # Build Session 1 context line for Session 2 alert
+            session1_context = ""
+            if is_session2 and session1_data:
+                s1_move = session1_data['session1_move_pct']
+                s1_emoji = '📈' if s1_move > 0 else '📉'
+                session1_context = f"\n{s1_emoji} *Session 1:* {s1_move:+.2f}% (H:{session1_data['high']:.2f}¢ L:{session1_data['low']:.2f}¢)\n"
+
             message = f"""
 🌾 *WHEAT ALERT - ULTIMATE v3.0* 🌾
+{session_label}
 
 {'🟢' if direction=='UP' else '🔴'} *{direction}* ({enhanced_conf:.1%})
 💰 *{price:.2f}¢* (${price/100:.2f}/bu)
-{reset_notice}
+{session1_context}{reset_notice}
 🤖 *ENSEMBLE AI:*
 LSTM: {prediction['model_details']['LSTM']}
 RF: {prediction['model_details']['RandomForest']}
@@ -977,6 +1062,7 @@ _🚀 Professional Edition_
                     if k >= (datetime.now() - timedelta(days=3)).date().isoformat()
                 }
                 state['alerts_today'][slot_key] = True
+                state['last_session'] = 'afternoon' if is_session2 else 'morning'
                 
                 try:
                     from performance_tracker import PerformanceTracker
