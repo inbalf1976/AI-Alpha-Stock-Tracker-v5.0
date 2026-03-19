@@ -1,8 +1,17 @@
 name: Wheat Monitor PRO - Ultimate Edition
 on:
   schedule:
-    - cron: '0 23 * * 0-4'  # 23:00 UTC Sun-Thu = 01:00 AM Israel Mon-Fri (Morning Alert)
-    - cron: '0 14 * * 1-5'  # 14:00 UTC Mon-Fri = 16:00 PM Israel Mon-Fri (Afternoon Alert)
+    # Morning alert: 01:00 AM Israel time
+    # Winter (UTC+2): 23:00 UTC previous day
+    # Summer (UTC+3): 22:00 UTC previous day
+    # Run both — Python auto-detects correct Israel time
+    - cron: '0 23 * * 0-4'  # Winter morning (01:00 Israel winter)
+    - cron: '0 22 * * 0-4'  # Summer morning (01:00 Israel summer)
+    # Afternoon alert: 16:00 PM Israel time
+    # Winter (UTC+2): 14:00 UTC
+    # Summer (UTC+3): 13:00 UTC
+    - cron: '0 14 * * 1-5'  # Winter afternoon (16:00 Israel winter)
+    - cron: '0 13 * * 1-5'  # Summer afternoon (16:00 Israel summer)
   workflow_dispatch:
   push:
     branches: [ main, master ]
