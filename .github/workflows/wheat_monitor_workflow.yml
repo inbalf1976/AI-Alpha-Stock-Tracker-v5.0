@@ -1,7 +1,8 @@
 name: Wheat Monitor PRO - Ultimate Edition
 on:
   schedule:
-    - cron: '0 1 * * 1-5'  # 01:00 UTC = 03:00 Israel time, weekdays only (Mon-Fri)
+    - cron: '0 23 * * 0-4'  # 23:00 UTC Sun-Thu = 01:00 AM Israel Mon-Fri (Morning Alert)
+    - cron: '0 14 * * 1-5'  # 14:00 UTC Mon-Fri = 16:00 PM Israel Mon-Fri (Afternoon Alert)
   workflow_dispatch:
   push:
     branches: [ main, master ]
@@ -28,6 +29,7 @@ jobs:
         pip install yfinance pandas numpy scikit-learn requests
         pip install tensorflow-cpu keras
         pip install xgboost beautifulsoup4 lxml
+        pip install pdfplumber
     
     - name: Run Professional Monitor
       env:
