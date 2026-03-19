@@ -518,7 +518,7 @@ def fetch_data(ticker, days=730):
         # DROP today's incomplete candle if market is open
         today = datetime.now().date()
         if df.index[-1].date() == today:
-            df = df.iloc[:-1]  # ← THIS IS THE FIX
+            df = df.iloc[:-1] 
         
         return df
     except Exception as e:
