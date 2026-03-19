@@ -623,6 +623,30 @@ def fetch_data(ticker, days=730):
         print(f"Data fetch error: {e}")
         return None
 
+def add_indicators(df):
+    df['Returns'] = df['Close'].pct_change()
+    df['SMA_20'] = df['Close'].rolling(window=20).mean()
+    df['SMA_50'] = df['Close'].rolling(window=50).mean()
+    df['EMA_12'] = df['Close'].ewm(span=12).mean()
+    df['EMA_26'] = df['Close'].ewm(span=26).mean()
+    df['MACD'] = df['EMA_12'] - df['EMA_26']
+    delta = df['Close'].diff()
+    gain = (delta.where(delta>0,0)).rolling(window=14).mean()
+    loss = (-delta.where(delta<0,0)).rolling(window=14).mean()
+    df['RSI'] = 100 - (100/(1+gain/loss))
+    df['BB_Middle'] = df['Close'].rolling(window=20).mean()
+    bb_std = df['Close'].rolling(window=20).std()
+    df['BB_Upper'] = df['BB_Middle'] + (2*bb_std)
+    df['BB_Lower'] = df['BB_Middle'] - (2*bb_std)
+    df['BB_Width'] = (df['BB_Upper']-df['BB_Lower'])/df['BB_Middle']
+    df['Volatility'] = df['Returns'].rolling(window=20).std()
+    high_low = df['High'] - df['Low']
+    high_close = np.abs(df['High']-df['Close'].shift())
+    low_close = np.abs(df['Low']-df['Close'].shift())
+    ranges = pd.concat([high_low,high_close,low_close],axis=1)
+    df['ATR'] = ranges.max(axis=1).rolling(14).mean()
+    return df.dropna()
+
 def fetch_session2_data(ticker, days=730):
     """
     For Session 2 alert (14:00 UTC):
