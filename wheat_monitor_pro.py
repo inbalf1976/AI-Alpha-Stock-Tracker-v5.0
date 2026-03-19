@@ -690,12 +690,18 @@ def should_alert(direction, price, state):
     Override: Set FORCE_ALERT=true in GitHub Actions env to send immediately.
     """
     # ── FORCE OVERRIDE ───────────────────────────────────────────────────
+    # Check all possible ways a manual trigger can be detected
     force_alert = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
-    github_event = os.getenv('GITHUB_EVENT_NAME', '').lower()
-    if force_alert or github_event == 'workflow_dispatch':
-        print(f"\n📢 Alert Check:")
-        print(f"   ⚡ Manual trigger detected (FORCE_ALERT={force_alert}, event={github_event}) — sending immediately")
-        return True, "⚡ Forced manual alert"
+    github_event = os.getenv('GITHUB_EVENT_NAME', '')
+    github_event2 = os.getenv('GITHUB_EVENT_PATH', '')
+    is_manual = force_alert or 'workflow_dispatch' in github_event or 'workflow_dispatch' in github_event2
+
+    print(f"\n📢 Alert Check:")
+    print(f"   FORCE_ALERT={force_alert}, GITHUB_EVENT_NAME={github_event}")
+
+    if is_manual:
+        print(f"   ⚡ Manual trigger detected — sending immediately")
+        return True, "⚡ Manual alert"
     # ─────────────────────────────────────────────────────────────────────
 
     israel_time, utc_offset, tz_name = get_israel_time()
