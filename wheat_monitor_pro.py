@@ -692,7 +692,7 @@ def main():
 
     state = load_state()
 
-    # Detect if this is a Session 2 run (14:00 UTC = 16:00 Israel)
+    # Detect session
     israel_time, utc_offset, tz_name = get_israel_time()
     israel_hour = israel_time.hour
     force_alert = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
@@ -700,42 +700,135 @@ def main():
     is_manual = force_alert or 'workflow_dispatch' in github_event
     is_session2 = (israel_hour == 16) or (is_manual and state.get('last_session') == 'morning')
 
+    # ── SESSION 2: Status update only (no prediction) ────────────────────
     if is_session2:
-        print(f"📊 SESSION 2 MODE — Using today's Session 1 data for afternoon prediction")
-    else:
-        print(f"📊 SESSION 1 MODE — Using yesterday's closed candle for daily prediction")
-
-    try:
-        print(f"\n📊 Fetching {PRIMARY_TICKER}...")
-
-        if is_session2:
+        print(f"📊 SESSION 2 MODE — Sending status update (no prediction)")
+        try:
+            print(f"\n📊 Fetching {PRIMARY_TICKER}...")
             df, session1_data = fetch_session2_data(PRIMARY_TICKER)
             if df is None:
                 print("❌ No data")
                 return
-            # Use current price from session 1 close if available
-            if session1_data:
-                price = session1_data['close']
-                print(f"✓ Session 2 entry price: {price:.2f}¢ (Session 1 close)")
-            else:
-                df_clean = df.copy()
-                today = datetime.now().date()
-                if df_clean.index[-1].date() == today:
-                    df_clean = df_clean.iloc[:-1]
-                price = df_clean['Close'].iloc[-1]
-                session1_data = None
-                print(f"✓ Price: {price:.2f}¢ (no session 1 data)")
-        else:
-            df = fetch_data(PRIMARY_TICKER)
-            if df is None:
-                print("❌ No data")
+
+            send_alert, reason = should_alert(None, None, state)
+            if not send_alert:
+                print(f"⏸️ No alert: {reason}")
+                state['last_direction'] = state.get('last_direction')
+                state['last_price'] = state.get('last_price')
+                save_state(state)
                 return
-            session1_data = None
-            price = df['Close'].iloc[-1]
-            print(f"✓ Price: {price:.2f}¢")
+
+            # Build status message from Session 1 data
+            morning_pred = state.get('last_direction', 'N/A')
+            morning_entry = state.get('last_price', 0)
+            morning_conf = state.get('last_confidence', 0)
+
+            if session1_data:
+                s1_move = session1_data['session1_move_pct']
+                s1_emoji = '📈' if s1_move > 0 else '📉'
+                current_price = session1_data['close']
+
+                # Check which targets were hit during Session 1
+                targets_hit = []
+                if morning_pred == 'DOWN' and morning_entry > 0:
+                    cons_target = morning_entry * (1 - 0.014)
+                    mod_target = morning_entry * (1 - 0.019)
+                    agg_target = morning_entry * (1 - 0.028)
+                    if session1_data['low'] <= agg_target:
+                        targets_hit.append(f"✅ Aggressive ({agg_target:.2f}¢)")
+                    elif session1_data['low'] <= mod_target:
+                        targets_hit.append(f"✅ Moderate ({mod_target:.2f}¢)")
+                    elif session1_data['low'] <= cons_target:
+                        targets_hit.append(f"✅ Conservative ({cons_target:.2f}¢)")
+                    else:
+                        targets_hit.append(f"⏳ No targets hit yet")
+                elif morning_pred == 'UP' and morning_entry > 0:
+                    cons_target = morning_entry * (1 + 0.014)
+                    mod_target = morning_entry * (1 + 0.019)
+                    agg_target = morning_entry * (1 + 0.028)
+                    if session1_data['high'] >= agg_target:
+                        targets_hit.append(f"✅ Aggressive ({agg_target:.2f}¢)")
+                    elif session1_data['high'] >= mod_target:
+                        targets_hit.append(f"✅ Moderate ({mod_target:.2f}¢)")
+                    elif session1_data['high'] >= cons_target:
+                        targets_hit.append(f"✅ Conservative ({cons_target:.2f}¢)")
+                    else:
+                        targets_hit.append(f"⏳ No targets hit yet")
+
+                targets_str = '\n'.join(targets_hit)
+
+                message = f"""
+🌾 *WHEAT UPDATE - SESSION 2* 🌾
+🌙 Afternoon Status (16:00 {tz_name})
+
+📋 *Morning Prediction:* {'▲' if morning_pred == 'UP' else '▼'} {morning_pred} from {morning_entry:.2f}¢
+
+{s1_emoji} *Session 1 Result:*
+Open: {session1_data.get('prev_close', 0):.2f}¢
+High: {session1_data['high']:.2f}¢
+Low: {session1_data['low']:.2f}¢
+Close: {current_price:.2f}¢ ({s1_move:+.2f}%)
+
+🎯 *Targets Status:*
+{targets_str}
+
+⏰ Session 2: 16:30 → 20:20 Israel
+_No new prediction — monitor open positions_
+_🚀 Professional Edition_
+"""
+            else:
+                message = f"""
+🌾 *WHEAT UPDATE - SESSION 2* 🌾
+🌙 Afternoon Status (16:00 {tz_name})
+
+📋 *Morning Prediction:* {'▲' if morning_pred == 'UP' else '▼'} {morning_pred} from {morning_entry:.2f}¢
+⏰ Session 2 opens at 16:30 Israel
+_No intraday data available yet_
+_🚀 Professional Edition_
+"""
+
+            telegram_success = send_telegram(message)
+            if telegram_success:
+                print("\n✅ Session 2 status sent!")
+                state['last_alert_time'] = datetime.now().isoformat()
+                state['last_alert_date'] = datetime.now().date().isoformat()
+                state['alerts_sent'] = state.get('alerts_sent', 0) + 1
+
+                israel_date = israel_time.date().isoformat()
+                if 'alerts_today' not in state:
+                    state['alerts_today'] = {}
+                state['alerts_today'] = {
+                    k: v for k, v in state['alerts_today'].items()
+                    if k >= (datetime.now() - timedelta(days=3)).date().isoformat()
+                }
+                state['alerts_today'][f"{israel_date}_afternoon"] = True
+                state['last_session'] = 'afternoon'
+
+            save_state(state)
+            print(f"\n📊 Total alerts: {state.get('alerts_sent', 0)}")
+            print(f"{'='*80}\n")
+
+        except Exception as e:
+            print(f"\n❌ ERROR: {e}")
+            import traceback
+            traceback.print_exc()
+        return
+    # ─────────────────────────────────────────────────────────────────────
+
+    print(f"📊 SESSION 1 MODE — Using yesterday's closed candle for daily prediction")
+
+    try:
+        print(f"\n📊 Fetching {PRIMARY_TICKER}...")
+        df = fetch_data(PRIMARY_TICKER)
+        if df is None:
+            print("❌ No data")
+            return
+        session1_data = None
+        price = df['Close'].iloc[-1]
+        print(f"✓ Price: {price:.2f}¢")
 
         df = add_indicators(df)
-        session_label = "🌙 SESSION 2 - Afternoon" if is_session2 else "☀️ SESSION 1 - Morning"
+        session_label = "☀️ SESSION 1 - Morning"
         
         print("\n🔬 Initializing advanced analyzers...")
         
@@ -966,6 +1059,7 @@ _🚀 Professional Edition_
                 }
                 state['alerts_today'][slot_key] = True
                 state['last_session'] = 'afternoon' if is_session2 else 'morning'
+                state['last_confidence'] = enhanced_conf
                 
                 try:
                     from performance_tracker import PerformanceTracker
