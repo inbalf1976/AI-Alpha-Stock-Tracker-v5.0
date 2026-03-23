@@ -1,7 +1,17 @@
 name: Wheat Monitor PRO - Ultimate Edition
 on:
   schedule:
-    - cron: '0 1 * * 1-5'  # 01:00 UTC = 03:00 Israel time, weekdays only (Mon-Fri)
+    # Morning alert: 01:00 AM Israel time
+    # Winter (UTC+2): 23:00 UTC previous day
+    # Summer (UTC+3): 22:00 UTC previous day
+    # Run both — Python auto-detects correct Israel time
+    - cron: '0 23 * * 0-4'  # Winter morning (01:00 Israel winter)
+    - cron: '0 22 * * 0-4'  # Summer morning (01:00 Israel summer)
+    # Afternoon alert: 16:00 PM Israel time
+    # Winter (UTC+2): 14:00 UTC
+    # Summer (UTC+3): 13:00 UTC
+    - cron: '0 14 * * 1-5'  # Winter afternoon (16:00 Israel winter)
+    - cron: '0 13 * * 1-5'  # Summer afternoon (16:00 Israel summer)
   workflow_dispatch:
   push:
     branches: [ main, master ]
@@ -28,6 +38,7 @@ jobs:
         pip install yfinance pandas numpy scikit-learn requests
         pip install tensorflow-cpu keras
         pip install xgboost beautifulsoup4 lxml
+        pip install pdfplumber
     
     - name: Run Professional Monitor
       env:
