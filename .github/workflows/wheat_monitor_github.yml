@@ -1,17 +1,10 @@
 name: Wheat Monitor PRO - Ultimate Edition
 on:
   schedule:
-    # Morning alert: 01:00 AM Israel time
-    # Winter (UTC+2): 23:00 UTC previous day
-    # Summer (UTC+3): 22:00 UTC previous day
-    # Run both — Python auto-detects correct Israel time
-    - cron: '0 23 * * 0-4'  # Winter morning (01:00 Israel winter)
-    - cron: '0 22 * * 0-4'  # Summer morning (01:00 Israel summer)
-    # Afternoon alert: 16:00 PM Israel time
-    # Winter (UTC+2): 14:00 UTC
-    # Summer (UTC+3): 13:00 UTC
-    - cron: '0 14 * * 1-5'  # Winter afternoon (16:00 Israel winter)
-    - cron: '0 13 * * 1-5'  # Summer afternoon (16:00 Israel summer)
+    - cron: '0 23 * * 0-4'
+    - cron: '0 22 * * 0-4'
+    - cron: '0 14 * * 1-5'
+    - cron: '0 13 * * 1-5'
   workflow_dispatch:
   push:
     branches: [ main, master ]
@@ -23,29 +16,34 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
-    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
+
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-    
+
     - name: Install packages
       run: |
         pip install yfinance pandas numpy scikit-learn requests
         pip install tensorflow-cpu keras
         pip install xgboost beautifulsoup4 lxml
         pip install pdfplumber
-    
+
+    - name: Set force alert for manual runs
+      if: github.event_name == 'workflow_dispatch'
+      run: echo "FORCE_ALERT=true" >> $GITHUB_ENV
+
     - name: Run Professional Monitor
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        FORCE_ALERT: ${{ github.event_name == 'workflow_dispatch' && 'true' || '' }}
+        GITHUB_EVENT_NAME: ${{ github.event_name }}
       run: python wheat_monitor_pro.py
-    
+
     - name: Commit state to repository
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
