@@ -209,132 +209,257 @@ class LiveWeatherAnalyzer:
 # LIVE WASDE SCRAPER - Embedded (USDA QuickStats API)
 # ============================================================================
 
+# ============================================================================
+# LIVE WASDE SCRAPER - Scrapes official USDA WASDE PDF monthly report
+# URL pattern: https://www.usda.gov/oce/commodity/wasde/wasde{MM}{YY}.pdf
+# Wheat data is on page 11 of the PDF
+# ============================================================================
+
 class LiveWASDEScraper:
-    """Fetch and analyze live USDA WASDE data for wheat"""
-    
+    """Scrape and analyze live USDA WASDE PDF report for wheat supply/use data"""
+
     def __init__(self):
-        self.api_key = os.getenv("USDA_API_KEY", "3338B84E-694D-3E6A-925C-F35064C59BAE")
-        self.base_url = "https://quickstats.nass.usda.gov/api/api_GET/"
-    
-    def fetch_wheat_stocks(self):
+        self.base_url = "https://www.usda.gov/oce/commodity/wasde"
+
+    def _get_wasde_url(self):
+        """Build the URL for the most recent WASDE PDF"""
+        now = datetime.now()
+        # WASDE release dates 2026: Jan 12, Feb 10, Mar 10, Apr 9, May 12...
+        # Released around the 10th of each month — use current month if past day 10, else previous
+        if now.day >= 10:
+            month = now.month
+            year = now.year
+        else:
+            # Before the 10th — use previous month's report
+            if now.month == 1:
+                month = 12
+                year = now.year - 1
+            else:
+                month = now.month - 1
+                year = now.year
+
+        mm = str(month).zfill(2)
+        yy = str(year)[-2:]
+        url = f"{self.base_url}/wasde{mm}{yy}.pdf"
+        print(f"         WASDE URL: {url}")
+        return url
+
+    def _parse_wheat_page(self, pdf_bytes):
+        """Extract US wheat stocks-to-use from WASDE PDF page 11.
+        
+        From debug output, page 11 format is:
+            Use, Total    1,815    1,969    2,028    2,028
+            Ending Stocks   696      855      931      931
+        Last column = current projection (Mar 2026)
+        US wheat STU = Ending Stocks / Use Total = 931/2028 = 45.9%
+        """
         try:
-            params = {
-                'key': self.api_key,
-                'source_desc': 'SURVEY',
-                'commodity_desc': 'WHEAT',
-                'statisticcat_desc': 'STOCKS',
-                'agg_level_desc': 'NATIONAL',
-                'format': 'JSON',
-                'year__GE': 2020
-            }
-            response = requests.get(self.base_url, params=params, timeout=15)
-            if response.status_code == 200:
-                data = response.json()
-                if 'data' in data and data['data']:
-                    return self._parse_stocks_data(data['data'])
+            import pdfplumber
+            import io
+            import re
+
+            with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+                # Page 11 confirmed from debug — try it first, then neighbors
+                for page_idx in [10, 9, 11, 12]:
+                    if page_idx >= len(pdf.pages):
+                        continue
+
+                    text = pdf.pages[page_idx].extract_text() or ''
+
+                    # Must contain both Use Total and Ending Stocks rows
+                    has_use = bool(re.search(r'Use,?\s*Total', text, re.IGNORECASE))
+                    has_stocks = bool(re.search(r'Ending\s+Stocks', text, re.IGNORECASE))
+
+                    if not (has_use and has_stocks):
+                        continue
+
+                    print(f"         Parsing page {page_idx + 1} for US wheat STU...")
+                    lines = text.split('\n')
+
+                    use_total = None
+                    ending_stocks = None
+
+                    for line in lines:
+                        # "Use, Total  1,815  1,969  2,028  2,028"
+                        if re.search(r'Use,?\s*Total', line, re.IGNORECASE):
+                            nums = [float(n.replace(',', '')) for n in re.findall(r'[\d,]+', line)
+                                    if float(n.replace(',', '')) > 100]
+                            if nums:
+                                use_total = nums[-1]  # Last = most recent projection
+                                print(f"         Use Total: {use_total}")
+
+                        # "Ending Stocks  696  855  931  931"
+                        if re.search(r'Ending\s+Stocks', line, re.IGNORECASE):
+                            nums = [float(n.replace(',', '')) for n in re.findall(r'[\d,]+', line)
+                                    if float(n.replace(',', '')) > 10]
+                            if nums:
+                                ending_stocks = nums[-1]
+                                print(f"         Ending Stocks: {ending_stocks}")
+
+                    if use_total and ending_stocks and use_total > 0:
+                        stu = ending_stocks / use_total
+                        # US wheat STU is typically 30-60%
+                        if 0.15 <= stu <= 0.80:
+                            print(f"         ✅ US Wheat STU: {stu:.1%} ({ending_stocks:.0f}/{use_total:.0f})")
+                            return {'stocks_to_use_pct': stu, 'source': 'WASDE PDF page 11'}
+                        else:
+                            print(f"         ⚠️ STU {stu:.1%} out of range — skipping")
+
+                print("         STU not found — using seasonal fallback")
+                return None
+
+        except ImportError:
+            print("         pdfplumber not installed")
             return None
         except Exception as e:
-            print(f"WASDE fetch error: {e}")
+            print(f"         PDF parse error: {e}")
             return None
-    
-    def _parse_stocks_data(self, data):
-        sorted_data = sorted(data, key=lambda x: (x.get('year', 0), x.get('reference_period_desc', '')), reverse=True)
-        if not sorted_data:
-            return None
-        
-        latest = sorted_data[0]
-        latest_value = float(latest.get('Value', 0).replace(',', ''))
-        latest_year = latest.get('year')
-        
-        previous_value = None
-        for record in sorted_data[1:]:
-            if record.get('year') != latest_year:
-                try:
-                    previous_value = float(record.get('Value', 0).replace(',', ''))
-                    break
-                except:
-                    continue
-        
-        yoy_change = 0
-        if previous_value and previous_value > 0:
-            yoy_change = ((latest_value - previous_value) / previous_value) * 100
-        
-        return {
-            'current_stocks': latest_value,
-            'yoy_change_pct': yoy_change,
-            'year': latest_year
-        }
-    
+
     def get_fundamental_score(self):
-        print("      Fetching USDA data...", end=" ")
-        stocks_data = self.fetch_wheat_stocks()
+        """
+        Fetch US wheat ending stocks and total use from USDA FAS PSD Online API.
+        This API is designed for programmatic access and works from GitHub Actions.
         
-        if not stocks_data:
-            print("Failed - using estimates")
-            return self._get_default_estimates()
+        API endpoint: https://apps.fas.usda.gov/psdonline/app/index.html
+        Commodity code: 0410000 (Wheat)
+        Country code: 9000000 (United States)
+        Attributes: 176 = Ending Stocks, 125 = Total Domestic Consumption + Exports
         
-        print("Success")
-        
+        ── MANUAL FALLBACK ─────────────────────────────────────────────────
+        If API fails, update WASDE_FALLBACK below after each monthly release.
+        Source: https://southernagtoday.org (search "WASDE recap")
+        Current: March 2026 — Ending Stocks: 931M bu, Total Use: 2,028M bu
+        ─────────────────────────────────────────────────────────────────────
+        """
+        # Manual fallback — update monthly if API fails
+        WASDE_FALLBACK = {
+            '2026-03': (931, 2028),   # March 10, 2026 — WASDE-669
+            # '2026-04': (XXX, XXXX), # Add after April 9 release
+        }
+
+        print("      Fetching USDA FAS PSD wheat data...", end=" ")
+
+        try:
+            # FAS PSD Online API — no API key required
+            # Commodity 0410000 = All Wheat, marketYear = start year of marketing year
+            # e.g. 2025 for the 2025/26 marketing year
+            current_year = datetime.now().year
+            market_year = current_year - 1  # 2025 for 2025/26
+            url = f"https://apps.fas.usda.gov/OpenData/api/psd/commodity/0410000/country/9000000/year/{market_year}"
+            headers = {
+                'Accept': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (compatible; WheatMonitor/3.0)'
+            }
+            response = requests.get(url, headers=headers, timeout=20)
+
+            if response.status_code == 200:
+                data = response.json()
+                ending_stocks_mbu = None
+                total_use_mbu = None
+
+                for record in data:
+                    attr_id = record.get('attributeId', 0)
+                    value = record.get('value', 0) or 0
+                    # Values in 1000 MT — convert to million bushels (1 MT = 36.744 bu)
+                    value_mbu = (value * 36.744) / 1000
+
+                    if attr_id == 176:   # Ending Stocks
+                        ending_stocks_mbu = value_mbu
+                    elif attr_id == 125: # Total Distribution
+                        total_use_mbu = value_mbu
+
+                if ending_stocks_mbu and total_use_mbu and total_use_mbu > 0:
+                    stu = ending_stocks_mbu / total_use_mbu
+                    print(f"Success (PSD API)")
+                    print(f"         Ending Stocks: {ending_stocks_mbu:.0f}M bu")
+                    print(f"         Total Use: {total_use_mbu:.0f}M bu")
+                    print(f"         STU: {stu:.1%}")
+                    return self._score_from_stu(stu, 'USDA FAS PSD API')
+                else:
+                    print("API returned no matching data — trying fallback")
+            else:
+                print(f"API HTTP {response.status_code} — trying fallback")
+
+        except Exception as e:
+            print(f"API error: {e} — using fallback")
+
+        # Use manual fallback
+        now = datetime.now()
+        key = now.strftime('%Y-%m') if now.day >= 10 else (now.replace(day=1) - timedelta(days=1)).strftime('%Y-%m')
+
+        for k in sorted(WASDE_FALLBACK.keys(), reverse=True):
+            if k <= key:
+                ending_stocks, total_use = WASDE_FALLBACK[k]
+                stu = ending_stocks / total_use
+                print(f"Using fallback ({k})")
+                print(f"         STU: {stu:.1%}")
+                return self._score_from_stu(stu, f'WASDE fallback {k}')
+
+        return self._get_default_estimates()
+
+    def _score_from_stu(self, stu, source):
+        """Convert stocks-to-use ratio to trading signal"""
         score = 0.0
-        factors = []
-        
-        stocks_value = stocks_data['current_stocks']
-        yoy_change = stocks_data['yoy_change_pct']
-        
-        stocks_millions = stocks_value / 1_000_000
-        estimated_use_millions = 2000
-        stocks_to_use = stocks_millions / estimated_use_millions if estimated_use_millions > 0 else 0.20
-        
-        print(f"         Raw stocks: {stocks_value:,.0f} bushels")
-        print(f"         Stocks (millions): {stocks_millions:.1f}")
-        print(f"         Stocks-to-use: {stocks_to_use:.1%}")
-        
-        stocks_to_use = max(0.0, min(2.0, stocks_to_use))
-        
-        if stocks_to_use < 0.15:
-            score += 0.30
-            factors.append(f"Very tight stocks ({stocks_to_use:.1%})")
-        elif stocks_to_use < 0.18:
-            score += 0.20
-            factors.append(f"Tight stocks ({stocks_to_use:.1%})")
-        elif stocks_to_use > 0.25:
-            score -= 0.15
-            factors.append(f"Ample stocks ({stocks_to_use:.1%})")
-        
-        if yoy_change < -5:
-            score += 0.15
-            factors.append(f"Stocks down {abs(yoy_change):.1f}% YoY")
-        elif yoy_change > 5:
-            score -= 0.10
-            factors.append(f"Stocks up {yoy_change:.1f}% YoY")
-        
-        if score > 0.20:
-            signal = 'BULLISH'
-        elif score < -0.10:
-            signal = 'BEARISH'
+
+        if stu < 0.15:
+            score = 0.30
+            label = f"Very tight wheat stocks ({stu:.1%})"
+        elif stu < 0.18:
+            score = 0.20
+            label = f"Tight wheat stocks ({stu:.1%})"
+        elif stu < 0.22:
+            score = 0.10
+            label = f"Snug wheat stocks ({stu:.1%})"
+        elif stu < 0.30:
+            score = 0.0
+            label = f"Normal wheat stocks ({stu:.1%})"
+        elif stu < 0.40:
+            score = -0.10
+            label = f"Comfortable wheat stocks ({stu:.1%})"
         else:
-            signal = 'NEUTRAL'
-        
+            score = -0.20
+            label = f"Ample wheat stocks ({stu:.1%})"
+
+        signal = 'BULLISH' if score > 0.10 else 'BEARISH' if score < -0.05 else 'NEUTRAL'
+        print(f"         WASDE Signal: {signal} ({label})")
+
         return {
             'signal': signal,
             'score': score,
             'data': {
-                'stocks_to_use': stocks_to_use,
-                'stocks_change': yoy_change,
+                'stocks_to_use': stu,
+                'stocks_change': 0,
                 'last_updated': datetime.now().strftime('%Y-%m-%d'),
-                'source': 'USDA QuickStats LIVE'
+                'source': source
             },
-            'factors': factors[:2]
+            'factors': [label]
         }
-    
+
     def _get_default_estimates(self):
+        """Seasonal fallback estimates when PDF unavailable"""
         month = datetime.now().month
-        if month in [1, 2, 3]:
-            return {'signal': 'BULLISH', 'score': 0.20, 'data': {'stocks_to_use': 0.18, 'stocks_change': -2, 'source': 'ESTIMATED'}, 'factors': ['Seasonal estimate']}
+        # March 2026: drought + geopolitical = tight supply (~22%)
+        if month in [1, 2, 3, 4]:
+            return {
+                'signal': 'BULLISH',
+                'score': 0.15,
+                'data': {'stocks_to_use': 0.22, 'stocks_change': -5, 'source': 'ESTIMATED'},
+                'factors': ['Tight wheat supply estimate (drought + geopolitical)']
+            }
         elif month in [7, 8, 9]:
-            return {'signal': 'BEARISH', 'score': -0.10, 'data': {'stocks_to_use': 0.22, 'stocks_change': 3, 'source': 'ESTIMATED'}, 'factors': ['Post-harvest']}
+            return {
+                'signal': 'BEARISH',
+                'score': -0.10,
+                'data': {'stocks_to_use': 0.28, 'stocks_change': 3, 'source': 'ESTIMATED'},
+                'factors': ['Post-harvest seasonal estimate']
+            }
         else:
-            return {'signal': 'NEUTRAL', 'score': 0.10, 'data': {'stocks_to_use': 0.20, 'stocks_change': 0, 'source': 'ESTIMATED'}, 'factors': ['Balanced']}
+            return {
+                'signal': 'NEUTRAL',
+                'score': 0.05,
+                'data': {'stocks_to_use': 0.25, 'stocks_change': 0, 'source': 'ESTIMATED'},
+                'factors': ['Seasonal average estimate']
+            }
 
 # ============================================================================
 
@@ -522,67 +647,95 @@ def add_indicators(df):
     df['ATR'] = ranges.max(axis=1).rolling(14).mean()
     return df.dropna()
 
-def should_alert(direction, price, state):
-    from datetime import datetime
+def get_israel_time():
+    """Get current Israel time, auto-adjusting for DST (no pytz needed)"""
+    import time
+    now_utc = datetime.utcnow()
     
-    current_time = datetime.now()
-    current_date = current_time.date().isoformat()
+    # Israel DST rules:
+    # Clocks spring forward last Friday before April 2 at 02:00
+    # Clocks fall back last Sunday before October 10 at 02:00
+    year = now_utc.year
     
-    last_alert_time = state.get('last_alert_time', None)
-    last_alert_date = state.get('last_alert_date', None)
-    last_direction = state.get('last_direction', None)
-    last_price = state.get('last_price', None)
+    # Find DST start: last Friday before April 2
+    april2 = datetime(year, 4, 2)
+    days_to_friday = (april2.weekday() - 4) % 7  # 4 = Friday
+    dst_start = april2 - timedelta(days=days_to_friday)
+    dst_start = dst_start.replace(hour=0, minute=0, second=0)  # midnight UTC = 2AM Israel
     
-    print(f"\n📢 Alert Check:")
-    print(f"   Last alert: {last_alert_time}")
-    print(f"   Last alert date: {last_alert_date} vs today: {current_date}")
-    print(f"   Last direction: {last_direction} → Current: {direction}")
+    # Find DST end: last Sunday before October 10
+    oct10 = datetime(year, 10, 10)
+    days_to_sunday = (oct10.weekday() - 6) % 7  # 6 = Sunday
+    dst_end = oct10 - timedelta(days=days_to_sunday)
+    dst_end = dst_end.replace(hour=0, minute=0, second=0)
     
-    if last_alert_time is None:
-        print(f"   → First run ever - SENDING")
-        return True, "First prediction"
-    
-    if last_alert_date != current_date:
-        print(f"   → New trading day - SENDING first alert of {current_date}")
-        return True, f"First prediction of {current_date}"
-    
-    try:
-        last_alert_dt = datetime.fromisoformat(last_alert_time)
-        minutes_since_alert = (current_time - last_alert_dt).total_seconds() / 60
-        print(f"   Minutes since last alert: {minutes_since_alert:.1f}")
-    except:
-        print(f"   → Could not parse time, sending alert")
-        return True, "Time parse error"
-    
-    if minutes_since_alert < 60:
-        print(f"   → Too soon (< 60 min) - NO ALERT")
-        return False, f"Only {minutes_since_alert:.0f} min since last alert"
-    
-    if direction == last_direction:
-        if last_price:
-            change_pct = abs((price - last_price) / last_price)
-            print(f"   → Same direction, price change: {change_pct:.2%}")
-            if change_pct >= DIRECTION_CHANGE_THRESHOLD:
-                print(f"   → Significant move - SENDING")
-                return True, f"Same direction but {change_pct:.1%} move"
-            else:
-                print(f"   → Insufficient move - NO ALERT")
-                return False, f"Same direction, only {change_pct:.1%} move"
-        else:
-            return False, "Same direction"
-    
-    print(f"   → Direction changed!")
-    if last_price:
-        change_pct = abs((price - last_price) / last_price)
-        print(f"      Price change: {change_pct:.2%}")
-        if change_pct >= DIRECTION_CHANGE_THRESHOLD:
-            print(f"   → Significant change - SENDING")
-            return True, f"Direction changed with {change_pct:.1%} move"
-        else:
-            print(f"   → Small change - NO ALERT")
-            return False, f"Direction changed but only {change_pct:.1%} move"
+    # Determine offset
+    if dst_start <= now_utc < dst_end:
+        offset = 3  # IDT (summer)
+        tz_name = "IDT (UTC+3)"
     else:
-        return True, "Direction changed"
+        offset = 2  # IST (winter)
+        tz_name = "IST (UTC+2)"
+    
+    israel_time = now_utc + timedelta(hours=offset)
+    return israel_time, offset, tz_name
+
+
+def should_alert(direction, price, state):
+    """
+    Two fixed alerts per day based on Israel local time:
+    - Morning alert: 01:00 AM Israel (auto-adjusts winter/summer)
+    - Afternoon alert: 16:00 PM Israel (auto-adjusts winter/summer)
+
+    Override: Set FORCE_ALERT=true in GitHub Actions env to send immediately.
+    """
+    # ── FORCE OVERRIDE ───────────────────────────────────────────────────
+    # Check all possible ways a manual trigger can be detected
+    force_alert = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
+    github_event = os.getenv('GITHUB_EVENT_NAME', '')
+    github_event2 = os.getenv('GITHUB_EVENT_PATH', '')
+    is_manual = force_alert or 'workflow_dispatch' in github_event or 'workflow_dispatch' in github_event2
+
+    print(f"\n📢 Alert Check:")
+    print(f"   FORCE_ALERT={force_alert}, GITHUB_EVENT_NAME={github_event}")
+
+    if is_manual:
+        print(f"   ⚡ Manual trigger detected — sending immediately")
+        return True, "⚡ Manual alert"
+    # ─────────────────────────────────────────────────────────────────────
+
+    israel_time, utc_offset, tz_name = get_israel_time()
+    israel_hour = israel_time.hour
+    israel_date = israel_time.date().isoformat()
+
+    print(f"\n📢 Alert Check:")
+    print(f"   Israel time: {israel_time.strftime('%Y-%m-%d %H:%M')} {tz_name}")
+    print(f"   Israel hour: {israel_hour}:00")
+
+    # Determine slot based on Israel local time
+    if israel_hour == 1:
+        slot = 'morning'
+        slot_label = f'Morning Alert (01:00 {tz_name})'
+    elif israel_hour == 16:
+        slot = 'afternoon'
+        slot_label = f'Afternoon Alert (16:00 {tz_name})'
+    else:
+        print(f"   → Not a scheduled alert hour ({israel_hour}:00 Israel) — NO ALERT")
+        print(f"   → Scheduled hours: 01:00 and 16:00 Israel time")
+        return False, f"Not a scheduled hour ({israel_hour}:00 Israel)"
+
+    # Check if this slot was already sent today
+    alerts_today = state.get('alerts_today', {})
+    slot_key = f"{israel_date}_{slot}"
+    already_sent = alerts_today.get(slot_key, False)
+
+    if already_sent:
+        print(f"   → {slot_label} already sent today — NO ALERT")
+        return False, f"{slot_label} already sent"
+
+    print(f"   → {slot_label} — SENDING")
+    return True, slot_label
+
 
 def main():
     print(f"\n{'='*80}")
@@ -716,11 +869,11 @@ def main():
             boost_details.append(f"Weather: -{penalty:.2%}")
         
         if (direction=="UP" and wasde_signal['signal']=='BULLISH') or (direction=="DOWN" and wasde_signal['signal']=='BEARISH'):
-            boost = abs(wasde_signal['score'])*0.5
+            boost = min(abs(wasde_signal['score'])*0.5, 0.05)  # Cap WASDE boost at 5%
             enhanced_conf += boost
             boost_details.append(f"WASDE: +{boost:.2%}")
         elif wasde_signal['signal']!='NEUTRAL':
-            penalty = abs(wasde_signal['score'])*0.3
+            penalty = min(abs(wasde_signal['score'])*0.3, 0.05)  # Cap WASDE penalty at 5%
             enhanced_conf -= penalty
             boost_details.append(f"WASDE: -{penalty:.2%}")
         
@@ -807,6 +960,23 @@ _🚀 Professional Edition_
                 state['last_alert_time'] = datetime.now().isoformat()
                 state['last_alert_date'] = datetime.now().date().isoformat()
                 state['alerts_sent'] += 1
+
+                # Track which slot was sent using Israel local time
+                israel_time, _, _ = get_israel_time()
+                israel_hour = israel_time.hour
+                israel_date = israel_time.date().isoformat()
+                slot = 'morning' if israel_hour == 1 else 'afternoon' if israel_hour == 16 else f'manual_{israel_hour}h'
+                slot_key = f"{israel_date}_{slot}"
+
+                if 'alerts_today' not in state:
+                    state['alerts_today'] = {}
+
+                # Clean old entries (keep only last 3 days)
+                state['alerts_today'] = {
+                    k: v for k, v in state['alerts_today'].items()
+                    if k >= (datetime.now() - timedelta(days=3)).date().isoformat()
+                }
+                state['alerts_today'][slot_key] = True
                 
                 try:
                     from performance_tracker import PerformanceTracker
