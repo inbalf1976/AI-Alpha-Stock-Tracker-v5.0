@@ -349,7 +349,8 @@ from move_analyzer import MoveAnalyzer
 
 # CONFIG
 PRIMARY_TICKER = "ZW=F"
-STOP_LOSS_PCT = 0.015
+STOP_LOSS_PCT = 0.015       # Tight stop (1.5%) — normal market
+STOP_LOSS_WIDE_PCT = 0.025  # Wide stop (2.5%) — Jane Street protection
 TAKE_PROFIT_PCT = 0.025
 MIN_CONFIDENCE = 0.55
 DIRECTION_CHANGE_THRESHOLD = 0.025
@@ -983,6 +984,7 @@ _🚀 Professional Edition_
         
         if send_alert and enhanced_conf >= MIN_CONFIDENCE:
             stop = price*(1-STOP_LOSS_PCT) if direction=="UP" else price*(1+STOP_LOSS_PCT)
+            stop_wide = price*(1-STOP_LOSS_WIDE_PCT) if direction=="UP" else price*(1+STOP_LOSS_WIDE_PCT)
             target = price*(1+TAKE_PROFIT_PCT) if direction=="UP" else price*(1-TAKE_PROFIT_PCT)
             
             reset_notice = ""
@@ -1024,7 +1026,8 @@ Agreement: {prediction['agreement']}
 
 💼 *TRADE SETUP:*
 Entry: {price:.2f}¢
-Stop: {stop:.2f}¢ ({STOP_LOSS_PCT:.1%})
+🛑 Stop 1 (Tight):  {stop:.2f}¢ ({STOP_LOSS_PCT:.1%}) — normal market
+🛡️ Stop 2 (Wide):   {stop_wide:.2f}¢ ({STOP_LOSS_WIDE_PCT:.1%}) — Jane Street protection
 Target: {target:.2f}¢ ({TAKE_PROFIT_PCT:.1%})
 R:R = 1.67:1
 
