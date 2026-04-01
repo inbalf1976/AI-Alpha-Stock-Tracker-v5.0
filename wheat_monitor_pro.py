@@ -994,9 +994,9 @@ _🚀 Professional Edition_
             is_spike = 'spike' in vol_explanation or float(volume_signal.get('score', 0)) >= 0.20
 
             if is_divergence or is_spike:
-                stop_recommendation = f"⚠️ *USE STOP 2* (volume {'divergence' if is_divergence else 'spike'} detected)"
+                stop_recommendation = f"⚠️ USE STOP 2 (volume {'divergence' if is_divergence else 'spike'} detected)"
             else:
-                stop_recommendation = f"✅ *USE STOP 1* (normal volume)"
+                stop_recommendation = f"✅ USE STOP 1 (normal volume)"
             
             reset_notice = ""
             if state.get('reset_count', 0) > 0:
