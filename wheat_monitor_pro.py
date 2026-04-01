@@ -986,6 +986,17 @@ _🚀 Professional Edition_
             stop = price*(1-STOP_LOSS_PCT) if direction=="UP" else price*(1+STOP_LOSS_PCT)
             stop_wide = price*(1-STOP_LOSS_WIDE_PCT) if direction=="UP" else price*(1+STOP_LOSS_WIDE_PCT)
             target = price*(1+TAKE_PROFIT_PCT) if direction=="UP" else price*(1-TAKE_PROFIT_PCT)
+
+            # Auto-recommend stop based on volume signal
+            vol_explanation = volume_signal.get('explanation', '').lower()
+            vol_signal = volume_signal.get('signal', 'NEUTRAL')
+            is_divergence = 'divergence' in vol_explanation
+            is_spike = 'spike' in vol_explanation or float(volume_signal.get('score', 0)) >= 0.20
+
+            if is_divergence or is_spike:
+                stop_recommendation = f"⚠️ *USE STOP 2* (volume {'divergence' if is_divergence else 'spike'} detected)"
+            else:
+                stop_recommendation = f"✅ *USE STOP 1* (normal volume)"
             
             reset_notice = ""
             if state.get('reset_count', 0) > 0:
@@ -1028,6 +1039,7 @@ Agreement: {prediction['agreement']}
 Entry: {price:.2f}¢
 🛑 Stop 1 (Tight):  {stop:.2f}¢ ({STOP_LOSS_PCT:.1%}) — normal market
 🛡️ Stop 2 (Wide):   {stop_wide:.2f}¢ ({STOP_LOSS_WIDE_PCT:.1%}) — Jane Street protection
+{stop_recommendation}
 Target: {target:.2f}¢ ({TAKE_PROFIT_PCT:.1%})
 R:R = 1.67:1
 
