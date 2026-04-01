@@ -1015,6 +1015,10 @@ _🚀 Professional Edition_
                 s1_emoji = '📈' if s1_move > 0 else '📉'
                 session1_context = f"\n{s1_emoji} *Session 1:* {s1_move:+.2f}% (H:{session1_data['high']:.2f}¢ L:{session1_data['low']:.2f}¢)\n"
 
+            # Escape special markdown chars in dynamic text fields
+            def esc(text):
+                return str(text).replace('*', '').replace('_', '').replace('`', '')
+
             message = f"""
 🌾 *WHEAT ALERT - ULTIMATE v3.0* 🌾
 {session_label}
@@ -1029,23 +1033,23 @@ XGB: {prediction['model_details']['XGBoost']}
 Agreement: {prediction['agreement']}
 
 📊 *FUNDAMENTAL FACTORS:*
-📅 Seasonal: {seasonal['direction']} - {seasonal['explanation']}
-🌦️ Weather: {weather_signal['signal']} ({weather_signal['explanation']})
-📈 WASDE: {wasde_signal['signal']} (Stocks: {wasde_signal['data']['stocks_to_use']:.0%})
-📊 Volume: {volume_signal['signal']} ({volume_signal['explanation']})
-🎯 Context: {context['position']}
+📅 Seasonal: {esc(seasonal['direction'])} - {esc(seasonal['explanation'])}
+🌦️ Weather: {esc(weather_signal['signal'])} ({esc(weather_signal['explanation'])})
+📈 WASDE: {esc(wasde_signal['signal'])} (Stocks: {wasde_signal['data']['stocks_to_use']:.0%})
+📊 Volume: {esc(volume_signal['signal'])} ({esc(volume_signal['explanation'])})
+🎯 Context: {esc(context['position'])}
 
 💼 *TRADE SETUP:*
 Entry: {price:.2f}¢
-🛑 Stop 1 (Tight):  {stop:.2f}¢ ({STOP_LOSS_PCT:.1%}) — normal market
-🛡️ Stop 2 (Wide):   {stop_wide:.2f}¢ ({STOP_LOSS_WIDE_PCT:.1%}) — Jane Street protection
+🛑 Stop 1 (Tight):  {stop:.2f}¢ ({STOP_LOSS_PCT:.1%}) - normal market
+🛡️ Stop 2 (Wide):   {stop_wide:.2f}¢ ({STOP_LOSS_WIDE_PCT:.1%}) - Jane Street protection
 {stop_recommendation}
 Target: {target:.2f}¢ ({TAKE_PROFIT_PCT:.1%})
 R:R = 1.67:1
 
 {recommendations}
 
-_{reason}_
+_{esc(reason)}_
 _🚀 Professional Edition_
 """
             
