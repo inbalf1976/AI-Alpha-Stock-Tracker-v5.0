@@ -660,10 +660,10 @@ def should_alert(direction, price, state):
     print(f"   Israel hour: {israel_hour}:00")
 
     # Determine slot based on Israel local time
-    if israel_hour == 1:
+    if israel_hour in (1, 2):
         slot = 'morning'
         slot_label = f'Morning Alert (01:00 {tz_name})'
-    elif israel_hour == 16:
+    elif israel_hour in (15, 16):
         slot = 'afternoon'
         slot_label = f'Afternoon Alert (16:00 {tz_name})'
     else:
@@ -699,7 +699,7 @@ def main():
     force_alert = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
     github_event = os.getenv('GITHUB_EVENT_NAME', '')
     is_manual = force_alert or 'workflow_dispatch' in github_event
-    is_session2 = (israel_hour == 16) or (is_manual and state.get('last_session') == 'morning')
+    is_session2 = (israel_hour in (15, 16)) or (is_manual and state.get('last_session') == 'morning')
 
     # ── SESSION 2: Status update only (no prediction) ────────────────────
     if is_session2:
@@ -1049,7 +1049,7 @@ _🚀 Professional Edition_
                 israel_time, _, _ = get_israel_time()
                 israel_hour = israel_time.hour
                 israel_date = israel_time.date().isoformat()
-                slot = 'morning' if israel_hour == 1 else 'afternoon' if israel_hour == 16 else f'manual_{israel_hour}h'
+                slot = 'morning' if israel_hour in (1,2) else 'afternoon' if israel_hour in (15,16) else f'manual_{israel_hour}h'
                 slot_key = f"{israel_date}_{slot}"
 
                 if 'alerts_today' not in state:
