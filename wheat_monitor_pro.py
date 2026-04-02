@@ -484,31 +484,39 @@ def fetch_data(ticker, days=730):
         if df.empty:
             return None
 
-        # ALWAYS drop the last candle if market is currently open
-        # Wheat futures market hours: 19:00 - 13:30 CT (next day)
-        # = 00:00 - 18:30 UTC
-        # At 1AM Israel (22:00-23:00 UTC) market IS open
-        # So we ALWAYS drop the last candle to ensure we use previous day close
+        # Wheat futures trading hours (Israel time, UTC+3 summer):
+        # Session opens: 03:00 Israel = 00:00 UTC
+        # Session closes: 15:45 Israel = 12:45 UTC
+        # Re-opens: 16:30 Israel = 13:30 UTC
+        # Day close: 21:20 Israel = 18:20 UTC
+        #
+        # Our alert runs at 1AM Israel = 22:00 UTC (previous day)
+        # At that time market is CLOSED - last candle is previous day's close
+        # BUT if run manually during market hours, we must drop incomplete candle
+        #
+        # RULE: Always use the last FULLY CLOSED daily candle
+        # A daily candle is complete only after 18:20 UTC (21:20 Israel)
+
         now_utc = datetime.utcnow()
+        now_utc_hour_min = now_utc.hour * 60 + now_utc.minute
+        market_day_closed = now_utc_hour_min >= 18 * 60 + 20  # after 18:20 UTC
+
         last_date = df.index[-1].date()
         today_utc = now_utc.date()
         yesterday_utc = (now_utc - timedelta(days=1)).date()
 
-        # Drop last candle if it's today OR yesterday but market was open
-        # Safe rule: always use the candle from 2+ days ago during market hours
-        # OR use yesterday if we're running after market close (after 20:00 UTC)
-        market_closed_for_day = now_utc.hour >= 20  # After 20:00 UTC market day is done
-
         if last_date >= today_utc:
+            # Today's candle - always drop, market still in progress
             df = df.iloc[:-1]
-            print(f"   Dropped today's candle - using {df.index[-1].date()}")
-        elif last_date == yesterday_utc and not market_closed_for_day:
-            df = df.iloc[:-1]
-            print(f"   Dropped yesterday's incomplete candle (market still open) - using {df.index[-1].date()}")
+            print(f"   Dropped today's incomplete candle - using {df.index[-1].date()}")
+        elif last_date == yesterday_utc and not market_day_closed:
+            # Yesterday's candle but today's session not done yet
+            # (this handles the case where yfinance returns yesterday as last)
+            print(f"   Using yesterday's closed candle: {last_date}")
         else:
-            print(f"   Using candle: {last_date}")
+            print(f"   Using closed candle: {last_date}")
 
-        print(f"   Previous day CLOSE: {df['Close'].iloc[-1]:.2f}c")
+        print(f"   Previous day CLOSE price: {df['Close'].iloc[-1]:.2f}c")
         return df
     except Exception as e:
         print(f"Data fetch error: {e}")
