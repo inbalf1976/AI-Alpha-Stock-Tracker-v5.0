@@ -520,7 +520,7 @@ def should_alert(direction, price, state):
 
     if is_manual:
         print(f"   Manual trigger - sending immediately")
-        return True, "Manual alert"
+        return True, "Manual alert", True
 
     # Get Israel time
     israel_time, utc_offset, tz_name = get_israel_time()
@@ -537,17 +537,17 @@ def should_alert(direction, price, state):
     else:
         print(f"   Not a scheduled hour ({israel_hour}:00 Israel) - NO ALERT")
         print(f"   Scheduled hour: 01:00 Israel time only")
-        return False, f"Not scheduled hour ({israel_hour}:00 Israel)"
+        return False, f"Not scheduled hour ({israel_hour}:00 Israel)", False
 
     # Check if slot already sent today
     alerts_today = state.get('alerts_today', {})
     slot_key = f"{israel_date}_{slot}"
     if alerts_today.get(slot_key, False):
         print(f"   {slot_label} already sent today - NO ALERT")
-        return False, f"{slot_label} already sent"
+        return False, f"{slot_label} already sent", False
 
     print(f"   {slot_label} - SENDING")
-    return True, slot_label
+    return True, slot_label, False
 
 
 # ============================================================================
@@ -711,7 +711,7 @@ def main():
         print(f"\nFINAL PREDICTION: {direction} ({enhanced_conf:.1%})")
         print(f"   Boost: {enhanced_conf-base_confidence:+.1%} ({', '.join(boost_details)})")
 
-        send_alert, reason = should_alert(direction, price, state)
+        send_alert, reason, is_manual = should_alert(direction, price, state)
         print(f"\nAlert decision: {reason}")
 
         if send_alert and enhanced_conf >= MIN_CONFIDENCE:
@@ -773,19 +773,20 @@ def main():
                 state['alerts_sent'] = state.get('alerts_sent', 0) + 1
                 state['last_confidence'] = enhanced_conf
 
-                # Track slot
-                israel_time, _, _ = get_israel_time()
-                israel_hour = israel_time.hour
-                israel_date = israel_time.date().isoformat()
-                slot = 'morning' if israel_hour in (1, 2) else f'manual_{israel_hour}h'
-                slot_key = f"{israel_date}_{slot}"
-                if 'alerts_today' not in state:
-                    state['alerts_today'] = {}
-                state['alerts_today'] = {
-                    k: v for k, v in state['alerts_today'].items()
-                    if k >= (datetime.now() - timedelta(days=3)).date().isoformat()
-                }
-                state['alerts_today'][slot_key] = True
+                # Track slot only for scheduled runs (not manual)
+                if not is_manual:
+                    israel_time, _, _ = get_israel_time()
+                    israel_hour = israel_time.hour
+                    israel_date = israel_time.date().isoformat()
+                    slot = 'morning' if israel_hour in (1, 2) else f'manual_{israel_hour}h'
+                    slot_key = f"{israel_date}_{slot}"
+                    if 'alerts_today' not in state:
+                        state['alerts_today'] = {}
+                    state['alerts_today'] = {
+                        k: v for k, v in state['alerts_today'].items()
+                        if k >= (datetime.now() - timedelta(days=3)).date().isoformat()
+                    }
+                    state['alerts_today'][slot_key] = True
 
                 try:
                     from performance_tracker import PerformanceTracker
