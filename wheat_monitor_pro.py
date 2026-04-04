@@ -442,12 +442,13 @@ def fetch_data(ticker, days=730):
         if df.empty:
             return None
 
-        # Drop today's incomplete candle — always use previous day's close
-        today = datetime.now().date()
-        if df.index[-1].date() == today:
-            df = df.iloc[:-1]
-            print(f"   Dropped today's incomplete candle - using {df.index[-1].date()}")
-
+        # ALWAYS drop the last candle
+        # Reason: at 1AM Israel market is open, last candle is incomplete
+        # When run manually during day, last candle is also incomplete
+        # Safest rule: always use previous closed day's close price
+        last_date = df.index[-1].date()
+        df = df.iloc[:-1]
+        print(f"   Dropped last candle ({last_date}) - using {df.index[-1].date()} close")
         print(f"   Previous day CLOSE: {df['Close'].iloc[-1]:.2f}c")
         return df
     except Exception as e:
