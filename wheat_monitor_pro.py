@@ -36,14 +36,17 @@ class LiveWeatherAnalyzer:
         self.api_key = os.getenv("VISUAL_CROSSING_API_KEY", "W2FNC8VKT94JKH9ZRZYHUE63P")
         self.base_url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
         self.wheat_regions = {
-            'Kansas': '38.5,-98.0',
-            'Oklahoma': '35.5,-98.0',
-            'North Dakota': '47.5,-100.5',
-            'Montana': '47.0,-110.0',
-            'Ukraine': '46.5,32.0',
-            'Russia': '45.0,39.0',
-            'Canada': '52.0,-106.0',
-            'Australia': '-32.0,148.0'
+            # === USA (Top 4 states) ===
+            'Kansas': '38.5,-98.0',          # #1 US producer
+            'Oklahoma': '35.5,-98.0',        # Winter wheat
+            'North Dakota': '47.5,-100.5',   # Spring wheat
+            'Montana': '47.0,-110.0',        # Hard red spring
+            
+            # === GLOBAL (Top 4 exporters) ===
+            'Ukraine': '46.5,32.0',          # Odessa region - Black Sea wheat
+            'Russia': '45.0,39.0',           # Krasnodar - Southern wheat belt
+            'Canada': '52.0,-106.0',         # Saskatchewan - Spring wheat
+            'Australia': '-32.0,148.0'       # New South Wales - Southern hemisphere
         }
     
     def fetch_weather_data(self, location, days=7):
@@ -173,10 +176,11 @@ class LiveWeatherAnalyzer:
         avg_score = sum(s['score'] for s in regional_signals) / len(regional_signals)
         bullish_count = sum(1 for s in regional_signals if s['signal'] == 'BULLISH')
         
-        if bullish_count >= 5:
+        # Determine combined signal (adjusted for 8 regions)
+        if bullish_count >= 5:  # Majority bullish (5+ out of 8)
             signal = 'BULLISH'
             confidence = 0.75
-        elif bullish_count >= 3:
+        elif bullish_count >= 3:  # Significant bullish (3-4 out of 8)
             signal = 'BULLISH'
             confidence = 0.65
         elif avg_score < -0.05:
@@ -202,7 +206,9 @@ class LiveWeatherAnalyzer:
         }
 
 # ============================================================================
-# LIVE WASDE SCRAPER
+
+# ============================================================================
+# LIVE WASDE SCRAPER - Embedded (USDA QuickStats API)
 # ============================================================================
 
 class LiveWASDEScraper:
@@ -277,14 +283,17 @@ class LiveWASDEScraper:
         stocks_value = stocks_data['current_stocks']
         yoy_change = stocks_data['yoy_change_pct']
         
+        # Estimate stocks-to-use (US typical use ~2000 million bushels/year)
+        # stocks_value is in bushels, convert to millions
         stocks_millions = stocks_value / 1_000_000
-        estimated_use_millions = 2000
+        estimated_use_millions = 2000  # Million bushels
         stocks_to_use = stocks_millions / estimated_use_millions if estimated_use_millions > 0 else 0.20
         
         print(f"         Raw stocks: {stocks_value:,.0f} bushels")
         print(f"         Stocks (millions): {stocks_millions:.1f}")
         print(f"         Stocks-to-use: {stocks_to_use:.1%}")
         
+        # Cap at reasonable range (0-200% - sometimes stocks can be very high)
         stocks_to_use = max(0.0, min(2.0, stocks_to_use))
         
         if stocks_to_use < 0.15:
@@ -338,6 +347,7 @@ from volume_analyzer import VolumeAnalyzer
 from ensemble_predictor import EnsemblePredictor
 from move_analyzer import MoveAnalyzer
 
+
 # CONFIG
 PRIMARY_TICKER = "ZW=F"
 STOP_LOSS_PCT = 0.015
@@ -358,6 +368,7 @@ SEASONAL_BIAS = {
 
 STATE_FILE = Path("wheat_monitor_state.json")
 
+# HELPERS
 def get_seasonal_bias():
     month = datetime.now().month
     bias = SEASONAL_BIAS.get(month, 0.0)
@@ -378,32 +389,48 @@ def get_market_context(price):
 
 def load_state():
     print(f"\n📂 Loading state...")
+    
     if STATE_FILE.exists():
         print(f"   ✓ State file exists")
         try:
             with open(STATE_FILE,'r') as f:
                 state = json.load(f)
+                
                 print(f"   ✓ Loaded - last_alert_date: {state.get('last_alert_date')}, daily_sent: {state.get('daily_alert_sent')}")
+                
+                # Check if model needs reset (every 2 years)
                 last_reset = state.get('last_model_reset', None)
                 if last_reset:
                     from datetime import datetime
                     last_reset_date = datetime.fromisoformat(last_reset)
                     days_since_reset = (datetime.now() - last_reset_date).days
-                    if days_since_reset >= 730:
+                    
+                    if days_since_reset >= 730:  # 2 years = 730 days
+                        print("⚠️  MODEL RESET: 2+ years since last reset")
+                        print(f"   Last reset: {last_reset_date.strftime('%Y-%m-%d')}")
+                        print(f"   Days: {days_since_reset}")
+                        print("   Resetting to prevent overfitting...")
+                        
+                        # Reset model-related state but keep alert history
                         state['last_model_reset'] = datetime.now().isoformat()
                         state['model_version'] = state.get('model_version', 1) + 1
                         state['reset_count'] = state.get('reset_count', 0) + 1
+                        
                         return state
                 else:
+                    # First time - set initial reset date
                     from datetime import datetime
                     state['last_model_reset'] = datetime.now().isoformat()
                     state['model_version'] = 1
                     state['reset_count'] = 0
+                
                 return state
         except Exception as e:
             print(f"   ❌ Error: {e}")
     else:
         print(f"   ⚠️  No state file")
+    
+    # New state
     from datetime import datetime
     return {
         'last_direction': None,
@@ -426,26 +453,53 @@ def save_state(state):
     print(f"   alerts_sent: {state.get('alerts_sent')}")
 
 def send_telegram(message):
+    """
+    Send message to Telegram with debug logging
+    """
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("❌ Telegram not configured")
+        print(f"   Bot token exists: {bool(TELEGRAM_BOT_TOKEN)}")
+        print(f"   Chat ID exists: {bool(TELEGRAM_CHAT_ID)}")
         return False
+    
     try:
         url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
         data = {"chat_id":TELEGRAM_CHAT_ID,"text":message,"parse_mode":"Markdown"}
+        
         print(f"\n🔍 TELEGRAM DEBUG:")
         print(f"   Bot token: {'SET' if TELEGRAM_BOT_TOKEN else 'MISSING'} (length: {len(TELEGRAM_BOT_TOKEN) if TELEGRAM_BOT_TOKEN else 0})")
         print(f"   Chat ID: {TELEGRAM_CHAT_ID}")
         print(f"   Message length: {len(message)} chars")
+        print(f"   First 200 chars of message:")
+        print(f"   {message[:200]}")
         print(f"   Sending to Telegram API...")
+        
         response = requests.post(url, data=data, timeout=10)
-        print(f"   Response status: {response.status_code}")
-        print(f"   Response body: {response.text}")
+        
+        print(f"   Response status code: {response.status_code}")
+        print(f"   Response headers: {dict(response.headers)}")
+        print(f"   Response body:")
+        print(f"   {response.text}")
+        
         if response.status_code == 200:
             print("   ✅ Telegram accepted the message!")
             return True
         else:
             print(f"   ❌ Telegram rejected the message!")
+            print(f"   Status: {response.status_code}")
+            try:
+                error_data = response.json()
+                print(f"   Error details: {error_data}")
+            except:
+                pass
             return False
+            
+    except requests.exceptions.Timeout:
+        print(f"   ❌ Timeout connecting to Telegram (10s)")
+        return False
+    except requests.exceptions.ConnectionError as e:
+        print(f"   ❌ Connection error: {e}")
+        return False
     except Exception as e:
         print(f"   ❌ Unexpected exception: {e}")
         import traceback
@@ -458,15 +512,7 @@ def fetch_data(ticker,days=730):
         start_date = end_date - timedelta(days=days)
         stock = yf.Ticker(ticker)
         df = stock.history(start=start_date,end=end_date,auto_adjust=False)
-        if df.empty:
-            return None
-        # Always drop last candle - use previous day close
-        # At 2AM Israel market is open - last candle is incomplete
-        last_date = df.index[-1].date()
-        df = df.iloc[:-1]
-        print(f"   ℹ️ Dropped last candle ({last_date}) - using {df.index[-1].date()} close")
-        print(f"   Previous day CLOSE: {df['Close'].iloc[-1]:.2f}¢")
-        return df
+        return None if df.empty else df
     except Exception as e:
         print(f"Data fetch error: {e}")
         return None
@@ -496,23 +542,39 @@ def add_indicators(df):
     return df.dropna()
 
 def should_alert(direction, price, state):
+    """
+    Alert rules:
+    1. First alert of new trading day → Always send
+    2. After that: Only if direction change + 2.5% move + 60min passed
+    
+    FIXED: Does NOT update state - that happens AFTER Telegram confirms success
+    """
     from datetime import datetime
+    
     current_time = datetime.now()
     current_date = current_time.date().isoformat()
+    
     last_alert_time = state.get('last_alert_time', None)
     last_alert_date = state.get('last_alert_date', None)
     last_direction = state.get('last_direction', None)
     last_price = state.get('last_price', None)
+    
     print(f"\n📢 Alert Check:")
     print(f"   Last alert: {last_alert_time}")
     print(f"   Last alert date: {last_alert_date} vs today: {current_date}")
     print(f"   Last direction: {last_direction} → Current: {direction}")
+    
+    # RULE 0: First run ever
     if last_alert_time is None:
         print(f"   → First run ever - SENDING")
         return True, "First prediction"
+    
+    # RULE 1: New trading day → Send first alert
     if last_alert_date != current_date:
         print(f"   → New trading day - SENDING first alert of {current_date}")
         return True, f"First prediction of {current_date}"
+    
+    # RULE 2: Same day - check timing and movement
     try:
         last_alert_dt = datetime.fromisoformat(last_alert_time)
         minutes_since_alert = (current_time - last_alert_dt).total_seconds() / 60
@@ -520,13 +582,18 @@ def should_alert(direction, price, state):
     except:
         print(f"   → Could not parse time, sending alert")
         return True, "Time parse error"
+    
+    # Must wait at least 60 minutes
     if minutes_since_alert < 60:
         print(f"   → Too soon (< 60 min) - NO ALERT")
         return False, f"Only {minutes_since_alert:.0f} min since last alert"
+    
+    # Same direction - need significant move
     if direction == last_direction:
         if last_price:
             change_pct = abs((price - last_price) / last_price)
             print(f"   → Same direction, price change: {change_pct:.2%}")
+            
             if change_pct >= DIRECTION_CHANGE_THRESHOLD:
                 print(f"   → Significant move - SENDING")
                 return True, f"Same direction but {change_pct:.1%} move"
@@ -534,11 +601,15 @@ def should_alert(direction, price, state):
                 print(f"   → Insufficient move - NO ALERT")
                 return False, f"Same direction, only {change_pct:.1%} move"
         else:
+            print(f"   → Same direction, no price history - NO ALERT")
             return False, "Same direction"
+    
+    # Direction changed - check magnitude
     print(f"   → Direction changed!")
     if last_price:
         change_pct = abs((price - last_price) / last_price)
         print(f"      Price change: {change_pct:.2%}")
+        
         if change_pct >= DIRECTION_CHANGE_THRESHOLD:
             print(f"   → Significant change - SENDING")
             return True, f"Direction changed with {change_pct:.1%} move"
@@ -546,6 +617,7 @@ def should_alert(direction, price, state):
             print(f"   → Small change - NO ALERT")
             return False, f"Direction changed but only {change_pct:.1%} move"
     else:
+        print(f"   → Direction changed (no price history) - SENDING")
         return True, "Direction changed"
 
 def main():
@@ -558,6 +630,7 @@ def main():
     state = load_state()
     
     try:
+        # Fetch data
         print(f"📊 Fetching {PRIMARY_TICKER}...")
         df = fetch_data(PRIMARY_TICKER)
         if df is None:
@@ -568,27 +641,37 @@ def main():
         price = df['Close'].iloc[-1]
         print(f"✓ Price: {price:.2f}¢")
         
+        # Initialize analyzers
         print("\n🔬 Initializing advanced analyzers...")
+        
+        # CHECK CACHE BEFORE FETCHING
         current_hour = datetime.now().hour
-        should_fetch_fresh = current_hour in [9, 17]
+        should_fetch_fresh = current_hour in [9, 17]  # 9 AM and 5 PM UTC (11 AM & 7 PM Israel)
         
         if should_fetch_fresh:
             print("🔄 Fetching FRESH weather & WASDE data (2x daily schedule)")
         else:
             print("💾 Using CACHED weather & WASDE data (saves API calls)")
         
+        # Weather with caching
         weather = LiveWeatherAnalyzer()
         weather_cache_file = Path("weather_cache.json")
+        
         if should_fetch_fresh or not weather_cache_file.exists():
-            weather_signal = weather.get_multi_region_signal()
+            weather_signal = weather.get_multi_region_signal()  # LIVE FETCH
+            # Cache the result
             try:
-                cache_data = {'timestamp': datetime.now().isoformat(), 'data': weather_signal}
+                cache_data = {
+                    'timestamp': datetime.now().isoformat(),
+                    'data': weather_signal
+                }
                 with open(weather_cache_file, 'w') as f:
                     json.dump(cache_data, f)
                 print("  ✓ Weather data cached")
             except:
                 pass
         else:
+            # Use cached data
             try:
                 with open(weather_cache_file, 'r') as f:
                     cache_data = json.load(f)
@@ -596,6 +679,7 @@ def main():
                     cache_age = datetime.now() - datetime.fromisoformat(cache_data['timestamp'])
                     print(f"  ✓ Using cached weather (age: {cache_age.seconds//3600}h {(cache_age.seconds%3600)//60}m)")
             except:
+                # Cache failed, fetch fresh
                 weather_signal = weather.get_multi_region_signal()
         
         if 'bullish_regions' in weather_signal and 'regional_count' in weather_signal:
@@ -603,18 +687,25 @@ def main():
         else:
             print(f"  ✓ Weather: {weather_signal['signal']} (data unavailable)")
         
+        # WASDE with caching
         wasde = LiveWASDEScraper()
         wasde_cache_file = Path("wasde_cache.json")
+        
         if should_fetch_fresh or not wasde_cache_file.exists():
-            wasde_signal = wasde.get_fundamental_score()
+            wasde_signal = wasde.get_fundamental_score()  # LIVE FETCH
+            # Cache the result
             try:
-                cache_data = {'timestamp': datetime.now().isoformat(), 'data': wasde_signal}
+                cache_data = {
+                    'timestamp': datetime.now().isoformat(),
+                    'data': wasde_signal
+                }
                 with open(wasde_cache_file, 'w') as f:
                     json.dump(cache_data, f)
                 print("  ✓ WASDE data cached")
             except:
                 pass
         else:
+            # Use cached data
             try:
                 with open(wasde_cache_file, 'r') as f:
                     cache_data = json.load(f)
@@ -622,23 +713,31 @@ def main():
                     cache_age = datetime.now() - datetime.fromisoformat(cache_data['timestamp'])
                     print(f"  ✓ Using cached WASDE (age: {cache_age.seconds//3600}h {(cache_age.seconds%3600)//60}m)")
             except:
+                # Cache failed, fetch fresh
                 wasde_signal = wasde.get_fundamental_score()
         
         print(f"  ✓ WASDE: {wasde_signal['signal']}")
         
+        # Volume analyzer (no caching needed - uses local data)
         volume = VolumeAnalyzer()
+        
+        # Get all signals
         print("📡 Gathering signals...")
         seasonal = get_seasonal_bias()
         print(f"  ✓ Seasonal: {seasonal['direction']}")
+        
         volume_signal = volume.analyze_volume(df)
         print(f"  ✓ Volume: {volume_signal['signal']}")
+        
         context = get_market_context(price)
         print(f"  ✓ Context: {context['position']}")
         
+        # Train ensemble model
         print("\n🤖 Training ensemble AI (LSTM + RF + XGB)...")
         ensemble = EnsemblePredictor()
         ensemble.train_all_models(df)
         
+        # Get ensemble prediction
         print("🎯 Making ensemble prediction...")
         prediction = ensemble.predict_ensemble(df)
         
@@ -651,10 +750,12 @@ def main():
         print(f"   Agreement: {prediction['agreement']} ({prediction['votes_up']}/3 UP)")
         print(f"   Models: LSTM={prediction['lstm_pred']:.3f}, RF={prediction['rf_pred']:.3f}, XGB={prediction['xgb_pred']:.3f}")
         
+        # ENHANCE with all factors
         print("\n⚡ Enhancing with fundamental factors...")
         enhanced_conf = base_confidence
         boost_details = []
         
+        # Seasonal
         if (direction=="UP" and seasonal['bias']>0) or (direction=="DOWN" and seasonal['bias']<0):
             boost = abs(seasonal['bias'])
             enhanced_conf += boost
@@ -664,6 +765,7 @@ def main():
             enhanced_conf -= penalty
             boost_details.append(f"Seasonal: -{penalty:.2%}")
         
+        # Weather
         if (direction=="UP" and weather_signal['signal']=='BULLISH') or (direction=="DOWN" and weather_signal['signal']=='BEARISH'):
             boost = weather_signal['score']
             enhanced_conf += boost
@@ -673,6 +775,7 @@ def main():
             enhanced_conf -= penalty
             boost_details.append(f"Weather: -{penalty:.2%}")
         
+        # WASDE
         if (direction=="UP" and wasde_signal['signal']=='BULLISH') or (direction=="DOWN" and wasde_signal['signal']=='BEARISH'):
             boost = abs(wasde_signal['score'])*0.5
             enhanced_conf += boost
@@ -682,6 +785,7 @@ def main():
             enhanced_conf -= penalty
             boost_details.append(f"WASDE: -{penalty:.2%}")
         
+        # Volume
         if (direction=="UP" and volume_signal['signal']=='BULLISH') or (direction=="DOWN" and volume_signal['signal']=='BEARISH'):
             boost = abs(volume_signal['score'])
             enhanced_conf += boost
@@ -691,6 +795,7 @@ def main():
             enhanced_conf -= penalty
             boost_details.append(f"Volume: -{penalty:.2%}")
         
+        # Context
         if context['signal']!='NEUTRAL':
             if (direction=="UP" and context['signal']=='BUY') or (direction=="DOWN" and context['signal']=='SELL'):
                 boost = 0.05
@@ -701,6 +806,7 @@ def main():
                 enhanced_conf -= penalty
                 boost_details.append(f"Context: -{penalty:.2%}")
         
+        # Clip
         enhanced_conf = max(0.5,min(1.0,enhanced_conf))
         
         print(f"\n🎯 FINAL ENHANCED PREDICTION:")
@@ -710,19 +816,23 @@ def main():
         print(f"   Boost: {enhanced_conf-base_confidence:+.1%}")
         print(f"   Details: {', '.join(boost_details)}")
         
+        # Check alert
         send_alert,reason = should_alert(direction,price,state)
         print(f"\n📢 Alert: {reason}")
         
+        # Send if needed
         if send_alert and enhanced_conf>=MIN_CONFIDENCE:
             stop = price*(1-STOP_LOSS_PCT) if direction=="UP" else price*(1+STOP_LOSS_PCT)
             target = price*(1+TAKE_PROFIT_PCT) if direction=="UP" else price*(1-TAKE_PROFIT_PCT)
             
+            # Check if model was just reset
             reset_notice = ""
             if state.get('reset_count', 0) > 0:
                 days_since_reset = (datetime.now() - datetime.fromisoformat(state['last_model_reset'])).days
-                if days_since_reset < 1:
+                if days_since_reset < 1:  # Reset happened today
                     reset_notice = f"\n🔄 *MODEL RESET:* Version {state['model_version']} (preventing overfitting)\n"
             
+            # Analyze typical moves and generate recommendations
             move_analyzer = MoveAnalyzer()
             move_stats = move_analyzer.analyze_typical_moves(df, direction)
             recommendations = move_analyzer.format_recommendation_message(price, direction, move_stats)
@@ -762,9 +872,12 @@ _🚀 Professional Edition_
             
             if telegram_success:
                 print("\n✅ Professional alert sent!")
+                # FIXED: Only update state AFTER Telegram confirms success
                 state['last_alert_time'] = datetime.now().isoformat()
                 state['last_alert_date'] = datetime.now().date().isoformat()
                 state['alerts_sent'] += 1
+                
+                # LOG PREDICTION FOR PERFORMANCE TRACKING
                 try:
                     from performance_tracker import PerformanceTracker
                     tracker = PerformanceTracker()
@@ -787,6 +900,7 @@ _🚀 Professional Edition_
         else:
             print(f"⏸️ No alert: {reason if not send_alert else f'Confidence {enhanced_conf:.1%} below {MIN_CONFIDENCE:.0%}'}")
         
+        # Save state
         state['last_direction'] = direction
         state['last_price'] = price
         save_state(state)
