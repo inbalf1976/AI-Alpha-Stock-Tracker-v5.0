@@ -3,8 +3,8 @@ PROFESSIONAL WHEAT TRADING SYSTEM - ULTIMATE EDITION
 Combines: Ensemble AI + Weather + WASDE + Volume + Seasonal + Context
 Expected Accuracy: 75-85%
 
-FIXED: Only update alert state AFTER Telegram confirms success
-ADDED: Debug logging to see Telegram API responses
+SCHEDULED ALERTS: 23:00 Israel Time (21:00 UTC) for NEXT trading day
+Uses ONLY last known closing price
 """
 
 import yfinance as yf
@@ -24,6 +24,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import requests
+import pytz
 
 # ============================================================================
 # LIVE WEATHER ANALYZER - Embedded to avoid import issues
@@ -353,7 +354,12 @@ PRIMARY_TICKER = "ZW=F"
 STOP_LOSS_PCT = 0.015
 TAKE_PROFIT_PCT = 0.025
 MIN_CONFIDENCE = 0.55
-DIRECTION_CHANGE_THRESHOLD = 0.025
+INTRADAY_CHANGE_THRESHOLD = 0.015  # 1.5% price move for intraday alerts
+
+# TIMING CONFIG - Israel Time
+ISRAEL_TZ = pytz.timezone('Asia/Jerusalem')
+ALERT_HOUR = 23  # 23:00 Israel time
+ALERT_MINUTE = 0
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
@@ -369,6 +375,43 @@ SEASONAL_BIAS = {
 STATE_FILE = Path("wheat_monitor_state.json")
 
 # HELPERS
+def get_next_trading_day():
+    """
+    Get the next trading day from current Israel time
+    If it's Sunday 23:00 → Monday
+    If it's Monday 23:00 → Tuesday
+    etc.
+    """
+    israel_now = datetime.now(ISRAEL_TZ)
+    next_day = israel_now + timedelta(days=1)
+    
+    # Skip weekends (Saturday=5, Sunday=6)
+    while next_day.weekday() >= 5:
+        next_day += timedelta(days=1)
+    
+    return next_day.strftime('%A, %B %d')
+
+def should_run_now():
+    """
+    Check if we should run based on Israel time
+    Run ONLY at 23:00 Israel time (21:00 UTC)
+    """
+    israel_now = datetime.now(ISRAEL_TZ)
+    current_hour = israel_now.hour
+    current_minute = israel_now.minute
+    
+    print(f"🕐 Israel Time: {israel_now.strftime('%Y-%m-%d %H:%M:%S %Z')}")
+    print(f"   Target: {ALERT_HOUR:02d}:{ALERT_MINUTE:02d}")
+    print(f"   Current: {current_hour:02d}:{current_minute:02d}")
+    
+    # Allow 5-minute window (23:00-23:04)
+    if current_hour == ALERT_HOUR and current_minute < 5:
+        print(f"   ✅ Within alert window")
+        return True
+    else:
+        print(f"   ⏸️ Outside alert window - waiting for {ALERT_HOUR:02d}:{ALERT_MINUTE:02d}")
+        return False
+
 def get_seasonal_bias():
     month = datetime.now().month
     bias = SEASONAL_BIAS.get(month, 0.0)
@@ -395,8 +438,7 @@ def load_state():
         try:
             with open(STATE_FILE,'r') as f:
                 state = json.load(f)
-                
-                print(f"   ✓ Loaded - last_alert_date: {state.get('last_alert_date')}, daily_sent: {state.get('daily_alert_sent')}")
+                print(f"   ✓ Loaded - last_alert_date: {state.get('last_alert_date')}")
                 
                 # Check if model needs reset (every 2 years)
                 last_reset = state.get('last_model_reset', None)
@@ -411,14 +453,12 @@ def load_state():
                         print(f"   Days: {days_since_reset}")
                         print("   Resetting to prevent overfitting...")
                         
-                        # Reset model-related state but keep alert history
                         state['last_model_reset'] = datetime.now().isoformat()
                         state['model_version'] = state.get('model_version', 1) + 1
                         state['reset_count'] = state.get('reset_count', 0) + 1
                         
                         return state
                 else:
-                    # First time - set initial reset date
                     from datetime import datetime
                     state['last_model_reset'] = datetime.now().isoformat()
                     state['model_version'] = 1
@@ -449,8 +489,79 @@ def save_state(state):
     print(f"   last_direction: {state.get('last_direction')}")
     print(f"   last_price: {state.get('last_price')}")
     print(f"   last_alert_date: {state.get('last_alert_date')}")
-    print(f"   last_alert_time: {state.get('last_alert_time')}")
     print(f"   alerts_sent: {state.get('alerts_sent')}")
+
+def should_send_alert(direction, price, state, is_scheduled_time):
+    """
+    Hybrid alert system:
+    1. SCHEDULED: Daily at 23:00 Israel time (always send if not sent today)
+    2. INTRADAY: Direction change + 1.5% move (must wait 60min between alerts)
+    
+    Returns: (should_send, reason, alert_type)
+    """
+    israel_now = datetime.now(ISRAEL_TZ)
+    today = israel_now.date().isoformat()
+    
+    last_alert_date = state.get('last_alert_date', None)
+    last_alert_time = state.get('last_alert_time', None)
+    last_direction = state.get('last_direction', None)
+    last_price = state.get('last_price', None)
+    
+    print(f"\n📢 Alert Check:")
+    print(f"   Today: {today}")
+    print(f"   Last alert date: {last_alert_date}")
+    print(f"   Scheduled time: {is_scheduled_time}")
+    print(f"   Last direction: {last_direction} → Current: {direction}")
+    print(f"   Last price: {last_price} → Current: {price}")
+    
+    # RULE 1: SCHEDULED ALERT (23:00 Israel time)
+    if is_scheduled_time:
+        if last_alert_date != today:
+            print(f"   → SCHEDULED: New day - SENDING")
+            return True, f"Daily scheduled prediction for {get_next_trading_day()}", "SCHEDULED"
+        else:
+            print(f"   → SCHEDULED: Already sent today - SKIP")
+            return False, "Scheduled alert already sent today", None
+    
+    # RULE 2: INTRADAY ALERT (direction change + 1.5% move)
+    # Must be same trading day and 60+ minutes since last alert
+    if last_alert_date != today:
+        print(f"   → INTRADAY: Different day - wait for scheduled time")
+        return False, "Wait for scheduled 23:00 alert", None
+    
+    # Check timing - must wait 60 minutes between alerts
+    if last_alert_time:
+        try:
+            last_alert_dt = datetime.fromisoformat(last_alert_time)
+            minutes_since_alert = (israel_now - last_alert_dt.astimezone(ISRAEL_TZ)).total_seconds() / 60
+            print(f"   Minutes since last alert: {minutes_since_alert:.1f}")
+            
+            if minutes_since_alert < 60:
+                print(f"   → INTRADAY: Too soon (< 60 min) - NO ALERT")
+                return False, f"Only {minutes_since_alert:.0f} min since last alert", None
+        except:
+            pass
+    
+    # Check if direction changed
+    if direction != last_direction:
+        print(f"   → INTRADAY: Direction changed!")
+        
+        if last_price:
+            change_pct = abs((price - last_price) / last_price)
+            print(f"      Price change: {change_pct:.2%}")
+            
+            if change_pct >= INTRADAY_CHANGE_THRESHOLD:
+                print(f"   → INTRADAY: Significant move ({change_pct:.1%}) - SENDING")
+                return True, f"Direction changed with {change_pct:.1%} move", "INTRADAY"
+            else:
+                print(f"   → INTRADAY: Small change ({change_pct:.1%}) - NO ALERT")
+                return False, f"Direction changed but only {change_pct:.1%} move", None
+        else:
+            print(f"   → INTRADAY: Direction changed (no price history) - SENDING")
+            return True, "Direction changed", "INTRADAY"
+    else:
+        print(f"   → INTRADAY: Same direction - NO ALERT")
+        return False, "Same direction, no alert needed", None
 
 def send_telegram(message):
     """
@@ -470,16 +581,11 @@ def send_telegram(message):
         print(f"   Bot token: {'SET' if TELEGRAM_BOT_TOKEN else 'MISSING'} (length: {len(TELEGRAM_BOT_TOKEN) if TELEGRAM_BOT_TOKEN else 0})")
         print(f"   Chat ID: {TELEGRAM_CHAT_ID}")
         print(f"   Message length: {len(message)} chars")
-        print(f"   First 200 chars of message:")
-        print(f"   {message[:200]}")
         print(f"   Sending to Telegram API...")
         
         response = requests.post(url, data=data, timeout=10)
         
         print(f"   Response status code: {response.status_code}")
-        print(f"   Response headers: {dict(response.headers)}")
-        print(f"   Response body:")
-        print(f"   {response.text}")
         
         if response.status_code == 200:
             print("   ✅ Telegram accepted the message!")
@@ -541,91 +647,16 @@ def add_indicators(df):
     df['ATR'] = ranges.max(axis=1).rolling(14).mean()
     return df.dropna()
 
-def should_alert(direction, price, state):
-    """
-    Alert rules:
-    1. First alert of new trading day → Always send
-    2. After that: Only if direction change + 2.5% move + 60min passed
-    
-    FIXED: Does NOT update state - that happens AFTER Telegram confirms success
-    """
-    from datetime import datetime
-    
-    current_time = datetime.now()
-    current_date = current_time.date().isoformat()
-    
-    last_alert_time = state.get('last_alert_time', None)
-    last_alert_date = state.get('last_alert_date', None)
-    last_direction = state.get('last_direction', None)
-    last_price = state.get('last_price', None)
-    
-    print(f"\n📢 Alert Check:")
-    print(f"   Last alert: {last_alert_time}")
-    print(f"   Last alert date: {last_alert_date} vs today: {current_date}")
-    print(f"   Last direction: {last_direction} → Current: {direction}")
-    
-    # RULE 0: First run ever
-    if last_alert_time is None:
-        print(f"   → First run ever - SENDING")
-        return True, "First prediction"
-    
-    # RULE 1: New trading day → Send first alert
-    if last_alert_date != current_date:
-        print(f"   → New trading day - SENDING first alert of {current_date}")
-        return True, f"First prediction of {current_date}"
-    
-    # RULE 2: Same day - check timing and movement
-    try:
-        last_alert_dt = datetime.fromisoformat(last_alert_time)
-        minutes_since_alert = (current_time - last_alert_dt).total_seconds() / 60
-        print(f"   Minutes since last alert: {minutes_since_alert:.1f}")
-    except:
-        print(f"   → Could not parse time, sending alert")
-        return True, "Time parse error"
-    
-    # Must wait at least 60 minutes
-    if minutes_since_alert < 60:
-        print(f"   → Too soon (< 60 min) - NO ALERT")
-        return False, f"Only {minutes_since_alert:.0f} min since last alert"
-    
-    # Same direction - need significant move
-    if direction == last_direction:
-        if last_price:
-            change_pct = abs((price - last_price) / last_price)
-            print(f"   → Same direction, price change: {change_pct:.2%}")
-            
-            if change_pct >= DIRECTION_CHANGE_THRESHOLD:
-                print(f"   → Significant move - SENDING")
-                return True, f"Same direction but {change_pct:.1%} move"
-            else:
-                print(f"   → Insufficient move - NO ALERT")
-                return False, f"Same direction, only {change_pct:.1%} move"
-        else:
-            print(f"   → Same direction, no price history - NO ALERT")
-            return False, "Same direction"
-    
-    # Direction changed - check magnitude
-    print(f"   → Direction changed!")
-    if last_price:
-        change_pct = abs((price - last_price) / last_price)
-        print(f"      Price change: {change_pct:.2%}")
-        
-        if change_pct >= DIRECTION_CHANGE_THRESHOLD:
-            print(f"   → Significant change - SENDING")
-            return True, f"Direction changed with {change_pct:.1%} move"
-        else:
-            print(f"   → Small change - NO ALERT")
-            return False, f"Direction changed but only {change_pct:.1%} move"
-    else:
-        print(f"   → Direction changed (no price history) - SENDING")
-        return True, "Direction changed"
-
 def main():
     print(f"\n{'='*80}")
-    print(f"🌾 PROFESSIONAL WHEAT MONITOR - ULTIMATE EDITION v3.0 + DEBUG")
-    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
+    print(f"🌾 PROFESSIONAL WHEAT MONITOR - HYBRID ALERT SYSTEM v3.2")
+    print(f"Time: {datetime.now(ISRAEL_TZ).strftime('%Y-%m-%d %H:%M:%S %Z')}")
+    print(f"Alert System: Daily 23:00 + Intraday direction changes (1.5% threshold)")
     print(f"Features: Ensemble AI + Weather + WASDE + Volume + Seasonal")
     print(f"{'='*80}\n")
+    
+    # CHECK IF THIS IS SCHEDULED TIME
+    is_scheduled_time = should_run_now()
     
     state = load_state()
     
@@ -638,87 +669,32 @@ def main():
             return
         
         df = add_indicators(df)
-        price = df['Close'].iloc[-1]
-        print(f"✓ Price: {price:.2f}¢")
+        price = df['Close'].iloc[-1]  # LAST KNOWN CLOSING PRICE
+        last_close_date = df.index[-1].strftime('%Y-%m-%d')
+        
+        print(f"✓ Last Closing Price: {price:.2f}¢ (from {last_close_date})")
+        
+        # Get next trading day (for scheduled alerts)
+        next_trading_day = get_next_trading_day()
         
         # Initialize analyzers
         print("\n🔬 Initializing advanced analyzers...")
         
-        # CHECK CACHE BEFORE FETCHING
-        current_hour = datetime.now().hour
-        should_fetch_fresh = current_hour in [9, 17]  # 9 AM and 5 PM UTC (11 AM & 7 PM Israel)
-        
-        if should_fetch_fresh:
-            print("🔄 Fetching FRESH weather & WASDE data (2x daily schedule)")
-        else:
-            print("💾 Using CACHED weather & WASDE data (saves API calls)")
-        
-        # Weather with caching
+        # Weather
         weather = LiveWeatherAnalyzer()
-        weather_cache_file = Path("weather_cache.json")
-        
-        if should_fetch_fresh or not weather_cache_file.exists():
-            weather_signal = weather.get_multi_region_signal()  # LIVE FETCH
-            # Cache the result
-            try:
-                cache_data = {
-                    'timestamp': datetime.now().isoformat(),
-                    'data': weather_signal
-                }
-                with open(weather_cache_file, 'w') as f:
-                    json.dump(cache_data, f)
-                print("  ✓ Weather data cached")
-            except:
-                pass
-        else:
-            # Use cached data
-            try:
-                with open(weather_cache_file, 'r') as f:
-                    cache_data = json.load(f)
-                    weather_signal = cache_data['data']
-                    cache_age = datetime.now() - datetime.fromisoformat(cache_data['timestamp'])
-                    print(f"  ✓ Using cached weather (age: {cache_age.seconds//3600}h {(cache_age.seconds%3600)//60}m)")
-            except:
-                # Cache failed, fetch fresh
-                weather_signal = weather.get_multi_region_signal()
+        weather_signal = weather.get_multi_region_signal()
         
         if 'bullish_regions' in weather_signal and 'regional_count' in weather_signal:
             print(f"  ✓ Weather: {weather_signal['signal']} ({weather_signal['bullish_regions']}/{weather_signal['regional_count']} regions)")
         else:
             print(f"  ✓ Weather: {weather_signal['signal']} (data unavailable)")
         
-        # WASDE with caching
+        # WASDE
         wasde = LiveWASDEScraper()
-        wasde_cache_file = Path("wasde_cache.json")
-        
-        if should_fetch_fresh or not wasde_cache_file.exists():
-            wasde_signal = wasde.get_fundamental_score()  # LIVE FETCH
-            # Cache the result
-            try:
-                cache_data = {
-                    'timestamp': datetime.now().isoformat(),
-                    'data': wasde_signal
-                }
-                with open(wasde_cache_file, 'w') as f:
-                    json.dump(cache_data, f)
-                print("  ✓ WASDE data cached")
-            except:
-                pass
-        else:
-            # Use cached data
-            try:
-                with open(wasde_cache_file, 'r') as f:
-                    cache_data = json.load(f)
-                    wasde_signal = cache_data['data']
-                    cache_age = datetime.now() - datetime.fromisoformat(cache_data['timestamp'])
-                    print(f"  ✓ Using cached WASDE (age: {cache_age.seconds//3600}h {(cache_age.seconds%3600)//60}m)")
-            except:
-                # Cache failed, fetch fresh
-                wasde_signal = wasde.get_fundamental_score()
-        
+        wasde_signal = wasde.get_fundamental_score()
         print(f"  ✓ WASDE: {wasde_signal['signal']}")
         
-        # Volume analyzer (no caching needed - uses local data)
+        # Volume analyzer
         volume = VolumeAnalyzer()
         
         # Get all signals
@@ -816,12 +792,13 @@ def main():
         print(f"   Boost: {enhanced_conf-base_confidence:+.1%}")
         print(f"   Details: {', '.join(boost_details)}")
         
-        # Check alert
-        send_alert,reason = should_alert(direction,price,state)
-        print(f"\n📢 Alert: {reason}")
+        # Check if we should send alert (scheduled OR intraday)
+        should_send, reason, alert_type = should_send_alert(direction, price, state, is_scheduled_time)
+        print(f"\n📢 Alert Decision: {reason}")
+        print(f"   Alert Type: {alert_type if alert_type else 'NONE'}")
         
         # Send if needed
-        if send_alert and enhanced_conf>=MIN_CONFIDENCE:
+        if should_send and enhanced_conf >= MIN_CONFIDENCE:
             stop = price*(1-STOP_LOSS_PCT) if direction=="UP" else price*(1+STOP_LOSS_PCT)
             target = price*(1+TAKE_PROFIT_PCT) if direction=="UP" else price*(1-TAKE_PROFIT_PCT)
             
@@ -829,7 +806,7 @@ def main():
             reset_notice = ""
             if state.get('reset_count', 0) > 0:
                 days_since_reset = (datetime.now() - datetime.fromisoformat(state['last_model_reset'])).days
-                if days_since_reset < 1:  # Reset happened today
+                if days_since_reset < 1:
                     reset_notice = f"\n🔄 *MODEL RESET:* Version {state['model_version']} (preventing overfitting)\n"
             
             # Analyze typical moves and generate recommendations
@@ -837,9 +814,16 @@ def main():
             move_stats = move_analyzer.analyze_typical_moves(df, direction)
             recommendations = move_analyzer.format_recommendation_message(price, direction, move_stats)
             
+            # Different message headers for scheduled vs intraday
+            if alert_type == "SCHEDULED":
+                header = f"🌾 *WHEAT ALERT - DAILY PREDICTION* 🌾\n\n📅 *For: {next_trading_day}*\n🕐 Based on last close: {last_close_date}\n"
+                footer = "\n_Daily prediction at 23:00 Israel Time_\n_🚀 Professional Edition v3.2_"
+            else:  # INTRADAY
+                header = f"🌾 *WHEAT ALERT - INTRADAY UPDATE* 🌾\n\n⚡ *DIRECTION CHANGE DETECTED*\n🕐 Current data: {last_close_date}\n"
+                footer = "\n_Intraday alert: Direction changed ≥1.5%_\n_🚀 Professional Edition v3.2_"
+            
             message = f"""
-🌾 *WHEAT ALERT - ULTIMATE v3.0* 🌾
-
+{header}
 {'🟢' if direction=='UP' else '🔴'} *{direction}* ({enhanced_conf:.1%})
 💰 *{price:.2f}¢* (${price/100:.2f}/bu)
 {reset_notice}
@@ -863,19 +847,19 @@ Target: {target:.2f}¢ ({TAKE_PROFIT_PCT:.1%})
 R:R = 1.67:1
 
 {recommendations}
-
-_{reason}_
-_🚀 Professional Edition_
+{footer}
 """
             
             telegram_success = send_telegram(message)
             
             if telegram_success:
-                print("\n✅ Professional alert sent!")
-                # FIXED: Only update state AFTER Telegram confirms success
-                state['last_alert_time'] = datetime.now().isoformat()
-                state['last_alert_date'] = datetime.now().date().isoformat()
+                print(f"\n✅ {alert_type} alert sent!")
+                # Update state ONLY after successful send
+                israel_now = datetime.now(ISRAEL_TZ)
+                state['last_alert_date'] = israel_now.date().isoformat()
+                state['last_alert_time'] = israel_now.isoformat()
                 state['alerts_sent'] += 1
+                state['last_alert_type'] = alert_type
                 
                 # LOG PREDICTION FOR PERFORMANCE TRACKING
                 try:
@@ -890,7 +874,8 @@ _🚀 Professional Edition_
                             'weather': weather_signal['signal'],
                             'wasde': wasde_signal['signal'],
                             'volume': volume_signal['signal'],
-                            'ensemble': f"{prediction['agreement']} ({prediction['votes_up']}/3)"
+                            'ensemble': f"{prediction['agreement']} ({prediction['votes_up']}/3)",
+                            'alert_type': alert_type
                         }
                     )
                 except Exception as e:
@@ -898,7 +883,10 @@ _🚀 Professional Edition_
             else:
                 print("\n❌ Alert failed - state NOT updated, will retry next run")
         else:
-            print(f"⏸️ No alert: {reason if not send_alert else f'Confidence {enhanced_conf:.1%} below {MIN_CONFIDENCE:.0%}'}")
+            if not should_send:
+                print(f"\n⏸️ No alert: {reason}")
+            else:
+                print(f"\n⏸️ Confidence {enhanced_conf:.1%} below minimum {MIN_CONFIDENCE:.0%} - no alert")
         
         # Save state
         state['last_direction'] = direction
@@ -907,7 +895,8 @@ _🚀 Professional Edition_
         
         print(f"\n📊 Session Stats:")
         print(f"   Total alerts sent: {state['alerts_sent']}")
-        print(f"   Last check: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"   Last alert type: {state.get('last_alert_type', 'N/A')}")
+        print(f"   Last check: {datetime.now(ISRAEL_TZ).strftime('%Y-%m-%d %H:%M:%S %Z')}")
         print(f"{'='*80}\n")
         
     except Exception as e:
