@@ -1,14 +1,13 @@
 
-"""
 TELEGRAM DIAGNOSTIC SCRIPT
 Tests your Telegram bot configuration and sends a test message
 """
-
+ 
 import os
 import sys
 import requests
 from datetime import datetime
-
+ 
 def test_telegram():
     print("=" * 80)
     print("🔍 TELEGRAM DIAGNOSTIC TEST")
@@ -99,11 +98,11 @@ def test_telegram():
     try:
         test_message = f"""
 🧪 *TELEGRAM TEST MESSAGE*
-
+ 
 ✅ Bot is working correctly!
 🕐 Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}
 🤖 Environment: GitHub Actions
-
+ 
 This is a test from your wheat monitor system.
 If you see this, Telegram alerts are configured correctly! 🎉
 """
@@ -146,6 +145,6 @@ If you see this, Telegram alerts are configured correctly! 🎉
     print("✅ ALL TESTS PASSED!")
     print("Your Telegram bot is configured correctly.")
     print("=" * 80)
-
+ 
 if __name__ == "__main__":
     test_telegram()
