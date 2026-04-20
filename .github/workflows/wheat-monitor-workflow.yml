@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 TELEGRAM DIAGNOSTIC SCRIPT
 Tests your Telegram bot configuration and sends a test message
