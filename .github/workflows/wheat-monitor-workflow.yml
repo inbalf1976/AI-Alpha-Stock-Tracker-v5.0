@@ -1,0 +1,92 @@
+name: Wheat Monitor PRO - Hybrid Alert System v3.2
+
+on:
+  schedule:
+    # 21:00 UTC = 23:00 Israel Time (Daily scheduled alert)
+    - cron: '0 21 * * 0-4'  # Sun-Thu at 23:00 Israel (for Mon-Fri trading)
+    
+    # Every hour during trading day for intraday alerts (9 AM - 5 PM Israel = 7-15 UTC)
+    - cron: '0 7-15 * * 1-5'  # Mon-Fri hourly checks
+    
+  workflow_dispatch:  # Manual trigger
+  
+  push:
+    branches: [ main, master ]
+    paths-ignore:
+      - 'wheat_monitor_state.json'
+      - 'weather_cache.json'
+      - 'wasde_cache.json'
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install yfinance pandas numpy scikit-learn requests pytz
+        pip install tensorflow-cpu keras
+        pip install xgboost beautifulsoup4 lxml
+        pip install pdfplumber
+    
+    - name: Debug environment
+      run: |
+        echo "=== ENVIRONMENT DEBUG ==="
+        echo "Workflow: ${{ github.workflow }}"
+        echo "Event: ${{ github.event_name }}"
+        echo "Time (UTC): $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+        echo "Telegram Bot Token exists: ${{ secrets.TELEGRAM_BOT_TOKEN != '' }}"
+        echo "Telegram Chat ID exists: ${{ secrets.TELEGRAM_CHAT_ID != '' }}"
+        echo "Python version: $(python --version)"
+        echo "Pip packages:"
+        pip list | grep -E "(yfinance|pandas|numpy|tensorflow|pytz)"
+        echo "========================"
+    
+    - name: Run Wheat Monitor
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        VISUAL_CROSSING_API_KEY: ${{ secrets.VISUAL_CROSSING_API_KEY }}
+        USDA_API_KEY: ${{ secrets.USDA_API_KEY }}
+      run: |
+        echo "Starting wheat monitor..."
+        python wheat_monitor_ultimate_v3_scheduled.py
+    
+    - name: Upload logs on failure
+      if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: error-logs
+        path: |
+          *.log
+          wheat_monitor_state.json
+    
+    - name: Commit state files
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        
+        # Add state and cache files
+        git add -f wheat_monitor_state.json || true
+        git add -f weather_cache.json || true
+        git add -f wasde_cache.json || true
+        
+        # Commit if there are changes
+        if ! git diff --quiet --staged; then
+          git commit -m "Update monitor state and cache [skip ci]"
+          git push || echo "Nothing to push"
+        else
+          echo "No changes to commit"
+        fi
