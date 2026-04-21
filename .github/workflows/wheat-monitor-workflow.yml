@@ -32,6 +32,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
+        cache: 'pip'
     
     - name: Install dependencies
       run: |
@@ -39,20 +40,6 @@ jobs:
         pip install yfinance pandas numpy scikit-learn requests pytz
         pip install tensorflow-cpu keras
         pip install xgboost beautifulsoup4 lxml
-        pip install pdfplumber
-    
-    - name: Debug environment
-      run: |
-        echo "=== ENVIRONMENT DEBUG ==="
-        echo "Workflow: ${{ github.workflow }}"
-        echo "Event: ${{ github.event_name }}"
-        echo "Time (UTC): $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-        echo "Telegram Bot Token exists: ${{ secrets.TELEGRAM_BOT_TOKEN != '' }}"
-        echo "Telegram Chat ID exists: ${{ secrets.TELEGRAM_CHAT_ID != '' }}"
-        echo "Python version: $(python --version)"
-        echo "Pip packages:"
-        pip list | grep -E "(yfinance|pandas|numpy|tensorflow|pytz)"
-        echo "========================"
     
     - name: Run Wheat Monitor
       env:
@@ -61,17 +48,19 @@ jobs:
         VISUAL_CROSSING_API_KEY: ${{ secrets.VISUAL_CROSSING_API_KEY }}
         USDA_API_KEY: ${{ secrets.USDA_API_KEY }}
       run: |
-        echo "Starting wheat monitor..."
+        echo "🌾 Starting Wheat Monitor v3.2"
+        echo "Time (UTC): $(date -u +'%Y-%m-%d %H:%M:%S')"
         python wheat_monitor_ultimate_v3_scheduled.py
     
     - name: Upload logs on failure
       if: failure()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: error-logs
+        name: error-logs-${{ github.run_number }}
         path: |
           *.log
           wheat_monitor_state.json
+        retention-days: 7
     
     - name: Commit state files
       run: |
@@ -85,8 +74,8 @@ jobs:
         
         # Commit if there are changes
         if ! git diff --quiet --staged; then
-          git commit -m "Update monitor state and cache [skip ci]"
-          git push || echo "Nothing to push"
+          git commit -m "Update monitor state [skip ci]"
+          git push || echo "Push failed, will retry next run"
         else
-          echo "No changes to commit"
+          echo "No state changes to commit"
         fi
