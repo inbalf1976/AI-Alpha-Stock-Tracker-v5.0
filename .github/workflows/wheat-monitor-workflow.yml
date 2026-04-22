@@ -1,12 +1,18 @@
-name: Wheat Monitor PRO - Hybrid Alert System v3.2
+name: Wheat Monitor PRO - Reliable Schedule
 
 on:
   schedule:
-    # 21:00 UTC = 23:00 Israel Time (Daily scheduled alert)
-    - cron: '0 21 * * 0-4'  # Sun-Thu at 23:00 Israel (for Mon-Fri trading)
+    # PRIMARY: 21:00 UTC = 23:00 Israel (Sun-Thu for Mon-Fri predictions)
+    - cron: '0 21 * * 0-4'
     
-    # Every hour during trading day for intraday alerts (9 AM - 5 PM Israel = 7-15 UTC)
-    - cron: '0 7-15 * * 1-5'  # Mon-Fri hourly checks
+    # BACKUP: 5 minutes later in case first one fails
+    - cron: '5 21 * * 0-4'
+    
+    # BACKUP: 20:55 UTC (5 min before main time)
+    - cron: '55 20 * * 0-4'
+    
+    # INTRADAY: Every hour during trading (7-15 UTC = 9-17 Israel)
+    - cron: '0 7-15 * * 1-5'
     
   workflow_dispatch:  # Manual trigger
   
@@ -27,6 +33,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
     
     - name: Setup Python
       uses: actions/setup-python@v5
@@ -34,12 +42,26 @@ jobs:
         python-version: '3.10'
         cache: 'pip'
     
+    - name: Cache pip packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
     - name: Install dependencies
       run: |
         pip install --upgrade pip
         pip install yfinance pandas numpy scikit-learn requests pytz
         pip install tensorflow-cpu keras
         pip install xgboost beautifulsoup4 lxml
+    
+    - name: Show current time
+      run: |
+        echo "UTC Time: $(date -u +'%Y-%m-%d %H:%M:%S')"
+        echo "Expected Israel Time: ~$(date -u -d '+3 hours' +'%H:%M') (UTC+3)"
+        echo "Cron triggered: ${{ github.event_name }}"
     
     - name: Run Wheat Monitor
       env:
@@ -51,6 +73,14 @@ jobs:
         echo "🌾 Starting Wheat Monitor v3.2"
         echo "Time (UTC): $(date -u +'%Y-%m-%d %H:%M:%S')"
         python wheat_monitor_ultimate_v3_scheduled.py
+    
+    - name: Check if alert was sent
+      run: |
+        if grep -q "last_alert_date.*$(date -u +'%Y-%m-%d')" wheat_monitor_state.json 2>/dev/null; then
+          echo "✅ Alert sent today!"
+        else
+          echo "ℹ️ No alert sent (may be outside alert window)"
+        fi
     
     - name: Upload logs on failure
       if: failure()
@@ -67,15 +97,23 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         
-        # Add state and cache files
         git add -f wheat_monitor_state.json || true
         git add -f weather_cache.json || true
         git add -f wasde_cache.json || true
         
-        # Commit if there are changes
-        if ! git diff --quiet --staged; then
-          git commit -m "Update monitor state [skip ci]"
-          git push || echo "Push failed, will retry next run"
+        if ! git diff --quiet --staged 2>/dev/null; then
+          git commit -m "Update monitor state [skip ci]" || true
+          git push || echo "Push may have failed - will retry next run"
         else
           echo "No state changes to commit"
         fi
+    
+    - name: Verify scheduled runs
+      if: github.event_name == 'schedule'
+      run: |
+        echo "✅ Scheduled workflow triggered successfully"
+        echo "Next scheduled runs should happen at:"
+        echo "  - 20:55 UTC (backup)"
+        echo "  - 21:00 UTC (primary)"  
+        echo "  - 21:05 UTC (backup)"
+        echo "  - Every hour 7-15 UTC (intraday)"
