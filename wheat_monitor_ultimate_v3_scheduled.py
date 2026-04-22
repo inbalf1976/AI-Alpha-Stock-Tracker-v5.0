@@ -361,8 +361,8 @@ ISRAEL_TZ = pytz.timezone('Asia/Jerusalem')
 ALERT_HOUR = 23  # 23:00 Israel time
 ALERT_MINUTE = 0
 
-TELEGRAM_BOT_TOKEN = os.getenv("8336894718:AAFBl5ITiWNlPERdevHj9DqjqC57VA5NwD8")
-TELEGRAM_CHAT_ID = os.getenv("1500305017")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 NORMAL_RANGE_LOW = 480
 NORMAL_RANGE_HIGH = 620
@@ -395,7 +395,13 @@ def should_run_now():
     """
     Check if we should run based on Israel time
     Run ONLY at 23:00 Israel time (21:00 UTC)
+    OR if FORCE_ALERT environment variable is set
     """
+    # Check for force mode
+    if os.getenv('FORCE_ALERT', '').lower() in ['true', '1', 'yes']:
+        print(f"   🚨 FORCE MODE ENABLED - Bypassing time check")
+        return True
+    
     israel_now = datetime.now(ISRAEL_TZ)
     current_hour = israel_now.hour
     current_minute = israel_now.minute
