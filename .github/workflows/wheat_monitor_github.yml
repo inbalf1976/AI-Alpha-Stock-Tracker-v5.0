@@ -1,44 +1,69 @@
-name: Wheat Monitor PRO - Ultimate Edition
+name: Wheat Monitor
+
 on:
   schedule:
-    - cron: '0 1 * * 1-5'  # 01:00 UTC = 03:00 Israel time, weekdays only (Mon-Fri)
-  workflow_dispatch:
-  push:
-    branches: [ main, master ]
-    paths-ignore:
-      - 'wheat_monitor_state.json'
+    # Run every hour during market hours (6 AM - 8 PM UTC, Mon-Fri)
+    - cron: '0 6-20 * * 1-5'
+  workflow_dispatch:  # Allow manual trigger
+
 jobs:
   monitor:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      contents: write
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup Python
-      uses: actions/setup-python@v5
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-    
-    - name: Install packages
+        
+    - name: Install dependencies
       run: |
-        pip install yfinance pandas numpy scikit-learn requests
-        pip install tensorflow-cpu keras
-        pip install xgboost beautifulsoup4 lxml
-    
-    - name: Run Professional Monitor
+        pip install --break-system-packages yfinance pandas numpy scikit-learn tensorflow requests
+        
+    - name: Run wheat monitor
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      run: python wheat_monitor_pro.py
-    
-    - name: Commit state to repository
+        VISUAL_CROSSING_API_KEY: ${{ secrets.VISUAL_CROSSING_API_KEY }}
+        USDA_API_KEY: ${{ secrets.USDA_API_KEY }}
+        # ✅ ADD YAHOO FINANCE TO NETWORK ALLOWLIST
+        ALLOWED_DOMAINS: >-
+          *.yahoo.com,
+          *.yimg.com,
+          query1.finance.yahoo.com,
+          query2.finance.yahoo.com,
+          fc.yahoo.com,
+          *.adobe.io,
+          adobe.io,
+          api.anthropic.com,
+          archive.ubuntu.com,
+          crates.io,
+          files.pythonhosted.org,
+          github.com,
+          index.crates.io,
+          npmjs.com,
+          npmjs.org,
+          pypi.org,
+          pythonhosted.org,
+          registry.npmjs.org,
+          registry.yarnpkg.com,
+          security.ubuntu.com,
+          static.crates.io,
+          www.npmjs.com,
+          www.npmjs.org,
+          yarnpkg.com,
+          weather.visualcrossing.com,
+          quickstats.nass.usda.gov
       run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add -f wheat_monitor_state.json || true
-        git diff --quiet && git diff --staged --quiet || git commit -m "Update monitor state [skip ci]"
-        git push || echo "Nothing to push"
+        python wheat_monitor_pro.py
+        
+    - name: Commit state changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add wheat_monitor_state.json weather_cache.json wasde_cache.json || true
+        git commit -m "Update monitor state [skip ci]" || true
+        git push || true
