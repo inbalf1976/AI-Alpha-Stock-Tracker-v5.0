@@ -1,3 +1,4 @@
+
 """
 PROFESSIONAL WHEAT TRADING SYSTEM - ULTIMATE EDITION
 Combines: Ensemble AI + Weather + WASDE + Volume + Seasonal + Context
@@ -5,8 +6,7 @@ Expected Accuracy: 75-85%
 
 FIXED: Only update alert state AFTER Telegram confirms success
 ADDED: Debug logging to see Telegram API responses
-FIXED: Drop today's incomplete candle ONLY during market hours (Mon-Fri 6-20 UTC)
-FIXED: Only update last_price when alert is actually sent
+FIXED: Drop today's incomplete candle to ensure prediction always uses closed candles
 """
 
 import yfinance as yf
@@ -205,6 +205,10 @@ class LiveWeatherAnalyzer:
             'factors': all_factors[:3],
             'explanation': f"Weather in {bullish_count}/{len(regional_signals)} regions"
         }
+
+# ============================================================================
+# LIVE WASDE SCRAPER - Embedded (USDA QuickStats API)
+# ============================================================================
 
 # ============================================================================
 # LIVE WASDE SCRAPER - Embedded (USDA QuickStats API)
@@ -486,24 +490,13 @@ def fetch_data(ticker, days=730):
         if df.empty:
             return None
 
-        # ✅ FIX: Only drop today's incomplete candle if markets are actually open
-        # This prevents dropping Friday's complete data on weekends
+        # ✅ FIX: Always drop today's incomplete candle
+        # This ensures predictions are always based on fully closed candles,
+        # regardless of what time of day the script runs.
         today = datetime.now().date()
-        now = datetime.now()
-        
-        # Check if today is a trading day (Monday-Friday)
-        is_trading_day = now.weekday() < 5  # 0=Monday, 4=Friday
-        
-        # Rough CME trading hours in UTC (adjust based on your timezone)
-        # CME wheat trades roughly 01:00-20:20 CT, which is ~06:00-01:20 UTC
-        is_market_hours = 6 <= now.hour <= 20
-        
-        # Only drop if it's a trading day during market hours
-        if is_trading_day and is_market_hours and df.index[-1].date() == today:
+        if df.index[-1].date() == today:
             df = df.iloc[:-1]
-            print(f"   ℹ️  Dropped today's incomplete candle (market hours) - using {df.index[-1].date()} as latest")
-        else:
-            print(f"   ℹ️  Using complete data through {df.index[-1].date()}")
+            print(f"   ℹ️  Dropped today's incomplete candle - using {df.index[-1].date()} as latest")
 
         return df
     except Exception as e:
@@ -534,88 +527,309 @@ def add_indicators(df):
     df['ATR'] = ranges.max(axis=1).rolling(14).mean()
     return df.dropna()
 
-def should_alert(direction, price, state):
-    from datetime import datetime
-    
-    current_time = datetime.now()
-    current_date = current_time.date().isoformat()
-    
-    last_alert_time = state.get('last_alert_time', None)
-    last_alert_date = state.get('last_alert_date', None)
-    last_direction = state.get('last_direction', None)
-    last_price = state.get('last_price', None)
-    
-    print(f"\n📢 Alert Check:")
-    print(f"   Last alert: {last_alert_time}")
-    print(f"   Last alert date: {last_alert_date} vs today: {current_date}")
-    print(f"   Last direction: {last_direction} → Current: {direction}")
-    print(f"   Last price: {last_price} → Current: {price}")
-    
-    if last_alert_time is None:
-        print(f"   → First run ever - SENDING")
-        return True, "First prediction"
-    
-    if last_alert_date != current_date:
-        print(f"   → New trading day - SENDING first alert of {current_date}")
-        return True, f"First prediction of {current_date}"
-    
+def fetch_session2_data(ticker, days=730):
+    """
+    For Session 2 alert (14:00 UTC):
+    - Include today's Session 1 candle as the latest data point
+    - This allows the model to use today's morning move for prediction
+    - Session 1 runs 19:00 UTC prev day → 13:30 UTC today
+    - At 14:00 UTC the session 1 candle is essentially complete
+    """
     try:
-        last_alert_dt = datetime.fromisoformat(last_alert_time)
-        minutes_since_alert = (current_time - last_alert_dt).total_seconds() / 60
-        print(f"   Minutes since last alert: {minutes_since_alert:.1f}")
-    except:
-        print(f"   → Could not parse time, sending alert")
-        return True, "Time parse error"
-    
-    if minutes_since_alert < 60:
-        print(f"   → Too soon (< 60 min) - NO ALERT")
-        return False, f"Only {minutes_since_alert:.0f} min since last alert"
-    
-    if direction == last_direction:
-        if last_price:
-            change_pct = abs((price - last_price) / last_price)
-            print(f"   → Same direction, price change: {change_pct:.2%}")
-            if change_pct >= DIRECTION_CHANGE_THRESHOLD:
-                print(f"   → Significant move - SENDING")
-                return True, f"Same direction but {change_pct:.1%} move"
-            else:
-                print(f"   → Insufficient move - NO ALERT")
-                return False, f"Same direction, only {change_pct:.1%} move"
+        end_date = datetime.now()
+        start_date = end_date - timedelta(days=days)
+        stock = yf.Ticker(ticker)
+        df = stock.history(start=start_date, end=end_date, auto_adjust=False)
+        if df.empty:
+            return None, None
+
+        today = datetime.now().date()
+
+        # Get today's intraday data for session context
+        today_data = None
+        if df.index[-1].date() == today:
+            today_row = df.iloc[-1]
+            today_data = {
+                'open': today_row['Open'],
+                'high': today_row['High'],
+                'low': today_row['Low'],
+                'close': today_row['Close'],
+                'volume': today_row['Volume'],
+                'session1_move_pct': ((today_row['Close'] - df.iloc[-2]['Close']) / df.iloc[-2]['Close']) * 100,
+                'prev_close': df.iloc[-2]['Close']
+            }
+            print(f"   ✓ Session 1 data: Open={today_data['open']:.2f}¢ High={today_data['high']:.2f}¢ Low={today_data['low']:.2f}¢ Close={today_data['close']:.2f}¢")
+            print(f"   ✓ Session 1 move: {today_data['session1_move_pct']:+.2f}% from yesterday's close {today_data['prev_close']:.2f}¢")
+            # Keep today's candle in df for Session 2 prediction
         else:
-            return False, "Same direction"
+            print(f"   ⚠️ No today's candle available — using yesterday's data")
+            # Drop nothing — use as-is
+
+        return df, today_data
+    except Exception as e:
+        print(f"Session 2 data fetch error: {e}")
+        return None, None
+
+
+    df['Returns'] = df['Close'].pct_change()
+    df['SMA_20'] = df['Close'].rolling(window=20).mean()
+    df['SMA_50'] = df['Close'].rolling(window=50).mean()
+    df['EMA_12'] = df['Close'].ewm(span=12).mean()
+    df['EMA_26'] = df['Close'].ewm(span=26).mean()
+    df['MACD'] = df['EMA_12'] - df['EMA_26']
+    delta = df['Close'].diff()
+    gain = (delta.where(delta>0,0)).rolling(window=14).mean()
+    loss = (-delta.where(delta<0,0)).rolling(window=14).mean()
+    df['RSI'] = 100 - (100/(1+gain/loss))
+    df['BB_Middle'] = df['Close'].rolling(window=20).mean()
+    bb_std = df['Close'].rolling(window=20).std()
+    df['BB_Upper'] = df['BB_Middle'] + (2*bb_std)
+    df['BB_Lower'] = df['BB_Middle'] - (2*bb_std)
+    df['BB_Width'] = (df['BB_Upper']-df['BB_Lower'])/df['BB_Middle']
+    df['Volatility'] = df['Returns'].rolling(window=20).std()
+    high_low = df['High'] - df['Low']
+    high_close = np.abs(df['High']-df['Close'].shift())
+    low_close = np.abs(df['Low']-df['Close'].shift())
+    ranges = pd.concat([high_low,high_close,low_close],axis=1)
+    df['ATR'] = ranges.max(axis=1).rolling(14).mean()
+    return df.dropna()
+
+def get_israel_time():
+    """Get current Israel time, auto-adjusting for DST (no pytz needed)"""
+    import time
+    now_utc = datetime.utcnow()
     
-    print(f"   → Direction changed!")
-    if last_price:
-        change_pct = abs((price - last_price) / last_price)
-        print(f"      Price change: {change_pct:.2%}")
-        if change_pct >= DIRECTION_CHANGE_THRESHOLD:
-            print(f"   → Significant change - SENDING")
-            return True, f"Direction changed with {change_pct:.1%} move"
-        else:
-            print(f"   → Small change - NO ALERT")
-            return False, f"Direction changed but only {change_pct:.1%} move"
+    # Israel DST rules:
+    # Clocks spring forward last Friday before April 2 at 02:00
+    # Clocks fall back last Sunday before October 10 at 02:00
+    year = now_utc.year
+    
+    # Find DST start: last Friday before April 2
+    april2 = datetime(year, 4, 2)
+    days_to_friday = (april2.weekday() - 4) % 7  # 4 = Friday
+    dst_start = april2 - timedelta(days=days_to_friday)
+    dst_start = dst_start.replace(hour=0, minute=0, second=0)  # midnight UTC = 2AM Israel
+    
+    # Find DST end: last Sunday before October 10
+    oct10 = datetime(year, 10, 10)
+    days_to_sunday = (oct10.weekday() - 6) % 7  # 6 = Sunday
+    dst_end = oct10 - timedelta(days=days_to_sunday)
+    dst_end = dst_end.replace(hour=0, minute=0, second=0)
+    
+    # Determine offset
+    if dst_start <= now_utc < dst_end:
+        offset = 3  # IDT (summer)
+        tz_name = "IDT (UTC+3)"
     else:
-        return True, "Direction changed"
+        offset = 2  # IST (winter)
+        tz_name = "IST (UTC+2)"
+    
+    israel_time = now_utc + timedelta(hours=offset)
+    return israel_time, offset, tz_name
+
+
+def should_alert(direction, price, state):
+    """
+    Two fixed alerts per day based on Israel local time:
+    - Morning alert: 01:00 AM Israel (auto-adjusts winter/summer)
+    - Afternoon alert: 16:00 PM Israel (auto-adjusts winter/summer)
+
+    Override: Set FORCE_ALERT=true in GitHub Actions env to send immediately.
+    """
+    # ── FORCE OVERRIDE ───────────────────────────────────────────────────
+    # Check all possible ways a manual trigger can be detected
+    force_alert = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
+    github_event = os.getenv('GITHUB_EVENT_NAME', '')
+    github_event2 = os.getenv('GITHUB_EVENT_PATH', '')
+    is_manual = force_alert or 'workflow_dispatch' in github_event or 'workflow_dispatch' in github_event2
+
+    print(f"\n📢 Alert Check:")
+    print(f"   FORCE_ALERT={force_alert}, GITHUB_EVENT_NAME={github_event}")
+
+    if is_manual:
+        print(f"   ⚡ Manual trigger detected — sending immediately")
+        return True, "⚡ Manual alert"
+    # ─────────────────────────────────────────────────────────────────────
+
+    israel_time, utc_offset, tz_name = get_israel_time()
+    israel_hour = israel_time.hour
+    israel_date = israel_time.date().isoformat()
+
+    print(f"\n📢 Alert Check:")
+    print(f"   Israel time: {israel_time.strftime('%Y-%m-%d %H:%M')} {tz_name}")
+    print(f"   Israel hour: {israel_hour}:00")
+
+    # Determine slot based on Israel local time
+    if israel_hour == 1:
+        slot = 'morning'
+        slot_label = f'Morning Alert (01:00 {tz_name})'
+    elif israel_hour == 16:
+        slot = 'afternoon'
+        slot_label = f'Afternoon Alert (16:00 {tz_name})'
+    else:
+        print(f"   → Not a scheduled alert hour ({israel_hour}:00 Israel) — NO ALERT")
+        print(f"   → Scheduled hours: 01:00 and 16:00 Israel time")
+        return False, f"Not a scheduled hour ({israel_hour}:00 Israel)"
+
+    # Check if this slot was already sent today
+    alerts_today = state.get('alerts_today', {})
+    slot_key = f"{israel_date}_{slot}"
+    already_sent = alerts_today.get(slot_key, False)
+
+    if already_sent:
+        print(f"   → {slot_label} already sent today — NO ALERT")
+        return False, f"{slot_label} already sent"
+
+    print(f"   → {slot_label} — SENDING")
+    return True, slot_label
+
 
 def main():
     print(f"\n{'='*80}")
-    print(f"🌾 PROFESSIONAL WHEAT MONITOR - ULTIMATE EDITION v3.1 + FIXES")
+    print(f"🌾 PROFESSIONAL WHEAT MONITOR - ULTIMATE EDITION v3.0 + DEBUG")
     print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print(f"Features: Ensemble AI + Weather + WASDE + Volume + Seasonal")
     print(f"{'='*80}\n")
-    
+
     state = load_state()
-    
+
+    # Detect session
+    israel_time, utc_offset, tz_name = get_israel_time()
+    israel_hour = israel_time.hour
+    force_alert = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
+    github_event = os.getenv('GITHUB_EVENT_NAME', '')
+    is_manual = force_alert or 'workflow_dispatch' in github_event
+    is_session2 = (israel_hour == 16) or (is_manual and state.get('last_session') == 'morning')
+
+    # ── SESSION 2: Status update only (no prediction) ────────────────────
+    if is_session2:
+        print(f"📊 SESSION 2 MODE — Sending status update (no prediction)")
+        try:
+            print(f"\n📊 Fetching {PRIMARY_TICKER}...")
+            df, session1_data = fetch_session2_data(PRIMARY_TICKER)
+            if df is None:
+                print("❌ No data")
+                return
+
+            send_alert, reason = should_alert(None, None, state)
+            if not send_alert:
+                print(f"⏸️ No alert: {reason}")
+                state['last_direction'] = state.get('last_direction')
+                state['last_price'] = state.get('last_price')
+                save_state(state)
+                return
+
+            # Build status message from Session 1 data
+            morning_pred = state.get('last_direction', 'N/A')
+            morning_entry = state.get('last_price', 0)
+            morning_conf = state.get('last_confidence', 0)
+
+            if session1_data:
+                s1_move = session1_data['session1_move_pct']
+                s1_emoji = '📈' if s1_move > 0 else '📉'
+                current_price = session1_data['close']
+
+                # Check which targets were hit during Session 1
+                targets_hit = []
+                if morning_pred == 'DOWN' and morning_entry > 0:
+                    cons_target = morning_entry * (1 - 0.014)
+                    mod_target = morning_entry * (1 - 0.019)
+                    agg_target = morning_entry * (1 - 0.028)
+                    if session1_data['low'] <= agg_target:
+                        targets_hit.append(f"✅ Aggressive ({agg_target:.2f}¢)")
+                    elif session1_data['low'] <= mod_target:
+                        targets_hit.append(f"✅ Moderate ({mod_target:.2f}¢)")
+                    elif session1_data['low'] <= cons_target:
+                        targets_hit.append(f"✅ Conservative ({cons_target:.2f}¢)")
+                    else:
+                        targets_hit.append(f"⏳ No targets hit yet")
+                elif morning_pred == 'UP' and morning_entry > 0:
+                    cons_target = morning_entry * (1 + 0.014)
+                    mod_target = morning_entry * (1 + 0.019)
+                    agg_target = morning_entry * (1 + 0.028)
+                    if session1_data['high'] >= agg_target:
+                        targets_hit.append(f"✅ Aggressive ({agg_target:.2f}¢)")
+                    elif session1_data['high'] >= mod_target:
+                        targets_hit.append(f"✅ Moderate ({mod_target:.2f}¢)")
+                    elif session1_data['high'] >= cons_target:
+                        targets_hit.append(f"✅ Conservative ({cons_target:.2f}¢)")
+                    else:
+                        targets_hit.append(f"⏳ No targets hit yet")
+
+                targets_str = '\n'.join(targets_hit)
+
+                message = f"""
+🌾 *WHEAT UPDATE - SESSION 2* 🌾
+🌙 Afternoon Status (16:00 {tz_name})
+
+📋 *Morning Prediction:* {'▲' if morning_pred == 'UP' else '▼'} {morning_pred} from {morning_entry:.2f}¢
+
+{s1_emoji} *Session 1 Result:*
+Open: {session1_data.get('prev_close', 0):.2f}¢
+High: {session1_data['high']:.2f}¢
+Low: {session1_data['low']:.2f}¢
+Close: {current_price:.2f}¢ ({s1_move:+.2f}%)
+
+🎯 *Targets Status:*
+{targets_str}
+
+⏰ Session 2: 16:30 → 20:20 Israel
+_No new prediction — monitor open positions_
+_🚀 Professional Edition_
+"""
+            else:
+                message = f"""
+🌾 *WHEAT UPDATE - SESSION 2* 🌾
+🌙 Afternoon Status (16:00 {tz_name})
+
+📋 *Morning Prediction:* {'▲' if morning_pred == 'UP' else '▼'} {morning_pred} from {morning_entry:.2f}¢
+⏰ Session 2 opens at 16:30 Israel
+_No intraday data available yet_
+_🚀 Professional Edition_
+"""
+
+            telegram_success = send_telegram(message)
+            if telegram_success:
+                print("\n✅ Session 2 status sent!")
+                state['last_alert_time'] = datetime.now().isoformat()
+                state['last_alert_date'] = datetime.now().date().isoformat()
+                state['alerts_sent'] = state.get('alerts_sent', 0) + 1
+
+                israel_date = israel_time.date().isoformat()
+                if 'alerts_today' not in state:
+                    state['alerts_today'] = {}
+                state['alerts_today'] = {
+                    k: v for k, v in state['alerts_today'].items()
+                    if k >= (datetime.now() - timedelta(days=3)).date().isoformat()
+                }
+                state['alerts_today'][f"{israel_date}_afternoon"] = True
+                state['last_session'] = 'afternoon'
+
+            save_state(state)
+            print(f"\n📊 Total alerts: {state.get('alerts_sent', 0)}")
+            print(f"{'='*80}\n")
+
+        except Exception as e:
+            print(f"\n❌ ERROR: {e}")
+            import traceback
+            traceback.print_exc()
+        return
+    # ─────────────────────────────────────────────────────────────────────
+
+    print(f"📊 SESSION 1 MODE — Using yesterday's closed candle for daily prediction")
+
     try:
-        print(f"📊 Fetching {PRIMARY_TICKER}...")
+        print(f"\n📊 Fetching {PRIMARY_TICKER}...")
         df = fetch_data(PRIMARY_TICKER)
         if df is None:
             print("❌ No data")
             return
-        
-        df = add_indicators(df)
+        session1_data = None
         price = df['Close'].iloc[-1]
         print(f"✓ Price: {price:.2f}¢")
+
+        df = add_indicators(df)
+        session_label = "☀️ SESSION 1 - Morning"
         
         print("\n🔬 Initializing advanced analyzers...")
         
@@ -729,11 +943,11 @@ def main():
             boost_details.append(f"Weather: -{penalty:.2%}")
         
         if (direction=="UP" and wasde_signal['signal']=='BULLISH') or (direction=="DOWN" and wasde_signal['signal']=='BEARISH'):
-            boost = abs(wasde_signal['score'])*0.5
+            boost = min(abs(wasde_signal['score'])*0.5, 0.05)  # Cap WASDE boost at 5%
             enhanced_conf += boost
             boost_details.append(f"WASDE: +{boost:.2%}")
         elif wasde_signal['signal']!='NEUTRAL':
-            penalty = abs(wasde_signal['score'])*0.3
+            penalty = min(abs(wasde_signal['score'])*0.3, 0.05)  # Cap WASDE penalty at 5%
             enhanced_conf -= penalty
             boost_details.append(f"WASDE: -{penalty:.2%}")
         
@@ -781,13 +995,21 @@ def main():
             move_analyzer = MoveAnalyzer()
             move_stats = move_analyzer.analyze_typical_moves(df, direction)
             recommendations = move_analyzer.format_recommendation_message(price, direction, move_stats)
-            
+
+            # Build Session 1 context line for Session 2 alert
+            session1_context = ""
+            if is_session2 and session1_data:
+                s1_move = session1_data['session1_move_pct']
+                s1_emoji = '📈' if s1_move > 0 else '📉'
+                session1_context = f"\n{s1_emoji} *Session 1:* {s1_move:+.2f}% (H:{session1_data['high']:.2f}¢ L:{session1_data['low']:.2f}¢)\n"
+
             message = f"""
-🌾 *WHEAT ALERT - ULTIMATE v3.1* 🌾
+🌾 *WHEAT ALERT - ULTIMATE v3.0* 🌾
+{session_label}
 
 {'🟢' if direction=='UP' else '🔴'} *{direction}* ({enhanced_conf:.1%})
 💰 *{price:.2f}¢* (${price/100:.2f}/bu)
-{reset_notice}
+{session1_context}{reset_notice}
 🤖 *ENSEMBLE AI:*
 LSTM: {prediction['model_details']['LSTM']}
 RF: {prediction['model_details']['RandomForest']}
@@ -810,19 +1032,35 @@ R:R = 1.67:1
 {recommendations}
 
 _{reason}_
-_🚀 Professional Edition v3.1_
+_🚀 Professional Edition_
 """
             
             telegram_success = send_telegram(message)
             
-            # ✅ FIX: Only update state when Telegram confirms success
             if telegram_success:
                 print("\n✅ Professional alert sent!")
                 state['last_alert_time'] = datetime.now().isoformat()
                 state['last_alert_date'] = datetime.now().date().isoformat()
-                state['last_direction'] = direction  # ← MOVED HERE
-                state['last_price'] = price  # ← MOVED HERE - only update on successful alert
                 state['alerts_sent'] += 1
+
+                # Track which slot was sent using Israel local time
+                israel_time, _, _ = get_israel_time()
+                israel_hour = israel_time.hour
+                israel_date = israel_time.date().isoformat()
+                slot = 'morning' if israel_hour == 1 else 'afternoon' if israel_hour == 16 else f'manual_{israel_hour}h'
+                slot_key = f"{israel_date}_{slot}"
+
+                if 'alerts_today' not in state:
+                    state['alerts_today'] = {}
+
+                # Clean old entries (keep only last 3 days)
+                state['alerts_today'] = {
+                    k: v for k, v in state['alerts_today'].items()
+                    if k >= (datetime.now() - timedelta(days=3)).date().isoformat()
+                }
+                state['alerts_today'][slot_key] = True
+                state['last_session'] = 'afternoon' if is_session2 else 'morning'
+                state['last_confidence'] = enhanced_conf
                 
                 try:
                     from performance_tracker import PerformanceTracker
@@ -846,7 +1084,8 @@ _🚀 Professional Edition v3.1_
         else:
             print(f"⏸️ No alert: {reason if not send_alert else f'Confidence {enhanced_conf:.1%} below {MIN_CONFIDENCE:.0%}'}")
         
-        # Don't update last_direction and last_price here - only on successful alert above
+        state['last_direction'] = direction
+        state['last_price'] = price
         save_state(state)
         
         print(f"\n📊 Session Stats:")
