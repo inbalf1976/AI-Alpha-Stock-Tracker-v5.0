@@ -1,13 +1,13 @@
 """
-PROFESSIONAL WHEAT TRADING SYSTEM - ULTIMATE EDITION
+PROFESSIONAL WHEAT TRADING SYSTEM - ULTIMATE EDITION v3.1
 Combines: Ensemble AI + Weather + WASDE + Volume + Seasonal + Context
 
-CHANGES FROM ORIGINAL:
-1. Incomplete candle fix in fetch_data()
-2. Israel timezone slot-based alerting (23:00 Israel - EVENING ALERT)
-3. FORCE_ALERT for manual triggers
-4. Double stop loss in message (1.5% tight + 2.5% wide)
-5. Auto stop recommendation based on volume
+CHANGES FROM v3.0:
+1. Scheduled alerts: 23:00 Israel time (evening prediction)
+2. Emergency alerts: 3.5%+ price movement triggers immediate alert
+3. Manual triggers: FORCE_ALERT environment variable
+4. Dual stop loss: 1.5% tight + 2.5% wide with auto-recommendation
+5. 1-hour cooldown between emergency alerts (prevents spam)
 """
 
 import yfinance as yf
@@ -300,7 +300,8 @@ STOP_LOSS_PCT = 0.015
 STOP_LOSS_WIDE_PCT = 0.025
 TAKE_PROFIT_PCT = 0.025
 MIN_CONFIDENCE = 0.55
-DIRECTION_CHANGE_THRESHOLD = 0.025
+DIRECTION_CHANGE_THRESHOLD = 0.035  # 3.5% movement triggers emergency alert
+EMERGENCY_ALERT_COOLDOWN_MINUTES = 60  # Minimum 60 minutes between emergency alerts
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
@@ -400,7 +401,9 @@ def load_state():
         'last_model_reset': datetime.now().isoformat(),
         'model_version': 1,
         'reset_count': 0,
-        'alerts_today': {}
+        'alerts_today': {},
+        'last_alert_time': None,
+        'last_alert_type': None
     }
 
 
@@ -421,7 +424,6 @@ def send_telegram(message):
         print(f"\nTELEGRAM: sending {len(message)} chars...")
         response = requests.post(url, data=data, timeout=10)
         print(f"   Response: {response.status_code}")
-        print(f"   Body: {response.text}")
         if response.status_code == 200:
             print("   Telegram accepted!")
             return True
@@ -482,10 +484,17 @@ def add_indicators(df):
 
 
 def should_alert(direction, price, state):
-    """Slot-based alerting: send at 23:00 Israel time only.
-    Manual triggers (workflow_dispatch) always send immediately."""
-
-    # Check for manual/force trigger
+    """
+    Three-tier alerting system:
+    1. MANUAL: FORCE_ALERT or workflow_dispatch always sends immediately
+    2. SCHEDULED: 23:00 Israel time daily prediction
+    3. EMERGENCY: 3.5%+ price movement with 60-min cooldown
+    
+    Returns: (should_send, reason, alert_type)
+    alert_type: 'manual', 'scheduled', 'emergency', or None
+    """
+    
+    # ===== TIER 1: MANUAL TRIGGER =====
     force_alert = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
     github_event = os.getenv('GITHUB_EVENT_NAME', '')
     is_manual = force_alert or 'workflow_dispatch' in github_event
@@ -494,10 +503,10 @@ def should_alert(direction, price, state):
     print(f"   FORCE_ALERT={force_alert}, GITHUB_EVENT_NAME={github_event}")
 
     if is_manual:
-        print(f"   Manual trigger - sending immediately")
-        return True, "Manual alert", True
+        print(f"   MANUAL trigger - sending immediately")
+        return True, "Manual alert (forced)", 'manual'
 
-    # Get Israel time
+    # ===== GET CURRENT TIME INFO =====
     israel_time, utc_offset, tz_name = get_israel_time()
     israel_hour = israel_time.hour
     israel_date = israel_time.date().isoformat()
@@ -505,24 +514,57 @@ def should_alert(direction, price, state):
     print(f"   Israel time: {israel_time.strftime('%Y-%m-%d %H:%M')} {tz_name}")
     print(f"   Israel hour: {israel_hour}:00")
 
-    # Determine slot - EVENING ONLY (23:00 Israel)
-    if israel_hour in (23, 0):  # 23:00 or 00:00 (in case of minute overlap)
-        slot = 'evening'
-        slot_label = f"Evening Alert (23:00 {tz_name})"
+    # ===== TIER 2: SCHEDULED 23:00 ALERT =====
+    is_scheduled_hour = israel_hour in (23, 0)  # 23:00 or 00:00 (minute overlap)
+    
+    if is_scheduled_hour:
+        alerts_today = state.get('alerts_today', {})
+        slot_key = f"{israel_date}_evening"
+        
+        if not alerts_today.get(slot_key, False):
+            print(f"   SCHEDULED alert (23:00 {tz_name}) - SENDING")
+            return True, f"Evening Alert (23:00 {tz_name})", 'scheduled'
+        else:
+            print(f"   Scheduled alert already sent today")
+            # Don't return yet - still check for emergency below
+    
+    # ===== TIER 3: EMERGENCY MOVEMENT ALERT =====
+    last_price = state.get('last_price')
+    
+    if last_price:
+        change_pct = abs((price - last_price) / last_price)
+        print(f"   Price change: {change_pct:.2%} (threshold: {DIRECTION_CHANGE_THRESHOLD:.1%})")
+        
+        if change_pct >= DIRECTION_CHANGE_THRESHOLD:
+            # Significant movement detected
+            print(f"   EMERGENCY movement detected: {change_pct:.1%}")
+            
+            # Check cooldown
+            last_alert_time = state.get('last_alert_time')
+            if last_alert_time:
+                try:
+                    last_alert_dt = datetime.fromisoformat(last_alert_time)
+                    minutes_since = (datetime.now() - last_alert_dt).total_seconds() / 60
+                    print(f"   Minutes since last alert: {minutes_since:.1f}")
+                    
+                    if minutes_since < EMERGENCY_ALERT_COOLDOWN_MINUTES:
+                        print(f"   Emergency cooldown active ({minutes_since:.0f}/{EMERGENCY_ALERT_COOLDOWN_MINUTES} min)")
+                        return False, f"Emergency cooldown ({minutes_since:.0f}/{EMERGENCY_ALERT_COOLDOWN_MINUTES} min)", None
+                except:
+                    pass  # If parse fails, allow alert
+            
+            # Cooldown passed or no previous alert
+            move_direction = "UP" if price > last_price else "DOWN"
+            print(f"   EMERGENCY alert triggered - {change_pct:.1%} move {move_direction}")
+            return True, f"EMERGENCY: Price moved {change_pct:.1%} {move_direction} (was {last_price:.2f}c)", 'emergency'
     else:
-        print(f"   Not a scheduled hour ({israel_hour}:00 Israel) - NO ALERT")
-        print(f"   Scheduled hour: 23:00 Israel time only")
-        return False, f"Not scheduled hour ({israel_hour}:00 Israel)", False
-
-    # Check if slot already sent today
-    alerts_today = state.get('alerts_today', {})
-    slot_key = f"{israel_date}_{slot}"
-    if alerts_today.get(slot_key, False):
-        print(f"   {slot_label} already sent today - NO ALERT")
-        return False, f"{slot_label} already sent", False
-
-    print(f"   {slot_label} - SENDING")
-    return True, slot_label, False
+        print(f"   No previous price - cannot calculate movement")
+    
+    # ===== NO ALERT CONDITIONS MET =====
+    if is_scheduled_hour:
+        return False, f"Scheduled alert already sent", None
+    else:
+        return False, f"Not scheduled hour ({israel_hour}:00) and no emergency move", None
 
 
 # ============================================================================
@@ -531,8 +573,9 @@ def should_alert(direction, price, state):
 
 def main():
     print(f"\n{'='*80}")
-    print(f"WHEAT MONITOR - ULTIMATE EDITION v3.0")
+    print(f"WHEAT MONITOR - ULTIMATE EDITION v3.1 ENHANCED")
     print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
+    print(f"Features: 23:00 scheduled + 3.5% emergency alerts")
     print(f"{'='*80}\n")
 
     state = load_state()
@@ -686,8 +729,8 @@ def main():
         print(f"\nFINAL PREDICTION: {direction} ({enhanced_conf:.1%})")
         print(f"   Boost: {enhanced_conf-base_confidence:+.1%} ({', '.join(boost_details)})")
 
-        send_alert, reason, is_manual = should_alert(direction, price, state)
-        print(f"\nAlert decision: {reason}")
+        send_alert, reason, alert_type = should_alert(direction, price, state)
+        print(f"\nAlert decision: {reason} (type: {alert_type})")
 
         if send_alert and enhanced_conf >= MIN_CONFIDENCE:
             stop = price * (1 - STOP_LOSS_PCT) if direction == "UP" else price * (1 + STOP_LOSS_PCT)
@@ -711,9 +754,26 @@ def main():
             def clean(text):
                 return str(text).replace('_', ' ').replace('*', '').replace('`', '').replace('[', '').replace(']', '')
 
+            # Alert type header
+            if alert_type == 'scheduled':
+                alert_header = "Evening Alert (23:00 Israel)"
+            elif alert_type == 'emergency':
+                alert_header = "EMERGENCY ALERT - Significant Move!"
+            elif alert_type == 'manual':
+                alert_header = "Manual Alert (Forced Run)"
+            else:
+                alert_header = "Market Alert"
+
+            # Add emergency warning emoji and context
+            if alert_type == 'emergency':
+                emergency_context = f"\nALERT REASON: {clean(reason)}\n"
+            else:
+                emergency_context = ""
+
             message = (
-                f"*WHEAT ALERT - ULTIMATE v3.0*\n"
-                f"Evening Alert (23:00 Israel)\n\n"
+                f"*WHEAT ALERT - ULTIMATE v3.1*\n"
+                f"{alert_header}\n"
+                f"{emergency_context}\n"
                 f"{'UP' if direction == 'UP' else 'DOWN'} ({enhanced_conf:.1%})\n"
                 f"Price: {price:.2f}c\n\n"
                 f"*ENSEMBLE AI:*\n"
@@ -735,28 +795,27 @@ def main():
                 f"Target: {target:.2f}c ({TAKE_PROFIT_PCT:.1%})\n"
                 f"R:R = 1.67:1\n\n"
                 f"{clean(recommendations)}\n\n"
-                f"{clean(reason)}\n"
-                f"Professional Edition"
+                f"Professional Edition v3.1"
             )
 
             telegram_success = send_telegram(message)
 
             if telegram_success:
-                print("\nAlert sent!")
+                print("\nAlert sent successfully!")
                 state['last_alert_time'] = datetime.now().isoformat()
                 state['last_alert_date'] = datetime.now().date().isoformat()
                 state['alerts_sent'] = state.get('alerts_sent', 0) + 1
                 state['last_confidence'] = enhanced_conf
+                state['last_alert_type'] = alert_type
 
-                # Track slot only for scheduled runs (not manual)
-                if not is_manual:
+                # Track scheduled alerts to prevent duplicates
+                if alert_type == 'scheduled':
                     israel_time, _, _ = get_israel_time()
-                    israel_hour = israel_time.hour
                     israel_date = israel_time.date().isoformat()
-                    slot = 'evening' if israel_hour in (23, 0) else f'manual_{israel_hour}h'
-                    slot_key = f"{israel_date}_{slot}"
+                    slot_key = f"{israel_date}_evening"
                     if 'alerts_today' not in state:
                         state['alerts_today'] = {}
+                    # Clean old entries (keep last 3 days)
                     state['alerts_today'] = {
                         k: v for k, v in state['alerts_today'].items()
                         if k >= (datetime.now() - timedelta(days=3)).date().isoformat()
@@ -775,7 +834,8 @@ def main():
                             'weather': weather_signal['signal'],
                             'wasde': wasde_signal['signal'],
                             'volume': volume_signal['signal'],
-                            'ensemble': f"{prediction['agreement']} ({prediction['votes_up']}/3)"
+                            'ensemble': f"{prediction['agreement']} ({prediction['votes_up']}/3)",
+                            'alert_type': alert_type
                         }
                     )
                 except Exception as e:
@@ -783,14 +843,19 @@ def main():
             else:
                 print("\nAlert failed - state NOT updated")
         else:
-            print(f"No alert: {reason if not send_alert else f'Confidence {enhanced_conf:.1%} below {MIN_CONFIDENCE:.0%}'}")
+            if not send_alert:
+                print(f"No alert: {reason}")
+            else:
+                print(f"No alert: Confidence {enhanced_conf:.1%} below {MIN_CONFIDENCE:.0%}")
 
         state['last_direction'] = direction
         state['last_price'] = price
         save_state(state)
 
-        print(f"\nTotal alerts sent: {state.get('alerts_sent', 0)}")
-        print(f"Last check: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"\nSession Summary:")
+        print(f"   Total alerts sent: {state.get('alerts_sent', 0)}")
+        print(f"   Last alert type: {state.get('last_alert_type', 'None')}")
+        print(f"   Last check: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"{'='*80}\n")
 
     except Exception as e:
