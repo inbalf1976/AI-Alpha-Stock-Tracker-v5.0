@@ -21,7 +21,7 @@ jobs:
         
     - name: Install dependencies
       run: |
-        pip install --break-system-packages -r requirements.txt
+        pip install --break-system-packages yfinance pandas numpy scikit-learn tensorflow requests xgboost
         
     - name: Run wheat monitor
       env:
