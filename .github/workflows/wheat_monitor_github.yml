@@ -2,11 +2,8 @@ name: Wheat Monitor
 
 on:
   schedule:
-    # Run 3x daily at key market times (Mon-Fri)
-    # 9 AM UTC - After Asian markets close, before CME opens
-    # 2 PM UTC - Mid-day CME session
-    # 8 PM UTC - Before CME close
-    - cron: '0 9,14,20 * * 1-5'
+    # Run once daily at 23:00 UTC (Mon-Fri)
+    - cron: '0 23 * * 1-5'
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
