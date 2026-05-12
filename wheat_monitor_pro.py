@@ -551,51 +551,19 @@ def should_alert(direction, price, state):
     print(f"   Last direction: {last_direction} → Current: {direction}")
     print(f"   Last price: {last_price} → Current: {price}")
     
+    # First run ever
     if last_alert_time is None:
         print(f"   → First run ever - SENDING")
         return True, "First prediction"
     
+    # New trading day - ALWAYS send daily alert at 23:00
     if last_alert_date != current_date:
-        print(f"   → New trading day - SENDING first alert of {current_date}")
-        return True, f"First prediction of {current_date}"
+        print(f"   → New trading day - SENDING daily alert for {current_date}")
+        return True, f"Daily update for {current_date}"
     
-    try:
-        last_alert_dt = datetime.fromisoformat(last_alert_time)
-        minutes_since_alert = (current_time - last_alert_dt).total_seconds() / 60
-        print(f"   Minutes since last alert: {minutes_since_alert:.1f}")
-    except:
-        print(f"   → Could not parse time, sending alert")
-        return True, "Time parse error"
-    
-    if minutes_since_alert < 60:
-        print(f"   → Too soon (< 60 min) - NO ALERT")
-        return False, f"Only {minutes_since_alert:.0f} min since last alert"
-    
-    if direction == last_direction:
-        if last_price:
-            change_pct = abs((price - last_price) / last_price)
-            print(f"   → Same direction, price change: {change_pct:.2%}")
-            if change_pct >= DIRECTION_CHANGE_THRESHOLD:
-                print(f"   → Significant move - SENDING")
-                return True, f"Same direction but {change_pct:.1%} move"
-            else:
-                print(f"   → Insufficient move - NO ALERT")
-                return False, f"Same direction, only {change_pct:.1%} move"
-        else:
-            return False, "Same direction"
-    
-    print(f"   → Direction changed!")
-    if last_price:
-        change_pct = abs((price - last_price) / last_price)
-        print(f"      Price change: {change_pct:.2%}")
-        if change_pct >= DIRECTION_CHANGE_THRESHOLD:
-            print(f"   → Significant change - SENDING")
-            return True, f"Direction changed with {change_pct:.1%} move"
-        else:
-            print(f"   → Small change - NO ALERT")
-            return False, f"Direction changed but only {change_pct:.1%} move"
-    else:
-        return True, "Direction changed"
+    # Same day - don't send duplicate
+    print(f"   → Same day, alert already sent - NO ALERT")
+    return False, f"Daily alert already sent for {current_date}"
 
 def main():
     print(f"\n{'='*80}")
