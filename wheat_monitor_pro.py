@@ -736,7 +736,9 @@ def main():
         send_alert, reason = should_alert(direction, price, state)
         print(f"\n📢 Alert: {reason}")
         
-        if send_alert and enhanced_conf >= MIN_CONFIDENCE:
+        # Always send daily alerts regardless of confidence
+        # Only apply confidence threshold to intraday alerts (if we add them later)
+        if send_alert:
             stop = price*(1-STOP_LOSS_PCT) if direction=="UP" else price*(1+STOP_LOSS_PCT)
             target = price*(1+TAKE_PROFIT_PCT) if direction=="UP" else price*(1-TAKE_PROFIT_PCT)
             
