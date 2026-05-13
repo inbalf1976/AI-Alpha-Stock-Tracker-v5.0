@@ -445,7 +445,8 @@ def send_telegram(message):
     
     try:
         url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-        data = {"chat_id":TELEGRAM_CHAT_ID,"text":message,"parse_mode":"Markdown"}
+        # Remove parse_mode to send as plain text - avoids all Markdown parsing errors
+        data = {"chat_id":TELEGRAM_CHAT_ID,"text":message}
         
         print(f"\n🔍 TELEGRAM DEBUG:")
         print(f"   Bot token: {'SET' if TELEGRAM_BOT_TOKEN else 'MISSING'} (length: {len(TELEGRAM_BOT_TOKEN) if TELEGRAM_BOT_TOKEN else 0})")
@@ -764,25 +765,25 @@ def main():
                 symbol = "+"
             
             message = f"""
-🌾 *WHEAT ALERT - ULTIMATE v3.1* 🌾
+🌾 WHEAT ALERT - ULTIMATE v3.1 🌾
 
-{'🟢' if direction=='UP' else '🔴'} *{direction}* ({enhanced_conf:.1%})
-💰 *{price:.2f}¢* (${price/100:.2f}/bu)
+{'🟢' if direction=='UP' else '🔴'} {direction} ({enhanced_conf:.1%})
+💰 {price:.2f}¢ (${price/100:.2f}/bu)
 {reset_notice}
-🤖 *ENSEMBLE AI:*
+🤖 ENSEMBLE AI:
 LSTM: {prediction['model_details']['LSTM']}
 RF: {prediction['model_details']['RandomForest']}
 XGB: {prediction['model_details']['XGBoost']}
 Agreement: {prediction['agreement']}
 
-📊 *FUNDAMENTAL FACTORS:*
+📊 FUNDAMENTAL FACTORS:
 📅 Seasonal: {seasonal['direction']} - {seasonal['explanation']}
 🌦️ Weather: {weather_signal['signal']} ({weather_signal['explanation']})
 📈 WASDE: {wasde_signal['signal']} (Stocks: {wasde_signal['data']['stocks_to_use']:.0%})
 📊 Volume: {volume_signal['signal']} ({volume_signal['explanation']})
 🎯 Context: {context['position']}
 
-💼 *TRADE SETUP:*
+💼 TRADE SETUP:
 Entry: {price:.2f}¢
 Stop: {stop:.2f}¢ ({STOP_LOSS_PCT:.1%})
 Target: {target:.2f}¢ ({TAKE_PROFIT_PCT:.1%})
@@ -794,7 +795,7 @@ R:R = 1.67:1
 • Aggressive: {aggressive_target:.2f}¢ ({symbol}{move_stats['p90']*100:.1f}%) - ~10%
 Based on {move_stats['count']} {direction} days
 
-_{reason}_
+{reason}
 🚀 Professional Edition v3.1
 """
             
