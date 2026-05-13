@@ -2,13 +2,13 @@
 PROFESSIONAL WHEAT TRADING SYSTEM - ULTIMATE EDITION
 Combines: Ensemble AI + Weather + WASDE + Volume + Seasonal + Context
 Expected Accuracy: 75-85%
-
+ 
 FIXED: Only update alert state AFTER Telegram confirms success
 ADDED: Debug logging to see Telegram API responses
 FIXED: Drop today's incomplete candle ONLY during market hours (Mon-Fri 6-20 UTC)
 FIXED: Only update last_price when alert is actually sent
 """
-
+ 
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -21,16 +21,16 @@ import sys
 import warnings
 warnings.filterwarnings('ignore')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
+ 
 # Fix imports for GitHub Actions
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
+ 
 import requests
-
+ 
 # ============================================================================
 # LIVE WEATHER ANALYZER - Embedded to avoid import issues
 # ============================================================================
-
+ 
 class LiveWeatherAnalyzer:
     """Analyze weather impact on wheat using Visual Crossing agricultural data"""
     
@@ -205,11 +205,11 @@ class LiveWeatherAnalyzer:
             'factors': all_factors[:3],
             'explanation': f"Weather in {bullish_count}/{len(regional_signals)} regions"
         }
-
+ 
 # ============================================================================
 # LIVE WASDE SCRAPER - Embedded (USDA QuickStats API)
 # ============================================================================
-
+ 
 class LiveWASDEScraper:
     """Fetch and analyze live USDA WASDE data for wheat"""
     
@@ -336,34 +336,34 @@ class LiveWASDEScraper:
             return {'signal': 'BEARISH', 'score': -0.10, 'data': {'stocks_to_use': 0.22, 'stocks_change': 3, 'source': 'ESTIMATED'}, 'factors': ['Post-harvest']}
         else:
             return {'signal': 'NEUTRAL', 'score': 0.10, 'data': {'stocks_to_use': 0.20, 'stocks_change': 0, 'source': 'ESTIMATED'}, 'factors': ['Balanced']}
-
+ 
 # ============================================================================
-
+ 
 from volume_analyzer import VolumeAnalyzer
 from ensemble_predictor import EnsemblePredictor
 from move_analyzer import MoveAnalyzer
-
-
+ 
+ 
 # CONFIG
 PRIMARY_TICKER = "ZW=F"
 STOP_LOSS_PCT = 0.015
 TAKE_PROFIT_PCT = 0.025
 MIN_CONFIDENCE = 0.55
 DIRECTION_CHANGE_THRESHOLD = 0.025
-
+ 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
-
+ 
 NORMAL_RANGE_LOW = 480
 NORMAL_RANGE_HIGH = 620
-
+ 
 SEASONAL_BIAS = {
     1:0.00, 2:-0.02, 3:0.03, 4:0.04, 5:0.05, 6:-0.05,
     7:-0.03, 8:-0.02, 9:0.02, 10:0.03, 11:0.04, 12:0.05
 }
-
+ 
 STATE_FILE = Path("wheat_monitor_state.json")
-
+ 
 # HELPERS
 def get_seasonal_bias():
     month = datetime.now().month
@@ -374,7 +374,7 @@ def get_seasonal_bias():
     }
     direction = 'BULLISH' if bias > 0.02 else 'BEARISH' if bias < -0.02 else 'NEUTRAL'
     return {'bias':bias,'direction':direction,'explanation':explanations.get(month,"")}
-
+ 
 def get_market_context(price):
     if price < NORMAL_RANGE_LOW:
         return {'position':'BELOW_NORMAL','signal':'BUY'}
@@ -382,7 +382,7 @@ def get_market_context(price):
         return {'position':'ABOVE_NORMAL','signal':'SELL'}
     else:
         return {'position':'NORMAL','signal':'NEUTRAL'}
-
+ 
 def load_state():
     print(f"\n📂 Loading state...")
     
@@ -426,7 +426,7 @@ def load_state():
         'model_version': 1,
         'reset_count': 0
     }
-
+ 
 def save_state(state):
     state['last_check'] = datetime.now().isoformat()
     with open(STATE_FILE,'w') as f:
@@ -437,7 +437,7 @@ def save_state(state):
     print(f"   last_alert_date: {state.get('last_alert_date')}")
     print(f"   last_alert_time: {state.get('last_alert_time')}")
     print(f"   alerts_sent: {state.get('alerts_sent')}")
-
+ 
 def send_telegram(message):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("❌ Telegram not configured")
@@ -477,7 +477,7 @@ def send_telegram(message):
         import traceback
         traceback.print_exc()
         return False
-
+ 
 def fetch_data(ticker, days=730):
     try:
         end_date = datetime.now()
@@ -486,7 +486,7 @@ def fetch_data(ticker, days=730):
         df = stock.history(start=start_date, end=end_date, auto_adjust=False)
         if df.empty:
             return None
-
+ 
         # ✅ FIX: Only drop today's incomplete candle if markets are actually open
         # This prevents dropping Friday's complete data on weekends
         today = datetime.now().date()
@@ -505,12 +505,12 @@ def fetch_data(ticker, days=730):
             print(f"   ℹ️  Dropped today's incomplete candle (market hours) - using {df.index[-1].date()} as latest")
         else:
             print(f"   ℹ️  Using complete data through {df.index[-1].date()}")
-
+ 
         return df
     except Exception as e:
         print(f"Data fetch error: {e}")
         return None
-
+ 
 def add_indicators(df):
     df['Returns'] = df['Close'].pct_change()
     df['SMA_20'] = df['Close'].rolling(window=20).mean()
@@ -534,7 +534,7 @@ def add_indicators(df):
     ranges = pd.concat([high_low,high_close,low_close],axis=1)
     df['ATR'] = ranges.max(axis=1).rolling(14).mean()
     return df.dropna()
-
+ 
 def should_alert(direction, price, state):
     from datetime import datetime
     
@@ -565,7 +565,7 @@ def should_alert(direction, price, state):
     # Same day - don't send duplicate
     print(f"   → Same day, alert already sent - NO ALERT")
     return False, f"Daily alert already sent for {current_date}"
-
+ 
 def main():
     print(f"\n{'='*80}")
     print(f"🌾 PROFESSIONAL WHEAT MONITOR - ULTIMATE EDITION v3.1 + FIXES")
@@ -766,7 +766,7 @@ def main():
             
             message = f"""
 🌾 WHEAT ALERT - ULTIMATE v3.1 🌾
-
+ 
 {'🟢' if direction=='UP' else '🔴'} {direction} ({enhanced_conf:.1%})
 💰 {price:.2f}¢ (${price/100:.2f}/bu)
 {reset_notice}
@@ -775,26 +775,26 @@ LSTM: {prediction['model_details']['LSTM']}
 RF: {prediction['model_details']['RandomForest']}
 XGB: {prediction['model_details']['XGBoost']}
 Agreement: {prediction['agreement']}
-
+ 
 📊 FUNDAMENTAL FACTORS:
 📅 Seasonal: {seasonal['direction']} - {seasonal['explanation']}
 🌦️ Weather: {weather_signal['signal']} ({weather_signal['explanation']})
 📈 WASDE: {wasde_signal['signal']} (Stocks: {wasde_signal['data']['stocks_to_use']:.0%})
 📊 Volume: {volume_signal['signal']} ({volume_signal['explanation']})
 🎯 Context: {context['position']}
-
+ 
 💼 TRADE SETUP:
 Entry: {price:.2f}¢
 Stop: {stop:.2f}¢ ({STOP_LOSS_PCT:.1%})
 Target: {target:.2f}¢ ({TAKE_PROFIT_PCT:.1%})
 R:R = 1.67:1
-
+ 
 📊 TYPICAL {direction} MOVES (Last 30 days):
 • Conservative: {conservative_target:.2f}¢ ({symbol}{move_stats['p50']*100:.1f}%) - ~50%
 • Moderate: {moderate_target:.2f}¢ ({symbol}{move_stats['p75']*100:.1f}%) - ~25%
 • Aggressive: {aggressive_target:.2f}¢ ({symbol}{move_stats['p90']*100:.1f}%) - ~10%
 Based on {move_stats['count']} {direction} days
-
+ 
 {reason}
 🚀 Professional Edition v3.1
 """
@@ -847,6 +847,6 @@ Based on {move_stats['count']} {direction} days
         print(f"\n❌ ERROR: {e}")
         import traceback
         traceback.print_exc()
-
+ 
 if __name__ == "__main__":
     main()
