@@ -13,6 +13,18 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Fetch all history
+        
+    - name: Pull latest changes
+      run: |
+        git pull origin main || git pull origin master || true
+        
+    - name: Verify code version
+      run: |
+        echo "=== CODE VERIFICATION ==="
+        head -20 wheat_monitor_pro.py | grep -i "version\|edition" || true
+        echo "========================="
       
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -64,6 +76,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        git pull origin main || git pull origin master || true
         git add wheat_monitor_state.json weather_cache.json wasde_cache.json || true
-        git commit -m "Update monitor state [skip ci]" || true
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update monitor state [skip ci]"
         git push || true
