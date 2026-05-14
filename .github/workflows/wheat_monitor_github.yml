@@ -2,8 +2,8 @@ name: Wheat Monitor
 
 on:
   schedule:
-    # Run once daily at 23:00 UTC (Mon-Fri)
-    - cron: '0 23 * * 1-5'
+    # Run once daily at 21:00 UTC = 23:00 Israel time (Mon-Fri)
+    - cron: '0 21 * * 1-5'
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
