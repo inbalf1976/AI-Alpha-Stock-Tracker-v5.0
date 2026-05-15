@@ -7,9 +7,9 @@ permissions:
 
 on:
   schedule:
-    # Run once daily at 21:00 UTC = 23:00 Israel time (Mon-Fri)
-    # Updated: May 15, 2026
-    - cron: '0 21 * * 1-5'
+    # Run Sunday-Thursday at 21:00 UTC = 23:00 Israel time
+    # 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday
+    - cron: '0 21 * * 0-4'
   workflow_dispatch:  # Allow manual trigger
   push:
     branches:
