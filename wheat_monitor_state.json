@@ -1,14 +1,14 @@
 {
   "last_direction": "UP",
-  "last_price": 674.75,
-  "alerts_sent": 96,
+  "last_price": 656.25,
+  "alerts_sent": 97,
   "last_model_reset": "2026-02-15T14:35:19.561201",
   "model_version": 1,
   "reset_count": 0,
-  "last_alert_date": "2026-05-14",
+  "last_alert_date": "2026-05-15",
   "daily_alert_sent": true,
-  "last_check": "2026-05-14T22:13:53.142323",
-  "last_alert_time": "2026-05-14T00:00:00.104619",
+  "last_check": "2026-05-15T04:57:15.050871",
+  "last_alert_time": "2026-05-15T04:57:15.048594",
   "alerts_today": {
     "2026-05-09_afternoon": true
   },
