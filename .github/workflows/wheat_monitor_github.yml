@@ -1,10 +1,20 @@
-name: Wheat Monitor
+name: Wheat Monitor Daily Alert
+
+# Schedule updated: 2026-05-15 - Daily at 21:00 UTC
+permissions:
+  contents: write
+  actions: write
 
 on:
   schedule:
     # Run once daily at 21:00 UTC = 23:00 Israel time (Mon-Fri)
+    # Updated: May 15, 2026
     - cron: '0 21 * * 1-5'
   workflow_dispatch:  # Allow manual trigger
+  push:
+    branches:
+      - main
+      - master
 
 jobs:
   monitor:
