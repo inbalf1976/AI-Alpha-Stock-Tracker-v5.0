@@ -1,20 +1,13 @@
-name: Wheat Monitor Daily Alert
-
-# Schedule updated: 2026-05-15 - Daily at 21:00 UTC
-permissions:
-  contents: write
-  actions: write
+name: Wheat Monitor
 
 on:
   schedule:
-    # Run Sunday-Thursday at 21:00 UTC = 23:00 Israel time
-    # 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday
-    - cron: '0 21 * * 0-4'
+    # Run 3x daily at key market times (Mon-Fri)
+    # 9 AM UTC - After Asian markets close, before CME opens
+    # 2 PM UTC - Mid-day CME session
+    # 8 PM UTC - Before CME close
+    - cron: '0 9,14,20 * * 1-5'
   workflow_dispatch:  # Allow manual trigger
-  push:
-    branches:
-      - main
-      - master
 
 jobs:
   monitor:
@@ -23,18 +16,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      with:
-        fetch-depth: 0  # Fetch all history
-        
-    - name: Pull latest changes
-      run: |
-        git pull origin main || git pull origin master || true
-        
-    - name: Verify code version
-      run: |
-        echo "=== CODE VERIFICATION ==="
-        head -20 wheat_monitor_pro.py | grep -i "version\|edition" || true
-        echo "========================="
       
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -86,7 +67,6 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git pull origin main || git pull origin master || true
         git add wheat_monitor_state.json weather_cache.json wasde_cache.json || true
-        git diff --quiet && git diff --staged --quiet || git commit -m "Update monitor state [skip ci]"
+        git commit -m "Update monitor state [skip ci]" || true
         git push || true
