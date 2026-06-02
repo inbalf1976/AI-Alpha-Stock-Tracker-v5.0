@@ -445,14 +445,12 @@ def send_telegram(message):
     
     try:
         url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-        # ✅ v3.2 FIX: Plain text mode - NO Markdown parsing
-        data = {"chat_id":TELEGRAM_CHAT_ID,"text":message}
+        data = {"chat_id":TELEGRAM_CHAT_ID,"text":message,"parse_mode":"Markdown"}
         
-        print(f"\n🔍 TELEGRAM DEBUG (v3.2 - Plain Text Mode):")
+        print(f"\n🔍 TELEGRAM DEBUG:")
         print(f"   Bot token: {'SET' if TELEGRAM_BOT_TOKEN else 'MISSING'} (length: {len(TELEGRAM_BOT_TOKEN) if TELEGRAM_BOT_TOKEN else 0})")
         print(f"   Chat ID: {TELEGRAM_CHAT_ID}")
         print(f"   Message length: {len(message)} chars")
-        print(f"   Parse mode: NONE (plain text)")
         print(f"   Sending to Telegram API...")
         
         response = requests.post(url, data=data, timeout=10)
@@ -553,26 +551,57 @@ def should_alert(direction, price, state):
     print(f"   Last direction: {last_direction} → Current: {direction}")
     print(f"   Last price: {last_price} → Current: {price}")
     
-    # First run ever
     if last_alert_time is None:
         print(f"   → First run ever - SENDING")
         return True, "First prediction"
     
-    # New trading day - ALWAYS send daily alert at 23:00
     if last_alert_date != current_date:
-        print(f"   → New trading day - SENDING daily alert for {current_date}")
-        return True, f"Daily update for {current_date}"
+        print(f"   → New trading day - SENDING first alert of {current_date}")
+        return True, f"First prediction of {current_date}"
     
-    # Same day - don't send duplicate
-    print(f"   → Same day, alert already sent - NO ALERT")
-    return False, f"Daily alert already sent for {current_date}"
+    try:
+        last_alert_dt = datetime.fromisoformat(last_alert_time)
+        minutes_since_alert = (current_time - last_alert_dt).total_seconds() / 60
+        print(f"   Minutes since last alert: {minutes_since_alert:.1f}")
+    except:
+        print(f"   → Could not parse time, sending alert")
+        return True, "Time parse error"
+    
+    if minutes_since_alert < 60:
+        print(f"   → Too soon (< 60 min) - NO ALERT")
+        return False, f"Only {minutes_since_alert:.0f} min since last alert"
+    
+    if direction == last_direction:
+        if last_price:
+            change_pct = abs((price - last_price) / last_price)
+            print(f"   → Same direction, price change: {change_pct:.2%}")
+            if change_pct >= DIRECTION_CHANGE_THRESHOLD:
+                print(f"   → Significant move - SENDING")
+                return True, f"Same direction but {change_pct:.1%} move"
+            else:
+                print(f"   → Insufficient move - NO ALERT")
+                return False, f"Same direction, only {change_pct:.1%} move"
+        else:
+            return False, "Same direction"
+    
+    print(f"   → Direction changed!")
+    if last_price:
+        change_pct = abs((price - last_price) / last_price)
+        print(f"      Price change: {change_pct:.2%}")
+        if change_pct >= DIRECTION_CHANGE_THRESHOLD:
+            print(f"   → Significant change - SENDING")
+            return True, f"Direction changed with {change_pct:.1%} move"
+        else:
+            print(f"   → Small change - NO ALERT")
+            return False, f"Direction changed but only {change_pct:.1%} move"
+    else:
+        return True, "Direction changed"
 
 def main():
     print(f"\n{'='*80}")
-    print(f"🌾 PROFESSIONAL WHEAT MONITOR - ULTIMATE EDITION v3.2 - TELEGRAM FIX")
+    print(f"🌾 PROFESSIONAL WHEAT MONITOR - ULTIMATE EDITION v3.1 + FIXES")
     print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print(f"Features: Ensemble AI + Weather + WASDE + Volume + Seasonal")
-    print(f"✅ FIXED: Plain text Telegram (no Markdown)")
     print(f"{'='*80}\n")
     
     state = load_state()
@@ -739,9 +768,7 @@ def main():
         send_alert, reason = should_alert(direction, price, state)
         print(f"\n📢 Alert: {reason}")
         
-        # Always send daily alerts regardless of confidence
-        # Only apply confidence threshold to intraday alerts (if we add them later)
-        if send_alert:
+        if send_alert and enhanced_conf >= MIN_CONFIDENCE:
             stop = price*(1-STOP_LOSS_PCT) if direction=="UP" else price*(1+STOP_LOSS_PCT)
             target = price*(1+TAKE_PROFIT_PCT) if direction=="UP" else price*(1-TAKE_PROFIT_PCT)
             
@@ -753,52 +780,37 @@ def main():
             
             move_analyzer = MoveAnalyzer()
             move_stats = move_analyzer.analyze_typical_moves(df, direction)
-            
-            # Format recommendations inline to avoid Markdown conflicts
-            if direction == 'UP':
-                conservative_target = price * (1 + move_stats['p50'])
-                moderate_target = price * (1 + move_stats['p75'])
-                aggressive_target = price * (1 + move_stats['p90'])
-                symbol = "+"
-            else:
-                conservative_target = price * (1 - move_stats['p50'])
-                moderate_target = price * (1 - move_stats['p75'])
-                aggressive_target = price * (1 - move_stats['p90'])
-                symbol = "+"
+            recommendations = move_analyzer.format_recommendation_message(price, direction, move_stats)
             
             message = f"""
-🌾 WHEAT ALERT - ULTIMATE v3.1 🌾
+🌾 *WHEAT ALERT - ULTIMATE v3.1* 🌾
 
-{'🟢' if direction=='UP' else '🔴'} {direction} ({enhanced_conf:.1%})
-💰 {price:.2f}¢ (${price/100:.2f}/bu)
+{'🟢' if direction=='UP' else '🔴'} *{direction}* ({enhanced_conf:.1%})
+💰 *{price:.2f}¢* (${price/100:.2f}/bu)
 {reset_notice}
-🤖 ENSEMBLE AI:
+🤖 *ENSEMBLE AI:*
 LSTM: {prediction['model_details']['LSTM']}
 RF: {prediction['model_details']['RandomForest']}
 XGB: {prediction['model_details']['XGBoost']}
 Agreement: {prediction['agreement']}
 
-📊 FUNDAMENTAL FACTORS:
+📊 *FUNDAMENTAL FACTORS:*
 📅 Seasonal: {seasonal['direction']} - {seasonal['explanation']}
 🌦️ Weather: {weather_signal['signal']} ({weather_signal['explanation']})
 📈 WASDE: {wasde_signal['signal']} (Stocks: {wasde_signal['data']['stocks_to_use']:.0%})
 📊 Volume: {volume_signal['signal']} ({volume_signal['explanation']})
 🎯 Context: {context['position']}
 
-💼 TRADE SETUP:
+💼 *TRADE SETUP:*
 Entry: {price:.2f}¢
 Stop: {stop:.2f}¢ ({STOP_LOSS_PCT:.1%})
 Target: {target:.2f}¢ ({TAKE_PROFIT_PCT:.1%})
 R:R = 1.67:1
 
-📊 TYPICAL {direction} MOVES (Last 30 days):
-• Conservative: {conservative_target:.2f}¢ ({symbol}{move_stats['p50']*100:.1f}%) - ~50%
-• Moderate: {moderate_target:.2f}¢ ({symbol}{move_stats['p75']*100:.1f}%) - ~25%
-• Aggressive: {aggressive_target:.2f}¢ ({symbol}{move_stats['p90']*100:.1f}%) - ~10%
-Based on {move_stats['count']} {direction} days
+{recommendations}
 
-{reason}
-🚀 Professional Edition v3.1
+_{reason}_
+_🚀 Professional Edition v3.1_
 """
             
             telegram_success = send_telegram(message)
@@ -832,10 +844,7 @@ Based on {move_stats['count']} {direction} days
             else:
                 print("\n❌ Alert failed - state NOT updated, will retry next run")
         else:
-            if not send_alert:
-                print(f"⏸️ No alert: {reason}")
-            else:
-                print(f"⏸️ Alert blocked (this shouldn't happen with daily alerts)")
+            print(f"⏸️ No alert: {reason if not send_alert else f'Confidence {enhanced_conf:.1%} below {MIN_CONFIDENCE:.0%}'}")
         
         # Don't update last_direction and last_price here - only on successful alert above
         save_state(state)
