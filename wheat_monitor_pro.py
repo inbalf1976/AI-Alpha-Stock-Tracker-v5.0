@@ -5,8 +5,7 @@ Expected Accuracy: 75-85%
 
 FIXED: Only update alert state AFTER Telegram confirms success
 ADDED: Debug logging to see Telegram API responses
-FIXED: Drop today's incomplete candle ONLY during market hours (Mon-Fri 6-20 UTC)
-FIXED: Only update last_price when alert is actually sent
+FIXED: Drop today's incomplete candle to ensure prediction always uses closed candles
 """
 
 import yfinance as yf
@@ -486,24 +485,13 @@ def fetch_data(ticker, days=730):
         if df.empty:
             return None
 
-        # ✅ FIX: Only drop today's incomplete candle if markets are actually open
-        # This prevents dropping Friday's complete data on weekends
+        # ✅ FIX: Always drop today's incomplete candle
+        # This ensures predictions are always based on fully closed candles,
+        # regardless of what time of day the script runs.
         today = datetime.now().date()
-        now = datetime.now()
-        
-        # Check if today is a trading day (Monday-Friday)
-        is_trading_day = now.weekday() < 5  # 0=Monday, 4=Friday
-        
-        # Rough CME trading hours in UTC (adjust based on your timezone)
-        # CME wheat trades roughly 01:00-20:20 CT, which is ~06:00-01:20 UTC
-        is_market_hours = 6 <= now.hour <= 20
-        
-        # Only drop if it's a trading day during market hours
-        if is_trading_day and is_market_hours and df.index[-1].date() == today:
+        if df.index[-1].date() == today:
             df = df.iloc[:-1]
-            print(f"   ℹ️  Dropped today's incomplete candle (market hours) - using {df.index[-1].date()} as latest")
-        else:
-            print(f"   ℹ️  Using complete data through {df.index[-1].date()}")
+            print(f"   ℹ️  Dropped today's incomplete candle - using {df.index[-1].date()} as latest")
 
         return df
     except Exception as e:
@@ -549,7 +537,6 @@ def should_alert(direction, price, state):
     print(f"   Last alert: {last_alert_time}")
     print(f"   Last alert date: {last_alert_date} vs today: {current_date}")
     print(f"   Last direction: {last_direction} → Current: {direction}")
-    print(f"   Last price: {last_price} → Current: {price}")
     
     if last_alert_time is None:
         print(f"   → First run ever - SENDING")
@@ -599,7 +586,7 @@ def should_alert(direction, price, state):
 
 def main():
     print(f"\n{'='*80}")
-    print(f"🌾 PROFESSIONAL WHEAT MONITOR - ULTIMATE EDITION v3.1 + FIXES")
+    print(f"🌾 PROFESSIONAL WHEAT MONITOR - ULTIMATE EDITION v3.0 + DEBUG")
     print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print(f"Features: Ensemble AI + Weather + WASDE + Volume + Seasonal")
     print(f"{'='*80}\n")
@@ -783,7 +770,7 @@ def main():
             recommendations = move_analyzer.format_recommendation_message(price, direction, move_stats)
             
             message = f"""
-🌾 *WHEAT ALERT - ULTIMATE v3.1* 🌾
+🌾 *WHEAT ALERT - ULTIMATE v3.0* 🌾
 
 {'🟢' if direction=='UP' else '🔴'} *{direction}* ({enhanced_conf:.1%})
 💰 *{price:.2f}¢* (${price/100:.2f}/bu)
@@ -810,18 +797,15 @@ R:R = 1.67:1
 {recommendations}
 
 _{reason}_
-_🚀 Professional Edition v3.1_
+_🚀 Professional Edition_
 """
             
             telegram_success = send_telegram(message)
             
-            # ✅ FIX: Only update state when Telegram confirms success
             if telegram_success:
                 print("\n✅ Professional alert sent!")
                 state['last_alert_time'] = datetime.now().isoformat()
                 state['last_alert_date'] = datetime.now().date().isoformat()
-                state['last_direction'] = direction  # ← MOVED HERE
-                state['last_price'] = price  # ← MOVED HERE - only update on successful alert
                 state['alerts_sent'] += 1
                 
                 try:
@@ -846,7 +830,8 @@ _🚀 Professional Edition v3.1_
         else:
             print(f"⏸️ No alert: {reason if not send_alert else f'Confidence {enhanced_conf:.1%} below {MIN_CONFIDENCE:.0%}'}")
         
-        # Don't update last_direction and last_price here - only on successful alert above
+        state['last_direction'] = direction
+        state['last_price'] = price
         save_state(state)
         
         print(f"\n📊 Session Stats:")
