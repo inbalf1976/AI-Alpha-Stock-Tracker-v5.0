@@ -1,13 +1,20 @@
+nt
+32.71 KB •836 lines•Formatting may be inconsistent from source
 """
 PROFESSIONAL WHEAT TRADING SYSTEM - ULTIMATE EDITION
 Combines: Ensemble AI + Weather + WASDE + Volume + Seasonal + Context
 
 CHANGES FROM ORIGINAL:
 1. Incomplete candle fix in fetch_data()
-2. Israel timezone slot-based alerting (23:00 Israel - EVENING ALERT)
+2. Israel timezone slot-based alerting (1AM and 4PM Israel)
 3. FORCE_ALERT for manual triggers
 4. Double stop loss in message (1.5% tight + 2.5% wide)
 5. Auto stop recommendation based on volume
+
+PATCH APPLIED:
+6. Performance gate: validate old predictions + check win rate before alerting
+7. Circuit breaker: auto-suppress alerts after 3 consecutive losses
+8. Shared tracker instance (no duplicate imports)
 """
 
 import yfinance as yf
@@ -260,9 +267,6 @@ class LiveWASDEScraper:
         }
 
     def get_fundamental_score(self):
-        # USDA API returns mixed grain data - not reliable for wheat-specific STU
-        # Original working values: ~2134M bushels / 2000M use = 107% = BEARISH
-        # This consistently produced accurate predictions - keeping it fixed
         print("      WASDE: Using fixed bearish signal (ample stocks)")
         score = -0.15
         stocks_to_use = 1.07
@@ -324,13 +328,11 @@ def get_israel_time():
     now_utc = datetime.utcnow()
     year = now_utc.year
 
-    # DST start: last Friday before April 2
     april2 = datetime(year, 4, 2)
     days_to_friday = (april2.weekday() - 4) % 7
     dst_start = april2 - timedelta(days=days_to_friday)
     dst_start = dst_start.replace(hour=0, minute=0, second=0)
 
-    # DST end: last Sunday before October 10
     oct10 = datetime(year, 10, 10)
     days_to_sunday = (oct10.weekday() - 6) % 7
     dst_end = oct10 - timedelta(days=days_to_sunday)
@@ -442,10 +444,6 @@ def fetch_data(ticker, days=730):
         if df.empty:
             return None
 
-        # ALWAYS drop the last candle
-        # Reason: at 23:00 Israel market is open, last candle is incomplete
-        # When run manually during day, last candle is also incomplete
-        # Safest rule: always use previous closed day's close price
         last_date = df.index[-1].date()
         df = df.iloc[:-1]
         print(f"   Dropped last candle ({last_date}) - using {df.index[-1].date()} close")
@@ -482,10 +480,9 @@ def add_indicators(df):
 
 
 def should_alert(direction, price, state):
-    """Slot-based alerting: send at 23:00 Israel time only.
+    """Slot-based alerting: send at 01:00 Israel time only.
     Manual triggers (workflow_dispatch) always send immediately."""
 
-    # Check for manual/force trigger
     force_alert = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
     github_event = os.getenv('GITHUB_EVENT_NAME', '')
     is_manual = force_alert or 'workflow_dispatch' in github_event
@@ -497,7 +494,6 @@ def should_alert(direction, price, state):
         print(f"   Manual trigger - sending immediately")
         return True, "Manual alert", True
 
-    # Get Israel time
     israel_time, utc_offset, tz_name = get_israel_time()
     israel_hour = israel_time.hour
     israel_date = israel_time.date().isoformat()
@@ -505,16 +501,13 @@ def should_alert(direction, price, state):
     print(f"   Israel time: {israel_time.strftime('%Y-%m-%d %H:%M')} {tz_name}")
     print(f"   Israel hour: {israel_hour}:00")
 
-    # Determine slot - EVENING ONLY (23:00 Israel)
-    if israel_hour in (23, 0):  # 23:00 or 00:00 (in case of minute overlap)
-        slot = 'evening'
-        slot_label = f"Evening Alert (23:00 {tz_name})"
+    if israel_hour in (1, 2):
+        slot = 'morning'
+        slot_label = f"Morning Alert (01:00 {tz_name})"
     else:
         print(f"   Not a scheduled hour ({israel_hour}:00 Israel) - NO ALERT")
-        print(f"   Scheduled hour: 23:00 Israel time only")
         return False, f"Not scheduled hour ({israel_hour}:00 Israel)", False
 
-    # Check if slot already sent today
     alerts_today = state.get('alerts_today', {})
     slot_key = f"{israel_date}_{slot}"
     if alerts_today.get(slot_key, False):
@@ -536,6 +529,32 @@ def main():
     print(f"{'='*80}\n")
 
     state = load_state()
+
+    # -------------------------------------------------------------------------
+    # PATCH: Validate old predictions, then check performance gate
+    # -------------------------------------------------------------------------
+    tracker = None
+    try:
+        from performance_tracker import PerformanceTracker
+        tracker = PerformanceTracker()
+
+        validated = tracker.validate_predictions()
+        if validated > 0:
+            print(f"   Validated {validated} pending prediction(s)")
+
+        gate_ok, gate_reason = tracker.get_confidence_gate()
+        print(f"\n🚦 Performance gate: {gate_reason}")
+
+        if not gate_ok:
+            # Circuit breaker or low win rate — exit without alerting
+            print(f"   Alerts suppressed — saving state and exiting")
+            save_state(state)
+            return
+
+    except Exception as e:
+        print(f"⚠️  Performance gate skipped: {e}")
+        # Non-fatal — continue normally if tracker unavailable
+    # -------------------------------------------------------------------------
 
     try:
         print(f"Fetching {PRIMARY_TICKER}...")
@@ -694,7 +713,6 @@ def main():
             stop_wide = price * (1 - STOP_LOSS_WIDE_PCT) if direction == "UP" else price * (1 + STOP_LOSS_WIDE_PCT)
             target = price * (1 + TAKE_PROFIT_PCT) if direction == "UP" else price * (1 - TAKE_PROFIT_PCT)
 
-            # Auto stop recommendation
             vol_exp = volume_signal.get('explanation', '').lower()
             if 'divergence' in vol_exp:
                 stop_rec = "USE STOP 2 - volume divergence detected"
@@ -707,13 +725,12 @@ def main():
             move_stats = move_analyzer.analyze_typical_moves(df, direction)
             recommendations = move_analyzer.format_recommendation_message(price, direction, move_stats)
 
-            # Clean text for Telegram markdown safety
             def clean(text):
                 return str(text).replace('_', ' ').replace('*', '').replace('`', '').replace('[', '').replace(']', '')
 
             message = (
                 f"*WHEAT ALERT - ULTIMATE v3.0*\n"
-                f"Evening Alert (23:00 Israel)\n\n"
+                f"Morning Alert\n\n"
                 f"{'UP' if direction == 'UP' else 'DOWN'} ({enhanced_conf:.1%})\n"
                 f"Price: {price:.2f}c\n\n"
                 f"*ENSEMBLE AI:*\n"
@@ -748,12 +765,11 @@ def main():
                 state['alerts_sent'] = state.get('alerts_sent', 0) + 1
                 state['last_confidence'] = enhanced_conf
 
-                # Track slot only for scheduled runs (not manual)
                 if not is_manual:
                     israel_time, _, _ = get_israel_time()
                     israel_hour = israel_time.hour
                     israel_date = israel_time.date().isoformat()
-                    slot = 'evening' if israel_hour in (23, 0) else f'manual_{israel_hour}h'
+                    slot = 'morning' if israel_hour in (1, 2) else f'manual_{israel_hour}h'
                     slot_key = f"{israel_date}_{slot}"
                     if 'alerts_today' not in state:
                         state['alerts_today'] = {}
@@ -763,23 +779,42 @@ def main():
                     }
                     state['alerts_today'][slot_key] = True
 
+                # -----------------------------------------------------------------
+                # PATCH: Log prediction using the shared tracker instance
+                # -----------------------------------------------------------------
                 try:
-                    from performance_tracker import PerformanceTracker
-                    tracker = PerformanceTracker()
-                    tracker.log_prediction(
-                        direction=direction,
-                        price=price,
-                        confidence=enhanced_conf,
-                        factors={
-                            'seasonal': seasonal['direction'],
-                            'weather': weather_signal['signal'],
-                            'wasde': wasde_signal['signal'],
-                            'volume': volume_signal['signal'],
-                            'ensemble': f"{prediction['agreement']} ({prediction['votes_up']}/3)"
-                        }
-                    )
+                    if tracker is not None:
+                        tracker.log_prediction(
+                            direction=direction,
+                            price=price,
+                            confidence=enhanced_conf,
+                            factors={
+                                'seasonal': seasonal['direction'],
+                                'weather':  weather_signal['signal'],
+                                'wasde':    wasde_signal['signal'],
+                                'volume':   volume_signal['signal'],
+                                'ensemble': f"{prediction['agreement']} ({prediction['votes_up']}/3)"
+                            }
+                        )
+                    else:
+                        # Fallback: tracker failed to init earlier, try again
+                        from performance_tracker import PerformanceTracker
+                        PerformanceTracker().log_prediction(
+                            direction=direction,
+                            price=price,
+                            confidence=enhanced_conf,
+                            factors={
+                                'seasonal': seasonal['direction'],
+                                'weather':  weather_signal['signal'],
+                                'wasde':    wasde_signal['signal'],
+                                'volume':   volume_signal['signal'],
+                                'ensemble': f"{prediction['agreement']} ({prediction['votes_up']}/3)"
+                            }
+                        )
                 except Exception as e:
                     print(f"Performance tracking skipped: {e}")
+                # -----------------------------------------------------------------
+
             else:
                 print("\nAlert failed - state NOT updated")
         else:
