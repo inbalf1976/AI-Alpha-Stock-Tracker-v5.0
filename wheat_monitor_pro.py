@@ -1,5 +1,3 @@
-nt
-32.71 KB •836 lines•Formatting may be inconsistent from source
 """
 PROFESSIONAL WHEAT TRADING SYSTEM - ULTIMATE EDITION
 Combines: Ensemble AI + Weather + WASDE + Volume + Seasonal + Context
