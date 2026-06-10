@@ -207,85 +207,83 @@ class LiveWeatherAnalyzer:
         }
 
 # ============================================================================
-# LIVE WASDE SCRAPER
+# LIVE WASDE SCRAPER - MULTI-GRAIN EDITION
+# Fetches wheat, corn, and soy stocks from USDA.
+# Derives wheat-specific signal using inter-grain relationships:
+#   - Corn/soy tight → acreage competition → bullish wheat
+#   - Corn/soy ample → no competition pressure → neutral/bearish wheat
+#   - Wheat STU is the primary signal; grains context adjusts it
 # ============================================================================
 
 class LiveWASDEScraper:
+
+    # Annual US consumption benchmarks (bushels) — stable USDA WASDE figures
+    ANNUAL_USE = {
+        'WHEAT': 2_000_000_000,   # ~2.0B bu
+        'CORN':  14_500_000_000,  # ~14.5B bu
+        'SOYBEANS': 4_400_000_000 # ~4.4B bu
+    }
+
+    # STU thresholds per grain
+    STU_THRESHOLDS = {
+        'WHEAT':    {'very_tight': 0.27, 'tight': 0.30, 'ample': 0.33},
+        'CORN':     {'very_tight': 0.08, 'tight': 0.10, 'ample': 0.13},
+        'SOYBEANS': {'very_tight': 0.05, 'tight': 0.07, 'ample': 0.10},
+    }
+
     def __init__(self):
-        self.api_key = os.getenv("USDA_API_KEY", "3338B84E-694D-3E6A-925C-F35064C59BAE")
+        self.api_key  = os.getenv("USDA_API_KEY", "3338B84E-694D-3E6A-925C-F35064C59BAE")
         self.base_url = "https://quickstats.nass.usda.gov/api/api_GET/"
 
-    def fetch_wheat_stocks(self):
-        try:
-            params = {
-                'key': self.api_key,
-                'source_desc': 'SURVEY',
-                'commodity_desc': 'WHEAT',
-                'statisticcat_desc': 'STOCKS',
-                'agg_level_desc': 'NATIONAL',
-                'format': 'JSON',
-                'year__GE': 2020
-            }
-            response = requests.get(self.base_url, params=params, timeout=15)
-            if response.status_code == 200:
-                data = response.json()
-                if 'data' in data and data['data']:
-                    return self._parse_stocks_data(data['data'])
-            return None
-        except Exception as e:
-            print(f"WASDE fetch error: {e}")
-            return None
-
-    def _parse_stocks_data(self, data):
-        sorted_data = sorted(data, key=lambda x: (x.get('year', 0), x.get('reference_period_desc', '')), reverse=True)
-        if not sorted_data:
-            return None
-
-        latest = sorted_data[0]
-        latest_value = float(latest.get('Value', 0).replace(',', ''))
-        latest_year = latest.get('year')
-
-        previous_value = None
-        for record in sorted_data[1:]:
-            if record.get('year') != latest_year:
-                try:
-                    previous_value = float(record.get('Value', 0).replace(',', ''))
-                    break
-                except:
-                    continue
-
-        yoy_change = 0
-        if previous_value and previous_value > 0:
-            yoy_change = ((latest_value - previous_value) / previous_value) * 100
-
-        return {
-            'current_stocks': latest_value,
-            'yoy_change_pct': yoy_change,
-            'year': latest_year
-        }
+    # ── public entry point ────────────────────────────────────────────────────
 
     def get_fundamental_score(self):
-        """Dynamic WASDE signal — no longer hardcoded.
-        Tries USDA API first, falls back to wheat/corn ratio proxy."""
-        print("      Fetching WASDE data...", end=" ")
+        """
+        Fetch all three grains from USDA, then derive a wheat-specific signal.
+        Falls back to market proxy (price ratios) if USDA is unavailable.
+        """
+        print("   📊 WASDE: fetching all grains...")
 
-        stocks_data = self._fetch_wheat_stocks_fixed()
+        grain_data = self._fetch_all_grains()
 
-        if stocks_data:
-            print("USDA OK")
-            return self._score_from_usda(stocks_data)
+        if grain_data.get('WHEAT'):
+            return self._derive_wheat_signal(grain_data)
 
-        print("USDA unavailable — using market proxy")
+        print("      USDA unavailable — using market proxy")
         return self._score_from_market_proxy()
 
-    def _fetch_wheat_stocks_fixed(self):
-        """Fixed USDA fetch — adds class_desc=ALL CLASSES to avoid mixed grain data."""
+    # ── USDA fetching ─────────────────────────────────────────────────────────
+
+    def _fetch_all_grains(self):
+        """Fetch stocks for wheat, corn, and soybeans in parallel-ish calls."""
+        grains = {
+            'WHEAT':    {'commodity_desc': 'WHEAT',    'class_desc': 'ALL CLASSES'},
+            'CORN':     {'commodity_desc': 'CORN',     'class_desc': 'ALL CLASSES'},
+            'SOYBEANS': {'commodity_desc': 'SOYBEANS', 'class_desc': 'ALL CLASSES'},
+        }
+
+        results = {}
+        for grain_name, grain_params in grains.items():
+            print(f"      {grain_name}...", end=" ")
+            data = self._fetch_grain_stocks(grain_params)
+            if data:
+                stu = data['current_stocks'] / self.ANNUAL_USE[grain_name]
+                data['stu'] = stu
+                results[grain_name] = data
+                print(f"STU={stu:.1%} YoY={data['yoy_change_pct']:+.1f}%")
+            else:
+                print("failed")
+
+        return results
+
+    def _fetch_grain_stocks(self, grain_params):
+        """Fetch stocks for a single grain from USDA QuickStats."""
         try:
             params = {
                 'key':               self.api_key,
                 'source_desc':       'SURVEY',
-                'commodity_desc':    'WHEAT',
-                'class_desc':        'ALL CLASSES',
+                'commodity_desc':    grain_params['commodity_desc'],
+                'class_desc':        grain_params['class_desc'],
                 'statisticcat_desc': 'STOCKS',
                 'unit_desc':         'BU',
                 'agg_level_desc':    'NATIONAL',
@@ -299,105 +297,234 @@ class LiveWASDEScraper:
                     return self._parse_stocks_data(data['data'])
             return None
         except Exception as e:
-            print(f"USDA error: {e}")
+            print(f"({e})", end=" ")
             return None
 
-    def _score_from_usda(self, stocks_data):
-        """Score from real USDA wheat stocks data."""
-        score = 0.0
+    def _parse_stocks_data(self, data):
+        """Parse raw USDA records into current stocks + YoY change."""
+        sorted_data = sorted(
+            data,
+            key=lambda x: (x.get('year', 0), x.get('reference_period_desc', '')),
+            reverse=True
+        )
+        if not sorted_data:
+            return None
+
+        latest       = sorted_data[0]
+        latest_year  = latest.get('year')
+
+        try:
+            latest_value = float(latest.get('Value', '0').replace(',', ''))
+        except (ValueError, TypeError):
+            return None
+
+        if latest_value <= 0:
+            return None
+
+        previous_value = None
+        for record in sorted_data[1:]:
+            if record.get('year') != latest_year:
+                try:
+                    v = float(record.get('Value', '0').replace(',', ''))
+                    if v > 0:
+                        previous_value = v
+                        break
+                except (ValueError, TypeError):
+                    continue
+
+        yoy_change = 0.0
+        if previous_value and previous_value > 0:
+            yoy_change = ((latest_value - previous_value) / previous_value) * 100
+
+        return {
+            'current_stocks': latest_value,
+            'yoy_change_pct': yoy_change,
+            'year':           latest_year,
+        }
+
+    # ── wheat signal derivation ───────────────────────────────────────────────
+
+    def _derive_wheat_signal(self, grain_data):
+        """
+        Derive wheat prediction from all three grains.
+
+        Logic:
+          1. Wheat STU is the primary signal (own supply/demand)
+          2. Corn STU adjusts it — tight corn = acreage competition = bullish wheat
+          3. Soy STU adjusts it — tight soy = acreage competition = bullish wheat
+          4. YoY direction for each grain adds confirmation or caution
+        """
+        score   = 0.0
         factors = []
 
-        stu = stocks_data['current_stocks'] / 2_000_000_000  # annual US use ~2B bu
-        yoy = stocks_data['yoy_change_pct']
+        wheat = grain_data.get('WHEAT')
+        corn  = grain_data.get('CORN')
+        soy   = grain_data.get('SOYBEANS')
 
-        print(f"         STU: {stu:.1%} | YoY: {yoy:+.1f}%")
+        thresh_w = self.STU_THRESHOLDS['WHEAT']
+        thresh_c = self.STU_THRESHOLDS['CORN']
+        thresh_s = self.STU_THRESHOLDS['SOYBEANS']
 
-        if stu < 0.27:
+        # ── 1. Wheat own STU (weight: primary, ±0.25) ──
+        w_stu = wheat['stu']
+        w_yoy = wheat['yoy_change_pct']
+
+        if w_stu < thresh_w['very_tight']:
             score += 0.25
-            factors.append(f"Very tight stocks ({stu:.1%})")
-        elif stu < 0.30:
+            factors.append(f"Wheat very tight ({w_stu:.1%} STU)")
+        elif w_stu < thresh_w['tight']:
             score += 0.15
-            factors.append(f"Tight stocks ({stu:.1%})")
-        elif stu > 0.33:
+            factors.append(f"Wheat tight ({w_stu:.1%} STU)")
+        elif w_stu > thresh_w['ample']:
             score -= 0.15
-            factors.append(f"Ample stocks ({stu:.1%})")
+            factors.append(f"Wheat ample ({w_stu:.1%} STU)")
         else:
-            factors.append(f"Balanced stocks ({stu:.1%})")
+            factors.append(f"Wheat balanced ({w_stu:.1%} STU)")
 
-        if yoy < -5:
+        if w_yoy < -5:
             score += 0.08
-            factors.append(f"Stocks falling {abs(yoy):.1f}% YoY")
-        elif yoy > 5:
+            factors.append(f"Wheat stocks falling {abs(w_yoy):.1f}% YoY")
+        elif w_yoy > 5:
             score -= 0.05
-            factors.append(f"Stocks rising {yoy:.1f}% YoY")
+            factors.append(f"Wheat stocks rising {w_yoy:.1f}% YoY")
 
+        # ── 2. Corn STU context (weight: secondary, ±0.08) ──
+        # Tight corn = farmers favour corn acres → less wheat planting → bullish wheat
+        if corn:
+            c_stu = corn['stu']
+            if c_stu < thresh_c['tight']:
+                score += 0.08
+                factors.append(f"Corn tight ({c_stu:.1%}) → acreage competition")
+            elif c_stu > thresh_c['ample']:
+                score -= 0.04
+                factors.append(f"Corn ample ({c_stu:.1%}) → no acre competition")
+
+        # ── 3. Soy STU context (weight: tertiary, ±0.06) ──
+        # Same acreage competition logic as corn
+        if soy:
+            s_stu = soy['stu']
+            if s_stu < thresh_s['tight']:
+                score += 0.06
+                factors.append(f"Soy tight ({s_stu:.1%}) → acreage competition")
+            elif s_stu > thresh_s['ample']:
+                score -= 0.03
+                factors.append(f"Soy ample ({s_stu:.1%}) → no acre competition")
+
+        # ── 4. Cross-grain divergence bonus ──
+        # If wheat is tight BUT corn+soy are both ample → wheat premium justified
+        if corn and soy:
+            grains_ample = (
+                corn['stu']  > thresh_c['ample'] and
+                soy['stu']   > thresh_s['ample']
+            )
+            wheat_tight = w_stu < thresh_w['tight']
+
+            if wheat_tight and grains_ample:
+                score += 0.07
+                factors.append("Wheat tight while corn/soy ample → wheat premium")
+            elif not wheat_tight and not grains_ample:
+                # All grains ample — bearish pressure across the board
+                score -= 0.05
+                factors.append("All grains well supplied → broad bearish pressure")
+
+        # ── Final signal ──
         signal = 'BULLISH' if score > 0.10 else 'BEARISH' if score < -0.05 else 'NEUTRAL'
+
+        print(f"      WASDE multi-grain result: {signal} (score={score:+.3f})")
+        print(f"      Wheat STU={w_stu:.1%} | "
+              f"Corn STU={corn['stu']:.1%} | " if corn else "Corn: N/A | ",
+              f"Soy STU={soy['stu']:.1%}" if soy else "Soy: N/A")
 
         return {
             'signal': signal,
-            'score':  score,
+            'score':  round(score, 4),
             'data': {
-                'stocks_to_use': stu,
-                'stocks_change': yoy,
-                'last_updated':  datetime.now().strftime('%Y-%m-%d'),
-                'source':        'USDA QuickStats LIVE',
+                'stocks_to_use':  w_stu,
+                'stocks_change':  w_yoy,
+                'corn_stu':       corn['stu']  if corn else None,
+                'soy_stu':        soy['stu']   if soy  else None,
+                'last_updated':   datetime.now().strftime('%Y-%m-%d'),
+                'source':         'USDA QuickStats LIVE (wheat+corn+soy)',
             },
-            'factors': factors[:2],
+            'factors': factors[:3],
+            'explanation': f"Wheat {w_stu:.1%} STU | Corn {corn['stu']:.1%} | Soy {soy['stu']:.1%}" if (corn and soy) else f"Wheat {w_stu:.1%} STU",
         }
 
+    # ── market proxy fallback ─────────────────────────────────────────────────
+
     def _score_from_market_proxy(self):
-        """Fallback: wheat/corn price ratio as supply proxy.
-        High ratio = market pricing in tight wheat = bullish."""
+        """
+        Fallback when USDA is unavailable.
+        Uses wheat/corn AND wheat/soy price ratios as supply proxies.
+        Both ratios are forward-looking — the market already prices in supply.
+        """
         try:
             end   = datetime.now()
             start = end - timedelta(days=400)
 
             wdf = yf.Ticker("ZW=F").history(start=start, end=end, auto_adjust=False)
             cdf = yf.Ticker("ZC=F").history(start=start, end=end, auto_adjust=False)
+            sdf = yf.Ticker("ZS=F").history(start=start, end=end, auto_adjust=False)
 
-            if wdf.empty or cdf.empty:
+            if wdf.empty:
                 return self._get_default_estimates()
 
-            ratio  = wdf['Close'] / cdf['Close'].reindex(wdf.index, method='ffill')
-            ratio  = ratio.dropna()
-            zscore = (ratio.iloc[-1] - ratio.mean()) / ratio.std()
+            score   = 0.0
+            factors = []
 
-            print(f"         W/C ratio z-score: {zscore:+.2f}")
+            # Wheat/corn ratio z-score
+            if not cdf.empty:
+                wc = (wdf['Close'] / cdf['Close'].reindex(wdf.index, method='ffill')).dropna()
+                if len(wc) > 20:
+                    wc_z = float((wc.iloc[-1] - wc.mean()) / wc.std())
+                    if wc_z > 0.75:
+                        score += 0.12
+                        factors.append(f"Wheat/corn ratio elevated (z={wc_z:+.2f})")
+                    elif wc_z < -0.75:
+                        score -= 0.08
+                        factors.append(f"Wheat/corn ratio depressed (z={wc_z:+.2f})")
+                    else:
+                        factors.append(f"Wheat/corn ratio normal (z={wc_z:+.2f})")
 
-            if zscore > 0.75:
-                signal, score = 'BULLISH', 0.15
-                note = f"Wheat expensive vs corn (z={zscore:+.2f})"
-            elif zscore < -0.75:
-                signal, score = 'BEARISH', -0.10
-                note = f"Wheat cheap vs corn (z={zscore:+.2f})"
-            else:
-                signal, score = 'NEUTRAL', 0.0
-                note = f"Wheat/corn ratio normal (z={zscore:+.2f})"
+            # Wheat/soy ratio z-score
+            if not sdf.empty:
+                ws = (wdf['Close'] / sdf['Close'].reindex(wdf.index, method='ffill')).dropna()
+                if len(ws) > 20:
+                    ws_z = float((ws.iloc[-1] - ws.mean()) / ws.std())
+                    if ws_z > 0.75:
+                        score += 0.08
+                        factors.append(f"Wheat/soy ratio elevated (z={ws_z:+.2f})")
+                    elif ws_z < -0.75:
+                        score -= 0.05
+                        factors.append(f"Wheat/soy ratio depressed (z={ws_z:+.2f})")
+
+            signal = 'BULLISH' if score > 0.10 else 'BEARISH' if score < -0.05 else 'NEUTRAL'
 
             return {
                 'signal': signal,
-                'score':  score,
+                'score':  round(score, 4),
                 'data': {
                     'stocks_to_use': 0.0,
                     'stocks_change': 0,
                     'last_updated':  datetime.now().strftime('%Y-%m-%d'),
-                    'source':        'Market proxy (W/C ratio)',
+                    'source':        'Market proxy (W/C + W/S ratios)',
                 },
-                'factors': [note],
+                'factors':     factors[:3],
+                'explanation': f"Market proxy: {signal}",
             }
 
         except Exception as e:
-            print(f"Market proxy error: {e}")
+            print(f"      Market proxy error: {e}")
             return self._get_default_estimates()
 
     def _get_default_estimates(self):
         month = datetime.now().month
         if month in [1, 2, 3]:
-            return {'signal': 'BULLISH', 'score': 0.20, 'data': {'stocks_to_use': 0.18, 'stocks_change': -2, 'source': 'ESTIMATED'}, 'factors': ['Seasonal estimate']}
+            return {'signal': 'BULLISH', 'score': 0.20, 'data': {'stocks_to_use': 0.18, 'stocks_change': -2, 'source': 'ESTIMATED'}, 'factors': ['Seasonal estimate'], 'explanation': 'Seasonal estimate'}
         elif month in [7, 8, 9]:
-            return {'signal': 'BEARISH', 'score': -0.10, 'data': {'stocks_to_use': 0.22, 'stocks_change': 3, 'source': 'ESTIMATED'}, 'factors': ['Post-harvest']}
+            return {'signal': 'BEARISH', 'score': -0.10, 'data': {'stocks_to_use': 0.22, 'stocks_change': 3, 'source': 'ESTIMATED'}, 'factors': ['Post-harvest'], 'explanation': 'Post-harvest estimate'}
         else:
-            return {'signal': 'NEUTRAL', 'score': 0.10, 'data': {'stocks_to_use': 0.20, 'stocks_change': 0, 'source': 'ESTIMATED'}, 'factors': ['Balanced']}
+            return {'signal': 'NEUTRAL', 'score': 0.10, 'data': {'stocks_to_use': 0.20, 'stocks_change': 0, 'source': 'ESTIMATED'}, 'factors': ['Balanced'], 'explanation': 'Seasonal estimate'}
 
 # ============================================================================
 
