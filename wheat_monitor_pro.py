@@ -265,21 +265,130 @@ class LiveWASDEScraper:
         }
 
     def get_fundamental_score(self):
-        print("      WASDE: Using fixed bearish signal (ample stocks)")
-        score = -0.15
-        stocks_to_use = 1.07
+        """Dynamic WASDE signal — no longer hardcoded.
+        Tries USDA API first, falls back to wheat/corn ratio proxy."""
+        print("      Fetching WASDE data...", end=" ")
+
+        stocks_data = self._fetch_wheat_stocks_fixed()
+
+        if stocks_data:
+            print("USDA OK")
+            return self._score_from_usda(stocks_data)
+
+        print("USDA unavailable — using market proxy")
+        return self._score_from_market_proxy()
+
+    def _fetch_wheat_stocks_fixed(self):
+        """Fixed USDA fetch — adds class_desc=ALL CLASSES to avoid mixed grain data."""
+        try:
+            params = {
+                'key':               self.api_key,
+                'source_desc':       'SURVEY',
+                'commodity_desc':    'WHEAT',
+                'class_desc':        'ALL CLASSES',
+                'statisticcat_desc': 'STOCKS',
+                'unit_desc':         'BU',
+                'agg_level_desc':    'NATIONAL',
+                'format':            'JSON',
+                'year__GE':          2021,
+            }
+            response = requests.get(self.base_url, params=params, timeout=15)
+            if response.status_code == 200:
+                data = response.json()
+                if 'data' in data and data['data']:
+                    return self._parse_stocks_data(data['data'])
+            return None
+        except Exception as e:
+            print(f"USDA error: {e}")
+            return None
+
+    def _score_from_usda(self, stocks_data):
+        """Score from real USDA wheat stocks data."""
+        score = 0.0
+        factors = []
+
+        stu = stocks_data['current_stocks'] / 2_000_000_000  # annual US use ~2B bu
+        yoy = stocks_data['yoy_change_pct']
+
+        print(f"         STU: {stu:.1%} | YoY: {yoy:+.1f}%")
+
+        if stu < 0.27:
+            score += 0.25
+            factors.append(f"Very tight stocks ({stu:.1%})")
+        elif stu < 0.30:
+            score += 0.15
+            factors.append(f"Tight stocks ({stu:.1%})")
+        elif stu > 0.33:
+            score -= 0.15
+            factors.append(f"Ample stocks ({stu:.1%})")
+        else:
+            factors.append(f"Balanced stocks ({stu:.1%})")
+
+        if yoy < -5:
+            score += 0.08
+            factors.append(f"Stocks falling {abs(yoy):.1f}% YoY")
+        elif yoy > 5:
+            score -= 0.05
+            factors.append(f"Stocks rising {yoy:.1f}% YoY")
+
+        signal = 'BULLISH' if score > 0.10 else 'BEARISH' if score < -0.05 else 'NEUTRAL'
 
         return {
-            'signal': 'BEARISH',
-            'score': score,
+            'signal': signal,
+            'score':  score,
             'data': {
-                'stocks_to_use': stocks_to_use,
-                'stocks_change': 0,
-                'last_updated': datetime.now().strftime('%Y-%m-%d'),
-                'source': 'WASDE Fixed'
+                'stocks_to_use': stu,
+                'stocks_change': yoy,
+                'last_updated':  datetime.now().strftime('%Y-%m-%d'),
+                'source':        'USDA QuickStats LIVE',
             },
-            'factors': [f"Ample stocks ({stocks_to_use:.0%})"]
+            'factors': factors[:2],
         }
+
+    def _score_from_market_proxy(self):
+        """Fallback: wheat/corn price ratio as supply proxy.
+        High ratio = market pricing in tight wheat = bullish."""
+        try:
+            end   = datetime.now()
+            start = end - timedelta(days=400)
+
+            wdf = yf.Ticker("ZW=F").history(start=start, end=end, auto_adjust=False)
+            cdf = yf.Ticker("ZC=F").history(start=start, end=end, auto_adjust=False)
+
+            if wdf.empty or cdf.empty:
+                return self._get_default_estimates()
+
+            ratio  = wdf['Close'] / cdf['Close'].reindex(wdf.index, method='ffill')
+            ratio  = ratio.dropna()
+            zscore = (ratio.iloc[-1] - ratio.mean()) / ratio.std()
+
+            print(f"         W/C ratio z-score: {zscore:+.2f}")
+
+            if zscore > 0.75:
+                signal, score = 'BULLISH', 0.15
+                note = f"Wheat expensive vs corn (z={zscore:+.2f})"
+            elif zscore < -0.75:
+                signal, score = 'BEARISH', -0.10
+                note = f"Wheat cheap vs corn (z={zscore:+.2f})"
+            else:
+                signal, score = 'NEUTRAL', 0.0
+                note = f"Wheat/corn ratio normal (z={zscore:+.2f})"
+
+            return {
+                'signal': signal,
+                'score':  score,
+                'data': {
+                    'stocks_to_use': 0.0,
+                    'stocks_change': 0,
+                    'last_updated':  datetime.now().strftime('%Y-%m-%d'),
+                    'source':        'Market proxy (W/C ratio)',
+                },
+                'factors': [note],
+            }
+
+        except Exception as e:
+            print(f"Market proxy error: {e}")
+            return self._get_default_estimates()
 
     def _get_default_estimates(self):
         month = datetime.now().month
