@@ -963,7 +963,7 @@ def main():
             gate_allowed = True   # non-fatal — allow if gate fails to load
         # ─────────────────────────────────────────────────────────────────────
 
-        if send_alert and enhanced_conf >= MIN_CONFIDENCE and gate_allowed:
+        if send_alert and enhanced_conf >= MIN_CONFIDENCE:
             stop = price * (1 - STOP_LOSS_PCT) if direction == "UP" else price * (1 + STOP_LOSS_PCT)
             stop_wide = price * (1 - STOP_LOSS_WIDE_PCT) if direction == "UP" else price * (1 + STOP_LOSS_WIDE_PCT)
             target = price * (1 + TAKE_PROFIT_PCT) if direction == "UP" else price * (1 - TAKE_PROFIT_PCT)
@@ -983,16 +983,51 @@ def main():
             def clean(text):
                 return str(text).replace('_', ' ').replace('*', '').replace('`', '').replace('[', '').replace(']', '')
 
+            # Build conviction block — shown on every alert so you can decide
+            tier_emojis  = {1: "💎", 2: "🥇", 3: "🥈", 4: "🥉"}
+            tier_labels  = {
+                1: "TIER 1 — Historical accuracy: 100% (6/yr)",
+                2: "TIER 2 — Historical accuracy: 94.7% (9/yr)",
+                3: "TIER 3 — Historical accuracy: 94.1% (8/yr)",
+                4: "TIER 4 — Historical accuracy: 81.7% (45/yr)",
+                0: "NO TIER — Baseline accuracy: 68% (daily)",
+            }
+            tier_advice  = {
+                1: "STRONG SETUP — high confidence to enter",
+                2: "STRONG SETUP — high confidence to enter",
+                3: "GOOD SETUP — consider entering",
+                4: "MODERATE SETUP — use smaller size",
+                0: "WEAK SETUP — wait or skip today",
+            }
+            t_emoji  = tier_emojis.get(gate_tier, "⚪")
+            t_label  = tier_labels.get(gate_tier, "")
+            t_advice = tier_advice.get(gate_tier, "")
+
+            # Gate conditions summary for transparency
+            if gate_tier > 0:
+                conditions_met = []
+                if gate_conditions.get('bearish_month'):  conditions_met.append("Harvest month")
+                if gate_conditions.get('in_lower_half'):  conditions_met.append(f"Low in range ({gate_conditions.get('range_pct', 0):.0%})")
+                if gate_conditions.get('rsi_oversold'):   conditions_met.append(f"RSI oversold ({gate_conditions.get('rsi', 0):.0f})")
+                if gate_conditions.get('vol_low'):        conditions_met.append(f"Low volume ({gate_conditions.get('vol_ratio', 0):.1f}x)")
+                if gate_conditions.get('inside_bb'):      conditions_met.append("Inside BB")
+                conditions_str = " | ".join(conditions_met)
+            else:
+                missing = []
+                if not gate_conditions.get('bearish_month', False): missing.append("Not harvest month")
+                if not gate_conditions.get('in_lower_half', False):  missing.append(f"High in range ({gate_conditions.get('range_pct', 0):.0%})")
+                if not gate_conditions.get('vol_low', False):        missing.append(f"Vol {gate_conditions.get('vol_ratio', 0):.1f}x (not low)")
+                conditions_str = "Missing: " + " | ".join(missing[:3])
+
             message = (
                 f"*WHEAT ALERT - ULTIMATE v3.0*\n"
                 f"Morning Alert\n\n"
                 f"{'UP' if direction == 'UP' else 'DOWN'} ({enhanced_conf:.1%})\n"
                 f"Price: {price:.2f}c\n\n"
-                f"{gate_msg}\n\n" if gate_msg else
-                f"*WHEAT ALERT - ULTIMATE v3.0*\n"
-                f"Morning Alert\n\n"
-                f"{'UP' if direction == 'UP' else 'DOWN'} ({enhanced_conf:.1%})\n"
-                f"Price: {price:.2f}c\n\n"
+                f"*{t_emoji} CONVICTION RATING:*\n"
+                f"{t_label}\n"
+                f"{conditions_str}\n"
+                f"DECISION: {t_advice}\n\n"
                 f"*ENSEMBLE AI:*\n"
                 f"LSTM: {clean(prediction['model_details']['LSTM'])}\n"
                 f"RF: {clean(prediction['model_details']['RandomForest'])}\n"
