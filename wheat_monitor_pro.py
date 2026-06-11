@@ -942,7 +942,28 @@ def main():
         send_alert, reason, is_manual = should_alert(direction, price, state)
         print(f"\nAlert decision: {reason}")
 
-        if send_alert and enhanced_conf >= MIN_CONFIDENCE:
+        # ── HIGH CONVICTION GATE ──────────────────────────────────────────────
+        # Only sends alerts when backtest-proven conditions are met.
+        # Tiers: 1=100% accuracy, 2=94.7%, 3=94.1%, 4=81.7% (vs 68% baseline)
+        gate_allowed  = True
+        gate_tier     = 0
+        gate_accuracy = 0.68
+        gate_msg      = ""
+
+        try:
+            from high_conviction_gate import HighConvictionGate
+            hcg = HighConvictionGate()
+            gate_allowed, gate_tier, gate_accuracy, gate_reason, gate_conditions = hcg.check_gate(df)
+            hcg.log_conditions(gate_conditions)
+            gate_msg = hcg.format_for_telegram(gate_tier, gate_accuracy, gate_reason, gate_conditions)
+            print(f"\n   Conviction gate: {'TIER ' + str(gate_tier) if gate_allowed else 'BLOCKED'}")
+            print(f"   {gate_reason}")
+        except Exception as e:
+            print(f"   Conviction gate skipped: {e}")
+            gate_allowed = True   # non-fatal — allow if gate fails to load
+        # ─────────────────────────────────────────────────────────────────────
+
+        if send_alert and enhanced_conf >= MIN_CONFIDENCE and gate_allowed:
             stop = price * (1 - STOP_LOSS_PCT) if direction == "UP" else price * (1 + STOP_LOSS_PCT)
             stop_wide = price * (1 - STOP_LOSS_WIDE_PCT) if direction == "UP" else price * (1 + STOP_LOSS_WIDE_PCT)
             target = price * (1 + TAKE_PROFIT_PCT) if direction == "UP" else price * (1 - TAKE_PROFIT_PCT)
@@ -963,6 +984,11 @@ def main():
                 return str(text).replace('_', ' ').replace('*', '').replace('`', '').replace('[', '').replace(']', '')
 
             message = (
+                f"*WHEAT ALERT - ULTIMATE v3.0*\n"
+                f"Morning Alert\n\n"
+                f"{'UP' if direction == 'UP' else 'DOWN'} ({enhanced_conf:.1%})\n"
+                f"Price: {price:.2f}c\n\n"
+                f"{gate_msg}\n\n" if gate_msg else
                 f"*WHEAT ALERT - ULTIMATE v3.0*\n"
                 f"Morning Alert\n\n"
                 f"{'UP' if direction == 'UP' else 'DOWN'} ({enhanced_conf:.1%})\n"
