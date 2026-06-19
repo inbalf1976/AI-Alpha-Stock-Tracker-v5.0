@@ -120,8 +120,10 @@ class EnsemblePredictor:
 
         feat = feat.dropna()
 
-        # Align index with LSTM y labels (starts at seq_len)
-        feat = feat.iloc[self.seq_len - len(feat):]
+        # Align with LSTM y labels: y has (len(df) - seq_len) rows
+        # so we take the last (len(df) - seq_len) rows of feat
+        n_labels = len(df) - self.seq_len
+        feat = feat.iloc[-n_labels:]
 
         # Scale
         scaled = self.scaler_ml.fit_transform(feat.fillna(0))
