@@ -18,5 +18,17 @@
     "actual_move_pct": null,
     "exit_price": null,
     "pnl_cents": null
+  },
+  {
+    "timestamp": "2026-06-19T11:54:41.925669",
+    "direction": "DOWN",
+    "entry_price": 605.75,
+    "confidence": 0.92,
+    "tier": 0,
+    "seasonal_phase": "NEUTRAL",
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
   }
 ]
