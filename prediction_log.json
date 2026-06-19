@@ -1,0 +1,22 @@
+[
+  {
+    "timestamp": "2026-06-19T06:55:46.402975",
+    "direction": "UP",
+    "entry_price": 612.75,
+    "confidence": 0.9467848169677314,
+    "factors": {
+      "seasonal": "BEARISH",
+      "weather": "BULLISH",
+      "wasde": "NEUTRAL",
+      "volume": "NEUTRAL",
+      "ensemble": "MAJORITY (2/3)"
+    },
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "directional_correct": null,
+    "actual_move_pct": null,
+    "exit_price": null,
+    "pnl_cents": null
+  }
+]
