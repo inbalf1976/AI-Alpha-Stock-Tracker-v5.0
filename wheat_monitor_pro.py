@@ -745,9 +745,25 @@ def main():
     if df_raw.index[-1].date() == datetime.now().date():
         df_raw = df_raw.iloc[:-1]
 
+    # ── Market day check ──
+    # If last candle is more than 3 calendar days old and this is a scheduled
+    # (not manual) run → market is closed, skip alert
+    last_candle_date = df_raw.index[-1].date()
+    days_since_candle = (datetime.now().date() - last_candle_date).days
+    is_weekend_or_holiday = days_since_candle >= 3
+
+    if is_weekend_or_holiday and not is_manual:
+        print(f"\nMarket closed — last candle was {last_candle_date} ({days_since_candle} days ago)")
+        print("No alert sent on non-trading days")
+        save_state(state)
+        return
+
+    if is_weekend_or_holiday:
+        print(f"\nNote: Last trading day was {last_candle_date} ({days_since_candle} days ago) — market was closed")
+
     # Get real current price (use most recent available)
     current_price = float(df_raw['Close'].iloc[-1])
-    print(f"Price: {current_price:.2f}¢  ({df_raw.index[-1].date()})")
+    print(f"Price: {current_price:.2f}¢  ({last_candle_date})")
 
     df = add_indicators(df_raw)
 
