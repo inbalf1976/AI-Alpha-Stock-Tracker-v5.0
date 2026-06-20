@@ -777,6 +777,23 @@ def main():
     print(f"  Weather: {weather['signal']}")
     print(f"  Volume:  {volume['signal']} ({volume['ratio']:.1f}x)")
 
+    # Cost floor
+    print("\nCalculating cost floor...")
+    cost_signal = None
+    try:
+        from cost_floor_analyzer import CostFloorAnalyzer
+        cfa         = CostFloorAnalyzer()
+        cost_signal = cfa.get_floor_signal(current_price)
+        # Cost floor near price = strong BUY bias — boost confidence if direction agrees
+        if cost_signal['signal'] in ('STRONG_BUY', 'BUY') and direction == 'UP':
+            confidence = min(0.92, confidence + 0.05)
+            print(f"  Cost floor boost: +5% (price near floor)")
+        elif cost_signal['signal'] == 'BEARISH' and direction == 'DOWN':
+            confidence = min(0.92, confidence + 0.03)
+            print(f"  Cost floor boost: +3% (price above fair value)")
+    except Exception as e:
+        print(f"  Cost floor skipped: {e}")
+
     # ── Ensemble ──
     print("\nTraining ensemble models...")
     ensemble = EnsemblePredictor()
@@ -853,7 +870,9 @@ def main():
             f"Agreement: {pred['agreement']}\n"
             f"Trend: {trend_data['trend']} ({trend_data['strength']})\n\n"
             f"*FUNDAMENTALS:*\n"
-            f"WASDE: {wasde['signal']} | Weather: {weather['signal']} | Vol: {volume['ratio']:.1f}x\n\n"
+            f"WASDE: {wasde['signal']} | Weather: {weather['signal']} | Vol: {volume['ratio']:.1f}x\n"
+            + (f"Cost floor: {cost_signal['floor_cents']:.0f}¢ ({cost_signal['distance_pct']:+.1%} above) — {cost_signal['signal']}\n" if cost_signal else "") +
+            f"\n"
             f"*TRADE SETUP:*\n"
             f"Entry: {current_price:.2f}¢\n"
             f"Stop:  {stop:.2f}¢ (1.5%)\n"
