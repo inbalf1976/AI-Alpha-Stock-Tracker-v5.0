@@ -777,23 +777,6 @@ def main():
     print(f"  Weather: {weather['signal']}")
     print(f"  Volume:  {volume['signal']} ({volume['ratio']:.1f}x)")
 
-    # Cost floor
-    print("\nCalculating cost floor...")
-    cost_signal = None
-    try:
-        from cost_floor_analyzer import CostFloorAnalyzer
-        cfa         = CostFloorAnalyzer()
-        cost_signal = cfa.get_floor_signal(current_price)
-        # Cost floor near price = strong BUY bias — boost confidence if direction agrees
-        if cost_signal['signal'] in ('STRONG_BUY', 'BUY') and direction == 'UP':
-            confidence = min(0.92, confidence + 0.05)
-            print(f"  Cost floor boost: +5% (price near floor)")
-        elif cost_signal['signal'] == 'BEARISH' and direction == 'DOWN':
-            confidence = min(0.92, confidence + 0.03)
-            print(f"  Cost floor boost: +3% (price above fair value)")
-    except Exception as e:
-        print(f"  Cost floor skipped: {e}")
-
     # ── Ensemble ──
     print("\nTraining ensemble models...")
     ensemble = EnsemblePredictor()
@@ -806,7 +789,7 @@ def main():
     # ── Seasonal override (most important filter) ──
     seasonal_blocked, seasonal_block_reason = seasonal.blocks_direction(direction)
     if seasonal_blocked:
-        print(f"\n⚠️  SEASONAL OVERRIDE: {seasonal_block_reason}")
+        print(f"\n  SEASONAL OVERRIDE: {seasonal_block_reason}")
         direction = 'DOWN' if direction == 'UP' else 'UP'
         pred['confidence'] = 0.62
         print(f"   Direction flipped to {direction}")
@@ -814,13 +797,12 @@ def main():
     # ── Trend filter ──
     trend_blocked, trend_block_reason = trend_engine.blocks_direction(direction, trend_data)
     if trend_blocked:
-        print(f"⚠️  TREND FILTER: {trend_block_reason}")
+        print(f"  TREND FILTER: {trend_block_reason}")
         direction = 'DOWN' if direction == 'UP' else 'UP'
         pred['confidence'] = 0.58
         print(f"   Direction flipped to {direction}")
 
-    # ── Final confidence (no artificial boosting) ──
-    # Small adjustments only — WASDE and volume as mild modifiers
+    # ── Final confidence ──
     confidence = pred['confidence']
     if wasde['signal'] == ('BULLISH' if direction == 'UP' else 'BEARISH'):
         confidence = min(0.92, confidence + 0.03)
@@ -829,6 +811,22 @@ def main():
     if s_phase['phase'] == ('BULLISH' if direction == 'UP' else 'BEARISH'):
         confidence = min(0.92, confidence + 0.03)
 
+    # ── Cost floor (after direction is known) ──
+    print("\nCalculating cost floor...")
+    cost_signal = None
+    try:
+        from cost_floor_analyzer import CostFloorAnalyzer
+        cfa         = CostFloorAnalyzer()
+        cost_signal = cfa.get_floor_signal(current_price)
+        if cost_signal['signal'] in ('STRONG_BUY', 'BUY') and direction == 'UP':
+            confidence = min(0.92, confidence + 0.05)
+            print(f"  Cost floor boost: +5% (price near floor)")
+        elif cost_signal['signal'] == 'BEARISH' and direction == 'DOWN':
+            confidence = min(0.92, confidence + 0.03)
+            print(f"  Cost floor boost: +3% (price above fair value)")
+    except Exception as e:
+        print(f"  Cost floor skipped: {e}")
+
     print(f"\nFINAL: {direction} ({confidence:.1%}) | Tier {tier} | Expected accuracy: {accuracy:.0%}")
 
     # ── Build and send alert ──
@@ -836,47 +834,50 @@ def main():
         stop   = current_price * (1 - STOP_PCT) if direction == 'UP' else current_price * (1 + STOP_PCT)
         target = current_price * (1 + TARGET_PCT) if direction == 'UP' else current_price * (1 - TARGET_PCT)
 
+        # Build cost floor line cleanly
         tier_labels = {
-            1: "💎 TIER 1 — 100% historical accuracy",
-            2: "🥇 TIER 2 — 94.7% historical accuracy",
-            3: "🥉 TIER 3 — 81.7% historical accuracy",
-            0: "⚪ NO TIER — 68% baseline (consider skipping)",
+            1: "TIER 1 - 100% historical accuracy",
+            2: "TIER 2 - 94.7% historical accuracy",
+            3: "TIER 3 - 81.7% historical accuracy",
+            0: "NO TIER - 68% baseline (consider skipping)",
         }
         tier_advice = {
-            1: "STRONG — high confidence to enter",
-            2: "STRONG — high confidence to enter",
-            3: "MODERATE — consider entering",
-            0: "WEAK — wait or skip today",
+            1: "STRONG - high confidence to enter",
+            2: "STRONG - high confidence to enter",
+            3: "MODERATE - consider entering",
+            0: "WEAK - wait or skip today",
         }
 
-        seasonal_override_note = f"\n⚠️ Seasonal override applied\n" if seasonal_blocked else ""
-        trend_override_note    = f"⚠️ Trend filter applied\n"        if trend_blocked    else ""
+        if cost_signal:
+            cost_line = f"Cost floor: {cost_signal['floor_cents']:.0f}c ({cost_signal['distance_pct']:+.1%} above) - {cost_signal['signal']}"
+        else:
+            cost_line = ""
+
+        seasonal_override_note = "Seasonal override applied\n" if seasonal_blocked else ""
+        trend_override_note    = "Trend filter applied\n"      if trend_blocked    else ""
 
         message = (
             f"*WHEAT MONITOR v4.0*\n\n"
-            f"{'🟢 UP' if direction == 'UP' else '🔴 DOWN'} ({confidence:.1%})\n"
-            f"Price: {current_price:.2f}¢\n\n"
+            f"{'UP' if direction == 'UP' else 'DOWN'} ({confidence:.1%})\n"
+            f"Price: {current_price:.2f}c\n\n"
             f"*{tier_labels[tier]}*\n"
             f"RSI: {gate_conds['rsi']:.0f} | Vol: {gate_conds['vol_ratio']:.1f}x | "
             f"Range: {gate_conds['range_pct']:.0%}\n"
             f"DECISION: {tier_advice[tier]}\n"
             f"{seasonal_override_note}"
             f"{trend_override_note}\n"
-            f"*SEASONAL PHASE:* {s_phase['phase']} ({s_phase['confidence']:.0%})\n"
-            f"{s_phase['explanation']}\n"
-            f"Next 20d: {s_phase['pos_days']} up / {s_phase['neg_days']} down days\n\n"
+            f"*SEASONAL:* {s_phase['phase']} ({s_phase['confidence']:.0%})\n"
+            f"{s_phase['explanation']} | Next 20d: {s_phase['pos_days']}up/{s_phase['neg_days']}down\n\n"
             f"*MODELS:*\n"
             f"LSTM: {pred['lstm']:.3f} | RF: {pred['rf']:.3f} | XGB: {pred['xgb']:.3f}\n"
-            f"Agreement: {pred['agreement']}\n"
-            f"Trend: {trend_data['trend']} ({trend_data['strength']})\n\n"
+            f"Agreement: {pred['agreement']} | Trend: {trend_data['trend']} ({trend_data['strength']})\n\n"
             f"*FUNDAMENTALS:*\n"
             f"WASDE: {wasde['signal']} | Weather: {weather['signal']} | Vol: {volume['ratio']:.1f}x\n"
-            + (f"Cost floor: {cost_signal['floor_cents']:.0f}¢ ({cost_signal['distance_pct']:+.1%} above) — {cost_signal['signal']}\n" if cost_signal else "") +
-            f"\n"
+            f"{cost_line}\n\n"
             f"*TRADE SETUP:*\n"
-            f"Entry: {current_price:.2f}¢\n"
-            f"Stop:  {stop:.2f}¢ (1.5%)\n"
-            f"Target: {target:.2f}¢ (2.5%)\n"
+            f"Entry: {current_price:.2f}c\n"
+            f"Stop:  {stop:.2f}c (1.5%)\n"
+            f"Target: {target:.2f}c (2.5%)\n"
             f"R:R = 1.67:1\n\n"
             f"_{reason}_"
         )
