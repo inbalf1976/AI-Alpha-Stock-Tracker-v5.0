@@ -676,13 +676,16 @@ def send_telegram(message):
         print("Telegram not configured")
         return False
     try:
+        # Send as plain text — no markdown parsing, no 400 errors
         r = requests.post(
             f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
-            data={"chat_id": TELEGRAM_CHAT, "text": message, "parse_mode": "Markdown"},
+            data={"chat_id": TELEGRAM_CHAT, "text": message},
             timeout=10
         )
         success = r.status_code == 200
         print(f"   Telegram: {'✓ sent' if success else '✗ failed'} ({r.status_code})")
+        if not success:
+            print(f"   Error: {r.text[:200]}")
         return success
     except Exception as e:
         print(f"   Telegram error: {e}")
@@ -857,29 +860,31 @@ def main():
         trend_override_note    = "Trend filter applied\n"      if trend_blocked    else ""
 
         message = (
-            f"*WHEAT MONITOR v4.0*\n\n"
+            f"WHEAT MONITOR v4.0\n"
+            f"------------------------------\n"
             f"{'UP' if direction == 'UP' else 'DOWN'} ({confidence:.1%})\n"
             f"Price: {current_price:.2f}c\n\n"
-            f"*{tier_labels[tier]}*\n"
-            f"RSI: {gate_conds['rsi']:.0f} | Vol: {gate_conds['vol_ratio']:.1f}x | "
-            f"Range: {gate_conds['range_pct']:.0%}\n"
+            f"CONVICTION:\n"
+            f"{tier_labels[tier]}\n"
+            f"RSI: {gate_conds['rsi']:.0f} | Vol: {gate_conds['vol_ratio']:.1f}x | Range: {gate_conds['range_pct']:.0%}\n"
             f"DECISION: {tier_advice[tier]}\n"
             f"{seasonal_override_note}"
             f"{trend_override_note}\n"
-            f"*SEASONAL:* {s_phase['phase']} ({s_phase['confidence']:.0%})\n"
-            f"{s_phase['explanation']} | Next 20d: {s_phase['pos_days']}up/{s_phase['neg_days']}down\n\n"
-            f"*MODELS:*\n"
+            f"SEASONAL: {s_phase['phase']} ({s_phase['confidence']:.0%})\n"
+            f"{s_phase['explanation']}\n"
+            f"Next 20d: {s_phase['pos_days']} up / {s_phase['neg_days']} down\n\n"
+            f"MODELS:\n"
             f"LSTM: {pred['lstm']:.3f} | RF: {pred['rf']:.3f} | XGB: {pred['xgb']:.3f}\n"
             f"Agreement: {pred['agreement']} | Trend: {trend_data['trend']} ({trend_data['strength']})\n\n"
-            f"*FUNDAMENTALS:*\n"
+            f"FUNDAMENTALS:\n"
             f"WASDE: {wasde['signal']} | Weather: {weather['signal']} | Vol: {volume['ratio']:.1f}x\n"
             f"{cost_line}\n\n"
-            f"*TRADE SETUP:*\n"
-            f"Entry: {current_price:.2f}c\n"
-            f"Stop:  {stop:.2f}c (1.5%)\n"
+            f"TRADE SETUP:\n"
+            f"Entry:  {current_price:.2f}c\n"
+            f"Stop:   {stop:.2f}c (1.5%)\n"
             f"Target: {target:.2f}c (2.5%)\n"
             f"R:R = 1.67:1\n\n"
-            f"_{reason}_"
+            f"{reason}"
         )
 
         success = send_telegram(message)
