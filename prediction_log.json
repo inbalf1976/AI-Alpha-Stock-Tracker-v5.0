@@ -87,5 +87,17 @@
     "outcome": null,
     "exit_reason": null,
     "pnl_cents": null
+  },
+  {
+    "timestamp": "2026-06-23T02:17:54.652235+03:00",
+    "direction": "UP",
+    "entry_price": 607.0,
+    "confidence": 0.92,
+    "tier": 0,
+    "seasonal_phase": "NEUTRAL",
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
   }
 ]
