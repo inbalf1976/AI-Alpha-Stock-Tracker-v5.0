@@ -6,7 +6,7 @@ Built from scratch using everything learned over the past month.
 DESIGN PRINCIPLES:
   1. Seasonal truth first — 5 years of ZW=F history defines the calendar
      2022 excluded (Ukraine war = global anomaly)
-  2. Real price always — uses current session price, never stale close
+  2. Real price always — uses LIVE current price (not stale daily bar)
   3. Trend respect — never fights a confirmed multi-day trend
   4. Conviction gate — only alerts on historically proven setups
   5. Honest confidence — no artificial boosting, real probabilities only
@@ -20,6 +20,16 @@ SIGNAL HIERARCHY (in order of weight):
   5. Fundamental context — WASDE multi-grain, weather, volume
 
 ACCURACY TARGET: 80%+ on Tier 1/2 setups (~6-10 alerts/month)
+
+CHANGELOG (this version):
+  - FIX: current_price now comes from a live quote (get_live_price),
+    not the last daily bar. The old logic dropped "today's" candle
+    to avoid using an incomplete bar, but that meant current_price
+    could silently lag by days around weekends/holidays. Now the
+    daily bars still drive all indicators/seasonal/trend calcs —
+    only the single "current price" used for entry/stop/target is
+    live. If the live fetch fails, this is now flagged explicitly
+    (⚠️ STALE) instead of failing silently.
 """
 
 import os, sys, json, warnings, requests
@@ -51,6 +61,38 @@ TELEGRAM_CHAT   = os.getenv("TELEGRAM_CHAT_ID")
 
 # Years to exclude from seasonal calculation (global anomalies)
 EXCLUDE_YEARS   = [2022]
+
+# ── LIVE PRICE FETCH ──────────────────────────────────────────────────────────
+
+def get_live_price(ticker=TICKER):
+    """
+    Fetches the actual live/last-traded price, separate from the
+    daily historical bars used for indicators. Daily bars can lag
+    by days around holidays/weekends or while today's session is
+    still forming — this pulls the real current quote instead.
+
+    Returns (price, is_live). is_live=False means the live fetch
+    failed and the caller should fall back to the last daily close,
+    while flagging it clearly rather than trusting it silently.
+    """
+    try:
+        fast = yf.Ticker(ticker).fast_info
+        live = fast.get('last_price') or fast.get('lastPrice')
+        if live and live > 0:
+            return float(live), True
+    except Exception as e:
+        print(f"   fast_info live price failed: {e}")
+
+    # Fallback: try 1-minute intraday bars for today
+    try:
+        intraday = yf.Ticker(ticker).history(period='1d', interval='1m')
+        if not intraday.empty:
+            return float(intraday['Close'].iloc[-1]), True
+    except Exception as e:
+        print(f"   intraday fallback failed: {e}")
+
+    return None, False
+
 
 # ── SEASONAL ENGINE ───────────────────────────────────────────────────────────
 
@@ -784,8 +826,14 @@ def main():
         save_state(state)
         return
 
-    current_price = float(df_raw['Close'].iloc[-1])
-    print(f"Price: {current_price:.2f}c  ({last_candle_date})")
+    # ── FIX: use LIVE price for current_price, daily bars stay for indicators ──
+    live_price, is_live_price = get_live_price()
+    if is_live_price:
+        current_price = live_price
+        print(f"Price: {current_price:.2f}c  (LIVE — daily bar was {last_candle_date})")
+    else:
+        current_price = float(df_raw['Close'].iloc[-1])
+        print(f"Price: {current_price:.2f}c  ⚠️ (STALE — daily bar {last_candle_date}, live fetch failed)")
 
     df = add_indicators(df_raw)
 
