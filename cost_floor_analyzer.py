@@ -1,7 +1,7 @@
 """
 COST FLOOR ANALYZER
 ====================
-Fetches real wheat production cost data from USDA ERS and AMS.
+Fetches real wheat production cost data from USDA NASS Quick Stats.
 Calculates the dynamic break-even floor price for wheat.
 
 WHY THIS MATTERS:
@@ -15,13 +15,18 @@ WHY THIS MATTERS:
   Above 650¢: farmers plant more → supply increases → price falls
 
 DATA SOURCES:
-  - USDA ERS Commodity Costs and Returns (wheat cost per bushel)
-  - USDA AMS Illinois Fertilizer Report (input cost trends)
-  - USDA NASS Agricultural Prices (fuel/input index)
+  - USDA NASS Quick Stats API — live season-average farm price
+    (PRICE RECEIVED, $/BU, national level). This is the same live
+    number USDA references in WASDE (e.g. the $6.00-6.50/bu
+    2026/27 season-average price), fetched via API instead of
+    scraping a static ERS Excel file that can silently break.
+  - Natural gas / crude oil proxies for fertilizer and fuel cost drift.
 
 FALLBACK:
-  If APIs unavailable, uses historical cost estimates updated by
-  fertilizer and fuel price proxies from commodity markets.
+  If the live NASS fetch fails for any reason, falls back to a
+  hardcoded historical estimate — and now FLAGS this clearly in
+  both the returned signal dict and the formatted Telegram alert,
+  so a silent stale-data failure is never invisible again.
 """
 
 import os
@@ -39,9 +44,10 @@ from datetime import datetime, timedelta
 CACHE_FILE    = Path("cost_floor_cache.json")
 CACHE_HOURS   = 72   # cost data changes slowly — cache 3 days
 
-# Historical US wheat cost of production (USDA ERS baseline, $/bu)
-# Updated from ERS Commodity Costs and Returns report
-BASELINE_COST_PER_BU = 6.10   # ~610¢/bu (2024-2025 USDA estimate)
+# Historical US wheat cost of production (fallback only, $/bu)
+# Used ONLY if the live USDA NASS fetch fails. Update this periodically
+# by hand as a sanity backstop, but it should rarely be hit in practice.
+BASELINE_COST_PER_BU = 6.10   # ~610¢/bu fallback estimate
 
 # Cost component weights (from USDA ERS wheat cost structure)
 # These are the main variable costs that change with input prices
@@ -58,7 +64,7 @@ COST_WEIGHTS = {
 class CostFloorAnalyzer:
     """
     Calculates the dynamic wheat cost-of-production floor.
-    Combines USDA data with real-time input cost proxies.
+    Combines a live USDA farm-price fetch with real-time input cost proxies.
     """
 
     def __init__(self):
@@ -118,7 +124,10 @@ class CostFloorAnalyzer:
             signal      = 'NEUTRAL'
             implication = f"Price in fair value range ({distance_pct:+.1%} above floor)"
 
-        print(f"   Cost floor: {floor_cents:.0f}¢/bu ({source})")
+        is_live = components.get('is_live', False)
+        live_tag = "LIVE" if is_live else "⚠️ FALLBACK"
+
+        print(f"   Cost floor: {floor_cents:.0f}¢/bu ({source}) [{live_tag}]")
         print(f"   Current:    {current_price_cents:.0f}¢/bu")
         print(f"   Distance:   {distance_pct:+.1%} above floor")
         print(f"   Signal:     {signal}")
@@ -139,22 +148,23 @@ class CostFloorAnalyzer:
     def _calculate_floor(self):
         """
         Calculate current cost-of-production floor using:
-        1. USDA ERS base cost (most authoritative)
+        1. Live USDA NASS season-average farm price (most authoritative,
+           updates automatically as USDA revises it through the season)
         2. Adjusted by current fertilizer and fuel price changes
         """
         print("   Calculating cost floor...")
 
-        # Try USDA ERS first
-        ers_cost = self._fetch_ers_cost()
+        # Try live USDA NASS farm price first
+        farm_price, is_live = self._fetch_farm_price()
 
-        if ers_cost:
-            base_cost = ers_cost
-            source    = "USDA ERS"
-            print(f"   USDA ERS cost: ${base_cost:.2f}/bu")
+        if is_live:
+            base_cost = farm_price
+            source    = "USDA NASS LIVE"
+            print(f"   USDA NASS live farm price: ${base_cost:.2f}/bu")
         else:
             base_cost = BASELINE_COST_PER_BU
-            source    = "Baseline estimate"
-            print(f"   Using baseline: ${base_cost:.2f}/bu")
+            source    = "FALLBACK (live fetch failed)"
+            print(f"   ⚠️ Live fetch failed — using stale fallback: ${base_cost:.2f}/bu")
 
         # Adjust for current input prices
         fertilizer_adj = self._get_fertilizer_adjustment()
@@ -175,6 +185,7 @@ class CostFloorAnalyzer:
             'fuel_adj':         round(fuel_adj, 4),
             'total_adjustment': round(total_adjustment, 4),
             'final_cost':       round(adjusted_cost, 2),
+            'is_live':          is_live,
         }
 
         print(f"   Fertilizer adj: {fertilizer_adj:+.1%}")
@@ -183,55 +194,70 @@ class CostFloorAnalyzer:
 
         return adjusted_cost, source, components
 
-    # ── USDA ERS fetch ────────────────────────────────────────────────────────
+    # ── USDA NASS live farm price fetch ───────────────────────────────────────
 
-    def _fetch_ers_cost(self):
+    def _fetch_farm_price(self):
         """
-        Fetch wheat cost of production from USDA ERS.
-        URL: ers.usda.gov/data-products/commodity-costs-and-returns
-        Returns cost in $/bushel or None if unavailable.
+        Fetch the current season-average farm price directly from
+        USDA NASS Quick Stats — the same live number USDA references
+        in WASDE (e.g. the $6.00-6.50/bu 2026/27 season-average price).
+
+        Far more reliable than scraping the ERS cost-of-production Excel
+        file, which uses a brittle static URL and fragile column parsing
+        that can fail silently.
+
+        Returns:
+            (price_per_bu, is_live) tuple.
+            is_live=False means the fetch failed and caller should use
+            the hardcoded BASELINE_COST_PER_BU fallback instead.
         """
+        api_key  = os.getenv("USDA_API_KEY", "3338B84E-694D-3E6A-925C-F35064C59BAE")
+        base_url = "https://quickstats.nass.usda.gov/api/api_GET/"
+
         try:
-            # USDA ERS provides CSV download
-            url = "https://www.ers.usda.gov/webdocs/DataFiles/50048/WheatCostsReturn.xlsx"
-            r   = requests.get(url, timeout=20)
+            r = requests.get(base_url, params={
+                'key': api_key, 'source_desc': 'SURVEY',
+                'commodity_desc': 'WHEAT',
+                'statisticcat_desc': 'PRICE RECEIVED',
+                'unit_desc': '$ / BU',
+                'agg_level_desc': 'NATIONAL',
+                'format': 'JSON', 'year__GE': 2025,
+            }, timeout=15)
 
-            if r.status_code == 200 and len(r.content) > 1000:
-                # Parse Excel file
-                from io import BytesIO
-                df = pd.read_excel(BytesIO(r.content), sheet_name=0, header=None)
+            if r.status_code == 200:
+                records = r.json().get('data', [])
+                if records:
+                    # Sort by year + reference period, most recent first
+                    records = sorted(
+                        records,
+                        key=lambda x: (x.get('year', 0), x.get('reference_period_desc', '')),
+                        reverse=True
+                    )
+                    for rec in records:
+                        try:
+                            price = float(str(rec['Value']).replace(',', ''))
+                            if 3.0 < price < 15.0:  # sanity check $/bu
+                                return price, True
+                        except (ValueError, KeyError, TypeError):
+                            continue
 
-                # Find most recent total cost per bushel
-                # ERS format: rows are years, columns include "Total, gross value of production"
-                for col in df.columns:
-                    col_data = df[col].astype(str)
-                    if col_data.str.contains('Total operating', case=False, na=False).any():
-                        # Found cost column — get most recent non-null value
-                        cost_col = df[col + 1] if col + 1 in df.columns else None
-                        if cost_col is not None:
-                            numeric = pd.to_numeric(cost_col, errors='coerce').dropna()
-                            if len(numeric) > 0:
-                                cost = float(numeric.iloc[-1])
-                                if 3.0 < cost < 15.0:  # sanity check $/bu
-                                    return cost
-            return None
+            print(f"   NASS farm price: no usable records (status {r.status_code})")
+            return None, False
 
         except Exception as e:
-            print(f"   ERS fetch: {e}")
-            return None
+            print(f"   NASS farm price fetch failed: {e}")
+            return None, False
 
     # ── input cost adjustments ────────────────────────────────────────────────
 
     def _get_fertilizer_adjustment(self):
         """
         Estimate fertilizer price change vs baseline using:
-        - UAN (urea ammonium nitrate) futures proxy: UNG natural gas
+        - Natural gas futures proxy (NG=F)
           (fertilizer production is ~70% natural gas cost)
         - Falls back to 0% adjustment if unavailable
         """
         try:
-            # Natural gas is the primary input for nitrogen fertilizer
-            # Price change in natgas → similar % change in fertilizer
             end   = datetime.now()
             start = end - timedelta(days=400)
 
@@ -240,14 +266,12 @@ class CostFloorAnalyzer:
             if ng.empty or len(ng) < 60:
                 return 0.0
 
-            # Compare current price to 1-year average
             current_ng = float(ng['Close'].iloc[-1])
             avg_ng_1yr = float(ng['Close'].mean())
 
             # Fertilizer cost changes at ~60% of natgas price change
-            # (other inputs buffer the full impact)
-            ng_change       = (current_ng - avg_ng_1yr) / avg_ng_1yr
-            fertilizer_adj  = ng_change * 0.60
+            ng_change      = (current_ng - avg_ng_1yr) / avg_ng_1yr
+            fertilizer_adj = ng_change * 0.60
 
             # Cap at ±30% to prevent extreme swings
             return float(np.clip(fertilizer_adj, -0.30, 0.30))
@@ -320,11 +344,14 @@ class CostFloorAnalyzer:
         }
         emoji = signal_emojis.get(signal_data['signal'], '⚪')
 
+        is_live = signal_data['components'].get('is_live', False)
+        warning = "" if is_live else "\n⚠️ Using stale fallback cost data — live NASS fetch failed"
+
         return (
             f"{emoji} *COST FLOOR:* {signal_data['floor_cents']:.0f}¢/bu\n"
             f"Current: {signal_data['current_cents']:.0f}¢ "
             f"({signal_data['distance_pct']:+.1%} above floor)\n"
-            f"{signal_data['implication']}"
+            f"{signal_data['implication']}{warning}"
         )
 
 
