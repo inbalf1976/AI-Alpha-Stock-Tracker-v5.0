@@ -1,0 +1,441 @@
+{
+  "run_date": "2026-07-07T10:36:33.542847",
+  "baseline_up": 0.682,
+  "baseline_down": 0.266,
+  "total_days": 500,
+  "individual_conditions": [
+    {
+      "condition": "vol_low",
+      "n": 91,
+      "up_accuracy": 0.813,
+      "down_accuracy": 0.154,
+      "best_direction": "UP",
+      "best_accuracy": 0.813
+    },
+    {
+      "condition": "bearish_month",
+      "n": 62,
+      "up_accuracy": 0.726,
+      "down_accuracy": 0.242,
+      "best_direction": "UP",
+      "best_accuracy": 0.726
+    },
+    {
+      "condition": "momentum_up",
+      "n": 81,
+      "up_accuracy": 0.667,
+      "down_accuracy": 0.321,
+      "best_direction": "UP",
+      "best_accuracy": 0.667
+    },
+    {
+      "condition": "rsi_oversold",
+      "n": 46,
+      "up_accuracy": 0.652,
+      "down_accuracy": 0.348,
+      "best_direction": "UP",
+      "best_accuracy": 0.652
+    },
+    {
+      "condition": "wc_bullish",
+      "n": 131,
+      "up_accuracy": 0.649,
+      "down_accuracy": 0.321,
+      "best_direction": "UP",
+      "best_accuracy": 0.649
+    },
+    {
+      "condition": "in_lower_half",
+      "n": 143,
+      "up_accuracy": 0.643,
+      "down_accuracy": 0.315,
+      "best_direction": "UP",
+      "best_accuracy": 0.643
+    },
+    {
+      "condition": "inside_bb",
+      "n": 191,
+      "up_accuracy": 0.639,
+      "down_accuracy": 0.309,
+      "best_direction": "UP",
+      "best_accuracy": 0.639
+    },
+    {
+      "condition": "rsi_neutral",
+      "n": 131,
+      "up_accuracy": 0.634,
+      "down_accuracy": 0.313,
+      "best_direction": "UP",
+      "best_accuracy": 0.634
+    },
+    {
+      "condition": "macd_bullish",
+      "n": 124,
+      "up_accuracy": 0.629,
+      "down_accuracy": 0.323,
+      "best_direction": "UP",
+      "best_accuracy": 0.629
+    },
+    {
+      "condition": "vol_good",
+      "n": 249,
+      "up_accuracy": 0.627,
+      "down_accuracy": 0.329,
+      "best_direction": "UP",
+      "best_accuracy": 0.627
+    },
+    {
+      "condition": "rsi_overbought",
+      "n": 32,
+      "up_accuracy": 0.625,
+      "down_accuracy": 0.344,
+      "best_direction": "UP",
+      "best_accuracy": 0.625
+    },
+    {
+      "condition": "in_upper_half",
+      "n": 74,
+      "up_accuracy": 0.622,
+      "down_accuracy": 0.324,
+      "best_direction": "UP",
+      "best_accuracy": 0.622
+    },
+    {
+      "condition": "momentum_down",
+      "n": 85,
+      "up_accuracy": 0.612,
+      "down_accuracy": 0.388,
+      "best_direction": "UP",
+      "best_accuracy": 0.612
+    },
+    {
+      "condition": "near_bb_lower",
+      "n": 23,
+      "up_accuracy": 0.609,
+      "down_accuracy": 0.391,
+      "best_direction": "UP",
+      "best_accuracy": 0.609
+    },
+    {
+      "condition": "trend_aligned",
+      "n": 154,
+      "up_accuracy": 0.578,
+      "down_accuracy": 0.37,
+      "best_direction": "UP",
+      "best_accuracy": 0.578
+    },
+    {
+      "condition": "bullish_month",
+      "n": 104,
+      "up_accuracy": 0.577,
+      "down_accuracy": 0.365,
+      "best_direction": "UP",
+      "best_accuracy": 0.577
+    },
+    {
+      "condition": "above_sma20",
+      "n": 127,
+      "up_accuracy": 0.575,
+      "down_accuracy": 0.346,
+      "best_direction": "UP",
+      "best_accuracy": 0.575
+    },
+    {
+      "condition": "above_sma50",
+      "n": 145,
+      "up_accuracy": 0.572,
+      "down_accuracy": 0.372,
+      "best_direction": "UP",
+      "best_accuracy": 0.572
+    },
+    {
+      "condition": "near_bb_upper",
+      "n": 35,
+      "up_accuracy": 0.571,
+      "down_accuracy": 0.4,
+      "best_direction": "UP",
+      "best_accuracy": 0.571
+    },
+    {
+      "condition": "wc_bearish",
+      "n": 63,
+      "up_accuracy": 0.556,
+      "down_accuracy": 0.397,
+      "best_direction": "UP",
+      "best_accuracy": 0.556
+    },
+    {
+      "condition": "vol_high",
+      "n": 108,
+      "up_accuracy": 0.481,
+      "down_accuracy": 0.454,
+      "best_direction": "UP",
+      "best_accuracy": 0.481
+    }
+  ],
+  "best_combinations": [
+    {
+      "conditions": [
+        "bearish_month",
+        "rsi_oversold",
+        "in_lower_half"
+      ],
+      "n": 13,
+      "up_accuracy": 1.0,
+      "down_accuracy": 0.0,
+      "best_direction": "UP",
+      "best_accuracy": 1.0
+    },
+    {
+      "conditions": [
+        "bearish_month",
+        "rsi_oversold",
+        "in_lower_half",
+        "vol_good"
+      ],
+      "n": 13,
+      "up_accuracy": 1.0,
+      "down_accuracy": 0.0,
+      "best_direction": "UP",
+      "best_accuracy": 1.0
+    },
+    {
+      "conditions": [
+        "rsi_oversold",
+        "wc_bullish",
+        "in_lower_half"
+      ],
+      "n": 10,
+      "up_accuracy": 1.0,
+      "down_accuracy": 0.0,
+      "best_direction": "UP",
+      "best_accuracy": 1.0
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "momentum_up",
+        "rsi_neutral",
+        "macd_bullish"
+      ],
+      "n": 10,
+      "up_accuracy": 1.0,
+      "down_accuracy": 0.0,
+      "best_direction": "UP",
+      "best_accuracy": 1.0
+    },
+    {
+      "conditions": [
+        "bearish_month",
+        "rsi_oversold",
+        "wc_bullish",
+        "in_lower_half"
+      ],
+      "n": 10,
+      "up_accuracy": 1.0,
+      "down_accuracy": 0.0,
+      "best_direction": "UP",
+      "best_accuracy": 1.0
+    },
+    {
+      "conditions": [
+        "rsi_oversold",
+        "wc_bullish",
+        "in_lower_half",
+        "vol_good"
+      ],
+      "n": 10,
+      "up_accuracy": 1.0,
+      "down_accuracy": 0.0,
+      "best_direction": "UP",
+      "best_accuracy": 1.0
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "momentum_up",
+        "rsi_neutral",
+        "macd_bullish",
+        "vol_good"
+      ],
+      "n": 10,
+      "up_accuracy": 1.0,
+      "down_accuracy": 0.0,
+      "best_direction": "UP",
+      "best_accuracy": 1.0
+    },
+    {
+      "conditions": [
+        "bearish_month",
+        "rsi_oversold",
+        "wc_bullish",
+        "in_lower_half",
+        "vol_good"
+      ],
+      "n": 10,
+      "up_accuracy": 1.0,
+      "down_accuracy": 0.0,
+      "best_direction": "UP",
+      "best_accuracy": 1.0
+    },
+    {
+      "conditions": [
+        "bearish_month",
+        "rsi_oversold",
+        "in_lower_half",
+        "inside_bb"
+      ],
+      "n": 8,
+      "up_accuracy": 1.0,
+      "down_accuracy": 0.0,
+      "best_direction": "UP",
+      "best_accuracy": 1.0
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "momentum_up",
+        "inside_bb",
+        "rsi_neutral",
+        "macd_bullish"
+      ],
+      "n": 8,
+      "up_accuracy": 1.0,
+      "down_accuracy": 0.0,
+      "best_direction": "UP",
+      "best_accuracy": 1.0
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "wc_bullish",
+        "rsi_neutral",
+        "macd_bullish",
+        "in_upper_half"
+      ],
+      "n": 8,
+      "up_accuracy": 1.0,
+      "down_accuracy": 0.0,
+      "best_direction": "UP",
+      "best_accuracy": 1.0
+    },
+    {
+      "conditions": [
+        "bearish_month",
+        "rsi_oversold",
+        "in_lower_half",
+        "inside_bb",
+        "vol_good"
+      ],
+      "n": 8,
+      "up_accuracy": 1.0,
+      "down_accuracy": 0.0,
+      "best_direction": "UP",
+      "best_accuracy": 1.0
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "in_lower_half",
+        "macd_bullish"
+      ],
+      "n": 15,
+      "up_accuracy": 0.933,
+      "down_accuracy": 0.067,
+      "best_direction": "UP",
+      "best_accuracy": 0.933
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "in_lower_half",
+        "macd_bullish",
+        "vol_good"
+      ],
+      "n": 15,
+      "up_accuracy": 0.933,
+      "down_accuracy": 0.067,
+      "best_direction": "UP",
+      "best_accuracy": 0.933
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "wc_bullish",
+        "inside_bb",
+        "macd_bullish",
+        "in_upper_half"
+      ],
+      "n": 15,
+      "up_accuracy": 0.933,
+      "down_accuracy": 0.067,
+      "best_direction": "UP",
+      "best_accuracy": 0.933
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "in_lower_half",
+        "inside_bb",
+        "macd_bullish"
+      ],
+      "n": 14,
+      "up_accuracy": 0.929,
+      "down_accuracy": 0.071,
+      "best_direction": "UP",
+      "best_accuracy": 0.929
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "in_lower_half",
+        "inside_bb",
+        "macd_bullish",
+        "vol_good"
+      ],
+      "n": 14,
+      "up_accuracy": 0.929,
+      "down_accuracy": 0.071,
+      "best_direction": "UP",
+      "best_accuracy": 0.929
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "momentum_up",
+        "in_upper_half"
+      ],
+      "n": 13,
+      "up_accuracy": 0.923,
+      "down_accuracy": 0.077,
+      "best_direction": "UP",
+      "best_accuracy": 0.923
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "momentum_up",
+        "wc_bullish",
+        "in_upper_half"
+      ],
+      "n": 13,
+      "up_accuracy": 0.923,
+      "down_accuracy": 0.077,
+      "best_direction": "UP",
+      "best_accuracy": 0.923
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "momentum_up",
+        "vol_good",
+        "in_upper_half"
+      ],
+      "n": 13,
+      "up_accuracy": 0.923,
+      "down_accuracy": 0.077,
+      "best_direction": "UP",
+      "best_accuracy": 0.923
+    }
+  ]
+}
