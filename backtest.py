@@ -1,16 +1,31 @@
 """
-WHEAT ACCURACY BACKTEST
-========================
+WHEAT ACCURACY BACKTEST v2 - WITH TRAIN/HOLDOUT VALIDATION
+=============================================================
 Run this once in GitHub Actions (or locally) to find which combinations
 of conditions actually preceded a 2.5% target hit before a 1.5% stop hit.
+
+CHANGELOG (this version):
+  Added a chronological train/holdout split. The original version
+  searched hundreds of condition combinations against the FULL dataset
+  and reported the single best result — a textbook overfitting setup,
+  since testing hundreds of combos against the same data you're
+  measuring against will always turn up something that looks like
+  100% by chance, even with no real edge.
+
+  Now: combos are DISCOVERED only on the training period (older ~70%
+  of the lookback window), then separately RE-TESTED on the holdout
+  period (most recent ~30%, which also happens to include this year's
+  drought/price action). If a combo's accuracy collapses on the
+  holdout, that's your proof it was overfit, not a real edge.
 
 Usage:
   python3 backtest.py
 
 Output:
-  - Prints each condition's individual accuracy
-  - Prints all combinations that achieve 70%+ accuracy
-  - Saves results to backtest_results.json
+  - Prints each condition's individual accuracy (on train data)
+  - Prints best combinations found on TRAIN, then their REAL accuracy
+    on the HOLDOUT they never saw
+  - Saves results to backtest_results.json, with both numbers labeled
 """
 
 import yfinance as yf
@@ -22,9 +37,10 @@ import json
 import warnings
 warnings.filterwarnings('ignore')
 
-STOP_PCT   = 0.015
-TARGET_PCT = 0.025
+STOP_PCT      = 0.015
+TARGET_PCT    = 0.025
 LOOKBACK_DAYS = 730  # 2 years
+TRAIN_FRACTION = 0.70  # older 70% = train, most recent 30% = holdout
 
 # ── fetch data ────────────────────────────────────────────────────────────────
 
@@ -52,19 +68,16 @@ def fetch_data():
 def build_features(daily, corn, soy):
     df = daily.copy()
 
-    # Returns
     df['ret_1d']  = df['Close'].pct_change(1)
     df['ret_3d']  = df['Close'].pct_change(3)
     df['ret_5d']  = df['Close'].pct_change(5)
 
-    # Trend
     df['sma20'] = df['Close'].rolling(20).mean()
     df['sma50'] = df['Close'].rolling(50).mean()
     df['above_sma20'] = (df['Close'] > df['sma20']).astype(int)
     df['above_sma50'] = (df['Close'] > df['sma50']).astype(int)
-    df['trend_aligned'] = ((df['sma20'] > df['sma50'])).astype(int)  # 1=uptrend
+    df['trend_aligned'] = ((df['sma20'] > df['sma50'])).astype(int)
 
-    # RSI
     delta = df['Close'].diff()
     gain  = delta.where(delta > 0, 0).rolling(14).mean()
     loss  = (-delta.where(delta < 0, 0)).rolling(14).mean()
@@ -73,32 +86,26 @@ def build_features(daily, corn, soy):
     df['rsi_overbought']= (df['rsi'] > 65).astype(int)
     df['rsi_neutral']   = ((df['rsi'] >= 40) & (df['rsi'] <= 60)).astype(int)
 
-    # MACD
     ema12 = df['Close'].ewm(span=12).mean()
     ema26 = df['Close'].ewm(span=26).mean()
     df['macd']        = ema12 - ema26
     df['macd_signal'] = df['macd'].ewm(span=9).mean()
     df['macd_bullish']= (df['macd'] > df['macd_signal']).astype(int)
 
-    # ATR — volatility gate
     hl   = df['High'] - df['Low']
     hc   = (df['High'] - df['Close'].shift()).abs()
     lc   = (df['Low']  - df['Close'].shift()).abs()
     df['atr']     = pd.concat([hl, hc, lc], axis=1).max(axis=1).rolling(14).mean()
     df['atr_pct'] = df['atr'] / df['Close']
-    # ATR must be > 1.0% for target to be reachable
     df['vol_ok']  = (df['atr_pct'] > 0.010).astype(int)
-    # ATR must be < 3.5% — too volatile = unpredictable
     df['vol_not_extreme'] = (df['atr_pct'] < 0.035).astype(int)
     df['vol_good'] = (df['vol_ok'] & df['vol_not_extreme']).astype(int)
 
-    # Volume
     df['vol_avg'] = df['Volume'].rolling(20).mean()
     df['vol_ratio'] = df['Volume'] / df['vol_avg']
     df['vol_high']  = (df['vol_ratio'] > 1.2).astype(int)
     df['vol_low']   = (df['vol_ratio'] < 0.8).astype(int)
 
-    # Bollinger Bands
     bb_mid   = df['Close'].rolling(20).mean()
     bb_std   = df['Close'].rolling(20).std()
     df['bb_upper'] = bb_mid + 2 * bb_std
@@ -107,7 +114,6 @@ def build_features(daily, corn, soy):
     df['near_bb_upper'] = (df['Close'] > bb_mid + 1.5 * bb_std).astype(int)
     df['inside_bb']     = (~(df['near_bb_lower'].astype(bool) | df['near_bb_upper'].astype(bool))).astype(int)
 
-    # Wheat/corn ratio
     corn_aligned = corn['Close'].reindex(df.index, method='ffill')
     soy_aligned  = soy['Close'].reindex(df.index,  method='ffill')
     wc_ratio = df['Close'] / corn_aligned
@@ -117,22 +123,17 @@ def build_features(daily, corn, soy):
     df['wc_bullish'] = (df['wc_zscore'] > 0.5).astype(int)
     df['wc_bearish'] = (df['wc_zscore'] < -0.5).astype(int)
 
-    # Price position in 52-week range
     df['high52'] = df['Close'].rolling(252).max()
     df['low52']  = df['Close'].rolling(252).min()
     df['range_pct'] = (df['Close'] - df['low52']) / (df['high52'] - df['low52'])
     df['in_lower_half'] = (df['range_pct'] < 0.4).astype(int)
     df['in_upper_half'] = (df['range_pct'] > 0.6).astype(int)
 
-    # Momentum consistency — same direction 2 days in a row
     df['momentum_up']   = ((df['ret_1d'] > 0) & (df['ret_3d'] > 0)).astype(int)
     df['momentum_down'] = ((df['ret_1d'] < 0) & (df['ret_3d'] < 0)).astype(int)
 
-    # Seasonal month
     df['month'] = df.index.month
-    # Historically bullish months for wheat: Mar, Apr, May, Nov, Dec
     df['bullish_month'] = df['month'].isin([3, 4, 5, 11, 12]).astype(int)
-    # Historically bearish months: Jun, Jul, Aug
     df['bearish_month'] = df['month'].isin([6, 7, 8]).astype(int)
 
     return df.dropna()
@@ -140,11 +141,6 @@ def build_features(daily, corn, soy):
 # ── validate outcome using next-day hourly bars ───────────────────────────────
 
 def compute_outcomes(daily, hourly):
-    """
-    For each daily close, simulate entering next morning.
-    Use hourly bars to check if +2.5% target or -1.5% stop was hit first.
-    Returns a Series: True = WIN (target hit first), False = LOSS (stop hit first), NaN = still open
-    """
     outcomes_up   = {}
     outcomes_down = {}
 
@@ -163,14 +159,12 @@ def compute_outcomes(daily, hourly):
         stop_down   = entry_price * (1 + STOP_PCT)
         target_down = entry_price * (1 - TARGET_PCT)
 
-        # Get next day's hourly bars
         next_day_mask = (hourly.index.normalize() == exit_window)
         next_bars = hourly[next_day_mask]
 
         if next_bars.empty:
             continue
 
-        # Walk bars — UP trade
         win_up = loss_up = win_down = loss_down = None
         for _, bar in next_bars.iterrows():
             if win_up is None and loss_up is None:
@@ -179,7 +173,6 @@ def compute_outcomes(daily, hourly):
                 if bar['High'] >= target_up:
                     win_up = True
                 if win_up and loss_up:
-                    # both in same bar — conservative: count as loss
                     win_up = None
                     break
 
@@ -192,7 +185,6 @@ def compute_outcomes(daily, hourly):
                     win_down = None
                     break
 
-        # If neither hit — use close vs entry
         if win_up is None and loss_up is None:
             final_close = float(next_bars['Close'].iloc[-1])
             win_up = final_close > entry_price
@@ -206,17 +198,37 @@ def compute_outcomes(daily, hourly):
 
     return pd.Series(outcomes_up), pd.Series(outcomes_down)
 
+# ── train/holdout split ───────────────────────────────────────────────────────
+
+def split_train_holdout(df, outcomes_up, outcomes_down, train_fraction=TRAIN_FRACTION):
+    """
+    Chronological split — NOT random. Train = older data, holdout =
+    most recent data (which naturally includes this year's drought
+    and price action). This is the correct way to validate a trading
+    signal: you can only ever trade forward in time, never backward,
+    so the test must respect that same direction.
+    """
+    dates = df.index.sort_values()
+    split_idx = int(len(dates) * train_fraction)
+    split_date = dates[split_idx]
+
+    train_df = df[df.index < split_date]
+    holdout_df = df[df.index >= split_date]
+
+    train_up   = outcomes_up[outcomes_up.index < split_date]
+    train_down = outcomes_down[outcomes_down.index < split_date]
+    holdout_up   = outcomes_up[outcomes_up.index >= split_date]
+    holdout_down = outcomes_down[outcomes_down.index >= split_date]
+
+    print(f"\nTrain/Holdout split at {split_date.date()}:")
+    print(f"  Train:   {len(train_df)} rows ({train_df.index.min().date()} to {train_df.index.max().date()})")
+    print(f"  Holdout: {len(holdout_df)} rows ({holdout_df.index.min().date()} to {holdout_df.index.max().date()})")
+
+    return train_df, holdout_df, train_up, train_down, holdout_up, holdout_down
+
 # ── backtest each condition ───────────────────────────────────────────────────
 
 def backtest_conditions(df, outcomes_up, outcomes_down):
-    """
-    For each condition, calculate:
-    - UP accuracy when condition is True
-    - DOWN accuracy when condition is True
-    - Sample size
-    """
-
-    # Align outcomes with features
     df_aligned = df[df.index.isin(outcomes_up.index)].copy()
     up_outcomes   = outcomes_up.reindex(df_aligned.index)
     down_outcomes = outcomes_down.reindex(df_aligned.index)
@@ -260,13 +272,9 @@ def backtest_conditions(df, outcomes_up, outcomes_down):
     results.sort(key=lambda x: x['best_accuracy'], reverse=True)
     return results
 
-# ── find best combinations ────────────────────────────────────────────────────
+# ── find best combinations (TRAIN ONLY) ───────────────────────────────────────
 
 def find_best_combinations(df, outcomes_up, outcomes_down, top_conditions, target_accuracy=0.75):
-    """
-    Test combinations of 3-5 conditions to find those exceeding target_accuracy.
-    Only tests the top 10 individual conditions to keep compute manageable.
-    """
     df_aligned    = df[df.index.isin(outcomes_up.index)].copy()
     up_outcomes   = outcomes_up.reindex(df_aligned.index)
     down_outcomes = outcomes_down.reindex(df_aligned.index)
@@ -274,7 +282,7 @@ def find_best_combinations(df, outcomes_up, outcomes_down, top_conditions, targe
     top_conds = [r['condition'] for r in top_conditions[:12]]
     combo_results = []
 
-    print(f"\nTesting combinations of top {len(top_conds)} conditions...")
+    print(f"\nTesting combinations of top {len(top_conds)} conditions (TRAIN data only)...")
 
     for r in [3, 4, 5]:
         for combo in combinations(top_conds, r):
@@ -304,92 +312,153 @@ def find_best_combinations(df, outcomes_up, outcomes_down, top_conditions, targe
     combo_results.sort(key=lambda x: (x['best_accuracy'], x['n']), reverse=True)
     return combo_results
 
+# ── re-test a combo on holdout data it never saw ──────────────────────────────
+
+def evaluate_combo_on_holdout(holdout_df, holdout_up, holdout_down, conditions):
+    """
+    THE KEY VALIDATION STEP. Takes a combo that was found to look good
+    on TRAIN data, and checks its real accuracy on HOLDOUT data it was
+    never fitted to. If accuracy collapses here, the combo was overfit
+    noise, not a real edge — regardless of how good it looked on train.
+    """
+    df_aligned = holdout_df[holdout_df.index.isin(holdout_up.index)].copy()
+    up_outcomes   = holdout_up.reindex(df_aligned.index)
+    down_outcomes = holdout_down.reindex(df_aligned.index)
+
+    mask = pd.Series(True, index=df_aligned.index)
+    for c in conditions:
+        if c in df_aligned.columns:
+            mask = mask & (df_aligned[c] == 1)
+
+    n = int(mask.sum())
+    if n == 0:
+        return {'n': 0, 'up_accuracy': None, 'down_accuracy': None, 'note': 'Condition never occurred in holdout period'}
+
+    up_acc   = float(up_outcomes[mask].mean())
+    down_acc = float(down_outcomes[mask].mean())
+
+    return {
+        'n': n,
+        'up_accuracy':   round(up_acc, 3),
+        'down_accuracy': round(down_acc, 3),
+        'best_direction': 'UP' if up_acc > down_acc else 'DOWN',
+        'best_accuracy':  round(max(up_acc, down_acc), 3),
+    }
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 def main():
     print("=" * 60)
-    print("WHEAT ACCURACY BACKTEST")
+    print("WHEAT ACCURACY BACKTEST v2 - TRAIN/HOLDOUT VALIDATION")
     print(f"Stop: {STOP_PCT:.1%} | Target: {TARGET_PCT:.1%} | Lookback: {LOOKBACK_DAYS}d")
+    print(f"Train fraction: {TRAIN_FRACTION:.0%} (older) | Holdout: {1-TRAIN_FRACTION:.0%} (most recent)")
     print("=" * 60)
 
-    # 1. Fetch data
     daily, hourly, corn, soy = fetch_data()
 
-    # 2. Build features
     print("\nBuilding features...")
     df = build_features(daily, corn, soy)
     print(f"Feature rows: {len(df)}")
 
-    # 3. Compute outcomes
     print("\nComputing outcomes (stop/target hits)...")
     outcomes_up, outcomes_down = compute_outcomes(daily, hourly)
     print(f"Outcomes computed: {len(outcomes_up)}")
 
     baseline_up   = float(outcomes_up.mean())
     baseline_down = float(outcomes_down.mean())
-    print(f"\nBaseline (no filter): UP={baseline_up:.1%} DOWN={baseline_down:.1%}")
-    print(f"Average daily range: {((daily['High']-daily['Low'])/daily['Close']*100).mean():.2f}%")
+    print(f"\nBaseline (full data, no filter): UP={baseline_up:.1%} DOWN={baseline_down:.1%}")
 
-    # 4. Test individual conditions
+    # ── SPLIT ──
+    train_df, holdout_df, train_up, train_down, holdout_up, holdout_down = \
+        split_train_holdout(df, outcomes_up, outcomes_down)
+
+    # ── Individual conditions — TRAIN ONLY ──
     print("\n" + "=" * 60)
-    print("INDIVIDUAL CONDITION ACCURACY")
+    print("INDIVIDUAL CONDITION ACCURACY (TRAIN DATA)")
     print("=" * 60)
-    condition_results = backtest_conditions(df, outcomes_up, outcomes_down)
+    condition_results = backtest_conditions(train_df, train_up, train_down)
 
     for r in condition_results[:15]:
         print(f"  {r['condition']:<25} n={r['n']:>4} | "
               f"UP={r['up_accuracy']:.1%} DOWN={r['down_accuracy']:.1%} | "
               f"Best: {r['best_direction']} @ {r['best_accuracy']:.1%}")
 
-    # 5. Find best combinations
+    # ── Best combinations — TRAIN ONLY ──
     print("\n" + "=" * 60)
-    print("COMBINATIONS ACHIEVING 75%+ ACCURACY")
+    print("COMBINATIONS ACHIEVING 75%+ ACCURACY (TRAIN DATA)")
     print("=" * 60)
     combo_results = find_best_combinations(
-        df, outcomes_up, outcomes_down,
+        train_df, train_up, train_down,
         condition_results,
         target_accuracy=0.75
     )
 
-    if combo_results:
-        for r in combo_results[:20]:
-            print(f"  {r['best_direction']} @ {r['best_accuracy']:.1%} (n={r['n']}) | "
-                  f"Conditions: {' + '.join(r['conditions'])}")
-    else:
-        print("  No combinations hit 75% — printing best found:")
-        combo_results_all = find_best_combinations(
-            df, outcomes_up, outcomes_down,
+    if not combo_results:
+        print("  No combinations hit 75% on train — lowering threshold to 60%")
+        combo_results = find_best_combinations(
+            train_df, train_up, train_down,
             condition_results,
             target_accuracy=0.60
         )
-        for r in combo_results_all[:10]:
-            print(f"  {r['best_direction']} @ {r['best_accuracy']:.1%} (n={r['n']}) | "
-                  f"Conditions: {' + '.join(r['conditions'])}")
 
-    # 6. Save results
+    # ── THE KEY STEP: re-test top train combos on HOLDOUT ──
+    print("\n" + "=" * 60)
+    print("HOLDOUT VALIDATION — DOES IT SURVIVE UNSEEN DATA?")
+    print("=" * 60)
+    print(f"{'TRAIN result':<35} | {'HOLDOUT result (real test)'}")
+    print("-" * 75)
+
+    validated_results = []
+    for r in combo_results[:15]:
+        holdout_eval = evaluate_combo_on_holdout(holdout_df, holdout_up, holdout_down, r['conditions'])
+
+        train_str = f"{r['best_direction']} @ {r['best_accuracy']:.1%} (n={r['n']})"
+        if holdout_eval['n'] == 0:
+            holdout_str = "NEVER OCCURRED in holdout"
+        else:
+            holdout_str = f"{holdout_eval['best_direction']} @ {holdout_eval['best_accuracy']:.1%} (n={holdout_eval['n']})"
+
+        # Flag large drops as likely overfit
+        flag = ""
+        if holdout_eval['n'] > 0 and holdout_eval['best_accuracy'] is not None:
+            drop = r['best_accuracy'] - holdout_eval['best_accuracy']
+            if drop > 0.25:
+                flag = "  ⚠️ LIKELY OVERFIT (big drop)"
+            elif drop > 0.10:
+                flag = "  ⚠️ accuracy dropped meaningfully"
+
+        print(f"{train_str:<35} | {holdout_str}{flag}")
+        print(f"  Conditions: {' + '.join(r['conditions'])}")
+
+        validated_results.append({
+            'conditions': r['conditions'],
+            'train': r,
+            'holdout': holdout_eval,
+        })
+
+    # ── Save everything, clearly labeled ──
     output = {
         'run_date':          datetime.now().isoformat(),
-        'baseline_up':       baseline_up,
-        'baseline_down':     baseline_down,
-        'total_days':        len(outcomes_up),
-        'individual_conditions': condition_results,
-        'best_combinations': combo_results[:20] if combo_results else [],
+        'baseline_up_full':  baseline_up,
+        'baseline_down_full': baseline_down,
+        'train_period':      f"{train_df.index.min().date()} to {train_df.index.max().date()}",
+        'holdout_period':    f"{holdout_df.index.min().date()} to {holdout_df.index.max().date()}",
+        'individual_conditions_train': condition_results,
+        'combinations_train_and_holdout': validated_results,
     }
 
     with open('backtest_results.json', 'w') as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f, indent=2, default=str)
 
-    print(f"\n✅ Results saved to backtest_results.json")
+    print(f"\n✅ Results saved to backtest_results.json (now includes train AND holdout numbers)")
     print("\n" + "=" * 60)
     print("SUMMARY")
     print("=" * 60)
-    print(f"Baseline accuracy:  UP={baseline_up:.1%} | DOWN={baseline_down:.1%}")
-    if combo_results:
-        best = combo_results[0]
-        print(f"Best combo found:   {best['best_direction']} @ {best['best_accuracy']:.1%} "
-              f"(n={best['n']} trades)")
-        print(f"Conditions: {' + '.join(best['conditions'])}")
-    print("\nNext step: share backtest_results.json and we build the gate from real numbers.")
+    print(f"Baseline (full data): UP={baseline_up:.1%} | DOWN={baseline_down:.1%}")
+    print("\nOnly trust a combo for ConvictionGate if its HOLDOUT accuracy is")
+    print("close to its TRAIN accuracy. A big gap between the two columns")
+    print("above means that combo was fitted to noise, not a real pattern —")
+    print("do not wire it into wheat_monitor_pro.py's ConvictionGate.")
 
 
 if __name__ == "__main__":
