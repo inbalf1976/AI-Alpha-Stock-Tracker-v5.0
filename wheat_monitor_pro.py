@@ -996,6 +996,7 @@ def main():
             cost_signal = cost_signal,
             gate_accuracy = accuracy,
             gate_reason   = gate_reason,
+            final_direction = direction,
         )
 
         # Add ensemble footnote
