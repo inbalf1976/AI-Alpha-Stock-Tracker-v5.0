@@ -259,77 +259,115 @@ class TrendEngine:
 
 class ConvictionGate:
     """
-    Backtest-derived conviction tiers.
-    Based on real ZW=F 2yr backtest (stop=1.5%, target=2.5%):
-      Tier 1: bearish_month + in_lower_half + rsi_oversold → 100% (13 trades)
-      Tier 2: vol_low + bearish_month + in_lower_half      → 94.7% (19 trades)
-      Tier 3: vol_low + in_lower_half                      → 81.7% (45 trades)
-      Tier 0: no conditions met                            → 68% baseline
+    REBUILT 2026-07-09 using real train/holdout backtest validation
+    (see backtest.py and backtest_results.json).
+
+    The previous version of this class used combinations found by
+    searching hundreds of condition combos against a single dataset,
+    reporting the best result as "100% accuracy". That number was
+    proven fake: when tested against a holdout period the combos
+    were never fitted to, most either collapsed to ~55-62% (barely
+    better than a coin flip) or never occurred at all in the last
+    4 months of data.
+
+    This version uses ONLY single conditions that were individually
+    validated on a real holdout set AND beat the baseline UP rate
+    (67.46% — wheat trended up most of this 2-year window anyway,
+    so anything below that adds zero real value, even if it "looks"
+    high in isolation).
+
+    CONFIRMED CONDITIONS (holdout period 2026-03-20 to 2026-07-09):
+      vol_low       : 84.8% UP (n=33 holdout) — strongest real signal
+      momentum_up   : 84.0% UP (n=25 holdout) — strong, worth watching for drift
+      macd_bullish  : 70.0% UP (n=30 holdout) — modest but real edge
+      bearish_month : 68.0% UP (n=25 holdout) — barely above baseline, weak
+
+    EXPLICITLY EXCLUDED (proven unreliable on holdout — DO NOT re-add):
+      rsi_oversold   : collapsed to 50.0% and flipped direction on holdout
+      momentum_down  : collapsed to 57.7% and flipped direction on holdout
+      near_bb_lower  : collapsed to 57.1% on tiny holdout sample (n=7)
+      in_lower_half  : never occurred once in the entire holdout period
+                        (consistent with this year's drought-driven price
+                        strength keeping wheat out of the bottom of its range)
+      wc_bullish, rsi_neutral, inside_bb, vol_good : all held up on holdout
+                        but scored BELOW the 67.46% baseline, meaning they
+                        add no real predictive value on their own
+
+    IMPORTANT: this backtest is a rolling 2-year window ending 2026-07-09.
+    Re-run backtest.py periodically (e.g. monthly) and update the numbers
+    below — do not let this drift stale the way the old hardcoded "100%"
+    numbers did.
     """
+
+    # Holdout-validated accuracies — update these when you re-run backtest.py
+    HOLDOUT_ACCURACY = {
+        'vol_low':       0.848,
+        'momentum_up':   0.840,
+        'macd_bullish':  0.700,
+        'bearish_month': 0.680,
+    }
+    BASELINE_UP = 0.6746  # from backtest_results.json baseline_up_full
 
     def evaluate(self, df):
         close = df['Close']
         price = float(close.iloc[-1])
-        month = datetime.now(IL).month
 
-        # RSI
-        delta = close.diff()
-        gain  = delta.where(delta > 0, 0).rolling(14).mean()
-        loss  = (-delta.where(delta < 0, 0)).rolling(14).mean()
-        rsi   = float(100 - (100 / (1 + gain / loss)).iloc[-1])
-
-        # Volume
+        # Volume (for vol_low)
         vol_avg   = float(df['Volume'].rolling(20).mean().iloc[-1])
         vol_curr  = float(df['Volume'].iloc[-1])
         vol_ratio = vol_curr / vol_avg if vol_avg > 0 else 1.0
+        vol_low   = vol_ratio < 0.80
 
-        # 52-week range position
-        prices_1yr = close.iloc[-252:] if len(close) >= 252 else close
-        high52     = float(prices_1yr.max())
-        low52      = float(prices_1yr.min())
-        range_pct  = (price - low52) / (high52 - low52) if high52 > low52 else 0.5
+        # Momentum (for momentum_up) — same-direction 1d and 3d returns
+        ret_1d = float(close.pct_change(1).iloc[-1])
+        ret_3d = float(close.pct_change(3).iloc[-1])
+        momentum_up = (ret_1d > 0) and (ret_3d > 0)
 
-        # Bollinger bands
-        bb_mid   = float(close.rolling(20).mean().iloc[-1])
-        bb_std   = float(close.rolling(20).std().iloc[-1])
-        inside_bb = abs(price - bb_mid) < 1.5 * bb_std
+        # MACD (for macd_bullish)
+        ema12 = close.ewm(span=12).mean()
+        ema26 = close.ewm(span=26).mean()
+        macd = ema12 - ema26
+        macd_signal = macd.ewm(span=9).mean()
+        macd_bullish = float(macd.iloc[-1]) > float(macd_signal.iloc[-1])
 
-        # Named conditions
+        # Month (for bearish_month)
+        month = datetime.now(IL).month
         bearish_month = month in [6, 7, 8]
-        in_lower_half = range_pct < 0.40
-        rsi_oversold  = rsi < 35
-        vol_low       = vol_ratio < 0.80
 
         conditions = {
-            'bearish_month': bearish_month,
-            'in_lower_half': in_lower_half,
-            'rsi_oversold':  rsi_oversold,
             'vol_low':       vol_low,
-            'inside_bb':     inside_bb,
-            'rsi':           round(rsi, 1),
+            'momentum_up':   momentum_up,
+            'macd_bullish':  macd_bullish,
+            'bearish_month': bearish_month,
             'vol_ratio':     round(vol_ratio, 2),
-            'range_pct':     round(range_pct, 3),
+            'ret_1d':        round(ret_1d, 4),
+            'ret_3d':        round(ret_3d, 4),
             'month':         month,
             'price':         round(price, 2),
         }
 
-        # Tier evaluation
-        if bearish_month and in_lower_half and rsi_oversold:
-            tier, accuracy = 1, 1.00
-            reason = f"💎 TIER 1 (100%) — Harvest + low range + RSI {rsi:.0f}"
-        elif vol_low and bearish_month and in_lower_half:
-            tier, accuracy = 2, 0.947
-            reason = f"🥇 TIER 2 (94.7%) — Low vol + harvest + low range"
-        elif vol_low and in_lower_half:
-            tier, accuracy = 3, 0.817
-            reason = f"🥉 TIER 3 (81.7%) — Low vol + low range"
+        # Rank active conditions by their real holdout accuracy — highest wins
+        active = [(name, acc) for name, acc in self.HOLDOUT_ACCURACY.items()
+                  if conditions.get(name)]
+
+        if not active:
+            tier, accuracy = 0, self.BASELINE_UP
+            reason = f"⚪ NO SIGNAL — baseline only ({self.BASELINE_UP:.1%}, no validated condition active)"
         else:
-            tier, accuracy = 0, 0.68
-            missing = []
-            if not bearish_month:  missing.append(f"not harvest month ({month})")
-            if not in_lower_half:  missing.append(f"high in range ({range_pct:.0%})")
-            if not vol_low:        missing.append(f"vol {vol_ratio:.1f}x")
-            reason = f"⚪ NO TIER (68%) — {' | '.join(missing[:2])}"
+            active.sort(key=lambda x: x[1], reverse=True)
+            best_name, best_acc = active[0]
+            active_names = " + ".join(name for name, _ in active)
+
+            if best_acc >= 0.80:
+                tier = 2
+                reason = f"🥇 TIER 2 (holdout-validated {best_acc:.1%}) — {active_names}"
+            elif best_acc >= 0.68:
+                tier = 1
+                reason = f"🥈 TIER 1 (holdout-validated {best_acc:.1%}) — {active_names}"
+            else:
+                tier = 0
+                reason = f"⚪ WEAK — {active_names} ({best_acc:.1%}, near baseline)"
+            accuracy = best_acc
 
         return tier, accuracy, reason, conditions
 
