@@ -1,28 +1,60 @@
 """
 HIGH CONVICTION GATE
 =====================
-Built from real backtest results on 2 years of ZW=F data.
-Only allows alerts when historically proven conditions are met.
+REBUILT 2026-07-09 to match the real, holdout-validated numbers now
+used in wheat_monitor_pro.py's ConvictionGate class.
 
-BACKTEST FINDINGS:
-  Baseline UP accuracy:  68.0%
-  Baseline DOWN accuracy: 26.4%
+WHY THIS CHANGED:
+  The previous version of this file claimed:
+    TIER 1: 100% accuracy (13 trades) — bearish_month + in_lower_half + rsi_oversold
+    TIER 2: 94.7% accuracy (19 trades)
+    TIER 3: 94.1% accuracy (17 trades)
+    TIER 4: 81.7% accuracy (93 trades) — vol_low alone
 
-  TIER 1 (100% accuracy, 8-13 trades):
-    bearish_month + in_lower_half + rsi_oversold
+  These numbers came from searching hundreds of condition combinations
+  against a single 2-year dataset and reporting the best result found —
+  a textbook overfitting setup. When tested against a holdout period
+  those combos were never fitted to (see backtest.py, backtest_results.json),
+  the results were:
+    - bearish_month + in_lower_half + rsi_oversold: NEVER OCCURRED in
+      the last 4 months of data at all
+    - Its close cousins that did occur collapsed to 54.5%-62.5%,
+      barely better than a coin flip
+    - rsi_oversold alone collapsed to 50.0% and flipped direction
+    - in_lower_half never occurred once in the holdout period —
+      consistent with this year's drought-driven price strength
+      keeping wheat out of the bottom of its 52-week range
 
-  TIER 2 (94.7% accuracy, 19 trades):
-    vol_low + bearish_month + in_lower_half
+BACKTEST FINDINGS (real, holdout-validated, as of 2026-07-09):
+  Baseline UP accuracy: 67.46% (wheat trended up most of this 2yr window,
+  so this is the real bar — anything below it adds zero value)
 
-  TIER 3 (94.1% accuracy, 17 trades):
-    vol_low + bearish_month + in_lower_half + inside_bb
+  Only 4 SINGLE conditions actually beat baseline on holdout data:
+    vol_low       : 84.8% UP (n=33 holdout) — strongest real signal
+    momentum_up   : 84.0% UP (n=25 holdout) — strong
+    macd_bullish  : 70.0% UP (n=30 holdout) — modest but real
+    bearish_month : 68.0% UP (n=25 holdout) — barely above baseline
 
-  TIER 4 (81.7% accuracy, 93 trades):
-    vol_low alone
+  EXCLUDED (proven unreliable on holdout — do not re-add):
+    rsi_oversold, momentum_down, near_bb_lower, in_lower_half,
+    wc_bullish, rsi_neutral, inside_bb, vol_good (last four held up
+    but scored BELOW baseline, meaning no real predictive value alone)
+
+  No combination-based tiers are used anymore. Searching combinations
+  reintroduces the exact overfitting problem that caused this rewrite.
+  If you want a combo-based tier in the future, it must be discovered
+  AND holdout-validated via backtest.py first — never wired in from a
+  single train-only search result.
 
 INTEGRATION:
   Call check_gate(df) before sending any alert.
-  Returns (allowed, tier, reason, conditions_met)
+  Returns (allowed, tier, accuracy, reason, conditions_met)
+  — same interface as before, so nothing calling this needs to change.
+
+MAINTENANCE:
+  Re-run backtest.py periodically and update HOLDOUT_ACCURACY /
+  BASELINE_UP below to match. Do not let these numbers go stale the
+  way the old hardcoded "100%" numbers did.
 """
 
 import pandas as pd
@@ -30,21 +62,27 @@ import numpy as np
 from datetime import datetime
 
 
-# ── thresholds (must match backtest exactly) ──────────────────────────────────
-RSI_OVERSOLD        = 35       # rsi_oversold
-VOL_RATIO_LOW       = 0.80     # vol_low: volume < 80% of 20-day avg
-BB_STD_INSIDE       = 1.5      # inside_bb: within 1.5 std of BB middle
-RANGE_PCT_LOWER     = 0.40     # in_lower_half: price in bottom 40% of 52wk range
-BEARISH_MONTHS      = [6, 7, 8]  # harvest season
+# ── holdout-validated accuracies (update when you re-run backtest.py) ─────────
+HOLDOUT_ACCURACY = {
+    'vol_low':       0.848,
+    'momentum_up':   0.840,
+    'macd_bullish':  0.700,
+    'bearish_month': 0.680,
+}
+BASELINE_UP = 0.6746  # from backtest_results.json baseline_up_full
 
-# Minimum sample size to trust a tier
+VOL_RATIO_LOW  = 0.80     # vol_low: volume < 80% of 20-day avg
+BEARISH_MONTHS = [6, 7, 8]  # harvest season
+
+# Minimum sample size to trust a tier (informational — see docstring)
 MIN_TRADES_TO_TRUST = 15
 
 
 class HighConvictionGate:
     """
-    Evaluates current market conditions against backtest-proven patterns.
-    Only allows alerts on historically high-accuracy setups.
+    Evaluates current market conditions against HOLDOUT-VALIDATED
+    single conditions only. No searched combinations — see module
+    docstring for why that approach was abandoned.
     """
 
     def check_gate(self, df):
@@ -56,8 +94,8 @@ class HighConvictionGate:
 
         Returns:
             allowed:        bool   — True = send alert, False = skip
-            tier:           int    — 1/2/3/4 = conviction tier, 0 = blocked
-            accuracy:       float  — expected accuracy based on backtest
+            tier:           int    — 2/1 = conviction tier, 0 = blocked/baseline
+            accuracy:       float  — real holdout-tested accuracy
             reason:         str    — human-readable explanation
             conditions:     dict   — all condition values for logging
         """
@@ -70,156 +108,83 @@ class HighConvictionGate:
     # ── condition computation ─────────────────────────────────────────────────
 
     def _compute_conditions(self, df):
-        """Compute all backtest conditions from current market data."""
-        close  = df['Close'].iloc[-1]
-        month  = datetime.now().month
+        """Compute only the conditions that survived holdout validation."""
+        close = df['Close'].iloc[-1]
+        month = datetime.now().month
 
-        # ── RSI ──
-        delta = df['Close'].diff()
-        gain  = delta.where(delta > 0, 0).rolling(14).mean()
-        loss  = (-delta.where(delta < 0, 0)).rolling(14).mean()
-        rsi_series = 100 - (100 / (1 + gain / loss))
-        rsi = float(rsi_series.iloc[-1])
-
-        # ── Volume ratio ──
+        # ── Volume ratio (for vol_low) ──
         vol_avg   = float(df['Volume'].rolling(20).mean().iloc[-1])
         vol_curr  = float(df['Volume'].iloc[-1])
         vol_ratio = vol_curr / vol_avg if vol_avg > 0 else 1.0
+        vol_low   = vol_ratio < VOL_RATIO_LOW
 
-        # ── Bollinger Bands ──
-        bb_mid = float(df['Close'].rolling(20).mean().iloc[-1])
-        bb_std = float(df['Close'].rolling(20).std().iloc[-1])
-        bb_upper = bb_mid + 2 * bb_std
-        bb_lower = bb_mid - 2 * bb_std
-        near_upper = close > (bb_mid + BB_STD_INSIDE * bb_std)
-        near_lower = close < (bb_mid - BB_STD_INSIDE * bb_std)
-        inside_bb  = not near_upper and not near_lower
-
-        # ── 52-week range position ──
-        prices_1yr = df['Close'].iloc[-252:] if len(df) >= 252 else df['Close']
-        high52 = float(prices_1yr.max())
-        low52  = float(prices_1yr.min())
-        range_pct = (close - low52) / (high52 - low52) if high52 > low52 else 0.5
-
-        # ── ATR ──
-        hl  = df['High'] - df['Low']
-        hc  = (df['High'] - df['Close'].shift()).abs()
-        lc  = (df['Low']  - df['Close'].shift()).abs()
-        atr = pd.concat([hl, hc, lc], axis=1).max(axis=1).rolling(14).mean().iloc[-1]
-        atr_pct = float(atr) / close
-
-        # ── MACD ──
-        ema12 = df['Close'].ewm(span=12).mean().iloc[-1]
-        ema26 = df['Close'].ewm(span=26).mean().iloc[-1]
-        macd  = float(ema12 - ema26)
-        macd_signal = float(df['Close'].ewm(span=12).mean().ewm(span=9).mean().iloc[-1] -
-                           df['Close'].ewm(span=26).mean().ewm(span=9).mean().iloc[-1])
-        macd_bullish = macd > macd_signal
-
-        # ── Momentum ──
+        # ── Momentum (for momentum_up) ──
         ret_1d = float(df['Close'].pct_change(1).iloc[-1])
         ret_3d = float(df['Close'].pct_change(3).iloc[-1])
-        momentum_up   = ret_1d > 0 and ret_3d > 0
-        momentum_down = ret_1d < 0 and ret_3d < 0
+        momentum_up = ret_1d > 0 and ret_3d > 0
 
-        # ── Named conditions (must match backtest names exactly) ──
+        # ── MACD (for macd_bullish) ──
+        ema12 = df['Close'].ewm(span=12).mean()
+        ema26 = df['Close'].ewm(span=26).mean()
+        macd = ema12 - ema26
+        macd_signal = macd.ewm(span=9).mean()
+        macd_bullish = float(macd.iloc[-1]) > float(macd_signal.iloc[-1])
+
+        # ── Month (for bearish_month) ──
+        bearish_month = month in BEARISH_MONTHS
+
         conds = {
-            # Core backtest conditions
-            'bearish_month':  month in BEARISH_MONTHS,
-            'in_lower_half':  range_pct < RANGE_PCT_LOWER,
-            'rsi_oversold':   rsi < RSI_OVERSOLD,
-            'vol_low':        vol_ratio < VOL_RATIO_LOW,
-            'inside_bb':      inside_bb,
-            'wc_bullish':     False,   # set externally if W/C ratio available
-            'momentum_up':    momentum_up,
-            'momentum_down':  momentum_down,
-            'macd_bullish':   macd_bullish,
-            'vol_good':       0.010 < atr_pct < 0.035,
+            'vol_low':       vol_low,
+            'momentum_up':   momentum_up,
+            'macd_bullish':  macd_bullish,
+            'bearish_month': bearish_month,
 
             # Raw values for logging
-            'rsi':            round(rsi, 1),
-            'vol_ratio':      round(vol_ratio, 2),
-            'range_pct':      round(range_pct, 3),
-            'atr_pct':        round(atr_pct, 4),
-            'month':          month,
-            'price':          round(close, 2),
-            'bb_mid':         round(bb_mid, 2),
+            'vol_ratio': round(vol_ratio, 2),
+            'ret_1d':    round(ret_1d, 4),
+            'ret_3d':    round(ret_3d, 4),
+            'month':     month,
+            'price':     round(float(close), 2),
         }
 
         return conds
-
-    def set_wc_bullish(self, conditions, wasde_signal):
-        """
-        Optionally enrich conditions with W/C ratio signal from WASDE.
-        Call after _compute_conditions() if wasde_signal is available.
-        """
-        if wasde_signal and wasde_signal.get('signal') == 'BULLISH':
-            conditions['wc_bullish'] = True
-        return conditions
 
     # ── tier evaluation ───────────────────────────────────────────────────────
 
     def _evaluate_tiers(self, c):
         """
-        Check tiers from highest to lowest conviction.
-        Returns first tier that matches.
+        Rank whichever validated conditions are currently active by
+        their real holdout accuracy. Highest wins. No combinations —
+        each condition was validated alone, so only single-condition
+        claims are made.
         """
+        active = [(name, acc) for name, acc in HOLDOUT_ACCURACY.items() if c.get(name)]
 
-        # ── TIER 1: 100% accuracy (13 trades) ──
-        # bearish_month + in_lower_half + rsi_oversold
-        if c['bearish_month'] and c['in_lower_half'] and c['rsi_oversold']:
+        if not active:
             return (
-                True, 1, 1.00,
-                f"TIER 1 — 100% accuracy (13 trades) | "
-                f"Harvest month + price at {c['range_pct']:.0%} of range + RSI {c['rsi']:.0f}",
+                False, 0, BASELINE_UP,
+                f"BLOCKED — no validated condition active (baseline only, {BASELINE_UP:.1%})",
                 c
             )
 
-        # ── TIER 2: 94.7% accuracy (19 trades) ──
-        # vol_low + bearish_month + in_lower_half
-        if c['vol_low'] and c['bearish_month'] and c['in_lower_half']:
-            return (
-                True, 2, 0.947,
-                f"TIER 2 — 94.7% accuracy (19 trades) | "
-                f"Low volume ({c['vol_ratio']:.1f}x) + harvest month + price at {c['range_pct']:.0%} of range",
-                c
-            )
+        active.sort(key=lambda x: x[1], reverse=True)
+        best_name, best_acc = active[0]
+        active_names = " + ".join(name for name, _ in active)
 
-        # ── TIER 3: 94.1% accuracy (17 trades) ──
-        # vol_low + bearish_month + in_lower_half + inside_bb
-        if c['vol_low'] and c['bearish_month'] and c['in_lower_half'] and c['inside_bb']:
-            return (
-                True, 3, 0.941,
-                f"TIER 3 — 94.1% accuracy (17 trades) | "
-                f"Low volume + harvest month + lower range + inside BB",
-                c
-            )
+        if best_acc >= 0.80:
+            tier = 2
+            reason = (f"TIER 2 — holdout-validated {best_acc:.1%} | "
+                       f"{active_names}")
+        elif best_acc >= 0.68:
+            tier = 1
+            reason = (f"TIER 1 — holdout-validated {best_acc:.1%} | "
+                       f"{active_names}")
+        else:
+            tier = 0
+            reason = f"WEAK — {active_names} ({best_acc:.1%}, near baseline)"
 
-        # ── TIER 4: 81.7% accuracy (93 trades) — vol_low alone ──
-        # Broader filter — still meaningfully above baseline 68%
-        if c['vol_low'] and c['in_lower_half']:
-            return (
-                True, 4, 0.817,
-                f"TIER 4 — 81.7% accuracy (93 trades) | "
-                f"Low volume ({c['vol_ratio']:.1f}x) + price at {c['range_pct']:.0%} of 52wk range",
-                c
-            )
-
-        # ── BLOCKED ──
-        # Build a clear reason explaining what's missing
-        missing = []
-        if not c['bearish_month']:
-            missing.append(f"not harvest month (month={c['month']})")
-        if not c['in_lower_half']:
-            missing.append(f"price too high in range ({c['range_pct']:.0%} of 52wk)")
-        if not c['rsi_oversold']:
-            missing.append(f"RSI not oversold ({c['rsi']:.0f})")
-        if not c['vol_low']:
-            missing.append(f"volume not low ({c['vol_ratio']:.1f}x avg)")
-
-        reason = "BLOCKED — conditions not met: " + " | ".join(missing[:3])
-
-        return False, 0, 0.68, reason, c
+        allowed = tier > 0
+        return allowed, tier, best_acc, reason, c
 
     # ── formatting ────────────────────────────────────────────────────────────
 
@@ -228,26 +193,24 @@ class HighConvictionGate:
         if tier == 0:
             return ""
 
-        tier_emoji = {1: "💎", 2: "🥇", 3: "🥈", 4: "🥉"}
+        tier_emoji = {1: "🥈", 2: "🥇"}
         emoji = tier_emoji.get(tier, "✅")
 
         return (
-            f"{emoji} *CONVICTION TIER {tier}*\n"
+            f"{emoji} *CONVICTION TIER {tier}* (holdout-validated)\n"
             f"Expected accuracy: {accuracy:.0%}\n"
-            f"RSI: {conditions['rsi']:.0f} | "
             f"Vol: {conditions['vol_ratio']:.1f}x | "
-            f"Range pos: {conditions['range_pct']:.0%}"
+            f"Momentum up: {conditions['momentum_up']} | "
+            f"MACD bullish: {conditions['macd_bullish']}"
         )
 
     def log_conditions(self, conditions):
         """Print all conditions to GitHub Actions log."""
-        print(f"\n🎯 Gate Conditions:")
+        print(f"\n🎯 Gate Conditions (holdout-validated set only):")
         print(f"   Month: {conditions['month']} | bearish_month={conditions['bearish_month']}")
-        print(f"   RSI: {conditions['rsi']:.1f} | oversold={conditions['rsi_oversold']}")
         print(f"   Vol ratio: {conditions['vol_ratio']:.2f}x | vol_low={conditions['vol_low']}")
-        print(f"   52wk range pos: {conditions['range_pct']:.1%} | in_lower_half={conditions['in_lower_half']}")
-        print(f"   Inside BB: {conditions['inside_bb']}")
-        print(f"   ATR: {conditions['atr_pct']:.2%} | vol_good={conditions['vol_good']}")
+        print(f"   ret_1d={conditions['ret_1d']:+.4f} ret_3d={conditions['ret_3d']:+.4f} | "
+              f"momentum_up={conditions['momentum_up']}")
 
 
 # ── standalone test ───────────────────────────────────────────────────────────
@@ -266,5 +229,5 @@ if __name__ == "__main__":
     gate.log_conditions(conditions)
 
     print(f"\nResult: {'✅ ALLOWED' if allowed else '⛔ BLOCKED'}")
-    print(f"Tier: {tier} | Expected accuracy: {accuracy:.0%}")
+    print(f"Tier: {tier} | Real holdout accuracy: {accuracy:.0%}")
     print(f"Reason: {reason}")
