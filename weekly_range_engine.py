@@ -293,7 +293,7 @@ class WeeklyRangeEngine:
 
     def format_alert(self, weekly, monthly=None, tier=0, gate_conds=None,
                      wasde=None, weather=None, seasonal=None, cost_signal=None,
-                     gate_accuracy=None, gate_reason=None):
+                     gate_accuracy=None, gate_reason=None, final_direction=None):
         """
         FIX 2 (2026-07-09): tier_labels/tier_advice used to be hardcoded
         to the OLD fake tier scheme (100%/94.7%/81.7%) and never updated
@@ -302,6 +302,18 @@ class WeeklyRangeEngine:
         gate_accuracy. Trade setup is now clearly gated: full numbers
         only shown when conviction is real (tier > 0); otherwise an
         explicit "no trade setup" message replaces it.
+
+        FIX 3 (2026-07-09): the message used to show weekly['bias'] as a
+        standalone "BIAS: UP/DOWN" line with no indication of whether it
+        actually won the override against the ensemble's direction (see
+        wheat_monitor_pro.py — override only fires if weekly confidence
+        >= 65%). This caused a real, confusing case in practice: an
+        alert showed "BIAS: UP (48%)" prominently while the ensemble was
+        heavily DOWN and the monthly outlook also said DOWN — the weekly
+        bias had LOST the override (48% < 65% threshold) but was still
+        displayed as if it were the headline call. Now the message
+        leads with an explicit FINAL CALL line, and the BIAS line is
+        annotated whenever it disagrees with the actual final direction.
         """
 
         if gate_accuracy is not None:
@@ -367,7 +379,19 @@ class WeeklyRangeEngine:
                 f"holdout-validated condition is actually active.)\n"
             )
 
+        # ── FIX 3: unambiguous final call header ─────────────────────────────
+        final_call_block = ""
+        bias_annotation = ""
+        if final_direction is not None:
+            final_call_block = f"FINAL CALL: {final_direction}\n" + ("=" * 30) + "\n\n"
+            if weekly['bias'] != 'NEUTRAL' and weekly['bias'] != final_direction:
+                bias_annotation = (
+                    f" (did NOT override — final call is {final_direction}, "
+                    f"this bias was below the 65% override threshold)"
+                )
+
         message = (
+            f"{final_call_block}"
             f"WHEAT WEEKLY OUTLOOK\n"
             f"------------------------------\n"
             f"{weekly['next_week_label']} | {weekly['month_label']}\n\n"
@@ -375,7 +399,7 @@ class WeeklyRangeEngine:
             f"Low:  {weekly['range_low']:.0f}c\n"
             f"High: {weekly['range_high']:.0f}c\n"
             f"Width: {weekly['range_width_pct']:.1f}% of price\n\n"
-            f"BIAS: {weekly['bias']} ({weekly['confidence']:.0%} confidence)\n"
+            f"BIAS: {weekly['bias']} ({weekly['confidence']:.0%} confidence){bias_annotation}\n"
             f"Historically {weekly['hist_up_pct']:.0f}% up this week of year\n"
             f"({weekly['sample_confidence_note']})\n\n"
             f"KEY LEVEL: {weekly['key_level']:.0f}c\n"
