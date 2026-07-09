@@ -3,6 +3,26 @@ WHEAT WEEKLY RANGE ENGINE
 ==========================
 Predicts next week's price range for ZW=F.
 
+CHANGELOG (2026-07-09):
+  FIX 1: hist_up_pct ("Historically X% up this week") was displayed
+  as raw ws['up_pct'] with zero sample-size discounting, even though
+  the confidence score right next to it DOES apply a size factor.
+  This is exactly the fake-precision problem found and fixed
+  elsewhere (see ConvictionGate rebuild, backtest.py holdout
+  validation) — a "100%" claim from 3-5 years of data is not
+  statistically meaningful. Now flagged explicitly with a sample
+  size note whenever count is small.
+
+  FIX 2: format_alert()'s tier_labels/tier_advice dicts were still
+  hardcoded to the OLD fake tier scheme (100%/94.7%/81.7%) and never
+  updated when ConvictionGate was rebuilt to use real holdout-tested
+  numbers (0/1/2 tiers, 68-85% real accuracy). This function was
+  silently printing stale fabricated labels regardless of what the
+  real gate said. Now takes the real accuracy value and builds the
+  label dynamically. Trade setup is now clearly marked or omitted
+  when conviction is weak, instead of always printing full
+  Entry/Stop/Target numbers under a "WEAK - informational only" line.
+
 WHY WEEKLY:
   - Daily: 58-68% accuracy (too much noise)
   - Weekly: 72-80% range accuracy (seasonal + fundamentals dominate)
@@ -44,11 +64,6 @@ class WeeklyRangeEngine:
     # ── FIT ──────────────────────────────────────────────────────────────────
 
     def fit(self, df, exclude_years=None):
-        """
-        Build weekly range statistics from 5 years of daily data.
-        Calculates typical weekly range, direction bias, and consistency
-        for each week of the year — excluding anomaly years.
-        """
         exclude_years = exclude_years or []
 
         df = df.copy()
@@ -60,10 +75,8 @@ class WeeklyRangeEngine:
         df['week']    = df.index.isocalendar().week.astype(int)
         df['ret_1d']  = df['Close'].pct_change()
 
-        # Exclude anomaly years
         df = df[~df['year'].isin(exclude_years)]
 
-        # Build weekly OHLC
         weekly = df.groupby(['year', 'week']).agg(
             open  =('Close', 'first'),
             high  =('High',  'max'),
@@ -76,7 +89,6 @@ class WeeklyRangeEngine:
         weekly['return_pct']  = (weekly['close'] - weekly['open']) / weekly['open']
         weekly['direction']   = (weekly['return_pct'] > 0).astype(int)
 
-        # Stats by week-of-year
         stats = weekly.groupby('week').agg(
             avg_range    =('range_pct',  'mean'),
             std_range    =('range_pct',  'std'),
@@ -94,77 +106,49 @@ class WeeklyRangeEngine:
     # ── PREDICT ───────────────────────────────────────────────────────────────
 
     def predict_next_week(self, df, current_price, cost_floor_cents=None):
-        """
-        Predict next week's range, bias, and key levels.
-
-        Args:
-            df:                Daily OHLC dataframe with indicators
-            current_price:     Current wheat price in cents
-            cost_floor_cents:  Production cost floor (optional)
-
-        Returns:
-            dict with range_low, range_high, bias, confidence, key_level, etc.
-        """
         if not self.fitted:
             raise RuntimeError("Call fit() first")
 
-        # Which week are we predicting?
         today     = datetime.now(IL)
         next_week = today + timedelta(days=7)
         next_week_num = int(next_week.isocalendar()[1])
 
-        # Get historical stats for that week
         if next_week_num in self.weekly_stats.index:
             ws = self.weekly_stats.loc[next_week_num]
         else:
-            # Fall back to nearest week
             ws = self.weekly_stats.iloc[min(next_week_num, len(self.weekly_stats)-1)]
 
-        # ── Range width ──────────────────────────────────────────────────────
-        # Use blend of historical weekly range + current ATR
         hist_range_pct  = float(ws['avg_range'])
         hist_range_std  = float(ws['std_range']) if not np.isnan(ws['std_range']) else hist_range_pct * 0.3
 
-        # Current ATR as % of price
         atr_pct = float(df['ATR'].iloc[-1]) / current_price
-
-        # Weekly range ≈ 2.5x daily ATR historically for wheat
         atr_weekly_estimate = atr_pct * 2.5
-
-        # Blend: 60% historical pattern, 40% current ATR
         blended_range_pct = hist_range_pct * 0.60 + atr_weekly_estimate * 0.40
-
-        # Range width in cents
         range_half = (current_price * blended_range_pct) / 2
 
-        # ── Directional bias ─────────────────────────────────────────────────
         hist_up_pct    = float(ws['up_pct'])
         hist_avg_ret   = float(ws['avg_return'])
         sample_count   = int(ws['count'])
 
-        # Start with historical bias
-        bias_score = hist_avg_ret  # positive = bullish, negative = bearish
+        bias_score = hist_avg_ret
 
-        # Adjust for current trend
         price     = float(df['Close'].iloc[-1])
         sma5      = float(df['Close'].rolling(5).mean().iloc[-1])
         sma20     = float(df['SMA_20'].iloc[-1])
         sma50     = float(df['SMA_50'].iloc[-1])
 
         if price > sma5 > sma20:
-            bias_score += 0.003    # uptrend adds small bullish bias
+            bias_score += 0.003
         elif price < sma5 < sma20:
-            bias_score -= 0.003    # downtrend adds small bearish bias
+            bias_score -= 0.003
 
-        # Adjust for cost floor proximity
         if cost_floor_cents:
             dist_from_floor = (current_price - cost_floor_cents) / cost_floor_cents
             if dist_from_floor < 0.02:
-                bias_score += 0.004   # near floor → bullish bounce expected
+                bias_score += 0.004
             elif dist_from_floor > 0.10:
-                bias_score -= 0.002   # well above floor → less upside
+                bias_score -= 0.002
 
-        # Determine bias direction
         if bias_score > 0.002:
             bias      = 'UP'
             bias_pct  = hist_up_pct
@@ -175,21 +159,23 @@ class WeeklyRangeEngine:
             bias      = 'NEUTRAL'
             bias_pct  = 0.50
 
-        # ── Confidence ───────────────────────────────────────────────────────
-        # Based on: historical consistency + sample size
-        consistency = float(ws['bias_strength'])    # 0 = random, 0.5 = always same direction
-        size_factor = min(1.0, sample_count / 5)    # full confidence at 5+ samples
+        consistency = float(ws['bias_strength'])
+        size_factor = min(1.0, sample_count / 5)
 
-        # Base confidence from historical consistency
         base_conf   = 0.50 + consistency * 0.60
         confidence  = min(0.85, base_conf * size_factor)
 
-        # Reduce confidence in NEUTRAL weeks
         if bias == 'NEUTRAL':
             confidence = min(0.55, confidence)
 
-        # ── Range bounds ─────────────────────────────────────────────────────
-        # Skew range toward the bias direction
+        # ── Sample-size honesty check (FIX 1) ────────────────────────────────
+        if sample_count < 4:
+            sample_confidence_note = f"LOW CONFIDENCE — only {sample_count} years of data"
+        elif sample_count < 8:
+            sample_confidence_note = f"moderate confidence — {sample_count} years of data"
+        else:
+            sample_confidence_note = f"{sample_count} years of data"
+
         if bias == 'UP':
             range_low  = current_price - range_half * 0.40
             range_high = current_price + range_half * 0.60
@@ -200,7 +186,6 @@ class WeeklyRangeEngine:
             range_low  = current_price - range_half * 0.50
             range_high = current_price + range_half * 0.50
 
-        # Snap to cost floor if it's in range (strong support)
         if cost_floor_cents and range_low < cost_floor_cents < range_high:
             key_level       = cost_floor_cents
             key_level_label = "Cost floor (strong support)"
@@ -211,14 +196,13 @@ class WeeklyRangeEngine:
             key_level       = round(sma20, 2)
             key_level_label = "SMA20 (nearest support)"
 
-        # ── Trade setup from weekly range ────────────────────────────────────
         if bias == 'UP':
             entry  = current_price
-            stop   = round(range_low - (range_half * 0.10), 2)   # just below range low
+            stop   = round(range_low - (range_half * 0.10), 2)
             target = round(range_high, 2)
         elif bias == 'DOWN':
             entry  = current_price
-            stop   = round(range_high + (range_half * 0.10), 2)  # just above range high
+            stop   = round(range_high + (range_half * 0.10), 2)
             target = round(range_low, 2)
         else:
             entry  = current_price
@@ -227,7 +211,6 @@ class WeeklyRangeEngine:
 
         rr = abs(target - entry) / abs(stop - entry) if abs(stop - entry) > 0 else 0
 
-        # ── Month label ──────────────────────────────────────────────────────
         month_labels = {
             1:'Jan neutral', 2:'Pre-spring dip', 3:'Spring rally',
             4:'Peak planting', 5:'Weather premium', 6:'Harvest pressure',
@@ -237,43 +220,31 @@ class WeeklyRangeEngine:
         month_label = month_labels.get(next_week.month, '')
 
         return {
-            # Range
             'range_low':        round(range_low, 2),
             'range_high':       round(range_high, 2),
             'range_width_pct':  round(blended_range_pct * 100, 2),
-
-            # Direction
             'bias':             bias,
             'bias_pct':         round(bias_pct * 100, 1),
             'confidence':       round(confidence, 3),
-
-            # Key level
             'key_level':        key_level,
             'key_level_label':  key_level_label,
-
-            # Trade setup
             'entry':            round(entry, 2),
             'stop':             stop,
             'target':           target,
             'rr':               round(rr, 2),
-
-            # Context
             'week_num':         next_week_num,
             'next_week_label':  f"Week {next_week_num} ({next_week.strftime('%b %d')})",
             'month_label':      month_label,
             'hist_up_pct':      round(hist_up_pct * 100, 1),
             'hist_avg_return':  round(hist_avg_ret * 100, 2),
             'sample_count':     sample_count,
+            'sample_confidence_note': sample_confidence_note,
             'current_price':    round(current_price, 2),
         }
 
     # ── MONTHLY OUTLOOK ───────────────────────────────────────────────────────
 
     def predict_monthly_range(self, df, current_price, cost_floor_cents=None):
-        """
-        Predict next 4 weeks price range.
-        Aggregates weekly predictions into a monthly view.
-        """
         if not self.fitted:
             raise RuntimeError("Call fit() first")
 
@@ -297,19 +268,16 @@ class WeeklyRangeEngine:
         if not monthly_lows:
             return None
 
-        # Compound weekly returns to get monthly range
         cumulative_low  = current_price * (1 + sum(monthly_lows))
         cumulative_high = current_price * (1 + sum(monthly_highs))
         avg_monthly_ret = sum(monthly_biases)
 
-        # Clamp to reasonable range (wheat rarely moves >15% in a month)
         max_move = current_price * 0.15
         monthly_low  = max(current_price - max_move, min(cumulative_low,  cumulative_high))
         monthly_high = min(current_price + max_move, max(cumulative_low,  cumulative_high))
 
-        # Snap low to cost floor if applicable
         if cost_floor_cents and monthly_low < cost_floor_cents:
-            monthly_low = cost_floor_cents * 0.99  # cost floor is real support
+            monthly_low = cost_floor_cents * 0.99
 
         bias = 'UP' if avg_monthly_ret > 0.005 else 'DOWN' if avg_monthly_ret < -0.005 else 'NEUTRAL'
 
@@ -324,27 +292,35 @@ class WeeklyRangeEngine:
     # ── FORMAT FOR TELEGRAM ───────────────────────────────────────────────────
 
     def format_alert(self, weekly, monthly=None, tier=0, gate_conds=None,
-                     wasde=None, weather=None, seasonal=None, cost_signal=None):
-        """Format complete weekly outlook alert for Telegram."""
+                     wasde=None, weather=None, seasonal=None, cost_signal=None,
+                     gate_accuracy=None, gate_reason=None):
+        """
+        FIX 2 (2026-07-09): tier_labels/tier_advice used to be hardcoded
+        to the OLD fake tier scheme (100%/94.7%/81.7%) and never updated
+        when ConvictionGate was rebuilt with real holdout-tested numbers.
+        Now builds the label from the REAL accuracy value passed in via
+        gate_accuracy. Trade setup is now clearly gated: full numbers
+        only shown when conviction is real (tier > 0); otherwise an
+        explicit "no trade setup" message replaces it.
+        """
 
-        tier_labels = {
-            1: "TIER 1 - 100% historical accuracy",
-            2: "TIER 2 - 94.7% historical accuracy",
-            3: "TIER 3 - 81.7% historical accuracy",
-            0: "NO TIER - 68% baseline",
-        }
-        tier_advice = {
-            1: "STRONG - high confidence to enter",
-            2: "STRONG - high confidence to enter",
-            3: "MODERATE - consider entering",
-            0: "WEAK - informational only",
-        }
+        if gate_accuracy is not None:
+            if tier == 0:
+                tier_label = f"NO SIGNAL - baseline only ({gate_accuracy:.0%})"
+                decision   = "WEAK - no trade setup below"
+            elif gate_accuracy >= 0.80:
+                tier_label = f"TIER {tier} - {gate_accuracy:.0%} holdout-validated accuracy"
+                decision   = "MODERATE-STRONG - real edge, size accordingly"
+            else:
+                tier_label = f"TIER {tier} - {gate_accuracy:.0%} holdout-validated accuracy"
+                decision   = "MODERATE - modest real edge, not a high-conviction signal"
+        else:
+            tier_label = "NO TIER - accuracy unavailable"
+            decision   = "WEAK - no trade setup below"
 
-        # RSI and vol from gate conditions
-        rsi_str = f"RSI: {gate_conds['rsi']:.0f}" if gate_conds else ""
-        vol_str = f"Vol: {gate_conds['vol_ratio']:.1f}x" if gate_conds else ""
+        rsi_str = f"RSI: {gate_conds.get('rsi'):.0f}" if gate_conds and gate_conds.get('rsi') is not None else ""
+        vol_str = f"Vol: {gate_conds.get('vol_ratio'):.1f}x" if gate_conds and gate_conds.get('vol_ratio') is not None else ""
 
-        # Cost floor line
         cost_line = ""
         if cost_signal:
             cost_line = (
@@ -353,7 +329,6 @@ class WeeklyRangeEngine:
                 f"- {cost_signal['signal']}\n"
             )
 
-        # Monthly outlook line
         monthly_line = ""
         if monthly:
             monthly_line = (
@@ -362,7 +337,6 @@ class WeeklyRangeEngine:
                 f"Bias: {monthly['bias']} ({monthly['avg_return']:+.1f}% avg)\n"
             )
 
-        # Seasonal line
         seasonal_line = ""
         if seasonal:
             seasonal_line = (
@@ -371,12 +345,27 @@ class WeeklyRangeEngine:
                 f"Next 20d: {seasonal['pos_days']} up / {seasonal['neg_days']} down\n"
             )
 
-        # WASDE + weather
         fundamental_line = ""
         if wasde:
             fundamental_line += f"WASDE: {wasde['signal']} ({wasde['source']})\n"
         if weather:
             fundamental_line += f"Weather: {weather['signal']}\n"
+
+        # ── Trade setup block — only shown with real conviction (FIX 2) ──────
+        if tier > 0:
+            trade_setup_block = (
+                f"TRADE SETUP:\n"
+                f"Entry:  {weekly['entry']:.0f}c (current)\n"
+                f"Stop:   {weekly['stop']:.0f}c\n"
+                f"Target: {weekly['target']:.0f}c\n"
+                f"R:R = {weekly['rr']:.1f}:1\n"
+            )
+        else:
+            trade_setup_block = (
+                f"No trade setup shown — conviction is baseline/weak.\n"
+                f"(Entry/stop/target numbers are only shown when a\n"
+                f"holdout-validated condition is actually active.)\n"
+            )
 
         message = (
             f"WHEAT WEEKLY OUTLOOK\n"
@@ -388,20 +377,16 @@ class WeeklyRangeEngine:
             f"Width: {weekly['range_width_pct']:.1f}% of price\n\n"
             f"BIAS: {weekly['bias']} ({weekly['confidence']:.0%} confidence)\n"
             f"Historically {weekly['hist_up_pct']:.0f}% up this week of year\n"
-            f"Based on {weekly['sample_count']} years of data\n\n"
+            f"({weekly['sample_confidence_note']})\n\n"
             f"KEY LEVEL: {weekly['key_level']:.0f}c\n"
             f"{weekly['key_level_label']}\n\n"
             f"{cost_line}"
             f"{seasonal_line}"
             f"{fundamental_line}\n"
-            f"CONVICTION: {tier_labels[tier]}\n"
+            f"CONVICTION: {tier_label}\n"
             f"{rsi_str} | {vol_str}\n"
-            f"DECISION: {tier_advice[tier]}\n\n"
-            f"TRADE SETUP (if entering):\n"
-            f"Entry:  {weekly['entry']:.0f}c (current)\n"
-            f"Stop:   {weekly['stop']:.0f}c\n"
-            f"Target: {weekly['target']:.0f}c\n"
-            f"R:R = {weekly['rr']:.1f}:1\n"
+            f"DECISION: {decision}\n\n"
+            f"{trade_setup_block}"
             f"{monthly_line}"
         )
 
@@ -419,9 +404,8 @@ if __name__ == "__main__":
     end   = datetime.now(ZoneInfo("Asia/Jerusalem"))
     start = end - timedelta(days=5 * 365)
     df    = yf.Ticker("ZW=F").history(start=start, end=end, auto_adjust=False)
-    df    = df.iloc[:-1]  # drop incomplete candle
+    df    = df.iloc[:-1]
 
-    # Add minimal indicators needed
     df['Returns']    = df['Close'].pct_change()
     df['SMA_20']     = df['Close'].rolling(20).mean()
     df['SMA_50']     = df['Close'].rolling(50).mean()
@@ -450,7 +434,7 @@ if __name__ == "__main__":
     print(f"  Key level:  {weekly['key_level']:.0f}c ({weekly['key_level_label']})")
     print(f"  Trade:      Entry {weekly['entry']:.0f} | Stop {weekly['stop']:.0f} | Target {weekly['target']:.0f}")
     print(f"  R:R:        {weekly['rr']:.1f}:1")
-    print(f"  History:    {weekly['hist_up_pct']:.0f}% up this week | {weekly['sample_count']} samples")
+    print(f"  History:    {weekly['hist_up_pct']:.0f}% up this week | {weekly['sample_confidence_note']}")
 
     if monthly:
         print(f"\nMONTHLY OUTLOOK:")
