@@ -994,6 +994,8 @@ def main():
             weather     = weather,
             seasonal    = s_phase,
             cost_signal = cost_signal,
+            gate_accuracy = accuracy,
+            gate_reason   = gate_reason,
         )
 
         # Add ensemble footnote
