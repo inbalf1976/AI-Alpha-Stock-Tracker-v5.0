@@ -312,6 +312,40 @@ def find_best_combinations(df, outcomes_up, outcomes_down, top_conditions, targe
     combo_results.sort(key=lambda x: (x['best_accuracy'], x['n']), reverse=True)
     return combo_results
 
+# ── re-test INDIVIDUAL conditions on holdout data (was missing before) ────────
+
+def evaluate_condition_on_holdout(holdout_df, holdout_up, holdout_down, condition):
+    """
+    Same validation logic as combos, but for a single condition.
+    This was the missing piece: individual conditions were reported
+    from TRAIN data only, with no check for whether they hold up on
+    data they never saw. A condition that looks solid on train but
+    collapses on holdout is just as untrustworthy as an overfit combo
+    — it was just discovered with a smaller search, not zero search.
+    """
+    df_aligned = holdout_df[holdout_df.index.isin(holdout_up.index)].copy()
+    up_outcomes   = holdout_up.reindex(df_aligned.index)
+    down_outcomes = holdout_down.reindex(df_aligned.index)
+
+    if condition not in df_aligned.columns:
+        return {'n': 0, 'up_accuracy': None, 'down_accuracy': None, 'note': 'Condition column missing'}
+
+    mask = df_aligned[condition] == 1
+    n = int(mask.sum())
+    if n == 0:
+        return {'n': 0, 'up_accuracy': None, 'down_accuracy': None, 'note': 'Condition never occurred in holdout period'}
+
+    up_acc   = float(up_outcomes[mask].mean())
+    down_acc = float(down_outcomes[mask].mean())
+
+    return {
+        'n': n,
+        'up_accuracy':   round(up_acc, 3),
+        'down_accuracy': round(down_acc, 3),
+        'best_direction': 'UP' if up_acc > down_acc else 'DOWN',
+        'best_accuracy':  round(max(up_acc, down_acc), 3),
+    }
+
 # ── re-test a combo on holdout data it never saw ──────────────────────────────
 
 def evaluate_combo_on_holdout(holdout_df, holdout_up, holdout_down, conditions):
@@ -383,6 +417,43 @@ def main():
               f"UP={r['up_accuracy']:.1%} DOWN={r['down_accuracy']:.1%} | "
               f"Best: {r['best_direction']} @ {r['best_accuracy']:.1%}")
 
+    # ── Individual conditions — HOLDOUT VALIDATION (the missing piece) ──
+    print("\n" + "=" * 60)
+    print("INDIVIDUAL CONDITIONS — DO THEY SURVIVE HOLDOUT?")
+    print("=" * 60)
+    print(f"{'TRAIN result':<35} | {'HOLDOUT result (real test)'}")
+    print("-" * 75)
+
+    validated_conditions = []
+    for r in condition_results[:15]:
+        holdout_eval = evaluate_condition_on_holdout(holdout_df, holdout_up, holdout_down, r['condition'])
+
+        train_str = f"{r['condition']} {r['best_direction']} @ {r['best_accuracy']:.1%} (n={r['n']})"
+        if holdout_eval['n'] == 0:
+            holdout_str = "NEVER OCCURRED / missing in holdout"
+        else:
+            holdout_str = f"{holdout_eval['best_direction']} @ {holdout_eval['best_accuracy']:.1%} (n={holdout_eval['n']})"
+
+        flag = ""
+        if holdout_eval['n'] > 0 and holdout_eval['best_accuracy'] is not None:
+            drop = r['best_accuracy'] - holdout_eval['best_accuracy']
+            if drop > 0.25:
+                flag = "  ⚠️ LIKELY OVERFIT (big drop)"
+            elif drop > 0.10:
+                flag = "  ⚠️ accuracy dropped meaningfully"
+            elif drop < -0.05:
+                flag = "  ✓ held up (even improved on holdout)"
+            else:
+                flag = "  ✓ held up reasonably well"
+
+        print(f"{train_str:<35} | {holdout_str}{flag}")
+
+        validated_conditions.append({
+            'condition': r['condition'],
+            'train': r,
+            'holdout': holdout_eval,
+        })
+
     # ── Best combinations — TRAIN ONLY ──
     print("\n" + "=" * 60)
     print("COMBINATIONS ACHIEVING 75%+ ACCURACY (TRAIN DATA)")
@@ -444,6 +515,7 @@ def main():
         'train_period':      f"{train_df.index.min().date()} to {train_df.index.max().date()}",
         'holdout_period':    f"{holdout_df.index.min().date()} to {holdout_df.index.max().date()}",
         'individual_conditions_train': condition_results,
+        'individual_conditions_train_and_holdout': validated_conditions,
         'combinations_train_and_holdout': validated_results,
     }
 
