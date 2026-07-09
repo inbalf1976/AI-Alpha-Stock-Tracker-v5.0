@@ -364,13 +364,43 @@ class WeeklyRangeEngine:
             fundamental_line += f"Weather: {weather['signal']}\n"
 
         # ── Trade setup block — only shown with real conviction (FIX 2) ──────
+        # ── FIX 4 (2026-07-09): trade setup must match FINAL CALL, not the
+        # weekly engine's own (possibly overridden/losing) bias. Previously
+        # Entry/Stop/Target were always built from weekly['bias'] even when
+        # final_direction disagreed — meaning an alert could show
+        # "FINAL CALL: DOWN" at the top and still print a bullish trade
+        # setup (stop below entry, target above) underneath it. Now the
+        # setup direction is derived from final_direction when provided.
+        effective_direction = final_direction if final_direction is not None else weekly['bias']
+
         if tier > 0:
+            if effective_direction == 'UP':
+                setup_entry  = weekly['current_price']
+                setup_stop   = weekly['range_low']
+                setup_target = weekly['range_high']
+            elif effective_direction == 'DOWN':
+                setup_entry  = weekly['current_price']
+                setup_stop   = weekly['range_high']
+                setup_target = weekly['range_low']
+            else:
+                setup_entry  = weekly['entry']
+                setup_stop   = weekly['stop']
+                setup_target = weekly['target']
+
+            setup_rr = (abs(setup_target - setup_entry) / abs(setup_stop - setup_entry)
+                        if abs(setup_stop - setup_entry) > 0 else 0)
+
+            direction_note = ""
+            if effective_direction != weekly['bias']:
+                direction_note = f" (setup direction follows FINAL CALL {effective_direction}, not the weekly bias above)\n"
+
             trade_setup_block = (
                 f"TRADE SETUP:\n"
-                f"Entry:  {weekly['entry']:.0f}c (current)\n"
-                f"Stop:   {weekly['stop']:.0f}c\n"
-                f"Target: {weekly['target']:.0f}c\n"
-                f"R:R = {weekly['rr']:.1f}:1\n"
+                f"{direction_note}"
+                f"Entry:  {setup_entry:.0f}c (current)\n"
+                f"Stop:   {setup_stop:.0f}c\n"
+                f"Target: {setup_target:.0f}c\n"
+                f"R:R = {setup_rr:.1f}:1\n"
             )
         else:
             trade_setup_block = (
