@@ -524,6 +524,32 @@ class EnsemblePredictor:
         return f.dropna()
 
     def predict(self, df):
+        """
+        REBUILT 2026-07-09 — fixed a real bug in how model outputs
+        were combined.
+
+        OLD BEHAVIOR (removed): each model's "weight" was set to
+        abs(prediction - 0.5) — meaning the MORE EXTREME a model's
+        guess, the MORE it controlled the final answer. On a real
+        alert (2026-07-09), this meant XGB's 0.001 (essentially "0%
+        chance", more likely a miscalibrated/overconfident output
+        than genuine certainty) got ~50% of the total decision
+        weight, while LSTM's honest, moderate 0.481 (near a genuine
+        coin flip) got under 2% influence. Combined with an "all
+        models agree" bonus, this produced a fake 92% confidence
+        built almost entirely on the single most extreme number.
+        Two days earlier, the same mechanism had produced a 92%+
+        confidence in the OPPOSITE direction (RF/XGB near 0.95-0.998
+        UP) — proof the models are unstable day to day, and the old
+        formula was amplifying that instability into false certainty
+        instead of damping it.
+
+        NEW BEHAVIOR: equal weighting (simple average) — no model's
+        opinion counts more just because it's extreme. Confidence is
+        reported honestly, and real disagreement between models is
+        surfaced explicitly (reliability flag) instead of hidden
+        behind an agreement bonus.
+        """
         # LSTM
         data   = df[self.features].values
         scaled = self.scaler_lstm.transform(data)
@@ -536,30 +562,39 @@ class EnsemblePredictor:
         rf_p  = float(self.rf_model.predict_proba(X_ml)[0][1])
         xgb_p = float(self.xgb_model.predict_proba(X_ml)[0][1])
 
-        # Weighted by confidence
-        weights = [abs(p - 0.5) for p in [lstm_p, rf_p, xgb_p]]
-        total   = sum(weights) or 1
-        weighted = sum(p * w for p, w in zip([lstm_p, rf_p, xgb_p], weights)) / total
+        preds = [lstm_p, rf_p, xgb_p]
 
-        votes_up = sum(1 for p in [lstm_p, rf_p, xgb_p] if p >= 0.5)
+        # Equal-weighted average — no model gets extra say for being extreme
+        weighted = float(np.mean(preds))
+
+        votes_up = sum(1 for p in preds if p >= 0.5)
         direction = 'UP' if weighted >= 0.5 else 'DOWN'
-        base_conf = weighted if weighted >= 0.5 else 1 - weighted
+        confidence = weighted if weighted >= 0.5 else 1 - weighted
 
-        # Small agreement bonus (capped)
-        bonus     = 0.06 if votes_up in [0, 3] else 0.02
-        confidence = min(0.92, base_conf + bonus)
+        # Real disagreement measure — how spread out are the 3 opinions?
+        spread = float(np.std(preds))
 
-        agreement = 'FULL' if votes_up in [0,3] else 'MAJORITY' if votes_up in [1,2] else 'SPLIT'
+        agreement = 'FULL' if votes_up in [0, 3] else 'MAJORITY' if votes_up in [1, 2] else 'SPLIT'
+
+        # If models disagree substantially, that's real information —
+        # cap confidence instead of letting one extreme model dominate.
+        # A high spread means "the models don't actually know," which
+        # should LOWER stated confidence, not get averaged away.
+        reliability = 'LOW' if spread > 0.35 else 'MODERATE' if spread > 0.15 else 'HIGH'
+        if reliability == 'LOW':
+            confidence = min(confidence, 0.60)  # don't claim high confidence when models sharply disagree
 
         return {
-            'direction':  direction,
-            'confidence': confidence,
-            'lstm':       lstm_p,
-            'rf':         rf_p,
-            'xgb':        xgb_p,
-            'weighted':   weighted,
-            'votes_up':   votes_up,
-            'agreement':  agreement,
+            'direction':   direction,
+            'confidence':  confidence,
+            'lstm':        lstm_p,
+            'rf':          rf_p,
+            'xgb':         xgb_p,
+            'weighted':    weighted,
+            'votes_up':    votes_up,
+            'agreement':   agreement,
+            'spread':      round(spread, 3),
+            'reliability': reliability,
         }
 
 
