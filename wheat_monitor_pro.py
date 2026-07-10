@@ -261,6 +261,8 @@ class ConvictionGate:
     """
     REBUILT 2026-07-09 using real train/holdout backtest validation
     (see backtest.py and backtest_results.json).
+    UPDATED 2026-07-10: vol_low REMOVED after discovering a structural
+    data problem, not just occasional bad data.
 
     The previous version of this class used combinations found by
     searching hundreds of condition combos against a single dataset,
@@ -270,38 +272,52 @@ class ConvictionGate:
     better than a coin flip) or never occurred at all in the last
     4 months of data.
 
-    This version uses ONLY single conditions that were individually
+    This version used ONLY single conditions that were individually
     validated on a real holdout set AND beat the baseline UP rate
     (67.46% — wheat trended up most of this 2-year window anyway,
     so anything below that adds zero real value, even if it "looks"
     high in isolation).
 
-    CONFIRMED CONDITIONS (holdout period 2026-03-20 to 2026-07-09):
-      vol_low       : 84.8% UP (n=33 holdout) — strongest real signal
-      momentum_up   : 84.0% UP (n=25 holdout) — strong, worth watching for drift
+    2026-07-10 DISCOVERY — vol_low is unreliable, removed entirely:
+    A diagnostic (volume_lag_check.py) showed ZW=F's Yahoo daily
+    Volume field takes roughly 1-2 WEEKS to fully backfill for
+    continuous futures contracts. Dates within the last ~10 days
+    showed volume readings of single/low-double digits (e.g. 7, 48,
+    136 contracts) on the most liquid wheat contract in the world —
+    obviously incomplete, not real. Since vol_low (ratio < 0.80)
+    compares TODAY's volume against a 20-day average that is ITSELF
+    partly built from these same artificially-low recent values, it
+    was almost certainly firing as effectively-always-true on recent
+    dates — meaning its 84.8% holdout accuracy likely measured "is
+    this date recent" rather than any real market behavior. This
+    was NOT a rare data glitch — it is structural and will recur
+    every single day this script runs. Removed rather than patched.
+
+    CONFIRMED CONDITIONS (holdout period 2026-03-20 to 2026-07-09) —
+    vol_low removed, the rest do not depend on the Volume field:
+      momentum_up   : 84.0% UP (n=25 holdout) — strongest reliable signal
       macd_bullish  : 70.0% UP (n=30 holdout) — modest but real edge
       bearish_month : 68.0% UP (n=25 holdout) — barely above baseline, weak
 
-    EXPLICITLY EXCLUDED (proven unreliable on holdout — DO NOT re-add):
+    EXPLICITLY EXCLUDED (do not re-add without re-validating):
+      vol_low        : REMOVED 2026-07-10 — structural data lag, not
+                        a genuine volume signal (see above)
       rsi_oversold   : collapsed to 50.0% and flipped direction on holdout
       momentum_down  : collapsed to 57.7% and flipped direction on holdout
       near_bb_lower  : collapsed to 57.1% on tiny holdout sample (n=7)
       in_lower_half  : never occurred once in the entire holdout period
-                        (consistent with this year's drought-driven price
-                        strength keeping wheat out of the bottom of its range)
-      wc_bullish, rsi_neutral, inside_bb, vol_good : all held up on holdout
-                        but scored BELOW the 67.46% baseline, meaning they
-                        add no real predictive value on their own
+      wc_bullish, rsi_neutral, inside_bb, vol_good : held up on holdout
+                        but scored BELOW the 67.46% baseline
 
-    IMPORTANT: this backtest is a rolling 2-year window ending 2026-07-09.
-    Re-run backtest.py periodically (e.g. monthly) and update the numbers
-    below — do not let this drift stale the way the old hardcoded "100%"
-    numbers did.
+    IMPORTANT: if volume data quality is ever fixed/verified reliable
+    (e.g. switching to a direct CME/CBOT feed instead of Yahoo), re-run
+    backtest.py fresh before re-adding any volume-based condition.
+    Re-run backtest.py periodically and update the numbers below —
+    do not let this drift stale.
     """
 
-    # Holdout-validated accuracies — update these when you re-run backtest.py
+    # Holdout-validated accuracies — vol_low removed 2026-07-10 (see docstring)
     HOLDOUT_ACCURACY = {
-        'vol_low':       0.848,
         'momentum_up':   0.840,
         'macd_bullish':  0.700,
         'bearish_month': 0.680,
@@ -312,25 +328,11 @@ class ConvictionGate:
         close = df['Close']
         price = float(close.iloc[-1])
 
-        # Volume (for vol_low)
-        vol_avg   = float(df['Volume'].rolling(20).mean().iloc[-1])
-        vol_curr  = float(df['Volume'].iloc[-1])
-        vol_ratio = vol_curr / vol_avg if vol_avg > 0 else 1.0
-        vol_low   = vol_ratio < 0.80
-
-        # DIAGNOSTIC (2026-07-10): see get_volume_signal() for full context.
-        # ZW=F's Yahoo volume field is known to be unreliable for
-        # continuous futures — if raw volume is exactly 0, vol_low is
-        # very likely firing on a data gap, not a real signal. Given this
-        # has shown up repeatedly (not a one-off), actively disable
-        # vol_low in this case rather than just warning — firing your
-        # strongest holdout-validated signal (84.8%) on bad data is worse
-        # than not firing it at all.
-        vol_data_suspect = (vol_curr == 0)
-        if vol_data_suspect:
-            print(f"   ⚠️ ConvictionGate: raw Volume=0 (data feed gap, not real) — "
-                  f"vol_low DISABLED for this run, not counted as a signal")
-            vol_low = False
+        # NOTE: vol_low removed 2026-07-10 — see class docstring.
+        # ZW=F's Yahoo volume field is structurally unreliable for
+        # dates within ~1-2 weeks (takes that long to backfill), so
+        # this condition was almost always firing on incomplete data,
+        # not a genuine low-volume signal.
 
         # Momentum (for momentum_up) — same-direction 1d and 3d returns
         ret_1d = float(close.pct_change(1).iloc[-1])
@@ -349,11 +351,9 @@ class ConvictionGate:
         bearish_month = month in [6, 7, 8]
 
         conditions = {
-            'vol_low':       vol_low,
             'momentum_up':   momentum_up,
             'macd_bullish':  macd_bullish,
             'bearish_month': bearish_month,
-            'vol_ratio':     round(vol_ratio, 2),
             'ret_1d':        round(ret_1d, 4),
             'ret_3d':        round(ret_3d, 4),
             'month':         month,
