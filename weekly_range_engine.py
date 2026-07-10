@@ -106,17 +106,38 @@ class WeeklyRangeEngine:
     # ── PREDICT ───────────────────────────────────────────────────────────────
 
     def predict_next_week(self, df, current_price, cost_floor_cents=None):
+        """
+        FIX (2026-07-10): previously used `next_week = today + 7 days`,
+        meaning the forecast ALWAYS described a rolling week starting
+        7 days from whenever the script happened to run — NOT the
+        calendar week currently in progress. This caused real
+        confusion: an alert run on a Monday would forecast the
+        FOLLOWING week (not the current one), while an alert run on a
+        Thursday might land in the same ISO week by coincidence,
+        making the target week inconsistent and non-obvious depending
+        on which day you happened to check.
+
+        Now targets the CURRENT ISO week (Monday-Sunday containing
+        "today"), so "this week's forecast" actually means the week
+        you're currently in, matching what a person reading "Week 29"
+        on a given day would reasonably assume it means. Combined
+        with get_frozen_weekly_range() in wheat_monitor_pro.py, this
+        is computed once at the start of each real calendar week and
+        held fixed until that week is actually over.
+        """
         if not self.fitted:
             raise RuntimeError("Call fit() first")
 
-        today     = datetime.now(IL)
-        next_week = today + timedelta(days=7)
-        next_week_num = int(next_week.isocalendar()[1])
+        # Target THIS week (containing today), not a shifting +7 day window
+        today = datetime.now(IL)
+        target_week_num = int(today.isocalendar()[1])
+        # Monday of the current ISO week, for a clear, stable label
+        week_monday = today - timedelta(days=today.isoweekday() - 1)
 
-        if next_week_num in self.weekly_stats.index:
-            ws = self.weekly_stats.loc[next_week_num]
+        if target_week_num in self.weekly_stats.index:
+            ws = self.weekly_stats.loc[target_week_num]
         else:
-            ws = self.weekly_stats.iloc[min(next_week_num, len(self.weekly_stats)-1)]
+            ws = self.weekly_stats.iloc[min(target_week_num, len(self.weekly_stats)-1)]
 
         hist_range_pct  = float(ws['avg_range'])
         hist_range_std  = float(ws['std_range']) if not np.isnan(ws['std_range']) else hist_range_pct * 0.3
@@ -217,7 +238,7 @@ class WeeklyRangeEngine:
             7:'Post-harvest low', 8:'Summer lull', 9:'Fall recovery',
             10:'Winter demand', 11:'Pre-winter rally', 12:'Winter high'
         }
-        month_label = month_labels.get(next_week.month, '')
+        month_label = month_labels.get(week_monday.month, '')
 
         return {
             'range_low':        round(range_low, 2),
@@ -232,8 +253,8 @@ class WeeklyRangeEngine:
             'stop':             stop,
             'target':           target,
             'rr':               round(rr, 2),
-            'week_num':         next_week_num,
-            'next_week_label':  f"Week {next_week_num} ({next_week.strftime('%b %d')})",
+            'week_num':         target_week_num,
+            'next_week_label':  f"Week {target_week_num} (starting Mon {week_monday.strftime('%b %d')})",
             'month_label':      month_label,
             'hist_up_pct':      round(hist_up_pct * 100, 1),
             'hist_avg_return':  round(hist_avg_ret * 100, 2),
