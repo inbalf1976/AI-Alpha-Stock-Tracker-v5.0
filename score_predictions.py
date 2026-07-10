@@ -154,8 +154,13 @@ def main():
         entry['pnl_cents']   = pnl
         newly_scored += 1
 
-        print(f"  {entry['timestamp'][:10]} | {entry['direction']:<4} @ {entry['entry_price']:.2f}c "
-              f"| Tier {entry['tier']} | -> {outcome} ({exit_reason}, {pnl:+.2f}c)")
+        tier_display = entry.get('tier', 'N/A')
+        direction_display = entry.get('direction', '?')
+        entry_price_display = entry.get('entry_price', 0)
+        timestamp_display = entry.get('timestamp', 'unknown')[:10] if entry.get('timestamp') else 'unknown'
+
+        print(f"  {timestamp_display} | {direction_display:<4} @ {entry_price_display:.2f}c "
+              f"| Tier {tier_display} | -> {outcome} ({exit_reason}, {pnl:+.2f}c)")
 
     save_log(log)
     print(f"\nNewly scored this run: {newly_scored}")
@@ -173,9 +178,9 @@ def main():
     wins = sum(1 for e in scored if e['outcome'] == 'WIN')
     print(f"Overall: {wins}/{len(scored)} = {wins/len(scored):.1%}")
 
-    tiers = sorted(set(e['tier'] for e in scored))
+    tiers = sorted(set(e.get('tier', 'N/A') for e in scored), key=lambda x: (x == 'N/A', x))
     for t in tiers:
-        tier_entries = [e for e in scored if e['tier'] == t]
+        tier_entries = [e for e in scored if e.get('tier', 'N/A') == t]
         tier_wins = sum(1 for e in tier_entries if e['outcome'] == 'WIN')
         print(f"  Tier {t}: {tier_wins}/{len(tier_entries)} = {tier_wins/len(tier_entries):.1%}  (n={len(tier_entries)})")
 
