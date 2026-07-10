@@ -318,6 +318,20 @@ class ConvictionGate:
         vol_ratio = vol_curr / vol_avg if vol_avg > 0 else 1.0
         vol_low   = vol_ratio < 0.80
 
+        # DIAGNOSTIC (2026-07-10): see get_volume_signal() for full context.
+        # ZW=F's Yahoo volume field is known to be unreliable for
+        # continuous futures — if raw volume is exactly 0, vol_low is
+        # very likely firing on a data gap, not a real signal. Given this
+        # has shown up repeatedly (not a one-off), actively disable
+        # vol_low in this case rather than just warning — firing your
+        # strongest holdout-validated signal (84.8%) on bad data is worse
+        # than not firing it at all.
+        vol_data_suspect = (vol_curr == 0)
+        if vol_data_suspect:
+            print(f"   ⚠️ ConvictionGate: raw Volume=0 (data feed gap, not real) — "
+                  f"vol_low DISABLED for this run, not counted as a signal")
+            vol_low = False
+
         # Momentum (for momentum_up) — same-direction 1d and 3d returns
         ret_1d = float(close.pct_change(1).iloc[-1])
         ret_3d = float(close.pct_change(3).iloc[-1])
@@ -749,6 +763,23 @@ def get_volume_signal(df):
     ratio     = vol_curr / vol_avg if vol_avg > 0 else 1.0
     ret       = float(df['Close'].pct_change(1).iloc[-1])
 
+    # DIAGNOSTIC (2026-07-10): Vol: 0.0x has shown up repeatedly. ZW=F is a
+    # continuous/synthetic futures ticker, and Yahoo's daily volume field
+    # for these is known to be unreliable — sometimes genuinely 0 even on
+    # actively-traded days. Since vol_low (ratio < 0.80) is the system's
+    # single strongest holdout-validated signal (84.8%), a data bug here
+    # could be silently firing that signal on bad data, not real low
+    # volume. Log raw values so this can be distinguished from a genuine
+    # low-volume session.
+    if vol_curr == 0:
+        print(f"   ⚠️ SUSPECT DATA: raw Volume is exactly 0 (avg={vol_avg:.0f}). "
+              f"This is almost certainly a Yahoo data feed gap for ZW=F, "
+              f"not a real zero-volume session on the most liquid wheat contract. "
+              f"vol_low condition may be firing on bad data, not a genuine signal.")
+    elif ratio < 0.05:
+        print(f"   ⚠️ Very low vol_ratio ({ratio:.3f}) — raw Volume={vol_curr:.0f} vs avg={vol_avg:.0f}. "
+              f"Verify this is real before trusting vol_low.")
+
     if ratio > 1.5 and ret > 0:
         signal = 'BULLISH'
     elif ratio > 1.5 and ret < 0:
@@ -759,6 +790,7 @@ def get_volume_signal(df):
         signal = 'NEUTRAL'
 
     return {'signal': signal, 'ratio': round(ratio, 2),
+            'raw_volume': vol_curr, 'raw_avg_volume': round(vol_avg, 0),
             'explanation': f"{ratio:.1f}x average volume"}
 
 
