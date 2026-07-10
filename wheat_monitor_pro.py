@@ -386,6 +386,58 @@ class ConvictionGate:
         return tier, accuracy, reason, conditions
 
 
+WEEKLY_CACHE_FILE = Path("weekly_range_cache.json")
+
+
+def get_frozen_weekly_range(wre, df, current_price, cost_floor_cents):
+    """
+    FIX (2026-07-10): predict_next_week() previously recalculated a
+    brand-new range EVERY time it ran, centered on whatever the live
+    price happened to be at that moment. This meant the "weekly"
+    range/trade setup silently shifted on every single alert within
+    the same week (e.g. 608-631 -> 609-632 -> 608-632 across three
+    runs in one day) — misleading, since it was labeled as a single
+    week's forecast but was actually a fresh, moving-target
+    recalculation each time.
+
+    This wraps that call with a freeze: the range/bias/key level/
+    trade setup is computed ONCE per real ISO calendar week (the
+    week we're currently in, not a shifting "7 days from now"
+    window) and then reused unchanged for every alert until the
+    ISO week actually changes. The live current price is still
+    shown separately elsewhere in the alert — only the weekly
+    forecast itself is frozen.
+    """
+    iso_year, iso_week, _ = datetime.now(IL).isocalendar()
+
+    cached = None
+    if WEEKLY_CACHE_FILE.exists():
+        try:
+            cached = json.loads(WEEKLY_CACHE_FILE.read_text())
+        except Exception:
+            cached = None
+
+    if cached and cached.get('iso_year') == iso_year and cached.get('iso_week') == iso_week:
+        print(f"   Using FROZEN weekly range (locked earlier this week, iso {iso_year}-W{iso_week})")
+        return cached['weekly']
+
+    # New week (or no cache yet) — compute fresh and freeze it
+    weekly = wre.predict_next_week(df, current_price, cost_floor_cents)
+    try:
+        WEEKLY_CACHE_FILE.write_text(json.dumps({
+            'iso_year': iso_year,
+            'iso_week': iso_week,
+            'frozen_at': datetime.now(IL).isoformat(),
+            'weekly': weekly,
+        }, indent=2))
+        print(f"   Froze NEW weekly range for iso {iso_year}-W{iso_week}: "
+              f"{weekly['range_low']:.0f}-{weekly['range_high']:.0f}c")
+    except Exception as e:
+        print(f"   Failed to cache weekly range: {e}")
+
+    return weekly
+
+
 # ── INDICATORS ────────────────────────────────────────────────────────────────
 
 def add_indicators(df):
@@ -1003,7 +1055,7 @@ def main():
         from weekly_range_engine import WeeklyRangeEngine
         wre = WeeklyRangeEngine()
         wre.fit(df, exclude_years=[2022])
-        weekly  = wre.predict_next_week(df, current_price, cost_floor_cents)
+        weekly  = get_frozen_weekly_range(wre, df, current_price, cost_floor_cents)
         monthly = wre.predict_monthly_range(df, current_price, cost_floor_cents)
 
         print(f"  Weekly range: {weekly['range_low']:.0f} - {weekly['range_high']:.0f}c")
