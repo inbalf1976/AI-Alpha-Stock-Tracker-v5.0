@@ -18,7 +18,7 @@ Usage:
 import yfinance as yf
 from datetime import datetime, timedelta
 
-TICKER = "ZW=F"
+TICKER = "ZWU26.CBT"
 
 end = datetime.now()
 start = end - timedelta(days=20)
