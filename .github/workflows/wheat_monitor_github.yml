@@ -55,6 +55,10 @@ jobs:
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add -f wheat_monitor_state.json prediction_log.json weekly_range_cache.json backtest_results.json validated_conditions.json || true
-        git diff --quiet && git diff --staged --quiet || git commit -m "Update monitor state [skip ci]"
+        git add -f wheat_monitor_state.json || true
+        git add -f prediction_log.json || true
+        git add -f weekly_range_cache.json || true
+        git add -f backtest_results.json || true
+        git add -f validated_conditions.json || true
+        git diff --staged --quiet || git commit -m "Update monitor state [skip ci]"
         git push || echo "Nothing to push"
