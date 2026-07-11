@@ -60,5 +60,6 @@ jobs:
         git add -f weekly_range_cache.json || true
         git add -f backtest_results.json || true
         git add -f validated_conditions.json || true
+        git add -f monthly_range_cache.json || true
         git diff --staged --quiet || git commit -m "Update monitor state [skip ci]"
         git push || echo "Nothing to push"
