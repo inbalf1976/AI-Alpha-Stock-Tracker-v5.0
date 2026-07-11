@@ -293,24 +293,33 @@ class WeeklyRangeEngine:
             next_month_start = today.replace(month=today.month + 1, day=1)
         month_end = next_month_start - timedelta(days=1)
 
-        week_nums = set()
+        # Count how many days of the month fall in each ISO week, so
+        # boundary weeks (e.g. a week that's mostly June, with only 1-2
+        # days in July) contribute proportionally, not at full weight.
+        # Without this, months spanning 5 ISO weeks (common) summed all
+        # 5 weeks' full avg_range as if each fully belonged to the
+        # month, producing an unrealistic ~25%+ total swing that only
+        # looked sane because the 15% safety clamp silently caught it.
+        week_day_counts = {}
         d = month_start
         while d <= month_end:
-            week_nums.add(int(d.isocalendar()[1]))
+            wn = int(d.isocalendar()[1])
+            week_day_counts[wn] = week_day_counts.get(wn, 0) + 1
             d += timedelta(days=1)
 
         monthly_lows  = []
         monthly_highs = []
         monthly_biases = []
 
-        for week_num in sorted(week_nums):
+        for week_num in sorted(week_day_counts.keys()):
             if week_num in self.weekly_stats.index:
                 ws          = self.weekly_stats.loc[week_num]
                 range_pct   = float(ws['avg_range'])
                 avg_ret     = float(ws['avg_return'])
-                monthly_lows.append(avg_ret - range_pct / 2)
-                monthly_highs.append(avg_ret + range_pct / 2)
-                monthly_biases.append(avg_ret)
+                weight      = week_day_counts[week_num] / 7.0
+                monthly_lows.append((avg_ret - range_pct / 2) * weight)
+                monthly_highs.append((avg_ret + range_pct / 2) * weight)
+                monthly_biases.append(avg_ret * weight)
 
         if not monthly_lows:
             return None
