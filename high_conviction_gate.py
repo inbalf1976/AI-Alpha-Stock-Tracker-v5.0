@@ -1,68 +1,82 @@
 """
 HIGH CONVICTION GATE
 =====================
-REBUILT 2026-07-09 to match the real, holdout-validated numbers now
-used in wheat_monitor_pro.py's ConvictionGate class.
-UPDATED 2026-07-10: vol_low REMOVED — see below.
+UPDATED 2026-07-10: now loads from validated_conditions.json
+(auto-generated weekly by generate_validated_conditions.py from
+fresh backtest.py output), matching the same pattern as
+ConvictionGate in wheat_monitor_pro.py. Both gates now read from
+ONE shared, auto-updating source instead of each needing manual
+edits — this was the actual gap that let the old fabricated "100%"
+numbers drift out of sync with reality for so long.
 
-WHY vol_low WAS REMOVED (2026-07-10):
-  A diagnostic (volume_lag_check.py) showed ZW=F's Yahoo daily Volume
-  field takes roughly 1-2 WEEKS to fully backfill for this continuous
-  futures contract. Dates within the last ~10 days showed volume
-  readings of single/low-double digits (e.g. 7, 48, 136 contracts) on
-  the most liquid wheat contract in the world — obviously incomplete
-  data, not real trading activity. Since vol_low (ratio < 0.80)
-  compares current volume against a 20-day average that is ITSELF
-  partly built from these same artificially-low recent values, it was
-  almost certainly firing as effectively-always-true on any recent
-  date — meaning its 84.8% holdout accuracy likely measured "is this
-  date recent" rather than any genuine market behavior. This is a
-  STRUCTURAL problem that recurs every single day this runs, not a
-  rare glitch — removed rather than patched.
-
-BACKTEST FINDINGS (real, holdout-validated, as of 2026-07-09):
-  Baseline UP accuracy: 67.46%
-
-  Conditions that beat baseline on holdout data AND do not depend on
-  the unreliable Volume field:
-    momentum_up   : 84.0% UP (n=25 holdout) — strongest reliable signal
-    macd_bullish  : 70.0% UP (n=30 holdout) — modest but real
-    bearish_month : 68.0% UP (n=25 holdout) — barely above baseline
-
-  REMOVED:
-    vol_low — structural data lag, see above.
-
-  EXCLUDED (proven unreliable on holdout — do not re-add):
-    rsi_oversold, momentum_down, near_bb_lower, in_lower_half,
-    wc_bullish, rsi_neutral, inside_bb, vol_good
+vol_low remains permanently excluded (STRUCTURAL_EXCLUSIONS) — see
+generate_validated_conditions.py docstring for the confirmed Yahoo
+volume data lag that caused this.
 
 INTEGRATION:
   Call check_gate(df) before sending any alert.
   Returns (allowed, tier, accuracy, reason, conditions_met)
 """
 
+import json
 import pandas as pd
 import numpy as np
+from pathlib import Path
 from datetime import datetime
 
 
-HOLDOUT_ACCURACY = {
+FALLBACK_HOLDOUT_ACCURACY = {
     'momentum_up':   0.840,
     'macd_bullish':  0.700,
     'bearish_month': 0.680,
 }
-BASELINE_UP = 0.6746
+FALLBACK_BASELINE_UP = 0.6746
 
+STRUCTURAL_EXCLUSIONS = {'vol_low', 'vol_good', 'vol_high'}
 BEARISH_MONTHS = [6, 7, 8]
-MIN_TRADES_TO_TRUST = 15
+
+
+def _load_holdout_accuracy():
+    """Same loading logic as ConvictionGate — see wheat_monitor_pro.py."""
+    path = Path("validated_conditions.json")
+    if not path.exists():
+        print("   ⚠️ [HighConvictionGate] validated_conditions.json not found — using fallback")
+        return dict(FALLBACK_HOLDOUT_ACCURACY), FALLBACK_BASELINE_UP, "FALLBACK (no file)"
+
+    try:
+        data = json.loads(path.read_text())
+        loaded = data.get('validated_conditions', {})
+        baseline = data.get('baseline_up', FALLBACK_BASELINE_UP)
+
+        cleaned = {k: v for k, v in loaded.items() if k not in STRUCTURAL_EXCLUSIONS}
+        removed = set(loaded.keys()) & STRUCTURAL_EXCLUSIONS
+        if removed:
+            print(f"   ⚠️ [HighConvictionGate] Ignored structurally-excluded condition(s): {removed}")
+
+        if not cleaned:
+            print("   ⚠️ [HighConvictionGate] No usable conditions in file — using fallback")
+            return dict(FALLBACK_HOLDOUT_ACCURACY), FALLBACK_BASELINE_UP, "FALLBACK (empty file)"
+
+        generated_at = data.get('generated_at', 'unknown date')
+        print(f"   [HighConvictionGate] Loaded {len(cleaned)} validated condition(s) "
+              f"(generated {generated_at})")
+        return cleaned, baseline, f"LIVE (generated {generated_at})"
+
+    except Exception as e:
+        print(f"   ⚠️ [HighConvictionGate] Failed to load ({e}) — using fallback")
+        return dict(FALLBACK_HOLDOUT_ACCURACY), FALLBACK_BASELINE_UP, "FALLBACK (load error)"
 
 
 class HighConvictionGate:
     """
-    Evaluates current market conditions against HOLDOUT-VALIDATED
-    single conditions only. vol_low removed due to a confirmed
-    structural data reliability problem — see module docstring.
+    Evaluates current market conditions against whichever conditions
+    are currently validated in validated_conditions.json (auto-
+    updated weekly). vol_low structurally excluded regardless of
+    what any backtest says — see module docstring.
     """
+
+    def __init__(self):
+        self.HOLDOUT_ACCURACY, self.BASELINE_UP, self._source = _load_holdout_accuracy()
 
     def check_gate(self, df):
         if df is None or len(df) < 60:
@@ -100,12 +114,12 @@ class HighConvictionGate:
         return conds
 
     def _evaluate_tiers(self, c):
-        active = [(name, acc) for name, acc in HOLDOUT_ACCURACY.items() if c.get(name)]
+        active = [(name, acc) for name, acc in self.HOLDOUT_ACCURACY.items() if c.get(name)]
 
         if not active:
             return (
-                False, 0, BASELINE_UP,
-                f"BLOCKED — no validated condition active (baseline only, {BASELINE_UP:.1%})",
+                False, 0, self.BASELINE_UP,
+                f"BLOCKED — no validated condition active (baseline only, {self.BASELINE_UP:.1%})",
                 c
             )
 
@@ -134,14 +148,14 @@ class HighConvictionGate:
         emoji = tier_emoji.get(tier, "✅")
 
         return (
-            f"{emoji} *CONVICTION TIER {tier}* (holdout-validated)\n"
+            f"{emoji} *CONVICTION TIER {tier}* (holdout-validated, {self._source})\n"
             f"Expected accuracy: {accuracy:.0%}\n"
             f"Momentum up: {conditions['momentum_up']} | "
             f"MACD bullish: {conditions['macd_bullish']}"
         )
 
     def log_conditions(self, conditions):
-        print(f"\n🎯 Gate Conditions (holdout-validated set only, vol_low removed):")
+        print(f"\n🎯 Gate Conditions (source: {self._source}):")
         print(f"   Month: {conditions['month']} | bearish_month={conditions['bearish_month']}")
         print(f"   ret_1d={conditions['ret_1d']:+.4f} ret_3d={conditions['ret_3d']:+.4f} | "
               f"momentum_up={conditions['momentum_up']}")
