@@ -317,12 +317,61 @@ class ConvictionGate:
     """
 
     # Holdout-validated accuracies — vol_low removed 2026-07-10 (see docstring)
-    HOLDOUT_ACCURACY = {
+    # FALLBACK values, used only if validated_conditions.json is missing
+    # or invalid — see _load_holdout_accuracy() below for the real,
+    # auto-updating source. Update these manually only as a last resort.
+    FALLBACK_HOLDOUT_ACCURACY = {
         'momentum_up':   0.840,
         'macd_bullish':  0.700,
         'bearish_month': 0.680,
     }
-    BASELINE_UP = 0.6746  # from backtest_results.json baseline_up_full
+    FALLBACK_BASELINE_UP = 0.6746
+
+    # Never auto-trust these even if a loaded file somehow contains them —
+    # defense in depth alongside backtest.py's own exclusion (see
+    # backtest.py's STRUCTURAL_EXCLUSIONS for why: confirmed structural
+    # Yahoo volume data lag for ZW=F, 2026-07-10).
+    STRUCTURAL_EXCLUSIONS = {'vol_low', 'vol_good', 'vol_high'}
+
+    def __init__(self):
+        self.HOLDOUT_ACCURACY, self.BASELINE_UP, self._source = self._load_holdout_accuracy()
+
+    def _load_holdout_accuracy(self):
+        """
+        Loads validated_conditions.json (auto-produced weekly by
+        backtest.py) if present and valid. Falls back to the hardcoded
+        FALLBACK_* values otherwise, with a clear console message so
+        it's never a silent, invisible fallback.
+        """
+        path = Path("validated_conditions.json")
+        if not path.exists():
+            print("   ⚠️ validated_conditions.json not found — using hardcoded fallback accuracy values")
+            return dict(self.FALLBACK_HOLDOUT_ACCURACY), self.FALLBACK_BASELINE_UP, "FALLBACK (no file)"
+
+        try:
+            data = json.loads(path.read_text())
+            loaded = data.get('validated_conditions', {})
+            baseline = data.get('baseline_up', self.FALLBACK_BASELINE_UP)
+
+            # Defense in depth: strip any structurally-excluded condition
+            # even if it somehow made it into the file
+            cleaned = {k: v for k, v in loaded.items() if k not in self.STRUCTURAL_EXCLUSIONS}
+            removed = set(loaded.keys()) & self.STRUCTURAL_EXCLUSIONS
+            if removed:
+                print(f"   ⚠️ Ignored structurally-excluded condition(s) found in file: {removed}")
+
+            if not cleaned:
+                print("   ⚠️ validated_conditions.json had no usable conditions — using hardcoded fallback")
+                return dict(self.FALLBACK_HOLDOUT_ACCURACY), self.FALLBACK_BASELINE_UP, "FALLBACK (empty file)"
+
+            generated_at = data.get('generated_at', 'unknown date')
+            print(f"   Loaded {len(cleaned)} validated condition(s) from validated_conditions.json "
+                  f"(generated {generated_at})")
+            return cleaned, baseline, f"LIVE (generated {generated_at})"
+
+        except Exception as e:
+            print(f"   ⚠️ Failed to load validated_conditions.json ({e}) — using hardcoded fallback")
+            return dict(self.FALLBACK_HOLDOUT_ACCURACY), self.FALLBACK_BASELINE_UP, "FALLBACK (load error)"
 
     def evaluate(self, df):
         close = df['Close']
@@ -809,28 +858,89 @@ def get_weather_signal():
 
 # ── VOLUME SIGNAL ─────────────────────────────────────────────────────────────
 
-def get_volume_signal(df):
-    vol_avg   = float(df['Volume'].rolling(20).mean().iloc[-1])
-    vol_curr  = float(df['Volume'].iloc[-1])
-    ratio     = vol_curr / vol_avg if vol_avg > 0 else 1.0
-    ret       = float(df['Close'].pct_change(1).iloc[-1])
+# ── FRONT-MONTH CONTRACT (for accurate volume only) ──────────────────────────
+# CBOT wheat delivery months: Mar(H), May(K), Jul(N), Sep(U), Dec(Z)
+# ZW=F's continuous-contract volume field has a confirmed ~1-2 week
+# backfill lag (see volume_lag_check.py, 2026-07-10/11 diagnostics).
+# The specific front-month contract does NOT have this lag — confirmed
+# by direct comparison (ZWU26.CBT showed real volume 70k-113k on dates
+# where ZW=F showed single/double digits). BUT a specific contract only
+# has a few months of tradeable history, so it's used ONLY for the
+# live volume display/diagnostic — price, seasonal, and backtest
+# history all continue using ZW=F's long continuous series.
+WHEAT_MONTH_CODES = {3: 'H', 5: 'K', 7: 'N', 9: 'U', 12: 'Z'}
 
-    # DIAGNOSTIC (2026-07-10): Vol: 0.0x has shown up repeatedly. ZW=F is a
-    # continuous/synthetic futures ticker, and Yahoo's daily volume field
-    # for these is known to be unreliable — sometimes genuinely 0 even on
-    # actively-traded days. Since vol_low (ratio < 0.80) is the system's
-    # single strongest holdout-validated signal (84.8%), a data bug here
-    # could be silently firing that signal on bad data, not real low
-    # volume. Log raw values so this can be distinguished from a genuine
-    # low-volume session.
-    if vol_curr == 0:
-        print(f"   ⚠️ SUSPECT DATA: raw Volume is exactly 0 (avg={vol_avg:.0f}). "
-              f"This is almost certainly a Yahoo data feed gap for ZW=F, "
-              f"not a real zero-volume session on the most liquid wheat contract. "
-              f"vol_low condition may be firing on bad data, not a genuine signal.")
-    elif ratio < 0.05:
-        print(f"   ⚠️ Very low vol_ratio ({ratio:.3f}) — raw Volume={vol_curr:.0f} vs avg={vol_avg:.0f}. "
-              f"Verify this is real before trusting vol_low.")
+
+def get_front_month_ticker(reference_date=None):
+    """
+    Returns the current front-month CBOT wheat contract ticker
+    (e.g. 'ZWU26.CBT'), rolling forward to the next contract month
+    once inside the current delivery month (a simple, conservative
+    roll rule — precise CBOT last-trade dates vary, but rolling at
+    the start of delivery month avoids ever using an expired symbol).
+    """
+    ref = reference_date or datetime.now(IL)
+    months = sorted(WHEAT_MONTH_CODES.keys())
+
+    year = ref.year
+    for m in months:
+        if ref.month < m:
+            return f"ZW{WHEAT_MONTH_CODES[m]}{str(year)[-2:]}.CBT"
+    # Past all this year's months — roll to March of next year
+    return f"ZW{WHEAT_MONTH_CODES[3]}{str(year + 1)[-2:]}.CBT"
+
+
+def get_accurate_volume():
+    """
+    Fetches real, non-lagged volume from the front-month specific
+    contract, for use in the display/diagnostic line only. Falls
+    back to (None, False) if the fetch fails — caller should fall
+    back to the ZW=F figure with a clear label, not silently trust
+    a missing value.
+    """
+    ticker = get_front_month_ticker()
+    try:
+        df = yf.Ticker(ticker).history(period='5d', interval='1d', auto_adjust=False)
+        if not df.empty:
+            vol_avg  = float(df['Volume'].rolling(min(20, len(df))).mean().iloc[-1])
+            vol_curr = float(df['Volume'].iloc[-1])
+            return {
+                'ticker': ticker,
+                'raw_volume': vol_curr,
+                'raw_avg_volume': round(vol_avg, 0),
+                'ratio': round(vol_curr / vol_avg, 2) if vol_avg > 0 else None,
+            }, True
+    except Exception as e:
+        print(f"   Front-month volume fetch failed ({ticker}): {e}")
+    return None, False
+
+
+def get_volume_signal(df):
+    """
+    UPDATED 2026-07-10/11: the Vol: Xx display now uses accurate,
+    non-lagged volume from the current front-month specific contract
+    (see get_accurate_volume() above) instead of ZW=F's continuous
+    series, which has a confirmed multi-day backfill lag. This is
+    DISPLAY ONLY — vol_low remains permanently excluded from
+    ConvictionGate/HighConvictionGate (see those files' docstrings);
+    re-enabling it as a real trading signal would require backtesting
+    volume across many historical rolled contracts, a separate task.
+    """
+    accurate, is_accurate = get_accurate_volume()
+
+    if is_accurate and accurate['ratio'] is not None:
+        vol_avg  = accurate['raw_avg_volume']
+        vol_curr = accurate['raw_volume']
+        ratio    = accurate['ratio']
+        source   = f"LIVE ({accurate['ticker']})"
+    else:
+        # Fallback to the old (known-lagged) ZW=F figure, clearly labeled
+        vol_avg   = float(df['Volume'].rolling(20).mean().iloc[-1])
+        vol_curr  = float(df['Volume'].iloc[-1])
+        ratio     = vol_curr / vol_avg if vol_avg > 0 else 1.0
+        source    = "⚠️ FALLBACK (ZW=F, known lag)"
+
+    ret = float(df['Close'].pct_change(1).iloc[-1])
 
     if ratio > 1.5 and ret > 0:
         signal = 'BULLISH'
@@ -843,7 +953,8 @@ def get_volume_signal(df):
 
     return {'signal': signal, 'ratio': round(ratio, 2),
             'raw_volume': vol_curr, 'raw_avg_volume': round(vol_avg, 0),
-            'explanation': f"{ratio:.1f}x average volume"}
+            'source': source,
+            'explanation': f"{ratio:.1f}x average volume ({source})"}
 
 
 # ── STATE ─────────────────────────────────────────────────────────────────────
