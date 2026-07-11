@@ -1,0 +1,11 @@
+{
+  "month_key": "2026-07",
+  "frozen_at": "2026-07-11T22:49:11.153638+03:00",
+  "monthly": {
+    "monthly_low": 568.75,
+    "monthly_high": 726.8,
+    "bias": "NEUTRAL",
+    "avg_return": 0.11,
+    "month_label": "July"
+  }
+}
