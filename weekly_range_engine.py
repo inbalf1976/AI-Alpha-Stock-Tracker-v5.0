@@ -266,18 +266,44 @@ class WeeklyRangeEngine:
     # ── MONTHLY OUTLOOK ───────────────────────────────────────────────────────
 
     def predict_monthly_range(self, df, current_price, cost_floor_cents=None):
+        """
+        FIX (2026-07-11): same bug class as predict_next_week had
+        before its 2026-07-10 fix — this previously aggregated "the
+        next 4 weeks from today", a rolling window that shifts every
+        single day, rather than the actual current calendar month.
+        Combined with using live current_price as the center point
+        every run, this caused the monthly range to visibly change
+        on every alert, all week, for no real reason.
+
+        Now aggregates the ISO weeks that fall within the CURRENT
+        calendar month (today's actual month, 1st to last day), so
+        "July's range" genuinely means July. Combined with
+        get_frozen_monthly_range() in wheat_monitor_pro.py, this
+        should be computed once per real calendar month and held
+        fixed until the month changes.
+        """
         if not self.fitted:
             raise RuntimeError("Call fit() first")
 
         today = datetime.now(IL)
+        month_start = today.replace(day=1)
+        if today.month == 12:
+            next_month_start = today.replace(year=today.year + 1, month=1, day=1)
+        else:
+            next_month_start = today.replace(month=today.month + 1, day=1)
+        month_end = next_month_start - timedelta(days=1)
+
+        week_nums = set()
+        d = month_start
+        while d <= month_end:
+            week_nums.add(int(d.isocalendar()[1]))
+            d += timedelta(days=1)
+
         monthly_lows  = []
         monthly_highs = []
         monthly_biases = []
 
-        for week_offset in range(1, 5):
-            target_date = today + timedelta(weeks=week_offset)
-            week_num    = int(target_date.isocalendar()[1])
-
+        for week_num in sorted(week_nums):
             if week_num in self.weekly_stats.index:
                 ws          = self.weekly_stats.loc[week_num]
                 range_pct   = float(ws['avg_range'])
