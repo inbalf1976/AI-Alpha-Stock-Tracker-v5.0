@@ -435,6 +435,47 @@ class ConvictionGate:
         return tier, accuracy, reason, conditions
 
 
+MONTHLY_CACHE_FILE = Path("monthly_range_cache.json")
+
+
+def get_frozen_monthly_range(wre, df, current_price, cost_floor_cents):
+    """
+    Same freeze pattern as get_frozen_weekly_range(), applied to the
+    monthly outlook — see that function's docstring and
+    predict_monthly_range()'s docstring for the full reasoning.
+    Computed once per real calendar month, reused until the month
+    actually changes.
+    """
+    today = datetime.now(IL)
+    cache_key = f"{today.year}-{today.month:02d}"
+
+    cached = None
+    if MONTHLY_CACHE_FILE.exists():
+        try:
+            cached = json.loads(MONTHLY_CACHE_FILE.read_text())
+        except Exception:
+            cached = None
+
+    if cached and cached.get('month_key') == cache_key:
+        print(f"   Using FROZEN monthly range (locked earlier this month, {cache_key})")
+        return cached['monthly']
+
+    monthly = wre.predict_monthly_range(df, current_price, cost_floor_cents)
+    if monthly:
+        try:
+            MONTHLY_CACHE_FILE.write_text(json.dumps({
+                'month_key': cache_key,
+                'frozen_at': today.isoformat(),
+                'monthly': monthly,
+            }, indent=2))
+            print(f"   Froze NEW monthly range for {cache_key}: "
+                  f"{monthly['monthly_low']:.0f}-{monthly['monthly_high']:.0f}c")
+        except Exception as e:
+            print(f"   Failed to cache monthly range: {e}")
+
+    return monthly
+
+
 WEEKLY_CACHE_FILE = Path("weekly_range_cache.json")
 
 
@@ -1167,7 +1208,7 @@ def main():
         wre = WeeklyRangeEngine()
         wre.fit(df, exclude_years=[2022])
         weekly  = get_frozen_weekly_range(wre, df, current_price, cost_floor_cents)
-        monthly = wre.predict_monthly_range(df, current_price, cost_floor_cents)
+        monthly = get_frozen_monthly_range(wre, df, current_price, cost_floor_cents)
 
         print(f"  Weekly range: {weekly['range_low']:.0f} - {weekly['range_high']:.0f}c")
         print(f"  Weekly bias:  {weekly['bias']} ({weekly['confidence']:.0%})")
