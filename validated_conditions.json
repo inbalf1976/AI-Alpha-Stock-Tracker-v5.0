@@ -1,0 +1,11 @@
+{
+  "generated_at": "2026-07-12T23:24:52.638558",
+  "baseline_up": 0.6827,
+  "validated_conditions": {
+    "bearish_month": 0.692,
+    "macd_bullish": 0.71,
+    "momentum_up": 0.88,
+    "near_bb_upper": 0.7
+  },
+  "source_backtest_run_date": "2026-07-12T23:24:52.547556"
+}
