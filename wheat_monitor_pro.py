@@ -497,6 +497,15 @@ def get_frozen_weekly_range(wre, df, current_price, cost_floor_cents):
     ISO week actually changes. The live current price is still
     shown separately elsewhere in the alert — only the weekly
     forecast itself is frozen.
+    FIX (2026-07-14): entry price was being frozen along with the
+    rest of the weekly bundle, but the alert template labels it
+    "(current)" — which became false by mid-week once real price
+    moved away from Monday's freeze value (a real example: Monday
+    froze entry at 640c, but by Thursday real price had moved to
+    670-685c during a Black Sea supply shock, while the alert kept
+    showing "Entry: 640c (current)", a stale number mislabeled as
+    live). Range/stop/target correctly stay frozen for the week —
+    only entry now always reflects today's real live price.
     """
     iso_year, iso_week, _ = datetime.now(IL).isocalendar()
 
@@ -509,7 +518,10 @@ def get_frozen_weekly_range(wre, df, current_price, cost_floor_cents):
 
     if cached and cached.get('iso_year') == iso_year and cached.get('iso_week') == iso_week:
         print(f"   Using FROZEN weekly range (locked earlier this week, iso {iso_year}-W{iso_week})")
-        return cached['weekly']
+        weekly = dict(cached['weekly'])
+        weekly['entry'] = round(current_price, 2)  # always live, never frozen
+        weekly['current_price'] = round(current_price, 2)
+        return weekly
 
     # New week (or no cache yet) — compute fresh and freeze it
     weekly = wre.predict_next_week(df, current_price, cost_floor_cents)
