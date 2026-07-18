@@ -1,1 +1,29 @@
-
+{
+  "iso_year": 2026,
+  "iso_week": 29,
+  "frozen_at": "2026-07-18T22:34:57.821270+03:00",
+  "weekly": {
+    "range_low": 671.13,
+    "range_high": 700.18,
+    "range_width_pct": 4.26,
+    "bias": "UP",
+    "bias_pct": 100.0,
+    "confidence": 0.64,
+    "key_level": 614.88,
+    "key_level_label": "SMA50 (key support)",
+    "entry": 682.75,
+    "stop": 669.68,
+    "target": 700.18,
+    "rr": 1.33,
+    "week_num": 29,
+    "next_week_label": "Week 29 (starting Mon Jul 13)",
+    "month_label": "Post-harvest low",
+    "hist_up_pct": 100.0,
+    "hist_avg_return": 4.95,
+    "sample_count": 4,
+    "sample_confidence_note": "moderate confidence \u2014 4 years of data",
+    "current_price": 682.75,
+    "final_call": "UP",
+    "history": []
+  }
+}
