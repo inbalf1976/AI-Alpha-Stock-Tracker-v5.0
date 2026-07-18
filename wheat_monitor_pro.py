@@ -596,28 +596,26 @@ def log_weekly_break(iso_year, iso_week, current_price, old_weekly, reason):
 
 def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direction):
     """
-    REBUILT 2026-07-14 per new design — replaces get_frozen_weekly_range.
+    REBUILT 2026-07-14, corrected same day: entry/stop/target now come
+    from predict_next_week()'s OWN real historical/ATR-based forecast
+    (clamped to a -15%/+25% outer safety boundary), NOT a hardcoded
+    fixed-percentage formula. An earlier version of this fix mistakenly
+    always used exactly -15%/+25% as the forecast itself; corrected to
+    treat those as outer limits only — the model's real forecast can
+    (and usually should) be narrower.
 
-    Key changes from the previous version:
-      - weekly['final_call'] is now tracked explicitly and is the
-        FROZEN weekly direction shown as the top-level header — it
-        only changes when the current setup actually breaks (not
-        every run, and not from daily ensemble noise).
-      - entry/stop/target now come from compute_setup_from_entry()
-        (fixed -15%/+25% band), not the old ATR/historical blend —
-        and ENTRY STAYS FROZEN too (the earlier "always live entry"
-        patch is removed) since entry is now part of a real trade
-        plan, not a display value. Today's actual live price is
-        shown separately via the status line instead.
-      - On break: if price broke past TARGET, that's a WIN — the new
-        setup continues in the SAME direction with fresh, wider
-        levels. If price broke past STOP, that's a LOSS — the new
-        setup FLIPS direction, since the original directional read
-        was wrong.
-      - EXPECTED RANGE (bias/confidence/key_level/historical stats)
-        still comes from predict_next_week()'s seasonal calculation,
-        unchanged — only entry/stop/target/final_call use the new
-        fixed-percentage method.
+    - weekly['final_call'] is the FROZEN weekly direction shown as the
+      top-level header — only changes when the current setup breaks.
+    - On break: WIN (broke past target) → same direction, new real
+      forecast around current price. LOSS (broke past stop) → flip
+      direction, new real forecast for the flipped direction.
+    - forced_direction is passed to predict_next_week() so the
+      regenerated forecast still uses real seasonal/ATR data, just
+      pinned to the win/loss-determined direction rather than
+      whatever the data would have picked on its own.
+    - On a fresh week, NO forced_direction — the model's own bias
+      score (now also nudged by today's daily_direction_hint) decides
+      final_call, rather than blindly copying the daily ensemble read.
     """
     iso_year, iso_week, _ = datetime.now(IL).isocalendar()
 
@@ -654,16 +652,17 @@ def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direc
             print(f"   ⚠️ WEEKLY SETUP BROKEN: {reason} — regenerating")
             log_weekly_break(iso_year, iso_week, current_price, old_weekly, reason)
 
-            # Win → keep same direction, fresh wider levels.
+            # Win → keep same direction, fresh real forecast.
             # Loss → the directional read was wrong, flip it.
             new_final_call = final_call if break_type == 'target' else (
                 'DOWN' if final_call == 'UP' else 'UP')
 
-            weekly = wre.predict_next_week(df, current_price, cost_floor_cents)
-            setup = wre.compute_setup_from_entry(current_price, new_final_call)
-            weekly.update(setup)
+            weekly = wre.predict_next_week(
+                df, current_price, cost_floor_cents,
+                forced_direction=new_final_call,
+                daily_direction_hint=daily_direction,
+            )
             weekly['final_call'] = new_final_call
-            weekly['bias'] = new_final_call
 
             history = old_weekly.get('history', [])
             history.append({
@@ -682,7 +681,8 @@ def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direc
                     'weekly': weekly,
                 }, indent=2))
                 print(f"   Re-froze weekly plan after {outcome}: final_call={new_final_call}, "
-                      f"entry={weekly['entry']:.0f} stop={weekly['stop']:.0f} target={weekly['target']:.0f}")
+                      f"entry={weekly['entry']:.0f} stop={weekly['stop']:.0f} target={weekly['target']:.0f} "
+                      f"(range {weekly['range_low']:.0f}-{weekly['range_high']:.0f})")
             except Exception as e:
                 print(f"   Failed to cache regenerated weekly plan: {e}")
 
@@ -696,12 +696,13 @@ def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direc
                    else weekly['target'] <= current_price <= weekly['stop']
         return weekly, not in_range, None
 
-    # New week — compute fresh, freeze final_call to today's daily_direction
-    weekly = wre.predict_next_week(df, current_price, cost_floor_cents)
-    setup = wre.compute_setup_from_entry(current_price, daily_direction)
-    weekly.update(setup)
-    weekly['final_call'] = daily_direction
-    weekly['bias'] = daily_direction
+    # New week — let the model's OWN real forecast (nudged by today's
+    # daily direction, not overridden by it) determine final_call
+    weekly = wre.predict_next_week(
+        df, current_price, cost_floor_cents,
+        daily_direction_hint=daily_direction,
+    )
+    weekly['final_call'] = weekly['bias'] if weekly['bias'] in ('UP', 'DOWN') else daily_direction
     weekly['history'] = []
 
     try:
@@ -711,8 +712,9 @@ def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direc
             'weekly': weekly,
         }, indent=2))
         print(f"   Froze NEW weekly plan for iso {iso_year}-W{iso_week}: "
-              f"final_call={daily_direction}, entry={weekly['entry']:.0f} "
-              f"stop={weekly['stop']:.0f} target={weekly['target']:.0f}")
+              f"final_call={weekly['final_call']}, entry={weekly['entry']:.0f} "
+              f"stop={weekly['stop']:.0f} target={weekly['target']:.0f} "
+              f"(range {weekly['range_low']:.0f}-{weekly['range_high']:.0f})")
     except Exception as e:
         print(f"   Failed to cache weekly plan: {e}")
 
