@@ -175,15 +175,62 @@ class WeeklyRangeEngine:
         else:
             ws = self.weekly_stats.iloc[min(target_week_num, len(self.weekly_stats)-1)]
 
-        # RANGE FORMULA (2026-07-14): changed from ATR-blended ~7-8%
-        # symmetric width to explicit asymmetric -15%/+25% of price —
-        # a deliberately wider weekly range given this year's real,
-        # confirmed shock volatility (Russia canal/Black Sea events
-        # moved price 20-45c in single sessions). This replaces the
-        # narrower historical-pattern width, which was blown through
-        # twice in the two weeks leading up to this change.
-        DOWN_PCT = 0.15
-        UP_PCT   = 0.25
+    def predict_next_week(self, df, current_price, cost_floor_cents=None,
+                           forced_direction=None, daily_direction_hint=None):
+        """
+        FIX (2026-07-10): targets the CURRENT ISO week, not a shifting
+        +7 day window — see prior changelog entries for full history.
+
+        REBUILT (2026-07-14) per corrected design: the model computes
+        its OWN real weekly HIGH/LOW from historical seasonal pattern
+        + current ATR (same as the original design), and that
+        forecast can be ANY width — it is only CLAMPED to a hard
+        outer safety boundary of -15%/+25% from current price, never
+        forced to exactly those numbers. A quiet, typical week might
+        forecast a narrow 8-12% range; only if the raw calculation
+        would exceed the -15%/+25% outer limits does clamping kick
+        in. (An earlier version of this fix mistakenly hardcoded the
+        range to always be exactly -15%/+25% — corrected here.)
+
+        forced_direction: used only when regenerating after a broken
+        setup (win → same direction, loss → flip) — overrides the
+        data-derived bias so the forced direction still gets a real,
+        clamped range appropriate to it, rather than a fixed formula.
+
+        daily_direction_hint: today's backtest-informed daily ensemble
+        read (ConvictionGate/EnsemblePredictor), fed in as a small
+        additional nudge to the weekly bias score — per design note,
+        the weekly forecast should also draw on the same
+        backtest-validated signals the daily alert uses, not only
+        seasonal/trend/cost-floor data in isolation.
+        """
+        if not self.fitted:
+            raise RuntimeError("Call fit() first")
+
+        # Target THIS week (containing today), not a shifting +7 day window
+        today = datetime.now(IL)
+        target_week_num = int(today.isocalendar()[1])
+        # Monday of the current ISO week, for a clear, stable label
+        week_monday = today - timedelta(days=today.isoweekday() - 1)
+
+        if target_week_num in self.weekly_stats.index:
+            ws = self.weekly_stats.loc[target_week_num]
+        else:
+            ws = self.weekly_stats.iloc[min(target_week_num, len(self.weekly_stats)-1)]
+
+        # OUTER SAFETY BOUNDS ONLY — the real forecast below can be
+        # (and usually should be) much narrower than this; these are
+        # just the hard ceiling/floor it may never exceed.
+        MAX_DOWN_PCT = 0.15
+        MAX_UP_PCT   = 0.25
+
+        hist_range_pct  = float(ws['avg_range'])
+        hist_range_std  = float(ws['std_range']) if not np.isnan(ws['std_range']) else hist_range_pct * 0.3
+
+        atr_pct = float(df['ATR'].iloc[-1]) / current_price
+        atr_weekly_estimate = atr_pct * 2.5
+        blended_range_pct = hist_range_pct * 0.60 + atr_weekly_estimate * 0.40
+        range_half = (current_price * blended_range_pct) / 2
 
         hist_up_pct    = float(ws['up_pct'])
         hist_avg_ret   = float(ws['avg_return'])
@@ -208,7 +255,18 @@ class WeeklyRangeEngine:
             elif dist_from_floor > 0.10:
                 bias_score -= 0.002
 
-        if bias_score > 0.002:
+        # Small nudge from today's backtest-informed daily direction,
+        # per design note — the weekly call should partly draw on the
+        # same validated signals the daily alert already uses.
+        if daily_direction_hint == 'UP':
+            bias_score += 0.0015
+        elif daily_direction_hint == 'DOWN':
+            bias_score -= 0.0015
+
+        if forced_direction in ('UP', 'DOWN'):
+            bias = forced_direction
+            bias_pct = hist_up_pct if bias == 'UP' else (1 - hist_up_pct)
+        elif bias_score > 0.002:
             bias      = 'UP'
             bias_pct  = hist_up_pct
         elif bias_score < -0.002:
@@ -235,10 +293,32 @@ class WeeklyRangeEngine:
         else:
             sample_confidence_note = f"{sample_count} years of data"
 
-        range_low  = current_price * (1 - DOWN_PCT)
-        range_high = current_price * (1 + UP_PCT)
+        # Real forecast, skewed toward the bias direction (as before)
+        if bias == 'UP':
+            range_low  = current_price - range_half * 0.40
+            range_high = current_price + range_half * 0.60
+        elif bias == 'DOWN':
+            range_low  = current_price - range_half * 0.60
+            range_high = current_price + range_half * 0.40
+        else:
+            range_low  = current_price - range_half * 0.50
+            range_high = current_price + range_half * 0.50
+
+        # ── OUTER BOUND CLAMP (the actual fix) ────────────────────────────────
+        # The real forecast above may be narrower than these limits
+        # (typical/quiet weeks) — it just may never be WIDER than them.
+        floor_price   = current_price * (1 - MAX_DOWN_PCT)
+        ceiling_price = current_price * (1 + MAX_UP_PCT)
+        clamped = False
+        if range_low < floor_price:
+            range_low = floor_price
+            clamped = True
+        if range_high > ceiling_price:
+            range_high = ceiling_price
+            clamped = True
+
         blended_range_pct = (range_high - range_low) / current_price
-        range_half = (range_high - range_low) / 2
+        range_half = (range_high - range_low) / 2  # recompute AFTER clamp, for a consistent stop buffer
 
         if cost_floor_cents and range_low < cost_floor_cents < range_high:
             key_level       = cost_floor_cents
