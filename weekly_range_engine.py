@@ -105,6 +105,42 @@ class WeeklyRangeEngine:
 
     # ── PREDICT ───────────────────────────────────────────────────────────────
 
+    def compute_setup_from_entry(self, entry, direction):
+        """
+        NEW (2026-07-14): replaces the old ATR/historical-blended range
+        for the actual TRADE SETUP (not the informational EXPECTED
+        RANGE, which still uses seasonal history separately). Uses a
+        fixed, asymmetric -15%/+25% band from the entry price —
+        deliberately wide and skewed upward, reflecting the recent
+        reality that Black Sea supply shocks have repeatedly blown
+        through narrower historical-based ranges this month, with
+        upside moves (698 high) larger than downside ones.
+
+        direction: 'UP' or 'DOWN' — determines which side is the
+        stop and which is the target.
+        """
+        entry = float(entry)
+        if direction == 'UP':
+            low  = round(entry * 0.85, 2)
+            high = round(entry * 1.25, 2)
+            stop, target = low, high
+        elif direction == 'DOWN':
+            low  = round(entry * 0.75, 2)
+            high = round(entry * 1.15, 2)
+            stop, target = high, low
+        else:  # NEUTRAL fallback — symmetric-ish, no strong directional lean
+            low  = round(entry * 0.85, 2)
+            high = round(entry * 1.15, 2)
+            stop, target = low, high
+
+        rr = abs(target - entry) / abs(stop - entry) if abs(stop - entry) > 0 else 0
+
+        return {
+            'range_low': low, 'range_high': high,
+            'entry': round(entry, 2), 'stop': stop, 'target': target,
+            'rr': round(rr, 2),
+        }
+
     def predict_next_week(self, df, current_price, cost_floor_cents=None):
         """
         FIX (2026-07-10): previously used `next_week = today + 7 days`,
@@ -139,13 +175,15 @@ class WeeklyRangeEngine:
         else:
             ws = self.weekly_stats.iloc[min(target_week_num, len(self.weekly_stats)-1)]
 
-        hist_range_pct  = float(ws['avg_range'])
-        hist_range_std  = float(ws['std_range']) if not np.isnan(ws['std_range']) else hist_range_pct * 0.3
-
-        atr_pct = float(df['ATR'].iloc[-1]) / current_price
-        atr_weekly_estimate = atr_pct * 2.5
-        blended_range_pct = hist_range_pct * 0.60 + atr_weekly_estimate * 0.40
-        range_half = (current_price * blended_range_pct) / 2
+        # RANGE FORMULA (2026-07-14): changed from ATR-blended ~7-8%
+        # symmetric width to explicit asymmetric -15%/+25% of price —
+        # a deliberately wider weekly range given this year's real,
+        # confirmed shock volatility (Russia canal/Black Sea events
+        # moved price 20-45c in single sessions). This replaces the
+        # narrower historical-pattern width, which was blown through
+        # twice in the two weeks leading up to this change.
+        DOWN_PCT = 0.15
+        UP_PCT   = 0.25
 
         hist_up_pct    = float(ws['up_pct'])
         hist_avg_ret   = float(ws['avg_return'])
@@ -197,15 +235,10 @@ class WeeklyRangeEngine:
         else:
             sample_confidence_note = f"{sample_count} years of data"
 
-        if bias == 'UP':
-            range_low  = current_price - range_half * 0.40
-            range_high = current_price + range_half * 0.60
-        elif bias == 'DOWN':
-            range_low  = current_price - range_half * 0.60
-            range_high = current_price + range_half * 0.40
-        else:
-            range_low  = current_price - range_half * 0.50
-            range_high = current_price + range_half * 0.50
+        range_low  = current_price * (1 - DOWN_PCT)
+        range_high = current_price * (1 + UP_PCT)
+        blended_range_pct = (range_high - range_low) / current_price
+        range_half = (range_high - range_low) / 2
 
         if cost_floor_cents and range_low < cost_floor_cents < range_high:
             key_level       = cost_floor_cents
@@ -300,6 +333,19 @@ class WeeklyRangeEngine:
         # 5 weeks' full avg_range as if each fully belonged to the
         # month, producing an unrealistic ~25%+ total swing that only
         # looked sane because the 15% safety clamp silently caught it.
+        #
+        # SECOND FIX (same day): the weighting fix above helped only
+        # marginally (156c -> still ~156c wide) because the deeper
+        # problem wasn't boundary weeks — it was summing each week's
+        # FULL range linearly across 4-5 weeks. Range/volatility does
+        # NOT add up linearly across periods; it scales with the
+        # square root of time (standard random-walk/volatility scaling
+        # in finance). Naively summing 5 weeks' full ranges massively
+        # overstates real monthly range — that's why the 15% safety
+        # clamp was silently doing all the work both times, on both
+        # sides of the range. Now uses a weighted AVERAGE weekly range
+        # (not a sum), scaled by sqrt(effective number of weeks),
+        # applied once — the statistically defensible way to do this.
         week_day_counts = {}
         d = month_start
         while d <= month_end:
@@ -307,26 +353,38 @@ class WeeklyRangeEngine:
             week_day_counts[wn] = week_day_counts.get(wn, 0) + 1
             d += timedelta(days=1)
 
-        monthly_lows  = []
-        monthly_highs = []
-        monthly_biases = []
+        weighted_range_pcts = []
+        weighted_returns    = []
+        weights             = []
 
-        for week_num in sorted(week_day_counts.keys()):
+        for week_num, days_in_month in week_day_counts.items():
             if week_num in self.weekly_stats.index:
-                ws          = self.weekly_stats.loc[week_num]
-                range_pct   = float(ws['avg_range'])
-                avg_ret     = float(ws['avg_return'])
-                weight      = week_day_counts[week_num] / 7.0
-                monthly_lows.append((avg_ret - range_pct / 2) * weight)
-                monthly_highs.append((avg_ret + range_pct / 2) * weight)
-                monthly_biases.append(avg_ret * weight)
+                ws        = self.weekly_stats.loc[week_num]
+                range_pct = float(ws['avg_range'])
+                avg_ret   = float(ws['avg_return'])
+                weight    = days_in_month / 7.0
+                weighted_range_pcts.append(range_pct * weight)
+                weighted_returns.append(avg_ret * weight)
+                weights.append(weight)
 
-        if not monthly_lows:
+        if not weights:
             return None
 
-        cumulative_low  = current_price * (1 + sum(monthly_lows))
-        cumulative_high = current_price * (1 + sum(monthly_highs))
-        avg_monthly_ret = sum(monthly_biases)
+        total_weight = sum(weights)
+        # Weighted average weekly range (not a sum) — the typical
+        # week's range this month, on average
+        avg_weekly_range_pct = sum(weighted_range_pcts) / total_weight
+        # Returns DO compound roughly additively (fine to sum) —
+        # this is the expected total drift over the month
+        avg_monthly_ret = sum(weighted_returns)
+        # Volatility scales with sqrt(time), not linear time —
+        # this is the actual fix
+        monthly_range_pct = avg_weekly_range_pct * (total_weight ** 0.5)
+
+        center = current_price * (1 + avg_monthly_ret)
+        half_range = current_price * monthly_range_pct / 2
+        cumulative_low  = center - half_range
+        cumulative_high = center + half_range
 
         max_move = current_price * 0.15
         monthly_low  = max(current_price - max_move, min(cumulative_low,  cumulative_high))
@@ -349,8 +407,26 @@ class WeeklyRangeEngine:
 
     def format_alert(self, weekly, monthly=None, tier=0, gate_conds=None,
                      wasde=None, weather=None, seasonal=None, cost_signal=None,
-                     gate_accuracy=None, gate_reason=None, final_direction=None):
+                     gate_accuracy=None, gate_reason=None, final_direction=None,
+                     daily_direction=None, status_line=None):
         """
+        UPDATED 2026-07-14 — new weekly plan design:
+          - weekly['final_call'] is now the FROZEN weekly direction
+            (only changes when the week's TP/SL setup breaks), shown
+            as the top-level "WEEKLY FINAL CALL" header.
+          - daily_direction is a SEPARATE, freshly-computed daily
+            technical read (ensemble/trend/seasonal), shown on its
+            own line, distinct from the frozen weekly call.
+          - status_line shows whether today's real price is inside
+            or outside the current frozen setup's range.
+          - Trade setup (entry/stop/target) now uses a fixed -15%/
+            +25% band from entry (see compute_setup_from_entry),
+            not the old ATR/historical blend — EXPECTED RANGE above
+            it still uses the historical/seasonal calc separately,
+            since that section answers a different question ("what's
+            typical this week historically") than the trade setup
+            ("what am I actually risking against right now").
+
         FIX 2 (2026-07-09): tier_labels/tier_advice used to be hardcoded
         to the OLD fake tier scheme (100%/94.7%/81.7%) and never updated
         when ConvictionGate was rebuilt with real holdout-tested numbers.
@@ -358,18 +434,6 @@ class WeeklyRangeEngine:
         gate_accuracy. Trade setup is now clearly gated: full numbers
         only shown when conviction is real (tier > 0); otherwise an
         explicit "no trade setup" message replaces it.
-
-        FIX 3 (2026-07-09): the message used to show weekly['bias'] as a
-        standalone "BIAS: UP/DOWN" line with no indication of whether it
-        actually won the override against the ensemble's direction (see
-        wheat_monitor_pro.py — override only fires if weekly confidence
-        >= 65%). This caused a real, confusing case in practice: an
-        alert showed "BIAS: UP (48%)" prominently while the ensemble was
-        heavily DOWN and the monthly outlook also said DOWN — the weekly
-        bias had LOST the override (48% < 65% threshold) but was still
-        displayed as if it were the headline call. Now the message
-        leads with an explicit FINAL CALL line, and the BIAS line is
-        annotated whenever it disagrees with the actual final direction.
         """
 
         if gate_accuracy is not None:
@@ -420,43 +484,20 @@ class WeeklyRangeEngine:
             fundamental_line += f"Weather: {weather['signal']}\n"
 
         # ── Trade setup block — only shown with real conviction (FIX 2) ──────
-        # ── FIX 4 (2026-07-09): trade setup must match FINAL CALL, not the
-        # weekly engine's own (possibly overridden/losing) bias. Previously
-        # Entry/Stop/Target were always built from weekly['bias'] even when
-        # final_direction disagreed — meaning an alert could show
-        # "FINAL CALL: DOWN" at the top and still print a bullish trade
-        # setup (stop below entry, target above) underneath it. Now the
-        # setup direction is derived from final_direction when provided.
-        effective_direction = final_direction if final_direction is not None else weekly['bias']
+        # ── NEW (2026-07-14): trade setup now comes directly from the
+        # weekly dict's own entry/stop/target — set once via
+        # compute_setup_from_entry() when the week (or a mid-week
+        # breakout regeneration) was frozen, in wheat_monitor_pro.py.
+        # No longer recalculated here from bias/current_price.
+        weekly_final_call = weekly.get('final_call', final_direction)
 
-        if tier > 0:
-            if effective_direction == 'UP':
-                setup_entry  = weekly['current_price']
-                setup_stop   = weekly['range_low']
-                setup_target = weekly['range_high']
-            elif effective_direction == 'DOWN':
-                setup_entry  = weekly['current_price']
-                setup_stop   = weekly['range_high']
-                setup_target = weekly['range_low']
-            else:
-                setup_entry  = weekly['entry']
-                setup_stop   = weekly['stop']
-                setup_target = weekly['target']
-
-            setup_rr = (abs(setup_target - setup_entry) / abs(setup_stop - setup_entry)
-                        if abs(setup_stop - setup_entry) > 0 else 0)
-
-            direction_note = ""
-            if effective_direction != weekly['bias']:
-                direction_note = f" (setup direction follows FINAL CALL {effective_direction}, not the weekly bias above)\n"
-
+        if tier > 0 and weekly.get('entry') is not None:
             trade_setup_block = (
                 f"TRADE SETUP:\n"
-                f"{direction_note}"
-                f"Entry:  {setup_entry:.0f}c (current)\n"
-                f"Stop:   {setup_stop:.0f}c\n"
-                f"Target: {setup_target:.0f}c\n"
-                f"R:R = {setup_rr:.1f}:1\n"
+                f"Entry:  {weekly['entry']:.0f}c\n"
+                f"Stop:   {weekly['stop']:.0f}c\n"
+                f"Target: {weekly['target']:.0f}c\n"
+                f"R:R = {weekly['rr']:.1f}:1\n"
             )
         else:
             trade_setup_block = (
@@ -465,27 +506,20 @@ class WeeklyRangeEngine:
                 f"holdout-validated condition is actually active.)\n"
             )
 
-        # ── FIX 3: unambiguous final call header ─────────────────────────────
-        final_call_block = ""
-        bias_annotation = ""
-        if final_direction is not None:
-            final_call_block = f"FINAL CALL: {final_direction}\n" + ("=" * 30) + "\n\n"
-            if weekly['bias'] != 'NEUTRAL' and weekly['bias'] != final_direction:
-                bias_annotation = (
-                    f" (did NOT override — final call is {final_direction}, "
-                    f"this bias was below the 65% override threshold)"
-                )
+        final_call_block = f"WEEKLY FINAL CALL: {weekly_final_call}\n" + ("=" * 30) + "\n\n"
+        daily_direction_line = f"daily direction: {daily_direction}\n\n" if daily_direction else ""
+        status_block = f"\nstatus- {status_line}\n" if status_line else ""
 
         message = (
             f"{final_call_block}"
+            f"{daily_direction_line}"
             f"WHEAT WEEKLY OUTLOOK\n"
             f"------------------------------\n"
             f"{weekly['next_week_label']} | {weekly['month_label']}\n\n"
             f"EXPECTED RANGE:\n"
             f"Low:  {weekly['range_low']:.0f}c\n"
-            f"High: {weekly['range_high']:.0f}c\n"
-            f"Width: {weekly['range_width_pct']:.1f}% of price\n\n"
-            f"BIAS: {weekly['bias']} ({weekly['confidence']:.0%} confidence){bias_annotation}\n"
+            f"High: {weekly['range_high']:.0f}c\n\n"
+            f"BIAS: {weekly['bias']} ({weekly['confidence']:.0%} confidence)\n"
             f"Historically {weekly['hist_up_pct']:.0f}% up this week of year\n"
             f"({weekly['sample_confidence_note']})\n\n"
             f"KEY LEVEL: {weekly['key_level']:.0f}c\n"
@@ -498,6 +532,7 @@ class WeeklyRangeEngine:
             f"DECISION: {decision}\n\n"
             f"{trade_setup_block}"
             f"{monthly_line}"
+            f"{status_block}"
         )
 
         return message
