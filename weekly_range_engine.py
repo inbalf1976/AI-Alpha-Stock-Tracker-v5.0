@@ -309,6 +309,7 @@ class WeeklyRangeEngine:
         # (typical/quiet weeks) — it just may never be WIDER than them.
         floor_price   = current_price * (1 - MAX_DOWN_PCT)
         ceiling_price = current_price * (1 + MAX_UP_PCT)
+        raw_low, raw_high = range_low, range_high  # DIAGNOSTIC: pre-clamp values
         clamped = False
         if range_low < floor_price:
             range_low = floor_price
@@ -316,6 +317,13 @@ class WeeklyRangeEngine:
         if range_high > ceiling_price:
             range_high = ceiling_price
             clamped = True
+
+        if clamped:
+            print(f"   ⚠️ Weekly range CLAMPED: raw forecast was {raw_low:.0f}-{raw_high:.0f}c "
+                  f"({(raw_high-raw_low)/current_price:.1%} width) -> clamped to "
+                  f"{range_low:.0f}-{range_high:.0f}c ({(range_high-range_low)/current_price:.1%} width). "
+                  f"range_half(pre-clamp)={range_half:.2f}c, atr_pct={atr_pct:.4f}, "
+                  f"hist_range_pct={hist_range_pct:.4f}, blended_range_pct={blended_range_pct:.4f}")
 
         blended_range_pct = (range_high - range_low) / current_price
         range_half = (range_high - range_low) / 2  # recompute AFTER clamp, for a consistent stop buffer
