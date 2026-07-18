@@ -3,6 +3,7 @@ on:
   schedule:
     - cron: '0 22 * * 0-4'  # 22:00 UTC Sun-Thu = 01:00 Israel time Mon-Fri (IDT UTC+3)
     - cron: '30 22 * * 0'   # 22:30 UTC Sunday — weekly backtest refresh, after the Sunday monitor run
+    - cron: '0 0 * * 6'     # 00:00 UTC Saturday = 03:00 Israel time Saturday — accuracy report ONLY, no new alert
   workflow_dispatch:         # manual trigger kept for testing
 jobs:
   monitor:
@@ -10,6 +11,7 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
+    if: github.event.schedule != '0 0 * * 6'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -61,5 +63,28 @@ jobs:
         git add -f backtest_results.json || true
         git add -f validated_conditions.json || true
         git add -f monthly_range_cache.json || true
+        git add -f weekly_performance_log.json || true
+        git add -f weekly_break_log.json || true
         git diff --staged --quiet || git commit -m "Update monitor state [skip ci]"
         git push || echo "Nothing to push"
+
+  saturday_report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event.schedule == '0 0 * * 6'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    - name: Send weekly accuracy report ONLY
+      # Saturday 03:00 Israel — deliberately does NOT run the full
+      # monitor or generate a new alert, per design: this is purely
+      # a real, logged day-by-day accuracy conclusion for the week
+      # that just ended (see weekly_report.py).
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: python weekly_report.py
