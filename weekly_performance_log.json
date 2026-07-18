@@ -1,0 +1,13 @@
+[
+  {
+    "iso_key": "2026-W29",
+    "date": "2026-07-18",
+    "day_name": "Saturday",
+    "price": 682.75,
+    "range_low": 580.34,
+    "range_high": 853.44,
+    "position_in_range_pct": 37.5,
+    "within_range": true,
+    "bias": "UP"
+  }
+]

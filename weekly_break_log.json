@@ -1,0 +1,11 @@
+[
+  {
+    "iso_key": "2026-W29",
+    "broken_at": "2026-07-18T09:45:01.971903+03:00",
+    "price_at_break": 682.75,
+    "old_range": "631-655",
+    "old_stop": 628.08,
+    "old_target": 654.85,
+    "reason": "price 683c broke past stop (LOSS)"
+  }
+]
