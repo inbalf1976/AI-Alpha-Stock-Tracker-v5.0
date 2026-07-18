@@ -476,36 +476,148 @@ def get_frozen_monthly_range(wre, df, current_price, cost_floor_cents):
     return monthly
 
 
-WEEKLY_CACHE_FILE = Path("weekly_range_cache.json")
+BREACH_TOLERANCE_PCT = 0.02  # 2% beyond stop/target triggers a re-freeze — adjust here
 
 
-def get_frozen_weekly_range(wre, df, current_price, cost_floor_cents):
+def _check_breach(weekly, current_price, direction):
     """
-    FIX (2026-07-10): predict_next_week() previously recalculated a
-    brand-new range EVERY time it ran, centered on whatever the live
-    price happened to be at that moment. This meant the "weekly"
-    range/trade setup silently shifted on every single alert within
-    the same week (e.g. 608-631 -> 609-632 -> 608-632 across three
-    runs in one day) — misleading, since it was labeled as a single
-    week's forecast but was actually a fresh, moving-target
-    recalculation each time.
+    Returns (is_breached, reason). A forecast is "broken" when price
+    has moved BREACH_TOLERANCE_PCT beyond either the frozen target
+    (forecast already achieved/exceeded) or the frozen stop (forecast
+    invalidated) — not just touched, to avoid re-freezing on noise.
+    """
+    target = weekly.get('target')
+    stop = weekly.get('stop')
+    if target is None or stop is None:
+        return False, ""
 
-    This wraps that call with a freeze: the range/bias/key level/
-    trade setup is computed ONCE per real ISO calendar week (the
-    week we're currently in, not a shifting "7 days from now"
-    window) and then reused unchanged for every alert until the
-    ISO week actually changes. The live current price is still
-    shown separately elsewhere in the alert — only the weekly
-    forecast itself is frozen.
-    FIX (2026-07-14): entry price was being frozen along with the
-    rest of the weekly bundle, but the alert template labels it
-    "(current)" — which became false by mid-week once real price
-    moved away from Monday's freeze value (a real example: Monday
-    froze entry at 640c, but by Thursday real price had moved to
-    670-685c during a Black Sea supply shock, while the alert kept
-    showing "Entry: 640c (current)", a stale number mislabeled as
-    live). Range/stop/target correctly stay frozen for the week —
-    only entry now always reflects today's real live price.
+    if direction == 'UP':
+        target_breach = current_price >= target * (1 + BREACH_TOLERANCE_PCT)
+        stop_breach   = current_price <= stop * (1 - BREACH_TOLERANCE_PCT)
+    elif direction == 'DOWN':
+        target_breach = current_price <= target * (1 - BREACH_TOLERANCE_PCT)
+        stop_breach   = current_price >= stop * (1 + BREACH_TOLERANCE_PCT)
+    else:
+        return False, ""
+
+    if target_breach:
+        return True, f"price {current_price:.0f}c is {BREACH_TOLERANCE_PCT:.0%}+ past frozen target {target:.0f}c"
+    if stop_breach:
+        return True, f"price {current_price:.0f}c is {BREACH_TOLERANCE_PCT:.0%}+ past frozen stop {stop:.0f}c"
+    return False, ""
+
+
+WEEKLY_CACHE_FILE = Path("weekly_range_cache.json")
+WEEKLY_BREAK_LOG_FILE = Path("weekly_break_log.json")
+WEEKLY_PERFORMANCE_LOG_FILE = Path("weekly_performance_log.json")
+
+# How far past the frozen stop/target price must move before the
+# weekly forecast is considered "broken" and gets regenerated.
+# UPDATED 2026-07-14: changed from 2% to 0.1% per explicit design
+# decision — even a small breach now triggers regeneration, rather
+# than waiting for a larger, more clearly-confirmed break.
+BREAK_THRESHOLD_PCT = 0.001
+
+
+def log_daily_performance(iso_year, iso_week, current_price, weekly):
+    """
+    Appends today's price vs. this week's frozen range to a running
+    log, so a Friday/Saturday report can show a real day-by-day
+    breakdown (not a memory-based impression) of how the week's
+    forecast actually held up.
+    """
+    log = []
+    if WEEKLY_PERFORMANCE_LOG_FILE.exists():
+        try:
+            log = json.loads(WEEKLY_PERFORMANCE_LOG_FILE.read_text())
+        except Exception:
+            log = []
+
+    iso_key = f"{iso_year}-W{iso_week}"
+    today = datetime.now(IL)
+    today_str = today.strftime('%Y-%m-%d')
+
+    # Don't double-log if this script runs more than once on the same day
+    if any(e['iso_key'] == iso_key and e['date'] == today_str for e in log):
+        return
+
+    range_low  = weekly['range_low']
+    range_high = weekly['range_high']
+    range_width = range_high - range_low
+    if range_width > 0:
+        position_pct = round(((current_price - range_low) / range_width) * 100, 1)
+    else:
+        position_pct = None
+
+    within_range = range_low <= current_price <= range_high
+
+    log.append({
+        'iso_key': iso_key,
+        'date': today_str,
+        'day_name': today.strftime('%A'),
+        'price': round(current_price, 2),
+        'range_low': range_low,
+        'range_high': range_high,
+        'position_in_range_pct': position_pct,
+        'within_range': within_range,
+        'bias': weekly.get('bias'),
+    })
+
+    try:
+        WEEKLY_PERFORMANCE_LOG_FILE.write_text(json.dumps(log, indent=2))
+    except Exception as e:
+        print(f"   Failed to log daily performance: {e}")
+
+
+def log_weekly_break(iso_year, iso_week, current_price, old_weekly, reason):
+    """Records when/why a weekly forecast got broken and regenerated."""
+    log = []
+    if WEEKLY_BREAK_LOG_FILE.exists():
+        try:
+            log = json.loads(WEEKLY_BREAK_LOG_FILE.read_text())
+        except Exception:
+            log = []
+
+    log.append({
+        'iso_key': f"{iso_year}-W{iso_week}",
+        'broken_at': datetime.now(IL).isoformat(),
+        'price_at_break': round(current_price, 2),
+        'old_range': f"{old_weekly['range_low']:.0f}-{old_weekly['range_high']:.0f}",
+        'old_stop': old_weekly.get('stop'),
+        'old_target': old_weekly.get('target'),
+        'reason': reason,
+    })
+
+    try:
+        WEEKLY_BREAK_LOG_FILE.write_text(json.dumps(log, indent=2))
+    except Exception as e:
+        print(f"   Failed to log weekly break: {e}")
+
+
+def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direction):
+    """
+    REBUILT 2026-07-14 per new design — replaces get_frozen_weekly_range.
+
+    Key changes from the previous version:
+      - weekly['final_call'] is now tracked explicitly and is the
+        FROZEN weekly direction shown as the top-level header — it
+        only changes when the current setup actually breaks (not
+        every run, and not from daily ensemble noise).
+      - entry/stop/target now come from compute_setup_from_entry()
+        (fixed -15%/+25% band), not the old ATR/historical blend —
+        and ENTRY STAYS FROZEN too (the earlier "always live entry"
+        patch is removed) since entry is now part of a real trade
+        plan, not a display value. Today's actual live price is
+        shown separately via the status line instead.
+      - On break: if price broke past TARGET, that's a WIN — the new
+        setup continues in the SAME direction with fresh, wider
+        levels. If price broke past STOP, that's a LOSS — the new
+        setup FLIPS direction, since the original directional read
+        was wrong.
+      - EXPECTED RANGE (bias/confidence/key_level/historical stats)
+        still comes from predict_next_week()'s seasonal calculation,
+        unchanged — only entry/stop/target/final_call use the new
+        fixed-percentage method.
     """
     iso_year, iso_week, _ = datetime.now(IL).isocalendar()
 
@@ -517,27 +629,95 @@ def get_frozen_weekly_range(wre, df, current_price, cost_floor_cents):
             cached = None
 
     if cached and cached.get('iso_year') == iso_year and cached.get('iso_week') == iso_week:
-        print(f"   Using FROZEN weekly range (locked earlier this week, iso {iso_year}-W{iso_week})")
-        weekly = dict(cached['weekly'])
-        weekly['entry'] = round(current_price, 2)  # always live, never frozen
-        weekly['current_price'] = round(current_price, 2)
-        return weekly
+        old_weekly = cached['weekly']
+        stop   = old_weekly.get('stop')
+        target = old_weekly.get('target')
+        final_call = old_weekly.get('final_call', daily_direction)
 
-    # New week (or no cache yet) — compute fresh and freeze it
+        broken = False
+        break_type = None  # 'target' (win) or 'stop' (loss)
+        if stop is not None and target is not None:
+            if final_call == 'UP':
+                if current_price > target * (1 + BREAK_THRESHOLD_PCT):
+                    broken, break_type = True, 'target'
+                elif current_price < stop * (1 - BREAK_THRESHOLD_PCT):
+                    broken, break_type = True, 'stop'
+            else:  # DOWN
+                if current_price < target * (1 - BREAK_THRESHOLD_PCT):
+                    broken, break_type = True, 'target'
+                elif current_price > stop * (1 + BREAK_THRESHOLD_PCT):
+                    broken, break_type = True, 'stop'
+
+        if broken:
+            outcome = 'WIN' if break_type == 'target' else 'LOSS'
+            reason = f"price {current_price:.0f}c broke past {break_type} ({outcome})"
+            print(f"   ⚠️ WEEKLY SETUP BROKEN: {reason} — regenerating")
+            log_weekly_break(iso_year, iso_week, current_price, old_weekly, reason)
+
+            # Win → keep same direction, fresh wider levels.
+            # Loss → the directional read was wrong, flip it.
+            new_final_call = final_call if break_type == 'target' else (
+                'DOWN' if final_call == 'UP' else 'UP')
+
+            weekly = wre.predict_next_week(df, current_price, cost_floor_cents)
+            setup = wre.compute_setup_from_entry(current_price, new_final_call)
+            weekly.update(setup)
+            weekly['final_call'] = new_final_call
+            weekly['bias'] = new_final_call
+
+            history = old_weekly.get('history', [])
+            history.append({
+                'closed_at': datetime.now(IL).isoformat(),
+                'entry': old_weekly.get('entry'), 'stop': stop, 'target': target,
+                'final_call': final_call, 'outcome': outcome,
+                'price_at_close': round(current_price, 2),
+            })
+            weekly['history'] = history
+
+            try:
+                WEEKLY_CACHE_FILE.write_text(json.dumps({
+                    'iso_year': iso_year, 'iso_week': iso_week,
+                    'frozen_at': datetime.now(IL).isoformat(),
+                    'broken_and_regenerated': True,
+                    'weekly': weekly,
+                }, indent=2))
+                print(f"   Re-froze weekly plan after {outcome}: final_call={new_final_call}, "
+                      f"entry={weekly['entry']:.0f} stop={weekly['stop']:.0f} target={weekly['target']:.0f}")
+            except Exception as e:
+                print(f"   Failed to cache regenerated weekly plan: {e}")
+
+            log_daily_performance(iso_year, iso_week, current_price, weekly)
+            return weekly, True, outcome
+
+        print(f"   Using FROZEN weekly plan (locked earlier this week, iso {iso_year}-W{iso_week})")
+        weekly = dict(old_weekly)
+        log_daily_performance(iso_year, iso_week, current_price, weekly)
+        in_range = weekly['stop'] <= current_price <= weekly['target'] if weekly['final_call'] == 'UP' \
+                   else weekly['target'] <= current_price <= weekly['stop']
+        return weekly, not in_range, None
+
+    # New week — compute fresh, freeze final_call to today's daily_direction
     weekly = wre.predict_next_week(df, current_price, cost_floor_cents)
+    setup = wre.compute_setup_from_entry(current_price, daily_direction)
+    weekly.update(setup)
+    weekly['final_call'] = daily_direction
+    weekly['bias'] = daily_direction
+    weekly['history'] = []
+
     try:
         WEEKLY_CACHE_FILE.write_text(json.dumps({
-            'iso_year': iso_year,
-            'iso_week': iso_week,
+            'iso_year': iso_year, 'iso_week': iso_week,
             'frozen_at': datetime.now(IL).isoformat(),
             'weekly': weekly,
         }, indent=2))
-        print(f"   Froze NEW weekly range for iso {iso_year}-W{iso_week}: "
-              f"{weekly['range_low']:.0f}-{weekly['range_high']:.0f}c")
+        print(f"   Froze NEW weekly plan for iso {iso_year}-W{iso_week}: "
+              f"final_call={daily_direction}, entry={weekly['entry']:.0f} "
+              f"stop={weekly['stop']:.0f} target={weekly['target']:.0f}")
     except Exception as e:
-        print(f"   Failed to cache weekly range: {e}")
+        print(f"   Failed to cache weekly plan: {e}")
 
-    return weekly
+    log_daily_performance(iso_year, iso_week, current_price, weekly)
+    return weekly, False, None
 
 
 # ── INDICATORS ────────────────────────────────────────────────────────────────
@@ -1219,18 +1399,29 @@ def main():
         from weekly_range_engine import WeeklyRangeEngine
         wre = WeeklyRangeEngine()
         wre.fit(df, exclude_years=[2022])
-        weekly  = get_frozen_weekly_range(wre, df, current_price, cost_floor_cents)
+        weekly, out_of_range, break_outcome = get_frozen_weekly_plan(
+            wre, df, current_price, cost_floor_cents, direction
+        )
         monthly = get_frozen_monthly_range(wre, df, current_price, cost_floor_cents)
 
         print(f"  Weekly range: {weekly['range_low']:.0f} - {weekly['range_high']:.0f}c")
-        print(f"  Weekly bias:  {weekly['bias']} ({weekly['confidence']:.0%})")
+        print(f"  Weekly FINAL CALL: {weekly['final_call']} (frozen — only changes on break)")
+        print(f"  Daily direction (today): {direction}")
         print(f"  Monthly bias: {monthly['bias'] if monthly else 'N/A'}")
 
-        # Use weekly bias to override/confirm ensemble direction
-        if weekly['bias'] != 'NEUTRAL' and weekly['confidence'] >= 0.65:
-            if weekly['bias'] != direction:
-                print(f"  Weekly range bias ({weekly['bias']}) overrides ensemble ({direction})")
-                direction = weekly['bias']
+        # NOTE (2026-07-14): the old "weekly bias overrides daily ensemble
+        # direction" block was removed here on purpose. weekly['final_call']
+        # is now an intentionally FROZEN value (only changes when the
+        # setup actually breaks) — letting it silently overwrite the
+        # live daily `direction` every run would defeat that freeze and
+        # recreate the exact "which number is real" confusion fixed
+        # earlier. The two are now shown as separate, clearly labeled
+        # lines (WEEKLY FINAL CALL vs daily direction) instead.
+
+        status_word = "out range" if out_of_range else "in range"
+        status_line = f"current price {current_price:.0f}c \"{status_word}\" direction {direction}"
+        if break_outcome:
+            status_line += f" — weekly setup just closed as {break_outcome}, new setup generated"
 
         # Build weekly message
         message = wre.format_alert(
@@ -1244,7 +1435,9 @@ def main():
             cost_signal = cost_signal,
             gate_accuracy = accuracy,
             gate_reason   = gate_reason,
-            final_direction = direction,
+            final_direction = weekly['final_call'],
+            daily_direction = direction,
+            status_line     = status_line,
         )
 
         # Add ensemble footnote
