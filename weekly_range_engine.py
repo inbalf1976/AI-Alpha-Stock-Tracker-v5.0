@@ -141,42 +141,9 @@ class WeeklyRangeEngine:
             'rr': round(rr, 2),
         }
 
-    def predict_next_week(self, df, current_price, cost_floor_cents=None):
-        """
-        FIX (2026-07-10): previously used `next_week = today + 7 days`,
-        meaning the forecast ALWAYS described a rolling week starting
-        7 days from whenever the script happened to run — NOT the
-        calendar week currently in progress. This caused real
-        confusion: an alert run on a Monday would forecast the
-        FOLLOWING week (not the current one), while an alert run on a
-        Thursday might land in the same ISO week by coincidence,
-        making the target week inconsistent and non-obvious depending
-        on which day you happened to check.
-
-        Now targets the CURRENT ISO week (Monday-Sunday containing
-        "today"), so "this week's forecast" actually means the week
-        you're currently in, matching what a person reading "Week 29"
-        on a given day would reasonably assume it means. Combined
-        with get_frozen_weekly_range() in wheat_monitor_pro.py, this
-        is computed once at the start of each real calendar week and
-        held fixed until that week is actually over.
-        """
-        if not self.fitted:
-            raise RuntimeError("Call fit() first")
-
-        # Target THIS week (containing today), not a shifting +7 day window
-        today = datetime.now(IL)
-        target_week_num = int(today.isocalendar()[1])
-        # Monday of the current ISO week, for a clear, stable label
-        week_monday = today - timedelta(days=today.isoweekday() - 1)
-
-        if target_week_num in self.weekly_stats.index:
-            ws = self.weekly_stats.loc[target_week_num]
-        else:
-            ws = self.weekly_stats.iloc[min(target_week_num, len(self.weekly_stats)-1)]
-
     def predict_next_week(self, df, current_price, cost_floor_cents=None,
-                           forced_direction=None, daily_direction_hint=None):
+                           forced_direction=None, daily_direction_hint=None,
+                           backtest_tier=None, backtest_accuracy=None):
         """
         FIX (2026-07-10): targets the CURRENT ISO week, not a shifting
         +7 day window — see prior changelog entries for full history.
@@ -189,20 +156,29 @@ class WeeklyRangeEngine:
         forced to exactly those numbers. A quiet, typical week might
         forecast a narrow 8-12% range; only if the raw calculation
         would exceed the -15%/+25% outer limits does clamping kick
-        in. (An earlier version of this fix mistakenly hardcoded the
-        range to always be exactly -15%/+25% — corrected here.)
+        in.
 
         forced_direction: used only when regenerating after a broken
         setup (win → same direction, loss → flip) — overrides the
         data-derived bias so the forced direction still gets a real,
         clamped range appropriate to it, rather than a fixed formula.
 
-        daily_direction_hint: today's backtest-informed daily ensemble
-        read (ConvictionGate/EnsemblePredictor), fed in as a small
-        additional nudge to the weekly bias score — per design note,
-        the weekly forecast should also draw on the same
-        backtest-validated signals the daily alert uses, not only
-        seasonal/trend/cost-floor data in isolation.
+        daily_direction_hint: today's daily ensemble read, fed in as
+        a small additional nudge to the weekly bias score.
+
+        backtest_tier / backtest_accuracy (2026-07-18): the actual
+        holdout-validated backtest result from ConvictionGate. All
+        currently-validated conditions (momentum_up, macd_bullish,
+        bearish_month) are UP-only signals — the backtest never found
+        a reliable DOWN condition (candidates like momentum_down,
+        rsi_oversold collapsed on holdout and were excluded). So this
+        nudge is directional and honest about that asymmetry: when
+        the gate fires (tier > 0), it pushes bias_score toward UP,
+        scaled by how far above baseline the real accuracy is —
+        stronger than the smaller trend/cost-floor heuristic nudges,
+        since it's actual validated evidence, not a rule of thumb.
+        When tier is 0, it adds NO push in either direction, since
+        the backtest has no validated DOWN edge to claim.
         """
         if not self.fitted:
             raise RuntimeError("Call fit() first")
@@ -255,13 +231,21 @@ class WeeklyRangeEngine:
             elif dist_from_floor > 0.10:
                 bias_score -= 0.002
 
-        # Small nudge from today's backtest-informed daily direction,
-        # per design note — the weekly call should partly draw on the
-        # same validated signals the daily alert already uses.
+        # Small nudge from today's daily ensemble direction (heuristic)
         if daily_direction_hint == 'UP':
             bias_score += 0.0015
         elif daily_direction_hint == 'DOWN':
             bias_score -= 0.0015
+
+        # REAL backtest-validated nudge (2026-07-18) — stronger than the
+        # heuristic nudges above, since it's actual holdout-tested
+        # evidence, not a rule of thumb. UP-only, honestly: no
+        # currently-validated condition has ever predicted DOWN
+        # reliably, so this never pushes bias_score down, only up,
+        # and only when the gate actually fired (tier > 0).
+        if backtest_tier and backtest_tier > 0 and backtest_accuracy:
+            edge = max(0.0, backtest_accuracy - 0.50)  # how far above a coin flip
+            bias_score += edge * 0.02
 
         if forced_direction in ('UP', 'DOWN'):
             bias = forced_direction
