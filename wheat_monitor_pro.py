@@ -594,7 +594,8 @@ def log_weekly_break(iso_year, iso_week, current_price, old_weekly, reason):
         print(f"   Failed to log weekly break: {e}")
 
 
-def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direction):
+def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direction,
+                            backtest_tier=None, backtest_accuracy=None):
     """
     REBUILT 2026-07-14, corrected same day: entry/stop/target now come
     from predict_next_week()'s OWN real historical/ATR-based forecast
@@ -661,6 +662,8 @@ def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direc
                 df, current_price, cost_floor_cents,
                 forced_direction=new_final_call,
                 daily_direction_hint=daily_direction,
+                backtest_tier=backtest_tier,
+                backtest_accuracy=backtest_accuracy,
             )
             weekly['final_call'] = new_final_call
 
@@ -701,6 +704,8 @@ def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direc
     weekly = wre.predict_next_week(
         df, current_price, cost_floor_cents,
         daily_direction_hint=daily_direction,
+        backtest_tier=backtest_tier,
+        backtest_accuracy=backtest_accuracy,
     )
     weekly['final_call'] = weekly['bias'] if weekly['bias'] in ('UP', 'DOWN') else daily_direction
     weekly['history'] = []
@@ -1402,7 +1407,8 @@ def main():
         wre = WeeklyRangeEngine()
         wre.fit(df, exclude_years=[2022])
         weekly, out_of_range, break_outcome = get_frozen_weekly_plan(
-            wre, df, current_price, cost_floor_cents, direction
+            wre, df, current_price, cost_floor_cents, direction,
+            backtest_tier=tier, backtest_accuracy=accuracy,
         )
         monthly = get_frozen_monthly_range(wre, df, current_price, cost_floor_cents)
 
