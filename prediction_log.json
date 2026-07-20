@@ -518,10 +518,10 @@
     "confidence": 0.6,
     "tier": 2,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -10.17
   },
   {
     "timestamp": "2026-07-17T01:55:33.712456+03:00",
@@ -530,10 +530,10 @@
     "confidence": 0.58,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 16.86
   },
   {
     "timestamp": "2026-07-17T10:40:09.198313+03:00",
@@ -542,10 +542,10 @@
     "confidence": 0.58,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 16.74
   },
   {
     "timestamp": "2026-07-17T11:29:49.382919+03:00",
@@ -554,10 +554,10 @@
     "confidence": 0.58,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 16.79
   },
   {
     "timestamp": "2026-07-18T09:45:02.655861+03:00",
@@ -613,6 +613,18 @@
     "entry_price": 682.75,
     "confidence": 0.6,
     "tier": 2,
+    "seasonal_phase": "BEARISH",
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
+  },
+  {
+    "timestamp": "2026-07-21T01:57:47.797377+03:00",
+    "direction": "UP",
+    "entry_price": 672.75,
+    "confidence": 0.58,
+    "tier": 1,
     "seasonal_phase": "BEARISH",
     "validated": false,
     "outcome": null,
