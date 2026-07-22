@@ -143,7 +143,8 @@ class WeeklyRangeEngine:
 
     def predict_next_week(self, df, current_price, cost_floor_cents=None,
                            forced_direction=None, daily_direction_hint=None,
-                           backtest_tier=None, backtest_accuracy=None):
+                           backtest_tier=None, backtest_accuracy=None,
+                           news_signal=None):
         """
         FIX (2026-07-10): targets the CURRENT ISO week, not a shifting
         +7 day window — see prior changelog entries for full history.
@@ -246,6 +247,20 @@ class WeeklyRangeEngine:
         if backtest_tier and backtest_tier > 0 and backtest_accuracy:
             edge = max(0.0, backtest_accuracy - 0.50)  # how far above a coin flip
             bias_score += edge * 0.02
+
+        # NEWS SIGNAL NUDGE (2026-07-19) — NEW, UNVALIDATED. Deliberately
+        # much smaller than the backtest nudge above (0.02 scale) since
+        # this hasn't earned trust yet — see score_news_signals.py.
+        # Do not raise NEWS_SIGNAL_NUDGE_SCALE without real evidence
+        # from many scored signals over weeks.
+        NEWS_SIGNAL_NUDGE_SCALE = 0.003
+        if news_signal:
+            news_direction, news_confidence = news_signal
+            news_edge = max(0.0, (news_confidence / 100.0) - 0.50)
+            if news_direction == 'BULLISH':
+                bias_score += news_edge * NEWS_SIGNAL_NUDGE_SCALE
+            elif news_direction == 'BEARISH':
+                bias_score -= news_edge * NEWS_SIGNAL_NUDGE_SCALE
 
         if forced_direction in ('UP', 'DOWN'):
             bias = forced_direction
