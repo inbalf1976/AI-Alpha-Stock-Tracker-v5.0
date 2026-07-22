@@ -4,6 +4,9 @@ on:
     - cron: '0 22 * * 0-4'  # 22:00 UTC Sun-Thu = 01:00 Israel time Mon-Fri (IDT UTC+3)
     - cron: '30 22 * * 0'   # 22:30 UTC Sunday — weekly backtest refresh, after the Sunday monitor run
     - cron: '0 0 * * 6'     # 00:00 UTC Saturday = 03:00 Israel time Saturday — accuracy report ONLY, no new alert
+    - cron: '0 6 * * *'     # 06:00 UTC daily — news scan #1
+    - cron: '0 12 * * *'    # 12:00 UTC daily — news scan #2
+    - cron: '0 18 * * *'    # 18:00 UTC daily — news scan #3
   workflow_dispatch:         # manual trigger kept for testing
 jobs:
   monitor:
@@ -11,7 +14,7 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
-    if: github.event.schedule != '0 0 * * 6'
+    if: contains(fromJSON('["0 22 * * 0-4", "30 22 * * 0"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -88,3 +91,36 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: python weekly_report.py
+
+  news_scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    if: contains(fromJSON('["0 6 * * *", "0 12 * * *", "0 18 * * *"]'), github.event.schedule)
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    - name: Install packages
+      run: pip install feedparser google-generativeai yfinance
+    - name: Run news scan
+      # Free Google News RSS (no key) + free-tier Gemini interpretation
+      # (needs GEMINI_API_KEY secret — get one free at aistudio.google.com).
+      # Runs 3x/day since news breaks any time, not just at 01:00 Israel.
+      # NOTE: no Telegram alert sent — this feeds the forecast model
+      # silently in the background, per design (2026-07-19).
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      run: python news_scanner.py
+    - name: Commit news logs
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add -f news_log.json || true
+        git add -f news_signal_log.json || true
+        git diff --staged --quiet || git commit -m "Update news scan logs [skip ci]"
+        git push || echo "Nothing to push"
