@@ -507,6 +507,43 @@ def _check_breach(weekly, current_price, direction):
     return False, ""
 
 
+NEWS_SIGNAL_MAX_AGE_HOURS = 12  # only trust a signal this fresh
+
+
+def get_news_signal():
+    """
+    Reads the most recent LLM news interpretation (from news_scanner.py)
+    if it's fresh enough. Returns None if missing, stale, or NEUTRAL —
+    caller should treat None as "no news nudge this run", not guess.
+
+    WEIGHT NOTE (2026-07-19): this is a brand new, UNVALIDATED signal.
+    It gets a deliberately small nudge in predict_next_week() — see
+    NEWS_SIGNAL_NUDGE_SCALE there — much smaller than the real,
+    holdout-validated backtest nudge. Do not increase this weight
+    based on a good week or two; check score_news_signals.py's real
+    win rate over many scored signals first. Same discipline that
+    caught vol_low being unreliable applies here.
+    """
+    path = Path("news_signal_log.json")
+    if not path.exists():
+        return None
+    try:
+        log = json.loads(path.read_text())
+        if not log:
+            return None
+        latest = log[-1]
+        ts = datetime.fromisoformat(latest['timestamp'])
+        age_hours = (datetime.now(IL) - ts).total_seconds() / 3600
+        if age_hours > NEWS_SIGNAL_MAX_AGE_HOURS:
+            return None
+        if latest['signal'] == 'NEUTRAL':
+            return None
+        return latest['signal'], latest['confidence']
+    except Exception as e:
+        print(f"   Failed to read news signal: {e}")
+        return None
+
+
 WEEKLY_CACHE_FILE = Path("weekly_range_cache.json")
 WEEKLY_BREAK_LOG_FILE = Path("weekly_break_log.json")
 WEEKLY_PERFORMANCE_LOG_FILE = Path("weekly_performance_log.json")
@@ -595,7 +632,7 @@ def log_weekly_break(iso_year, iso_week, current_price, old_weekly, reason):
 
 
 def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direction,
-                            backtest_tier=None, backtest_accuracy=None):
+                            backtest_tier=None, backtest_accuracy=None, news_signal=None):
     """
     REBUILT 2026-07-14, corrected same day: entry/stop/target now come
     from predict_next_week()'s OWN real historical/ATR-based forecast
@@ -664,6 +701,7 @@ def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direc
                 daily_direction_hint=daily_direction,
                 backtest_tier=backtest_tier,
                 backtest_accuracy=backtest_accuracy,
+                news_signal=news_signal,
             )
             weekly['final_call'] = new_final_call
 
@@ -706,6 +744,7 @@ def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direc
         daily_direction_hint=daily_direction,
         backtest_tier=backtest_tier,
         backtest_accuracy=backtest_accuracy,
+        news_signal=news_signal,
     )
     weekly['final_call'] = weekly['bias'] if weekly['bias'] in ('UP', 'DOWN') else daily_direction
     weekly['history'] = []
@@ -1402,6 +1441,9 @@ def main():
 
     # ── Weekly range prediction ──
     print("\nBuilding weekly range prediction...")
+    news_signal = get_news_signal()
+    if news_signal:
+        print(f"   News signal (unvalidated, small nudge): {news_signal[0]} ({news_signal[1]}%)")
     try:
         from weekly_range_engine import WeeklyRangeEngine
         wre = WeeklyRangeEngine()
@@ -1409,6 +1451,7 @@ def main():
         weekly, out_of_range, break_outcome = get_frozen_weekly_plan(
             wre, df, current_price, cost_floor_cents, direction,
             backtest_tier=tier, backtest_accuracy=accuracy,
+            news_signal=news_signal,
         )
         monthly = get_frozen_monthly_range(wre, df, current_price, cost_floor_cents)
 
