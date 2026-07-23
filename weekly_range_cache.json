@@ -1,30 +1,30 @@
 {
   "iso_year": 2026,
   "iso_week": 30,
-  "frozen_at": "2026-07-23T01:59:44.378658+03:00",
+  "frozen_at": "2026-07-24T01:53:46.735490+03:00",
   "broken_and_regenerated": true,
   "weekly": {
-    "range_low": 696.62,
-    "range_high": 720.7,
-    "range_width_pct": 3.41,
-    "bias": "UP",
-    "bias_pct": 25.0,
+    "range_low": 679.92,
+    "range_high": 704.22,
+    "range_width_pct": 3.5,
+    "bias": "DOWN",
+    "bias_pct": 75.0,
     "confidence": 0.52,
-    "key_level": 619.75,
+    "key_level": 621.18,
     "key_level_label": "SMA50 (key support)",
-    "entry": 706.25,
-    "stop": 695.42,
-    "target": 720.7,
+    "entry": 694.5,
+    "stop": 705.43,
+    "target": 679.92,
     "rr": 1.33,
     "week_num": 30,
     "next_week_label": "Week 30 (starting Mon Jul 20)",
     "month_label": "Post-harvest low",
     "hist_up_pct": 25.0,
-    "hist_avg_return": -1.86,
+    "hist_avg_return": -2.3,
     "sample_count": 4,
     "sample_confidence_note": "moderate confidence \u2014 4 years of data",
-    "current_price": 706.25,
-    "final_call": "UP",
+    "current_price": 694.5,
+    "final_call": "DOWN",
     "history": [
       {
         "closed_at": "2026-07-23T01:59:44.378650+03:00",
@@ -34,6 +34,15 @@
         "final_call": "DOWN",
         "outcome": "LOSS",
         "price_at_close": 706.25
+      },
+      {
+        "closed_at": "2026-07-24T01:53:46.735472+03:00",
+        "entry": 706.25,
+        "stop": 695.42,
+        "target": 720.7,
+        "final_call": "UP",
+        "outcome": "LOSS",
+        "price_at_close": 694.5
       }
     ]
   }
