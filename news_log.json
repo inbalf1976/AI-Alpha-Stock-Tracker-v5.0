@@ -303,5 +303,69 @@
         "source_query": "Baltic Dry Index"
       }
     ]
+  },
+  {
+    "scan_time": "2026-07-24T16:26:34.341620+03:00",
+    "total_headlines": 8,
+    "high_impact_count": 3,
+    "headlines": [
+      {
+        "title": "Black Sea Tensions Send Grain Prices Soaring - Devdiscourse",
+        "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNTnZYZkFkU2hwQWN0ZlB1QlRUWGdPSnN0VFU1alVIU0dib1JWMWJNZVdFQm8xV3AteFpvaUs2YXh0OEoxS1VBYnp2MlU5Z21HV2RtQ0ZXYlhjUVJnQ2dncHJlWEtXaVMtNzAzQVJRTS1Rc1lBYkUxQ2hXWi1fN0RXekIybldyWk5nRy10UDBRd05oLTNidDJKNDRCTjJ2TW_SAaQBQVVfeXFMTkI3RFpJeXZXemVMWWhiQVNDMlRLaElXUVZlQ01pZHhYR2tKYXBZUVpYbGxLWVk0bzMzVTJHdUhNSzBlZXByNmJZRjJDOXJlemJtNG1ZSkhwWWZzeVByNXNQTEQyckU0M19ibWgtT0F4QTNaX0RvRTdqUzlKR24zTGpMMFRSMlRaTjk1SGUwdVNVMTN6WG1MVzVoMWFpNXJIcVVBTkE?oc=5",
+        "published": "2026-07-24T15:20:29+03:00",
+        "source_query": "wheat price"
+      },
+      {
+        "title": "Grains markets hit new highs on Black Sea attacks, crude oil rally - The Edge Malaysia",
+        "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1rR1dSWmJ6dHBVdUV4WEstSzZRQ1RQb0hHbGZ1YWs4Ny0xRi0yV2xTcXItSGsyRmcxYlRweVBna3NVWmJUbWlOU0d6TTFSUXhCTUFj?oc=5",
+        "published": "2026-07-24T15:30:34+03:00",
+        "source_query": "wheat price",
+        "flagged_keywords": [
+          "attack"
+        ]
+      },
+      {
+        "title": "Feedgrain Focus: Prices keep kicking, growers hold in dry week - Grain Central",
+        "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQX0toc2tETmw2UGE5REdBc0lJMmxobHNGQkhheWFIMHc5SnJLMG9MdVk0bWctbmlrNmw5X0JRVTV4UFFScDQ2T3EzU2RTSnhnSVVvWDU2Z1ZBcWhHbDBaTjBxemxDTk9zSG90VXBDX3FlQWRhUmV6WGJDby15bm0wcEF2ZFhaWkRyNURsVE05UU02VG5ucTRwYnJHa1UzR2M?oc=5",
+        "published": "2026-07-24T09:04:56+03:00",
+        "source_query": "wheat price"
+      },
+      {
+        "title": "Kazakhstan seeks stronger opportunities for grain trade with Morocco - trend.az",
+        "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE03cVBUeldteWI3YVdjZ2g5dGh5TWo1ZWlkcWdEelZYZ0p0REh6V2lGUlhpSnNZeFhjQWNOTUJVWGttYWZKc0tBc0lEMDJReTgzWExVYk1MeUpORjJXSUE0?oc=5",
+        "published": "2026-07-24T08:52:00+03:00",
+        "source_query": "wheat export"
+      },
+      {
+        "title": "Ukraine can export up to 3.5 mln tons of grain per month without deep-sea ports - UkrAgroConsult",
+        "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNTFJPSHpzTkdFb2ZqTGNQU21aQjZoT1h0SlR4RFpMMGxFRVdSNzF4Vkc1cjd4ZWI2ejU1Z205UDBueWdXWnFNWXJjbF9mTk9Ka0VsZnhuWW9NSWRWUXdhcTVMUkc5aHJrYTkwa3pXUDNVWG9oS2F4dGhlM2F6ZUhPbjFVVE5CVjBSQ0ZYXzhBZUl2N1FPNFM2WkRpY2xUbWFaRFN2UHlTa1V6MkFOeEZ0WHJBekl6dw?oc=5",
+        "published": "2026-07-24T12:05:37+03:00",
+        "source_query": "Ukraine grain export"
+      },
+      {
+        "title": "Conflict escalations driving the market - mecardo.com.au",
+        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE44SGVQa3lSTWdHSmQzdU5KQUZmdGdXTGNuSW91dFpuRWdPOVJvVFMxQkMzRU9LMnRnNzNZSUZ1YUFNVWVVYVhEc2VfRGtiSmpPdUY5SVJOT2lVYmt6RVJpUFRzWDM1TUotU05HWWJQZlI?oc=5",
+        "published": "2026-07-24T08:31:57+03:00",
+        "source_query": "Ukraine grain export",
+        "flagged_keywords": [
+          "conflict"
+        ]
+      },
+      {
+        "title": "US wheat on track for fourth weekly gain on Black Sea supply concerns - Zawya",
+        "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNVUhMWm9fTm5lRDJNWUZlT1BuR2JOcHN1Yzk1VnVDOF9HdGk1NWgwaUQtdUk1LWpJVXlXLUFELUFFWHZxUnRtdkpZLWVhRENINTlzQURYbUIzRkREcUhqQmYtWU5HLVJaZzZpSVRQR1RSUklubXd5d1lacUlJQnJVTE55SmNSeFdnd0tqRjZVc29qUGtrQl8tOXVlZ1FYLUVFaG8yZ0dpcUpIalRwcXdN?oc=5",
+        "published": "2026-07-24T13:48:00+03:00",
+        "source_query": "Black Sea grain"
+      },
+      {
+        "title": "Extreme Heat and Drought Bring Harvest Weeks ahead of Schedule - Hungary Today",
+        "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNTEhxaVRjNHdXWkxHU1VQNlJmWTctOUNnTG5qZlBvZ0xxNlI2c25zTGdmT0dwV1lCcGt4eDJUanBkREsyUFhscEpOVkpRdEdxVUZOcWZKaVpTNjhrSDcxbnFfQUVPQm1kS2FyaERRcnFIVUZkbDc1QmU5dHl2d0F2RC1RWk96YUsxMjl0bURyaS0?oc=5",
+        "published": "2026-07-24T06:28:05+03:00",
+        "source_query": "wheat drought harvest",
+        "flagged_keywords": [
+          "drought"
+        ]
+      }
+    ]
   }
 ]
