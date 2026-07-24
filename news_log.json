@@ -259,5 +259,49 @@
         "source_query": "IMF food security loan wheat"
       }
     ]
+  },
+  {
+    "scan_time": "2026-07-24T11:33:08.990218+03:00",
+    "total_headlines": 5,
+    "high_impact_count": 2,
+    "headlines": [
+      {
+        "title": "Strong Yields, Higher Prices Signal strong 2026 Wheat Harvest Across Mid-Columbia - Columbia Community Connection",
+        "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQMXZkVXlTMUhUUVluUkktRnZmZmdQQnRNM2RXNUxxX0FYMnBzQnFjVEd5YTJHNThEUmVPd2paQkh2dVFnYWZ5NVVvTU4zNDdjWWRVS1B5WmFWbkJUWDVVbS1SaHpKZmRNbDVZWWZ0WnVmM1FIWWNqZV9JZkN6d3JLWTAzVS0wemhQaEpkeXZQM204NS1BMmxvTWtHLVRHd0xCbXM0ekhSb3oyb2V0V29YeDdGdWdtOFR1dWMyVG1jWjdfVmdoYzl2bQ?oc=5",
+        "published": "2026-07-24T03:01:20+03:00",
+        "source_query": "wheat price"
+      },
+      {
+        "title": "Feedgrain Focus: Prices keep kicking, growers hold in dry week - Grain Central",
+        "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQX0toc2tETmw2UGE5REdBc0lJMmxobHNGQkhheWFIMHc5SnJLMG9MdVk0bWctbmlrNmw5X0JRVTV4UFFScDQ2T3EzU2RTSnhnSVVvWDU2Z1ZBcWhHbDBaTjBxemxDTk9zSG90VXBDX3FlQWRhUmV6WGJDby15bm0wcEF2ZFhaWkRyNURsVE05UU02VG5ucTRwYnJHa1UzR2M?oc=5",
+        "published": "2026-07-24T09:04:56+03:00",
+        "source_query": "wheat price"
+      },
+      {
+        "title": "Conflict escalations driving the market - mecardo.com.au",
+        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE44SGVQa3lSTWdHSmQzdU5KQUZmdGdXTGNuSW91dFpuRWdPOVJvVFMxQkMzRU9LMnRnNzNZSUZ1YUFNVWVVYVhEc2VfRGtiSmpPdUY5SVJOT2lVYmt6RVJpUFRzWDM1TUotU05HWWJQZlI?oc=5",
+        "published": "2026-07-24T05:58:10+03:00",
+        "source_query": "Ukraine grain export",
+        "flagged_keywords": [
+          "conflict"
+        ]
+      },
+      {
+        "title": "War in Ukraine | Global Conflict Tracker - Council on Foreign Relations",
+        "link": "https://news.google.com/rss/articles/CBMieEFVX3lxTFBzNzUzWFZFa3dRQ094S3NlRzRSbVloSUU5ZGhYSHZBLUYxdTlvdGdaTmN6b09EOGZlYmVTaGRnSFVzbk12T0Z4bDJJTnF6bGI4S1ZaVXhNUDY3cEJweFJVVWZZQ2c4T0NOT3lWVy1BMHFFRGJNdUQ5Rg?oc=5",
+        "published": "2026-07-24T10:36:27+03:00",
+        "source_query": "CFR wheat price",
+        "flagged_keywords": [
+          "war",
+          "conflict"
+        ]
+      },
+      {
+        "title": "Weekly Dry Market Monitor Week 29, 2026 - Cyprus Shipping News",
+        "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQNjlvUlk2aHRPczFiZ2pDaTVyRmRKMXZjRGEzZDE2Y2FwWktBU0EwMjlfT3N5UVdfX2FDWTFTOV9adE82dnZaWUg3REhmd3JCV3FuNlM3b1NMWm1UOF9fMm5jQUZoZ1AzNUJfTG9FWDlfcE5SdndvZXFReDFFaV91OWF2bExxMzJw?oc=5",
+        "published": "2026-07-24T05:41:50+03:00",
+        "source_query": "Baltic Dry Index"
+      }
+    ]
   }
 ]
