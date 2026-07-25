@@ -367,5 +367,60 @@
         ]
       }
     ]
+  },
+  {
+    "scan_time": "2026-07-25T22:18:17.459643+03:00",
+    "total_headlines": 7,
+    "high_impact_count": 2,
+    "headlines": [
+      {
+        "title": "Farmers seek early wheat policy, fair support price - | Associated Press Of Pakistan",
+        "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbnVGYU5MVzJncFFyc05vOV83cjgtclFwdW9PSml2dlFkZmVCV2xHYnp0d1QtWEdNR3VMcEMwZFk0TzM0Mk9jZmNXb054QVNzaWVBaGR0amVFTGs4UHA2SHF5UFJhSnh2X1dlVzhHZGR2am5ENkNmbkFFVW5DN2lrTzlWWFY1dFk0?oc=5",
+        "published": "2026-07-25T13:52:04+03:00",
+        "source_query": "wheat price"
+      },
+      {
+        "title": "Burkina Faso lifts four year ban on cereal flour exports - Milling Middle East & Africa",
+        "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOTWRHRjVubjg1a2xtQlFHSXpIaWpLQllMZ0g1S2d2NzhyZXpyVksyVEdDQVBxSUdQMkJrODQ3dTY5NXhqQ2VQZ01DTEptZHdWdUl2X3kzSFpGeU1RWTgyLWtvWENkbG1HaHJNTjYtdml6dTJGbkswRkVvOVljWUllamJGcE1WQ1U?oc=5",
+        "published": "2026-07-25T15:22:07+03:00",
+        "source_query": "wheat export"
+      },
+      {
+        "title": "Ukraine updates grain export protection plan \u2013 Zelenskyy - UkrAgroConsult",
+        "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQbzBYZHlFNVVaSVA2OUwzbzVLQUt3Mk9LS0Zxckh2Y1BVTmNDQ0IwM09YWHRhSlI1WFkyMFFwbk8yeW92bHhrUy1aTnVyU0gwbk5DTHo4M1gweHJBdlhrNXUwY2gwWjMwUWluVERPM3V2MFN3dV9aVjFkdDhNNUwwWXNITUN4LWZNM1VuOEI5NnVGNTVM?oc=5",
+        "published": "2026-07-25T15:59:49+03:00",
+        "source_query": "Ukraine grain export"
+      },
+      {
+        "title": "Ukraine updates plan to protect grain exports - \u041d\u043e\u0432\u0438\u043d\u0438 \u0430\u0433\u0440\u0430\u0440\u043d\u043e\u0433\u043e \u0431\u0456\u0437\u043d\u0435\u0441\u0443",
+        "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5tZ1dCYXUwSXNnVjRrOTZlbjJoTF80ckZGbFpNMlJNQmFIUmRzZWIwb25qVmpTZ0tIM0tTYVZmNzVwazVPZTYxTEFzMXpFaFAxQThpTjlUQUdNRzBLZkVNWXpnaFdHX05welg1YjZfdk9UNk1qQ1J5V0ttV3NKU1U?oc=5",
+        "published": "2026-07-25T13:14:00+03:00",
+        "source_query": "Ukraine grain export"
+      },
+      {
+        "title": "Weather, Exports and Black Sea Risk Share the Driver\u2019s Seat in Grain Rally - Rural Radio Network",
+        "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNYjkwdW1ockVaeDRfaHJzcWR0RW9yd0lJbkljNU1KdzFGUnVLYjNnWEVtdEpERkZKMHM4Z0s4TGNhdFhoNEhoQ2J3c2Y0S1FlUGkyQkM0dVVZcXFFbURKMVVTMDVxMjVYUnB6VGNFTHQwbWhXakhVZVRXWmh0eVQxdHE0eUc3bFQyMlpVLVE3ZVJtUHBIdkFROUh5ZXFkVlRveGd3cU12czN2cHgzNElv?oc=5",
+        "published": "2026-07-25T19:47:54+03:00",
+        "source_query": "Black Sea grain"
+      },
+      {
+        "title": "Ukraine accuses Russia of turning Black Sea into a \"second Strait of Hormuz\" - \u0423\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430 \u043f\u0440\u0430\u0432\u0434\u0430",
+        "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5hSDN4UmZFcjl4dTlVMkt3Z1NJRlU4UERlTWhLOVl4aWZtVFF3c0JRVWd6dW8wY2dIVGc4THJhdE1FUGdKYlZmX0IyRnAyRkFoOWZ3dkFpZ3hzQjg3SDNqRnp6ZFTSAXBBVV95cUxNR3l1STVfdHBrUWhfT1RpcE1Rd056ODNuMkgzM0pEdXlUTmFHQk9xb2psbGswWTJwdXU1U3hTeHNYOHFES1JHenp5dVZadDRjX1ZFY251MFlNYnhqZkxvVks2S0NhNzBpV1BVX0ZVTjRP?oc=5",
+        "published": "2026-07-25T15:50:00+03:00",
+        "source_query": "Black Sea grain",
+        "flagged_keywords": [
+          "strait"
+        ]
+      },
+      {
+        "title": "Hormuz Closure And Black Sea Attacks Drive Crop Prices To Three-Year High, Threatening Global Food Security - foreignpolicyjournal.com",
+        "link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQMXhPREhUSl8xbzJOOXZiMHZqN25mQ1ZBR0hrMW5odVl6TEVBNHBMQW5UR3Z0VXM4VzJXVGtiQ0Q4V3VMcVZOM2Nzem0xVEJueWthdnZkOGZCYzZzdnJ5djRxTkFVV2d6RVpzRHhEbmM4SWp0QlprcmNYRmczOWlNemN5c1VRWEh3cmNDZUNkVk1MYS1jV3pyVWFmamNNdVhWWEFvSVF3azJhMlZqeDl3SWhKaEwtQzNMSkdOMVpSckxWUmxMcm0wNGFtb29jbHRaU1dwbUQ4LUFiYWNOaThYX2x3MzQyVXJVN2NV?oc=5",
+        "published": "2026-07-25T19:24:00+03:00",
+        "source_query": "Black Sea grain",
+        "flagged_keywords": [
+          "attack"
+        ]
+      }
+    ]
   }
 ]
