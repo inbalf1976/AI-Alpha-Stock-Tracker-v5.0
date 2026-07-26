@@ -23,6 +23,17 @@ CHANGELOG (2026-07-09):
   when conviction is weak, instead of always printing full
   Entry/Stop/Target numbers under a "WEAK - informational only" line.
 
+CHANGELOG (2026-07-26):
+  format_alert() previously HID the Entry/Stop/Target block entirely
+  whenever tier == 0, printing "No trade setup shown" instead. Per
+  explicit request, the numbers are now always shown (when computed) —
+  Tier 0 no longer suppresses them. To avoid re-introducing the exact
+  false-confidence problem the 2026-07-09 fix addressed, a Tier 0
+  setup is now labeled inline as NOT backtest-validated rather than
+  presented identically to a Tier 1/2 setup. The DECISION line was
+  also reworded for Tier 0 so it no longer says "no trade setup below"
+  when a trade setup is, in fact, printed below it.
+
 WHY WEEKLY:
   - Daily: 58-68% accuracy (too much noise)
   - Weekly: 72-80% range accuracy (seasonal + fundamentals dominate)
@@ -518,15 +529,23 @@ class WeeklyRangeEngine:
         to the OLD fake tier scheme (100%/94.7%/81.7%) and never updated
         when ConvictionGate was rebuilt with real holdout-tested numbers.
         Now builds the label from the REAL accuracy value passed in via
-        gate_accuracy. Trade setup is now clearly gated: full numbers
-        only shown when conviction is real (tier > 0); otherwise an
-        explicit "no trade setup" message replaces it.
+        gate_accuracy.
+
+        FIX (2026-07-26): the trade setup block used to be hidden
+        entirely whenever tier == 0 ("No trade setup shown — conviction
+        is baseline/weak"). Per explicit request, Entry/Stop/Target are
+        now always shown when computed, regardless of tier. To avoid
+        recreating the false-confidence problem the earlier fix
+        addressed, a Tier 0 setup gets an inline "NOT backtest-validated"
+        caveat directly under the numbers, and the DECISION line no
+        longer claims "no trade setup below" when one is, in fact,
+        printed below it.
         """
 
         if gate_accuracy is not None:
             if tier == 0:
                 tier_label = f"NO SIGNAL - baseline only ({gate_accuracy:.0%})"
-                decision   = "WEAK - no trade setup below"
+                decision   = "WEAK - setup below is NOT backtest-validated, size small or skip"
             elif gate_accuracy >= 0.80:
                 tier_label = f"TIER {tier} - {gate_accuracy:.0%} holdout-validated accuracy"
                 decision   = "MODERATE-STRONG - real edge, size accordingly"
@@ -535,7 +554,7 @@ class WeeklyRangeEngine:
                 decision   = "MODERATE - modest real edge, not a high-conviction signal"
         else:
             tier_label = "NO TIER - accuracy unavailable"
-            decision   = "WEAK - no trade setup below"
+            decision   = "WEAK - setup below is NOT backtest-validated, size small or skip"
 
         rsi_str = f"RSI: {gate_conds.get('rsi'):.0f}" if gate_conds and gate_conds.get('rsi') is not None else ""
         vol_str = f"Vol: {gate_conds.get('vol_ratio'):.1f}x" if gate_conds and gate_conds.get('vol_ratio') is not None else ""
@@ -570,15 +589,15 @@ class WeeklyRangeEngine:
         if weather:
             fundamental_line += f"Weather: {weather['signal']}\n"
 
-        # ── Trade setup block — only shown with real conviction (FIX 2) ──────
-        # ── NEW (2026-07-14): trade setup now comes directly from the
-        # weekly dict's own entry/stop/target — set once via
-        # compute_setup_from_entry() when the week (or a mid-week
-        # breakout regeneration) was frozen, in wheat_monitor_pro.py.
-        # No longer recalculated here from bias/current_price.
+        # ── Trade setup block ─────────────────────────────────────────────
+        # FIX (2026-07-26): numbers are now shown whenever they were
+        # computed, regardless of tier — previously gated on `tier > 0`,
+        # which hid them entirely at Tier 0. Tier 0 now gets the same
+        # numbers plus an explicit "not backtest-validated" caveat,
+        # instead of no numbers at all.
         weekly_final_call = weekly.get('final_call', final_direction)
 
-        if tier > 0 and weekly.get('entry') is not None:
+        if weekly.get('entry') is not None:
             trade_setup_block = (
                 f"TRADE SETUP:\n"
                 f"Entry:  {weekly['entry']:.0f}c\n"
@@ -586,11 +605,13 @@ class WeeklyRangeEngine:
                 f"Target: {weekly['target']:.0f}c\n"
                 f"R:R = {weekly['rr']:.1f}:1\n"
             )
+            if tier == 0:
+                trade_setup_block += (
+                    "(⚠️ conviction is baseline/weak — this setup is NOT backtest-validated)\n"
+                )
         else:
             trade_setup_block = (
-                f"No trade setup shown — conviction is baseline/weak.\n"
-                f"(Entry/stop/target numbers are only shown when a\n"
-                f"holdout-validated condition is actually active.)\n"
+                f"No trade setup available — entry/stop/target were not computed this run.\n"
             )
 
         final_call_block = f"WEEKLY FINAL CALL: {weekly_final_call}\n" + ("=" * 30) + "\n\n"
