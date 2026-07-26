@@ -422,5 +422,48 @@
         ]
       }
     ]
+  },
+  {
+    "scan_time": "2026-07-26T22:22:33.418972+03:00",
+    "total_headlines": 5,
+    "high_impact_count": 2,
+    "headlines": [
+      {
+        "title": "European wheat prices have risen by 18%. The reason is shipping risks in the Black Sea - logos-pres.md",
+        "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPRTZjbmZrVi1RMlhUYzRTbWpSRjZKU1VkRGsta0pUWDhZeWhLbHRSUU5pcG1PQVVQUGdGLVFwUDNHcFRDajhaY1hIMGdiYTB5OVk0ZlRrWjJlOTVHRko2RTRzRlRURllMWDdTXzZpUWkxdlBobU5pRTZiQjl4dHpKa0dJcHhyNUJ5ZFBCTnNNTEZsZFM2MHkzWlNnVnlwSjN2dnREeS1YczlIOFR0aTh5R1U4OFRnUQ?oc=5",
+        "published": "2026-07-26T16:27:52+03:00",
+        "source_query": "wheat price"
+      },
+      {
+        "title": "Global wheat rally revives India's export prospects as government allows 5 million tonnes of wheat exports - The Economic Times",
+        "link": "https://news.google.com/rss/articles/CBMisgJBVV95cUxOLUllazM1dy14RUxZR25CZWFZa3VwS25kRV9HdzUxV3VZNXF2WXp3ZWY2S2JyZU5FMGFodlJhQ1VLMjhpVGhiRVBMZmpyZE1nb1pQYXpsUGdzS0NZNFUycGd3eGZoWlFnaXRPMkxZSzc5aGx2ekt0N3ZCYkJrUDlwaW9yUGVZcEt4dEF3cjdDc0FtRWxkWThaWUROT0pBSGNsUFUwRldHRE1odWJWam1VaXZuclFUS3RGQmZCTXF4a2Y3dEdVUnVZS0Jhbjd0bW42M1RVRERfN0VUWmVMR2QwLWNsTnVuQ1lFM2FhRXdQeVVPblA3TU52RWl3TWZzRF9PUzNCVDNGWHpOdUpFblNXUGQtMjV0WXpyNXRlNmluMUd0SE9oOGc0VzhFRjNvOFlyb1HSAbcCQVVfeXFMUEtpWXlzLUpsU05GLUh6STVJTVR3eTlQR1JYaHlnbENqTVc3M3ZwMVc3aF8yVlNfaHF3bVE5OU54SjJ2M3dFelVMVWV1ejdOMVM1eGNTcHMwYThZRFBON3M0ZDBURFFTOGRuQU5RQjY2NWctaW1MYlVNZ3Foa043cERuNV9CN29saW51WDh6Y1U5WHNjRkZJYWF6VVZsRmdKRFJocVNjMGVwSzNTSG45dDJFakZ3YTQ4T0pqbTFmZWZDZDJZTnJSMFZDUXVwRzVhaGlYajA1aEhHa1BKTWVXTlNiZTE2VTdMOEZObFQzTXVOU0VydnA1czU0aVk4MFBYZGFDTkdfNm56c2RhN2xoY0d1ZFhCS0pRbV9wd0xJVzZXdEx1RFdkLXZiYTQwTkJLc2JIN0thYkk?oc=5",
+        "published": "2026-07-26T21:35:16+03:00",
+        "source_query": "wheat price"
+      },
+      {
+        "title": "Vlad Filat: Wheat prices increased, but bread prices remained unchanged - ipn.md",
+        "link": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPT2hYeEdvSUpqdmsxbGdDTGMxdzRwUnNaTGpEbUdRb29MODM2Z0R3Q2NtRkswbzk4YWU2MUp0dVBHeHZUVDJRTGtNR09UeEI0OEowNGZ0TVF0QXV4U3VfNENfS0NXUVpsQzFVeWQ1Tm1sUjV3M0l4aG9BY3ZhTmpSaVJnTXZoRnJVcURLOG9LbGpVUQ?oc=5",
+        "published": "2026-07-26T14:00:00+03:00",
+        "source_query": "wheat price",
+        "flagged_keywords": [
+          "bread price"
+        ]
+      },
+      {
+        "title": "Government Increases Wheat Procurement Target at Minimum Support Price by 15% - News On AIR",
+        "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQdHh0eWdhNjFxeE85V2VkdUpSUzhDS3BmcnNzaS13WTlNQVJvZERSdnE2SUQxY25VOGUzRVFBQU9UenhsNmFjRnlGa1hGY3B6bXpCRnlRV1RwN0RWdHEwLXoyQ3hlQU5sZm44eE5CZ0dIZnpvMnJYdkxGNEhvWTNHdUNhUWpUUDB2MGF5d01KdTF2UGtBS0lYUVE0Q2RrRkFOdWpTZg?oc=5",
+        "published": "2026-07-26T18:44:39+03:00",
+        "source_query": "wheat price"
+      },
+      {
+        "title": "Blockade of Ukrainian Black Sea ports: Will Poland once again fall victim to a grain crisis? - Defence24.com",
+        "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPTXdnWTdBUlZQbkVZQUViNU9scnB5a1dBdTRYZGxTcVMzTjZjeERXUVhUYWJFWWMzTHZNejJwaXY0aHduUzRVdFhtR3VaU1pwUFFrNGl2VWotaWYxQTJHU1lsb1k2bHN5XzJ6NGJIekZjRnVSbkl6SkFScUJ5WFJhWVBQNVFJQTNPaUdJVkRJR1g4WTVqOE51dkRkay1VODNOSTQ5ZHFtLUM5ZFc3bmwwVG5nWDNxVEVyc0owdzVBVEU4UQ?oc=5",
+        "published": "2026-07-26T15:01:43+03:00",
+        "source_query": "Ukraine grain export",
+        "flagged_keywords": [
+          "blockade"
+        ]
+      }
+    ]
   }
 ]
