@@ -76,6 +76,36 @@ TELEGRAM_CHAT   = os.getenv("TELEGRAM_CHAT_ID")
 # Years to exclude from seasonal calculation (global anomalies)
 EXCLUDE_YEARS   = [2022]
 
+
+def compute_daily_setup(current_price, direction):
+    """
+    FIX (2026-07-26): the daily trade setup was mistakenly built with
+    WeeklyRangeEngine.compute_setup_from_entry(), which applies a wide
+    -15%/+25% band meant as the WEEKLY forecast's outer safety clamp
+    (e.g. DOWN from 678c gave stop=780c / target=508c — a 170c spread,
+    nowhere near daily scale). The daily setup should use the same
+    tight STOP_PCT/TARGET_PCT (1.5%/2.5%) already defined in CONFIG
+    above and already used correctly in the old daily-fallback message
+    block below — this just makes that the single source of truth,
+    computed fresh every run from live current_price + today's
+    direction, independent of the frozen weekly range.
+    """
+    if direction == 'UP':
+        stop   = current_price * (1 - STOP_PCT)
+        target = current_price * (1 + TARGET_PCT)
+    else:  # DOWN
+        stop   = current_price * (1 + STOP_PCT)
+        target = current_price * (1 - TARGET_PCT)
+
+    rr = abs(target - current_price) / abs(stop - current_price) if stop != current_price else 0
+
+    return {
+        'entry':  round(current_price, 2),
+        'stop':   round(stop, 2),
+        'target': round(target, 2),
+        'rr':     round(rr, 2),
+    }
+
 # ── LIVE PRICE FETCH ──────────────────────────────────────────────────────────
 
 def get_live_price(ticker=TICKER):
@@ -1517,7 +1547,7 @@ def main():
         # objects — `weekly` stays frozen as before; `daily_setup` is
         # computed fresh from live current_price + today's `direction`
         # on every single run, never cached.
-        daily_setup = wre.compute_setup_from_entry(current_price, direction)
+        daily_setup = compute_daily_setup(current_price, direction)
         print(f"  Daily setup: Entry {daily_setup['entry']:.0f} | Stop {daily_setup['stop']:.0f} | "
               f"Target {daily_setup['target']:.0f} (R:R {daily_setup['rr']:.1f}:1)")
 
@@ -1574,8 +1604,7 @@ def main():
 
     # ── Fallback to daily message if weekly fails ──
     if not use_weekly:
-        stop    = current_price * (1 - STOP_PCT) if direction == 'UP' else current_price * (1 + STOP_PCT)
-        target  = current_price * (1 + TARGET_PCT) if direction == 'UP' else current_price * (1 - TARGET_PCT)
+        fallback_setup = compute_daily_setup(current_price, direction)
         message = (
             f"WHEAT MONITOR v4.0\n"
             f"------------------------------\n"
@@ -1584,7 +1613,8 @@ def main():
             f"SEASONAL: {s_phase['phase']} ({s_phase['confidence']:.0%})\n"
             f"WASDE: {wasde['signal']} | Weather: {weather['signal']}\n"
             f"MODELS: LSTM={pred['lstm']:.3f} RF={pred['rf']:.3f} XGB={pred['xgb']:.3f}\n\n"
-            f"Entry: {current_price:.2f}c | Stop: {stop:.2f}c | Target: {target:.2f}c\n"
+            f"Entry: {fallback_setup['entry']:.2f}c | Stop: {fallback_setup['stop']:.2f}c | "
+            f"Target: {fallback_setup['target']:.2f}c\n"
         )
 
     print(f"\nFINAL: {direction} | Tier {tier}")
