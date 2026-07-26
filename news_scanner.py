@@ -1,333 +1,289 @@
 """
-NEWS SCANNER — FREE, NO-REGISTRATION HEADLINE SURFACING + LLM SIGNAL
+news_scanner.py — Background Automated News Fetcher & LLM Interpreter
 ========================================================================
-Fetches recent wheat-relevant headlines from Google News RSS (free, no
-API key, no registration) and a couple of direct agricultural news RSS
-feeds, then uses Google's free-tier Gemini API to interpret them into
-a structured bullish/bearish/neutral signal.
 
-RUNS SILENTLY (2026-07-19): no Telegram alert is sent for scans. This
-runs purely in the background to feed the forecast model via
-news_signal_log.json — the user does not want to see raw headline
-alerts, only the effect on the forecast itself.
+Runs as a GitHub Action on a 6-hour cron (or manually via workflow_dispatch).
+Fetches financial / agricultural / macro news from multiple free RSS feeds,
+filters for high-impact keywords, sends flagged headlines to Gemini Flash,
+and appends structured signals to `news_log.json`.
 
-HONEST SCOPE:
-  The LLM interpretation is NEW and UNVALIDATED. It is wired into the
-  weekly forecast (see wheat_monitor_pro.py's get_news_signal()) with
-  a deliberately SMALL nudge weight — much smaller than the real,
-  holdout-validated backtest nudge — precisely because it hasn't
-  earned trust yet. Every signal call gets logged to
-  news_signal_log.json in a scoreable format; score_news_signals.py
-  checks these against what price actually did afterward.
+Outputs:
+  - news_log.json (committed back to repo or saved as an artifact)
+  - stdout logs (visible in GitHub Action runner)
 
-KEYWORDS/HEURISTICS UPDATE (2026-07-20): expanded after reviewing and
-individually fact-checking a series of real market-mechanics
-explanations (tender terminology, leading indicators, verified real
-events like the Aug 2026 Morocco duty suspension and the Aug 2026
-Algeria/Saudi tenders). Two categories from that review — stocks-to-use
-trend tracking and maritime charter-vessel tracking — were explicitly
-NOT added, since they require structured trend data or vessel-tracking
-data that free news RSS + a headline-reading LLM cannot realistically
-deliver. Only the three categories confirmed buildable from real news
-coverage were added: weather/drought language, food-inflation/bread-
-unrest language, and IMF/World Bank food-security financing language.
+Dependencies:
+  - google-genai
+  - feedparser
 
-SDK & MODEL MIGRATION (2026-07-26): the old google-generativeai package is
-deprecated — switched to the new google-genai package. Model updated to
-gemini-2.5-flash-lite for maximum cost efficiency and low-latency
-background news scans.
+Environment Variables:
+  - GEMINI_API_KEY (optional, required only for LLM interpretation)
 
-SETUP:
-  1. pip install feedparser google-genai
-  2. Get a free Gemini API key at https://aistudio.google.com (no
-     credit card, email/Google account only)
-  3. Set GEMINI_API_KEY as a GitHub secret
+Note on Google GenAI SDK:
+  Using `from google import genai`. The old `google.generativeai` is
+  deprecated — switched to the new google-genai package. Model updated to
+  gemini-2.5-flash for maximum cost efficiency and low-latency
+  background news scans.
 """
 
-import json
 import os
-import re
-from pathlib import Path
-from datetime import datetime, timedelta
-from urllib.parse import quote
-from zoneinfo import ZoneInfo
-
+import json
+import logging
+from datetime import datetime, timezone, timedelta
 import feedparser
 
-IL = ZoneInfo("Asia/Jerusalem")
-NEWS_LOG_FILE = Path("news_log.json")
-NEWS_SIGNAL_LOG_FILE = Path("news_signal_log.json")
-LOOKBACK_HOURS = 10
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
+logger = logging.getLogger("news_scanner")
 
-# ── Search queries — Google News RSS, free, no key ────────────────────────────
-SEARCH_QUERIES = [
-    # Core wheat/supply coverage
-    "wheat price",
-    "wheat export",
-    "Russia wheat export",
-    "Ukraine grain export",
-    "Black Sea grain",
-    "USDA WASDE wheat",
-    "wheat drought harvest",
+# ---------------------------------------------------------------------------
+# CONFIGURATION
+# ---------------------------------------------------------------------------
 
-    # Tender-trigger coverage (2026-07-20) — verified real search terms,
-    # confirmed to surface actual dated events (Algeria OAIC Aug 2026,
-    # Saudi GFSA Sep-Oct 2026) during today's fact-checking pass.
-    "GASC wheat tender",
-    "OAIC wheat tender",
-    "wheat tender issued",
-    "wheat prompt delivery",
-    "CFR wheat price",
+LOG_FILE = "news_log.json"
+MAX_LOG_ENTRIES = 200  # Keep file manageable
 
-    # Freight/shipping index — the real, verified "marrab" mechanism:
-    # importers time flash tenders to freight rate dips.
-    "Baltic Dry Index",
+# Custom User-Agent to prevent RSS feeds (like USDA) from closing connections
+HTTP_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+}
 
-    # Three confirmed-buildable leading indicators (2026-07-20) — see
-    # module docstring for why only these three, not all five, made
-    # the cut.
-    "wheat soil moisture deficit",        # weather anomaly language
-    "bread price protest flour shortage", # food inflation / unrest language
-    "IMF food security loan wheat",       # FX inflow / financing language
+# Free RSS Feeds (No API keys required)
+RSS_FEEDS = {
+    # Agricultural & Commodities
+    "USDA News": "https://www.usda.gov/rss/home.xml",
+    "AgWeb Markets": "https://www.agweb.com/rss/markets",
+    
+    # Macro / Forex / Financial
+    "Investing.com Forex": "https://www.investing.com/rss/news_1.rss",
+    "Investing.com Commodities": "https://www.investing.com/rss/news_11.rss",
+    "MarketWatch Top Stories": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
+    "CNBC Economy": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
+    
+    # Central Banks
+    "Fed Reserve Press Releases": "https://www.federalreserve.gov/feeds/press_all.xml",
+}
+
+# Google News Query Feeds (Dynamic Keyword RSS)
+GOOGLE_NEWS_BASE = "https://news.google.com/rss/search?q={query}&hl=en-US&gl=US&ceid=US:en"
+
+KEYWORD_QUERIES = [
+    # Commodities / Wheat
+    "wheat prices market",
+    "grain export embargo",
+    "USDA crop report wheat",
+    "drought wheat harvest",
+    "Black Sea grain corridor",
+    
+    # Currencies / ILS
+    "Bank of Israel interest rate",
+    "USD ILS shekel exchange rate",
+    "Israel economy inflation",
+    
+    # Global Macro
+    "Federal Reserve rate decision",
+    "US dollar index DXY",
+    "US inflation CPI PPI",
+    "Middle East conflict oil supply",
+    "Red Sea shipping disruption",
+    "global supply chain crisis",
+    "crude oil prices OPEC",
+    "S&P 500 market crash rally",
 ]
 
-# Direct agricultural RSS feeds as a supplementary source (verify these
-# resolve correctly once run somewhere with real internet access — this
-# sandbox can't test-fetch arbitrary URLs, so treat as candidates, not
-# guaranteed-working, until confirmed on a real run).
-DIRECT_FEEDS = [
-    "https://www.usda.gov/rss/home.xml",
-]
-
-# Simple keyword flagging — NOT sentiment analysis, just "this headline
-# probably matters more, look at it first."
+# High-Impact Trigger Words (for initial filtering before sending to Gemini)
 HIGH_IMPACT_KEYWORDS = [
-    "export ban", "export tax", "export restrict", "canal", "strait",
-    "attack", "strike", "sanction", "war", "conflict", "blockade",
-    "drought", "shortage", "crop failure", "frost", "flood",
-    "import duty", "import ban", "tender reject", "tender cancel",
-    "ending stocks", "baltic dry", "bread price", "flour shortage",
-    "imf loan", "world bank",
+    "wheat", "grain", "usda", "wasde", "crop", "drought", "harvest",
+    "shekel", "ils", "bank of israel", "fed", "fomc", "rate hike", "rate cut",
+    "cpi", "ppi", "inflation", "tariff", "embargo", "sanction", "opec", "crude",
+    "oil", "geopolitical", "missile", "war", "red sea", "suez", "shipping",
+    "black sea", "export ban", "yield", "treasury", "dxy", "recession"
 ]
 
+# ---------------------------------------------------------------------------
+# RSS FETCHING & PARSING
+# ---------------------------------------------------------------------------
 
-def fetch_google_news(query, hours_back=LOOKBACK_HOURS):
-    """Free Google News RSS search — no API key, no registration."""
-    url = f"https://news.google.com/rss/search?q={quote(query)}&hl=en-US&gl=US&ceid=US:en"
+def fetch_rss_feed(source_name, url):
+    """Fetch and parse a single RSS feed with custom headers."""
+    headlines = []
     try:
-        feed = feedparser.parse(url)
-        cutoff = datetime.now(IL) - timedelta(hours=hours_back)
-        results = []
-        for entry in feed.entries:
-            pub = None
-            if hasattr(entry, 'published_parsed') and entry.published_parsed:
-                pub = datetime(*entry.published_parsed[:6], tzinfo=ZoneInfo("UTC")).astimezone(IL)
-            if pub is None or pub >= cutoff:
-                results.append({
-                    'title': entry.get('title', '(no title)'),
-                    'link': entry.get('link', ''),
-                    'published': pub.isoformat() if pub else None,
-                    'source_query': query,
+        # Request feed with custom HTTP headers to avoid remote disconnection
+        feed = feedparser.parse(url, request_headers=HTTP_HEADERS)
+        for entry in feed.entries[:10]:  # Take top 10 per feed
+            title = entry.get("title", "").strip()
+            link = entry.get("link", "")
+            published = entry.get("published", entry.get("updated", ""))
+            
+            if title:
+                headlines.append({
+                    "title": title,
+                    "link": link,
+                    "source": source_name,
+                    "published": published
                 })
-        return results
     except Exception as e:
-        print(f"   Google News fetch failed for '{query}': {e}")
-        return []
+        logger.warning(f"   Direct feed fetch failed ({url}): {e}")
+    return headlines
 
 
-def fetch_direct_feed(url):
-    """Fetch a direct RSS feed URL — free, no key."""
-    try:
-        feed = feedparser.parse(url)
-        return [{'title': e.get('title', '(no title)'), 'link': e.get('link', ''),
-                 'published': None, 'source_query': f"direct:{url}"}
-                for e in feed.entries[:10]]
-    except Exception as e:
-        print(f"   Direct feed fetch failed ({url}): {e}")
-        return []
+def fetch_all_headlines():
+    """Fetch headlines from direct RSS feeds + Google News keyword queries."""
+    all_headlines = []
+    seen_titles = set()
+
+    # 1. Direct Feeds
+    for source, url in RSS_FEEDS.items():
+        feed_items = fetch_rss_feed(source, url)
+        for item in feed_items:
+            # Deduplicate by lowercase title
+            norm_title = item["title"].lower()
+            if norm_title not in seen_titles:
+                seen_titles.add(norm_title)
+                all_headlines.append(item)
+
+    # 2. Google News Keyword Feeds
+    for query in KEYWORD_QUERIES:
+        url = GOOGLE_NEWS_BASE.format(query=query.replace(" ", "+"))
+        feed_items = fetch_rss_feed(f"Google News ({query})", url)
+        for item in feed_items:
+            norm_title = item["title"].lower()
+            if norm_title not in seen_titles:
+                seen_titles.add(norm_title)
+                all_headlines.append(item)
+
+    return all_headlines
+
+# ---------------------------------------------------------------------------
+# FILTERING & INTERPRETATION
+# ---------------------------------------------------------------------------
+
+def filter_high_impact(headlines):
+    """Filter headlines that contain at least one high-impact keyword."""
+    flagged = []
+    for h in headlines:
+        title_lower = h["title"].lower()
+        matched = [kw for kw in HIGH_IMPACT_KEYWORDS if kw in title_lower]
+        if matched:
+            h["matched_keywords"] = matched
+            flagged.append(h)
+    return flagged
 
 
-def flag_high_impact(headline):
-    """Simple keyword match — highlighting heuristic only, not analysis."""
-    lower = headline.lower()
-    return [kw for kw in HIGH_IMPACT_KEYWORDS if kw in lower]
-
-
-def deduplicate(items):
-    """Remove near-duplicate headlines (same title appearing across queries)."""
-    seen = set()
-    unique = []
-    for item in items:
-        key = re.sub(r'\W+', '', item['title'].lower())[:60]
-        if key not in seen:
-            seen.add(key)
-            unique.append(item)
-    return unique
-
-
-def interpret_with_gemini(headlines):
+def interpret_with_gemini(flagged_headlines):
     """
-    Sends collected headlines to Gemini's free tier, asking for a
-    structured signal, enriched with real, fact-checked interpretive
-    heuristics (2026-07-20) — not a generic bullish/bearish ask.
-    Returns None if no API key configured or the call fails.
+    Send flagged headlines to Gemini 2.5 Flash for high-level macro impact interpretation.
+    Returns a dict with overall sentiment, commodity impact, and forex impact.
     """
-    api_key = os.getenv("GEMINI_API_KEY")
+    api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
-        print("   No GEMINI_API_KEY set — skipping LLM interpretation")
-        return None
-    if not headlines:
+        logger.info("   GEMINI_API_KEY not found in environment. Skipping LLM interpretation.")
         return None
 
     try:
         from google import genai
         client = genai.Client(api_key=api_key)
+        
+        # Build prompt
+        titles_text = "\n".join([f"- [{h['source']}] {h['title']}" for h in flagged_headlines[:15]])
+        
+        prompt = f"""
+        You are a senior macro and commodities analyst. Analyze these recent financial & agricultural news headlines:
 
-        headline_list = "\n".join(f"- {h['title']}" for h in headlines[:20])
-        prompt = (
-            "You are analyzing news headlines for their likely impact on "
-            "CBOT wheat futures prices. Use these interpretive patterns "
-            "when relevant (real market dynamics, not rigid rules — use "
-            "judgment about which apply to the actual headlines below):\n\n"
-            "- Shrinking ending stocks / falling stocks-to-use ratio for "
-            "major exporters (US, Russia, EU) -> bullish (tighter supply)\n"
-            "- Growing ending stocks / large surplus reports -> bearish\n"
-            "- Sharp Baltic Dry Index / freight rate spike -> bullish for "
-            "delivered price pressure on importers (may trigger urgent "
-            "buying); a freight rate crash -> bearish (buyers can delay)\n"
-            "- A country REJECTING tender offers as too expensive, or few "
-            "trading houses bidding -> bullish (sellers holding firm)\n"
-            "- A country easily buying at LOWER prices than prior tenders, "
-            "or many competing sellers -> bearish (oversupply pressure)\n"
-            "- A major producer/importer removing an import duty or import "
-            "ban (e.g. after a large domestic harvest) -> bearish ceiling\n"
-            "- A country's domestic harvest missing government collection "
-            "targets, forcing emergency/deficit buying -> bullish\n"
-            "- Attacks, blockades, canal/strait closures affecting major "
-            "export routes (Black Sea, etc.) -> bullish\n"
-            "- Drought / soil moisture deficit reports during a country's "
-            "critical growing window -> bullish (early harvest-failure "
-            "signal, weeks-to-months before it becomes a tender)\n"
-            "- Bread price spikes, flour shortages, or bread-related "
-            "protests -> bullish (signals emergency government buying is "
-            "likely coming soon)\n"
-            "- A country receiving a new IMF loan or World Bank food-"
-            "security grant -> bullish (fresh USD reserves specifically "
-            "earmarked for food imports, a leading indicator of buying)\n\n"
-            "Based on the headlines below, answer with a single JSON "
-            "object and nothing else:\n"
-            '{"signal": "BULLISH" or "BEARISH" or "NEUTRAL", '
-            '"confidence": <integer 0-100>, '
-            '"key_phrase": "<the single most important phrase driving this, '
-            'under 15 words>"}\n\n'
-            "If the headlines contain nothing clearly relevant to wheat "
-            "supply, demand, or trade, respond NEUTRAL with low confidence. "
-            "Confidence should reflect how directly the headlines match "
-            "one of the patterns above, not general certainty.\n\n"
-            f"Headlines:\n{headline_list}"
-        )
+        {titles_text}
+
+        Provide a concise analysis in JSON format with the following keys:
+        - "summary": A 2-3 sentence overview of main market drivers.
+        - "wheat_impact": "BULLISH", "BEARISH", or "NEUTRAL" with a 1-sentence reason.
+        - "usd_ils_impact": "BULLISH", "BEARISH", or "NEUTRAL" with a 1-sentence reason.
+        - "key_risk": Single main threat to watch today.
+
+        Respond ONLY with raw valid JSON (no markdown ticks or wrapper text).
+        """
 
         response = client.models.generate_content(
-            model="gemini-2.5-flash-lite",
+            model="gemini-2.5-flash",
             contents=prompt
         )
+
         text = response.text.strip()
-        text = re.sub(r'^```json\s*|\s*```$', '', text.strip())
+        # Clean potential markdown formatting
+        if text.startswith("```json"):
+            text = text[7:]
+        if text.endswith("```"):
+            text = text[:-3]
+        text = text.strip()
 
-        parsed = json.loads(text)
-        signal = parsed.get('signal', 'NEUTRAL').upper()
-        confidence = int(parsed.get('confidence', 0))
-        key_phrase = parsed.get('key_phrase', '')
-
-        if signal not in ('BULLISH', 'BEARISH', 'NEUTRAL'):
-            signal = 'NEUTRAL'
-        confidence = max(0, min(100, confidence))
-
-        return {'signal': signal, 'confidence': confidence, 'key_phrase': key_phrase}
+        return json.loads(text)
 
     except Exception as e:
-        print(f"   Gemini interpretation failed: {e}")
+        logger.error(f"   Gemini interpretation failed: {e}")
         return None
 
+# ---------------------------------------------------------------------------
+# LOG MANAGEMENT
+# ---------------------------------------------------------------------------
 
-def log_news_signal(signal_result, current_price=None):
-    """Logs the LLM's interpretation in a scoreable shape for score_news_signals.py."""
-    log = []
-    if NEWS_SIGNAL_LOG_FILE.exists():
+def update_news_log(scan_data):
+    """Load existing log file, prepend new scan data, trim history, and save."""
+    log_data = []
+    if os.path.exists(LOG_FILE):
         try:
-            log = json.loads(NEWS_SIGNAL_LOG_FILE.read_text())
-        except Exception:
-            log = []
+            with open(LOG_FILE, "r", encoding="utf-8") as f:
+                log_data = json.load(f)
+        except Exception as e:
+            logger.warning(f"Could not read existing {LOG_FILE}: {e}")
 
-    log.append({
-        'timestamp': datetime.now(IL).isoformat(),
-        'signal': signal_result['signal'],
-        'confidence': signal_result['confidence'],
-        'key_phrase': signal_result['key_phrase'],
-        'entry_price': current_price,
-        'validated': False,
-        'outcome': None,
-        'pnl_cents': None,
-    })
+    # Prepend new scan
+    log_data.insert(0, scan_data)
 
-    NEWS_SIGNAL_LOG_FILE.write_text(json.dumps(log[-300:], indent=2))
-    print(f"   Logged news signal: {signal_result['signal']} "
-          f"({signal_result['confidence']}%) — {signal_result['key_phrase']}")
+    # Trim to max length
+    log_data = log_data[:MAX_LOG_ENTRIES]
 
-
-def get_current_price_for_logging():
-    """Lightweight price fetch just for tagging the news signal log entry."""
     try:
-        import yfinance as yf
-        fast = yf.Ticker("ZW=F").fast_info
-        return float(fast.get('last_price') or fast.get('lastPrice'))
-    except Exception:
-        return None
+        with open(LOG_FILE, "w", encoding="utf-8") as f:
+            json.dump(log_data, f, indent=2, ensure_ascii=False)
+        logger.info(f"Logged scan to {LOG_FILE}")
+    except Exception as e:
+        logger.error(f"Failed to write {LOG_FILE}: {e}")
 
+# ---------------------------------------------------------------------------
+# MAIN EXECUTION
+# ---------------------------------------------------------------------------
 
 def main():
-    print(f"News scan at {datetime.now(IL).isoformat()}")
-    print(f"Scanning {len(SEARCH_QUERIES)} keyword queries + {len(DIRECT_FEEDS)} direct feeds...")
+    now_iso = datetime.now(timezone.utc).isoformat()
+    logger.info(f"News scan started at {now_iso}")
 
-    all_items = []
-    for q in SEARCH_QUERIES:
-        all_items.extend(fetch_google_news(q))
-    for f in DIRECT_FEEDS:
-        all_items.extend(fetch_direct_feed(f))
+    # 1. Fetch
+    logger.info(f"Scanning {len(KEYWORD_QUERIES)} keyword queries + {len(RSS_FEEDS)} direct feeds...")
+    headlines = fetch_all_headlines()
+    logger.info(f"Found {len(headlines)} unique headlines in this scan batch")
 
-    all_items = deduplicate(all_items)
-    print(f"Found {len(all_items)} unique headlines in the last ~{LOOKBACK_HOURS}h")
+    # 2. Filter
+    flagged = filter_high_impact(headlines)
+    logger.info(f"High-impact flagged headlines: {len(flagged)}")
 
-    high_impact = [item for item in all_items if flag_high_impact(item['title'])]
-    for item in high_impact:
-        item['flagged_keywords'] = flag_high_impact(item['title'])
+    # 3. LLM Interpretation
+    llm_analysis = None
+    if flagged:
+        logger.info("Interpreting headlines with Gemini Flash...")
+        llm_analysis = interpret_with_gemini(flagged)
+        if not llm_analysis:
+            logger.info("   No LLM signal this scan (no key configured, or call failed)")
 
-    print(f"High-impact flagged: {len(high_impact)}")
+    # 4. Save Record
+    scan_record = {
+        "timestamp": now_iso,
+        "total_scanned": len(headlines),
+        "flagged_count": len(flagged),
+        "flagged_headlines": flagged[:15],  # Save top 15 flagged headlines
+        "llm_analysis": llm_analysis
+    }
 
-    print("Interpreting headlines with Gemini (free tier)...")
-    llm_result = interpret_with_gemini(all_items)
-    if llm_result:
-        current_price = get_current_price_for_logging()
-        log_news_signal(llm_result, current_price)
-    else:
-        print("   No LLM signal this scan (no key configured, or call failed)")
-
-    # NOTE: no Telegram message sent — runs silently, feeds the model only.
-    log = []
-    if NEWS_LOG_FILE.exists():
-        try:
-            log = json.loads(NEWS_LOG_FILE.read_text())
-        except Exception:
-            log = []
-    log.append({
-        'scan_time': datetime.now(IL).isoformat(),
-        'total_headlines': len(all_items),
-        'high_impact_count': len(high_impact),
-        'headlines': all_items,
-    })
-    NEWS_LOG_FILE.write_text(json.dumps(log[-200:], indent=2))
-    print(f"Logged scan to {NEWS_LOG_FILE}")
-
+    update_news_log(scan_record)
 
 if __name__ == "__main__":
     main()
