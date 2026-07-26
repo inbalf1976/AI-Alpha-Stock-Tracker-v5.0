@@ -1,1547 +1,491 @@
+#!/usr/bin/env python3
 """
-WHEAT MONITOR v4.0 - CLEAN REBUILD
-=====================================
-Built from scratch using everything learned over the past month.
-
-DESIGN PRINCIPLES:
-  1. Seasonal truth first — 5 years of ZW=F history defines the calendar
-     2022 excluded (Ukraine war = global anomaly)
-  2. Real price always — uses LIVE current price (not stale daily bar)
-  3. Trend respect — never fights a confirmed multi-day trend
-  4. Conviction gate — only alerts on historically proven setups
-  5. Honest confidence — no artificial boosting, real probabilities only
-  6. One alert per day — no duplicates, no noise
-
-SIGNAL HIERARCHY (in order of weight):
-  1. Seasonal phase      — derived from 5yr history, hard override
-  2. Trend direction     — 5/10/20 day MA alignment
-  3. Conviction tier     — backtest-proven condition combinations
-  4. Ensemble models     — LSTM + RF + XGB with daily-sensitive features
-  5. Fundamental context — WASDE multi-grain, weather, volume
-
-ACCURACY TARGET: 80%+ on Tier 1/2 setups (~6-10 alerts/month)
-
-CHANGELOG (this version):
-  - FIX: current_price now comes from a live quote (get_live_price),
-    not the last daily bar. The old logic dropped "today's" candle
-    to avoid using an incomplete bar, but that meant current_price
-    could silently lag by days around weekends/holidays. Now the
-    daily bars still drive all indicators/seasonal/trend calcs —
-    only the single "current price" used for entry/stop/target is
-    live. If the live fetch fails, this is now flagged explicitly
-    (⚠️ STALE) instead of failing silently.
+WHEAT MONITOR v4.0 — Main System Engine
+Integrates Wheat Range Engine (WRE), Technical Indicator Pipeline,
+News-Adjusted Conviction Gate, State Caching, and Telegram Alerting.
 """
 
-import os, sys, json, warnings, requests
+import json
+import logging
+import datetime
+from pathlib import Path
+from typing import Dict, Any, Tuple, Optional
+
 import numpy as np
 import pandas as pd
-import yfinance as yf
-from pathlib import Path
-from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
+import requests
 
-IL = ZoneInfo("Asia/Jerusalem")   # Israel timezone — used everywhere
+# ── LOGGING & CONFIGURATION ──────────────────────────────────────────────────
 
-warnings.filterwarnings('ignore')
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
+logger = logging.getLogger("WheatMonitor")
 
-# ── CONFIG ────────────────────────────────────────────────────────────────────
+WEEKLY_CACHE_FILE = Path("weekly_cache.json")
+DAILY_LOG_FILE = Path("daily_performance_log.json")
 
-TICKER          = "ZW=F"
-CORN_TICKER     = "ZC=F"
-SOY_TICKER      = "ZS=F"
-STOP_PCT        = 0.015   # 1.5%
-TARGET_PCT      = 0.025   # 2.5%
-MIN_CONFIDENCE  = 0.58
-STATE_FILE      = Path("wheat_monitor_state.json")
 
-TELEGRAM_TOKEN  = os.getenv("TELEGRAM_BOT_TOKEN")
-TELEGRAM_CHAT   = os.getenv("TELEGRAM_CHAT_ID")
+# ── INDICATORS & FEATURE ENGINEERING ─────────────────────────────────────────
 
-# Years to exclude from seasonal calculation (global anomalies)
-EXCLUDE_YEARS   = [2022]
-
-# ── LIVE PRICE FETCH ──────────────────────────────────────────────────────────
-
-def get_live_price(ticker=TICKER):
+def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Fetches the actual live/last-traded price, separate from the
-    daily historical bars used for indicators. Daily bars can lag
-    by days around holidays/weekends or while today's session is
-    still forming — this pulls the real current quote instead.
-
-    Returns (price, is_live). is_live=False means the live fetch
-    failed and the caller should fall back to the last daily close,
-    while flagging it clearly rather than trusting it silently.
+    Computes technical indicators for trend, momentum, volatility, and volume.
+    Used by Daily Ensemble models and Conviction Gate logic.
+    Note: Volume indicators relying on unstable continuous futures feeds (vol_low)
+    are structurally excluded to prevent false signals.
     """
-    try:
-        fast = yf.Ticker(ticker).fast_info
-        live = fast.get('last_price') or fast.get('lastPrice')
-        if live and live > 0:
-            return float(live), True
-    except Exception as e:
-        print(f"   fast_info live price failed: {e}")
-
-    # Fallback: try 1-minute intraday bars for today
-    try:
-        intraday = yf.Ticker(ticker).history(period='1d', interval='1m')
-        if not intraday.empty:
-            return float(intraday['Close'].iloc[-1]), True
-    except Exception as e:
-        print(f"   intraday fallback failed: {e}")
-
-    return None, False
-
-
-# ── SEASONAL ENGINE ───────────────────────────────────────────────────────────
-
-class SeasonalEngine:
-    """
-    Derives the wheat seasonal calendar directly from 5 years of
-    ZW=F price history. No hardcoded assumptions — the data speaks.
-    Excludes 2022 (Ukraine war anomaly).
-    """
-
-    def __init__(self):
-        self.seasonal_returns = None
-        self.phase            = None
-        self.bias             = 0.0
-        self.confidence       = 0.0
-
-    def fit(self, df):
-        """Calculate average return by day-of-year across 5 years, excluding anomaly years."""
-        df = df.copy()
-        df['doy']  = df.index.dayofyear
-        df['year'] = df.index.year
-        df['ret1'] = df['Close'].pct_change(1)
-
-        # Exclude anomaly years
-        df = df[~df['year'].isin(EXCLUDE_YEARS)]
-
-        # Average return by day-of-year
-        self.seasonal_returns = df.groupby('doy')['ret1'].mean()
-
-        # Smooth with 7-day rolling average
-        self.seasonal_returns = self.seasonal_returns.rolling(7, center=True, min_periods=1).mean()
-
-    def get_current_phase(self):
-        """
-        Returns seasonal phase for today based on historical patterns.
-        Looks at next 20 trading days to determine trend direction.
-        """
-        if self.seasonal_returns is None:
-            return {'phase': 'UNKNOWN', 'bias': 0.0, 'confidence': 0.0, 'explanation': 'No data'}
-
-        today_doy = datetime.now(IL).timetuple().tm_yday
-
-        # Look at next 20 days of seasonal returns
-        forward_days = []
-        for offset in range(1, 21):
-            doy = ((today_doy + offset - 1) % 365) + 1
-            if doy in self.seasonal_returns.index:
-                forward_days.append(self.seasonal_returns[doy])
-
-        if not forward_days:
-            return {'phase': 'NEUTRAL', 'bias': 0.0, 'confidence': 0.5, 'explanation': 'No seasonal data'}
-
-        avg_forward = np.mean(forward_days)
-        pos_days    = sum(1 for r in forward_days if r > 0)
-        neg_days    = sum(1 for r in forward_days if r < 0)
-
-        # Determine phase
-        if avg_forward > 0.0005 and pos_days >= 13:
-            phase      = 'BULLISH'
-            confidence = min(0.85, 0.60 + pos_days * 0.012)
-        elif avg_forward < -0.0005 and neg_days >= 13:
-            phase      = 'BEARISH'
-            confidence = min(0.85, 0.60 + neg_days * 0.012)
-        else:
-            phase      = 'NEUTRAL'
-            confidence = 0.55
-
-        # Month labels
-        month = datetime.now(IL).month
-        labels = {
-            1:'Jan neutral', 2:'Pre-spring dip', 3:'Spring rally starts',
-            4:'Peak planting premium', 5:'Max weather premium',
-            6:'Harvest pressure', 7:'Post-harvest low', 8:'Summer lull',
-            9:'Fall recovery', 10:'Winter demand builds',
-            11:'Pre-winter rally', 12:'Winter high'
-        }
-
-        self.phase      = phase
-        self.bias       = avg_forward
-        self.confidence = confidence
-
-        return {
-            'phase':       phase,
-            'bias':        round(avg_forward, 5),
-            'confidence':  round(confidence, 3),
-            'pos_days':    pos_days,
-            'neg_days':    neg_days,
-            'explanation': labels.get(month, ''),
-        }
-
-    def blocks_direction(self, direction):
-        """
-        Hard seasonal override.
-        If seasonal phase strongly disagrees with direction → block.
-        This is the most important filter in the system.
-        """
-        if self.phase is None:
-            return False, ""
-
-        if direction == 'UP' and self.phase == 'BEARISH' and self.confidence >= 0.72:
-            return True, f"Seasonal BEARISH phase blocks UP (confidence {self.confidence:.0%})"
-
-        if direction == 'DOWN' and self.phase == 'BULLISH' and self.confidence >= 0.72:
-            return True, f"Seasonal BULLISH phase blocks DOWN (confidence {self.confidence:.0%})"
-
-        return False, ""
-
-
-# ── TREND ENGINE ──────────────────────────────────────────────────────────────
-
-class TrendEngine:
-    """
-    Determines the current trend from price action.
-    Never fight a confirmed trend.
-    """
-
-    def get_trend(self, df):
-        close = df['Close']
-        price = float(close.iloc[-1])
-        sma5  = float(close.rolling(5).mean().iloc[-1])
-        sma10 = float(close.rolling(10).mean().iloc[-1])
-        sma20 = float(close.rolling(20).mean().iloc[-1])
-        sma50 = float(close.rolling(50).mean().iloc[-1])
-
-        # Consecutive up/down days
-        rets = close.pct_change()
-        last5 = rets.iloc[-5:]
-        up_days   = int((last5 > 0).sum())
-        down_days = int((last5 < 0).sum())
-
-        # Trend strength
-        if price > sma5 > sma10 > sma20:
-            trend     = 'UP'
-            strength  = 'STRONG' if price > sma50 else 'MODERATE'
-        elif price < sma5 < sma10 < sma20:
-            trend     = 'DOWN'
-            strength  = 'STRONG' if price < sma50 else 'MODERATE'
-        else:
-            trend     = 'NEUTRAL'
-            strength  = 'WEAK'
-
-        return {
-            'trend':     trend,
-            'strength':  strength,
-            'price':     price,
-            'sma5':      round(sma5, 2),
-            'sma10':     round(sma10, 2),
-            'sma20':     round(sma20, 2),
-            'sma50':     round(sma50, 2),
-            'up_days':   up_days,
-            'down_days': down_days,
-        }
-
-    def blocks_direction(self, direction, trend_data):
-        """Block signals that fight a strong confirmed trend."""
-        if direction == 'DOWN' and trend_data['trend'] == 'UP' and trend_data['strength'] == 'STRONG':
-            return True, f"Strong uptrend blocks DOWN (price {trend_data['price']:.1f} > all MAs)"
-        if direction == 'UP' and trend_data['trend'] == 'DOWN' and trend_data['strength'] == 'STRONG':
-            return True, f"Strong downtrend blocks UP (price {trend_data['price']:.1f} < all MAs)"
-        return False, ""
-
-
-# ── CONVICTION GATE ───────────────────────────────────────────────────────────
-
-class ConvictionGate:
-    """
-    REBUILT 2026-07-09 using real train/holdout backtest validation
-    (see backtest.py and backtest_results.json).
-    UPDATED 2026-07-10: vol_low REMOVED after discovering a structural
-    data problem, not just occasional bad data.
-
-    The previous version of this class used combinations found by
-    searching hundreds of condition combos against a single dataset,
-    reporting the best result as "100% accuracy". That number was
-    proven fake: when tested against a holdout period the combos
-    were never fitted to, most either collapsed to ~55-62% (barely
-    better than a coin flip) or never occurred at all in the last
-    4 months of data.
-
-    This version used ONLY single conditions that were individually
-    validated on a real holdout set AND beat the baseline UP rate
-    (67.46% — wheat trended up most of this 2-year window anyway,
-    so anything below that adds zero real value, even if it "looks"
-    high in isolation).
-
-    2026-07-10 DISCOVERY — vol_low is unreliable, removed entirely:
-    A diagnostic (volume_lag_check.py) showed ZW=F's Yahoo daily
-    Volume field takes roughly 1-2 WEEKS to fully backfill for
-    continuous futures contracts. Dates within the last ~10 days
-    showed volume readings of single/low-double digits (e.g. 7, 48,
-    136 contracts) on the most liquid wheat contract in the world —
-    obviously incomplete, not real. Since vol_low (ratio < 0.80)
-    compares TODAY's volume against a 20-day average that is ITSELF
-    partly built from these same artificially-low recent values, it
-    was almost certainly firing as effectively-always-true on recent
-    dates — meaning its 84.8% holdout accuracy likely measured "is
-    this date recent" rather than any real market behavior. This
-    was NOT a rare data glitch — it is structural and will recur
-    every single day this script runs. Removed rather than patched.
-
-    CONFIRMED CONDITIONS (holdout period 2026-03-20 to 2026-07-09) —
-    vol_low removed, the rest do not depend on the Volume field:
-      momentum_up   : 84.0% UP (n=25 holdout) — strongest reliable signal
-      macd_bullish  : 70.0% UP (n=30 holdout) — modest but real edge
-      bearish_month : 68.0% UP (n=25 holdout) — barely above baseline, weak
-
-    EXPLICITLY EXCLUDED (do not re-add without re-validating):
-      vol_low        : REMOVED 2026-07-10 — structural data lag, not
-                        a genuine volume signal (see above)
-      rsi_oversold   : collapsed to 50.0% and flipped direction on holdout
-      momentum_down  : collapsed to 57.7% and flipped direction on holdout
-      near_bb_lower  : collapsed to 57.1% on tiny holdout sample (n=7)
-      in_lower_half  : never occurred once in the entire holdout period
-      wc_bullish, rsi_neutral, inside_bb, vol_good : held up on holdout
-                        but scored BELOW the 67.46% baseline
-
-    IMPORTANT: if volume data quality is ever fixed/verified reliable
-    (e.g. switching to a direct CME/CBOT feed instead of Yahoo), re-run
-    backtest.py fresh before re-adding any volume-based condition.
-    Re-run backtest.py periodically and update the numbers below —
-    do not let this drift stale.
-    """
-
-    # Holdout-validated accuracies — vol_low removed 2026-07-10 (see docstring)
-    # FALLBACK values, used only if validated_conditions.json is missing
-    # or invalid — see _load_holdout_accuracy() below for the real,
-    # auto-updating source. Update these manually only as a last resort.
-    FALLBACK_HOLDOUT_ACCURACY = {
-        'momentum_up':   0.840,
-        'macd_bullish':  0.700,
-        'bearish_month': 0.680,
-    }
-    FALLBACK_BASELINE_UP = 0.6746
-
-    # Never auto-trust these even if a loaded file somehow contains them —
-    # defense in depth alongside backtest.py's own exclusion (see
-    # backtest.py's STRUCTURAL_EXCLUSIONS for why: confirmed structural
-    # Yahoo volume data lag for ZW=F, 2026-07-10).
-    STRUCTURAL_EXCLUSIONS = {'vol_low', 'vol_good', 'vol_high'}
-
-    def __init__(self):
-        self.HOLDOUT_ACCURACY, self.BASELINE_UP, self._source = self._load_holdout_accuracy()
-
-    def _load_holdout_accuracy(self):
-        """
-        Loads validated_conditions.json (auto-produced weekly by
-        backtest.py) if present and valid. Falls back to the hardcoded
-        FALLBACK_* values otherwise, with a clear console message so
-        it's never a silent, invisible fallback.
-        """
-        path = Path("validated_conditions.json")
-        if not path.exists():
-            print("   ⚠️ validated_conditions.json not found — using hardcoded fallback accuracy values")
-            return dict(self.FALLBACK_HOLDOUT_ACCURACY), self.FALLBACK_BASELINE_UP, "FALLBACK (no file)"
-
-        try:
-            data = json.loads(path.read_text())
-            loaded = data.get('validated_conditions', {})
-            baseline = data.get('baseline_up', self.FALLBACK_BASELINE_UP)
-
-            # Defense in depth: strip any structurally-excluded condition
-            # even if it somehow made it into the file
-            cleaned = {k: v for k, v in loaded.items() if k not in self.STRUCTURAL_EXCLUSIONS}
-            removed = set(loaded.keys()) & self.STRUCTURAL_EXCLUSIONS
-            if removed:
-                print(f"   ⚠️ Ignored structurally-excluded condition(s) found in file: {removed}")
-
-            if not cleaned:
-                print("   ⚠️ validated_conditions.json had no usable conditions — using hardcoded fallback")
-                return dict(self.FALLBACK_HOLDOUT_ACCURACY), self.FALLBACK_BASELINE_UP, "FALLBACK (empty file)"
-
-            generated_at = data.get('generated_at', 'unknown date')
-            print(f"   Loaded {len(cleaned)} validated condition(s) from validated_conditions.json "
-                  f"(generated {generated_at})")
-            return cleaned, baseline, f"LIVE (generated {generated_at})"
-
-        except Exception as e:
-            print(f"   ⚠️ Failed to load validated_conditions.json ({e}) — using hardcoded fallback")
-            return dict(self.FALLBACK_HOLDOUT_ACCURACY), self.FALLBACK_BASELINE_UP, "FALLBACK (load error)"
-
-    def evaluate(self, df):
-        close = df['Close']
-        price = float(close.iloc[-1])
-
-        # NOTE: vol_low removed 2026-07-10 — see class docstring.
-        # ZW=F's Yahoo volume field is structurally unreliable for
-        # dates within ~1-2 weeks (takes that long to backfill), so
-        # this condition was almost always firing on incomplete data,
-        # not a genuine low-volume signal.
-
-        # Momentum (for momentum_up) — same-direction 1d and 3d returns
-        ret_1d = float(close.pct_change(1).iloc[-1])
-        ret_3d = float(close.pct_change(3).iloc[-1])
-        momentum_up = (ret_1d > 0) and (ret_3d > 0)
-
-        # MACD (for macd_bullish)
-        ema12 = close.ewm(span=12).mean()
-        ema26 = close.ewm(span=26).mean()
-        macd = ema12 - ema26
-        macd_signal = macd.ewm(span=9).mean()
-        macd_bullish = float(macd.iloc[-1]) > float(macd_signal.iloc[-1])
-
-        # Month (for bearish_month)
-        month = datetime.now(IL).month
-        bearish_month = month in [6, 7, 8]
-
-        conditions = {
-            'momentum_up':   momentum_up,
-            'macd_bullish':  macd_bullish,
-            'bearish_month': bearish_month,
-            'ret_1d':        round(ret_1d, 4),
-            'ret_3d':        round(ret_3d, 4),
-            'month':         month,
-            'price':         round(price, 2),
-        }
-
-        # Rank active conditions by their real holdout accuracy — highest wins
-        active = [(name, acc) for name, acc in self.HOLDOUT_ACCURACY.items()
-                  if conditions.get(name)]
-
-        if not active:
-            tier, accuracy = 0, self.BASELINE_UP
-            reason = f"⚪ NO SIGNAL — baseline only ({self.BASELINE_UP:.1%}, no validated condition active)"
-        else:
-            active.sort(key=lambda x: x[1], reverse=True)
-            best_name, best_acc = active[0]
-            active_names = " + ".join(name for name, _ in active)
-
-            if best_acc >= 0.80:
-                tier = 2
-                reason = f"🥇 TIER 2 (holdout-validated {best_acc:.1%}) — {active_names}"
-            elif best_acc >= 0.68:
-                tier = 1
-                reason = f"🥈 TIER 1 (holdout-validated {best_acc:.1%}) — {active_names}"
-            else:
-                tier = 0
-                reason = f"⚪ WEAK — {active_names} ({best_acc:.1%}, near baseline)"
-            accuracy = best_acc
-
-        return tier, accuracy, reason, conditions
-
-
-MONTHLY_CACHE_FILE = Path("monthly_range_cache.json")
-
-
-def get_frozen_monthly_range(wre, df, current_price, cost_floor_cents):
-    """
-    Same freeze pattern as get_frozen_weekly_range(), applied to the
-    monthly outlook — see that function's docstring and
-    predict_monthly_range()'s docstring for the full reasoning.
-    Computed once per real calendar month, reused until the month
-    actually changes.
-    """
-    today = datetime.now(IL)
-    cache_key = f"{today.year}-{today.month:02d}"
-
-    cached = None
-    if MONTHLY_CACHE_FILE.exists():
-        try:
-            cached = json.loads(MONTHLY_CACHE_FILE.read_text())
-        except Exception:
-            cached = None
-
-    if cached and cached.get('month_key') == cache_key:
-        print(f"   Using FROZEN monthly range (locked earlier this month, {cache_key})")
-        return cached['monthly']
-
-    monthly = wre.predict_monthly_range(df, current_price, cost_floor_cents)
-    if monthly:
-        try:
-            MONTHLY_CACHE_FILE.write_text(json.dumps({
-                'month_key': cache_key,
-                'frozen_at': today.isoformat(),
-                'monthly': monthly,
-            }, indent=2))
-            print(f"   Froze NEW monthly range for {cache_key}: "
-                  f"{monthly['monthly_low']:.0f}-{monthly['monthly_high']:.0f}c")
-        except Exception as e:
-            print(f"   Failed to cache monthly range: {e}")
-
-    return monthly
-
-
-BREACH_TOLERANCE_PCT = 0.02  # 2% beyond stop/target triggers a re-freeze — adjust here
-
-
-def _check_breach(weekly, current_price, direction):
-    """
-    Returns (is_breached, reason). A forecast is "broken" when price
-    has moved BREACH_TOLERANCE_PCT beyond either the frozen target
-    (forecast already achieved/exceeded) or the frozen stop (forecast
-    invalidated) — not just touched, to avoid re-freezing on noise.
-    """
-    target = weekly.get('target')
-    stop = weekly.get('stop')
-    if target is None or stop is None:
-        return False, ""
-
-    if direction == 'UP':
-        target_breach = current_price >= target * (1 + BREACH_TOLERANCE_PCT)
-        stop_breach   = current_price <= stop * (1 - BREACH_TOLERANCE_PCT)
-    elif direction == 'DOWN':
-        target_breach = current_price <= target * (1 - BREACH_TOLERANCE_PCT)
-        stop_breach   = current_price >= stop * (1 + BREACH_TOLERANCE_PCT)
-    else:
-        return False, ""
-
-    if target_breach:
-        return True, f"price {current_price:.0f}c is {BREACH_TOLERANCE_PCT:.0%}+ past frozen target {target:.0f}c"
-    if stop_breach:
-        return True, f"price {current_price:.0f}c is {BREACH_TOLERANCE_PCT:.0%}+ past frozen stop {stop:.0f}c"
-    return False, ""
-
-
-NEWS_SIGNAL_MAX_AGE_HOURS = 12  # only trust a signal this fresh
-
-
-def get_news_signal():
-    """
-    Reads the most recent LLM news interpretation (from news_scanner.py)
-    if it's fresh enough. Returns None if missing, stale, or NEUTRAL —
-    caller should treat None as "no news nudge this run", not guess.
-
-    WEIGHT NOTE (2026-07-19): this is a brand new, UNVALIDATED signal.
-    It gets a deliberately small nudge in predict_next_week() — see
-    NEWS_SIGNAL_NUDGE_SCALE there — much smaller than the real,
-    holdout-validated backtest nudge. Do not increase this weight
-    based on a good week or two; check score_news_signals.py's real
-    win rate over many scored signals first. Same discipline that
-    caught vol_low being unreliable applies here.
-    """
-    path = Path("news_signal_log.json")
-    if not path.exists():
-        return None
-    try:
-        log = json.loads(path.read_text())
-        if not log:
-            return None
-        latest = log[-1]
-        ts = datetime.fromisoformat(latest['timestamp'])
-        age_hours = (datetime.now(IL) - ts).total_seconds() / 3600
-        if age_hours > NEWS_SIGNAL_MAX_AGE_HOURS:
-            return None
-        if latest['signal'] == 'NEUTRAL':
-            return None
-        return latest['signal'], latest['confidence']
-    except Exception as e:
-        print(f"   Failed to read news signal: {e}")
-        return None
-
-
-WEEKLY_CACHE_FILE = Path("weekly_range_cache.json")
-WEEKLY_BREAK_LOG_FILE = Path("weekly_break_log.json")
-WEEKLY_PERFORMANCE_LOG_FILE = Path("weekly_performance_log.json")
-
-# How far past the frozen stop/target price must move before the
-# weekly forecast is considered "broken" and gets regenerated.
-# UPDATED 2026-07-14: changed from 2% to 0.1% per explicit design
-# decision — even a small breach now triggers regeneration, rather
-# than waiting for a larger, more clearly-confirmed break.
-BREAK_THRESHOLD_PCT = 0.001
-
-
-def log_daily_performance(iso_year, iso_week, current_price, weekly):
-    """
-    Appends today's price vs. this week's frozen range to a running
-    log, so a Friday/Saturday report can show a real day-by-day
-    breakdown (not a memory-based impression) of how the week's
-    forecast actually held up.
-    """
-    log = []
-    if WEEKLY_PERFORMANCE_LOG_FILE.exists():
-        try:
-            log = json.loads(WEEKLY_PERFORMANCE_LOG_FILE.read_text())
-        except Exception:
-            log = []
-
-    iso_key = f"{iso_year}-W{iso_week}"
-    today = datetime.now(IL)
-    today_str = today.strftime('%Y-%m-%d')
-
-    # Don't double-log if this script runs more than once on the same day
-    if any(e['iso_key'] == iso_key and e['date'] == today_str for e in log):
-        return
-
-    range_low  = weekly['range_low']
-    range_high = weekly['range_high']
-    range_width = range_high - range_low
-    if range_width > 0:
-        position_pct = round(((current_price - range_low) / range_width) * 100, 1)
-    else:
-        position_pct = None
-
-    within_range = range_low <= current_price <= range_high
-
-    log.append({
-        'iso_key': iso_key,
-        'date': today_str,
-        'day_name': today.strftime('%A'),
-        'price': round(current_price, 2),
-        'range_low': range_low,
-        'range_high': range_high,
-        'position_in_range_pct': position_pct,
-        'within_range': within_range,
-        'bias': weekly.get('bias'),
-    })
-
-    try:
-        WEEKLY_PERFORMANCE_LOG_FILE.write_text(json.dumps(log, indent=2))
-    except Exception as e:
-        print(f"   Failed to log daily performance: {e}")
-
-
-def log_weekly_break(iso_year, iso_week, current_price, old_weekly, reason):
-    """Records when/why a weekly forecast got broken and regenerated."""
-    log = []
-    if WEEKLY_BREAK_LOG_FILE.exists():
-        try:
-            log = json.loads(WEEKLY_BREAK_LOG_FILE.read_text())
-        except Exception:
-            log = []
-
-    log.append({
-        'iso_key': f"{iso_year}-W{iso_week}",
-        'broken_at': datetime.now(IL).isoformat(),
-        'price_at_break': round(current_price, 2),
-        'old_range': f"{old_weekly['range_low']:.0f}-{old_weekly['range_high']:.0f}",
-        'old_stop': old_weekly.get('stop'),
-        'old_target': old_weekly.get('target'),
-        'reason': reason,
-    })
-
-    try:
-        WEEKLY_BREAK_LOG_FILE.write_text(json.dumps(log, indent=2))
-    except Exception as e:
-        print(f"   Failed to log weekly break: {e}")
-
-
-def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direction,
-                            backtest_tier=None, backtest_accuracy=None, news_signal=None):
-    """
-    REBUILT 2026-07-14, corrected same day: entry/stop/target now come
-    from predict_next_week()'s OWN real historical/ATR-based forecast
-    (clamped to a -15%/+25% outer safety boundary), NOT a hardcoded
-    fixed-percentage formula. An earlier version of this fix mistakenly
-    always used exactly -15%/+25% as the forecast itself; corrected to
-    treat those as outer limits only — the model's real forecast can
-    (and usually should) be narrower.
-
-    - weekly['final_call'] is the FROZEN weekly direction shown as the
-      top-level header — only changes when the current setup breaks.
-    - On break: WIN (broke past target) → same direction, new real
-      forecast around current price. LOSS (broke past stop) → flip
-      direction, new real forecast for the flipped direction.
-    - forced_direction is passed to predict_next_week() so the
-      regenerated forecast still uses real seasonal/ATR data, just
-      pinned to the win/loss-determined direction rather than
-      whatever the data would have picked on its own.
-    - On a fresh week, NO forced_direction — the model's own bias
-      score (now also nudged by today's daily_direction_hint) decides
-      final_call, rather than blindly copying the daily ensemble read.
-    """
-    iso_year, iso_week, _ = datetime.now(IL).isocalendar()
-
-    cached = None
-    if WEEKLY_CACHE_FILE.exists():
-        try:
-            cached = json.loads(WEEKLY_CACHE_FILE.read_text())
-        except Exception:
-            cached = None
-
-    if cached and cached.get('iso_year') == iso_year and cached.get('iso_week') == iso_week:
-        old_weekly = cached['weekly']
-        stop   = old_weekly.get('stop')
-        target = old_weekly.get('target')
-        final_call = old_weekly.get('final_call', daily_direction)
-
-        broken = False
-        break_type = None  # 'target' (win) or 'stop' (loss)
-        if stop is not None and target is not None:
-            if final_call == 'UP':
-                if current_price > target * (1 + BREAK_THRESHOLD_PCT):
-                    broken, break_type = True, 'target'
-                elif current_price < stop * (1 - BREAK_THRESHOLD_PCT):
-                    broken, break_type = True, 'stop'
-            else:  # DOWN
-                if current_price < target * (1 - BREAK_THRESHOLD_PCT):
-                    broken, break_type = True, 'target'
-                elif current_price > stop * (1 + BREAK_THRESHOLD_PCT):
-                    broken, break_type = True, 'stop'
-
-        if broken:
-            outcome = 'WIN' if break_type == 'target' else 'LOSS'
-            reason = f"price {current_price:.0f}c broke past {break_type} ({outcome})"
-            print(f"   ⚠️ WEEKLY SETUP BROKEN: {reason} — regenerating")
-            log_weekly_break(iso_year, iso_week, current_price, old_weekly, reason)
-
-            # Win → keep same direction, fresh real forecast.
-            # Loss → the directional read was wrong, flip it.
-            new_final_call = final_call if break_type == 'target' else (
-                'DOWN' if final_call == 'UP' else 'UP')
-
-            weekly = wre.predict_next_week(
-                df, current_price, cost_floor_cents,
-                forced_direction=new_final_call,
-                daily_direction_hint=daily_direction,
-                backtest_tier=backtest_tier,
-                backtest_accuracy=backtest_accuracy,
-                news_signal=news_signal,
-            )
-            weekly['final_call'] = new_final_call
-
-            history = old_weekly.get('history', [])
-            history.append({
-                'closed_at': datetime.now(IL).isoformat(),
-                'entry': old_weekly.get('entry'), 'stop': stop, 'target': target,
-                'final_call': final_call, 'outcome': outcome,
-                'price_at_close': round(current_price, 2),
-            })
-            weekly['history'] = history
-
-            try:
-                WEEKLY_CACHE_FILE.write_text(json.dumps({
-                    'iso_year': iso_year, 'iso_week': iso_week,
-                    'frozen_at': datetime.now(IL).isoformat(),
-                    'broken_and_regenerated': True,
-                    'weekly': weekly,
-                }, indent=2))
-                print(f"   Re-froze weekly plan after {outcome}: final_call={new_final_call}, "
-                      f"entry={weekly['entry']:.0f} stop={weekly['stop']:.0f} target={weekly['target']:.0f} "
-                      f"(range {weekly['range_low']:.0f}-{weekly['range_high']:.0f})")
-            except Exception as e:
-                print(f"   Failed to cache regenerated weekly plan: {e}")
-
-            log_daily_performance(iso_year, iso_week, current_price, weekly)
-            return weekly, True, outcome
-
-        print(f"   Using FROZEN weekly plan (locked earlier this week, iso {iso_year}-W{iso_week})")
-        weekly = dict(old_weekly)
-        log_daily_performance(iso_year, iso_week, current_price, weekly)
-        in_range = weekly['stop'] <= current_price <= weekly['target'] if weekly['final_call'] == 'UP' \
-                   else weekly['target'] <= current_price <= weekly['stop']
-        return weekly, not in_range, None
-
-    # New week — let the model's OWN real forecast (nudged by today's
-    # daily direction, not overridden by it) determine final_call
-    weekly = wre.predict_next_week(
-        df, current_price, cost_floor_cents,
-        daily_direction_hint=daily_direction,
-        backtest_tier=backtest_tier,
-        backtest_accuracy=backtest_accuracy,
-        news_signal=news_signal,
-    )
-    weekly['final_call'] = weekly['bias'] if weekly['bias'] in ('UP', 'DOWN') else daily_direction
-    weekly['history'] = []
-
-    try:
-        WEEKLY_CACHE_FILE.write_text(json.dumps({
-            'iso_year': iso_year, 'iso_week': iso_week,
-            'frozen_at': datetime.now(IL).isoformat(),
-            'weekly': weekly,
-        }, indent=2))
-        print(f"   Froze NEW weekly plan for iso {iso_year}-W{iso_week}: "
-              f"final_call={weekly['final_call']}, entry={weekly['entry']:.0f} "
-              f"stop={weekly['stop']:.0f} target={weekly['target']:.0f} "
-              f"(range {weekly['range_low']:.0f}-{weekly['range_high']:.0f})")
-    except Exception as e:
-        print(f"   Failed to cache weekly plan: {e}")
-
-    log_daily_performance(iso_year, iso_week, current_price, weekly)
-    return weekly, False, None
-
-
-# ── INDICATORS ────────────────────────────────────────────────────────────────
-
-def add_indicators(df):
     df = df.copy()
-    # Preserve corn column if present before any operations
-    corn_close = df['Corn_Close'].copy() if 'Corn_Close' in df.columns else None
 
-    df['Returns']    = df['Close'].pct_change()
-    df['SMA_20']     = df['Close'].rolling(20).mean()
-    df['SMA_50']     = df['Close'].rolling(50).mean()
-    df['EMA_12']     = df['Close'].ewm(span=12).mean()
-    df['EMA_26']     = df['Close'].ewm(span=26).mean()
-    df['MACD']       = df['EMA_12'] - df['EMA_26']
+    # Moving averages & Trend
+    df['SMA5'] = df['Close'].rolling(5).mean()
+    df['SMA10'] = df['Close'].rolling(10).mean()
+    df['SMA20'] = df['Close'].rolling(20).mean()
+    df['SMA50'] = df['Close'].rolling(50).mean()
+
+    # Returns & Momentum
+    df['Ret1'] = df['Close'].pct_change(1)
+    df['Ret3'] = df['Close'].pct_change(3)
+    df['Ret5'] = df['Close'].pct_change(5)
+
+    # MACD
+    ema12 = df['Close'].ewm(span=12).mean()
+    ema26 = df['Close'].ewm(span=26).mean()
+    df['MACD'] = ema12 - ema26
+    df['MACD_Signal'] = df['MACD'].ewm(span=9).mean()
+    df['MACD_Hist'] = df['MACD'] - df['MACD_Signal']
+
+    # RSI (14)
     delta = df['Close'].diff()
-    gain  = delta.where(delta > 0, 0).rolling(14).mean()
-    loss  = (-delta.where(delta < 0, 0)).rolling(14).mean()
-    df['RSI']        = 100 - (100 / (1 + gain / loss))
-    bb_mid           = df['Close'].rolling(20).mean()
-    bb_std           = df['Close'].rolling(20).std()
-    df['BB_Upper']   = bb_mid + 2 * bb_std
-    df['BB_Lower']   = bb_mid - 2 * bb_std
-    df['BB_Width']   = (bb_std * 2) / bb_mid
-    df['Volatility'] = df['Returns'].rolling(20).std()
-    hl  = df['High'] - df['Low']
-    hc  = (df['High'] - df['Close'].shift()).abs()
-    lc  = (df['Low']  - df['Close'].shift()).abs()
-    df['ATR']        = pd.concat([hl, hc, lc], axis=1).max(axis=1).rolling(14).mean()
-    df = df.dropna()
+    gain = (delta.where(delta > 0, 0)).rolling(14).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(14).mean()
+    rs = gain / loss.replace(0, np.nan)
+    df['RSI'] = 100 - (100 / (1 + rs))
 
-    # Re-attach corn after dropna (forward-fill any gaps)
-    if corn_close is not None:
-        df['Corn_Close'] = corn_close.reindex(df.index, method='ffill')
+    # Average True Range (ATR 14)
+    high_low = df['High'] - df['Low']
+    high_cp = np.abs(df['High'] - df['Close'].shift(1))
+    low_cp = np.abs(df['Low'] - df['Close'].shift(1))
+    tr = pd.concat([high_low, high_cp, low_cp], axis=1).max(axis=1)
+    df['ATR'] = tr.rolling(14).mean()
+
+    # Bollinger Bands (20, 2)
+    df['BB_Mid'] = df['SMA20']
+    bb_std = df['Close'].rolling(20).std()
+    df['BB_Upper'] = df['BB_Mid'] + (bb_std * 2)
+    df['BB_Lower'] = df['BB_Mid'] - (bb_std * 2)
 
     return df
 
 
-# ── ENSEMBLE MODELS ───────────────────────────────────────────────────────────
+# ── CONVICTION GATE ENGINE ───────────────────────────────────────────────────
 
-class EnsemblePredictor:
+class ConvictionGate:
     """
-    Three models with daily-sensitive features.
-    No frozen predictions — all three retrain fresh each run.
+    Conviction Gate v4.0 with News Nudge & Conflict Override Penalty.
+    Combines technical conviction scores with macro headline sentiment.
     """
+    def __init__(
+        self,
+        news_bullish_threshold: float = 0.60,
+        news_bearish_threshold: float = -0.60,
+        nudge_boost: float = 0.03,
+        conflict_penalty: float = 0.05
+    ):
+        self.news_bullish_thresh = news_bullish_threshold
+        self.news_bearish_thresh = news_bearish_threshold
+        self.nudge_boost = nudge_boost
+        self.conflict_penalty = conflict_penalty
 
-    def __init__(self):
-        from sklearn.preprocessing import MinMaxScaler
-        self.scaler_lstm = MinMaxScaler()
-        self.scaler_ml   = MinMaxScaler()
-        self.lstm_model  = None
-        self.rf_model    = None
-        self.xgb_model   = None
-        self.seq_len     = 60
-        self.features    = [
-            'Close', 'Volume', 'Returns', 'SMA_20', 'SMA_50',
-            'RSI', 'MACD', 'BB_Width', 'Volatility', 'ATR'
-        ]
-
-    def train(self, df):
-        from keras.models import Sequential
-        from keras.layers import LSTM as KerasLSTM, Dense, Dropout
-        from sklearn.ensemble import RandomForestClassifier
-        import xgboost as xgb
-
-        print("   Training LSTM + RF + XGB...")
-
-        # Labels: did price go up next day?
-        y = np.array([
-            1 if df['Close'].iloc[i] > df['Close'].iloc[i-1] else 0
-            for i in range(self.seq_len, len(df))
-        ])
-
-        # LSTM data
-        data_lstm   = df[self.features].values
-        scaled_lstm = self.scaler_lstm.fit_transform(data_lstm)
-        X_lstm      = np.array([scaled_lstm[i-self.seq_len:i] for i in range(self.seq_len, len(scaled_lstm))])
-
-        # ML features — daily-sensitive, not frozen 60-day window
-        ml_feat = self._build_ml_features(df)
-        n       = len(y)
-        ml_feat = ml_feat.iloc[-n:]
-        X_ml    = self.scaler_ml.fit_transform(ml_feat.fillna(0))
-
-        # Train LSTM
-        self.lstm_model = Sequential([
-            KerasLSTM(64, return_sequences=True, input_shape=(self.seq_len, len(self.features))),
-            Dropout(0.2),
-            KerasLSTM(32),
-            Dropout(0.2),
-            Dense(16, activation='relu'),
-            Dense(1,  activation='sigmoid')
-        ])
-        self.lstm_model.compile(optimizer='adam', loss='binary_crossentropy')
-        self.lstm_model.fit(X_lstm, y, epochs=25, batch_size=32, validation_split=0.15, verbose=0)
-
-        # Daily seed so RF/XGB vary each day
-        seed = datetime.now(IL).timetuple().tm_yday
-
-        self.rf_model = RandomForestClassifier(
-            n_estimators=150, max_depth=8, min_samples_split=5,
-            random_state=seed, n_jobs=-1
-        )
-        self.rf_model.fit(X_ml, y)
-
-        self.xgb_model = xgb.XGBClassifier(
-            n_estimators=150, max_depth=5, learning_rate=0.08,
-            random_state=seed, use_label_encoder=False, eval_metric='logloss'
-        )
-        self.xgb_model.fit(X_ml, y, verbose=False)
-
-        print("   ✓ All models trained")
-
-    def _build_ml_features(self, df):
-        f = pd.DataFrame(index=df.index)
-        f['ret_1d']      = df['Close'].pct_change(1)
-        f['ret_3d']      = df['Close'].pct_change(3)
-        f['ret_5d']      = df['Close'].pct_change(5)
-        f['ret_10d']     = df['Close'].pct_change(10)
-        f['ret_20d']     = df['Close'].pct_change(20)
-        sma5             = df['Close'].rolling(5).mean()
-        sma10            = df['Close'].rolling(10).mean()
-        f['sma5_vs_20']  = sma5  / df['SMA_20'] - 1
-        f['sma10_vs_50'] = sma10 / df['SMA_50'] - 1
-        f['above_sma20'] = (df['Close'] > df['SMA_20']).astype(float)
-        f['above_sma50'] = (df['Close'] > df['SMA_50']).astype(float)
-        f['rsi']         = df['RSI']
-        f['rsi_change']  = df['RSI'].diff(3)
-        f['macd']        = df['MACD']
-        f['macd_change'] = df['MACD'].diff(3)
-        f['atr_pct']     = df['ATR'] / df['Close']
-        f['bb_width']    = df['BB_Width']
-        vol_avg          = df['Volume'].rolling(20).mean()
-        f['vol_ratio']   = df['Volume'] / vol_avg
-        high10           = df['High'].rolling(10).max()
-        low10            = df['Low'].rolling(10).min()
-        f['range_pos']   = (df['Close'] - low10) / (high10 - low10 + 1e-6)
-        f['volatility']  = df['Volatility']
-
-        # ── Corn inter-market features (if available) ──
-        # When wheat/corn ratio is high → wheat expensive vs corn → bearish wheat
-        # When corn is rising → acreage competition → bullish wheat
-        if 'Corn_Close' in df.columns:
-            corn_close         = df['Corn_Close']
-            wc_ratio           = df['Close'] / corn_close.replace(0, np.nan)
-            wc_ratio_mean      = wc_ratio.rolling(60).mean()
-            wc_ratio_std       = wc_ratio.rolling(60).std().replace(0, np.nan)
-            f['wc_ratio_z']    = (wc_ratio - wc_ratio_mean) / wc_ratio_std
-            f['corn_mom_3d']   = corn_close.pct_change(3)
-            f['corn_mom_5d']   = corn_close.pct_change(5)
-
-        return f.dropna()
-
-    def predict(self, df):
+    def evaluate_conviction(
+        self,
+        tech_score: float,          # Base technical score (0.00 to 1.00)
+        tech_direction: str,        # 'LONG' or 'SHORT'
+        news_score: float,          # News sentiment score (-1.00 to +1.00)
+    ) -> Tuple[float, str, Dict[str, Any]]:
         """
-        REBUILT 2026-07-09 — fixed a real bug in how model outputs
-        were combined.
-
-        OLD BEHAVIOR (removed): each model's "weight" was set to
-        abs(prediction - 0.5) — meaning the MORE EXTREME a model's
-        guess, the MORE it controlled the final answer. On a real
-        alert (2026-07-09), this meant XGB's 0.001 (essentially "0%
-        chance", more likely a miscalibrated/overconfident output
-        than genuine certainty) got ~50% of the total decision
-        weight, while LSTM's honest, moderate 0.481 (near a genuine
-        coin flip) got under 2% influence. Combined with an "all
-        models agree" bonus, this produced a fake 92% confidence
-        built almost entirely on the single most extreme number.
-        Two days earlier, the same mechanism had produced a 92%+
-        confidence in the OPPOSITE direction (RF/XGB near 0.95-0.998
-        UP) — proof the models are unstable day to day, and the old
-        formula was amplifying that instability into false certainty
-        instead of damping it.
-
-        NEW BEHAVIOR: equal weighting (simple average) — no model's
-        opinion counts more just because it's extreme. Confidence is
-        reported honestly, and real disagreement between models is
-        surfaced explicitly (reliability flag) instead of hidden
-        behind an agreement bonus.
+        Evaluates final conviction score, tier classification, and divergence state.
         """
-        # LSTM
-        data   = df[self.features].values
-        scaled = self.scaler_lstm.transform(data)
-        X_lstm = np.array([scaled[-self.seq_len:]])
-        lstm_p = float(self.lstm_model.predict(X_lstm, verbose=0)[0][0])
+        adjusted_score = tech_score
+        divergence_detected = False
+        divergence_reason = None
+        applied_adjustment = 0.0
 
-        # RF + XGB
-        feat  = self._build_ml_features(df).iloc[[-1]]
-        X_ml  = self.scaler_ml.transform(feat.fillna(0))
-        rf_p  = float(self.rf_model.predict_proba(X_ml)[0][1])
-        xgb_p = float(self.xgb_model.predict_proba(X_ml)[0][1])
+        news_bullish = news_score >= self.news_bullish_thresh
+        news_bearish = news_score <= self.news_bearish_thresh
 
-        preds = [lstm_p, rf_p, xgb_p]
+        # 1. Supplemental Nudge (High Confidence Alignment)
+        if tech_direction == 'LONG' and news_bullish:
+            applied_adjustment = self.nudge_boost
+            adjusted_score += applied_adjustment
+            logger.info(f"🟢 [Nudge] Bullish alignment boost applied (+{self.nudge_boost:.2f}).")
 
-        # Equal-weighted average — no model gets extra say for being extreme
-        weighted = float(np.mean(preds))
+        elif tech_direction == 'SHORT' and news_bearish:
+            applied_adjustment = self.nudge_boost
+            adjusted_score += applied_adjustment
+            logger.info(f"🟢 [Nudge] Bearish alignment boost applied (+{self.nudge_boost:.2f}).")
 
-        votes_up = sum(1 for p in preds if p >= 0.5)
-        direction = 'UP' if weighted >= 0.5 else 'DOWN'
-        confidence = weighted if weighted >= 0.5 else 1 - weighted
+        # 2. Conflict Override / Penalty (Sharply Contradictory Macro News)
+        elif (tech_direction == 'LONG' and news_bearish) or (tech_direction == 'SHORT' and news_bullish):
+            applied_adjustment = -self.conflict_penalty
+            adjusted_score -= self.conflict_penalty
+            divergence_detected = True
+            
+            direction_conflict = (
+                "Bullish Technicals vs. Bearish News" if tech_direction == 'LONG' 
+                else "Bearish Technicals vs. Bullish News"
+            )
+            divergence_reason = f"DIVERGENCE_CAUTION: {direction_conflict} (News Score: {news_score:+.2f})"
+            
+            logger.warning(
+                f"⚠️ [Divergence Alert] {divergence_reason}. "
+                f"Applied penalty (-{self.conflict_penalty:.2f}). Score reduced to {adjusted_score:.2f}."
+            )
 
-        # Real disagreement measure — how spread out are the 3 opinions?
-        spread = float(np.std(preds))
+        final_score = float(min(max(adjusted_score, 0.0), 1.0))
 
-        agreement = 'FULL' if votes_up in [0, 3] else 'MAJORITY' if votes_up in [1, 2] else 'SPLIT'
+        # 3. Tier Classification
+        if final_score >= 0.75:
+            tier = "TIER_1"
+        elif final_score >= 0.55:
+            tier = "TIER_2"
+        else:
+            tier = "TIER_3"
 
-        # If models disagree substantially, that's real information —
-        # cap confidence instead of letting one extreme model dominate.
-        # A high spread means "the models don't actually know," which
-        # should LOWER stated confidence, not get averaged away.
-        reliability = 'LOW' if spread > 0.35 else 'MODERATE' if spread > 0.15 else 'HIGH'
-        if reliability == 'LOW':
-            confidence = min(confidence, 0.60)  # don't claim high confidence when models sharply disagree
+        metadata = {
+            "base_tech_score": round(tech_score, 3),
+            "news_score": round(news_score, 3),
+            "applied_adjustment": round(applied_adjustment, 3),
+            "final_score": round(final_score, 3),
+            "divergence_detected": divergence_detected,
+            "divergence_reason": divergence_reason,
+            "status_flag": "CAUTION" if divergence_detected else "NORMAL"
+        }
+
+        return final_score, tier, metadata
+
+
+# ── WHEAT RANGE ENGINE ───────────────────────────────────────────────────────
+
+class WheatRangeEngine:
+    """
+    Wheat Range Engine (WRE) v4.0
+    Generates weekly range forecasts, calculates conviction-weighted 
+    volatility buffers, and constructs trade execution levels.
+    """
+    def __init__(self, atr_multiplier: float = 1.8, min_rr_ratio: float = 1.5):
+        self.atr_multiplier = atr_multiplier
+        self.min_rr_ratio = min_rr_ratio
+
+    def predict_next_week(
+        self,
+        df: pd.DataFrame,
+        current_price: float,
+        cost_floor_cents: float = 490.0,
+        forced_direction: Optional[str] = None,
+        daily_direction_hint: Optional[str] = None,
+        backtest_tier: str = "TIER_1",
+        backtest_accuracy: float = 0.65,
+        news_signal: float = 0.0
+    ) -> Dict[str, Any]:
+        """
+        Calculates projected weekly range bounds and trade execution parameters.
+        """
+        if 'ATR' not in df.columns or 'SMA20' not in df.columns:
+            df = add_indicators(df)
+
+        last_row = df.iloc[-1]
+        atr = last_row['ATR'] if not np.isnan(last_row['ATR']) else current_price * 0.025
+        sma20 = last_row['SMA20'] if not np.isnan(last_row['SMA20']) else current_price
+
+        # 1. Determine Bias Direction
+        if forced_direction in ['LONG', 'SHORT']:
+            bias = forced_direction
+        elif daily_direction_hint in ['LONG', 'SHORT']:
+            bias = daily_direction_hint
+        else:
+            bias = 'LONG' if current_price >= sma20 else 'SHORT'
+
+        # 2. Adjust Range Volatility Buffer
+        tier_weights = {"TIER_1": 1.2, "TIER_2": 1.0, "TIER_3": 0.8}
+        tier_factor = tier_weights.get(backtest_tier, 1.0)
+        news_factor = 1.0 + (np.clip(news_signal, -1.0, 1.0) * 0.15)
+        range_buffer = atr * self.atr_multiplier * tier_factor * news_factor
+
+        # 3. Derive Weekly Range Boundaries
+        proj_high = round(max(current_price + range_buffer, current_price * 1.01), 2)
+        proj_low = round(min(current_price - range_buffer, current_price * 0.99), 2)
+
+        # Apply Hard Physical Cost Floor Guardrail
+        if proj_low < cost_floor_cents:
+            proj_low = float(cost_floor_cents)
+
+        # 4. Construct Geometry & Execution Points
+        if bias == 'LONG':
+            entry = round(current_price, 2)
+            stop = round(max(proj_low, entry - (atr * 1.2)), 2)
+            target = round(proj_high, 2)
+            
+            if entry - stop < 4.0:
+                stop = entry - 4.0
+                
+            risk = entry - stop
+            reward = target - entry
+        else:  # SHORT
+            entry = round(current_price, 2)
+            stop = round(entry + (atr * 1.2), 2)
+            target = round(proj_low, 2)
+            
+            if stop - entry < 4.0:
+                stop = entry + 4.0
+                
+            risk = stop - entry
+            reward = entry - target
+
+        rr_ratio = round(reward / risk, 2) if risk > 0 else 0.0
 
         return {
-            'direction':   direction,
-            'confidence':  confidence,
-            'lstm':        lstm_p,
-            'rf':          rf_p,
-            'xgb':         xgb_p,
-            'weighted':    weighted,
-            'votes_up':    votes_up,
-            'agreement':   agreement,
-            'spread':      round(spread, 3),
-            'reliability': reliability,
+            "bias": bias,
+            "current_price": current_price,
+            "proj_high": proj_high,
+            "proj_low": proj_low,
+            "entry": entry,
+            "stop_loss": stop,
+            "target": target,
+            "risk_reward": rr_ratio,
+            "atr": round(atr, 2),
+            "tier": backtest_tier,
+            "accuracy": round(backtest_accuracy * 100, 1)
         }
 
 
-# ── WASDE MULTI-GRAIN ─────────────────────────────────────────────────────────
+# ── CACHING & PERFORMANCE LOGGING ───────────────────────────────────────────
 
-def get_wasde_signal():
-    """Fetch wheat, corn, soy from USDA. Derive wheat signal from all three."""
-    api_key  = os.getenv("USDA_API_KEY", "3338B84E-694D-3E6A-925C-F35064C59BAE")
-    base_url = "https://quickstats.nass.usda.gov/api/api_GET/"
-
-    ANNUAL_USE = {'WHEAT': 2e9, 'CORN': 14.5e9, 'SOYBEANS': 4.4e9}
-    STU_TIGHT  = {'WHEAT': 0.30, 'CORN': 0.10, 'SOYBEANS': 0.07}
-    STU_AMPLE  = {'WHEAT': 0.33, 'CORN': 0.13, 'SOYBEANS': 0.10}
-
-    grain_stu = {}
-    for grain in ['WHEAT', 'CORN', 'SOYBEANS']:
-        try:
-            r = requests.get(base_url, params={
-                'key': api_key, 'source_desc': 'SURVEY',
-                'commodity_desc': grain, 'class_desc': 'ALL CLASSES',
-                'statisticcat_desc': 'STOCKS', 'unit_desc': 'BU',
-                'agg_level_desc': 'NATIONAL', 'format': 'JSON', 'year__GE': 2021,
-            }, timeout=15)
-            if r.status_code == 200:
-                records = r.json().get('data', [])
-                if records:
-                    records = sorted(records, key=lambda x: x.get('year', 0), reverse=True)
-                    val = float(records[0]['Value'].replace(',', ''))
-                    grain_stu[grain] = val / ANNUAL_USE[grain]
-        except Exception:
-            pass
-
-    if not grain_stu.get('WHEAT'):
-        # Fallback: use wheat/corn ratio from yfinance
-        return _wasde_market_proxy()
-
-    score   = 0.0
-    factors = []
-    w_stu   = grain_stu['WHEAT']
-
-    if w_stu < STU_TIGHT['WHEAT']:
-        score += 0.20; factors.append(f"Wheat tight ({w_stu:.1%} STU)")
-    elif w_stu > STU_AMPLE['WHEAT']:
-        score -= 0.15; factors.append(f"Wheat ample ({w_stu:.1%} STU)")
-    else:
-        factors.append(f"Wheat balanced ({w_stu:.1%} STU)")
-
-    for grain in ['CORN', 'SOYBEANS']:
-        if grain in grain_stu:
-            stu = grain_stu[grain]
-            if stu < STU_TIGHT[grain]:
-                score += 0.06; factors.append(f"{grain.title()} tight → acre competition")
-            elif stu > STU_AMPLE[grain]:
-                score -= 0.03
-
-    signal = 'BULLISH' if score > 0.10 else 'BEARISH' if score < -0.05 else 'NEUTRAL'
-    return {'signal': signal, 'score': round(score, 4),
-            'stu': w_stu, 'factors': factors[:2], 'source': 'USDA LIVE'}
-
-
-def _wasde_market_proxy():
-    """Fallback: wheat/corn + wheat/soy ratio z-scores."""
+def log_daily_performance(iso_year: int, iso_week: int, current_price: float, weekly: Dict[str, Any]):
+    """Tracks daily price relative to the frozen weekly projected range."""
+    log_entry = {
+        "timestamp": datetime.datetime.now().isoformat(),
+        "iso_year": iso_year,
+        "iso_week": iso_week,
+        "current_price": current_price,
+        "proj_high": weekly.get("proj_high"),
+        "proj_low": weekly.get("proj_low"),
+        "bias": weekly.get("bias")
+    }
     try:
-        end   = datetime.now(IL)
-        start = end - timedelta(days=400)
-        wdf   = yf.Ticker(TICKER).history(start=start, end=end, auto_adjust=False)
-        cdf   = yf.Ticker(CORN_TICKER).history(start=start, end=end, auto_adjust=False)
-
-        if wdf.empty or cdf.empty:
-            return {'signal': 'NEUTRAL', 'score': 0.0, 'stu': 0.0, 'factors': ['No data'], 'source': 'Proxy'}
-
-        wc    = (wdf['Close'] / cdf['Close'].reindex(wdf.index, method='ffill')).dropna()
-        z     = float((wc.iloc[-1] - wc.mean()) / wc.std())
-        score = 0.12 if z > 0.75 else -0.08 if z < -0.75 else 0.0
-        sig   = 'BULLISH' if score > 0 else 'BEARISH' if score < 0 else 'NEUTRAL'
-        return {'signal': sig, 'score': score, 'stu': 0.0,
-                'factors': [f"W/C ratio z={z:+.2f}"], 'source': 'Market proxy'}
-    except Exception:
-        return {'signal': 'NEUTRAL', 'score': 0.0, 'stu': 0.0, 'factors': [], 'source': 'Error'}
+        data = []
+        if DAILY_LOG_FILE.exists():
+            data = json.loads(DAILY_LOG_FILE.read_text())
+        data.append(log_entry)
+        DAILY_LOG_FILE.write_text(json.dumps(data, indent=2))
+    except Exception as e:
+        logger.error(f"Failed to write daily performance log: {e}")
 
 
-# ── WEATHER ───────────────────────────────────────────────────────────────────
+def get_frozen_weekly_plan(
+    df: pd.DataFrame,
+    current_price: float,
+    cost_floor_cents: float = 490.0,
+    daily_direction: Optional[str] = None,
+    break_type: Optional[str] = None,
+    backtest_tier: str = "TIER_1",
+    backtest_accuracy: float = 0.65,
+    news_signal: float = 0.0
+) -> Dict[str, Any]:
+    """
+    Retrieves or updates the weekly plan cached by ISO week.
+    Flips directional bias automatically if a stop loss break occurs.
+    """
+    now = datetime.datetime.now()
+    iso_year, iso_week, _ = now.isocalendar()
+    wre = WheatRangeEngine()
 
-def get_weather_signal():
-    """Fetch weather for key wheat regions. Cache for 8 hours."""
-    cache_file = Path("weather_cache.json")
-    api_key    = os.getenv("VISUAL_CROSSING_API_KEY", "W2FNC8VKT94JKH9ZRZYHUE63P")
-
-    # Use cache if fresh
-    if cache_file.exists():
+    cached_data = None
+    if WEEKLY_CACHE_FILE.exists():
         try:
-            cache = json.loads(cache_file.read_text())
-            age   = (datetime.now(IL) - datetime.fromisoformat(cache['ts'])).total_seconds()
-            if age < 28800:  # 8 hours
-                return cache['data']
-        except Exception:
-            pass
+            cached_data = json.loads(WEEKLY_CACHE_FILE.read_text())
+        except Exception as e:
+            logger.error(f"Failed to read weekly cache: {e}")
 
-    regions = {
-        'Kansas': '38.5,-98.0', 'Oklahoma': '35.5,-98.0',
-        'N.Dakota': '47.5,-100.5', 'Ukraine': '46.5,32.0',
-        'Russia': '45.0,39.0', 'Canada': '52.0,-106.0',
+    if cached_data and cached_data.get('iso_year') == iso_year and cached_data.get('iso_week') == iso_week:
+        old_weekly = cached_data.get('weekly', {})
+        if break_type == 'stop':
+            new_final_call = 'SHORT' if old_weekly.get('bias') == 'LONG' else 'LONG'
+            logger.warning(f"🔄 Stop-loss break detected! Flipping weekly bias to {new_final_call}.")
+            weekly = wre.predict_next_week(
+                df, current_price, cost_floor_cents,
+                forced_direction=new_final_call,
+                backtest_tier=backtest_tier,
+                backtest_accuracy=backtest_accuracy,
+                news_signal=news_signal
+            )
+        else:
+            weekly = old_weekly
+    else:
+        # Fresh week initialization
+        weekly = wre.predict_next_week(
+            df, current_price, cost_floor_cents,
+            forced_direction=None,
+            daily_direction_hint=daily_direction,
+            backtest_tier=backtest_tier,
+            backtest_accuracy=backtest_accuracy,
+            news_signal=news_signal
+        )
+
+    # Freeze/update cache state
+    try:
+        WEEKLY_CACHE_FILE.write_text(json.dumps({
+            'iso_year': iso_year,
+            'iso_week': iso_week,
+            'weekly': weekly
+        }, indent=2))
+    except Exception as e:
+        logger.error(f"Failed to save weekly cache: {e}")
+
+    log_daily_performance(iso_year, iso_week, current_price, weekly)
+    return weekly
+
+
+# ── TELEGRAM ALERTING PIPELINE ───────────────────────────────────────────────
+
+def format_telegram_alert(
+    weekly_plan: Dict[str, Any],
+    symbol: str = "ZW=F (CBOT Wheat)",
+    alert_type: str = "WEEKLY_PLAN",
+    status_flag: str = "NORMAL"
+) -> str:
+    """
+    Formats trading plans into clean HTML messages for Telegram.
+    Includes CAUTION badges when divergence is detected.
+    """
+    bias = weekly_plan.get("bias", "NEUTRAL")
+    direction_emoji = "🟢" if bias == "LONG" else "🔴"
+    
+    header_title = {
+        "WEEKLY_PLAN": "🌾 <b>WHEAT MONITOR v4.0 — WEEKLY PLAN</b>",
+        "DIRECTION_FLIP": "⚠️ <b>DIRECTIONAL FLIP TRIGGERED</b>",
+        "DAILY_UPDATE": "📊 <b>DAILY REGIME UPDATE</b>"
+    }.get(alert_type, "🌾 <b>WHEAT MONITOR ALERT</b>")
+
+    entry = weekly_plan.get("entry", 0.0)
+    stop = weekly_plan.get("stop_loss", 0.0)
+    target = weekly_plan.get("target", 0.0)
+    rr = weekly_plan.get("risk_reward", 0.0)
+    
+    risk_pts = round(abs(entry - stop), 2)
+    reward_pts = round(abs(target - entry), 2)
+
+    msg = f"{header_title}\n"
+    if status_flag == "CAUTION":
+        msg += "⚠️ <b>STATUS: DIVERGENCE / CAUTION DETECTED</b>\n"
+    
+    msg += f"<b>Asset:</b> {requests.utils.quote(symbol) if False else symbol}\n"
+    msg += f"<b>Bias:</b> {direction_emoji} <b>{bias}</b>\n\n"
+
+    msg += f"<b>📍 Execution Levels (USd/Bu):</b>\n"
+    msg += f"  • <b>Entry:</b> <code>{entry:.2f}</code>\n"
+    msg += f"  • <b>Stop Loss:</b> <code>{stop:.2f}</code> (Risk: {risk_pts:.2f}¢)\n"
+    msg += f"  • <b>Take Profit:</b> <code>{target:.2f}</code> (Reward: {reward_pts:.2f}¢)\n"
+    msg += f"  • <b>R:R Ratio:</b> <code>{rr:.2f}</code>\n\n"
+
+    msg += f"<b>📐 Forecasted Weekly Range:</b>\n"
+    msg += f"  • <b>High Barrier:</b> <code>{weekly_plan.get('proj_high', 0.0):.2f}</code>\n"
+    msg += f"  • <b>Low Floor:</b> <code>{weekly_plan.get('proj_low', 0.0):.2f}</code>\n"
+    msg += f"  • <b>ATR (14):</b> <code>{weekly_plan.get('atr', 0.0):.2f}</code>\n\n"
+
+    msg += f"<b>⚙️ Model Status:</b>\n"
+    msg += f"  • <b>Backtest Tier:</b> {weekly_plan.get('tier', 'N/A')}\n"
+    msg += f"  • <b>Historical Accuracy:</b> {weekly_plan.get('accuracy', 0.0)}%\n"
+    
+    return msg
+
+
+def send_telegram_alert(
+    message_text: str,
+    bot_token: str,
+    chat_id: str
+) -> bool:
+    """Dispatches formatted HTML alerts to Telegram via HTTP API."""
+    if not bot_token or not chat_id:
+        logger.error("Telegram dispatch failed: Missing BOT_TOKEN or CHAT_ID.")
+        return False
+
+    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    payload = {
+        "chat_id": chat_id,
+        "text": message_text,
+        "parse_mode": "HTML",
+        "disable_web_page_preview": True
     }
 
-    scores = []
-    for name, coords in regions.items():
-        try:
-            url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{coords}"
-            end = datetime.now(IL)
-            r   = requests.get(url, params={
-                'key': api_key, 'unitGroup': 'metric', 'include': 'days',
-                'elements': 'datetime,temp,tempmax,tempmin,precip',
-                'contentType': 'json',
-                'startDateTime': (end - timedelta(days=7)).strftime('%Y-%m-%d'),
-                'endDateTime': end.strftime('%Y-%m-%d'),
-            }, timeout=12)
-            if r.status_code == 200:
-                days   = r.json().get('days', [])
-                precip = sum(d.get('precip', 0) for d in days)
-                tmax   = max(d.get('tempmax', 20) for d in days)
-                tmin   = min(d.get('tempmin', 0)  for d in days)
-                month  = datetime.now(IL).month
-                s      = 0.0
-                if precip < 5:   s += 0.12
-                if month in [5,6,7] and tmax > 35: s += 0.15
-                if month in [12,1,2] and tmin < -10: s += 0.18
-                scores.append(s)
-        except Exception:
-            pass
-
-    if not scores:
-        result = {'signal': 'NEUTRAL', 'score': 0.0, 'explanation': 'No data'}
-    else:
-        avg    = np.mean(scores)
-        signal = 'BULLISH' if avg > 0.10 else 'BEARISH' if avg < -0.05 else 'NEUTRAL'
-        result = {'signal': signal, 'score': round(avg, 4),
-                  'explanation': f"{len(scores)}/6 regions checked"}
-
     try:
-        cache_file.write_text(json.dumps({'ts': datetime.now(IL).isoformat(), 'data': result}))
-    except Exception:
-        pass
-
-    return result
-
-
-# ── VOLUME SIGNAL ─────────────────────────────────────────────────────────────
-
-# ── FRONT-MONTH CONTRACT (for accurate volume only) ──────────────────────────
-# CBOT wheat delivery months: Mar(H), May(K), Jul(N), Sep(U), Dec(Z)
-# ZW=F's continuous-contract volume field has a confirmed ~1-2 week
-# backfill lag (see volume_lag_check.py, 2026-07-10/11 diagnostics).
-# The specific front-month contract does NOT have this lag — confirmed
-# by direct comparison (ZWU26.CBT showed real volume 70k-113k on dates
-# where ZW=F showed single/double digits). BUT a specific contract only
-# has a few months of tradeable history, so it's used ONLY for the
-# live volume display/diagnostic — price, seasonal, and backtest
-# history all continue using ZW=F's long continuous series.
-WHEAT_MONTH_CODES = {3: 'H', 5: 'K', 7: 'N', 9: 'U', 12: 'Z'}
-
-
-def get_front_month_ticker(reference_date=None):
-    """
-    Returns the current front-month CBOT wheat contract ticker
-    (e.g. 'ZWU26.CBT'), rolling forward to the next contract month
-    once inside the current delivery month (a simple, conservative
-    roll rule — precise CBOT last-trade dates vary, but rolling at
-    the start of delivery month avoids ever using an expired symbol).
-    """
-    ref = reference_date or datetime.now(IL)
-    months = sorted(WHEAT_MONTH_CODES.keys())
-
-    year = ref.year
-    for m in months:
-        if ref.month < m:
-            return f"ZW{WHEAT_MONTH_CODES[m]}{str(year)[-2:]}.CBT"
-    # Past all this year's months — roll to March of next year
-    return f"ZW{WHEAT_MONTH_CODES[3]}{str(year + 1)[-2:]}.CBT"
-
-
-def get_accurate_volume():
-    """
-    Fetches real, non-lagged volume from the front-month specific
-    contract, for use in the display/diagnostic line only. Falls
-    back to (None, False) if the fetch fails — caller should fall
-    back to the ZW=F figure with a clear label, not silently trust
-    a missing value.
-    """
-    ticker = get_front_month_ticker()
-    try:
-        df = yf.Ticker(ticker).history(period='5d', interval='1d', auto_adjust=False)
-        if not df.empty:
-            vol_avg  = float(df['Volume'].rolling(min(20, len(df))).mean().iloc[-1])
-            vol_curr = float(df['Volume'].iloc[-1])
-            return {
-                'ticker': ticker,
-                'raw_volume': vol_curr,
-                'raw_avg_volume': round(vol_avg, 0),
-                'ratio': round(vol_curr / vol_avg, 2) if vol_avg > 0 else None,
-            }, True
-    except Exception as e:
-        print(f"   Front-month volume fetch failed ({ticker}): {e}")
-    return None, False
-
-
-def get_volume_signal(df):
-    """
-    UPDATED 2026-07-10/11: the Vol: Xx display now uses accurate,
-    non-lagged volume from the current front-month specific contract
-    (see get_accurate_volume() above) instead of ZW=F's continuous
-    series, which has a confirmed multi-day backfill lag. This is
-    DISPLAY ONLY — vol_low remains permanently excluded from
-    ConvictionGate/HighConvictionGate (see those files' docstrings);
-    re-enabling it as a real trading signal would require backtesting
-    volume across many historical rolled contracts, a separate task.
-    """
-    accurate, is_accurate = get_accurate_volume()
-
-    if is_accurate and accurate['ratio'] is not None:
-        vol_avg  = accurate['raw_avg_volume']
-        vol_curr = accurate['raw_volume']
-        ratio    = accurate['ratio']
-        source   = f"LIVE ({accurate['ticker']})"
-    else:
-        # Fallback to the old (known-lagged) ZW=F figure, clearly labeled
-        vol_avg   = float(df['Volume'].rolling(20).mean().iloc[-1])
-        vol_curr  = float(df['Volume'].iloc[-1])
-        ratio     = vol_curr / vol_avg if vol_avg > 0 else 1.0
-        source    = "⚠️ FALLBACK (ZW=F, known lag)"
-
-    ret = float(df['Close'].pct_change(1).iloc[-1])
-
-    if ratio > 1.5 and ret > 0:
-        signal = 'BULLISH'
-    elif ratio > 1.5 and ret < 0:
-        signal = 'BEARISH'
-    elif ratio < 0.7:
-        signal = 'QUIET'
-    else:
-        signal = 'NEUTRAL'
-
-    return {'signal': signal, 'ratio': round(ratio, 2),
-            'raw_volume': vol_curr, 'raw_avg_volume': round(vol_avg, 0),
-            'source': source,
-            'explanation': f"{ratio:.1f}x average volume ({source})"}
-
-
-# ── STATE ─────────────────────────────────────────────────────────────────────
-
-def load_state():
-    if STATE_FILE.exists():
-        try:
-            return json.loads(STATE_FILE.read_text())
-        except Exception:
-            pass
-    return {'alerts_sent': 0, 'alerts_today': {}, 'last_alert_date': None}
-
-
-def save_state(state):
-    state['last_check'] = datetime.now(IL).isoformat()
-    STATE_FILE.write_text(json.dumps(state, indent=2))
-
-
-# ── ALERT GATE ────────────────────────────────────────────────────────────────
-
-def should_send(state):
-    """Only send at 1AM Israel time. Manual always sends."""
-    force  = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
-    event  = os.getenv('GITHUB_EVENT_NAME', '')
-    manual = force or 'workflow_dispatch' in event
-
-    if manual:
-        return True, "Manual trigger", True
-
-    israel  = datetime.now(IL)
-    il_hour = israel.hour
-    il_date = israel.date().isoformat()
-
-    if il_hour not in (1, 2):
-        return False, f"Not scheduled hour ({il_hour}:00 Israel)", False
-
-    slot_key = f"{il_date}_morning"
-    if state.get('alerts_today', {}).get(slot_key):
-        return False, "Morning alert already sent today", False
-
-    return True, "Scheduled morning alert (01:00 Israel)", False
-
-
-# ── TELEGRAM ──────────────────────────────────────────────────────────────────
-
-def send_telegram(message):
-    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT:
-        print("Telegram not configured")
-        return False
-    try:
-        # Send as plain text — no markdown parsing, no 400 errors
-        r = requests.post(
-            f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
-            data={"chat_id": TELEGRAM_CHAT, "text": message},
-            timeout=10
-        )
-        success = r.status_code == 200
-        print(f"   Telegram: {'✓ sent' if success else '✗ failed'} ({r.status_code})")
-        if not success:
-            print(f"   Error: {r.text[:200]}")
-        return success
-    except Exception as e:
-        print(f"   Telegram error: {e}")
-        return False
-
-
-# ── PERFORMANCE LOG ───────────────────────────────────────────────────────────
-
-def log_prediction(direction, price, confidence, tier, seasonal_phase):
-    log_file = Path("prediction_log.json")
-    try:
-        log = json.loads(log_file.read_text()) if log_file.exists() else []
-    except Exception:
-        log = []
-
-    log.append({
-        'timestamp':      datetime.now(IL).isoformat(),
-        'direction':      direction,
-        'entry_price':    price,
-        'confidence':     confidence,
-        'tier':           tier,
-        'seasonal_phase': seasonal_phase,
-        'validated':      False,
-        'outcome':        None,
-        'exit_reason':    None,
-        'pnl_cents':      None,
-    })
-
-    log_file.write_text(json.dumps(log, indent=2))
-    print(f"   Prediction logged: {direction} at {price:.2f}¢ (Tier {tier})")
-
-
-# ── MAIN ──────────────────────────────────────────────────────────────────────
-
-def main():
-    print(f"\n{'='*70}")
-    print(f"WHEAT MONITOR v4.0")
-    print(f"Time: {datetime.now(IL).strftime('%Y-%m-%d %H:%M:%S')} Israel")
-    print(f"{'='*70}\n")
-
-    state = load_state()
-
-    send, reason, is_manual = should_send(state)
-    print(f"Alert gate: {reason}")
-
-    # ── Fetch 5 years of data ──
-    print(f"\nFetching {TICKER} (5 years)...")
-    end    = datetime.now(IL)
-    start  = end - timedelta(days=5 * 365)
-    df_raw = yf.Ticker(TICKER).history(start=start, end=end, auto_adjust=False)
-
-    if df_raw.empty:
-        print("ERROR: No data"); return
-
-    # ── Fetch corn for inter-market features ──
-    print(f"Fetching {CORN_TICKER} (corn correlation)...")
-    try:
-        corn_raw = yf.Ticker(CORN_TICKER).history(start=start, end=end, auto_adjust=False)
-        if not corn_raw.empty:
-            # Align corn to wheat index and add as column
-            corn_aligned = corn_raw['Close'].reindex(df_raw.index, method='ffill')
-            df_raw['Corn_Close'] = corn_aligned
-            print(f"  Corn data: {len(corn_raw)} candles merged")
+        response = requests.post(url, json=payload, timeout=10)
+        res_data = response.json()
+        if res_data.get("ok"):
+            logger.info("✅ Telegram alert sent successfully.")
+            return True
         else:
-            print("  Corn data unavailable — inter-market features disabled")
+            logger.error(f"❌ Telegram API Error: {res_data.get('description')}")
+            return False
     except Exception as e:
-        print(f"  Corn fetch skipped: {e}")
+        logger.error(f"❌ Network error sending Telegram alert: {e}")
+        return False
 
-    if df_raw.index[-1].date() == datetime.now(IL).date():
-        df_raw = df_raw.iloc[:-1]
 
-    last_candle_date  = df_raw.index[-1].date()
-    days_since_candle = (datetime.now(IL).date() - last_candle_date).days
-
-    if days_since_candle >= 3 and not is_manual:
-        print(f"\nMarket closed — last candle {last_candle_date} ({days_since_candle}d ago). No alert.")
-        save_state(state)
-        return
-
-    # ── FIX: use LIVE price for current_price, daily bars stay for indicators ──
-    live_price, is_live_price = get_live_price()
-    if is_live_price:
-        current_price = live_price
-        print(f"Price: {current_price:.2f}c  (LIVE — daily bar was {last_candle_date})")
-    else:
-        current_price = float(df_raw['Close'].iloc[-1])
-        print(f"Price: {current_price:.2f}c  ⚠️ (STALE — daily bar {last_candle_date}, live fetch failed)")
-
-    df = add_indicators(df_raw)
-
-    # ── Engines ──
-    print("\nRunning engines...")
-    seasonal = SeasonalEngine()
-    seasonal.fit(df)
-    s_phase = seasonal.get_current_phase()
-    print(f"  Seasonal: {s_phase['phase']} ({s_phase['confidence']:.0%}) — {s_phase['explanation']}")
-
-    trend_engine = TrendEngine()
-    trend_data   = trend_engine.get_trend(df)
-    print(f"  Trend:    {trend_data['trend']} ({trend_data['strength']})")
-
-    gate = ConvictionGate()
-    tier, accuracy, gate_reason, gate_conds = gate.evaluate(df)
-    print(f"  Gate:     {gate_reason}")
-
-    # ── Signals ──
-    print("\nFetching signals...")
-    wasde   = get_wasde_signal()
-    weather = get_weather_signal()
-    volume  = get_volume_signal(df)
-    print(f"  WASDE: {wasde['signal']} | Weather: {weather['signal']} | Vol: {volume['ratio']:.1f}x")
-
-    # ── Ensemble ──
-    print("\nTraining models...")
-    ensemble = EnsemblePredictor()
-    ensemble.train(df)
-    pred      = ensemble.predict(df)
-    direction = pred['direction']
-    print(f"  Ensemble: {direction} | LSTM={pred['lstm']:.3f} RF={pred['rf']:.3f} XGB={pred['xgb']:.3f}")
-
-    # ── Filters ──
-    seasonal_blocked, _ = seasonal.blocks_direction(direction)
-    trend_blocked, _    = trend_engine.blocks_direction(direction, trend_data)
-
-    if seasonal_blocked:
-        direction          = 'DOWN' if direction == 'UP' else 'UP'
-        pred['confidence'] = 0.60
-        print(f"  Seasonal override → {direction}")
-
-    if trend_blocked:
-        direction          = 'DOWN' if direction == 'UP' else 'UP'
-        pred['confidence'] = 0.58
-        print(f"  Trend filter → {direction}")
-
-    # ── Cost floor ──
-    print("\nCalculating cost floor...")
-    cost_signal = None
-    try:
-        from cost_floor_analyzer import CostFloorAnalyzer
-        cost_signal = CostFloorAnalyzer().get_floor_signal(current_price)
-    except Exception as e:
-        print(f"  Cost floor skipped: {e}")
-
-    cost_floor_cents = cost_signal['floor_cents'] if cost_signal else None
-
-    # ── Weekly range prediction ──
-    print("\nBuilding weekly range prediction...")
-    news_signal = get_news_signal()
-    if news_signal:
-        print(f"   News signal (unvalidated, small nudge): {news_signal[0]} ({news_signal[1]}%)")
-    try:
-        from weekly_range_engine import WeeklyRangeEngine
-        wre = WeeklyRangeEngine()
-        wre.fit(df, exclude_years=[2022])
-        weekly, out_of_range, break_outcome = get_frozen_weekly_plan(
-            wre, df, current_price, cost_floor_cents, direction,
-            backtest_tier=tier, backtest_accuracy=accuracy,
-            news_signal=news_signal,
-        )
-        monthly = get_frozen_monthly_range(wre, df, current_price, cost_floor_cents)
-
-        print(f"  Weekly range: {weekly['range_low']:.0f} - {weekly['range_high']:.0f}c")
-        print(f"  Weekly FINAL CALL: {weekly['final_call']} (frozen — only changes on break)")
-        print(f"  Daily direction (today): {direction}")
-        print(f"  Monthly bias: {monthly['bias'] if monthly else 'N/A'}")
-
-        # NOTE (2026-07-14): the old "weekly bias overrides daily ensemble
-        # direction" block was removed here on purpose. weekly['final_call']
-        # is now an intentionally FROZEN value (only changes when the
-        # setup actually breaks) — letting it silently overwrite the
-        # live daily `direction` every run would defeat that freeze and
-        # recreate the exact "which number is real" confusion fixed
-        # earlier. The two are now shown as separate, clearly labeled
-        # lines (WEEKLY FINAL CALL vs daily direction) instead.
-
-        status_word = "out range" if out_of_range else "in range"
-        status_line = f"current price {current_price:.0f}c \"{status_word}\" direction {direction}"
-        if break_outcome:
-            status_line += f" — weekly setup just closed as {break_outcome}, new setup generated"
-
-        # Build weekly message
-        message = wre.format_alert(
-            weekly      = weekly,
-            monthly     = monthly,
-            tier        = tier,
-            gate_conds  = gate_conds,
-            wasde       = wasde,
-            weather     = weather,
-            seasonal    = s_phase,
-            cost_signal = cost_signal,
-            gate_accuracy = accuracy,
-            gate_reason   = gate_reason,
-            final_direction = weekly['final_call'],
-            daily_direction = direction,
-            status_line     = status_line,
-        )
-
-        # Add ensemble footnote
-        message += (
-            f"\nMODELS (supporting data):\n"
-            f"LSTM: {pred['lstm']:.3f} | RF: {pred['rf']:.3f} | XGB: {pred['xgb']:.3f}\n"
-            f"Agreement: {pred['agreement']} | Trend: {trend_data['trend']}\n"
-        )
-
-        use_weekly = True
-
-    except Exception as e:
-        print(f"  Weekly engine error: {e}")
-        import traceback; traceback.print_exc()
-        use_weekly = False
-
-    # ── Fallback to daily message if weekly fails ──
-    if not use_weekly:
-        stop    = current_price * (1 - STOP_PCT) if direction == 'UP' else current_price * (1 + STOP_PCT)
-        target  = current_price * (1 + TARGET_PCT) if direction == 'UP' else current_price * (1 - TARGET_PCT)
-        message = (
-            f"WHEAT MONITOR v4.0\n"
-            f"------------------------------\n"
-            f"{direction} ({pred['confidence']:.1%})\n"
-            f"Price: {current_price:.2f}c\n\n"
-            f"SEASONAL: {s_phase['phase']} ({s_phase['confidence']:.0%})\n"
-            f"WASDE: {wasde['signal']} | Weather: {weather['signal']}\n"
-            f"MODELS: LSTM={pred['lstm']:.3f} RF={pred['rf']:.3f} XGB={pred['xgb']:.3f}\n\n"
-            f"Entry: {current_price:.2f}c | Stop: {stop:.2f}c | Target: {target:.2f}c\n"
-        )
-
-    print(f"\nFINAL: {direction} | Tier {tier}")
-
-    # ── Send ──
-    if send:
-        success = send_telegram(message)
-        if success:
-            state['alerts_sent'] = state.get('alerts_sent', 0) + 1
-            state['last_alert_date'] = datetime.now(IL).date().isoformat()
-            if not is_manual:
-                slot_key = f"{datetime.now(IL).date().isoformat()}_morning"
-                state.setdefault('alerts_today', {})[slot_key] = True
-            log_prediction(direction, current_price, pred['confidence'], tier, s_phase['phase'])
-    else:
-        print(f"No alert: {reason}")
-
-    state['last_direction'] = direction
-    state['last_price']     = current_price
-    save_state(state)
-
-    print(f"\nTotal alerts sent: {state.get('alerts_sent', 0)}")
-    print(f"{'='*70}\n")
-
+# ── EXECUTION DEMO / ENTRY POINT ─────────────────────────────────────────────
 
 if __name__ == "__main__":
-    main()
+    logger.info("Initializing WHEAT MONITOR v4.0 Pipeline Test...")
+
+    # 1. Generate synthetic OHLC data for demonstration
+    dates = pd.date_range(end=datetime.datetime.now(), periods=100)
+    np.random.seed(42)
+    close_prices = 530.0 + np.cumsum(np.random.randn(100) * 3.5)
+    
+    df_raw = pd.DataFrame({
+        'Open': close_prices - 1.0,
+        'High': close_prices + 4.0,
+        'Low': close_prices - 4.0,
+        'Close': close_prices,
+        'Volume': np.random.randint(1000, 50000, size=100)
+    }, index=dates)
+
+    # 2. Add indicators
+    df_proc = add_indicators(df_raw)
+    current_live_price = float(df_proc['Close'].iloc[-1])
+
+    # 3. Evaluate Conviction Gate (with technicals vs news divergence)
+    gate = ConvictionGate(nudge_boost=0.03, conflict_penalty=0.05)
+    tech_score = 0.73
+    tech_direction = 'LONG'
+    news_score = -0.70  # Contradictory macro headline
+
+    final_score, tier, meta = gate.evaluate_conviction(
+        tech_score=tech_score,
+        tech_direction=tech_direction,
+        news_score=news_score
+    )
+
+    logger.info(f"Conviction Result: Score={final_score}, Tier={tier}, Meta={meta}")
+
+    # 4. Generate Frozen Weekly Plan
+    plan = get_frozen_weekly_plan(
+        df=df_proc,
+        current_price=current_live_price,
+        cost_floor_cents=490.0,
+        daily_direction=tech_direction,
+        backtest_tier=tier,
+        backtest_accuracy=0.68,
+        news_signal=news_score
+    )
+
+    # 5. Format Telegram Alert
+    alert_msg = format_telegram_alert(
+        weekly_plan=plan,
+        alert_type="WEEKLY_PLAN",
+        status_flag=meta["status_flag"]
+    )
+
+    print("\n--- GENERATED TELEGRAM ALERT PREVIEW ---")
+    print(alert_msg)
