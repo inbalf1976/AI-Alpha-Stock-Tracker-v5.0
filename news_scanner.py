@@ -21,7 +21,7 @@ Environment Variables:
 Note on Google GenAI SDK:
   Using `from google import genai`. The old `google.generativeai` is
   deprecated — switched to the new google-genai package. Model updated to
-  gemini-2.5-flash for maximum cost efficiency and low-latency
+  gemini-3.5-flash-lite for maximum cost efficiency and low-latency
   background news scans.
 """
 
@@ -174,7 +174,7 @@ def filter_high_impact(headlines):
 
 def interpret_with_gemini(flagged_headlines):
     """
-    Send flagged headlines to Gemini 2.5 Flash for high-level macro impact interpretation.
+    Send flagged headlines to Gemini 3.5 Flash-Lite for high-level macro impact interpretation.
     Returns a dict with overall sentiment, commodity impact, and forex impact.
     """
     api_key = os.environ.get("GEMINI_API_KEY")
@@ -204,7 +204,7 @@ def interpret_with_gemini(flagged_headlines):
         """
 
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.5-flash-lite",
             contents=prompt
         )
 
