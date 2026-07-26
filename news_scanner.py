@@ -41,16 +41,16 @@ logger = logging.getLogger("news_scanner")
 LOG_FILE = "news_log.json"
 MAX_LOG_ENTRIES = 200  # Keep file manageable
 
-# Custom User-Agent to prevent RSS feeds (like USDA) from closing connections
+# Custom User-Agent header for HTTP requests
 HTTP_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
 
-# Direct RSS Feeds (No API keys required)
+# Direct RSS Feeds (Reliable, open endpoints)
 RSS_FEEDS = {
-    # Agricultural & Commodities
-    "USDA News": "https://www.usda.gov/rss/home.xml",
-    "AgWeb Markets": "https://www.agweb.com/rss/markets",
+    # Agricultural & Commodities (Google News routed to bypass 403 / Timeout blocks)
+    "USDA News": "https://news.google.com/rss/search?q=site:usda.gov+when:1d&hl=en-US&gl=US&ceid=US:en",
+    "AgWeb Markets": "https://news.google.com/rss/search?q=site:agweb.com+markets+when:1d&hl=en-US&gl=US&ceid=US:en",
     
     # Macro / Forex / Financial
     "Investing.com Forex": "https://www.investing.com/rss/news_1.rss",
@@ -132,7 +132,6 @@ def fetch_all_headlines():
     """Fetch headlines concurrently across direct feeds + keyword search feeds."""
     all_headlines = []
     seen_titles = set()
-    tasks = []
 
     # Prepare target workload list
     targets = []
