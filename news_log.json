@@ -1,5 +1,158 @@
 [
   {
+    "timestamp": "2026-07-26T22:17:34.169762+00:00",
+    "total_scanned": 222,
+    "flagged_count": 161,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Small Business Bank and announces termination enforcement actions with BNP Paribas S.A., BNP Paribas USA, Inc., BNP Paribas Securities Corp., and Community Bankshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260702a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 2 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues initial findings from its 2025 triennial payments study",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260701a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 1 Jul 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Trump's new global tariff draws rebukes from trade partners over forced labor justification",
+        "link": "https://www.cnbc.com/2026/07/24/trump-global-tariffs-trade-imbalance-forced-labor.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 24 Jul 2026 12:09:09 GMT",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Kevin Warsh has homed in on three key phrases. How Fed watchers interpret them",
+        "link": "https://www.cnbc.com/2026/07/22/kevin-warsh-has-homed-in-on-three-key-phrases-how-fed-watchers-interpret-them.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 22 Jul 2026 16:57:55 GMT",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Trump plans generic drug tariffs from 2028 with two-year delay testing U.S. onshoring push",
+        "link": "https://www.cnbc.com/2026/07/22/trump-generic-drugs-tariffs-medicine-trade-.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 22 Jul 2026 06:28:08 GMT",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "World Cup gave bars and restaurants a needed boost as consumers flash warning signs, Fed says",
+        "link": "https://www.cnbc.com/2026/07/15/world-cup-economy-spending-alcohol-hotels-fed.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 15 Jul 2026 21:53:10 GMT",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "India's inflation accelerates to 4.38% in June, exceeding forecasts",
+        "link": "https://www.cnbc.com/2026/07/13/india-june-inflation-oil-food-iran-war.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 13 Jul 2026 10:56:52 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Canadian dollar slips as oil retreats, Fed decision looms",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-oil-retreats-fed-decision-looms-93CH-4812379",
+        "source": "Investing.com Forex",
+        "published": "2026-07-24 18:12:27",
+        "matched_keywords": [
+          "fed",
+          "oil"
+        ]
+      },
+      {
+        "title": "U.S. bond sell-off deepens as energy shock and trade friction lock in hawkish Fed",
+        "link": "https://www.investing.com/news/forex-news/german-yields-eases-from-multiyear-peaks-100-oil-surge-threatens-euro-growth-4810548",
+        "source": "Investing.com Forex",
+        "published": "2026-07-24 12:36:52",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound steady as dollar bid dominates on Fed repricing",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-steady-as-dollar-bid-dominates-on-fed-repricing-4811621",
+        "source": "Investing.com Forex",
+        "published": "2026-07-24 12:13:02",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are being driven by a hawkish Federal Reserve stance fueled by persistent energy shocks and trade frictions, alongside aggressive new U.S. tariff proposals. Meanwhile, central bank regulatory actions and mixed consumer signals—highlighted by rising inflation in emerging markets like India—add to macroeconomic uncertainty.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Agricultural fundamentals are largely insulated from current macro drivers, which are primarily focused on Fed policy, energy shocks, and tariffs.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "A hawkish Federal Reserve repricing and deepening U.S. bond sell-offs are driving broad-based U.S. dollar strength against global currencies.",
+      "key_risk": "Escalating trade frictions and energy shocks driving persistent inflation and forcing a more aggressive, prolonged hawkish stance by the Federal Reserve."
+    }
+  },
+  {
     "timestamp": "2026-07-26T21:27:50.400139+00:00",
     "total_scanned": 222,
     "flagged_count": 158,
