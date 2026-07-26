@@ -2,7 +2,7 @@
 news_scanner.py — Background Automated News Fetcher & LLM Interpreter
 ========================================================================
 
-Runs as a GitHub Action on a 6-hour cron (or manually via workflow_dispatch).
+Runs as a GitHub Action on a scheduled cron (or manually via workflow_dispatch).
 Fetches financial / agricultural / macro news from multiple free RSS feeds,
 filters for high-impact keywords, sends flagged headlines to Gemini Flash,
 and appends structured signals to `news_log.json`.
@@ -17,18 +17,14 @@ Dependencies:
 
 Environment Variables:
   - GEMINI_API_KEY (optional, required only for LLM interpretation)
-
-Note on Google GenAI SDK:
-  Using `from google import genai`. The old `google.generativeai` is
-  deprecated — switched to the new google-genai package. Model updated to
-  gemini-3.5-flash-lite for maximum cost efficiency and low-latency
-  background news scans.
 """
 
 import os
 import json
 import logging
-from datetime import datetime, timezone, timedelta
+import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timezone
 import feedparser
 
 # Configure logging
@@ -50,7 +46,7 @@ HTTP_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
 
-# Free RSS Feeds (No API keys required)
+# Direct RSS Feeds (No API keys required)
 RSS_FEEDS = {
     # Agricultural & Commodities
     "USDA News": "https://www.usda.gov/rss/home.xml",
@@ -107,11 +103,14 @@ HIGH_IMPACT_KEYWORDS = [
 # ---------------------------------------------------------------------------
 
 def fetch_rss_feed(source_name, url):
-    """Fetch and parse a single RSS feed with custom headers."""
+    """Fetch and parse a single RSS feed with explicit HTTP headers and timeout."""
     headlines = []
     try:
-        # Request feed with custom HTTP headers to avoid remote disconnection
-        feed = feedparser.parse(url, request_headers=HTTP_HEADERS)
+        req = urllib.request.Request(url, headers=HTTP_HEADERS)
+        with urllib.request.urlopen(req, timeout=10) as response:
+            xml_data = response.read()
+            
+        feed = feedparser.parse(xml_data)
         for entry in feed.entries[:10]:  # Take top 10 per feed
             title = entry.get("title", "").strip()
             link = entry.get("link", "")
@@ -130,29 +129,33 @@ def fetch_rss_feed(source_name, url):
 
 
 def fetch_all_headlines():
-    """Fetch headlines from direct RSS feeds + Google News keyword queries."""
+    """Fetch headlines concurrently across direct feeds + keyword search feeds."""
     all_headlines = []
     seen_titles = set()
+    tasks = []
 
-    # 1. Direct Feeds
+    # Prepare target workload list
+    targets = []
     for source, url in RSS_FEEDS.items():
-        feed_items = fetch_rss_feed(source, url)
-        for item in feed_items:
-            # Deduplicate by lowercase title
-            norm_title = item["title"].lower()
-            if norm_title not in seen_titles:
-                seen_titles.add(norm_title)
-                all_headlines.append(item)
+        targets.append((source, url))
 
-    # 2. Google News Keyword Feeds
     for query in KEYWORD_QUERIES:
         url = GOOGLE_NEWS_BASE.format(query=query.replace(" ", "+"))
-        feed_items = fetch_rss_feed(f"Google News ({query})", url)
-        for item in feed_items:
-            norm_title = item["title"].lower()
-            if norm_title not in seen_titles:
-                seen_titles.add(norm_title)
-                all_headlines.append(item)
+        targets.append((f"Google News ({query})", url))
+
+    # Execute requests concurrently using 10 worker threads
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        future_to_target = {
+            executor.submit(fetch_rss_feed, source, url): (source, url)
+            for source, url in targets
+        }
+        for future in as_completed(future_to_target):
+            feed_items = future.result()
+            for item in feed_items:
+                norm_title = item["title"].lower()
+                if norm_title not in seen_titles:
+                    seen_titles.add(norm_title)
+                    all_headlines.append(item)
 
     return all_headlines
 
@@ -174,8 +177,8 @@ def filter_high_impact(headlines):
 
 def interpret_with_gemini(flagged_headlines):
     """
-    Send flagged headlines to Gemini 3.5 Flash-Lite for high-level macro impact interpretation.
-    Returns a dict with overall sentiment, commodity impact, and forex impact.
+    Send flagged headlines to Gemini 3.5 Flash-Lite for macro & commodity interpretation.
+    Returns a structured dictionary with market impacts.
     """
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
@@ -209,7 +212,7 @@ def interpret_with_gemini(flagged_headlines):
         )
 
         text = response.text.strip()
-        # Clean potential markdown formatting
+        # Clean potential markdown formatting wrappers
         if text.startswith("```json"):
             text = text[7:]
         if text.endswith("```"):
