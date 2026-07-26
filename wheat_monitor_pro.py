@@ -4,10 +4,13 @@ import datetime
 import requests
 import numpy as np
 import pandas as pd
-from dotenv import load_dotenv
 
-# Load environment variables from .env file if available
-load_dotenv()
+# Safe import for python-dotenv (falls back gracefully in CI/CD runners)
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
 # Configure Logging
 logging.basicConfig(
@@ -230,11 +233,11 @@ def send_telegram_alert(message_text: str, bot_token: str, chat_id: str) -> bool
 if __name__ == "__main__":
     logger.info("Initializing WHEAT MONITOR v4.0 Pipeline Test...")
 
-    # Load credentials from environment variables or .env file
+    # Load credentials from system environment or GitHub Action secrets
     TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
     TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-    # 1. Generate Synthetic Synthetic OHLC Data
+    # 1. Generate Synthetic OHLC Data
     dates = pd.date_range(end=datetime.datetime.now(), periods=100)
     np.random.seed(42)
     close_prices = 490.0 + np.cumsum(np.random.randn(100) * 0.5)
@@ -299,5 +302,5 @@ if __name__ == "__main__":
     else:
         logger.warning(
             "⚠️ Telegram dispatch skipped: Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID. "
-            "Set them in your environment or inside a .env file."
+            "Set them in your environment variables or GitHub Repository Secrets."
         )
