@@ -32,13 +32,10 @@ deliver. Only the three categories confirmed buildable from real news
 coverage were added: weather/drought language, food-inflation/bread-
 unrest language, and IMF/World Bank food-security financing language.
 
-SDK MIGRATION (2026-07-26): the old google-generativeai package is
-deprecated — switched to the new google-genai package. Model stays
-gemini-2.5-flash: this project's free-tier quota dashboard confirmed
-gemini-2.0-flash has ZERO allocated quota on this account, while
-gemini-2.5-flash has real, working free-tier quota (5 RPM/20 RPD) and
-prior usage — so the original 404 was an old-SDK/endpoint issue, not
-the model being genuinely unavailable to this project.
+SDK & MODEL MIGRATION (2026-07-26): the old google-generativeai package is
+deprecated — switched to the new google-genai package. Model updated to
+gemini-2.5-flash-lite for maximum cost efficiency and low-latency
+background news scans.
 
 SETUP:
   1. pip install feedparser google-genai
@@ -231,7 +228,7 @@ def interpret_with_gemini(headlines):
         )
 
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-2.5-flash-lite",
             contents=prompt
         )
         text = response.text.strip()
