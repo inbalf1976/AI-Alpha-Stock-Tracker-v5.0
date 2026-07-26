@@ -30,6 +30,20 @@ CHANGELOG (this version):
     only the single "current price" used for entry/stop/target is
     live. If the live fetch fails, this is now flagged explicitly
     (⚠️ STALE) instead of failing silently.
+  - FIX (2026-07-26): ConvictionGate was reporting its holdout-validated
+    accuracy (e.g. "TIER 1 (holdout-validated 75.0%)") regardless of
+    which direction the alert actually called. Every condition in
+    validated_conditions.json was only ever backtested for how well
+    it predicts UP — there is no DOWN-side accuracy number anywhere
+    in the pipeline. So on a run where macd_bullish/bearish_month
+    were active but the ensemble+seasonal engines landed on DOWN,
+    the alert showed a 75% confidence badge next to a DOWN call that
+    number had never actually measured. ConvictionGate.evaluate() now
+    takes `direction` and only reports a tier/accuracy when
+    direction == 'UP'; otherwise it reports "N/A — validated UP-only"
+    instead of a misleading number. main() was reordered so the
+    ensemble direction is computed BEFORE the gate is evaluated,
+    since the gate now needs it as an input.
 """
 
 import os, sys, json, warnings, requests
@@ -314,6 +328,19 @@ class ConvictionGate:
     backtest.py fresh before re-adding any volume-based condition.
     Re-run backtest.py periodically and update the numbers below —
     do not let this drift stale.
+
+    FIX (2026-07-26): every accuracy number this class knows about —
+    whether loaded from validated_conditions.json or the hardcoded
+    fallback — was ONLY ever backtested for predicting UP (see
+    docstring above: "beat the baseline UP rate"). There is no
+    DOWN-side accuracy anywhere in this data. evaluate() previously
+    ignored that and printed the UP-only accuracy next to whatever
+    direction the rest of the pipeline happened to land on that run,
+    which meant a DOWN call could show a misleading "holdout-validated
+    75%" badge that had never actually been measured for DOWN.
+    evaluate() now requires `direction` and only reports a real
+    tier/accuracy when direction == 'UP'; for DOWN it reports
+    tier 0 with an explicit "N/A — UP-only" reason instead.
     """
 
     # Holdout-validated accuracies — vol_low removed 2026-07-10 (see docstring)
@@ -373,7 +400,17 @@ class ConvictionGate:
             print(f"   ⚠️ Failed to load validated_conditions.json ({e}) — using hardcoded fallback")
             return dict(self.FALLBACK_HOLDOUT_ACCURACY), self.FALLBACK_BASELINE_UP, "FALLBACK (load error)"
 
-    def evaluate(self, df):
+    def evaluate(self, df, direction):
+        """
+        `direction` (the 'UP'/'DOWN' call already decided by the
+        ensemble/seasonal/trend logic) must be passed in now — see
+        the FIX note in the class docstring for why. This class no
+        longer decides or influences direction itself; it only scores
+        how much backtest-validated conviction exists behind whatever
+        direction the caller already settled on, and every number it
+        has is UP-only, so DOWN gets an explicit N/A instead of a
+        borrowed number.
+        """
         close = df['Close']
         price = float(close.iloc[-1])
 
@@ -416,6 +453,14 @@ class ConvictionGate:
         if not active:
             tier, accuracy = 0, self.BASELINE_UP
             reason = f"⚪ NO SIGNAL — baseline only ({self.BASELINE_UP:.1%}, no validated condition active)"
+        elif direction != 'UP':
+            # FIX (2026-07-26): every condition here was only ever
+            # backtested for predicting UP. Reporting their accuracy
+            # next to a DOWN call would imply a validated DOWN
+            # confidence that was never actually measured.
+            tier, accuracy = 0, self.BASELINE_UP
+            active_names = " + ".join(name for name, _ in active)
+            reason = f"⚪ N/A — {active_names} validated UP-only, current call is DOWN"
         else:
             active.sort(key=lambda x: x[1], reverse=True)
             best_name, best_acc = active[0]
@@ -1395,18 +1440,9 @@ def main():
     trend_data   = trend_engine.get_trend(df)
     print(f"  Trend:    {trend_data['trend']} ({trend_data['strength']})")
 
-    gate = ConvictionGate()
-    tier, accuracy, gate_reason, gate_conds = gate.evaluate(df)
-    print(f"  Gate:     {gate_reason}")
-
-    # ── Signals ──
-    print("\nFetching signals...")
-    wasde   = get_wasde_signal()
-    weather = get_weather_signal()
-    volume  = get_volume_signal(df)
-    print(f"  WASDE: {wasde['signal']} | Weather: {weather['signal']} | Vol: {volume['ratio']:.1f}x")
-
-    # ── Ensemble ──
+    # ── Ensemble ── (FIX 2026-07-26: moved BEFORE the gate — the gate
+    # now needs `direction` as an input, since its accuracy numbers are
+    # UP-only and it must not report them next to a DOWN call.)
     print("\nTraining models...")
     ensemble = EnsemblePredictor()
     ensemble.train(df)
@@ -1414,7 +1450,9 @@ def main():
     direction = pred['direction']
     print(f"  Ensemble: {direction} | LSTM={pred['lstm']:.3f} RF={pred['rf']:.3f} XGB={pred['xgb']:.3f}")
 
-    # ── Filters ──
+    # ── Filters ── (moved up alongside direction — these can flip
+    # `direction` before the gate ever sees it, so the gate must run
+    # after these too, not just after the raw ensemble read)
     seasonal_blocked, _ = seasonal.blocks_direction(direction)
     trend_blocked, _    = trend_engine.blocks_direction(direction, trend_data)
 
@@ -1427,6 +1465,20 @@ def main():
         direction          = 'DOWN' if direction == 'UP' else 'UP'
         pred['confidence'] = 0.58
         print(f"  Trend filter → {direction}")
+
+    # ── Conviction gate ── now runs with the FINAL direction (after
+    # ensemble + any seasonal/trend overrides), so its accuracy badge
+    # is never attached to a direction other than the one being sent.
+    gate = ConvictionGate()
+    tier, accuracy, gate_reason, gate_conds = gate.evaluate(df, direction)
+    print(f"  Gate:     {gate_reason}")
+
+    # ── Signals ──
+    print("\nFetching signals...")
+    wasde   = get_wasde_signal()
+    weather = get_weather_signal()
+    volume  = get_volume_signal(df)
+    print(f"  WASDE: {wasde['signal']} | Weather: {weather['signal']} | Vol: {volume['ratio']:.1f}x")
 
     # ── Cost floor ──
     print("\nCalculating cost floor...")
