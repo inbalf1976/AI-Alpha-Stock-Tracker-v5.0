@@ -97,7 +97,7 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: write
-    if: contains(fromJSON('["0 6 * * *", "0 12 * * *", "0 18 * * *"]'), github.event.schedule)
+    if: contains(fromJSON('["0 6 * * *", "0 12 * * *", "0 18 * * *"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
