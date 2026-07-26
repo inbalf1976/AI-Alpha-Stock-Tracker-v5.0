@@ -506,7 +506,7 @@ class WeeklyRangeEngine:
     def format_alert(self, weekly, monthly=None, tier=0, gate_conds=None,
                      wasde=None, weather=None, seasonal=None, cost_signal=None,
                      gate_accuracy=None, gate_reason=None, final_direction=None,
-                     daily_direction=None, status_line=None):
+                     daily_direction=None, status_line=None, daily_setup=None):
         """
         UPDATED 2026-07-14 — new weekly plan design:
           - weekly['final_call'] is now the FROZEN weekly direction
@@ -531,7 +531,7 @@ class WeeklyRangeEngine:
         Now builds the label from the REAL accuracy value passed in via
         gate_accuracy.
 
-        FIX (2026-07-26): the trade setup block used to be hidden
+        FIX (2026-07-26a): the trade setup block used to be hidden
         entirely whenever tier == 0 ("No trade setup shown — conviction
         is baseline/weak"). Per explicit request, Entry/Stop/Target are
         now always shown when computed, regardless of tier. To avoid
@@ -540,6 +540,17 @@ class WeeklyRangeEngine:
         caveat directly under the numbers, and the DECISION line no
         longer claims "no trade setup below" when one is, in fact,
         printed below it.
+
+        FIX (2026-07-26b): the trade setup was ALSO accidentally frozen
+        together with the weekly range/bias (both came from the same
+        cached `weekly` dict) — collapsing what used to be two separate
+        predictions (a frozen WEEKLY range+direction, and a DAILY
+        entry/stop/target that moves with today's live price and
+        today's direction) into one. `daily_setup` is now a required
+        separate argument, computed fresh every run by the caller via
+        compute_setup_from_entry(current_price, direction) — never
+        cached — and the trade setup block below now reads from it
+        instead of from the frozen `weekly` dict.
         """
 
         if gate_accuracy is not None:
@@ -590,20 +601,23 @@ class WeeklyRangeEngine:
             fundamental_line += f"Weather: {weather['signal']}\n"
 
         # ── Trade setup block ─────────────────────────────────────────────
-        # FIX (2026-07-26): numbers are now shown whenever they were
+        # FIX (2026-07-26a): numbers are now shown whenever they were
         # computed, regardless of tier — previously gated on `tier > 0`,
         # which hid them entirely at Tier 0. Tier 0 now gets the same
         # numbers plus an explicit "not backtest-validated" caveat,
         # instead of no numbers at all.
+        # FIX (2026-07-26b): now reads from `daily_setup` (fresh every
+        # run, tracks live price + today's direction) instead of the
+        # frozen `weekly` dict — see class docstring.
         weekly_final_call = weekly.get('final_call', final_direction)
 
-        if weekly.get('entry') is not None:
+        if daily_setup is not None:
             trade_setup_block = (
-                f"TRADE SETUP:\n"
-                f"Entry:  {weekly['entry']:.0f}c\n"
-                f"Stop:   {weekly['stop']:.0f}c\n"
-                f"Target: {weekly['target']:.0f}c\n"
-                f"R:R = {weekly['rr']:.1f}:1\n"
+                f"DAILY SETUP (updates with today's price/direction):\n"
+                f"Entry:  {daily_setup['entry']:.0f}c\n"
+                f"Stop:   {daily_setup['stop']:.0f}c\n"
+                f"Target: {daily_setup['target']:.0f}c\n"
+                f"R:R = {daily_setup['rr']:.1f}:1\n"
             )
             if tier == 0:
                 trade_setup_block += (
@@ -611,7 +625,7 @@ class WeeklyRangeEngine:
                 )
         else:
             trade_setup_block = (
-                f"No trade setup available — entry/stop/target were not computed this run.\n"
+                f"No trade setup available — daily_setup was not computed this run.\n"
             )
 
         final_call_block = f"WEEKLY FINAL CALL: {weekly_final_call}\n" + ("=" * 30) + "\n\n"
