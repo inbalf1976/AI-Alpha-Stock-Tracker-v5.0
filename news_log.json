@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-07-26T22:43:19.687147+00:00",
+    "total_scanned": 222,
+    "flagged_count": 160,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Small Business Bank and announces termination enforcement actions with BNP Paribas S.A., BNP Paribas USA, Inc., BNP Paribas Securities Corp., and Community Bankshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260702a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 2 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues initial findings from its 2025 triennial payments study",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260701a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 1 Jul 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil prices sink, stock futures rally as U.S. and Iran pause attacks, Wall Street awaits busy week",
+        "link": "https://www.marketwatch.com/story/oil-prices-sink-stock-futures-rally-as-u-s-and-iran-pause-attacks-wall-street-awaits-busy-week-75030e00?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 26 Jul 2026 22:16:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "The Treasury market is sending Fed Chair Kevin Warsh a clear warning about rates",
+        "link": "https://www.marketwatch.com/story/the-treasury-market-is-sending-fed-chair-kevin-warsh-a-clear-warning-about-rates-d0026da9?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 26 Jul 2026 12:30:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "war",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Oil slips more than 5% after US pauses strikes on Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-slips-more-than-5-after-us-pauses-strikes-on-iran-4812923",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-26 22:12:26",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Iran war spreads to Red Sea and Caspian, Gulf quiet as US forgoes strikes",
+        "link": "https://www.investing.com/news/commodities-news/iran-war-spreads-to-red-sea-and-caspian-gulf-quiet-as-us-forgoes-strikes-4812822",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-26 03:36:25",
+        "matched_keywords": [
+          "war",
+          "red sea"
+        ]
+      },
+      {
+        "title": "Houthis fire on Saudi oil sites; no US strike on Iran for first time in two weeks",
+        "link": "https://www.investing.com/news/commodities-news/trump-vows-to-punish-iran-and-houthis-for-attacks-in-red-sea-4810448",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-25 20:24:29",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Swiss cheesemakers try to fill hole in sales from US tariffs",
+        "link": "https://www.investing.com/news/commodities-news/swiss-cheesemakers-try-to-fill-hole-in-sales-from-us-tariffs-4812765",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-25 10:12:52",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Gold snaps two-week losing run as technical buying offsets inflationary pressures",
+        "link": "https://www.investing.com/news/commodities-news/gold-set-for-first-weekly-gain-in-three-as-fed-meast-stay-in-focus-4810406",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-24 21:06:55",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Canadian dollar slips as oil retreats, Fed decision looms",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-oil-retreats-fed-decision-looms-93CH-4812379",
+        "source": "Investing.com Forex",
+        "published": "2026-07-24 18:12:27",
+        "matched_keywords": [
+          "fed",
+          "oil"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are reacting to a temporary de-escalation in U.S.-Iran hostilities, causing crude oil prices to plunge over 5% and boosting equity futures. Meanwhile, persistent geopolitical friction in the Red Sea region, ongoing monetary policy adjustments under Fed Chair Kevin Warsh, and trade friction like U.S. tariffs continue to drive safe-haven and FX volatility.",
+      "wheat_impact": {
+        "direction": "NEUTRAL",
+        "reason": "Agricultural markets face mixed signals as energy cost pressures ease from falling oil prices, while broader geopolitical tensions in the Middle East provide underlying supply-chain caution."
+      },
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "The broader greenback is supported by looming Federal Reserve decisions and Treasury market dynamics, while regional Middle East conflict risks continue to weigh on the Israeli Shekel despite temporary lulls in U.S.-Iran direct strikes."
+      },
+      "key_risk": "Potential reactivation or expansion of Middle East hostilities impacting critical shipping lanes like the Red Sea and regional energy infrastructure."
+    }
+  },
+  {
     "timestamp": "2026-07-26T22:34:49.769114+00:00",
     "total_scanned": 222,
     "flagged_count": 159,
