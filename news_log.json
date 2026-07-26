@@ -1,5 +1,157 @@
 [
   {
+    "timestamp": "2026-07-26T21:21:07.742613+00:00",
+    "total_scanned": 210,
+    "flagged_count": 153,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Small Business Bank and announces termination enforcement actions with BNP Paribas S.A., BNP Paribas USA, Inc., BNP Paribas Securities Corp., and Community Bankshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260702a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 2 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues initial findings from its 2025 triennial payments study",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260701a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 1 Jul 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar slips as oil retreats, Fed decision looms",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-oil-retreats-fed-decision-looms-93CH-4812379",
+        "source": "Investing.com Forex",
+        "published": "2026-07-24 18:12:27",
+        "matched_keywords": [
+          "fed",
+          "oil"
+        ]
+      },
+      {
+        "title": "U.S. bond sell-off deepens as energy shock and trade friction lock in hawkish Fed",
+        "link": "https://www.investing.com/news/forex-news/german-yields-eases-from-multiyear-peaks-100-oil-surge-threatens-euro-growth-4810548",
+        "source": "Investing.com Forex",
+        "published": "2026-07-24 12:36:52",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound steady as dollar bid dominates on Fed repricing",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-steady-as-dollar-bid-dominates-on-fed-repricing-4811621",
+        "source": "Investing.com Forex",
+        "published": "2026-07-24 12:13:02",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "BofA sees Hong Kong dollar rates spike risk on Fed hikes",
+        "link": "https://www.investing.com/news/forex-news/bofa-sees-hong-kong-dollar-rates-spike-risk-on-fed-hikes-93CH-4810869",
+        "source": "Investing.com Forex",
+        "published": "2026-07-24 09:41:20",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "US Treasury finds no trading partner manipulated currency for trade advantage in 2025",
+        "link": "https://www.investing.com/news/forex-news/us-treasury-finds-no-trading-partner-manipulated-currency-for-trade-advantage-in-2025-4809864",
+        "source": "Investing.com Forex",
+        "published": "2026-07-23 20:06:49",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Canadian dollar rises as oil prices jump on supply concerns",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-as-oil-prices-jump-on-supply-concerns-93CH-4809736",
+        "source": "Investing.com Forex",
+        "published": "2026-07-23 17:58:57",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "UBS adds Norwegian krone to top FX picks as oil rally seen capped",
+        "link": "https://www.investing.com/news/forex-news/ubs-adds-norwegian-krone-to-top-fx-picks-as-oil-rally-seen-capped-4809440",
+        "source": "Investing.com Forex",
+        "published": "2026-07-23 14:58:21",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Iran war spreads to Red Sea and Caspian, Gulf quiet as US forgoes strikes",
+        "link": "https://www.investing.com/news/commodities-news/iran-war-spreads-to-red-sea-and-caspian-gulf-quiet-as-us-forgoes-strikes-4812822",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-26 03:36:25",
+        "matched_keywords": [
+          "war",
+          "red sea"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are being driven by a hawkish Federal Reserve pricing environment, fueled by an escalating energy shock and trade frictions. Meanwhile, geopolitical conflict in the Middle East has spread to the Red Sea and Caspian regions, directly impacting energy supply dynamics and commodity valuations.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_reason": "Supply disruptions from the Middle East conflict spreading to the Red Sea threaten global grain shipping routes and drive up input costs.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Broader Middle East conflict escalation combined with a persistently strong US dollar driven by a hawkish Fed creates upward pressure on USD/ILS.",
+      "key_risk": "Further escalation of the Middle East conflict threatening critical maritime shipping lanes and global energy supplies."
+    }
+  },
+  {
     "scan_time": "2026-07-23T22:28:35.147706+03:00",
     "total_headlines": 33,
     "high_impact_count": 18,
@@ -14,13 +166,13 @@
         ]
       },
       {
-        "title": "Brian Liedl Talks World Markets on 'Wheat\u2019s On Your Mind' Podcast - U.S. Wheat Associates",
+        "title": "Brian Liedl Talks World Markets on 'Wheat’s On Your Mind' Podcast - U.S. Wheat Associates",
         "link": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxOSDk5aGNEdVVGR1AxWEMzOFRVazcxS2lHNThHZlJnMGxqeWF6eF8ycTl0T0NLRjROUkpoU2dCUklmM1ZLRzVYOS1kYXphM2JFdDYtSFdBaHBtYzFmWlNpMWFTRjJvR0FvMklxLVF0UVNXeGNvc3lfNXlueWhjVmJQYU5aWmpXUEpIZnI4TjBocTh4bGF3dWxiMTh6OElCRXJFZzdyZnEweTdBdUxLYnlTWV9XS3U4X3JaeGI0SkpaYmJtcEpUamtFN1dhbFNsd0hacG8tdV9qU2dQNWZF?oc=5",
         "published": "2026-07-23T18:33:40+03:00",
         "source_query": "wheat price"
       },
       {
-        "title": "Wheat prices hit 2-year high amid Russia-Ukraine tensions, drought concerns - Anadolu Ajans\u0131",
+        "title": "Wheat prices hit 2-year high amid Russia-Ukraine tensions, drought concerns - Anadolu Ajansı",
         "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPTDI5TUxqa3ZETlVZcDZOVGVNN3NTSmgxRVNMME1ReW5vUlNrSWF3RWFnbTNnWUNwcC0tQzNuRnNrS0RHc09NZUlkeEZsdDhRam80Z2RTR0tNWE52cmhtbTVXRDVKdGFOUThzX0VrcElWRmkxX0p3TTgtNjFUYTVrZTJfWXJ3M2JtblYyTzdEQXFLTDRWT2RfQnNvRFpRb3J5WW8xaXNOVWZZOFVzankwdWRvY2VxUQ?oc=5",
         "published": "2026-07-23T16:27:28+03:00",
         "source_query": "wheat price",
@@ -80,7 +232,7 @@
         "source_query": "wheat export"
       },
       {
-        "title": "Wheat climbs to the highest level since May 2024 \ud83d\ude9c Black Sea export risks fuel rally - XTB.com",
+        "title": "Wheat climbs to the highest level since May 2024 🚜 Black Sea export risks fuel rally - XTB.com",
         "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPWWtrSXFwNjE1dzVqTXBNR0p3b3Y5cXV2WGZHX1RWM3BkX3hOdlRISE1VQlR1bGtTSzlUUndpUEpOcW41Q0dmMS1sRXVPeEdxdE9MTmtibmN3UFNtRk5OMDVMU0ExeTludEJkV1UxNXVyNC1uMmdReDNPZ0lPTVBZZE1RdkNZQ2YtbjFPOHBIZk9wZDBRdGVXUjBGU1hfLVotM0hCcnJISkctYmZmZ1h1dTk1Y2YyUUgtekY3OElqaWZ2ekRXMVdnQlVSLVdqRHlSS0FDRHN3?oc=5",
         "published": "2026-07-23T17:21:24+03:00",
         "source_query": "wheat export"
@@ -95,7 +247,7 @@
         ]
       },
       {
-        "title": "Turkey\u2019s sunflower oil exports rise as demand stays firm despite regional conflict - Milling Middle East & Africa",
+        "title": "Turkey’s sunflower oil exports rise as demand stays firm despite regional conflict - Milling Middle East & Africa",
         "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQVEJGbHlNSUphekZYTHFEOUpTbUMwZW96OFpyeHdxTlJlNmkwVXdIS1gwQWRPcHRfdllucjZLRThYck9qaXEwcGhlS0xFUU04a1BVaEtCOWsxcFZSZUp4d1ZRODZuRy1NVm83dTBuSWVlam5TWkE2eFdKNmc5OXZ0WXNHS2tadVFVbU1oZHY5SXlLU2FWcnRublpKWEpBY1BiSUNsazN6RlQ?oc=5",
         "published": "2026-07-23T15:31:23+03:00",
         "source_query": "wheat export",
@@ -138,7 +290,7 @@
         "source_query": "Ukraine grain export"
       },
       {
-        "title": "Russia Escalating Bid to Choke Ukraine\u2019s Grain Corridor as Ships Stay Away \u2013 Zelensky - Kyiv Post",
+        "title": "Russia Escalating Bid to Choke Ukraine’s Grain Corridor as Ships Stay Away – Zelensky - Kyiv Post",
         "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBnMXBaN2RERUpqV0MxUFpuLTlWN2EyLXNlYVgxdzFyODIybnMzRHRORGZhYjFpa0FVeWVicFU4TUxFUEpITEozY01ITQ?oc=5",
         "published": "2026-07-23T18:02:34+03:00",
         "source_query": "Ukraine grain export"
@@ -150,7 +302,7 @@
         "source_query": "Ukraine grain export"
       },
       {
-        "title": "Zelensky warns Russia escalating attacks to shut down Ukraine\u2019s grain corridors - Ukrinform",
+        "title": "Zelensky warns Russia escalating attacks to shut down Ukraine’s grain corridors - Ukrinform",
         "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxORTdzSzB4SlYtTE9pbVlLLW1RbDZOczM1NUpCcmFSV1BZczktRzUtRnQtQldyeURZQWRrVnc4V3VXRmNQa1dCMTJMdnp1QVRTb2MzRlo3Y0RKellDcVVBcWxHNGpCYUI0RGxZVmRuaHRmSVM4ZHVHUHJYX05feHUtaTU2RTRnb0pzTWdfRkZ2eVh5MGRvMXF2aHFvWGl2d2tYTGstVkFGSUZfTEFKSHRia1VfbTlXVU1TME9qaEhTZkRjX25WVmNaczJFbDltUUpENWfSAdIBQVVfeXFMTkU3c0sweEpWLUxPaW1ZSy1tUWw2TnMzNTVKQnJhUldQWXM5LUc1LUZ0LUJXcnlEWUFka1Z3OFd1V0ZjUGtXQjEyTHZ6dUFUU29jM0ZaN2NESnpZQ3FVQXFsRzRqQmFCNERsWVZkbmh0ZklTOGR1R1ByWF9OX3h1LWk1NkU0Z29Kc01nX0ZGdnlYeTBkbzFxdmhxb1hpdndrWExrLVZBRklGX0xBSkh0YmtVX205V1VNUzBPamhIU2ZEY19uVlZjWnMyRWw5bVFKRDVn?oc=5",
         "published": "2026-07-23T17:15:00+03:00",
         "source_query": "Ukraine grain export",
@@ -187,7 +339,7 @@
         ]
       },
       {
-        "title": "Russia chokes Ukraine\u2019s lifeline Black Sea export corridor - politico.eu",
+        "title": "Russia chokes Ukraine’s lifeline Black Sea export corridor - politico.eu",
         "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPWEdfejJiamlMYS1uYXNjUjhfOFBhVExUNkZKYlZnLVlfZGNHWDJoRTFEM1RhaS1OeGhmZHFuNVZ5c0NUYjkwVFJmb1U1akFEUWdaeDhBUmhFbUFiTkFsbV9GSkVQQ2x5ZkFTLTVYXzV2M2wyeXl4dzVxNHIwSDdOVWNRMDU5QkYwQnBCMW5WdFFQYnM?oc=5",
         "published": "2026-07-23T14:17:00+03:00",
         "source_query": "Black Sea grain"
@@ -386,25 +538,25 @@
         "source_query": "wheat export"
       },
       {
-        "title": "Ukraine updates grain export protection plan \u2013 Zelenskyy - UkrAgroConsult",
+        "title": "Ukraine updates grain export protection plan – Zelenskyy - UkrAgroConsult",
         "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQbzBYZHlFNVVaSVA2OUwzbzVLQUt3Mk9LS0Zxckh2Y1BVTmNDQ0IwM09YWHRhSlI1WFkyMFFwbk8yeW92bHhrUy1aTnVyU0gwbk5DTHo4M1gweHJBdlhrNXUwY2gwWjMwUWluVERPM3V2MFN3dV9aVjFkdDhNNUwwWXNITUN4LWZNM1VuOEI5NnVGNTVM?oc=5",
         "published": "2026-07-25T15:59:49+03:00",
         "source_query": "Ukraine grain export"
       },
       {
-        "title": "Ukraine updates plan to protect grain exports - \u041d\u043e\u0432\u0438\u043d\u0438 \u0430\u0433\u0440\u0430\u0440\u043d\u043e\u0433\u043e \u0431\u0456\u0437\u043d\u0435\u0441\u0443",
+        "title": "Ukraine updates plan to protect grain exports - Новини аграрного бізнесу",
         "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5tZ1dCYXUwSXNnVjRrOTZlbjJoTF80ckZGbFpNMlJNQmFIUmRzZWIwb25qVmpTZ0tIM0tTYVZmNzVwazVPZTYxTEFzMXpFaFAxQThpTjlUQUdNRzBLZkVNWXpnaFdHX05welg1YjZfdk9UNk1qQ1J5V0ttV3NKU1U?oc=5",
         "published": "2026-07-25T13:14:00+03:00",
         "source_query": "Ukraine grain export"
       },
       {
-        "title": "Weather, Exports and Black Sea Risk Share the Driver\u2019s Seat in Grain Rally - Rural Radio Network",
+        "title": "Weather, Exports and Black Sea Risk Share the Driver’s Seat in Grain Rally - Rural Radio Network",
         "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNYjkwdW1ockVaeDRfaHJzcWR0RW9yd0lJbkljNU1KdzFGUnVLYjNnWEVtdEpERkZKMHM4Z0s4TGNhdFhoNEhoQ2J3c2Y0S1FlUGkyQkM0dVVZcXFFbURKMVVTMDVxMjVYUnB6VGNFTHQwbWhXakhVZVRXWmh0eVQxdHE0eUc3bFQyMlpVLVE3ZVJtUHBIdkFROUh5ZXFkVlRveGd3cU12czN2cHgzNElv?oc=5",
         "published": "2026-07-25T19:47:54+03:00",
         "source_query": "Black Sea grain"
       },
       {
-        "title": "Ukraine accuses Russia of turning Black Sea into a \"second Strait of Hormuz\" - \u0423\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430 \u043f\u0440\u0430\u0432\u0434\u0430",
+        "title": "Ukraine accuses Russia of turning Black Sea into a \"second Strait of Hormuz\" - Українська правда",
         "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5hSDN4UmZFcjl4dTlVMkt3Z1NJRlU4UERlTWhLOVl4aWZtVFF3c0JRVWd6dW8wY2dIVGc4THJhdE1FUGdKYlZmX0IyRnAyRkFoOWZ3dkFpZ3hzQjg3SDNqRnp6ZFTSAXBBVV95cUxNR3l1STVfdHBrUWhfT1RpcE1Rd056ODNuMkgzM0pEdXlUTmFHQk9xb2psbGswWTJwdXU1U3hTeHNYOHFES1JHenp5dVZadDRjX1ZFY251MFlNYnhqZkxvVks2S0NhNzBpV1BVX0ZVTjRP?oc=5",
         "published": "2026-07-25T15:50:00+03:00",
         "source_query": "Black Sea grain",
