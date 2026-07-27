@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-07-27T21:14:05.781998+00:00",
+    "total_scanned": 223,
+    "flagged_count": 163,
+    "flagged_headlines": [
+      {
+        "title": "Gold prices rise slightly as pause in Middle East fighting weighs on oil",
+        "link": "https://www.investing.com/news/commodities-news/gold-rises-on-weaker-dollar-traders-weigh-middle-east-pause-fed-outlook-4812946",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-27 21:02:56",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil price outlook: OPEC+ supply hike and weak demand signal further downside",
+        "link": "https://www.investing.com/news/commodities-news/oil-price-outlook-opec-supply-hike-and-weak-demand-signal-further-downside-93CH-4815104",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-27 20:49:42",
+        "matched_keywords": [
+          "opec",
+          "oil"
+        ]
+      },
+      {
+        "title": "Corn futures drop as crude oil falls and traders take profits",
+        "link": "https://www.investing.com/news/commodities-news/corn-futures-drop-as-crude-oil-falls-and-traders-take-profits-93CH-4815086",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-27 20:44:05",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices tumble after U.S. and Iran pause fighting, Brent falls below $90",
+        "link": "https://www.investing.com/news/commodities-news/oil-tumbles-over-5-as-usiran-pause-sparks-hopes-for-diplomatic-breakthrough-4812935",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-27 18:47:33",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US Treasury trims 84 people, firms from its sanctions list as review continues",
+        "link": "https://www.investing.com/news/commodities-news/us-treasury-trims-84-people-firms-from-its-sanctions-list-as-review-continues-4814845",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-27 17:19:07",
+        "matched_keywords": [
+          "sanction",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Baker Hughes sees modest decline in global oil spending",
+        "link": "https://www.investing.com/news/commodities-news/baker-hughes-sees-modest-decline-in-global-oil-spending-93CH-4814797",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-27 16:39:31",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "‘I know what he wants to do,’ Trump says of Fed’s Warsh, as president presses for rate cuts",
+        "link": "https://www.marketwatch.com/story/i-know-what-he-wants-to-do-trump-says-of-feds-warsh-as-president-presses-for-rate-cuts-edaa115e?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 27 Jul 2026 19:06:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate cut",
+          "war"
+        ]
+      },
+      {
+        "title": "Dollar rises slightly as traders eye crucial Fed decision later in the week",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-firms-as-oil-slump-dents-dollar-strenght-4812988",
+        "source": "Investing.com Forex",
+        "published": "2026-07-27 16:32:27",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Global yields retreat as crude slide eases inflation fears ahead of Fed, BOE calls",
+        "link": "https://www.investing.com/news/forex-news/german-yields-retreat-as-crude-slide-eases-inflation-fears-ahead-of-fed-boe-calls-4813005",
+        "source": "Investing.com Forex",
+        "published": "2026-07-27 12:20:12",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "crude",
+          "yield"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound edges lower against dollar ahead of Fed, BoE meetings",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-edges-lower-against-dollar-ahead-of-fed-boe-meetings-4813819",
+        "source": "Investing.com Forex",
+        "published": "2026-07-27 11:47:01",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar slips as oil retreats, Fed decision looms",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-oil-retreats-fed-decision-looms-93CH-4812379",
+        "source": "Investing.com Forex",
+        "published": "2026-07-24 18:12:27",
+        "matched_keywords": [
+          "fed",
+          "oil"
+        ]
+      },
+      {
+        "title": "U.S. bond sell-off deepens as energy shock and trade friction lock in hawkish Fed",
+        "link": "https://www.investing.com/news/forex-news/german-yields-eases-from-multiyear-peaks-100-oil-surge-threatens-euro-growth-4810548",
+        "source": "Investing.com Forex",
+        "published": "2026-07-24 12:36:52",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound steady as dollar bid dominates on Fed repricing",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-steady-as-dollar-bid-dominates-on-fed-repricing-4811621",
+        "source": "Investing.com Forex",
+        "published": "2026-07-24 12:13:02",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Geopolitical de-escalation in the Middle East has triggered a sharp sell-off in crude oil, which in turn is easing global inflation fears and weighing on energy-linked currencies like the Canadian dollar. Meanwhile, financial markets remain hyper-focused on upcoming central bank decisions, with the U.S. dollar holding firm amid shifting Fed rate expectations and political pressure.",
+      "wheat_impact": "BEARISH",
+      "reason": "The pause in Middle East fighting reduces regional risk premiums, strengthening the Israeli Shekel against the US dollar.",
+      "usd_ils_impact": "BEARISH",
+      "key_risk": "Unanticipated hawkish surprises or shifting guidance from the upcoming Federal Reserve and Bank of England monetary policy decisions."
+    }
+  },
+  {
     "timestamp": "2026-07-27T14:21:31.718876+00:00",
     "total_scanned": 222,
     "flagged_count": 156,
