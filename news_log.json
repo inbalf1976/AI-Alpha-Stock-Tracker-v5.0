@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-07-28T08:35:08.278510+00:00",
+    "total_scanned": 225,
+    "flagged_count": 164,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Small Business Bank and announces termination enforcement actions with BNP Paribas S.A., BNP Paribas USA, Inc., BNP Paribas Securities Corp., and Community Bankshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260702a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 2 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues initial findings from its 2025 triennial payments study",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260701a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 1 Jul 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Nvidia’s potential new deal with OpenAI would revive a spooky tech-bubble habit, analyst warns",
+        "link": "https://www.marketwatch.com/story/nvidias-potential-new-deal-with-openai-would-revive-a-spooky-tech-bubble-habit-analyst-warns-ae34ed64?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 28 Jul 2026 01:19:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Euro yields stay pinned near multi-year peaks as markets price in elevated rates",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-stay-pinned-near-multiyear-peaks-as-markets-price-in-elevated-rates-4815606",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 07:30:31",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar steadies near one-month high as Fed bets weigh on Asian currencies",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-muted-as-dollar-steadies-near-onemonth-high-4815434",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 07:05:52",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar rises slightly as traders eye crucial Fed decision later in the week",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-firms-as-oil-slump-dents-dollar-strenght-4812988",
+        "source": "Investing.com Forex",
+        "published": "2026-07-27 16:32:27",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Global yields retreat as crude slide eases inflation fears ahead of Fed, BOE calls",
+        "link": "https://www.investing.com/news/forex-news/german-yields-retreat-as-crude-slide-eases-inflation-fears-ahead-of-fed-boe-calls-4813005",
+        "source": "Investing.com Forex",
+        "published": "2026-07-27 12:20:12",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "crude",
+          "yield"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound edges lower against dollar ahead of Fed, BoE meetings",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-edges-lower-against-dollar-ahead-of-fed-boe-meetings-4813819",
+        "source": "Investing.com Forex",
+        "published": "2026-07-27 11:47:01",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar slips as oil retreats, Fed decision looms",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-oil-retreats-fed-decision-looms-93CH-4812379",
+        "source": "Investing.com Forex",
+        "published": "2026-07-24 18:12:27",
+        "matched_keywords": [
+          "fed",
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold prices slip as firm dollar weighs; Fed decision eyed",
+        "link": "https://www.investing.com/news/commodities-news/gold-prices-slip-as-firm-dollar-weighs-fed-decision-eyed-4815435",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-28 07:11:02",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are tightly focused on upcoming Federal Reserve decisions and FOMC minutes, with a firm U.S. dollar weighing on commodities and foreign currencies. Meanwhile, declining crude oil prices are helping to ease broader inflation fears ahead of crucial central bank meetings.",
+      "wheat_impact": {
+        "direction": "NEUTRAL",
+        "reason": "Macro drivers are dominated by Fed policy, USD strength, and crude oil movements, with no direct agricultural supply or demand news present."
+      },
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "The U.S. dollar is steadying near recent highs supported by elevated Federal Reserve rate expectations, which generally exerts upward pressure on the USD/ILS exchange rate."
+      },
+      "key_risk": "An unexpectedly hawkish Federal Reserve decision or tone that triggers further dollar appreciation and pressures risk assets and commodities."
+    }
+  },
+  {
     "timestamp": "2026-07-27T21:14:05.781998+00:00",
     "total_scanned": 223,
     "flagged_count": 163,
