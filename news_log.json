@@ -1,5 +1,157 @@
 [
   {
+    "timestamp": "2026-07-28T19:38:14.354913+00:00",
+    "total_scanned": 230,
+    "flagged_count": 170,
+    "flagged_headlines": [
+      {
+        "title": "Oil prices settle at lowest in over a week, as US pauses attacks on Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-settle-at-lowest-in-over-a-week-as-us-pauses-attacks-on-iran-4817880",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-28 18:54:47",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "European wheat prices fall as Black Sea risks seen priced in",
+        "link": "https://www.investing.com/news/commodities-news/european-wheat-prices-fall-as-black-sea-risks-seen-priced-in-93CH-4817886",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-28 18:46:38",
+        "matched_keywords": [
+          "wheat",
+          "black sea"
+        ]
+      },
+      {
+        "title": "US Senate to vote on Russia sanctions bill in tribute to Graham",
+        "link": "https://www.investing.com/news/commodities-news/us-senate-to-vote-on-russia-sanctions-bill-in-tribute-to-graham-4817844",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-28 18:06:33",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "China in touch with Yemen’s Houthis to allow ships to sail through Red Sea, sources say",
+        "link": "https://www.investing.com/news/commodities-news/china-in-touch-with-yemens-houthis-to-allow-ships-to-sail-through-red-sea-sources-say-4817803",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-28 17:30:36",
+        "matched_keywords": [
+          "red sea"
+        ]
+      },
+      {
+        "title": "Oil prices fall 5% to two-week low on hopes for US-Iran conflict easing",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-5-to-twoweek-low-on-hopes-for-usiran-conflict-easing-4817775",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-28 17:06:54",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Corn prices rise after USDA cuts crop condition rating",
+        "link": "https://www.investing.com/news/commodities-news/corn-prices-rise-after-usda-cuts-crop-condition-rating-93CH-4817014",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-28 13:31:26",
+        "matched_keywords": [
+          "usda",
+          "crop"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Small Business Bank and announces termination enforcement actions with BNP Paribas S.A., BNP Paribas USA, Inc., BNP Paribas Securities Corp., and Community Bankshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260702a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 2 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues initial findings from its 2025 triennial payments study",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260701a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 1 Jul 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar rises slightly as markets await Fed decision",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-slightly-as-markets-await-fed-decision-93CH-4817871",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 18:32:22",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "South African rand holds steady ahead of Fed decision",
+        "link": "https://www.investing.com/news/forex-news/south-african-rand-holds-steady-ahead-of-fed-decision-93CH-4817316",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 15:31:44",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are primarily driven by easing geopolitical tensions in the Middle East—specifically de-escalation signals between the US and Iran and potential Red Sea shipping relief via China—which have sharply depressed oil prices. Meanwhile, agricultural markets are diverging as European wheat falls on fully priced-in Black Sea risks while US corn rises due to deteriorating crop conditions, all ahead of an impending Federal Reserve decision.",
+      "wheat_impact": "BEARISH",
+      "wheat_reason": "European wheat prices are falling as the market has already fully priced in ongoing Black Sea supply risks.",
+      "usd_ils_impact": "BEARISH",
+      "usd_ils_reason": "Easing geopolitical conflicts involving Iran and the Houthis reduce regional risk premiums, strengthening the Israeli Shekel against the US dollar.",
+      "key_risk": "Unexpected escalation or disruption in Red Sea maritime trade routes despite diplomatic interventions."
+    }
+  },
+  {
     "timestamp": "2026-07-28T18:24:55.754861+00:00",
     "total_scanned": 230,
     "flagged_count": 170,
