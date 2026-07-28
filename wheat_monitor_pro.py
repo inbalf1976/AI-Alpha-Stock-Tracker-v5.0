@@ -512,33 +512,60 @@ NEWS_SIGNAL_MAX_AGE_HOURS = 12  # only trust a signal this fresh
 
 def get_news_signal():
     """
-    Reads the most recent LLM news interpretation (from news_scanner.py)
+    Reads the most recent LLM news interpretation from news_log.json
+    (produced by news_scanner.py's macro/commodity Gemini analysis)
     if it's fresh enough. Returns None if missing, stale, or NEUTRAL —
     caller should treat None as "no news nudge this run", not guess.
 
-    WEIGHT NOTE (2026-07-19): this is a brand new, UNVALIDATED signal.
-    It gets a deliberately small nudge in predict_next_week() — see
-    NEWS_SIGNAL_NUDGE_SCALE there — much smaller than the real,
-    holdout-validated backtest nudge. Do not increase this weight
-    based on a good week or two; check score_news_signals.py's real
-    win rate over many scored signals first. Same discipline that
-    caught vol_low being unreliable applies here.
+    UPDATED 2026-07-28: news_scanner.py was rewritten to a broader
+    macro/commodity scanner writing news_log.json (not the original
+    news_signal_log.json), with entries newest-first and wheat signal
+    nested under llm_analysis.wheat_impact — which appears as either
+    a string ("BULLISH"/"BEARISH"/"NEUTRAL") or a dict
+    ({"direction": ..., "reason": ...}) depending on how the model
+    formatted its JSON that run. This function normalizes both shapes.
+    The new scanner does not emit a numeric confidence, so a fixed
+    moderate confidence (60) is used — kept deliberately unremarkable
+    since, same as before, this signal is unvalidated and gets only a
+    small nudge weight in predict_next_week() (see NEWS_SIGNAL_NUDGE_SCALE
+    there). Do not treat this fixed value as a real confidence score.
+
+    WEIGHT NOTE (2026-07-19, still applies): this is a brand new,
+    UNVALIDATED signal. Do not increase its nudge weight based on a
+    good week or two; check score_news_signals.py's real win rate
+    over many scored signals first.
     """
-    path = Path("news_signal_log.json")
+    path = Path("news_log.json")
     if not path.exists():
         return None
     try:
         log = json.loads(path.read_text())
         if not log:
             return None
-        latest = log[-1]
+
+        latest = log[0]  # newest-first (news_scanner.py inserts at index 0)
         ts = datetime.fromisoformat(latest['timestamp'])
         age_hours = (datetime.now(IL) - ts).total_seconds() / 3600
         if age_hours > NEWS_SIGNAL_MAX_AGE_HOURS:
             return None
-        if latest['signal'] == 'NEUTRAL':
+
+        analysis = latest.get('llm_analysis')
+        if not analysis:
             return None
-        return latest['signal'], latest['confidence']
+
+        wheat_impact = analysis.get('wheat_impact')
+        if isinstance(wheat_impact, dict):
+            signal = wheat_impact.get('direction', 'NEUTRAL')
+        else:
+            signal = wheat_impact or 'NEUTRAL'
+        signal = str(signal).upper()
+
+        if signal not in ('BULLISH', 'BEARISH'):
+            return None  # NEUTRAL or unrecognized — no nudge this run
+
+        confidence = 60  # fixed — see docstring; new scanner has no numeric confidence
+        return signal, confidence
+
     except Exception as e:
         print(f"   Failed to read news signal: {e}")
         return None
