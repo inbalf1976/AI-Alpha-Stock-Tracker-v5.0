@@ -1,5 +1,168 @@
 [
   {
+    "timestamp": "2026-07-28T18:24:55.754861+00:00",
+    "total_scanned": 230,
+    "flagged_count": 170,
+    "flagged_headlines": [
+      {
+        "title": "Forget oil. A surging El Niño could kill Fed rate cuts — and these stocks stand to win.",
+        "link": "https://www.marketwatch.com/story/forget-oil-a-surging-el-nino-could-kill-fed-rate-cuts-and-these-stocks-stand-to-win-41f8e67f?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 28 Jul 2026 16:41:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate cut",
+          "oil"
+        ]
+      },
+      {
+        "title": "The Fed isn’t your biggest worry. The central-bank decision that actually impacts your 401(k) lands in Tokyo.",
+        "link": "https://www.marketwatch.com/story/the-fed-isnt-your-biggest-worry-the-central-bank-decision-that-actually-impacts-your-401-k-lands-in-tokyo-fc9d22c8?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 28 Jul 2026 16:39:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Software stocks are rising, and these 6 are expected to withstand the AI threat",
+        "link": "https://www.marketwatch.com/story/software-stocks-are-rising-and-these-6-are-expected-to-withstand-the-ai-threat-1ce47e99?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 28 Jul 2026 16:30:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Singapore tightens monetary policy in surprise move as rising oil prices rekindle inflation risk",
+        "link": "https://www.cnbc.com/2026/07/27/singapore-mas-july-monetary-policy-middle-east-oil-prices-inflation-.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 27 Jul 2026 14:22:15 GMT",
+        "matched_keywords": [
+          "inflation",
+          "oil"
+        ]
+      },
+      {
+        "title": "Trump's new global tariff draws rebukes from trade partners over forced labor justification",
+        "link": "https://www.cnbc.com/2026/07/24/trump-global-tariffs-trade-imbalance-forced-labor.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 24 Jul 2026 12:09:09 GMT",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Kevin Warsh has homed in on three key phrases. How Fed watchers interpret them",
+        "link": "https://www.cnbc.com/2026/07/22/kevin-warsh-has-homed-in-on-three-key-phrases-how-fed-watchers-interpret-them.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 22 Jul 2026 16:57:55 GMT",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Trump plans generic drug tariffs from 2028 with two-year delay testing U.S. onshoring push",
+        "link": "https://www.cnbc.com/2026/07/22/trump-generic-drugs-tariffs-medicine-trade-.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 22 Jul 2026 06:28:08 GMT",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "World Cup gave bars and restaurants a needed boost as consumers flash warning signs, Fed says",
+        "link": "https://www.cnbc.com/2026/07/15/world-cup-economy-spending-alcohol-hotels-fed.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 15 Jul 2026 21:53:10 GMT",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "South African rand holds steady ahead of Fed decision",
+        "link": "https://www.investing.com/news/forex-news/south-african-rand-holds-steady-ahead-of-fed-decision-93CH-4817316",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 15:31:44",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar holds at near 5-week highs as ’higher-for-longer’ rate bets offset oil fall",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-muted-as-dollar-steadies-near-onemonth-high-4815434",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 14:56:45",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "U.S. yields ease off multi-month peaks as anxious bond market braces for Fed call",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-stay-pinned-near-multiyear-peaks-as-markets-price-in-elevated-rates-4815606",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 11:47:20",
+        "matched_keywords": [
+          "fed",
+          "yield"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as dollar bid builds into Fed decision",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-dollar-bid-builds-into-fed-decision-4816063",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 10:29:59",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "UBS raises USD/SGD price target on Fed hawkishness, MAS tightening",
+        "link": "https://www.investing.com/news/forex-news/ubs-raises-usdsgd-price-target-on-fed-hawkishness-mas-tightening-93CH-4815810",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 09:16:38",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar rises slightly as traders eye crucial Fed decision later in the week",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-firms-as-oil-slump-dents-dollar-strenght-4812988",
+        "source": "Investing.com Forex",
+        "published": "2026-07-27 16:32:27",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Global yields retreat as crude slide eases inflation fears ahead of Fed, BOE calls",
+        "link": "https://www.investing.com/news/forex-news/german-yields-retreat-as-crude-slide-eases-inflation-fears-ahead-of-fed-boe-calls-4813005",
+        "source": "Investing.com Forex",
+        "published": "2026-07-27 12:20:12",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "crude",
+          "yield"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are heavily focused on impending central bank decisions from the Fed and Bank of Japan, while lingering inflation risks from volatile oil prices and weather phenomena like El Niño drive 'higher-for-longer' rate expectations. Meanwhile, trade policy developments, including proposed U.S. tariffs, add geopolitical friction to the macro landscape.",
+      "wheat_impact": {
+        "direction": "BULLISH",
+        "reason": "A surging El Niño weather pattern threatens agricultural yields and supply chains, raising renewed food inflation concerns."
+      },
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "The U.S. dollar is broadly supported near multi-week highs by hawkish 'higher-for-longer' Fed rate bets and safe-haven demand ahead of central bank decisions."
+      },
+      "key_risk": "Hawkish monetary policy surprises or sticky inflation prints reigniting global bond yield spikes and equity sell-offs."
+    }
+  },
+  {
     "timestamp": "2026-07-28T13:53:57.950053+00:00",
     "total_scanned": 228,
     "flagged_count": 166,
