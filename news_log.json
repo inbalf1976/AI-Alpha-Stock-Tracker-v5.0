@@ -1,5 +1,161 @@
 [
   {
+    "timestamp": "2026-07-28T13:53:57.950053+00:00",
+    "total_scanned": 228,
+    "flagged_count": 166,
+    "flagged_headlines": [
+      {
+        "title": "Corn prices rise after USDA cuts crop condition rating",
+        "link": "https://www.investing.com/news/commodities-news/corn-prices-rise-after-usda-cuts-crop-condition-rating-93CH-4817014",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-28 13:31:26",
+        "matched_keywords": [
+          "usda",
+          "crop"
+        ]
+      },
+      {
+        "title": "Wheat futures expected to open lower on profit-taking",
+        "link": "https://www.investing.com/news/commodities-news/wheat-futures-expected-to-open-lower-on-profittaking-93CH-4816998",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-28 13:29:32",
+        "matched_keywords": [
+          "wheat"
+        ]
+      },
+      {
+        "title": "Gold prices slip as firm dollar weighs, Fed decision eyed",
+        "link": "https://www.investing.com/news/commodities-news/gold-prices-slip-as-firm-dollar-weighs-fed-decision-eyed-4815435",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-28 13:22:18",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Gold price outlook: $4,000 level tested amid Fed & rate risks",
+        "link": "https://www.investing.com/news/stock-market-news/gold-price-outlook-4000-level-tested-amid-fed--rate-risks-93CH-4816453",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-28 11:40:57",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Libya halts oil output at key field after protest shutdown",
+        "link": "https://www.investing.com/news/commodities-news/libya-halts-oil-output-at-key-field-after-protest-shutdown-93CH-4816019",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-28 10:16:07",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Small Business Bank and announces termination enforcement actions with BNP Paribas S.A., BNP Paribas USA, Inc., BNP Paribas Securities Corp., and Community Bankshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260702a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 2 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues initial findings from its 2025 triennial payments study",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260701a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 1 Jul 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. yields ease off multi-month peaks as anxious bond market braces for Fed call",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-stay-pinned-near-multiyear-peaks-as-markets-price-in-elevated-rates-4815606",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 11:47:20",
+        "matched_keywords": [
+          "fed",
+          "yield"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as dollar bid builds into Fed decision",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-dollar-bid-builds-into-fed-decision-4816063",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 10:29:59",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar holds at multi-week highs as ’higher-for-longer’ rate bets offset oil fall",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-muted-as-dollar-steadies-near-onemonth-high-4815434",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 09:54:53",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are tightly wound ahead of the upcoming Federal Reserve rate decision, driving a firm U.S. dollar and weighing on precious metals and foreign currencies. Meanwhile, agricultural commodities display mixed sentiment as corn gains on worsening crop conditions while wheat faces profit-taking, and energy supply risks emerge due to Libyan field protests.",
+      "wheat_impact": {
+        "direction": "BEARISH",
+        "reason": "Wheat futures are facing downward pressure primarily driven by short-term profit-taking despite broader supply concerns."
+      },
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "The U.S. dollar is maintaining multi-week highs supported by 'higher-for-longer' rate bets ahead of the Fed decision, which inherently strengthens the USD against the Israeli Shekel."
+      },
+      "key_risk": "Hawkish surprises or unexpected policy signals from the Federal Reserve rate decision that could trigger severe volatility across bonds, equities, and the U.S. dollar."
+    }
+  },
+  {
     "timestamp": "2026-07-28T08:35:08.278510+00:00",
     "total_scanned": 225,
     "flagged_count": 164,
