@@ -1,5 +1,156 @@
 [
   {
+    "timestamp": "2026-07-29T09:22:44.535101+00:00",
+    "total_scanned": 229,
+    "flagged_count": 172,
+    "flagged_headlines": [
+      {
+        "title": "Dollar holds firm as Middle East escalation keeps Fed rate-hike risks alive",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-aussie-slides-on-soft-cpi-won-firms-ahead-of-fed-decision-4818595",
+        "source": "Investing.com Forex",
+        "published": "2026-07-29 09:02:01",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Eurozone borrowing costs rise as Middle East escalation and hawkish Fed bets weigh",
+        "link": "https://www.investing.com/news/forex-news/eurozone-borrowing-costs-rise-as-middle-east-escalation-and-hawkish-fed-bets-weigh-4818640",
+        "source": "Investing.com Forex",
+        "published": "2026-07-29 06:17:09",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar eases back from over a one-month high a day ahead of key Fed rate decision",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-muted-as-dollar-steadies-near-onemonth-high-4815434",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 21:04:52",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar rises slightly as markets await Fed decision",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-slightly-as-markets-await-fed-decision-93CH-4817871",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 18:32:22",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "South African rand holds steady ahead of Fed decision",
+        "link": "https://www.investing.com/news/forex-news/south-african-rand-holds-steady-ahead-of-fed-decision-93CH-4817316",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 15:31:44",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. yields ease off multi-month peaks as anxious bond market braces for Fed call",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-stay-pinned-near-multiyear-peaks-as-markets-price-in-elevated-rates-4815606",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 11:47:20",
+        "matched_keywords": [
+          "fed",
+          "yield"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as dollar bid builds into Fed decision",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-dollar-bid-builds-into-fed-decision-4816063",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 10:29:59",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "UBS raises USD/SGD price target on Fed hawkishness, MAS tightening",
+        "link": "https://www.investing.com/news/forex-news/ubs-raises-usdsgd-price-target-on-fed-hawkishness-mas-tightening-93CH-4815810",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 09:16:38",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Small Business Bank and announces termination enforcement actions with BNP Paribas S.A., BNP Paribas USA, Inc., BNP Paribas Securities Corp., and Community Bankshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260702a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 2 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues initial findings from its 2025 triennial payments study",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260701a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 1 Jul 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global financial markets are heavily driven by escalating Middle East tensions paired with hawkish Federal Reserve rate expectations and surging bond yields. Investors are positioning defensively ahead of key central bank decisions, bolstering safe-haven demand across the board.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_reason": "Middle East geopolitical escalations heighten supply chain risks and energy costs, which traditionally spill over into agricultural inputs and grain futures.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Regional military escalation directly pressures local Middle Eastern currencies while safe-haven flows support a strong US dollar.",
+      "key_risk": "Unchecked escalation of the Middle East conflict driving energy shocks and persistent inflation, forcing a more aggressive Fed rate path."
+    }
+  },
+  {
     "timestamp": "2026-07-29T08:41:40.948247+00:00",
     "total_scanned": 229,
     "flagged_count": 174,
