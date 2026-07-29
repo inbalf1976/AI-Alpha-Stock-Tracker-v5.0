@@ -1,5 +1,158 @@
 [
   {
+    "timestamp": "2026-07-29T18:10:34.984588+00:00",
+    "total_scanned": 230,
+    "flagged_count": 174,
+    "flagged_headlines": [
+      {
+        "title": "Why SoFi’s stock is dropping, even after its earnings beat expectations",
+        "link": "https://www.marketwatch.com/story/why-sofis-stock-is-dropping-even-after-its-earnings-beat-expectations-ecc442eb?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 29 Jul 2026 17:18:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "The dollar’s rally matters — but it still won’t help Fed’s Warsh win the inflation fight",
+        "link": "https://www.marketwatch.com/story/the-dollars-rally-matters-but-it-still-wont-help-feds-warsh-win-the-inflation-fight-ce278d40?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 29 Jul 2026 17:12:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "Global oil prices top $88 a barrel after Trump vows retaliation for surprise Iranian attack on U.S. troops",
+        "link": "https://www.marketwatch.com/story/oil-prices-rise-after-u-s-and-saudi-arabia-attack-iran-backed-militias-in-iraq-f0f409ea?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 29 Jul 2026 16:36:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Small Business Bank and announces termination enforcement actions with BNP Paribas S.A., BNP Paribas USA, Inc., BNP Paribas Securities Corp., and Community Bankshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260702a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 2 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues initial findings from its 2025 triennial payments study",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260701a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 1 Jul 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Northwest European gasoline margins fall as crude prices climb",
+        "link": "https://www.investing.com/news/commodities-news/northwest-european-gasoline-margins-fall-as-crude-prices-climb-93CH-4821337",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-29 17:01:00",
+        "matched_keywords": [
+          "crude"
+        ]
+      },
+      {
+        "title": "US oil inventories fall 7.2 million barrels amid war escalation",
+        "link": "https://www.investing.com/news/commodities-news/us-oil-inventories-fall-72-million-barrels-amid-war-escalation-93CH-4821244",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-29 16:25:17",
+        "matched_keywords": [
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "Oil jumps 7% on escalating Middle East airstrikes",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-rebound-by-more-than-2-a-barrel-on-prospect-of-tightening-us-crude-supplies-4818435",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-29 16:18:51",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US issues new Iran-related sanctions targeting tankers -Treasury",
+        "link": "https://www.investing.com/news/commodities-news/us-issues-new-iranrelated-sanctions-targeting-tankers-treasury-4820753",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-29 14:19:00",
+        "matched_keywords": [
+          "sanction",
+          "treasury"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are being driven by a severe geopolitical shock in the Middle East, where a surprise Iranian attack on U.S. troops has sent crude oil prices surging past $88 a barrel and triggered new U.S. sanctions. Concurrently, the Federal Reserve continues to navigate monetary policy objectives amid ongoing macroeconomic and regulatory developments, while a strengthening U.S. dollar complicates the broader inflation fight.",
+      "wheat_impact": "BULLISH: Escalating Middle East conflict and rising crude oil prices increase agricultural input costs, particularly for fertilizer and fuel, while threatening regional grain trade routes.",
+      "usd_ils_impact": "BULLISH: Heightened geopolitical conflict involving Iran directly threatens Israel's security, driving safe-haven flows and strengthening the U.S. dollar against the Israeli Shekel.",
+      "key_risk": "Further military escalation in the Middle East leading to prolonged supply chain disruptions in energy markets and sustained high oil prices."
+    }
+  },
+  {
     "timestamp": "2026-07-29T13:58:39.324493+00:00",
     "total_scanned": 229,
     "flagged_count": 173,
