@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-07-29T13:58:39.324493+00:00",
+    "total_scanned": 229,
+    "flagged_count": 173,
+    "flagged_headlines": [
+      {
+        "title": "Global oil prices rise above $87 a barrel after Trump vows retaliation for surprise Iranian attack on U.S. troops",
+        "link": "https://www.marketwatch.com/story/oil-prices-rise-after-u-s-and-saudi-arabia-attack-iran-backed-militias-in-iraq-f0f409ea?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 29 Jul 2026 13:56:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Forget oil. A surging El Niño could kill Fed rate cuts — and these stocks stand to win.",
+        "link": "https://www.marketwatch.com/story/forget-oil-a-surging-el-nino-could-kill-fed-rate-cuts-and-these-stocks-stand-to-win-41f8e67f?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 29 Jul 2026 13:41:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate cut",
+          "oil"
+        ]
+      },
+      {
+        "title": "The Fed isn’t your biggest worry. The central-bank decision that actually impacts your 401(k) lands in Tokyo.",
+        "link": "https://www.marketwatch.com/story/the-fed-isnt-your-biggest-worry-the-central-bank-decision-that-actually-impacts-your-401-k-lands-in-tokyo-fc9d22c8?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 29 Jul 2026 13:33:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Saudi Arabia has a new, and pricier, workaround to export its oil",
+        "link": "https://www.marketwatch.com/story/saudi-arabia-has-a-new-and-pricier-workaround-to-export-its-oil-fb5085a5?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 29 Jul 2026 11:16:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "U.S. Treasuries  pressured as Middle East escalation and hawkish Fed bets weigh",
+        "link": "https://www.investing.com/news/forex-news/eurozone-borrowing-costs-rise-as-middle-east-escalation-and-hawkish-fed-bets-weigh-4818640",
+        "source": "Investing.com Forex",
+        "published": "2026-07-29 12:09:49",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound flat as traders await Fed rate decision",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-flat-as-traders-await-fed-rate-decision-4819493",
+        "source": "Investing.com Forex",
+        "published": "2026-07-29 10:51:49",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar holds firm as Middle East escalation keeps Fed rate-hike risks alive",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-aussie-slides-on-soft-cpi-won-firms-ahead-of-fed-decision-4818595",
+        "source": "Investing.com Forex",
+        "published": "2026-07-29 09:02:01",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar eases back from over a one-month high a day ahead of key Fed rate decision",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-muted-as-dollar-steadies-near-onemonth-high-4815434",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 21:04:52",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar rises slightly as markets await Fed decision",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-slightly-as-markets-await-fed-decision-93CH-4817871",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 18:32:22",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "South African rand holds steady ahead of Fed decision",
+        "link": "https://www.investing.com/news/forex-news/south-african-rand-holds-steady-ahead-of-fed-decision-93CH-4817316",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 15:31:44",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. yields ease off multi-month peaks as anxious bond market braces for Fed call",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-stay-pinned-near-multiyear-peaks-as-markets-price-in-elevated-rates-4815606",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 11:47:20",
+        "matched_keywords": [
+          "fed",
+          "yield"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as dollar bid builds into Fed decision",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-dollar-bid-builds-into-fed-decision-4816063",
+        "source": "Investing.com Forex",
+        "published": "2026-07-28 10:29:59",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil jumps nearly 7% on escalating Middle East airstrikes",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-rebound-by-more-than-2-a-barrel-on-prospect-of-tightening-us-crude-supplies-4818435",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-29 13:42:30",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Wheat futures rise on Black Sea export disruptions",
+        "link": "https://www.investing.com/news/commodities-news/wheat-futures-rise-on-black-sea-export-disruptions-93CH-4820397",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-29 13:12:50",
+        "matched_keywords": [
+          "wheat",
+          "black sea"
+        ]
+      },
+      {
+        "title": "US wheat rises on Black Sea disruptions",
+        "link": "https://www.investing.com/news/commodities-news/us-wheat-rises-on-black-sea-disruptions-4819999",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-29 12:18:43",
+        "matched_keywords": [
+          "wheat",
+          "black sea"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are driven by escalating Middle East geopolitical tensions pushing crude oil sharply higher and boosting safe-haven demand for the U.S. dollar, alongside heightened anxiety ahead of critical central bank decisions from the Fed and Bank of Japan. Meanwhile, weather and geopolitical supply risks are providing localized support to agricultural commodities like wheat.",
+      "wheat_impact": {
+        "direction": "BULLISH",
+        "reason": "Wheat futures are rising due to supply constraints driven by Black Sea export disruptions."
+      },
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "Intensifying Middle East military escalation and a firm U.S. dollar tend to strengthen the USD against regional currencies like the Israeli Shekel (ILS)."
+      },
+      "key_risk": "Further military escalation in the Middle East causing prolonged oil supply shocks and unanchoring global inflation expectations."
+    }
+  },
+  {
     "timestamp": "2026-07-29T09:51:44.226479+00:00",
     "total_scanned": 229,
     "flagged_count": 173,
