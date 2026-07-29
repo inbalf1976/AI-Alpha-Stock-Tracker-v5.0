@@ -1550,7 +1550,21 @@ def main():
     print(f"\nFINAL: {direction} | Tier {tier}")
 
     # ── Send ──
-    if send:
+    # UPDATED 2026-07-29: alerts and logged predictions are now gated on
+    # tier > 0, not just time-of-day. Previously every alert-eligible run
+    # sent a full Telegram message and logged a real prediction (entry
+    # price, later validated to a real WIN/LOSS + P&L) even on Tier 0
+    # days — when ConvictionGate found NO validated condition at all.
+    # format_alert() already changed the message WORDING on Tier 0
+    # ("no trade setup shown"), but nothing stopped the send/log itself,
+    # so Tier 0 daily-ensemble guesses were being tracked as if they
+    # were real signals. A real check of prediction_log.json (2026-07-29)
+    # showed Tier 0 sitting at 18.8% win rate and -73.9c total P&L,
+    # dragging the overall combined win rate down to 43.5% even though
+    # Tier 1 (62.5%) and Tier 2 (57.1%) were both genuinely profitable
+    # on their own. Tier 0 is explicitly "no signal" by ConvictionGate's
+    # own design and should never have been sent or logged as a trade.
+    if send and tier > 0:
         success = send_telegram(message)
         if success:
             state['alerts_sent'] = state.get('alerts_sent', 0) + 1
@@ -1559,6 +1573,9 @@ def main():
                 slot_key = f"{datetime.now(IL).date().isoformat()}_morning"
                 state.setdefault('alerts_today', {})[slot_key] = True
             log_prediction(direction, current_price, pred['confidence'], tier, s_phase['phase'])
+    elif send and tier == 0:
+        print(f"   No alert sent — Tier 0 (no validated gate condition fired; "
+              f"not a real signal, not logged as a prediction)")
     else:
         print(f"No alert: {reason}")
 
