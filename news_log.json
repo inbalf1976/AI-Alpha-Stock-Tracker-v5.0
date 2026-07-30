@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-07-30T13:47:42.012070+00:00",
+    "total_scanned": 227,
+    "flagged_count": 171,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Small Business Bank and announces termination enforcement actions with BNP Paribas S.A., BNP Paribas USA, Inc., BNP Paribas Securities Corp., and Community Bankshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260702a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 2 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues initial findings from its 2025 triennial payments study",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260701a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 1 Jul 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Fed-favored PCE inflation gauge falls for first time since pandemic, but danger far from over",
+        "link": "https://www.marketwatch.com/story/fed-favored-pce-inflation-gauge-falls-for-first-time-since-pandemic-but-danger-far-from-over-57e382bf?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 30 Jul 2026 12:35:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Oil falls on Hormuz talks",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-slip-as-tankers-continue-to-ply-middle-east-conflict-zones-4822181",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-30 13:37:39",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Drone strike near Suez Canal in Egypt raises new security threat in widening war",
+        "link": "https://www.investing.com/news/commodities-news/us-military-says-it-hit-dozens-of-irans-irgc-targets-4822452",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-30 13:07:34",
+        "matched_keywords": [
+          "war",
+          "suez"
+        ]
+      },
+      {
+        "title": "Oil hovers around $91 after fresh U.S. attacks on Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-dips-after-surging-8-as-traders-weigh-fresh-iran-hostilities-inventory-drop-4822198",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-30 10:28:22",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Long-term U.S. borrowing costs hit 19-year high as Fed ambiguity rattles bonds",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-firm-as-middle-east-war-and-fed-ambiguity-stoke-inflation-fears-4822455",
+        "source": "Investing.com Forex",
+        "published": "2026-07-30 12:24:42",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar steady as Fed ambiguity, rate hike fears weigh; euro, pound digest policy",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-as-dollar-steadies-after-fed-hold-boe-boj-loom-4822313",
+        "source": "Investing.com Forex",
+        "published": "2026-07-30 10:12:22",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Dollar sees worst day in about four weeks as Fed holds rates steady",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-aussie-slides-on-soft-cpi-won-firms-ahead-of-fed-decision-4818595",
+        "source": "Investing.com Forex",
+        "published": "2026-07-29 21:43:52",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Financial markets are driven by persistent Federal Reserve monetary policy ambiguity, stubborn inflation concerns, and rising geopolitical tensions in the Middle East affecting energy corridors. Long-term U.S. borrowing costs have surged to 19-year highs while crude oil hovers near $91 amid ongoing conflict involving Iran and disruptions near key shipping lanes.",
+      "wheat_impact": {
+        "direction": "BULLISH",
+        "reason": "Escalating Middle Eastern military conflicts, including security threats near the Suez Canal and tensions involving Iran, threaten crucial global grain shipping routes and increase energy and input costs."
+      },
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "Widening regional conflicts in the Middle East combined with aggressive safe-haven demand and high U.S. yields tend to strengthen the dollar against regional currencies like the Israeli Shekel."
+      },
+      "key_risk": "Further escalation of Middle Eastern military actions threatening critical energy and commodity transit chokepoints like the Suez Canal and Strait of Hormuz."
+    }
+  },
+  {
     "timestamp": "2026-07-30T09:58:56.911605+00:00",
     "total_scanned": 229,
     "flagged_count": 166,
