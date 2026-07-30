@@ -575,10 +575,10 @@
     "confidence": 0.6,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -9.97
   },
   {
     "timestamp": "2026-07-30T01:58:21.237165+03:00",
@@ -586,6 +586,18 @@
     "entry_price": 660.0,
     "confidence": 0.8241495372537765,
     "tier": 1,
+    "seasonal_phase": "BEARISH",
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
+  },
+  {
+    "timestamp": "2026-07-31T02:03:15.475212+03:00",
+    "direction": "DOWN",
+    "entry_price": 663.5,
+    "confidence": 0.6,
+    "tier": 2,
     "seasonal_phase": "BEARISH",
     "validated": false,
     "outcome": null,
