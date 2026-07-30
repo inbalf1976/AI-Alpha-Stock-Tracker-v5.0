@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-07-30T19:39:20.134646+00:00",
+    "total_scanned": 222,
+    "flagged_count": 169,
+    "flagged_headlines": [
+      {
+        "title": "Warsh’s Wall Street cred takes a hit as investors doubt the Fed chair’s inflation-fighting resolve",
+        "link": "https://www.marketwatch.com/story/warshs-wall-street-cred-takes-a-hit-as-investors-doubt-the-fed-chairs-inflation-fighting-resolve-82be4f77?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 30 Jul 2026 19:02:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "The warning signal insiders are sending",
+        "link": "https://www.marketwatch.com/story/the-warning-signal-insiders-are-sending-f0538ddf?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 30 Jul 2026 18:49:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil falls more than 1% on proposed Saudi-led maritime defence coalition",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-slip-as-tankers-continue-to-ply-middle-east-conflict-zones-4822181",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-30 18:37:35",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US issues sanctions targeting support networks for Iran’s Mahan Air",
+        "link": "https://www.investing.com/news/commodities-news/us-issues-sanctions-targeting-support-networks-for-irans-mahan-air-4825751",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-30 17:36:33",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Drone strike near Suez Canal in Egypt raises new security threat in widening war",
+        "link": "https://www.investing.com/news/commodities-news/us-military-says-it-hit-dozens-of-irans-irgc-targets-4822452",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-30 16:31:39",
+        "matched_keywords": [
+          "war",
+          "suez"
+        ]
+      },
+      {
+        "title": "Analysis-Drone strike in Egypt sparks security concerns about Suez oil exports",
+        "link": "https://www.investing.com/news/commodities-news/analysisdrone-strike-in-egypt-sparks-security-concerns-about-suez-oil-exports-4825504",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-30 16:19:50",
+        "matched_keywords": [
+          "oil",
+          "suez"
+        ]
+      },
+      {
+        "title": "Long-term U.S. borrowing costs hit 19-year high as Fed ambiguity rattles bonds",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-firm-as-middle-east-war-and-fed-ambiguity-stoke-inflation-fears-4822455",
+        "source": "Investing.com Forex",
+        "published": "2026-07-30 12:24:42",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Financial markets are grappling with surging long-term U.S. borrowing costs and skepticism surrounding Federal Reserve policy leadership amid sticky inflation concerns. Simultaneously, escalating Middle East geopolitical risks—highlighted by drone strikes near the Suez Canal—are threatening global energy supply chains and maritime security.",
+      "wheat_impact": {
+        "direction": "BULLISH",
+        "reason": "Escalating military conflict and security threats near the Suez Canal risk severely disrupting critical Black Sea and global grain shipping routes."
+      },
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "Expanding regional conflict in the Middle East increases safe-haven demand while pressuring local currencies against a strengthening dollar environment driven by 19-year high U.S. borrowing costs."
+      },
+      "key_risk": "Widening Middle East military conflict severely disrupting critical maritime trade routes and energy transit chokepoints like the Suez Canal."
+    }
+  },
+  {
     "timestamp": "2026-07-30T13:47:42.012070+00:00",
     "total_scanned": 227,
     "flagged_count": 171,
