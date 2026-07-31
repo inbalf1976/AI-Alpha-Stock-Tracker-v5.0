@@ -1,13 +1,10 @@
 {
-  "generated_at": "2026-07-26T23:27:55.244070",
-  "baseline_up": 0.6888,
+  "generated_at": "2026-07-31T01:33:42.644392",
+  "baseline_up": 0.688,
   "validated_conditions": {
-    "bearish_month": 0.722,
-    "wc_bullish": 0.689,
     "rsi_neutral": 0.707,
-    "macd_bullish": 0.732,
-    "momentum_up": 0.889,
-    "above_sma50": 0.689
+    "macd_bullish": 0.689,
+    "momentum_up": 0.889
   },
-  "source_backtest_run_date": "2026-07-26T23:27:55.102310"
+  "source_backtest_run_date": "2026-07-31T01:33:42.513463"
 }
