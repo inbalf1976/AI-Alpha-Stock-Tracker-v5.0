@@ -1,5 +1,160 @@
 [
   {
+    "timestamp": "2026-07-31T00:40:55.621603+00:00",
+    "total_scanned": 222,
+    "flagged_count": 168,
+    "flagged_headlines": [
+      {
+        "title": "Corporate insiders are sending warning signals about the stock market",
+        "link": "https://www.marketwatch.com/story/the-warning-signal-insiders-are-sending-f0538ddf?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 31 Jul 2026 00:31:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Implosion of Situational Awareness hedge fund has Wall Street betting the bottom is in for the AI trade",
+        "link": "https://www.marketwatch.com/story/implosion-of-situational-awareness-has-wall-street-betting-the-bottom-is-in-for-the-ai-trade-05d9f346?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 30 Jul 2026 22:09:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Can credit cards survive AI shopping? Why Mastercard’s CEO says they’ll ‘prevail’ in this new era.",
+        "link": "https://www.marketwatch.com/story/can-credit-cards-survive-ai-shopping-why-mastercards-ceo-says-theyll-prevail-in-this-new-era-8f8a660c?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 30 Jul 2026 21:45:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Software stocks are fading — but these 4 could shine through the rest of the year",
+        "link": "https://www.marketwatch.com/story/software-stocks-are-fading-but-these-4-could-shine-through-the-rest-of-the-year-2c4dbe22?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 30 Jul 2026 21:24:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Long-term U.S. borrowing costs hit 19-year high as Fed ambiguity rattles bonds",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-firm-as-middle-east-war-and-fed-ambiguity-stoke-inflation-fears-4822455",
+        "source": "Investing.com Forex",
+        "published": "2026-07-30 12:24:42",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar sees worst day in about four weeks as Fed holds rates steady",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-aussie-slides-on-soft-cpi-won-firms-ahead-of-fed-decision-4818595",
+        "source": "Investing.com Forex",
+        "published": "2026-07-29 21:43:52",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar may weaken if Fed holds rates steady, ING says",
+        "link": "https://www.investing.com/news/forex-news/dollar-may-weaken-if-fed-holds-rates-steady-ing-says-93CH-4820808",
+        "source": "Investing.com Forex",
+        "published": "2026-07-29 14:29:33",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Financial markets are currently driven by intense Federal Reserve ambiguity, stagnant interest rates, and surging long-term borrowing costs that hit 19-year highs, alongside shifting sentiment in the tech and AI trade sectors. While corporate insiders flash warnings and software stocks face pressure, the U.S. dollar experienced its worst day in four weeks following steady rate decisions.",
+      "wheat_impact": {
+        "direction": "NEUTRAL",
+        "reason": "Macro headlines are dominated by Federal Reserve monetary policy, treasury yields, and tech sector developments, with no direct fundamental supply or demand drivers impacting agricultural commodities."
+      },
+      "usd_ils_impact": {
+        "direction": "BEARISH",
+        "reason": "The U.S. dollar recently suffered its worst day in four weeks as the Federal Reserve held rates steady and market ambiguity rattled long-term borrowing costs, pointing to potential continued dollar weakness."
+      },
+      "key_risk": "Persistent Federal Reserve policy ambiguity driving extreme volatility in long-term U.S. borrowing costs and currency valuations."
+    }
+  },
+  {
     "timestamp": "2026-07-30T19:39:20.134646+00:00",
     "total_scanned": 222,
     "flagged_count": 169,
