@@ -1595,8 +1595,22 @@ def main():
                 slot_key = f"{datetime.now(IL).date().isoformat()}_morning"
                 state.setdefault('alerts_today', {})[slot_key] = True
     elif send and tier == 0:
-        print(f"   No alert sent — Tier 0 (no validated gate condition fired; "
-              f"not a real signal, not logged as a prediction)")
+        # UPDATED 2026-07-31: previously fully silent on Tier 0 (correct —
+        # no real signal, shouldn't send a full alert or log a fake trade).
+        # But full silence made it impossible to tell "no signal today"
+        # apart from "the pipeline crashed/stopped running" without
+        # checking GitHub Actions directly. This sends one short
+        # heartbeat line instead — NOT counted in alerts_sent (that
+        # stat should only reflect real tier>0 signals + break closures),
+        # NOT logged as a prediction, just a liveness ping.
+        heartbeat = (
+            f"Wheat Monitor: still running, no signal today (Tier 0).\n"
+            f"Price: {current_price:.2f}c | Daily read: {direction} "
+            f"(baseline only — no validated condition fired)"
+        )
+        send_telegram(heartbeat)
+        print(f"   Heartbeat sent — Tier 0, no real signal (not counted as an "
+              f"alert, not logged as a prediction)")
     else:
         print(f"No alert: {reason}")
 
