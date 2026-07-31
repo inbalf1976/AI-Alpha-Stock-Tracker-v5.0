@@ -1471,6 +1471,7 @@ def main():
     news_signal = get_news_signal()
     if news_signal:
         print(f"   News signal (unvalidated, small nudge): {news_signal[0]} ({news_signal[1]}%)")
+    break_outcome = None  # safe default — set for real inside the try block below
     try:
         from weekly_range_engine import WeeklyRangeEngine
         wre = WeeklyRangeEngine()
@@ -1564,6 +1565,15 @@ def main():
     # Tier 1 (62.5%) and Tier 2 (57.1%) were both genuinely profitable
     # on their own. Tier 0 is explicitly "no signal" by ConvictionGate's
     # own design and should never have been sent or logged as a trade.
+    #
+    # UPDATED 2026-07-30: added one exception — if a weekly trade setup
+    # just closed (break_outcome is WIN or LOSS), that's a real,
+    # already-committed position resolving, not a fresh Tier 0 guess.
+    # It must always be reported, even on a Tier 0 day, or the person
+    # never finds out their open position closed and flipped. This is
+    # sent WITHOUT calling log_prediction() — it is not a new signal,
+    # so it must not get counted in Tier 0's (or any tier's) win-rate
+    # stats; that stat should only ever reflect real tier>0 signals.
     if send and tier > 0:
         success = send_telegram(message)
         if success:
@@ -1573,6 +1583,17 @@ def main():
                 slot_key = f"{datetime.now(IL).date().isoformat()}_morning"
                 state.setdefault('alerts_today', {})[slot_key] = True
             log_prediction(direction, current_price, pred['confidence'], tier, s_phase['phase'])
+    elif send and tier == 0 and break_outcome is not None:
+        success = send_telegram(message)
+        print(f"   Alert sent despite Tier 0 — a weekly setup just closed "
+              f"({break_outcome}); not logged as a new prediction, since "
+              f"Tier 0 has no validated signal behind it.")
+        if success:
+            state['alerts_sent'] = state.get('alerts_sent', 0) + 1
+            state['last_alert_date'] = datetime.now(IL).date().isoformat()
+            if not is_manual:
+                slot_key = f"{datetime.now(IL).date().isoformat()}_morning"
+                state.setdefault('alerts_today', {})[slot_key] = True
     elif send and tier == 0:
         print(f"   No alert sent — Tier 0 (no validated gate condition fired; "
               f"not a real signal, not logged as a prediction)")
