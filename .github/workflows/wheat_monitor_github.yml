@@ -107,22 +107,54 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-    - name: Install packages
+    - name: Install news scanner packages
       run: pip install feedparser google-genai yfinance
     - name: Run news scan
       # Free Google News RSS (no key) + free-tier Gemini interpretation
       # (needs GEMINI_API_KEY secret — get one free at aistudio.google.com).
       # Runs 3x/day since news breaks any time, not just at 01:00 Israel.
-      # NOTE: no Telegram alert sent — this feeds the forecast model
-      # silently in the background, per design (2026-07-19).
       env:
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       run: python news_scanner.py
-    - name: Commit news logs
+    - name: Check for large price move
+      # UPDATED 2026-07-31: after every scan, compares current live
+      # price against wheat_monitor_state.json's last_price (recorded
+      # at the last full monitor run). If the move meets or exceeds
+      # check_price_trigger.py's threshold, the steps below re-run the
+      # full monitor immediately instead of waiting for the next
+      # scheduled 1am cycle — see check_price_trigger.py for the full
+      # rationale.
+      id: price_check
+      run: python check_price_trigger.py
+    - name: Install monitor packages (only if price move triggered)
+      if: steps.price_check.outputs.trigger == 'true'
+      run: |
+        pip install pandas numpy scikit-learn requests
+        pip install tensorflow-cpu keras
+        pip install xgboost beautifulsoup4 lxml
+    - name: Re-run full monitor (price-move triggered)
+      # Only fires when check_price_trigger.py detected a move at or
+      # above its threshold since the last full run. FORCE_ALERT reuses
+      # wheat_monitor_pro.py's existing manual-trigger hook — the model
+      # decides for itself (via seasonal/gate/ensemble/break logic,
+      # completely unchanged) whether this actually warrants a new
+      # alert; this step only shortens how long it takes to look.
+      if: steps.price_check.outputs.trigger == 'true'
+      env:
+        FORCE_ALERT: "true"
+        PRICE_MOVE_REASON: "Price move ${{ steps.price_check.outputs.move_pct }} detected by news scanner"
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: python wheat_monitor_pro.py
+    - name: Commit news + state logs
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add -f news_log.json || true
-        git add -f news_signal_log.json || true
-        git diff --staged --quiet || git commit -m "Update news scan logs [skip ci]"
+        git add -f wheat_monitor_state.json || true
+        git add -f prediction_log.json || true
+        git add -f weekly_range_cache.json || true
+        git add -f weekly_performance_log.json || true
+        git add -f weekly_break_log.json || true
+        git diff --staged --quiet || git commit -m "Update news scan + state [skip ci]"
         git push || echo "Nothing to push"
