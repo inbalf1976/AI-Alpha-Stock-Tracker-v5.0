@@ -1,5 +1,159 @@
 [
   {
+    "timestamp": "2026-07-31T08:50:19.229843+00:00",
+    "total_scanned": 222,
+    "flagged_count": 168,
+    "flagged_headlines": [
+      {
+        "title": "Corporate insiders are sending warning signals about the stock market",
+        "link": "https://www.marketwatch.com/story/the-warning-signal-insiders-are-sending-f0538ddf?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 31 Jul 2026 00:31:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Implosion of Situational Awareness hedge fund has Wall Street betting the bottom is in for the AI trade",
+        "link": "https://www.marketwatch.com/story/implosion-of-situational-awareness-has-wall-street-betting-the-bottom-is-in-for-the-ai-trade-05d9f346?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 30 Jul 2026 22:09:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Can credit cards survive AI shopping? Why Mastercard’s CEO says they’ll ‘prevail’ in this new era.",
+        "link": "https://www.marketwatch.com/story/can-credit-cards-survive-ai-shopping-why-mastercards-ceo-says-theyll-prevail-in-this-new-era-8f8a660c?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 30 Jul 2026 21:45:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Software stocks are fading — but these 4 could shine through the rest of the year",
+        "link": "https://www.marketwatch.com/story/software-stocks-are-fading-but-these-4-could-shine-through-the-rest-of-the-year-2c4dbe22?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 30 Jul 2026 21:24:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Oil slips as Hormuz tanker traffic improves; set for 20% monthly jump",
+        "link": "https://www.investing.com/news/commodities-news/oil-set-for-20-monthly-jump-as-usiran-conflict-widens-inventories-drop-4826597",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-31 06:33:49",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil falls more than $1 on greater flows despite US-Iran war",
+        "link": "https://www.investing.com/news/commodities-news/oil-falls-more-than-1-on-greater-flows-despite-usiran-war-4826705",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-31 03:06:26",
+        "matched_keywords": [
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "Drone strike at Egypt port near Suez Canal ignites new shipping risks",
+        "link": "https://www.investing.com/news/commodities-news/us-military-says-it-hit-dozens-of-irans-irgc-targets-4822452",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-31 02:12:26",
+        "matched_keywords": [
+          "ppi",
+          "suez",
+          "shipping"
+        ]
+      },
+      {
+        "title": "Oil settles lower in choppy trading amid report of ongoing Oman-Iran talks",
+        "link": "https://www.investing.com/news/commodities-news/oil-dips-after-surging-8-as-traders-weigh-fresh-iran-hostilities-inventory-drop-4822198",
+        "source": "Investing.com Commodities",
+        "published": "2026-07-30 21:36:33",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Eurozone yields consolidate as month-end buying caps sharp July rate sell-off",
+        "link": "https://www.investing.com/news/forex-news/eurozone-yields-consolidate-as-monthend-buying-caps-sharp-july-rate-selloff-4826916",
+        "source": "Investing.com Forex",
+        "published": "2026-07-31 07:55:14",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Long-term U.S. borrowing costs hit 19-year high as Fed ambiguity rattles bonds",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-firm-as-middle-east-war-and-fed-ambiguity-stoke-inflation-fears-4822455",
+        "source": "Investing.com Forex",
+        "published": "2026-07-30 12:24:42",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar sees worst day in about four weeks as Fed holds rates steady",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-aussie-slides-on-soft-cpi-won-firms-ahead-of-fed-decision-4818595",
+        "source": "Investing.com Forex",
+        "published": "2026-07-29 21:43:52",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar may weaken if Fed holds rates steady, ING says",
+        "link": "https://www.investing.com/news/forex-news/dollar-may-weaken-if-fed-holds-rates-steady-ing-says-93CH-4820808",
+        "source": "Investing.com Forex",
+        "published": "2026-07-29 14:29:33",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. economy slowed to 1.5% growth rate in Q2; June core inflation at 3.3%",
+        "link": "https://www.cnbc.com/2026/07/30/us-economy-slowed-to-1point5percent-growth-rate-in-q2-june-core-inflation-at-3point3percent.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 30 Jul 2026 15:04:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "What a divided Fed means for investors",
+        "link": "https://www.cnbc.com/2026/07/29/fed-meeting-interest-rates-warsh-stocks-bonds.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 29 Jul 2026 23:36:34 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Singapore tightens monetary policy in surprise move as rising oil prices rekindle inflation risk",
+        "link": "https://www.cnbc.com/2026/07/27/singapore-mas-july-monetary-policy-middle-east-oil-prices-inflation-.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 27 Jul 2026 14:22:15 GMT",
+        "matched_keywords": [
+          "inflation",
+          "oil"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are navigating a complex mix of slowing U.S. growth (1.5% in Q2), sticky inflation, and a softening U.S. dollar following a steady Fed rate decision. Meanwhile, geopolitical friction in the Middle East and improving Strait of Hormuz tanker flows continue to drive high volatility in energy markets.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_reason": "Escalating geopolitical risks, including drone strikes near the Suez Canal and ongoing Middle East tensions, threaten critical global agricultural shipping routes.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "A weakening U.S. dollar globally, combined with persistent regional security risks in the Middle East, tends to put downward pressure on the Israeli Shekel against the greenback.",
+      "key_risk": "Geopolitical escalation in the Middle East disrupting critical maritime choke points like the Suez Canal and Strait of Hormuz, thereby reigniting global energy inflation."
+    }
+  },
+  {
     "timestamp": "2026-07-31T07:27:06.306311+00:00",
     "total_scanned": 222,
     "flagged_count": 168,
