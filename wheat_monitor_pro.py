@@ -1288,6 +1288,14 @@ def should_send(state):
     manual = force or 'workflow_dispatch' in event
 
     if manual:
+        # UPDATED 2026-07-31: distinguish a genuine manual test run from
+        # a price-move-triggered re-run (see check_price_trigger.py) —
+        # both set FORCE_ALERT, but only the latter sets
+        # PRICE_MOVE_REASON, so the log/reason accurately reflects why
+        # this run actually happened instead of always saying "Manual".
+        price_move_reason = os.getenv('PRICE_MOVE_REASON')
+        if price_move_reason:
+            return True, price_move_reason, True
         return True, "Manual trigger", True
 
     israel  = datetime.now(IL)
