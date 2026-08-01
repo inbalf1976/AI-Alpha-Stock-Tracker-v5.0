@@ -1556,6 +1556,16 @@ def main():
             f"Entry: {current_price:.2f}c | Stop: {stop:.2f}c | Target: {target:.2f}c\n"
         )
 
+    # UPDATED 2026-07-31: make the trigger reason visible in the actual
+    # alert, not just the GitHub Actions console log. Previously
+    # PRICE_MOVE_REASON only affected should_send()'s internal reason
+    # string, invisible to anyone just reading Telegram — this adds a
+    # short header line so a price-triggered alert is distinguishable
+    # from the routine scheduled 1am one at a glance.
+    price_move_reason = os.getenv('PRICE_MOVE_REASON')
+    if price_move_reason:
+        message = f"⚡ {price_move_reason}\n\n" + message
+
     print(f"\nFINAL: {direction} | Tier {tier}")
 
     # ── Send ──
