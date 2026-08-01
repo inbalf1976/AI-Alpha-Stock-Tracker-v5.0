@@ -1,5 +1,155 @@
 [
   {
+    "timestamp": "2026-08-01T08:21:43.619602+00:00",
+    "total_scanned": 229,
+    "flagged_count": 168,
+    "flagged_headlines": [
+      {
+        "title": "If Social Security’s funding crisis is the elephant in the room, this is the mouse everyone has overlooked. You have been warned.",
+        "link": "https://www.marketwatch.com/story/if-social-securitys-funding-crisis-is-the-elephant-in-the-room-this-is-the-mouse-everyone-has-overlooked-you-have-been-warned-b95c450d?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 01 Aug 2026 00:25:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Situational Awareness vs. Long-Term Capital Management: A side-by-side comparison",
+        "link": "https://www.marketwatch.com/story/situational-awareness-vs-long-term-capital-management-a-side-by-side-comparison-e3e047b7?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 31 Jul 2026 22:09:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Temporary Grain Storage Could Be Fall 2026’s Pressure Valve - AgWeb",
+        "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPQjc4Q1ZlMTRFdFZsejN3bmc0U1V0RWIzMWxYZGo4aGx1SUFvTDJOV1U2Rl9wejg5d29TMTJycG9BQjBNSzYtcXBRb3V6N2dEYmpTSmEzbHA3Z0ZQZTdRSm1jYWRja0VOdkVqeVlFLWh1MlJvSWRaN05fWHZoMUxJUzl5Z25UYTktR3pUbC1FV1F3WE9WLWhLUjV3?oc=5",
+        "source": "AgWeb Markets",
+        "published": "Fri, 31 Jul 2026 15:36:00 GMT",
+        "matched_keywords": [
+          "grain"
+        ]
+      },
+      {
+        "title": "Grains Lower For the Week Removing Weather and War Premium: Is the Move Overdone? - AgWeb",
+        "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQUVpQb1hfd3VLTmFOOWJ6OU9pUUM3Rk9RMndIVkd3eFE1UGdSeXNzQUNuS2ZGTEptNm5nODlqaFA1V2ZPZXVIM2l3ZG9uZWtjTVFsR1hzYTZmay1VNGVUX3ByRUwtVFc2UUVvc3BHZnpqQUNrQnVQWTB4VUJDaWRtcDUtQzhVRXZSM3pIaVhQNlhtdFVxdlVQOW8xMktCWVlXMEt6a2lPbWZwalZ6Mng4?oc=5",
+        "source": "AgWeb Markets",
+        "published": "Fri, 31 Jul 2026 21:33:00 GMT",
+        "matched_keywords": [
+          "grain",
+          "war"
+        ]
+      },
+      {
+        "title": "Cattle Grind Higher but What’s the Sign a Bottom is In? Corn, Wheat Fall Early - AgWeb",
+        "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPVXNzeU5SaUxOQU9PRjJFOGFWenJ1aEExMUp3TEhmblM1R25DVm9STkhON3dUWGJrMDVsMVBqRFdfNlFWNWQtQ1lTc1dmRk4xNWF1aU82Mm1BNDU3N3FqZEVQMmt5eW9kMFhlQ2dwQklPZURScy1RdTczVmd0X2FORWIySFNrQ3pzdHFlNDl3YmhaQUo5aUhqUF9hdGoxZDI2NXVhNTBWTVk?oc=5",
+        "source": "AgWeb Markets",
+        "published": "Fri, 31 Jul 2026 15:57:00 GMT",
+        "matched_keywords": [
+          "wheat"
+        ]
+      },
+      {
+        "title": "Can Local Crop Stress Predict Global Ag Risk? Greenwing AI Thinks So - AgWeb",
+        "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPQ2w3cDhXYnREZXdRelhvWXBTUkNobnpYNnRvSVNobXlDUkNjNno2RGZTYlU3Um9tMzAwUTFtMnpJY295c1Y2a2g0YnVJeENaa3NEMDk5aW5lV1dWVi1nd3p4S2NVcnAwcS1GT2hhSkFYaE5DWlRWVGtqRVVyWWFXMHltd0hqZWZkNmVucHRBcmFoRTRFR3R5cHNUcWZILVl2X0g3TlYxRlJwZDhZenVtNk9sWjU?oc=5",
+        "source": "AgWeb Markets",
+        "published": "Fri, 31 Jul 2026 15:11:00 GMT",
+        "matched_keywords": [
+          "crop"
+        ]
+      },
+      {
+        "title": "Cotton Nutrient Requirements: Fall Soil Testing to Prepare for Next Season - AgWeb",
+        "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBnYkVrMTRmakgwUGpIc2ZQUklpbUx4d0hQRzhrZU53REFJYzdVSnJSUHpWdkd3NGZEUlZidXFreVJIeVVuM1lfZnBqRk1BekhKdUlrYUllZmlJamM2NlhZYXRILWozRUwz?oc=5",
+        "source": "AgWeb Markets",
+        "published": "Sat, 01 Aug 2026 01:49:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Financial markets are digesting recent Federal Reserve regulatory updates and monetary policy positioning, while agricultural commodities face downward pressure as weather and geopolitical risk premiums are stripped out of grain prices. Meanwhile, longer-term structural concerns in the agricultural sector highlight potential supply chain bottlenecks, such as temporary grain storage needs for future seasons.",
+      "wheat_impact": "BEARISH",
+      "usd_ils_impact": "NEUTRAL",
+      "key_risk": "Unforeseen escalation in geopolitical conflicts suddenly injecting the war premium back into agricultural commodities."
+    }
+  },
+  {
     "timestamp": "2026-07-31T19:39:53.995654+00:00",
     "total_scanned": 225,
     "flagged_count": 169,
