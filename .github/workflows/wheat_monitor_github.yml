@@ -108,7 +108,7 @@ jobs:
       with:
         python-version: '3.10'
     - name: Install news scanner packages
-      run: pip install feedparser google-genai yfinance
+      run: pip install feedparser google-genai yfinance beautifulsoup4
     - name: Run news scan
       # Free Google News RSS (no key) + free-tier Gemini interpretation
       # (needs GEMINI_API_KEY secret — get one free at aistudio.google.com).
