@@ -14,9 +14,20 @@ Outputs:
 Dependencies:
   - google-genai
   - feedparser
+  - beautifulsoup4
 
 Environment Variables:
   - GEMINI_API_KEY (optional, required only for LLM interpretation)
+
+CHANGELOG (2026-07-31):
+  Added best-effort FULL ARTICLE TEXT fetching for the top flagged
+  headlines (see FULL_TEXT_FETCH_COUNT), instead of sending only
+  headline titles to Gemini. Real-world fetch success will vary by
+  publisher — some sites block non-browser requests regardless of
+  headers used. Any fetch that fails or returns too little text
+  (likely paywalled/blocked) falls back to headline-only for that
+  article; the pipeline never breaks or blocks on a failed fetch.
+  This is a best-effort enrichment, not a guaranteed capability.
 """
 
 import os
@@ -26,6 +37,7 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 import feedparser
+from bs4 import BeautifulSoup
 
 # Configure logging
 logging.basicConfig(
@@ -41,9 +53,22 @@ logger = logging.getLogger("news_scanner")
 LOG_FILE = "news_log.json"
 MAX_LOG_ENTRIES = 200  # Keep file manageable
 
+# How many of the top flagged headlines to attempt full-article fetch
+# for, per scan. Kept small deliberately: each fetch is a real network
+# request with its own timeout, and the workflow job has a fixed
+# overall timeout. This does NOT increase Gemini call count (still one
+# call per scan) — only token count for that one call, which has
+# plenty of headroom on the current model's TPM limit.
+FULL_TEXT_FETCH_COUNT = 8
+ARTICLE_FETCH_TIMEOUT = 8       # seconds per article
+ARTICLE_MAX_CHARS = 3000        # per-article cap, keeps prompt size sane
+ARTICLE_MIN_CHARS = 200         # below this, treat as blocked/paywalled/empty
+
 # Custom User-Agent header for HTTP requests
 HTTP_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
 }
 
 # Direct RSS Feeds (Reliable, open endpoints)
@@ -51,13 +76,13 @@ RSS_FEEDS = {
     # Agricultural & Commodities (Google News routed to bypass 403 / Timeout blocks)
     "USDA News": "https://news.google.com/rss/search?q=site:usda.gov+when:1d&hl=en-US&gl=US&ceid=US:en",
     "AgWeb Markets": "https://news.google.com/rss/search?q=site:agweb.com+markets+when:1d&hl=en-US&gl=US&ceid=US:en",
-    
+
     # Macro / Forex / Financial
     "Investing.com Forex": "https://www.investing.com/rss/news_1.rss",
     "Investing.com Commodities": "https://www.investing.com/rss/news_11.rss",
     "MarketWatch Top Stories": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
     "CNBC Economy": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
-    
+
     # Central Banks
     "Fed Reserve Press Releases": "https://www.federalreserve.gov/feeds/press_all.xml",
 }
@@ -72,12 +97,12 @@ KEYWORD_QUERIES = [
     "USDA crop report wheat",
     "drought wheat harvest",
     "Black Sea grain corridor",
-    
+
     # Currencies / ILS
     "Bank of Israel interest rate",
     "USD ILS shekel exchange rate",
     "Israel economy inflation",
-    
+
     # Global Macro
     "Federal Reserve rate decision",
     "US dollar index DXY",
@@ -109,13 +134,13 @@ def fetch_rss_feed(source_name, url):
         req = urllib.request.Request(url, headers=HTTP_HEADERS)
         with urllib.request.urlopen(req, timeout=10) as response:
             xml_data = response.read()
-            
+
         feed = feedparser.parse(xml_data)
         for entry in feed.entries[:10]:  # Take top 10 per feed
             title = entry.get("title", "").strip()
             link = entry.get("link", "")
             published = entry.get("published", entry.get("updated", ""))
-            
+
             if title:
                 headlines.append({
                     "title": title,
@@ -159,6 +184,69 @@ def fetch_all_headlines():
     return all_headlines
 
 # ---------------------------------------------------------------------------
+# FULL ARTICLE TEXT FETCHING (best-effort, 2026-07-31)
+# ---------------------------------------------------------------------------
+
+def fetch_article_text(url, timeout=ARTICLE_FETCH_TIMEOUT,
+                        max_chars=ARTICLE_MAX_CHARS, min_chars=ARTICLE_MIN_CHARS):
+    """
+    Fetches and extracts the main article text from a URL, best-effort.
+    Returns None (never raises) if the fetch fails, times out, or the
+    page appears blocked/paywalled (too little extractable text) —
+    callers must treat None as "fall back to headline-only", not as
+    an error to surface. Real-world success rate will vary by
+    publisher; some sites block non-browser requests regardless of
+    headers used here.
+    """
+    try:
+        req = urllib.request.Request(url, headers=HTTP_HEADERS)
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            html = response.read()
+        soup = BeautifulSoup(html, "html.parser")
+        for tag in soup(["script", "style", "nav", "header", "footer", "aside", "form"]):
+            tag.decompose()
+        paragraphs = soup.find_all("p")
+        text = " ".join(p.get_text(strip=True) for p in paragraphs)
+        text = " ".join(text.split())  # normalize whitespace
+        if len(text) < min_chars:
+            return None
+        return text[:max_chars]
+    except Exception as e:
+        logger.info(f"   Article fetch failed ({url[:60]}...): {type(e).__name__}")
+        return None
+
+
+def enrich_with_full_text(flagged_headlines, count=FULL_TEXT_FETCH_COUNT):
+    """
+    Attempts to fetch full article text for the top `count` flagged
+    headlines, concurrently. Headlines beyond `count`, and any within
+    it that fail to fetch, are left with full_text=None — the prompt
+    builder falls back to title-only for those. Never raises; a
+    total failure here just means the scan proceeds headline-only,
+    same as before this feature existed.
+    """
+    targets = flagged_headlines[:count]
+    if not targets:
+        return flagged_headlines
+
+    with ThreadPoolExecutor(max_workers=min(8, len(targets))) as executor:
+        future_to_headline = {
+            executor.submit(fetch_article_text, h["link"]): h
+            for h in targets if h.get("link")
+        }
+        fetched = 0
+        for future in as_completed(future_to_headline):
+            headline = future_to_headline[future]
+            text = future.result()
+            headline["full_text"] = text
+            if text:
+                fetched += 1
+
+    logger.info(f"   Full article text fetched: {fetched}/{len(targets)} attempted "
+                f"(rest fell back to headline-only)")
+    return flagged_headlines
+
+# ---------------------------------------------------------------------------
 # FILTERING & INTERPRETATION
 # ---------------------------------------------------------------------------
 
@@ -176,8 +264,9 @@ def filter_high_impact(headlines):
 
 def interpret_with_gemini(flagged_headlines):
     """
-    Send flagged headlines to Gemini 3.5 Flash-Lite for macro & commodity interpretation.
-    Returns a structured dictionary with market impacts.
+    Send flagged headlines (with full article text where available) to
+    Gemini for macro & commodity interpretation. Returns a structured
+    dictionary with market impacts.
     """
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
@@ -187,12 +276,25 @@ def interpret_with_gemini(flagged_headlines):
     try:
         from google import genai
         client = genai.Client(api_key=api_key)
-        
-        # Build prompt
-        titles_text = "\n".join([f"- [{h['source']}] {h['title']}" for h in flagged_headlines[:15]])
-        
+
+        # Build prompt — use full article text where we have it,
+        # headline-only otherwise (fetch failures, or beyond the
+        # top-N fetch cutoff, both leave full_text unset/None).
+        entries_text = []
+        for h in flagged_headlines[:15]:
+            full_text = h.get("full_text")
+            if full_text:
+                entries_text.append(
+                    f"- [{h['source']}] HEADLINE: {h['title']}\n  ARTICLE TEXT: {full_text}"
+                )
+            else:
+                entries_text.append(f"- [{h['source']}] {h['title']}")
+        titles_text = "\n".join(entries_text)
+
         prompt = f"""
-        You are a senior macro and commodities analyst. Analyze these recent financial & agricultural news headlines:
+        You are a senior macro and commodities analyst. Analyze these recent financial & agricultural news items.
+        Some include the full article text (marked ARTICLE TEXT) for deeper context — use it when present;
+        otherwise rely on the headline alone.
 
         {titles_text}
 
@@ -268,7 +370,12 @@ def main():
     flagged = filter_high_impact(headlines)
     logger.info(f"High-impact flagged headlines: {len(flagged)}")
 
-    # 3. LLM Interpretation
+    # 3. Best-effort full-text enrichment for the top flagged headlines
+    if flagged:
+        logger.info(f"Attempting full-article fetch for top {min(FULL_TEXT_FETCH_COUNT, len(flagged))} headlines...")
+        flagged = enrich_with_full_text(flagged)
+
+    # 4. LLM Interpretation
     llm_analysis = None
     if flagged:
         logger.info("Interpreting headlines with Gemini Flash...")
@@ -276,12 +383,21 @@ def main():
         if not llm_analysis:
             logger.info("   No LLM signal this scan (no key configured, or call failed)")
 
-    # 4. Save Record
+    # 5. Save Record
+    # NOTE: full_text is intentionally NOT persisted to news_log.json —
+    # it's only used transiently to build the Gemini prompt this run.
+    # Saving full article bodies to the repo long-term isn't needed
+    # (the LLM's structured analysis already captures what mattered)
+    # and would bloat the log file considerably.
+    flagged_for_log = [
+        {k: v for k, v in h.items() if k != "full_text"}
+        for h in flagged[:15]
+    ]
     scan_record = {
         "timestamp": now_iso,
         "total_scanned": len(headlines),
         "flagged_count": len(flagged),
-        "flagged_headlines": flagged[:15],  # Save top 15 flagged headlines
+        "flagged_headlines": flagged_for_log,
         "llm_analysis": llm_analysis
     }
 
