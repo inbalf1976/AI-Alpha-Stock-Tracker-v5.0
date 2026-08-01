@@ -303,6 +303,14 @@ def interpret_with_gemini(flagged_headlines):
         - "wheat_impact": "BULLISH", "BEARISH", or "NEUTRAL" with a 1-sentence reason.
         - "usd_ils_impact": "BULLISH", "BEARISH", or "NEUTRAL" with a 1-sentence reason.
         - "key_risk": Single main threat to watch today.
+        - "headline_overstated": true or false — for items where you have ARTICLE TEXT,
+          does the headline's language (intensity, certainty, scale) go noticeably beyond
+          what the article body actually describes? If no items have ARTICLE TEXT, set this
+          to false. Base this ONLY on comparing headline framing to the article's own content
+          — not on whether you think the underlying event itself is true or important.
+        - "headline_vs_article_note": if headline_overstated is true, a 1-sentence note on
+          which headline/article pair shows the gap and what the article actually said instead.
+          If headline_overstated is false, use an empty string.
 
         Respond ONLY with raw valid JSON (no markdown ticks or wrapper text).
         """
