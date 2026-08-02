@@ -1,5 +1,161 @@
 [
   {
+    "timestamp": "2026-08-02T13:09:35.853928+00:00",
+    "total_scanned": 221,
+    "flagged_count": 160,
+    "flagged_headlines": [
+      {
+        "title": "How Apple’s cheap MacBook Neo sparked a war in budget laptops",
+        "link": "https://www.marketwatch.com/story/how-apples-cheap-macbook-neo-sparked-a-war-in-budget-laptops-8fbaf839?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 02 Aug 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Investors are rotating into financial stocks. The Fed’s next move could determine how far the rally runs.",
+        "link": "https://www.marketwatch.com/story/investors-are-rotating-into-financial-stocks-the-feds-next-move-could-determine-how-far-the-rally-runs-662c63df?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 02 Aug 2026 12:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "If Social Security’s funding crisis is the elephant in the room, this is the mouse everyone has overlooked. You have been warned.",
+        "link": "https://www.marketwatch.com/story/if-social-securitys-funding-crisis-is-the-elephant-in-the-room-this-is-the-mouse-everyone-has-overlooked-you-have-been-warned-b95c450d?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 01 Aug 2026 21:15:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "US Treasury intervenes to support yen through purchases - FT",
+        "link": "https://www.investing.com/news/forex-news/us-treasury-intervenes-to-support-yen-through-purchases--ft-4829482",
+        "source": "Investing.com Forex",
+        "published": "2026-08-01 01:35:20",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Dollar falls over 1% for July as U.S. data, Fed paint a muddy picture on inflation",
+        "link": "https://www.investing.com/news/forex-news/dollar-set-for-july-losses-yen-falls-after-reported-intervention-boj-hold-4826760",
+        "source": "Investing.com Forex",
+        "published": "2026-07-31 21:13:37",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "US Treasury informed banks that it may intervene in yen, source says",
+        "link": "https://www.investing.com/news/forex-news/us-treasury-informed-banks-that-it-may-intervene-in-yen-source-says-4828547",
+        "source": "Investing.com Forex",
+        "published": "2026-07-31 13:42:56",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "U.S. yields push higher to cap turbulent July on Middle East war, Fed confusion",
+        "link": "https://www.investing.com/news/forex-news/eurozone-yields-consolidate-as-monthend-buying-caps-sharp-july-rate-selloff-4826916",
+        "source": "Investing.com Forex",
+        "published": "2026-07-31 12:40:15",
+        "matched_keywords": [
+          "fed",
+          "war",
+          "yield"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Financial markets are navigating a complex mix of geopolitical risks from the Middle East, a paused Federal Reserve holding rates at 3.50%-3.75% with a notable 3-vote dissent, and currency interventions by the US Treasury to support the yen. Meanwhile, the US dollar suffered a monthly loss over 1% for July as mixed inflation data and shifting Treasury yields kept investors rotating into specific sectors like financials.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Recent macroeconomic drivers center on Fed policy, currency interventions, and Middle Eastern geopolitical friction, with no direct supply or demand shocks specific to grain markets reported.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Persisting conflict in the Middle East and general US dollar volatility support safe-haven demand, which typically strengthens the dollar against regional pairs like the Israeli Shekel (ILS).",
+      "key_risk": "Escalation of Middle Eastern geopolitical conflict driving further energy supply shocks and complicating the Federal Reserve's path on inflation and interest rates.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-02T08:24:49.481900+00:00",
     "total_scanned": 224,
     "flagged_count": 161,
