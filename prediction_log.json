@@ -587,10 +587,10 @@
     "confidence": 0.8241495372537765,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 16.5
   },
   {
     "timestamp": "2026-07-31T02:03:15.475212+03:00",
