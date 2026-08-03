@@ -1,5 +1,160 @@
 [
   {
+    "timestamp": "2026-08-03T19:43:21.098932+00:00",
+    "total_scanned": 223,
+    "flagged_count": 159,
+    "flagged_headlines": [
+      {
+        "title": "Oil prices slide after massive July gains as Trump calls off attack on Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-drops-to-3wk-low-as-trump-calls-off-iran-strike-announces-fresh-talks-4829733",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 19:33:50",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Northwest European gasoline margins drop over $5 on crude decline",
+        "link": "https://www.investing.com/news/commodities-news/northwest-european-gasoline-margins-drop-over-5-on-crude-decline-93CH-4832052",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 17:46:55",
+        "matched_keywords": [
+          "crude"
+        ]
+      },
+      {
+        "title": "Venezuela oil exports fall 25% in July on lower India demand",
+        "link": "https://www.investing.com/news/commodities-news/venezuela-oil-exports-fall-25-in-july-on-lower-india-demand-93CH-4832020",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 17:07:45",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Nigeria’s NNPC offers September crude cargoes amid stable prices",
+        "link": "https://www.investing.com/news/commodities-news/nigerias-nnpc-offers-september-crude-cargoes-amid-stable-prices-93CH-4831961",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 16:25:26",
+        "matched_keywords": [
+          "crude"
+        ]
+      },
+      {
+        "title": "Sanctioned Georgia refinery to complete shift from Russian oil by September",
+        "link": "https://www.investing.com/news/commodities-news/sanctioned-georgia-refinery-to-complete-shift-from-russian-oil-by-september-93CH-4831593",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 14:08:57",
+        "matched_keywords": [
+          "sanction",
+          "oil"
+        ]
+      },
+      {
+        "title": "Dollar slips as U.S.-Japan yen intervention, easing oil fears weigh",
+        "link": "https://www.investing.com/news/forex-news/yen-extends-rally-on-prospects-of-further-usjapan-fx-intervention-4829743",
+        "source": "Investing.com Forex",
+        "published": "2026-08-03 14:03:20",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Manufacturing survey shows inflation worries 'worse than pandemic era,' adding to Fed pressure",
+        "link": "https://www.cnbc.com/2026/08/03/manufacturing-survey-shows-inflation-worries-adding-to-pressure-on-fed.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 03 Aug 2026 16:54:19 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Crude oil prices retreated sharply following geopolitical de-escalation in the Middle East and easing supply disruption fears, pressuring energy-linked currencies and petroleum product margins. Meanwhile, the Federal Reserve faces mounting policy pressure from persistent manufacturing inflation concerns, alongside ongoing domestic regulatory updates for community and mutual banks.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "The provided news flow focuses entirely on energy markets, macroeconomic monetary policy, and banking regulations without any direct drivers for agricultural commodities.",
+      "usd_ils_impact": "BEARISH",
+      "usd_ils_impact_reason": "Geopolitical de-escalation with Iran and sliding global oil prices reduce regional conflict risk premiums, typically strengthening local Middle Eastern currencies like the Israeli Shekel against a slipping U.S. dollar.",
+      "key_risk": "Renewed geopolitical escalation in the Middle East or unexpected supply disruptions that could abruptly reverse the recent drop in crude prices.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-03T14:28:40.239819+00:00",
     "total_scanned": 215,
     "flagged_count": 160,
