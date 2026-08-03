@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-08-03T09:46:34.358500+00:00",
+    "total_scanned": 216,
+    "flagged_count": 158,
+    "flagged_headlines": [
+      {
+        "title": "Warsh tightened more by pausing than by lifting rates, this bond-market veteran argues. Here’s the math.",
+        "link": "https://www.marketwatch.com/story/warsh-tightened-more-by-pausing-than-by-lifting-rates-this-bond-market-veteran-argues-heres-the-math-31cb15a1?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 03 Aug 2026 09:18:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "If Social Security’s funding crisis is the elephant in the room, this is the mouse everyone has overlooked. You have been warned.",
+        "link": "https://www.marketwatch.com/story/if-social-securitys-funding-crisis-is-the-elephant-in-the-room-this-is-the-mouse-everyone-has-overlooked-you-have-been-warned-b95c450d?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 02 Aug 2026 13:30:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Silver coils in $2.50 range awaiting breakout: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/silver-coils-in-250-range-awaiting-breakout-live-levels-93CH-4829887",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 07:03:52",
+        "matched_keywords": [
+          "ils",
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil slumps over 6% as Trump calls off Iran strike, announces fresh talks",
+        "link": "https://www.investing.com/news/commodities-news/oil-drops-to-3wk-low-as-trump-calls-off-iran-strike-announces-fresh-talks-4829733",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 06:59:29",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold rises as weaker dollar offsets Fed concerns",
+        "link": "https://www.investing.com/news/commodities-news/gold-climbs-as-trump-delays-iran-strike-softer-oil-eases-inflation-concerns-4829739",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 05:52:44",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil slumps on hopes of Iran deal, yen spikes suddenly after intervention",
+        "link": "https://www.investing.com/news/commodities-news/oil-slumps-on-hopes-of-iran-deal-yen-spikes-suddenly-after-intervention-4829735",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 01:06:34",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil tumbles as Trump cancels attack on Iran to reach nuclear deal",
+        "link": "https://www.investing.com/news/commodities-news/oil-tumbles-as-trump-cancels-attack-on-iran-to-reach-nuclear-deal-4829728",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 00:12:28",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Geopolitical risk premium in crude oil collapsed following canceled U.S. strikes on Iran and renewed talks, dragging energy markets lower by over 6%. Meanwhile, the Federal Reserve kept the fed funds rate steady at 3.50%-3.75% in a divided 9-3 vote, citing persistent inflation linked to energy supply shocks.",
+      "wheat_impact": {
+        "direction": "NEUTRAL",
+        "reason": "Recent macroeconomic and commodity headlines are heavily dominated by geopolitical de-escalation in the Middle East and Fed monetary policy rather than grain supply-demand fundamentals."
+      },
+      "usd_ils_impact": {
+        "direction": "BEARISH",
+        "reason": "The de-escalation of U.S.-Iran military tensions reduces regional conflict premiums, heavily easing pressure on Middle Eastern currencies including the Israeli Shekel."
+      },
+      "key_risk": "Uncertainty surrounding Middle Eastern geopolitical stability and whether newly announced U.S.-Iran talks will yield a durable agreement or face sudden reversals.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-03T00:01:10.218060+00:00",
     "total_scanned": 50,
     "flagged_count": 26,
