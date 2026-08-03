@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-08-03T14:28:40.239819+00:00",
+    "total_scanned": 215,
+    "flagged_count": 160,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar slips as U.S.-Japan yen intervention, easing oil fears weigh",
+        "link": "https://www.investing.com/news/forex-news/yen-extends-rally-on-prospects-of-further-usjapan-fx-intervention-4829743",
+        "source": "Investing.com Forex",
+        "published": "2026-08-03 14:03:20",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Sanctioned Georgia refinery to complete shift from Russian oil by September",
+        "link": "https://www.investing.com/news/commodities-news/sanctioned-georgia-refinery-to-complete-shift-from-russian-oil-by-september-93CH-4831593",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 14:08:57",
+        "matched_keywords": [
+          "sanction",
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil falls over 5% as Trump calls off Iran strike, announces fresh talks",
+        "link": "https://www.investing.com/news/commodities-news/oil-drops-to-3wk-low-as-trump-calls-off-iran-strike-announces-fresh-talks-4829733",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 13:51:52",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US farm agency staff warn trade, research, aid programs at risk from reorganization",
+        "link": "https://www.investing.com/news/commodities-news/us-farm-agency-staff-warn-trade-research-aid-programs-at-risk-from-reorganization-4830652",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 12:55:04",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "India’s ONGC to reserve half of new oil storage for strategic needs",
+        "link": "https://www.investing.com/news/commodities-news/indias-ongc-to-reserve-half-of-new-oil-storage-for-strategic-needs-93CH-4830571",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 10:53:35",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Global oil prices fall below $83 a barrel to hover at 3-week low after Trump calls off planned attack and says Iran talks to resume Monday",
+        "link": "https://www.marketwatch.com/story/oil-prices-fall-to-three-week-low-after-trump-calls-off-planned-attack-631a8683?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 03 Aug 2026 13:28:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "JPMorgan says Warsh failure to buttress Fed credibility may force a rate hike before year-end",
+        "link": "https://www.marketwatch.com/story/jpmorgan-says-warsh-failure-to-buttress-fed-credibility-may-force-a-rate-hike-before-year-end-e14e5821?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 03 Aug 2026 13:06:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "war"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are reacting to a de-escalation in Middle East geopolitical tensions, driven by President Trump calling off a planned strike on Iran and signaling renewed talks, which has sent crude oil prices plunging over 5% to a three-week low below $83 a barrel. Meanwhile, the Federal Reserve maintained the federal funds rate at 3.50%–3.75% in a contested 9-3 vote, with persistent inflation and energy supply shocks prompting dissent from officials favoring a rate hike.",
+      "wheat_impact": {
+        "direction": "NEUTRAL",
+        "reason": "Agricultural markets face localized structural risks from U.S. farm agency reorganizations, but grain fundamentals remain largely disconnected from the sharp drops in crude oil and recent central bank policy decisions."
+      },
+      "usd_ils_impact": {
+        "direction": "BEARISH",
+        "reason": "The easing of geopolitical tensions in the Middle East—specifically the averted U.S. strike on Iran—reduces regional risk premiums and supports strength in local currencies relative to the U.S. dollar."
+      },
+      "key_risk": "Renewed geopolitical escalation in the Middle East if upcoming U.S.-Iran talks collapse, which could quickly reverse the recent plunge in crude oil prices and reignite energy-driven inflation pressures.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-03T09:46:34.358500+00:00",
     "total_scanned": 216,
     "flagged_count": 158,
