@@ -599,10 +599,10 @@
     "confidence": 0.6,
     "tier": 2,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 16.59
   },
   {
     "timestamp": "2026-07-31T16:53:34.884041+03:00",
@@ -611,9 +611,9 @@
     "confidence": 0.6,
     "tier": 2,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -9.64
   }
 ]
