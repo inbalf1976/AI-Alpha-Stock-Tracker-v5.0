@@ -152,5 +152,16 @@
     "position_in_range_pct": 60.0,
     "within_range": true,
     "bias": "DOWN"
+  },
+  {
+    "iso_key": "2026-W32",
+    "date": "2026-08-05",
+    "day_name": "Wednesday",
+    "price": 638.0,
+    "range_low": 638.11,
+    "range_high": 660.43,
+    "position_in_range_pct": -0.5,
+    "within_range": false,
+    "bias": "DOWN"
   }
 ]
