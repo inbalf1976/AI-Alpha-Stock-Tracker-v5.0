@@ -1,5 +1,161 @@
 [
   {
+    "timestamp": "2026-08-04T08:37:14.455640+00:00",
+    "total_scanned": 227,
+    "flagged_count": 163,
+    "flagged_headlines": [
+      {
+        "title": "Oil rises after steep losses as Trump, Iran send mixed signals on talks",
+        "link": "https://www.investing.com/news/commodities-news/oil-holds-losses-as-trump-touts-iran-talks-tehran-denies-negotiations-4832658",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-04 04:42:20",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Shipping traffic at key Gulf waterways little changed on uncertain peace talks",
+        "link": "https://www.investing.com/news/commodities-news/shipping-traffic-at-key-gulf-waterways-little-changed-on-uncertain-peace-talks-4832728",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-04 02:24:53",
+        "matched_keywords": [
+          "ppi",
+          "shipping"
+        ]
+      },
+      {
+        "title": "Oil ticks up after selloff as talks to end US-Iran war remain uncertain",
+        "link": "https://www.investing.com/news/commodities-news/oil-ticks-up-after-selloff-as-talks-to-end-usiran-war-remain-uncertain-4832678",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-04 01:07:04",
+        "matched_keywords": [
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "Gold slightly higher as slide in oil prices offset by clouded Fed rate outlook",
+        "link": "https://www.investing.com/news/commodities-news/gold-climbs-as-trump-delays-iran-strike-softer-oil-eases-inflation-concerns-4829739",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 21:16:29",
+        "matched_keywords": [
+          "fed",
+          "oil"
+        ]
+      },
+      {
+        "title": "US oil exports in July fall to lowest level in eight months, data shows",
+        "link": "https://www.investing.com/news/commodities-news/us-oil-exports-in-july-fall-to-lowest-level-in-eight-months-data-shows-4832367",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 20:55:10",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices slide after massive July gains as Trump calls off attack on Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-drops-to-3wk-low-as-trump-calls-off-iran-strike-announces-fresh-talks-4829733",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 19:33:50",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Eurozone yields pause after sharp July sell-off",
+        "link": "https://www.investing.com/news/forex-news/eurozone-yields-pause-after-sharp-july-selloff-4832872",
+        "source": "Investing.com Forex",
+        "published": "2026-08-04 07:48:42",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar little changed as U.S.-Japan yen intervention, easing oil fears weigh",
+        "link": "https://www.investing.com/news/forex-news/yen-extends-rally-on-prospects-of-further-usjapan-fx-intervention-4829743",
+        "source": "Investing.com Forex",
+        "published": "2026-08-03 21:00:10",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Crude oil markets are experiencing high volatility driven by shifting geopolitical tensions and mixed signals regarding U.S.-Iran talks, which in turn are influencing safe-haven demand for gold and broader currency dynamics. Meanwhile, the Federal Reserve continues to navigate monetary policy adjustments and regulatory updates, while energy export and shipping data reflect temporary stabilization.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "The provided news focuses entirely on energy geopolitics, Fed regulatory actions, and FX markets, with no direct drivers affecting global wheat supply, demand, or trade flows.",
+      "usd_ils_impact": "NEUTRAL",
+      "usd_ils_impact_reason": "While Middle Eastern geopolitical tensions involving Iran usually impact the Israeli Shekel, current market drivers are primarily focused on U.S.-Iran diplomatic signals and broader dollar stability rather than direct domestic Israeli monetary factors.",
+      "key_risk": "Uncertainty surrounding U.S.-Iran diplomatic talks and potential escalation in Gulf waterways that could abruptly shock global energy supplies.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-04T07:59:53.018174+00:00",
     "total_scanned": 227,
     "flagged_count": 161,
