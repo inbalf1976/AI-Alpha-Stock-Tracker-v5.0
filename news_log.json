@@ -1,5 +1,152 @@
 [
   {
+    "timestamp": "2026-08-04T05:53:43.889709+00:00",
+    "total_scanned": 228,
+    "flagged_count": 162,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil rises after steep losses as Trump, Iran send mixed signals on talks",
+        "link": "https://www.investing.com/news/commodities-news/oil-holds-losses-as-trump-touts-iran-talks-tehran-denies-negotiations-4832658",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-04 04:42:20",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Shipping traffic at key Gulf waterways little changed on uncertain peace talks",
+        "link": "https://www.investing.com/news/commodities-news/shipping-traffic-at-key-gulf-waterways-little-changed-on-uncertain-peace-talks-4832728",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-04 02:24:53",
+        "matched_keywords": [
+          "ppi",
+          "shipping"
+        ]
+      },
+      {
+        "title": "Oil ticks up after selloff as talks to end US-Iran war remain uncertain",
+        "link": "https://www.investing.com/news/commodities-news/oil-ticks-up-after-selloff-as-talks-to-end-usiran-war-remain-uncertain-4832678",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-04 01:07:04",
+        "matched_keywords": [
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "Gold steadies as traders assess Fed outlook, Middle East risks",
+        "link": "https://www.investing.com/news/commodities-news/gold-steadies-as-traders-assess-fed-outlook-middle-east-risks-4832673",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-04 01:04:33",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Gold slightly higher as slide in oil prices offset by clouded Fed rate outlook",
+        "link": "https://www.investing.com/news/commodities-news/gold-climbs-as-trump-delays-iran-strike-softer-oil-eases-inflation-concerns-4829739",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 21:16:29",
+        "matched_keywords": [
+          "fed",
+          "oil"
+        ]
+      },
+      {
+        "title": "US oil exports in July fall to lowest level in eight months, data shows",
+        "link": "https://www.investing.com/news/commodities-news/us-oil-exports-in-july-fall-to-lowest-level-in-eight-months-data-shows-4832367",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 20:55:10",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices slide after massive July gains as Trump calls off attack on Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-drops-to-3wk-low-as-trump-calls-off-iran-strike-announces-fresh-talks-4829733",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-03 19:33:50",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "llm_analysis": null
+  },
+  {
     "timestamp": "2026-08-03T19:43:21.098932+00:00",
     "total_scanned": 223,
     "flagged_count": 159,
