@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-08-04T13:58:46.610699+00:00",
+    "total_scanned": 228,
+    "flagged_count": 161,
+    "flagged_headlines": [
+      {
+        "title": "Oil prices take a dive as Qatar and Bessent note talks to reopen Strait of Hormuz",
+        "link": "https://www.marketwatch.com/story/oil-prices-rise-after-vessel-reports-being-hit-in-strait-of-hormuz-db6ce867?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 04 Aug 2026 13:22:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Manufacturing survey shows inflation worries 'worse than pandemic era,' adding to Fed pressure",
+        "link": "https://www.cnbc.com/2026/08/03/manufacturing-survey-shows-inflation-worries-adding-to-pressure-on-fed.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 03 Aug 2026 16:54:19 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "As Warsh’s Fed faces pressure to act on inflation, these indicators show it’s at its lowest in years",
+        "link": "https://www.cnbc.com/2026/07/31/these-fed-alternative-indicators-show-inflation-is-at-lowest-in-years.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 31 Jul 2026 16:51:30 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "U.S. economy slowed to 1.5% growth rate in Q2; June core inflation at 3.3%",
+        "link": "https://www.cnbc.com/2026/07/30/us-economy-slowed-to-1point5percent-growth-rate-in-q2-june-core-inflation-at-3point3percent.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 30 Jul 2026 15:04:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "What a divided Fed means for investors",
+        "link": "https://www.cnbc.com/2026/07/29/fed-meeting-interest-rates-warsh-stocks-bonds.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 29 Jul 2026 23:36:34 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Singapore tightens monetary policy in surprise move as rising oil prices rekindle inflation risk",
+        "link": "https://www.cnbc.com/2026/07/27/singapore-mas-july-monetary-policy-middle-east-oil-prices-inflation-.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 27 Jul 2026 14:22:15 GMT",
+        "matched_keywords": [
+          "inflation",
+          "oil"
+        ]
+      },
+      {
+        "title": "Trump's new global tariff draws rebukes from trade partners over forced labor justification",
+        "link": "https://www.cnbc.com/2026/07/24/trump-global-tariffs-trade-imbalance-forced-labor.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 24 Jul 2026 12:09:09 GMT",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Kevin Warsh has homed in on three key phrases. How Fed watchers interpret them",
+        "link": "https://www.cnbc.com/2026/07/22/kevin-warsh-has-homed-in-on-three-key-phrases-how-fed-watchers-interpret-them.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 22 Jul 2026 16:57:55 GMT",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Trump plans generic drug tariffs from 2028 with two-year delay testing U.S. onshoring push",
+        "link": "https://www.cnbc.com/2026/07/22/trump-generic-drugs-tariffs-medicine-trade-.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 22 Jul 2026 06:28:08 GMT",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "U.S. Treasuries consolidate as oil retreat offers relief ahead of jobs slate",
+        "link": "https://www.investing.com/news/forex-news/eurozone-yields-pause-after-sharp-july-selloff-4832872",
+        "source": "Investing.com Forex",
+        "published": "2026-08-04 12:36:46",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Dollar little changed as U.S.-Japan yen intervention, easing oil fears weigh",
+        "link": "https://www.investing.com/news/forex-news/yen-extends-rally-on-prospects-of-further-usjapan-fx-intervention-4829743",
+        "source": "Investing.com Forex",
+        "published": "2026-08-03 21:00:10",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Qatar says progress made toward US-Iran talks",
+        "link": "https://www.investing.com/news/commodities-news/status-of-usiran-talks-uncertain-as-ship-struck-in-hormuz-4832765",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-04 13:31:31",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Wheat futures expected to open lower on CBOT Tuesday",
+        "link": "https://www.investing.com/news/commodities-news/wheat-futures-expected-to-open-lower-on-cbot-tuesday-93CH-4834585",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-04 13:28:26",
+        "matched_keywords": [
+          "wheat"
+        ]
+      },
+      {
+        "title": "Aramco says US-Iran war has cost the global market 2.6 billion barrels of oil",
+        "link": "https://www.investing.com/news/commodities-news/aramco-says-usiran-war-has-cost-the-global-market-26-billion-barrels-of-oil-4834500",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-04 13:07:57",
+        "matched_keywords": [
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "Gold firms as upbeat comments on Mideast talks ease inflation fears",
+        "link": "https://www.investing.com/news/commodities-news/gold-steadies-as-traders-assess-fed-outlook-middle-east-risks-4832673",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-04 12:38:43",
+        "matched_keywords": [
+          "inflation"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are reacting to easing energy supply fears as diplomatic talks between Qatar, the US, and Iran point toward reopening the Strait of Hormuz, causing oil prices to pull back. Meanwhile, the U.S. manufacturing sector continues to flash warning signs of stubborn price pressures and geopolitical uncertainty, keeping pressure on Federal Reserve Chairman Kevin Warsh and raising expectations for a potential September rate hike despite moderating trimmed-mean inflation measures.",
+      "wheat_impact": "BEARISH",
+      "wheat_impact_reason": "CBOT wheat futures are expected to open lower alongside broader commodity pullbacks as easing Middle East geopolitical tensions reduce supply-chain risk premiums.",
+      "usd_ils_impact": "BEARISH",
+      "usd_ils_impact_reason": "Signs of progress in US-Iran talks and receding oil-driven inflation risks reduce safe-haven demand and regional conflict premiums, strengthening local currency stability against the dollar.",
+      "key_risk": "Persistent underlying manufacturing price pressures and geopolitical supply volatility reigniting inflation before the Federal Reserve can ease policy.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-04T08:37:14.455640+00:00",
     "total_scanned": 227,
     "flagged_count": 163,
