@@ -34,6 +34,7 @@ import os
 import json
 import logging
 import urllib.request
+import urllib.error
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 import feedparser
@@ -211,6 +212,18 @@ def fetch_article_text(url, timeout=ARTICLE_FETCH_TIMEOUT,
         if len(text) < min_chars:
             return None
         return text[:max_chars]
+    except urllib.error.HTTPError as e:
+        # 2026-08-01: was previously logged as a generic "HTTPError"
+        # with no code/reason, making it impossible to tell a real
+        # block (403) from a redirect issue, rate limit, or something
+        # else. Now logs the actual status code and reason.
+        logger.info(f"   Article fetch failed ({url[:60]}...): "
+                    f"HTTP {e.code} {e.reason}")
+        return None
+    except urllib.error.URLError as e:
+        logger.info(f"   Article fetch failed ({url[:60]}...): "
+                    f"URLError {e.reason}")
+        return None
     except Exception as e:
         logger.info(f"   Article fetch failed ({url[:60]}...): {type(e).__name__}")
         return None
