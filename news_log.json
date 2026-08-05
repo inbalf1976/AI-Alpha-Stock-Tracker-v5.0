@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-08-05T16:00:17.314980+00:00",
+    "total_scanned": 225,
+    "flagged_count": 159,
+    "flagged_headlines": [
+      {
+        "title": "Europe is blowing up riverbeds as an extreme drought wreaks havoc on its economy",
+        "link": "https://www.cnbc.com/2026/08/05/drought-rhine-danube-water-levels-economy.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 05 Aug 2026 07:15:17 GMT",
+        "matched_keywords": [
+          "drought"
+        ]
+      },
+      {
+        "title": "Manufacturing survey shows inflation worries 'worse than pandemic era,' adding to Fed pressure",
+        "link": "https://www.cnbc.com/2026/08/03/manufacturing-survey-shows-inflation-worries-adding-to-pressure-on-fed.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 04 Aug 2026 14:42:39 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "As Warsh’s Fed faces pressure to act on inflation, these indicators show it’s at its lowest in years",
+        "link": "https://www.cnbc.com/2026/07/31/these-fed-alternative-indicators-show-inflation-is-at-lowest-in-years.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 31 Jul 2026 16:51:30 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "U.S. economy slowed to 1.5% growth rate in Q2; June core inflation at 3.3%",
+        "link": "https://www.cnbc.com/2026/07/30/us-economy-slowed-to-1point5percent-growth-rate-in-q2-june-core-inflation-at-3point3percent.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 30 Jul 2026 15:04:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "What a divided Fed means for investors",
+        "link": "https://www.cnbc.com/2026/07/29/fed-meeting-interest-rates-warsh-stocks-bonds.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 29 Jul 2026 23:36:34 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Singapore tightens monetary policy in surprise move as rising oil prices rekindle inflation risk",
+        "link": "https://www.cnbc.com/2026/07/27/singapore-mas-july-monetary-policy-middle-east-oil-prices-inflation-.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 27 Jul 2026 14:22:15 GMT",
+        "matched_keywords": [
+          "inflation",
+          "oil"
+        ]
+      },
+      {
+        "title": "Trump's new global tariff draws rebukes from trade partners over forced labor justification",
+        "link": "https://www.cnbc.com/2026/07/24/trump-global-tariffs-trade-imbalance-forced-labor.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 24 Jul 2026 12:09:09 GMT",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Kevin Warsh has homed in on three key phrases. How Fed watchers interpret them",
+        "link": "https://www.cnbc.com/2026/07/22/kevin-warsh-has-homed-in-on-three-key-phrases-how-fed-watchers-interpret-them.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 22 Jul 2026 16:57:55 GMT",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Treasuries mixed as oil drop eases inflation anxieties ahead of U.S. labor slate",
+        "link": "https://www.investing.com/news/forex-news/german-yields-drop-to-3week-lows-as-easing-oil-cools-inflation-bets-4836423",
+        "source": "Investing.com Forex",
+        "published": "2026-08-05 12:10:31",
+        "matched_keywords": [
+          "inflation",
+          "oil"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound holds above $1.34 as dollar stays firm on Fed hike risk",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-holds-above-134-as-dollar-stays-firm-on-fed-hike-risk-4836614",
+        "source": "Investing.com Forex",
+        "published": "2026-08-05 08:27:50",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar weakens as oil prices fall on trade data",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-weakens-as-oil-prices-fall-on-trade-data-93CH-4835463",
+        "source": "Investing.com Forex",
+        "published": "2026-08-04 17:48:27",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "South African rand strengthens as oil prices decline",
+        "link": "https://www.investing.com/news/forex-news/south-african-rand-strengthens-as-oil-prices-decline-93CH-4835129",
+        "source": "Investing.com Forex",
+        "published": "2026-08-04 15:47:50",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Bessent’s call to upsize Fed foreign lending facility may not be risk-free",
+        "link": "https://www.investing.com/news/forex-news/bessents-call-to-upsize-fed-foreign-lending-facility-may-not-be-riskfree-4834725",
+        "source": "Investing.com Forex",
+        "published": "2026-08-04 13:54:38",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil trims gains amid hopes for Mideast peace deal, Houthi attack on Saudi tanker",
+        "link": "https://www.investing.com/news/commodities-news/oil-slips-for-third-day-as-hormuz-deal-hopes-ease-supply-concerns-4836315",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-05 13:57:06",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Russian fuel prices added 0.5% to inflation in June and July",
+        "link": "https://www.investing.com/news/commodities-news/russian-fuel-prices-added-05-to-inflation-in-june-and-july-93CH-4837892",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-05 13:33:04",
+        "matched_keywords": [
+          "inflation"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are balancing between sticky inflationary pressures driven by Middle East geopolitical risks and tariff policies, and severe climate-induced supply chain disruptions like the European droughts. Central banks face complex decisions, with the Fed leaning hawkish under Chairman Kevin Warsh amid rising manufacturing prices, while regional monetary authorities like Singapore tighten policy.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_reason": "Severe European droughts lowering the Rhine and Danube river levels are severely disrupting grain shipments and agricultural logistics out of key export regions.",
+      "usd_ils_impact": "BEARISH",
+      "usd_ils_impact_reason": "Recent easing in Middle East tensions and temporary drops in energy prices have helped relieve conflict-driven pressures, supporting the Israeli shekel.",
+      "key_risk": "Escalation of Middle Eastern geopolitical conflict triggering renewed oil price shocks and persistent supply chain bottlenecks.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-05T13:56:16.966432+00:00",
     "total_scanned": 225,
     "flagged_count": 161,
