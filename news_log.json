@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-08-07T12:52:18.113038+00:00",
+    "total_scanned": 224,
+    "flagged_count": 157,
+    "flagged_headlines": [
+      {
+        "title": "There are good reasons why higher bond yields are here to stay, this strategist says",
+        "link": "https://www.marketwatch.com/story/there-are-good-reasons-why-higher-bond-yields-are-here-to-stay-this-strategist-says-2a89d5ae?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 07 Aug 2026 10:02:00 GMT",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Treasuries rise as Two-year and 10-year yields post biggest drop since mid-June",
+        "link": "https://www.investing.com/news/forex-news/european-bonds-cap-best-week-since-june-as-easing-oil-snaps-bund-selloff-4845170",
+        "source": "Investing.com Forex",
+        "published": "2026-08-07 12:24:27",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar firms on safe haven boost, rising yields; yen hits 158 after intervention",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-dollar-near-7wk-low-with-iran-talks-us-jobs-data-in-focus-4839999",
+        "source": "Investing.com Forex",
+        "published": "2026-08-06 18:39:23",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Treasuries edge upward as traders weigh energy risks and divided Fed hike bets",
+        "link": "https://www.investing.com/news/forex-news/german-yields-hold-steady-at-3week-lows-as-easing-oil-cools-ecb-hike-bets-4840076",
+        "source": "Investing.com Forex",
+        "published": "2026-08-06 12:01:08",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Europe is blowing up riverbeds as an extreme drought wreaks havoc on its economy",
+        "link": "https://www.cnbc.com/2026/08/05/drought-rhine-danube-water-levels-economy.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 05 Aug 2026 07:15:17 GMT",
+        "matched_keywords": [
+          "drought"
+        ]
+      },
+      {
+        "title": "Manufacturing survey shows inflation worries 'worse than pandemic era,' adding to Fed pressure",
+        "link": "https://www.cnbc.com/2026/08/03/manufacturing-survey-shows-inflation-worries-adding-to-pressure-on-fed.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 04 Aug 2026 14:42:39 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are navigating a complex mix of persistent inflation pressures, shifting Federal Reserve rate expectations, and significant weather-driven supply risks. Notably, extreme droughts in Europe are threatening vital waterways and agricultural transport, while bond yields fluctuate amid ongoing macroeconomic uncertainty.",
+      "wheat_impact": {
+        "direction": "BULLISH",
+        "reason": "Severe European droughts are wreaking havoc on riverbeds and logistics, potentially disrupting regional crop yields and agricultural transport."
+      },
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "Broader dollar firmness driven by safe-haven demand and shifting U.S. yield dynamics supports strength in the USD against the ILS."
+      },
+      "key_risk": "Escalating climate and drought disruptions to key agricultural transportation arteries and supply chains.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-07T10:37:24.725074+00:00",
     "total_scanned": 223,
     "flagged_count": 158,
