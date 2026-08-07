@@ -1,0 +1,30 @@
+name: Bug Detector
+
+on:
+  schedule:
+    # Every Sunday at 06:00 UTC (~08:00/09:00 Israel time depending on DST).
+    # Runs independently of wheat_monitor_github.yml — this only reads
+    # state, never writes to it and never sends trading alerts.
+    - cron: '0 6 * * 0'
+  workflow_dispatch: {}   # manual run button in the Actions tab
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run bug detector
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python bug_detector.py
