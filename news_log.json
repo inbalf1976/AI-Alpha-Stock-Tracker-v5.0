@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-08-07T08:37:48.081005+00:00",
+    "total_scanned": 223,
+    "flagged_count": 160,
+    "flagged_headlines": [
+      {
+        "title": "Sweetgreen recalls jalapenos, details how cyclospora outbreak will weigh on sales",
+        "link": "https://www.marketwatch.com/story/sweetgreen-recalls-jalapenos-details-how-cyclospora-outbreak-will-weigh-on-sales-c52435bf?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 06 Aug 2026 22:58:00 GMT",
+        "matched_keywords": [
+          "ils"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil rises on concerns over Strait of Hormuz reopening plans",
+        "link": "https://www.investing.com/news/commodities-news/oil-rises-on-concerns-over-strait-of-hormuz-reopening-plans-4844992",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 07:06:46",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "London Gas Oil hits resistance wall at $1,228: Hourly levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-crashes-9-below-20ma-live-levels-93CH-4833082",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 07:04:41",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Brent Oil bear flag near $83.54 tests key levels: Live hourly",
+        "link": "https://www.investing.com/news/commodities-news/brent-oil-squeezed-between-8230-and-8626-live-levels-93CH-4833084",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 07:04:41",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI consolidates below $80.84 resistance: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-trapped-in-79608250-range-hourly-levels-93CH-4833083",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 07:04:38",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Trump unveils trade actions to compete with China on solar and chips",
+        "link": "https://www.investing.com/news/commodities-news/trump-signs-executive-order-to-protect-us-polysilicon-industry-4844311",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 06:48:27",
+        "matched_keywords": [
+          "ils"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Energy markets are reacting to geopolitical risks and trade maneuvers involving the Strait of Hormuz and China, while the Federal Reserve advances multiple banking sector regulatory updates and M&A approvals. Meanwhile, idiosyncratic agricultural news notes a food safety recall affecting Sweetgreen's supply chain.",
+      "wheat_impact": {
+        "direction": "NEUTRAL",
+        "reason": "Recent news centers on energy, regional banking regulatory actions, and targeted trade policies with no direct bearing on global wheat supply or demand fundamentals."
+      },
+      "usd_ils_impact": {
+        "direction": "NEUTRAL",
+        "reason": "Macro drivers are dominated by US Federal Reserve updates, US-China trade actions, and broader crude oil movements rather than factors directly impacting the Israeli Shekel."
+      },
+      "key_risk": "Geopolitical escalation around the Strait of Hormuz threatening global crude oil supply and shipping lanes.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-07T07:16:34.334538+00:00",
     "total_scanned": 223,
     "flagged_count": 162,
