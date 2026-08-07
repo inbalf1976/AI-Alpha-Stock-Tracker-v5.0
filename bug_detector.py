@@ -307,17 +307,24 @@ def main():
     all_issues += check_state_health(state)
     all_issues += check_signal_freshness()
 
-    now_str = datetime.now(IL).strftime("%Y-%m-%d %H:%M")
+    now = datetime.now(IL)
+    now_str = now.strftime("%Y-%m-%d %H:%M")
+    is_weekly_report_day = now.weekday() == 6  # Sunday — full report regardless of issues
+
     if all_issues:
         lines = [f"🔎 Bug Detector Report ({now_str})", f"{len(all_issues)} issue(s) found:\n"]
         for i, issue in enumerate(all_issues, 1):
             lines.append(f"{i}. {issue}")
         message = "\n".join(lines)
+        print(message)
+        send_telegram(message)  # always alert immediately when something's wrong
+    elif is_weekly_report_day:
+        message = f"🔎 Bug Detector — Weekly Report ({now_str})\nAll checks passed — no issues found."
+        print(message)
+        send_telegram(message)
     else:
-        message = f"🔎 Bug Detector Report ({now_str})\nAll checks passed — no issues found."
-
-    print(message)
-    send_telegram(message)
+        # Silent day, nothing wrong — don't ping Telegram, just log for the Actions run.
+        print(f"🔎 Bug Detector ({now_str}) — all checks passed, no report sent (not weekly report day).")
 
 
 if __name__ == "__main__":
