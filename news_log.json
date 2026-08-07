@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-08-07T10:25:32.389604+00:00",
+    "total_scanned": 223,
+    "flagged_count": 158,
+    "flagged_headlines": [
+      {
+        "title": "European bonds cap best week since June as easing oil snaps bund sell-off",
+        "link": "https://www.investing.com/news/forex-news/european-bonds-cap-best-week-since-june-as-easing-oil-snaps-bund-selloff-4845170",
+        "source": "Investing.com Forex",
+        "published": "2026-08-07 08:06:11",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Dollar firms on safe haven boost, rising yields; yen hits 158 after intervention",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-dollar-near-7wk-low-with-iran-talks-us-jobs-data-in-focus-4839999",
+        "source": "Investing.com Forex",
+        "published": "2026-08-06 18:39:23",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Treasuries edge upward as traders weigh energy risks and divided Fed hike bets",
+        "link": "https://www.investing.com/news/forex-news/german-yields-hold-steady-at-3week-lows-as-easing-oil-cools-ecb-hike-bets-4840076",
+        "source": "Investing.com Forex",
+        "published": "2026-08-06 12:01:08",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "There are good reasons why higher bond yields are here to stay, this strategist says",
+        "link": "https://www.marketwatch.com/story/there-are-good-reasons-why-higher-bond-yields-are-here-to-stay-this-strategist-says-2a89d5ae?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 07 Aug 2026 10:02:00 GMT",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Oil choppy as investors gauge hopes for Strait of Hormuz reopening",
+        "link": "https://www.investing.com/news/commodities-news/oil-extends-sharp-gains-as-iran-seeks-to-ban-us-israeli-ships-from-hormuz-4844990",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 10:08:21",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices firm on concerns over Strait of Hormuz plans",
+        "link": "https://www.investing.com/news/commodities-news/oil-rises-on-concerns-over-strait-of-hormuz-reopening-plans-4844992",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 08:48:50",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "London Gas Oil hits resistance wall at $1,228: Hourly levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-crashes-9-below-20ma-live-levels-93CH-4833082",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 07:04:41",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Brent Oil bear flag near $83.54 tests key levels: Live hourly",
+        "link": "https://www.investing.com/news/commodities-news/brent-oil-squeezed-between-8230-and-8626-live-levels-93CH-4833084",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 07:04:41",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI consolidates below $80.84 resistance: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-trapped-in-79608250-range-hourly-levels-93CH-4833083",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 07:04:38",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Europe is blowing up riverbeds as an extreme drought wreaks havoc on its economy",
+        "link": "https://www.cnbc.com/2026/08/05/drought-rhine-danube-water-levels-economy.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 05 Aug 2026 07:15:17 GMT",
+        "matched_keywords": [
+          "drought"
+        ]
+      },
+      {
+        "title": "Manufacturing survey shows inflation worries 'worse than pandemic era,' adding to Fed pressure",
+        "link": "https://www.cnbc.com/2026/08/03/manufacturing-survey-shows-inflation-worries-adding-to-pressure-on-fed.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 04 Aug 2026 14:42:39 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "As Warsh’s Fed faces pressure to act on inflation, these indicators show it’s at its lowest in years",
+        "link": "https://www.cnbc.com/2026/07/31/these-fed-alternative-indicators-show-inflation-is-at-lowest-in-years.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 31 Jul 2026 16:51:30 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "U.S. economy slowed to 1.5% growth rate in Q2; June core inflation at 3.3%",
+        "link": "https://www.cnbc.com/2026/07/30/us-economy-slowed-to-1point5percent-growth-rate-in-q2-june-core-inflation-at-3point3percent.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 30 Jul 2026 15:04:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "What a divided Fed means for investors",
+        "link": "https://www.cnbc.com/2026/07/29/fed-meeting-interest-rates-warsh-stocks-bonds.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 29 Jul 2026 23:36:34 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Singapore tightens monetary policy in surprise move as rising oil prices rekindle inflation risk",
+        "link": "https://www.cnbc.com/2026/07/27/singapore-mas-july-monetary-policy-middle-east-oil-prices-inflation-.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 27 Jul 2026 14:22:15 GMT",
+        "matched_keywords": [
+          "inflation",
+          "oil"
+        ]
+      }
+    ],
+    "llm_analysis": {
+      "summary": "Global markets are navigating conflicting crosscurrents of sticky inflation pressures, central bank policy divisions, and acute geopolitical risks in the Middle East tied to the Strait of Hormuz. While easing energy volatility offered some relief to European bonds, renewed supply concerns and extreme weather shocks like European droughts continue to stoke commodity inflation fears.",
+      "wheat_impact": {
+        "direction": "BULLISH",
+        "reason": "Severe European droughts and transport disruptions from low riverbeds threaten agricultural yields and logistics, adding upward pressure to global grain markets."
+      },
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "Rising safe-haven dollar demand, combined with heightened Middle Eastern geopolitical risks surrounding the Strait of Hormuz, supports the greenback against the shekel."
+      },
+      "key_risk": "Potential military escalation or prolonged disruption in the Strait of Hormuz triggering a severe oil supply shock and reigniting global inflation.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-07T08:37:48.081005+00:00",
     "total_scanned": 223,
     "flagged_count": 160,
