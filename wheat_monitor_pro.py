@@ -30,6 +30,14 @@ CHANGELOG (this version):
     only the single "current price" used for entry/stop/target is
     live. If the live fetch fails, this is now flagged explicitly
     (⚠️ STALE) instead of failing silently.
+  - CHANGE (2026-08-07): full formatted alert now sends EVERY day
+    the alert gate is open, regardless of tier — restoring the
+    original daily visibility. Only log_prediction() (the accuracy
+    tracking) stays gated on tier > 0, so Tier 0 days are still
+    excluded from win-rate stats (per the 2026-07-29 fix that
+    stopped Tier 0 from dragging live accuracy down to 43.5%), but
+    no longer go silent/heartbeat-only. Sending and logging are now
+    fully decoupled.
 """
 
 import os, sys, json, warnings, requests
@@ -1569,30 +1577,16 @@ def main():
     print(f"\nFINAL: {direction} | Tier {tier}")
 
     # ── Send ──
-    # UPDATED 2026-07-29: alerts and logged predictions are now gated on
-    # tier > 0, not just time-of-day. Previously every alert-eligible run
-    # sent a full Telegram message and logged a real prediction (entry
-    # price, later validated to a real WIN/LOSS + P&L) even on Tier 0
-    # days — when ConvictionGate found NO validated condition at all.
-    # format_alert() already changed the message WORDING on Tier 0
-    # ("no trade setup shown"), but nothing stopped the send/log itself,
-    # so Tier 0 daily-ensemble guesses were being tracked as if they
-    # were real signals. A real check of prediction_log.json (2026-07-29)
-    # showed Tier 0 sitting at 18.8% win rate and -73.9c total P&L,
-    # dragging the overall combined win rate down to 43.5% even though
-    # Tier 1 (62.5%) and Tier 2 (57.1%) were both genuinely profitable
-    # on their own. Tier 0 is explicitly "no signal" by ConvictionGate's
-    # own design and should never have been sent or logged as a trade.
-    #
-    # UPDATED 2026-07-30: added one exception — if a weekly trade setup
-    # just closed (break_outcome is WIN or LOSS), that's a real,
-    # already-committed position resolving, not a fresh Tier 0 guess.
-    # It must always be reported, even on a Tier 0 day, or the person
-    # never finds out their open position closed and flipped. This is
-    # sent WITHOUT calling log_prediction() — it is not a new signal,
-    # so it must not get counted in Tier 0's (or any tier's) win-rate
-    # stats; that stat should only ever reflect real tier>0 signals.
-    if send and tier > 0:
+    # UPDATED 2026-08-07: full formatted alert now sends every day the
+    # alert gate is open, regardless of tier — restoring the original
+    # daily visibility that was lost when the 2026-07-29 tier-gating
+    # fix (correctly) stopped Tier 0 from being logged as a tracked
+    # prediction. Sending and logging are now fully decoupled: every
+    # send still updates alerts_sent/alerts_today, but log_prediction()
+    # (which feeds the accuracy stats bug_detector.py checks) still
+    # only fires on tier > 0, so Tier 0 days stay excluded from
+    # win-rate tracking without going silent/heartbeat-only.
+    if send:
         success = send_telegram(message)
         if success:
             state['alerts_sent'] = state.get('alerts_sent', 0) + 1
@@ -1600,35 +1594,10 @@ def main():
             if not is_manual:
                 slot_key = f"{datetime.now(IL).date().isoformat()}_morning"
                 state.setdefault('alerts_today', {})[slot_key] = True
+        if tier > 0:
             log_prediction(direction, current_price, pred['confidence'], tier, s_phase['phase'])
-    elif send and tier == 0 and break_outcome is not None:
-        success = send_telegram(message)
-        print(f"   Alert sent despite Tier 0 — a weekly setup just closed "
-              f"({break_outcome}); not logged as a new prediction, since "
-              f"Tier 0 has no validated signal behind it.")
-        if success:
-            state['alerts_sent'] = state.get('alerts_sent', 0) + 1
-            state['last_alert_date'] = datetime.now(IL).date().isoformat()
-            if not is_manual:
-                slot_key = f"{datetime.now(IL).date().isoformat()}_morning"
-                state.setdefault('alerts_today', {})[slot_key] = True
-    elif send and tier == 0:
-        # UPDATED 2026-07-31: previously fully silent on Tier 0 (correct —
-        # no real signal, shouldn't send a full alert or log a fake trade).
-        # But full silence made it impossible to tell "no signal today"
-        # apart from "the pipeline crashed/stopped running" without
-        # checking GitHub Actions directly. This sends one short
-        # heartbeat line instead — NOT counted in alerts_sent (that
-        # stat should only reflect real tier>0 signals + break closures),
-        # NOT logged as a prediction, just a liveness ping.
-        heartbeat = (
-            f"Wheat Monitor: still running, no signal today (Tier 0).\n"
-            f"Price: {current_price:.2f}c | Daily read: {direction} "
-            f"(baseline only — no validated condition fired)"
-        )
-        send_telegram(heartbeat)
-        print(f"   Heartbeat sent — Tier 0, no real signal (not counted as an "
-              f"alert, not logged as a prediction)")
+        else:
+            print("   Tier 0 — alert sent for visibility, NOT logged as a tracked prediction.")
     else:
         print(f"No alert: {reason}")
 
