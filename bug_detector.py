@@ -134,6 +134,18 @@ def check_prediction_log(log):
     return issues
 
 
+def _entry_after(ts_str, cutoff):
+    if not ts_str:
+        return False
+    try:
+        ts = datetime.fromisoformat(ts_str)
+        if ts.tzinfo is None:
+            ts = ts.replace(tzinfo=IL)
+        return ts >= cutoff
+    except Exception:
+        return False
+
+
 def _is_recent(ts_str, days, invert=False):
     if not ts_str:
         return False
@@ -149,10 +161,24 @@ def _is_recent(ts_str, days, invert=False):
 
 # ── 3. LIVE VS BACKTEST ACCURACY DIVERGENCE ──────────────────────────────────
 
-def check_accuracy_divergence(log, validated):
+def check_accuracy_divergence(log, validated, state):
     issues = []
     if not isinstance(log, list) or not log:
         return issues  # already flagged by check_prediction_log
+
+    # Only count predictions from the stats cutoff forward — avoids
+    # blending pre-gate-change and post-gate-change trades into one
+    # misleading number. Old entries stay in the log for history; they
+    # just stop feeding this comparison. Set stats_cutoff_date in
+    # wheat_monitor_state.json whenever the gate/conditions change
+    # meaningfully (e.g. after a ConvictionGate condition set update).
+    cutoff_str = (state or {}).get("stats_cutoff_date")
+    if cutoff_str:
+        try:
+            cutoff = datetime.fromisoformat(cutoff_str).replace(tzinfo=IL)
+            log = [e for e in log if _entry_after(e.get("timestamp"), cutoff)]
+        except Exception:
+            pass
 
     claimed = {}
     if isinstance(validated, dict) and "validated_conditions" in validated:
@@ -277,7 +303,7 @@ def main():
     all_issues = []
     all_issues += check_missed_run(state)
     all_issues += check_prediction_log(log)
-    all_issues += check_accuracy_divergence(log, validated)
+    all_issues += check_accuracy_divergence(log, validated, state)
     all_issues += check_state_health(state)
     all_issues += check_signal_freshness()
 
