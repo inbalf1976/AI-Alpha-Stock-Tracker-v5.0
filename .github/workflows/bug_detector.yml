@@ -2,10 +2,9 @@ name: Bug Detector
 
 on:
   schedule:
-    # Every Sunday at 06:00 UTC (~08:00/09:00 Israel time depending on DST).
-    # Runs independently of wheat_monitor_github.yml — this only reads
-    # state, never writes to it and never sends trading alerts.
-    - cron: '0 6 * * 0'
+    # Daily at 06:00 UTC. Silent on clean days — only alerts immediately
+    # if an issue is found. Sends a full report every Sunday regardless.
+    - cron: '0 6 * * *'
   workflow_dispatch: {}   # manual run button in the Actions tab
 
 jobs:
