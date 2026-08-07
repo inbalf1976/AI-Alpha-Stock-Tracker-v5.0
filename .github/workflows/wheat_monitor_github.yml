@@ -1,12 +1,12 @@
 name: Wheat Monitor PRO - Ultimate Edition
 on:
   schedule:
-    - cron: '0 22 * * 0-4'  # 22:00 UTC Sun-Thu = 01:00 Israel time Mon-Fri (IDT UTC+3)
-    - cron: '30 22 * * 0'   # 22:30 UTC Sunday — weekly backtest refresh, after the Sunday monitor run
-    - cron: '0 0 * * 6'     # 00:00 UTC Saturday = 03:00 Israel time Saturday — accuracy report ONLY, no new alert
-    - cron: '0 6 * * *'     # 06:00 UTC daily — news scan #1
-    - cron: '0 12 * * *'    # 12:00 UTC daily — news scan #2
-    - cron: '0 18 * * *'    # 18:00 UTC daily — news scan #3
+    - cron: '0 22 * * 6,0,1,2,3'  # 22:00 UTC Sat-Wed = 01:00 Israel time Sun-Thu (IDT UTC+3)
+    - cron: '30 22 * * 6'         # 22:30 UTC Saturday — weekly backtest refresh, after the Sunday monitor run
+    - cron: '0 0 * * 6'           # 00:00 UTC Saturday = 03:00 Israel time Saturday — accuracy report ONLY, no new alert
+    - cron: '0 6 * * *'           # 06:00 UTC daily — news scan #1
+    - cron: '0 12 * * *'          # 12:00 UTC daily — news scan #2
+    - cron: '0 18 * * *'          # 18:00 UTC daily — news scan #3
   workflow_dispatch:         # manual trigger kept for testing
 jobs:
   monitor:
@@ -14,7 +14,7 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
-    if: contains(fromJSON('["0 22 * * 0-4", "30 22 * * 0"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
+    if: contains(fromJSON('["0 22 * * 6,0,1,2,3", "30 22 * * 6"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -30,18 +30,19 @@ jobs:
     - name: Determine if this is the weekly backtest run
       id: check_schedule
       run: |
-        if [ "${{ github.event.schedule }}" = "30 22 * * 0" ]; then
+        if [ "${{ github.event.schedule }}" = "30 22 * * 6" ]; then
           echo "is_backtest_run=true" >> $GITHUB_OUTPUT
         else
           echo "is_backtest_run=false" >> $GITHUB_OUTPUT
         fi
     - name: Weekly backtest refresh
       if: steps.check_schedule.outputs.is_backtest_run == 'true'
-      # Runs once a week (Sunday), separate from the daily monitor
-      # schedule, since a 730-day rolling window barely moves day to
-      # day — running this daily would be wasted compute for near-
-      # zero new information (confirmed 2026-07-09: baseline moved
-      # only 0.07% across a 2-day gap).
+      # Runs once a week (Saturday UTC, ahead of the Sunday-Israel
+      # monitor run), separate from the daily monitor schedule, since
+      # a 730-day rolling window barely moves day to day — running
+      # this daily would be wasted compute for near-zero new
+      # information (confirmed 2026-07-09: baseline moved only 0.07%
+      # across a 2-day gap).
       run: |
         python backtest.py
         python generate_validated_conditions.py
