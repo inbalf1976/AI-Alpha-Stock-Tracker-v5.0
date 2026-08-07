@@ -43,7 +43,8 @@ MAX_HOURS_SINCE_LAST_CHECK   = 30     # flag if monitor hasn't run in this long
 ALERTS_TODAY_CLEANUP_LIMIT   = 40     # flag if old date-keys are piling up
 ACCURACY_DIVERGENCE_PCT      = 15     # flag if live vs backtest win rate gap exceeds this
 MIN_SAMPLE_FOR_ACCURACY_CHECK = 8     # don't judge accuracy off tiny samples
-STALE_SIGNAL_HOURS           = 48     # news/weather/validated_conditions age flag
+STALE_SIGNAL_HOURS           = 48     # news/weather age flag (these should update daily)
+STALE_VALIDATED_COND_HOURS   = 200    # validated_conditions.json only regenerates weekly (~168h) — give it slack
 
 
 def _load_json(path):
@@ -220,10 +221,10 @@ def check_state_health(state):
 
 def check_signal_freshness():
     issues = []
-    for label, path, ts_key in [
-        ("news_log.json", NEWS_LOG, "timestamp"),
-        ("weather_cache.json", WEATHER_CACHE, "ts"),
-        ("validated_conditions.json", VALIDATED_COND, "generated_at"),
+    for label, path, ts_key, max_hours in [
+        ("news_log.json", NEWS_LOG, "timestamp", STALE_SIGNAL_HOURS),
+        ("weather_cache.json", WEATHER_CACHE, "ts", STALE_SIGNAL_HOURS),
+        ("validated_conditions.json", VALIDATED_COND, "generated_at", STALE_VALIDATED_COND_HOURS),
     ]:
         data = _load_json(path)
         if data is None:
@@ -242,7 +243,7 @@ def check_signal_freshness():
             if ts.tzinfo is None:
                 ts = ts.replace(tzinfo=IL)
             age_h = (datetime.now(IL) - ts).total_seconds() / 3600
-            if age_h > STALE_SIGNAL_HOURS:
+            if age_h > max_hours:
                 issues.append(f"{label} is {age_h:.0f}h old — may be stale (source may have stopped updating).")
         except Exception:
             pass
