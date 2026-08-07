@@ -614,11 +614,13 @@ class WeeklyRangeEngine:
 
         final_call_block = f"WEEKLY FINAL CALL: {weekly_final_call}\n" + ("=" * 30) + "\n\n"
         daily_direction_line = f"daily direction: {daily_direction}\n\n" if daily_direction else ""
+        tier_top_line = f"Tier: {tier}\n\n"
         status_block = f"\nstatus- {status_line}\n" if status_line else ""
 
         message = (
             f"{final_call_block}"
             f"{daily_direction_line}"
+            f"{tier_top_line}"
             f"WHEAT WEEKLY OUTLOOK\n"
             f"------------------------------\n"
             f"{weekly['next_week_label']} | {weekly['month_label']}\n\n"
