@@ -1,0 +1,51 @@
+name: News Scanner
+
+on:
+  workflow_dispatch: {}   # manual "Run workflow" button — always scans regardless of time
+  schedule:
+    # Six cron entries = 3 target IL times x 2 (winter/summer UTC
+    # offset), same dual-cron convention as wheat_monitor_github.yml.
+    # news_scanner.py's should_run_scheduled_scan() then checks the
+    # ACTUAL current Israel time and only performs a real scan within
+    # 10 minutes of one of the three targets below — the "wrong for
+    # today's DST state" cron entries fire but exit immediately
+    # without scanning, so this is safe/cheap even though 6 entries
+    # fire daily.
+    #
+    # Target 01:58 IL (just before the model's 01:00-02:00 alert window)
+    - cron: '58 23 * * *'   # winter (IL = UTC+2)
+    - cron: '58 22 * * *'   # summer (IL = UTC+3, DST)
+    # Target 11:35 IL
+    - cron: '35 9 * * *'    # winter
+    - cron: '35 8 * * *'    # summer
+    # Target 16:15 IL (ahead of market open)
+    - cron: '15 14 * * *'   # winter
+    - cron: '15 13 * * *'   # summer
+
+jobs:
+  news-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # NOTE: merge with whatever your project's actual dependency
+      # list is (this repo doesn't have a prior news_scanner.yml to
+      # copy from) — news_scanner.py needs feedparser, beautifulsoup4,
+      # requests, and google-genai.
+      - name: Install dependencies
+        run: pip install feedparser beautifulsoup4 requests google-genai
+
+      - name: Run news scanner
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python3 news_scanner.py
+
+      # NOTE: add your repo's usual "commit news_log.json back" step
+      # here (matching whatever pattern wheat_monitor_github.yml or
+      # run_backtest.yml uses for committing generated files) — not
+      # included here since the exact git-commit step wasn't available
+      # to copy from an existing workflow.
