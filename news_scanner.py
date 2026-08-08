@@ -113,6 +113,13 @@ ARTICLE_FETCH_TIMEOUT = 8       # seconds per article
 ARTICLE_MAX_CHARS = 3000        # per-article cap, keeps prompt size sane
 ARTICLE_MIN_CHARS = 200         # below this, treat as blocked/paywalled/empty
 
+# Sources whose headlines are routine/low-value boilerplate (e.g. Fed
+# press releases approving individual bank mergers) rather than
+# market-moving news. enrich_with_full_text() deprioritizes these so
+# the limited fetch budget goes to sources actually worth fetching —
+# see LOW_PRIORITY_FETCH_SOURCES below and its docstring note.
+LOW_PRIORITY_FETCH_SOURCES = {"Fed Reserve Press Releases"}
+
 # Windward AI maritime chokepoint dashboard — free, no registration,
 # no API. See CHANGELOG (2026-08-08) above for why this is fetched
 # directly rather than treated as an RSS source.
@@ -302,8 +309,26 @@ def enrich_with_full_text(flagged_headlines, count=FULL_TEXT_FETCH_COUNT):
     builder falls back to title-only for those. Never raises; a
     total failure here just means the scan proceeds headline-only,
     same as before this feature existed.
+
+    UPDATED 2026-08-08: previously took flagged_headlines[:count] in
+    whatever order filter_high_impact() happened to produce. On scans
+    where several routine Fed Reserve press releases (bank merger
+    approvals, enforcement actions — see LOW_PRIORITY_FETCH_SOURCES)
+    sorted first, they silently consumed the entire fetch budget,
+    leaving genuinely market-moving Investing.com/MarketWatch articles
+    further down the list never attempted at all. Now sorts
+    low-priority sources to the back before taking the top `count`,
+    so the limited fetch budget goes to the sources most likely to
+    carry real market-moving detail worth the full-text fetch.
     """
-    targets = flagged_headlines[:count]
+    if not flagged_headlines:
+        return flagged_headlines
+
+    prioritized = sorted(
+        flagged_headlines,
+        key=lambda h: h.get("source") in LOW_PRIORITY_FETCH_SOURCES,
+    )
+    targets = prioritized[:count]
     if not targets:
         return flagged_headlines
 
