@@ -28,6 +28,32 @@ CHANGELOG (2026-07-31):
   (likely paywalled/blocked) falls back to headline-only for that
   article; the pipeline never breaks or blocks on a failed fetch.
   This is a best-effort enrichment, not a guaranteed capability.
+
+CHANGELOG (2026-08-08):
+  Expanded HIGH_IMPACT_KEYWORDS after a loss_forensics.py review
+  showed real losses whose driving news wasn't reliably being flagged.
+  Added two groups:
+    - Missing topic words: hormuz, escalation, heatwave/heat wave.
+      (Other suggested words like "crop damage", "grain corridor",
+      "yield cut" were NOT added as separate entries since "crop",
+      "grain", and "yield" already catch them via substring match —
+      adding them again would be redundant.)
+    - Anticipatory/developing-event language: words that hint a
+      disruption is forming or an event is about to resolve, BEFORE
+      it's fully priced in — e.g. "warns of", "threatens to" (early
+      warning), "halts exports"/"suspends shipping"/"blockade"
+      (concrete early-stage disruption), "declares unsafe" (the
+      original Black Sea navigation example), "ceasefire"/"peace
+      deal"/"peace agreement" (de-escalation is just as much a
+      "change coming" signal as escalation), "secretly" (low-noise,
+      catches under-the-radar developments).
+    Deliberately did NOT add broad generic verbs like "fire",
+    "announce", or "signing" — these match almost anything (any
+    corporate announcement, any firing, any contract signing) and
+    would flood flagged headlines with noise unrelated to wheat,
+    the same problem "fed" already causes with routine Fed
+    enforcement-action press releases. Anticipatory language was
+    kept as specific multi-word phrases for the same reason.
 """
 
 import os
@@ -121,7 +147,16 @@ HIGH_IMPACT_KEYWORDS = [
     "shekel", "ils", "bank of israel", "fed", "fomc", "rate hike", "rate cut",
     "cpi", "ppi", "inflation", "tariff", "embargo", "sanction", "opec", "crude",
     "oil", "geopolitical", "missile", "war", "red sea", "suez", "shipping",
-    "black sea", "export ban", "yield", "treasury", "dxy", "recession"
+    "black sea", "export ban", "yield", "treasury", "dxy", "recession",
+    # Added 2026-08-08 — missing topic words (see CHANGELOG above)
+    "hormuz", "escalation", "heatwave", "heat wave",
+    # Added 2026-08-08 — anticipatory/developing-event language, kept
+    # as specific multi-word phrases so they don't fire independent of
+    # any real topic (see CHANGELOG above for why "fire"/"announce"/
+    # "signing" were deliberately left out)
+    "declares unsafe", "warns of", "threatens to", "halts exports",
+    "suspends shipping", "blockade", "secretly", "ceasefire",
+    "peace deal", "peace agreement"
 ]
 
 # ---------------------------------------------------------------------------
