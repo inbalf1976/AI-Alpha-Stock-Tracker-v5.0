@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-08-08T18:42:15.537017+00:00",
+    "total_scanned": 226,
+    "flagged_count": 169,
+    "flagged_headlines": [
+      {
+        "title": "Europe is blowing up riverbeds as an extreme drought wreaks havoc on its economy",
+        "link": "https://www.cnbc.com/2026/08/05/drought-rhine-danube-water-levels-economy.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 05 Aug 2026 07:15:17 GMT",
+        "matched_keywords": [
+          "drought"
+        ]
+      },
+      {
+        "title": "Manufacturing survey shows inflation worries 'worse than pandemic era,' adding to Fed pressure",
+        "link": "https://www.cnbc.com/2026/08/03/manufacturing-survey-shows-inflation-worries-adding-to-pressure-on-fed.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 04 Aug 2026 14:42:39 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "As Warsh’s Fed faces pressure to act on inflation, these indicators show it’s at its lowest in years",
+        "link": "https://www.cnbc.com/2026/07/31/these-fed-alternative-indicators-show-inflation-is-at-lowest-in-years.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 31 Jul 2026 16:51:30 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "U.S. economy slowed to 1.5% growth rate in Q2; June core inflation at 3.3%",
+        "link": "https://www.cnbc.com/2026/07/30/us-economy-slowed-to-1point5percent-growth-rate-in-q2-june-core-inflation-at-3point3percent.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 30 Jul 2026 15:04:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "What a divided Fed means for investors",
+        "link": "https://www.cnbc.com/2026/07/29/fed-meeting-interest-rates-warsh-stocks-bonds.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 29 Jul 2026 23:36:34 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar falls as Fed rate hike bets ease; yen set to hold intervention gains",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-rangebound-dollar-firms-amid-iran-peace-uncertainty-us-jobs-caution-4845065",
+        "source": "Investing.com Forex",
+        "published": "2026-08-07 19:34:05",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "US sanctions Dubai crypto exchange for aiding Iran’s IRGC, following a Reuters report",
+        "link": "https://www.investing.com/news/forex-news/us-sanctions-dubai-crypto-exchange-for-aiding-irans-irgc-following-a-reuters-report-4847273",
+        "source": "Investing.com Forex",
+        "published": "2026-08-07 17:49:10",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Dollar firms on safe haven boost, rising yields; yen hits 158 after intervention",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-dollar-near-7wk-low-with-iran-talks-us-jobs-data-in-focus-4839999",
+        "source": "Investing.com Forex",
+        "published": "2026-08-06 18:39:23",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Treasuries edge upward as traders weigh energy risks and divided Fed hike bets",
+        "link": "https://www.investing.com/news/forex-news/german-yields-hold-steady-at-3week-lows-as-easing-oil-cools-ecb-hike-bets-4840076",
+        "source": "Investing.com Forex",
+        "published": "2026-08-06 12:01:08",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "I’m an unemployed software developer who is skeptical of AI. Can I still find a job in tech?",
+        "link": "https://www.marketwatch.com/story/im-an-unemployed-software-developer-who-is-skeptical-of-ai-can-i-still-find-a-job-in-tech-4413875e?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 08 Aug 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Iran says deal on Strait of Hormuz is close but is not enough to open the waterway",
+        "link": "https://www.investing.com/news/commodities-news/iran-says-deal-on-strait-of-hormuz-is-close-but-will-not-open-the-waterway-by-itself-4847656",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-08 15:24:29",
+        "matched_keywords": [
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Oil slides more than 8% for the week as traders hope for Hormuz reopening deal",
+        "link": "https://www.investing.com/news/commodities-news/oil-extends-sharp-gains-as-iran-seeks-to-ban-us-israeli-ships-from-hormuz-4844990",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 20:55:54",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Brent climbs $1 on uncertainty over end to Iran war",
+        "link": "https://www.investing.com/news/commodities-news/oil-rises-on-concerns-over-strait-of-hormuz-reopening-plans-4844992",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 20:06:37",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Gold set for best week since late January after jobs data dents Fed rate hike bets",
+        "link": "https://www.investing.com/news/commodities-news/gold-steady-as-hormuz-tensions-cloud-fed-outlook-traders-eye-payrolls-4844993",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 19:56:58",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Canada discussing trade concessions with US to avoid new tariffs, says source",
+        "link": "https://www.investing.com/news/commodities-news/canada-discussing-trade-concessions-with-us-to-avoid-new-tariffs-says-source-4847320",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-07 19:18:36",
+        "matched_keywords": [
+          "tariff"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are navigating a complex mix of geopolitical tensions in the Middle East, severe European droughts threatening major trade corridors, and a divided Federal Reserve debating future rate hikes amid persistent inflation. Meanwhile, crude oil slides on hopes of a potential Strait of Hormuz resolution, though actual maritime transit through the chokepoint remains severely constrained.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_reason": "Low water levels on the Danube and Rhine rivers are restricting grain shipments from European farmers, compounding supply chain disruptions.",
+      "usd_ils_impact": "NEUTRAL",
+      "usd_ils_impact_reason": "Shifting Fed rate hike bets and fluctuating Middle East geopolitical risks present offsetting forces for regional currency pairs.",
+      "key_risk": "Prolonged closure or severely restricted transit through the Strait of Hormuz keeping global energy and freight markets under extreme stress.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-08T15:30:58.634935+00:00",
     "total_scanned": 229,
     "flagged_count": 170,
