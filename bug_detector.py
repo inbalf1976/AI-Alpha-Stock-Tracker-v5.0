@@ -223,23 +223,6 @@ def check_state_health(state):
             f"old date-keys (e.g. from May) are still present. File will grow unbounded."
         )
 
-    # last_alert_time vs last_alert_date consistency check — current code
-    # only ever sets last_alert_date, so a very old last_alert_time next to
-    # a fresh last_alert_date is a stale/dead field, not a live bug, but
-    # worth a heads-up since it can be misread as "last alert was in June."
-    lad = state.get("last_alert_date")
-    lat = state.get("last_alert_time")
-    if lad and lat:
-        try:
-            date_part = lat.split("T")[0]
-            if date_part != lad:
-                issues.append(
-                    f"'last_alert_time' ({lat}) doesn't match 'last_alert_date' ({lad}) — "
-                    f"likely a stale/unused field left over from an older version of the code."
-                )
-        except Exception:
-            pass
-
     return issues
 
 
