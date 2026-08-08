@@ -1,0 +1,38 @@
+name: Loss Forensics
+
+on:
+  workflow_dispatch: {}   # manual "Run workflow" button in GitHub Actions UI — always sends to Telegram
+  schedule:
+    # Same dual-cron pattern as wheat_monitor_github.yml / bug_detector.yml:
+    # 22:00 UTC covers 00:00/01:00 IL depending on DST (Israel is UTC+2 in
+    # winter, UTC+3 in summer). Runs daily; the script itself decides
+    # whether today is a weekly (Sunday) or monthly (1st) report day —
+    # other days it just logs quietly, no Telegram send.
+    - cron: '0 22 * * *'
+
+jobs:
+  loss-forensics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run loss forensics (manual trigger — always sends)
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 loss_forensics.py --telegram
+
+      - name: Run loss forensics (scheduled — weekly/monthly only)
+        if: github.event_name == 'schedule'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 loss_forensics.py --scheduled
