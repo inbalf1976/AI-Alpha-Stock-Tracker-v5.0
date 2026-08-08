@@ -30,30 +30,52 @@ CHANGELOG (2026-07-31):
   This is a best-effort enrichment, not a guaranteed capability.
 
 CHANGELOG (2026-08-08):
-  Expanded HIGH_IMPACT_KEYWORDS after a loss_forensics.py review
-  showed real losses whose driving news wasn't reliably being flagged.
-  Added two groups:
-    - Missing topic words: hormuz, escalation, heatwave/heat wave.
-      (Other suggested words like "crop damage", "grain corridor",
-      "yield cut" were NOT added as separate entries since "crop",
-      "grain", and "yield" already catch them via substring match —
-      adding them again would be redundant.)
-    - Anticipatory/developing-event language: words that hint a
-      disruption is forming or an event is about to resolve, BEFORE
-      it's fully priced in — e.g. "warns of", "threatens to" (early
-      warning), "halts exports"/"suspends shipping"/"blockade"
-      (concrete early-stage disruption), "declares unsafe" (the
-      original Black Sea navigation example), "ceasefire"/"peace
-      deal"/"peace agreement" (de-escalation is just as much a
-      "change coming" signal as escalation), "secretly" (low-noise,
-      catches under-the-radar developments).
-    Deliberately did NOT add broad generic verbs like "fire",
-    "announce", or "signing" — these match almost anything (any
-    corporate announcement, any firing, any contract signing) and
-    would flood flagged headlines with noise unrelated to wheat,
-    the same problem "fed" already causes with routine Fed
-    enforcement-action press releases. Anticipatory language was
-    kept as specific multi-word phrases for the same reason.
+  1. Expanded HIGH_IMPACT_KEYWORDS after a loss_forensics.py review
+     showed real losses whose driving news wasn't reliably being
+     flagged. Added two groups:
+       - Missing topic words: hormuz, escalation, heatwave/heat wave.
+         (Other suggested words like "crop damage", "grain corridor",
+         "yield cut" were NOT added as separate entries since "crop",
+         "grain", and "yield" already catch them via substring match.)
+       - Anticipatory/developing-event language: words that hint a
+         disruption is forming or an event is about to resolve,
+         BEFORE it's fully priced in — "warns of", "threatens to"
+         (early warning), "halts exports"/"suspends shipping"/
+         "blockade" (concrete early-stage disruption), "declares
+         unsafe" (the original Black Sea navigation example),
+         "ceasefire"/"peace deal"/"peace agreement" (de-escalation is
+         just as much a "change coming" signal as escalation),
+         "secretly" (low-noise, catches under-the-radar developments).
+       Deliberately did NOT add broad generic verbs like "fire",
+       "announce", or "signing" — these match almost anything and
+       would flood flagged headlines with noise, the same problem
+       "fed" already causes with routine Fed enforcement-action press
+       releases.
+       (Also considered and explicitly REJECTED: adding "Kpler" and
+       "Energy Aspects" as named-source keywords — both require paid
+       registration to access any underlying data, so a headline
+       merely citing them gives no verifiable signal here. Not added.)
+  2. Added fetch_windward_context() — a direct fetch of Windward AI's
+     free, no-registration maritime chokepoint dashboard (Hormuz /
+     Red Sea / Black Sea shipping status: blockade status, transit
+     volumes vs. baseline, attack incidents, dark-shipping activity).
+     This is NOT wired in as an RSS feed: the page is a live,
+     JS-rendered status snapshot that gets overwritten in place, not
+     a stream of discrete new items, so RSS's "new item" model doesn't
+     fit it. Instead it's fetched fresh each scan (same direct-fetch
+     pattern as fetch_article_text()) and its "BLUF — Bottom Line Up
+     Front" summary section is extracted as fixed context appended to
+     the Gemini prompt, independent of the keyword-flagged headline
+     pipeline. Given how often Hormuz/Black Sea/Red Sea disruption has
+     shown up as the actual driver behind real trading losses (see
+     loss_forensics.py session, 2026-08-08), this gives a live,
+     dated status ahead of when mainstream headlines catch up — the
+     ~20h institutional-media lag already observed in this project.
+     Like full_text, the raw snapshot is NOT persisted to
+     news_log.json (transient prompt context only, would bloat the
+     log) — only a boolean flag (maritime_context_included) is logged
+     so it's visible in history whether this context was available
+     for a given scan.
 """
 
 import os
@@ -90,6 +112,14 @@ FULL_TEXT_FETCH_COUNT = 8
 ARTICLE_FETCH_TIMEOUT = 8       # seconds per article
 ARTICLE_MAX_CHARS = 3000        # per-article cap, keeps prompt size sane
 ARTICLE_MIN_CHARS = 200         # below this, treat as blocked/paywalled/empty
+
+# Windward AI maritime chokepoint dashboard — free, no registration,
+# no API. See CHANGELOG (2026-08-08) above for why this is fetched
+# directly rather than treated as an RSS source.
+WINDWARD_URL = "https://insights.windward.ai/"
+WINDWARD_FETCH_TIMEOUT = 10
+WINDWARD_CONTEXT_MAX_CHARS = 2500   # BLUF summary only, not the full vessel-by-vessel tables
+WINDWARD_CONTEXT_MIN_CHARS = 200    # below this, treat as blocked/empty/structure-changed
 
 # Custom User-Agent header for HTTP requests
 HTTP_HEADERS = {
@@ -295,6 +325,66 @@ def enrich_with_full_text(flagged_headlines, count=FULL_TEXT_FETCH_COUNT):
     return flagged_headlines
 
 # ---------------------------------------------------------------------------
+# WINDWARD MARITIME CHOKEPOINT CONTEXT (best-effort, 2026-08-08)
+# ---------------------------------------------------------------------------
+
+def fetch_windward_context(timeout=WINDWARD_FETCH_TIMEOUT,
+                            max_chars=WINDWARD_CONTEXT_MAX_CHARS,
+                            min_chars=WINDWARD_CONTEXT_MIN_CHARS):
+    """
+    Best-effort fetch of Windward AI's free, no-registration maritime
+    chokepoint dashboard (Hormuz / Red Sea / Black Sea shipping
+    status). This is a live status snapshot that gets overwritten in
+    place each day, NOT a stream of discrete new items — see
+    CHANGELOG (2026-08-08) for why this is fetched directly here
+    rather than added as an RSS feed.
+
+    Extracts just the "BLUF — Bottom Line Up Front" summary section
+    (the daily top-line bullets) rather than the full page, which also
+    contains large vessel-by-vessel tables too granular/noisy for a
+    daily macro prompt.
+
+    Returns None (never raises) on any fetch/parse failure, or if the
+    page's structure has changed enough that the BLUF marker can't be
+    found and the fallback slice is too short to be useful — callers
+    must treat None as "no maritime context this scan", same pattern
+    as fetch_article_text().
+    """
+    try:
+        req = urllib.request.Request(WINDWARD_URL, headers=HTTP_HEADERS)
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            html = response.read()
+        soup = BeautifulSoup(html, "html.parser")
+        for tag in soup(["script", "style", "nav", "header", "footer", "aside", "form"]):
+            tag.decompose()
+        text = " ".join(soup.stripped_strings)
+        text = " ".join(text.split())  # normalize whitespace
+
+        # Anchor on "BLUF" — the page's own label for its daily
+        # top-line summary bullets. If the site's structure changes
+        # and this marker disappears, fall back to the start of the
+        # page rather than silently returning nothing.
+        marker = "BLUF"
+        idx = text.find(marker)
+        if idx == -1:
+            idx = 0
+
+        snippet = text[idx:idx + max_chars]
+        if len(snippet) < min_chars:
+            return None
+        return snippet
+
+    except urllib.error.HTTPError as e:
+        logger.info(f"   Windward fetch failed: HTTP {e.code} {e.reason}")
+        return None
+    except urllib.error.URLError as e:
+        logger.info(f"   Windward fetch failed: URLError {e.reason}")
+        return None
+    except Exception as e:
+        logger.info(f"   Windward fetch failed: {type(e).__name__}")
+        return None
+
+# ---------------------------------------------------------------------------
 # FILTERING & INTERPRETATION
 # ---------------------------------------------------------------------------
 
@@ -310,11 +400,16 @@ def filter_high_impact(headlines):
     return flagged
 
 
-def interpret_with_gemini(flagged_headlines):
+def interpret_with_gemini(flagged_headlines, maritime_context=None):
     """
     Send flagged headlines (with full article text where available) to
     Gemini for macro & commodity interpretation. Returns a structured
     dictionary with market impacts.
+
+    maritime_context: optional string from fetch_windward_context() —
+    if present, appended to the prompt as fixed live shipping-status
+    context (Hormuz/Red Sea/Black Sea), independent of the keyword-
+    flagged headlines. See CHANGELOG (2026-08-08).
     """
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
@@ -339,13 +434,21 @@ def interpret_with_gemini(flagged_headlines):
                 entries_text.append(f"- [{h['source']}] {h['title']}")
         titles_text = "\n".join(entries_text)
 
+        maritime_block = ""
+        if maritime_context:
+            maritime_block = f"""
+
+        LIVE MARITIME CHOKEPOINT STATUS (Windward AI, Hormuz/Red Sea/Black Sea shipping):
+        {maritime_context}
+        """
+
         prompt = f"""
         You are a senior macro and commodities analyst. Analyze these recent financial & agricultural news items.
         Some include the full article text (marked ARTICLE TEXT) for deeper context — use it when present;
         otherwise rely on the headline alone.
 
         {titles_text}
-
+        {maritime_block}
         Provide a concise analysis in JSON format with the following keys:
         - "summary": A 2-3 sentence overview of main market drivers.
         - "wheat_impact": "BULLISH", "BEARISH", or "NEUTRAL" with a 1-sentence reason.
@@ -431,20 +534,34 @@ def main():
         logger.info(f"Attempting full-article fetch for top {min(FULL_TEXT_FETCH_COUNT, len(flagged))} headlines...")
         flagged = enrich_with_full_text(flagged)
 
+    # 3b. Best-effort maritime chokepoint context (Windward AI) — fetched
+    # independent of whether any headline was keyword-flagged, since it's
+    # cheap (one request) and gives live Hormuz/Red Sea/Black Sea status
+    # even on a quiet news day.
+    logger.info("Fetching maritime chokepoint context (Windward AI)...")
+    maritime_context = fetch_windward_context()
+    if maritime_context:
+        logger.info(f"   Maritime context fetched ({len(maritime_context)} chars)")
+    else:
+        logger.info("   No maritime context this scan (fetch failed or page structure changed)")
+
     # 4. LLM Interpretation
     llm_analysis = None
     if flagged:
         logger.info("Interpreting headlines with Gemini Flash...")
-        llm_analysis = interpret_with_gemini(flagged)
+        llm_analysis = interpret_with_gemini(flagged, maritime_context=maritime_context)
         if not llm_analysis:
             logger.info("   No LLM signal this scan (no key configured, or call failed)")
 
     # 5. Save Record
-    # NOTE: full_text is intentionally NOT persisted to news_log.json —
-    # it's only used transiently to build the Gemini prompt this run.
-    # Saving full article bodies to the repo long-term isn't needed
-    # (the LLM's structured analysis already captures what mattered)
-    # and would bloat the log file considerably.
+    # NOTE: full_text and the raw maritime_context snapshot are
+    # intentionally NOT persisted to news_log.json — both are only
+    # used transiently to build the Gemini prompt this run. Saving
+    # full article bodies / dashboard snapshots to the repo long-term
+    # isn't needed (the LLM's structured analysis already captures
+    # what mattered) and would bloat the log file considerably. Only
+    # a boolean flag is kept so scan history shows whether maritime
+    # context was available that day.
     flagged_for_log = [
         {k: v for k, v in h.items() if k != "full_text"}
         for h in flagged[:15]
@@ -454,6 +571,7 @@ def main():
         "total_scanned": len(headlines),
         "flagged_count": len(flagged),
         "flagged_headlines": flagged_for_log,
+        "maritime_context_included": bool(maritime_context),
         "llm_analysis": llm_analysis
     }
 
