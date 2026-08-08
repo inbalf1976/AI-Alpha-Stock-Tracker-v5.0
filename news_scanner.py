@@ -76,6 +76,24 @@ CHANGELOG (2026-08-08):
      log) — only a boolean flag (maritime_context_included) is logged
      so it's visible in history whether this context was available
      for a given scan.
+  3. Added enrich_with_full_text() source-priority sorting — routine
+     Fed Reserve press releases (bank merger approvals, enforcement
+     actions) were silently consuming the entire fetch budget on
+     scans where several sorted first, leaving genuinely
+     market-moving Investing.com/MarketWatch articles further down
+     the list never attempted. Now sorts LOW_PRIORITY_FETCH_SOURCES
+     to the back before taking the top N.
+  4. Added a scan-time guard so scheduled runs are synchronized with
+     wheat_monitor_pro.py's alert timing instead of running on an
+     independent, uncoordinated cron. Target: a scan lands as close
+     as possible before each of the model's key moments —
+     01:58 IL (just before the 01:00-02:00 IL alert window),
+     11:35 IL, and 16:15 IL (ahead of market open) — so the freshest
+     possible news/maritime context is available when the model
+     actually computes its alert. See TARGET_SCAN_TIMES_IL and
+     should_run_scheduled_scan() below. Manual/workflow_dispatch
+     runs always proceed regardless of time, same convention as
+     wheat_monitor_pro.py's should_send().
 """
 
 import os
@@ -85,8 +103,11 @@ import urllib.request
 import urllib.error
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 import feedparser
 from bs4 import BeautifulSoup
+
+IL = ZoneInfo("Asia/Jerusalem")   # same convention as wheat_monitor_pro.py
 
 # Configure logging
 logging.basicConfig(
@@ -119,6 +140,22 @@ ARTICLE_MIN_CHARS = 200         # below this, treat as blocked/paywalled/empty
 # the limited fetch budget goes to sources actually worth fetching —
 # see LOW_PRIORITY_FETCH_SOURCES below and its docstring note.
 LOW_PRIORITY_FETCH_SOURCES = {"Fed Reserve Press Releases"}
+
+# Scan-time synchronization with wheat_monitor_pro.py (see CHANGELOG
+# 2026-08-08 above). Times are (hour, minute) in Israel local time.
+#   01:58 — just before the model's 01:00-02:00 IL alert window
+#   11:35 — mid-session check
+#   16:15 — ahead of market open
+# A scheduled (cron) run only performs a real scan if the current IL
+# time is within SCAN_TIME_TOLERANCE_MINUTES of one of these targets;
+# otherwise it exits quickly without scanning. This lets the GitHub
+# Actions cron itself be approximate (imprecise due to GitHub's own
+# scheduling jitter, and needing dual entries for Israel's DST
+# shift — see the companion workflow file) while still guaranteeing
+# the scan only actually runs near the intended moments. Manual runs
+# (workflow_dispatch) always scan regardless of time.
+TARGET_SCAN_TIMES_IL = [(1, 58), (11, 35), (16, 15)]
+SCAN_TIME_TOLERANCE_MINUTES = 10
 
 # Windward AI maritime chokepoint dashboard — free, no registration,
 # no API. See CHANGELOG (2026-08-08) above for why this is fetched
@@ -541,9 +578,45 @@ def update_news_log(scan_data):
 # MAIN EXECUTION
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# SCAN-TIME GUARD (synchronize with wheat_monitor_pro.py, 2026-08-08)
+# ---------------------------------------------------------------------------
+
+def should_run_scheduled_scan():
+    """
+    Returns (should_run: bool, reason: str). Manual triggers
+    (workflow_dispatch, or FORCE_SCAN=true locally) always run. A
+    scheduled (cron) trigger only runs if current Israel time is
+    within SCAN_TIME_TOLERANCE_MINUTES of one of TARGET_SCAN_TIMES_IL
+    — otherwise it's a redundant DST-safety cron firing (see the
+    companion workflow's dual-cron entries) and should exit quietly.
+    """
+    force = os.getenv("FORCE_SCAN", "").lower() in ("true", "1", "yes")
+    event = os.getenv("GITHUB_EVENT_NAME", "")
+    manual = force or "workflow_dispatch" in event
+
+    if manual:
+        return True, "Manual trigger"
+
+    now = datetime.now(IL)
+    for h, m in TARGET_SCAN_TIMES_IL:
+        target = now.replace(hour=h, minute=m, second=0, microsecond=0)
+        diff_minutes = abs((now - target).total_seconds()) / 60
+        if diff_minutes <= SCAN_TIME_TOLERANCE_MINUTES:
+            return True, f"Within {SCAN_TIME_TOLERANCE_MINUTES}min of target {h:02d}:{m:02d} IL"
+
+    return False, f"Not near any target scan time (now {now.strftime('%H:%M')} IL)"
+
+
 def main():
     now_iso = datetime.now(timezone.utc).isoformat()
-    logger.info(f"News scan started at {now_iso}")
+    logger.info(f"News scan triggered at {now_iso}")
+
+    should_run, reason = should_run_scheduled_scan()
+    logger.info(f"Scan gate: {reason}")
+    if not should_run:
+        logger.info("Skipping — not a manual run and not near a target scan time.")
+        return
 
     # 1. Fetch
     logger.info(f"Scanning {len(KEYWORD_QUERIES)} keyword queries + {len(RSS_FEEDS)} direct feeds...")
