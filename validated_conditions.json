@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-08-04T06:38:16.838717",
-  "baseline_up": 0.6774,
+  "generated_at": "2026-08-08T22:57:19.244202",
+  "baseline_up": 0.6814,
   "validated_conditions": {
-    "momentum_up": 0.8,
-    "macd_bullish": 0.689
+    "momentum_up": 0.783,
+    "macd_bullish": 0.682
   },
-  "source_backtest_run_date": "2026-08-04T06:38:16.734446"
+  "source_backtest_run_date": "2026-08-08T22:57:19.151309"
 }
