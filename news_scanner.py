@@ -146,16 +146,14 @@ LOW_PRIORITY_FETCH_SOURCES = {"Fed Reserve Press Releases"}
 #   01:58 — just before the model's 01:00-02:00 IL alert window
 #   11:35 — mid-session check
 #   16:15 — ahead of market open
-# A scheduled (cron) run only performs a real scan if the current IL
-# time is within SCAN_TIME_TOLERANCE_MINUTES of one of these targets;
-# otherwise it exits quickly without scanning. This lets the GitHub
-# Actions cron itself be approximate (imprecise due to GitHub's own
-# scheduling jitter, and needing dual entries for Israel's DST
-# shift — see the companion workflow file) while still guaranteeing
-# the scan only actually runs near the intended moments. Manual runs
-# (workflow_dispatch) always scan regardless of time.
+# The real synchronization is done by the cron schedule itself (see
+# wheat_monitor_github.yml's news_scan job). This check is a loose
+# safety net only, not the primary mechanism — GitHub Actions cron
+# can fire several minutes late under load, so the tolerance is
+# deliberately wide to avoid silently skipping a legitimately-
+# triggered scheduled run. Manual runs always scan regardless.
 TARGET_SCAN_TIMES_IL = [(1, 58), (11, 35), (16, 15)]
-SCAN_TIME_TOLERANCE_MINUTES = 10
+SCAN_TIME_TOLERANCE_MINUTES = 30
 
 # Windward AI maritime chokepoint dashboard — free, no registration,
 # no API. See CHANGELOG (2026-08-08) above for why this is fetched
