@@ -4,9 +4,20 @@ on:
     - cron: '0 22 * * 6,0,1,2,3'  # 22:00 UTC Sat-Wed = 01:00 Israel time Sun-Thu (IDT UTC+3)
     - cron: '30 22 * * 6'         # 22:30 UTC Saturday — weekly backtest refresh, after the Sunday monitor run
     - cron: '0 0 * * 6'           # 00:00 UTC Saturday = 03:00 Israel time Saturday — accuracy report ONLY, no new alert
-    - cron: '0 6 * * *'           # 06:00 UTC daily — news scan #1
-    - cron: '0 12 * * *'          # 12:00 UTC daily — news scan #2
-    - cron: '0 18 * * *'          # 18:00 UTC daily — news scan #3
+    # UPDATED 2026-08-08: news_scan cron times synchronized with the
+    # model's own key moments instead of running on an independent,
+    # evenly-spaced schedule. Times below are "as close as possible
+    # before" each moment (assuming IDT/UTC+3, same convention as the
+    # 01:00 monitor cron above — during winter/standard time (UTC+2)
+    # these drift ~1h earlier in real Israel time, same accepted
+    # seasonal drift as the existing monitor cron, safely absorbed by
+    # should_send()'s 2-hour (01:00-02:00) alert window):
+    #   22:58 UTC ≈ 01:58 IL — just before the 01:00-02:00 IL alert window
+    #   08:35 UTC ≈ 11:35 IL — mid-session check
+    #   13:15 UTC ≈ 16:15 IL — ahead of market open
+    - cron: '58 22 * * *'         # news scan #1 — just before the monitor's alert window
+    - cron: '35 8 * * *'          # news scan #2 — mid-session
+    - cron: '15 13 * * *'         # news scan #3 — ahead of market open
   workflow_dispatch:         # manual trigger kept for testing
 jobs:
   monitor:
@@ -37,12 +48,6 @@ jobs:
         fi
     - name: Weekly backtest refresh
       if: steps.check_schedule.outputs.is_backtest_run == 'true'
-      # Runs once a week (Saturday UTC, ahead of the Sunday-Israel
-      # monitor run), separate from the daily monitor schedule, since
-      # a 730-day rolling window barely moves day to day — running
-      # this daily would be wasted compute for near-zero new
-      # information (confirmed 2026-07-09: baseline moved only 0.07%
-      # across a 2-day gap).
       run: |
         python backtest.py
         python generate_validated_conditions.py
@@ -52,10 +57,6 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: python wheat_monitor_pro.py
     - name: Score past predictions
-      # Closes the validation loop: checks every logged prediction old
-      # enough to have a real outcome against what price actually did,
-      # and marks it WIN/LOSS. Safe to run every time — it skips
-      # predictions already scored and predictions too recent to score.
       run: python score_predictions.py
     - name: Commit state to repository
       run: |
@@ -86,10 +87,6 @@ jobs:
     - name: Install packages
       run: pip install requests
     - name: Send weekly accuracy report ONLY
-      # Saturday 03:00 Israel — deliberately does NOT run the full
-      # monitor or generate a new alert, per design: this is purely
-      # a real, logged day-by-day accuracy conclusion for the week
-      # that just ended (see weekly_report.py).
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -100,7 +97,8 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: write
-    if: contains(fromJSON('["0 6 * * *", "0 12 * * *", "0 18 * * *"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
+    # UPDATED 2026-08-08: matches the new synchronized cron strings above.
+    if: contains(fromJSON('["58 22 * * *", "35 8 * * *", "15 13 * * *"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -111,20 +109,13 @@ jobs:
     - name: Install news scanner packages
       run: pip install feedparser google-genai yfinance beautifulsoup4
     - name: Run news scan
-      # Free Google News RSS (no key) + free-tier Gemini interpretation
-      # (needs GEMINI_API_KEY secret — get one free at aistudio.google.com).
-      # Runs 3x/day since news breaks any time, not just at 01:00 Israel.
+      # Now synchronized to land just before the model's own key
+      # moments (see cron comments above) instead of an independent
+      # evenly-spaced schedule — see news_scanner.py CHANGELOG 2026-08-08.
       env:
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       run: python news_scanner.py
     - name: Check for large price move
-      # UPDATED 2026-07-31: after every scan, compares current live
-      # price against wheat_monitor_state.json's last_price (recorded
-      # at the last full monitor run). If the move meets or exceeds
-      # check_price_trigger.py's threshold, the steps below re-run the
-      # full monitor immediately instead of waiting for the next
-      # scheduled 1am cycle — see check_price_trigger.py for the full
-      # rationale.
       id: price_check
       run: python check_price_trigger.py
     - name: Install monitor packages (only if price move triggered)
@@ -134,12 +125,6 @@ jobs:
         pip install tensorflow-cpu keras
         pip install xgboost beautifulsoup4 lxml
     - name: Re-run full monitor (price-move triggered)
-      # Only fires when check_price_trigger.py detected a move at or
-      # above its threshold since the last full run. FORCE_ALERT reuses
-      # wheat_monitor_pro.py's existing manual-trigger hook — the model
-      # decides for itself (via seasonal/gate/ensemble/break logic,
-      # completely unchanged) whether this actually warrants a new
-      # alert; this step only shortens how long it takes to look.
       if: steps.price_check.outputs.trigger == 'true'
       env:
         FORCE_ALERT: "true"
