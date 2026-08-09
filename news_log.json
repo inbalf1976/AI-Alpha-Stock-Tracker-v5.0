@@ -1,5 +1,162 @@
 [
   {
+    "timestamp": "2026-08-09T23:24:38.545431+00:00",
+    "total_scanned": 222,
+    "flagged_count": 161,
+    "flagged_headlines": [
+      {
+        "title": "Europe is blowing up riverbeds as an extreme drought wreaks havoc on its economy",
+        "link": "https://www.cnbc.com/2026/08/05/drought-rhine-danube-water-levels-economy.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 05 Aug 2026 07:15:17 GMT",
+        "matched_keywords": [
+          "drought"
+        ]
+      },
+      {
+        "title": "Manufacturing survey shows inflation worries 'worse than pandemic era,' adding to Fed pressure",
+        "link": "https://www.cnbc.com/2026/08/03/manufacturing-survey-shows-inflation-worries-adding-to-pressure-on-fed.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 04 Aug 2026 14:42:39 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "As Warsh’s Fed faces pressure to act on inflation, these indicators show it’s at its lowest in years",
+        "link": "https://www.cnbc.com/2026/07/31/these-fed-alternative-indicators-show-inflation-is-at-lowest-in-years.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 31 Jul 2026 16:51:30 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "U.S. economy slowed to 1.5% growth rate in Q2; June core inflation at 3.3%",
+        "link": "https://www.cnbc.com/2026/07/30/us-economy-slowed-to-1point5percent-growth-rate-in-q2-june-core-inflation-at-3point3percent.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 30 Jul 2026 15:04:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "What a divided Fed means for investors",
+        "link": "https://www.cnbc.com/2026/07/29/fed-meeting-interest-rates-warsh-stocks-bonds.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 29 Jul 2026 23:36:34 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar falls as Fed rate hike bets ease; yen set to hold intervention gains",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-rangebound-dollar-firms-amid-iran-peace-uncertainty-us-jobs-caution-4845065",
+        "source": "Investing.com Forex",
+        "published": "2026-08-07 19:34:05",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "US sanctions Dubai crypto exchange for aiding Iran’s IRGC, following a Reuters report",
+        "link": "https://www.investing.com/news/forex-news/us-sanctions-dubai-crypto-exchange-for-aiding-irans-irgc-following-a-reuters-report-4847273",
+        "source": "Investing.com Forex",
+        "published": "2026-08-07 17:49:10",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Dollar firms on safe haven boost, rising yields; yen hits 158 after intervention",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-dollar-near-7wk-low-with-iran-talks-us-jobs-data-in-focus-4839999",
+        "source": "Investing.com Forex",
+        "published": "2026-08-06 18:39:23",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "U.S. stock futures dip as investors await inflation data, grapple with more Iran uncertainty",
+        "link": "https://www.marketwatch.com/story/u-s-stock-futures-flat-as-investors-await-inflation-data-grapple-with-more-iran-uncertainty-133212d2?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 09 Aug 2026 23:15:00 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Iran ties Hormuz reopening to US concessions on several demands",
+        "link": "https://www.investing.com/news/commodities-news/iran-ties-hormuz-reopening-to-us-concessions-on-several-demands-4847760",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-09 23:06:27",
+        "matched_keywords": [
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Oil rises as uncertainty continues over reopening of Strait",
+        "link": "https://www.investing.com/news/commodities-news/oil-rises-as-uncertainty-continues-over-reopening-of-strait-4847759",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-09 22:18:26",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Iran says Oman deal is in ’final stages’ but US must act to open Hormuz",
+        "link": "https://www.investing.com/news/commodities-news/iran-says-oman-deal-is-in-final-stages-but-us-must-act-to-open-hormuz-4847732",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-09 18:48:30",
+        "matched_keywords": [
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Iran says deal on Strait of Hormuz is close but not enough to open the waterway",
+        "link": "https://www.investing.com/news/commodities-news/iran-says-deal-on-strait-of-hormuz-is-close-but-will-not-open-the-waterway-by-itself-4847656",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-08 22:48:25",
+        "matched_keywords": [
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are grappling with persistent geopolitical energy shocks from the Middle East, severe European climate-driven logistics disruptions along the Rhine and Danube rivers, and a deeply divided Federal Reserve signaling potential interest rate hikes to combat stubborn inflation. Concurrently, ongoing Strait of Hormuz maritime blockades and sanctions on Iranian shadow networks continue to constrain commodity flows and elevate shipping freight costs.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_reason": "Low water levels on the Danube River are actively preventing farmers from shipping crops, creating localized export bottlenecks and driving up logistics costs.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Ongoing Middle East military tensions and Iran-related security concerns continue to support safe-haven demand for the US dollar against regional currencies like the Israeli shekel.",
+      "key_risk": "Prolonged closure or severe restriction of the Strait of Hormuz bottleneck combined with escalated geopolitical conflict driving a sustained oil price shock.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-09T10:30:25.411231+00:00",
     "total_scanned": 50,
     "flagged_count": 23,
