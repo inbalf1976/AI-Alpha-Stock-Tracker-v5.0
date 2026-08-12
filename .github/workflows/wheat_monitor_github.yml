@@ -59,6 +59,10 @@ jobs:
     - name: Score past predictions
       run: python score_predictions.py
     - name: Commit state to repository
+      # UPDATED 2026-08-12: same fix as news_scan's commit step — see
+      # that step's comment for why "git push || echo Nothing to push"
+      # was silently masking real rejected pushes (race with the
+      # news_scan job pushing to main around the same time).
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
@@ -70,8 +74,21 @@ jobs:
         git add -f monthly_range_cache.json || true
         git add -f weekly_performance_log.json || true
         git add -f weekly_break_log.json || true
-        git diff --staged --quiet || git commit -m "Update monitor state [skip ci]"
-        git push || echo "Nothing to push"
+        if git diff --staged --quiet; then
+          echo "Nothing to commit."
+        else
+          git commit -m "Update monitor state [skip ci]"
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push failed (attempt $attempt) — pulling --rebase and retrying..."
+            git pull --rebase origin main
+          done
+          echo "::error::git push failed after 3 attempts — monitor state updates did NOT reach the repo this run."
+          exit 1
+        fi
 
   saturday_report:
     runs-on: ubuntu-latest
@@ -133,6 +150,17 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: python wheat_monitor_pro.py
     - name: Commit news + state logs
+      # UPDATED 2026-08-12: "git push || echo Nothing to push" was
+      # silently swallowing REAL push failures, not just genuine
+      # no-op cases. By this point git diff --staged --quiet has
+      # already confirmed there IS something committed, so a failed
+      # push here means a real rejected (non-fast-forward) push —
+      # almost certainly a race with the `monitor` job pushing to
+      # main around the same time — not "nothing to push". This was
+      # happening silently: news_log.json went stale for 56+ hours
+      # while the workflow kept reporting success every run.
+      # Now: pull --rebase and retry once before giving up, and fail
+      # the step loudly (no more silent swallow) if it still can't push.
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
@@ -142,5 +170,18 @@ jobs:
         git add -f weekly_range_cache.json || true
         git add -f weekly_performance_log.json || true
         git add -f weekly_break_log.json || true
-        git diff --staged --quiet || git commit -m "Update news scan + state [skip ci]"
-        git push || echo "Nothing to push"
+        if git diff --staged --quiet; then
+          echo "Nothing to commit."
+        else
+          git commit -m "Update news scan + state [skip ci]"
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push failed (attempt $attempt) — pulling --rebase and retrying..."
+            git pull --rebase origin main
+          done
+          echo "::error::git push failed after 3 attempts — news_log.json / state updates did NOT reach the repo this run."
+          exit 1
+        fi
