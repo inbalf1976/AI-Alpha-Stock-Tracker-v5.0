@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-08-12T16:26:26.389075+00:00",
+    "total_scanned": 226,
+    "flagged_count": 168,
+    "flagged_headlines": [
+      {
+        "title": "Sterling today: Pound gains as dollar softens on in-line U.S. CPI",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-flat-as-dollar-steadies-before-us-cpi-test-4853900",
+        "source": "Investing.com Forex",
+        "published": "2026-08-12 13:01:03",
+        "matched_keywords": [
+          "cpi"
+        ]
+      },
+      {
+        "title": "Dollar falls as tame U.S. inflation dims Fed rate-hike bets",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-dollar-tread-water-ahead-of-us-cpi-hormuz-tensions-lift-oil-4853635",
+        "source": "Investing.com Forex",
+        "published": "2026-08-12 12:48:12",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "U.S. two-year yield edges slightly as on-target CPI softens Sept rate-hike fears",
+        "link": "https://www.investing.com/news/forex-news/german-yields-hover-oneweek-highs-as-oil-spikes-for-sixth-day-us-cpi-in-focus-4853748",
+        "source": "Investing.com Forex",
+        "published": "2026-08-12 12:41:44",
+        "matched_keywords": [
+          "cpi",
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar flat a day ahead of key CPI data; yen gives up more intervention gains",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-dollar-muted-with-us-cpi-on-tap-rba-holds-rates-4850775",
+        "source": "Investing.com Forex",
+        "published": "2026-08-11 20:34:05",
+        "matched_keywords": [
+          "cpi"
+        ]
+      },
+      {
+        "title": "Treasuries extend losses as 10-Year yield nears highest level since January 2025",
+        "link": "https://www.investing.com/news/forex-news/german-yields-rebound-to-highest-since-aug-3-as-energy-spike-stokes-fear-4850909",
+        "source": "Investing.com Forex",
+        "published": "2026-08-11 12:41:34",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound drifts lower as dollar steadies before U.S. CPI",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-drifts-lower-as-dollar-steadies-before-us-cpi-4851256",
+        "source": "Investing.com Forex",
+        "published": "2026-08-11 11:08:38",
+        "matched_keywords": [
+          "cpi"
+        ]
+      },
+      {
+        "title": "US crude oil inventories jump by most since January 2023",
+        "link": "https://www.investing.com/news/commodities-news/us-crude-oil-inventories-jump-by-most-since-january-2023-93CH-4855588",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-12 15:27:19",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "US crude inventories jump 17.4 million barrels in surprise build",
+        "link": "https://www.investing.com/news/commodities-news/us-crude-inventories-jump-174-million-barrels-in-surprise-build-93CH-4855576",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-12 15:24:32",
+        "matched_keywords": [
+          "crude"
+        ]
+      },
+      {
+        "title": "Trump says US has ’total control’ over Strait of Hormuz",
+        "link": "https://www.investing.com/news/commodities-news/trump-says-us-has-total-control-over-strait-of-hormuz-4855480",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-12 14:42:37",
+        "matched_keywords": [
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Oil prices choppy amid uncertainty over Hormuz deal negotiations",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-near-2week-high-as-hormuz-remains-closed-houthi-strikes-continue-4853577",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-12 14:00:52",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Gold sits above $4,400 as investors digest U.S. inflation data",
+        "link": "https://www.investing.com/news/commodities-news/gold-rises-near-4400-as-hormuz-doubts-cpi-keep-fed-path-in-focus-4853602",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-12 13:32:16",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "US must return to interim deal, no ceasefire extension talks, senior Iranian source says",
+        "link": "https://www.investing.com/news/commodities-news/iran-us-not-discussing-ceasefire-extension-senior-iranian-official-says-4854595",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-12 13:06:33",
+        "matched_keywords": [
+          "ceasefire"
+        ]
+      },
+      {
+        "title": "Ukraine pounds grain terminals at Russia’s Black Sea Novorossiysk port",
+        "link": "https://www.investing.com/news/commodities-news/drones-hit-residential-buildings-in-russias-black-sea-port-of-novorossiysk-mayor-says-4853589",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-12 13:00:59",
+        "matched_keywords": [
+          "grain",
+          "black sea"
+        ]
+      },
+      {
+        "title": "Analysis-Saudi Arabia bets on defensive alliances to deter slide into war",
+        "link": "https://www.investing.com/news/commodities-news/analysissaudi-arabia-bets-on-defensive-alliances-to-deter-slide-into-war-4854888",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-12 12:36:36",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "An active fund holding a whopping 800 stocks is beating major indexes. Here’s how.",
+        "link": "https://www.marketwatch.com/story/an-active-fund-holding-a-whopping-800-stocks-is-beating-major-indexes-heres-how-6bf73062?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 12 Aug 2026 15:05:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Financial markets are reacting to a tame U.S. CPI print that has softened Fed rate-hike expectations and weighed on the dollar, while commodities face severe supply pressures from a massive U.S. crude inventory build and escalating kinetic disruptions in key shipping chokepoints like the Black Sea and Hormuz.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_reason": "Ukrainian strikes on Russia's Novorossiysk grain terminals threaten crucial Black Sea export infrastructure, raising supply disruption risks.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "A softer U.S. dollar driven by tamer inflation expectations generally strengthens emerging market currencies against the greenback, including the Israeli Shekel.",
+      "key_risk": "Escalating kinetic activity and maritime enforcement actions across key chokepoints (Hormuz, Bab el-Mandeb, and Black Sea) threatening global energy and agricultural flows.",
+      "headline_overstated": false,
+      "headline_vs_article_note": ""
+    }
+  },
+  {
     "timestamp": "2026-08-09T23:24:38.545431+00:00",
     "total_scanned": 222,
     "flagged_count": 161,
