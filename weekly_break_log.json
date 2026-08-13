@@ -79,5 +79,14 @@
     "old_stop": 649.07,
     "old_target": 626.73,
     "reason": "price 653c broke past stop (LOSS)"
+  },
+  {
+    "iso_key": "2026-W33",
+    "broken_at": "2026-08-14T02:35:55.920678+03:00",
+    "price_at_break": 668.5,
+    "old_range": "644-666",
+    "old_stop": 642.88,
+    "old_target": 666.5,
+    "reason": "price 668c broke past target (WIN)"
   }
 ]
