@@ -1,0 +1,23 @@
+name: Immediate Risk Tracker Report
+
+on:
+  workflow_dispatch: {}   # manual "Run workflow" button — check hit-rate progress anytime
+
+jobs:
+  tracker-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install yfinance
+
+      - name: Score pending + report summary
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 immediate_risk_tracker.py --telegram
