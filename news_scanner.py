@@ -94,6 +94,23 @@ CHANGELOG (2026-08-08):
      should_run_scheduled_scan() below. Manual/workflow_dispatch
      runs always proceed regardless of time, same convention as
      wheat_monitor_pro.py's should_send().
+  5. Added an "immediate risk" Telegram alert — informational ONLY,
+     does not touch wheat_monitor_pro.py, ConvictionGate, any gate
+     logic, weight, or parameter, and does not read or write anything
+     the model consumes. Adds two fields to the existing Gemini JSON
+     schema (immediate_risk: true/false, immediate_risk_reason) under
+     a strict definition (an ACTIVE, currently-developing disruption
+     to physical wheat supply or a shipping chokepoint — attack,
+     blockade, embargo, extreme weather event — not routine
+     commentary/analysis or an already-priced-in/settled situation),
+     deliberately narrow so this stays rare rather than becoming a
+     noisy every-scan ping (same lesson as the "fed" keyword being
+     too broad). Fires ONLY on the existing news_scan schedule
+     (01:58/11:35/16:15 IL) — no new schedule added. Motivated by
+     both real matched loss_forensics.py cases (2026-08-07,
+     2026-08-13) showing the scanner correctly identified bullish
+     supply-disruption news 2-6h BEFORE the resulting stop-out, with
+     no mechanism to surface it in the moment.
 """
 
 import os
@@ -101,6 +118,7 @@ import json
 import logging
 import urllib.request
 import urllib.error
+import urllib.parse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
@@ -108,6 +126,9 @@ import feedparser
 from bs4 import BeautifulSoup
 
 IL = ZoneInfo("Asia/Jerusalem")   # same convention as wheat_monitor_pro.py
+
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT  = os.getenv("TELEGRAM_CHAT_ID")
 
 # Configure logging
 logging.basicConfig(
@@ -445,6 +466,56 @@ def fetch_windward_context(timeout=WINDWARD_FETCH_TIMEOUT,
         return None
 
 # ---------------------------------------------------------------------------
+# IMMEDIATE-RISK TELEGRAM ALERT (informational only, 2026-08-15)
+# ---------------------------------------------------------------------------
+
+def send_immediate_risk_alert(risk_reason, wheat_impact, scan_time_iso):
+    """
+    Sends a standalone Telegram notification when Gemini flags
+    immediate_risk=true. INFORMATIONAL ONLY — does not touch
+    wheat_monitor_pro.py, ConvictionGate, or any model input/output.
+    Never raises; a failed send is logged and the scan continues
+    normally (same fail-soft convention as every other network call
+    in this file).
+    """
+    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT:
+        logger.info("   Immediate-risk alert: Telegram not configured, skipping send.")
+        return False
+
+    try:
+        ts = datetime.fromisoformat(scan_time_iso).astimezone(IL)
+        ts_str = ts.strftime("%Y-%m-%d %H:%M IL")
+    except Exception:
+        ts_str = scan_time_iso
+
+    message = (
+        f"🚨 NEWS SCAN — IMMEDIATE RISK DETECTED\n"
+        f"{ts_str}\n\n"
+        f"{risk_reason}\n\n"
+        f"Wheat impact: {wheat_impact}\n\n"
+        f"This is an informational notice only — no model action "
+        f"taken. Check the current position/setup manually if this "
+        f"affects your read on the market."
+    )
+
+    try:
+        data = urllib.parse.urlencode({"chat_id": TELEGRAM_CHAT, "text": message}).encode()
+        req = urllib.request.Request(
+            f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
+            data=data,
+        )
+        with urllib.request.urlopen(req, timeout=10) as response:
+            success = response.status == 200
+            if success:
+                logger.info("   Immediate-risk alert sent to Telegram.")
+            else:
+                logger.warning(f"   Immediate-risk alert send returned status {response.status}.")
+            return success
+    except Exception as e:
+        logger.warning(f"   Immediate-risk alert send failed: {e}")
+        return False
+
+# ---------------------------------------------------------------------------
 # FILTERING & INTERPRETATION
 # ---------------------------------------------------------------------------
 
@@ -522,6 +593,14 @@ def interpret_with_gemini(flagged_headlines, maritime_context=None):
         - "headline_vs_article_note": if headline_overstated is true, a 1-sentence note on
           which headline/article pair shows the gap and what the article actually said instead.
           If headline_overstated is false, use an empty string.
+        - "immediate_risk": true or false — is there an ACTIVE, currently-developing
+          disruption to physical wheat supply or a shipping chokepoint (e.g. an attack,
+          blockade, embargo, or extreme weather event happening now)? This must be a rare,
+          high-bar flag — do NOT set true for routine market commentary, analysis, forecasts,
+          or a situation that is already settled/priced-in. Only set true for something
+          genuinely new and actively unfolding.
+        - "immediate_risk_reason": if immediate_risk is true, a 1-2 sentence plain-language
+          description of the specific event. If immediate_risk is false, use an empty string.
 
         Respond ONLY with raw valid JSON (no markdown ticks or wrapper text).
         """
@@ -648,6 +727,20 @@ def main():
         llm_analysis = interpret_with_gemini(flagged, maritime_context=maritime_context)
         if not llm_analysis:
             logger.info("   No LLM signal this scan (no key configured, or call failed)")
+
+    # 4b. Immediate-risk alert — informational only, see CHANGELOG
+    # 2026-08-15. Fires ONLY on this existing scan schedule; does not
+    # touch wheat_monitor_pro.py or any model input.
+    if llm_analysis and llm_analysis.get("immediate_risk"):
+        reason = llm_analysis.get("immediate_risk_reason", "").strip()
+        wheat_impact = llm_analysis.get("wheat_impact", "UNKNOWN")
+        if isinstance(wheat_impact, dict):
+            wheat_impact = wheat_impact.get("direction", "UNKNOWN")
+        if reason:
+            logger.info(f"   IMMEDIATE RISK flagged: {reason}")
+            send_immediate_risk_alert(reason, wheat_impact, now_iso)
+        else:
+            logger.info("   immediate_risk=true but no reason text provided — skipping alert send.")
 
     # 5. Save Record
     # NOTE: full_text and the raw maritime_context snapshot are
