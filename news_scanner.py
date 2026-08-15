@@ -124,6 +124,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 import feedparser
 from bs4 import BeautifulSoup
+import immediate_risk_tracker
 
 IL = ZoneInfo("Asia/Jerusalem")   # same convention as wheat_monitor_pro.py
 
@@ -739,8 +740,18 @@ def main():
         if reason:
             logger.info(f"   IMMEDIATE RISK flagged: {reason}")
             send_immediate_risk_alert(reason, wheat_impact, now_iso)
+            # Log for outcome tracking (2026-08-15) — see
+            # immediate_risk_tracker.py. Purely additive: writes to
+            # its own file, never touches news_log.json or anything
+            # the model reads.
+            immediate_risk_tracker.log_event(reason, wheat_impact, now_iso)
         else:
             logger.info("   immediate_risk=true but no reason text provided — skipping alert send.")
+
+    # 4c. Score any previously-logged immediate-risk events whose
+    # scoring window has elapsed. Piggybacks on this existing
+    # schedule — no new cron. Silent unless something was scored.
+    immediate_risk_tracker.score_pending()
 
     # 5. Save Record
     # NOTE: full_text and the raw maritime_context snapshot are
