@@ -109,17 +109,32 @@ def get_price_now():
         return None
 
 
-def log_event(reason, wheat_impact, alert_timestamp_iso):
+def get_next_alert_number():
+    """
+    Returns the sequential number the NEXT alert should use — total
+    entries ever logged + 1. Includes both scheduled and manual
+    triggers (there's no separate counter for each), so the number
+    reflects the true running total of immediate_risk cycles.
+    """
+    return len(_load_log()) + 1
+
+
+def log_event(reason, wheat_impact, alert_timestamp_iso, alert_number=None):
     """
     Records a new immediate_risk alert for later scoring. Called by
     news_scanner.py right after it sends the Telegram alert.
     wheat_impact should be "BULLISH" or "BEARISH" (a "NEUTRAL" or
     unknown value is still logged but can never score as a hit/miss —
     there's no predicted direction to check against).
+
+    alert_number: the sequential alert count shown in the Telegram
+    message (see get_next_alert_number()) — stored alongside the
+    entry so a specific alert can be looked up later by its number.
     """
     price = get_price_now()
     entries = _load_log()
     entries.insert(0, {
+        "alert_number": alert_number,
         "alert_timestamp": alert_timestamp_iso,
         "reason": reason,
         "predicted_direction": wheat_impact,
@@ -132,9 +147,9 @@ def log_event(reason, wheat_impact, alert_timestamp_iso):
     })
     _save_log(entries)
     if price is not None:
-        logger.info(f"   Logged immediate_risk event for scoring (price at alert: {price})")
+        logger.info(f"   Logged immediate_risk event #{alert_number} for scoring (price at alert: {price})")
     else:
-        logger.info("   Logged immediate_risk event, but price fetch failed — will retry scoring later with no baseline (unscoreable).")
+        logger.info(f"   Logged immediate_risk event #{alert_number}, but price fetch failed — will retry scoring later with no baseline (unscoreable).")
 
 
 def score_pending():
