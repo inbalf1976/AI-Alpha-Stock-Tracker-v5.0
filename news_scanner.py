@@ -470,7 +470,7 @@ def fetch_windward_context(timeout=WINDWARD_FETCH_TIMEOUT,
 # IMMEDIATE-RISK TELEGRAM ALERT (informational only, 2026-08-15)
 # ---------------------------------------------------------------------------
 
-def send_immediate_risk_alert(risk_reason, wheat_impact, scan_time_iso):
+def send_immediate_risk_alert(risk_reason, wheat_impact, scan_time_iso, alert_number=None):
     """
     Sends a standalone Telegram notification when Gemini flags
     immediate_risk=true. INFORMATIONAL ONLY — does not touch
@@ -478,6 +478,11 @@ def send_immediate_risk_alert(risk_reason, wheat_impact, scan_time_iso):
     Never raises; a failed send is logged and the scan continues
     normally (same fail-soft convention as every other network call
     in this file).
+
+    alert_number: sequential count from
+    immediate_risk_tracker.get_next_alert_number() — shown in the
+    message so a specific alert can be referenced later (e.g. "check
+    what happened with alert #7").
     """
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT:
         logger.info("   Immediate-risk alert: Telegram not configured, skipping send.")
@@ -489,8 +494,11 @@ def send_immediate_risk_alert(risk_reason, wheat_impact, scan_time_iso):
     except Exception:
         ts_str = scan_time_iso
 
+    number_line = f"Alert #{alert_number}\n" if alert_number is not None else ""
+
     message = (
         f"🚨 NEWS SCAN — IMMEDIATE RISK DETECTED\n"
+        f"{number_line}"
         f"{ts_str}\n\n"
         f"{risk_reason}\n\n"
         f"Wheat impact: {wheat_impact}\n\n"
@@ -739,12 +747,13 @@ def main():
             wheat_impact = wheat_impact.get("direction", "UNKNOWN")
         if reason:
             logger.info(f"   IMMEDIATE RISK flagged: {reason}")
-            send_immediate_risk_alert(reason, wheat_impact, now_iso)
+            alert_number = immediate_risk_tracker.get_next_alert_number()
+            send_immediate_risk_alert(reason, wheat_impact, now_iso, alert_number=alert_number)
             # Log for outcome tracking (2026-08-15) — see
             # immediate_risk_tracker.py. Purely additive: writes to
             # its own file, never touches news_log.json or anything
             # the model reads.
-            immediate_risk_tracker.log_event(reason, wheat_impact, now_iso)
+            immediate_risk_tracker.log_event(reason, wheat_impact, now_iso, alert_number=alert_number)
         else:
             logger.info("   immediate_risk=true but no reason text provided — skipping alert send.")
 
