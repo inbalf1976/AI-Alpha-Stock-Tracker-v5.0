@@ -1,5 +1,168 @@
 [
   {
+    "timestamp": "2026-08-15T23:14:07.136201+00:00",
+    "total_scanned": 221,
+    "flagged_count": 161,
+    "flagged_headlines": [
+      {
+        "title": "An active fund holding a whopping 800 stocks is beating major indexes. Here’s how.",
+        "link": "https://www.marketwatch.com/story/an-active-fund-holding-a-whopping-800-stocks-is-beating-major-indexes-heres-how-6bf73062?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 15 Aug 2026 18:05:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Oil prices notch weekly gains of more than 5% on impasse over Hormuz control",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-steady-head-for-weekly-gain-on-iran-supply-uncertainty-4859570",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-14 21:05:25",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Gold prices head for weekly gain, helped by a hit to Fed rate hike odds",
+        "link": "https://www.investing.com/news/commodities-news/gold-slips-below-4400-as-fed-path-and-hormuz-talks-cap-recent-rally-4859615",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-14 20:33:03",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "US oil rigs rise to 455 as Strait of Hormuz attacks halt traffic",
+        "link": "https://www.investing.com/news/commodities-news/us-oil-rigs-rise-to-455-as-strait-of-hormuz-attacks-halt-traffic-93CH-4861467",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-14 20:13:32",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Oil climbs over $1 on tanker attacks, no progrees on peace",
+        "link": "https://www.investing.com/news/commodities-news/oil-set-for-weekly-gains-after-us-threatens-indefinite-blockade-of-iran-4860357",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-14 19:24:29",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "London Gas Oil trapped in $1,215-$1,260 range: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-fails-1328-tests-fib-support-live-levels-93CH-4847930",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-14 19:18:41",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Geopolitical tensions and tanker attacks in the Strait of Hormuz are driving oil prices up with weekly gains exceeding 5%, while gold benefits from tempered Federal Reserve rate-hike expectations. Meanwhile, maritime data shows mixed traffic flows with some vessels resorting to AIS-dark evasive maneuvers and diversions around the Cape of Good Hope.",
+      "wheat_impact": {
+        "direction": "BULLISH",
+        "reason": "Middle East shipping disruptions and tanker attacks risk driving up global bunker fuel costs and freight rates, which flow directly into agricultural input and transport expenses."
+      },
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "Heightened regional security risks and maritime chokepoint blockades in the Middle East generally increase safe-haven dollar demand while pressuring local currencies."
+      },
+      "key_risk": "Escalation of tanker attacks and complete transit closures in the Strait of Hormuz restricting global energy flows.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Ongoing tanker attacks, ship seizures, and evasive AIS-dark transits are actively disrupting traffic and forcing vessel diversions around the Cape of Good Hope in the Strait of Hormuz."
+    }
+  },
+  {
     "timestamp": "2026-08-15T08:56:53.462954+00:00",
     "total_scanned": 226,
     "flagged_count": 161,
