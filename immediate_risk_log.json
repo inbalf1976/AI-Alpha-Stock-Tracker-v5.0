@@ -1,0 +1,14 @@
+[
+  {
+    "alert_number": 1,
+    "alert_timestamp": "2026-08-15T08:56:53.462954+00:00",
+    "reason": "Active maritime disruptions continue in the Strait of Hormuz and Red Sea, featuring vessels running AIS-dark for extended periods, ongoing Saudi tanker diversions around the Cape of Good Hope, and active Houthi threat environments restricting normal shipping corridors.",
+    "predicted_direction": "BULLISH",
+    "price_at_alert": 674.75,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  }
+]
