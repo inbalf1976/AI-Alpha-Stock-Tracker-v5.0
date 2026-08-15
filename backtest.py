@@ -41,6 +41,7 @@ STOP_PCT      = 0.015
 TARGET_PCT    = 0.025
 LOOKBACK_DAYS = 730  # 2 years
 TRAIN_FRACTION = 0.70  # older 70% = train, most recent 30% = holdout
+STABILITY_N_PERIODS = 4  # for the fold-by-fold stability check, see report_stability_by_period()
 
 # ── fetch data ────────────────────────────────────────────────────────────────
 
@@ -379,6 +380,76 @@ def evaluate_combo_on_holdout(holdout_df, holdout_up, holdout_down, conditions):
         'best_accuracy':  round(max(up_acc, down_acc), 3),
     }
 
+# ── stability check: does accuracy hold across different time periods? ────────
+# ADDED 2026-08-15 — purely additive reporting, does not change which
+# conditions get validated or feed generate_validated_conditions.py.
+# The existing train/holdout split gives ONE holdout accuracy number
+# per condition — this can't distinguish "consistently good" from
+# "got lucky/unlucky in this particular stretch." This function
+# splits the FULL lookback window into several chronological periods
+# and reports each already-validated condition's accuracy in each
+# period separately, using the SAME direction chosen on train (never
+# re-picks the best direction per period — that would let a condition
+# "flip" to whichever direction looks good in each slice, which would
+# silently reintroduce the exact overfitting this file's whole
+# train/holdout design exists to catch).
+
+def report_stability_by_period(df, outcomes_up, outcomes_down, conditions_with_direction, n_periods=STABILITY_N_PERIODS):
+    """
+    conditions_with_direction: list of {'condition': str, 'best_direction': 'UP'/'DOWN'}
+    — normally the conditions that already survived the train/holdout
+    check (see main()). Reporting only; returns a list of dicts
+    suitable for saving to backtest_results.json alongside (not
+    replacing) the existing train/holdout fields.
+    """
+    df_aligned    = df[df.index.isin(outcomes_up.index)].copy()
+    up_outcomes   = outcomes_up.reindex(df_aligned.index)
+    down_outcomes = outcomes_down.reindex(df_aligned.index)
+
+    dates = df_aligned.index.sort_values()
+    period_chunks = np.array_split(dates, n_periods)
+
+    print(f"\n{'Condition [dir]':<26} | " + " | ".join(f"Period {i+1}" for i in range(n_periods)))
+    print("-" * (28 + 16 * n_periods))
+
+    results = []
+    for cw in conditions_with_direction:
+        cond, direction = cw['condition'], cw['best_direction']
+        if cond not in df_aligned.columns:
+            continue
+        outcomes = up_outcomes if direction == 'UP' else down_outcomes
+
+        period_records = []
+        display_cells = []
+        for chunk in period_chunks:
+            in_period = df_aligned.index.isin(chunk)
+            mask = (df_aligned[cond] == 1) & in_period
+            n = int(mask.sum())
+            acc = round(float(outcomes[mask].mean()), 3) if n > 0 else None
+
+            period_records.append({
+                'start': str(pd.Timestamp(chunk[0]).date()) if len(chunk) else None,
+                'end':   str(pd.Timestamp(chunk[-1]).date()) if len(chunk) else None,
+                'n': n,
+                'accuracy': acc,
+            })
+            display_cells.append(f"{acc:.0%}(n={n})" if acc is not None else "  n/a  ")
+
+        valid_accs = [p['accuracy'] for p in period_records if p['accuracy'] is not None]
+        spread = round(max(valid_accs) - min(valid_accs), 3) if len(valid_accs) >= 2 else None
+        flag = "  ⚠️ unstable across periods" if (spread is not None and spread > 0.30) else ""
+
+        print(f"{cond + ' [' + direction + ']':<26} | " + " | ".join(f"{c:<10}" for c in display_cells) + flag)
+
+        results.append({
+            'condition': cond,
+            'direction': direction,
+            'periods': period_records,
+            'spread': spread,
+        })
+
+    return results
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 def main():
@@ -448,11 +519,45 @@ def main():
 
         print(f"{train_str:<35} | {holdout_str}{flag}")
 
+        # 'held_up' feeds the stability-by-period check below — only
+        # conditions that already passed the existing holdout test are
+        # worth checking for period-to-period consistency. Matches the
+        # same threshold as the "✓" flags above (drop <= 0.10).
+        held_up = (
+            holdout_eval['n'] > 0
+            and holdout_eval['best_accuracy'] is not None
+            and (r['best_accuracy'] - holdout_eval['best_accuracy']) <= 0.10
+        )
+
         validated_conditions.append({
             'condition': r['condition'],
             'train': r,
             'holdout': holdout_eval,
+            'held_up': held_up,
         })
+
+    # ── Stability check: does accuracy hold across different periods? ──
+    # ADDED 2026-08-15, reporting only — see report_stability_by_period()
+    # docstring. Only checks conditions that already survived the
+    # existing train/holdout test above.
+    print("\n" + "=" * 60)
+    print("STABILITY CHECK — ACCURACY ACROSS DIFFERENT TIME PERIODS")
+    print("=" * 60)
+    print(f"(Splits the full {LOOKBACK_DAYS}-day lookback into {STABILITY_N_PERIODS} periods.")
+    print(" Reporting only — does not change which conditions are validated.")
+    print(" A condition swinging wildly between periods is less trustworthy")
+    print(" than one with similar accuracy in every period, even if both")
+    print(" have the same overall holdout number.)")
+
+    held_up_conditions = [
+        {'condition': v['condition'], 'best_direction': v['train']['best_direction']}
+        for v in validated_conditions if v['held_up']
+    ]
+    if held_up_conditions:
+        stability_results = report_stability_by_period(df, outcomes_up, outcomes_down, held_up_conditions)
+    else:
+        stability_results = []
+        print("  No conditions held up on holdout this run — nothing to check for stability.")
 
     # ── Best combinations — TRAIN ONLY ──
     print("\n" + "=" * 60)
@@ -517,6 +622,7 @@ def main():
         'individual_conditions_train': condition_results,
         'individual_conditions_train_and_holdout': validated_conditions,
         'combinations_train_and_holdout': validated_results,
+        'stability_by_period': stability_results,
     }
 
     with open('backtest_results.json', 'w') as f:
