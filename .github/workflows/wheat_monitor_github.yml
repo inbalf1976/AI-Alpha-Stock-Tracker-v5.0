@@ -59,10 +59,20 @@ jobs:
     - name: Score past predictions
       run: python score_predictions.py
     - name: Commit state to repository
-      # UPDATED 2026-08-12: same fix as news_scan's commit step — see
-      # that step's comment for why "git push || echo Nothing to push"
-      # was silently masking real rejected pushes (race with the
-      # news_scan job pushing to main around the same time).
+      # UPDATED 2026-08-17: the retry logic below (added 2026-08-12)
+      # only works if the working directory is fully clean after the
+      # commit. The explicit "git add -f <file>" list only stages
+      # files we know about — if wheat_monitor_pro.py or
+      # score_predictions.py ever touches a tracked file NOT on this
+      # list, that file stays unstaged/dirty after commit, and
+      # "git pull --rebase" then refuses to run at all ("cannot pull
+      # with rebase: you have unstaged changes") — confirmed live
+      # 2026-08-17, a rejected push correctly triggered a retry, but
+      # the retry itself then failed for this reason. Fix: `git add -A`
+      # right before committing, so everything modified this run is
+      # staged and the tree is clean — the explicit adds above stay
+      # (documents intent / what we expect to change) but no longer
+      # need to be a complete list.
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
@@ -74,6 +84,7 @@ jobs:
         git add -f monthly_range_cache.json || true
         git add -f weekly_performance_log.json || true
         git add -f weekly_break_log.json || true
+        git add -A
         if git diff --staged --quiet; then
           echo "Nothing to commit."
         else
@@ -83,8 +94,21 @@ jobs:
               echo "Push succeeded on attempt $attempt."
               exit 0
             fi
-            echo "Push failed (attempt $attempt) — pulling --rebase and retrying..."
-            git pull --rebase origin main
+            # UPDATED 2026-08-17: switched from `git pull --rebase` to
+            # `git fetch` + `git merge -X ours` — confirmed live that a
+            # rebase can hit a genuine merge conflict (not just a
+            # dirty-tree block) when the news_scan job's concurrent
+            # commit touches the SAME file (e.g. wheat_monitor_state.json)
+            # with different real content. A conflict mid-rebase leaves
+            # the repo in a broken state this loop can't recover from.
+            # `-X ours` resolves any conflicting hunks in favor of THIS
+            # job's own fresh data, which is the right call for state/log
+            # files where "keep the newest run's numbers" is the sensible
+            # resolution — verified in a local test to merge cleanly and
+            # preserve both this run's changes and any untouched files.
+            echo "Push failed (attempt $attempt) — fetching + merging (prefer local) and retrying..."
+            git fetch origin main
+            git merge -X ours origin/main -m "merge: resolve concurrent state update [skip ci]"
           done
           echo "::error::git push failed after 3 attempts — monitor state updates did NOT reach the repo this run."
           exit 1
@@ -161,6 +185,12 @@ jobs:
       # while the workflow kept reporting success every run.
       # Now: pull --rebase and retry once before giving up, and fail
       # the step loudly (no more silent swallow) if it still can't push.
+      # UPDATED 2026-08-17: added `git add -A` before committing — the
+      # retry's `git pull --rebase` refuses to run if anything is left
+      # unstaged, which can happen if a script modifies a tracked file
+      # not on the explicit list below (confirmed live on the monitor
+      # job's identical commit step this same day). Explicit adds stay
+      # for clarity but no longer need to be an exhaustive list.
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
@@ -171,6 +201,7 @@ jobs:
         git add -f weekly_range_cache.json || true
         git add -f weekly_performance_log.json || true
         git add -f weekly_break_log.json || true
+        git add -A
         if git diff --staged --quiet; then
           echo "Nothing to commit."
         else
@@ -180,8 +211,15 @@ jobs:
               echo "Push succeeded on attempt $attempt."
               exit 0
             fi
-            echo "Push failed (attempt $attempt) — pulling --rebase and retrying..."
-            git pull --rebase origin main
+            # UPDATED 2026-08-17: same fix as the monitor job's commit
+            # step — switched from `git pull --rebase` to `git fetch` +
+            # `git merge -X ours`, since a rebase can hit a genuine
+            # merge conflict (not just a dirty-tree block) if the
+            # monitor job's concurrent commit touched the same file.
+            # See that step's comment for the full explanation and test.
+            echo "Push failed (attempt $attempt) — fetching + merging (prefer local) and retrying..."
+            git fetch origin main
+            git merge -X ours origin/main -m "merge: resolve concurrent state update [skip ci]"
           done
           echo "::error::git push failed after 3 attempts — news_log.json / state updates did NOT reach the repo this run."
           exit 1
