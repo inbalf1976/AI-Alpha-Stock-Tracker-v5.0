@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 5,
+    "alert_timestamp": "2026-08-17T21:20:30.454212+00:00",
+    "reason": "The first confirmed breach of the US blockade by an Iranian-origin tanker via ship-to-ship transfers and ongoing dark-transit activity in the Strait of Hormuz signal an active escalation in sanctions evasion and chokepoint friction.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 689.25,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 4,
     "alert_timestamp": "2026-08-16T23:13:54.887958+00:00",
     "reason": "ADNOC-linked tankers have been struck by drones in the Strait of Hormuz, and persistent dark fleet and sanctioned vessel clustering continue to disrupt normal maritime transit corridors.",
@@ -17,11 +29,11 @@
     "reason": "Active tanker attacks and a severe shipping bottleneck in the Strait of Hormuz are forcing vessels to run AIS-dark or divert around the Cape of Good Hope, severely disrupting physical energy and commodity flows.",
     "predicted_direction": "BULLISH",
     "price_at_alert": 689.5,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "FLAT",
+    "price_at_scoring": 689.25,
+    "pct_change": -0.036,
+    "scored_at": "2026-08-17T21:20:36.044968+00:00"
   },
   {
     "alert_number": 2,
@@ -29,11 +41,11 @@
     "reason": "Ongoing tanker attacks, ship seizures, and evasive AIS-dark transits are actively disrupting traffic and forcing vessel diversions around the Cape of Good Hope in the Strait of Hormuz.",
     "predicted_direction": "BULLISH",
     "price_at_alert": 674.75,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "HIT",
+    "price_at_scoring": 689.25,
+    "pct_change": 2.149,
+    "scored_at": "2026-08-17T21:20:36.044968+00:00"
   },
   {
     "alert_number": 1,
