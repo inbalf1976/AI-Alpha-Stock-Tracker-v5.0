@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 6,
+    "alert_timestamp": "2026-08-17T21:28:04.673024+00:00",
+    "reason": "An active blockade breach by an Iranian LPG carrier, combined with heavy dark-transit activity and high threat levels in the Strait of Hormuz, is actively disrupting regional maritime traffic.",
+    "predicted_direction": "BEARISH",
+    "price_at_alert": 689.25,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 5,
     "alert_timestamp": "2026-08-17T21:20:30.454212+00:00",
     "reason": "The first confirmed breach of the US blockade by an Iranian-origin tanker via ship-to-ship transfers and ongoing dark-transit activity in the Strait of Hormuz signal an active escalation in sanctions evasion and chokepoint friction.",
