@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 7,
+    "alert_timestamp": "2026-08-17T23:17:22.994701+00:00",
+    "reason": "An active blockade and ongoing dark-vessel transit disruptions persist in the Strait of Hormuz, highlighted by the first confirmed sanctions breach via ship-to-ship transfer and widespread AIS-dark traffic.",
+    "predicted_direction": "BEARISH",
+    "price_at_alert": 689.25,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 6,
     "alert_timestamp": "2026-08-17T21:28:04.673024+00:00",
     "reason": "An active blockade breach by an Iranian LPG carrier, combined with heavy dark-transit activity and high threat levels in the Strait of Hormuz, is actively disrupting regional maritime traffic.",
@@ -29,11 +41,11 @@
     "reason": "ADNOC-linked tankers have been struck by drones in the Strait of Hormuz, and persistent dark fleet and sanctioned vessel clustering continue to disrupt normal maritime transit corridors.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 689.5,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "FLAT",
+    "price_at_scoring": 689.25,
+    "pct_change": -0.036,
+    "scored_at": "2026-08-17T23:17:28.136601+00:00"
   },
   {
     "alert_number": 3,
