@@ -1,1 +1,1 @@
-{"timestamp": "2026-05-20T17:51:07.012999", "data": {"signal": "BULLISH", "score": 0.10750000000000003, "confidence": 0.65, "regional_count": 8, "bullish_regions": 3, "factors": ["Kansas: Adequate moisture (29.9mm/week)", "Oklahoma: Dry conditions (0.0mm/week)", "Ukraine: Dry conditions (3.8mm/week)"], "explanation": "Weather in 3/8 regions"}}
+{"ts": "2026-08-18T00:28:47.836814+03:00", "data": {"signal": "NEUTRAL", "score": 0.08, "explanation": "6/6 regions checked"}}

@@ -251,5 +251,16 @@
     "position_in_range_pct": 60.0,
     "within_range": true,
     "bias": "DOWN"
+  },
+  {
+    "iso_key": "2026-W34",
+    "date": "2026-08-18",
+    "day_name": "Tuesday",
+    "price": 689.25,
+    "range_low": 677.2,
+    "range_high": 697.28,
+    "position_in_range_pct": 60.0,
+    "within_range": true,
+    "bias": "DOWN"
   }
 ]
