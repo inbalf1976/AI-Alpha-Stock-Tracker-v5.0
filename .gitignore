@@ -1,0 +1,15 @@
+# Python bytecode cache — machine-generated, regenerates automatically,
+# should never be committed. Added 2026-08-17 after git add -A (used in
+# wheat_monitor_github.yml's commit-retry fix) started sweeping .pyc
+# files into commits.
+__pycache__/
+*.pyc
+*.pyo
+
+# Common editor/OS junk
+.DS_Store
+.vscode/
+*.swp
+
+# Local env files, if ever used — never commit secrets
+.env
