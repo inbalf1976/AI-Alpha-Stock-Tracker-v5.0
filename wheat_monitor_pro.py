@@ -1409,15 +1409,40 @@ def main():
         df_raw = df_raw.iloc[:-1]
 
     last_candle_date  = df_raw.index[-1].date()
-    days_since_candle = (datetime.now(IL).date() - last_candle_date).days
+    today_date        = datetime.now(IL).date()
+    days_since_candle = (today_date - last_candle_date).days  # kept for the log line only, NOT used to decide closure anymore — see fix below
 
-    if days_since_candle >= 3 and not is_manual:
-        print(f"\nMarket closed — last candle {last_candle_date} ({days_since_candle}d ago). No alert.")
+    # ── FIX: get the live quote BEFORE deciding whether the market is
+    # closed, not after. A successful live fetch is direct, unambiguous
+    # proof trading is happening right now — it should always win over
+    # any date-based guess about the daily bar.
+    live_price, is_live_price = get_live_price()
+
+    # UPDATED 2026-08-17: the old check used raw CALENDAR days since
+    # the last daily candle (>=3 => "closed"). That counts weekends,
+    # so every Monday ~01:00 IL run — where the last candle is Friday's
+    # close — saw a 3-CALENDAR-day gap and incorrectly skipped the
+    # alert as "market closed", even though the market is open normally
+    # every Monday. This was a real, recurring bug (confirmed missed
+    # on 2026-08-17), not a one-off. Fixed two ways, applied together:
+    #   1. missed_business_days uses np.busday_count on the days AFTER
+    #      the last candle, which automatically excludes weekends —
+    #      Fri->Mon correctly reads 0 missed business days, while a
+    #      real holiday cluster (e.g. Thu holiday + weekend) still
+    #      correctly reads >=1.
+    #   2. Even if missed_business_days looks large, a successful live
+    #      quote (is_live_price=True) overrides it — if get_live_price()
+    #      is actually returning fresh data, the market is plainly not
+    #      closed, whatever the daily-bar gap suggests.
+    missed_business_days = np.busday_count(last_candle_date + timedelta(days=1), today_date)
+    market_likely_closed = (missed_business_days >= 2) and not is_live_price
+
+    if market_likely_closed and not is_manual:
+        print(f"\nMarket closed — last candle {last_candle_date} "
+              f"({missed_business_days} business day(s) missed, live fetch also failed). No alert.")
         save_state(state)
         return
 
-    # ── FIX: use LIVE price for current_price, daily bars stay for indicators ──
-    live_price, is_live_price = get_live_price()
     if is_live_price:
         current_price = live_price
         print(f"Price: {current_price:.2f}c  (LIVE — daily bar was {last_candle_date})")
