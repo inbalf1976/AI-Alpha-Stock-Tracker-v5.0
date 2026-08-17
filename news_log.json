@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-08-17T21:28:04.673024+00:00",
+    "total_scanned": 226,
+    "flagged_count": 158,
+    "flagged_headlines": [
+      {
+        "title": "Dollar slips on pared Fed rate hike bets, but losses capped by rising oil prices",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-ticks-up-on-reduced-fed-hike-bets-yen-gains-despite-weak-japan-gdp-4862111",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 20:18:03",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "oil"
+        ]
+      },
+      {
+        "title": "Latin American currencies gain as Fed rate hike bets ease",
+        "link": "https://www.investing.com/news/forex-news/latin-american-currencies-gain-as-fed-rate-hike-bets-ease-93CH-4863871",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 20:02:27",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Canadian dollar rises as inflation exceeds expectations",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-as-inflation-exceeds-expectations-93CH-4863620",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 15:26:59",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound advance as weak US retail data dims Fed hike bets",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-advance-as-weak-us-retail-data-dims-fed-hike-bets-4862294",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 07:57:18",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar falls on pared rate hike bets, but on track to snap two-week losing streak",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-ticks-up-dollar-dips-after-soft-us-ppi-curbs-fed-hike-bets-4859699",
+        "source": "Investing.com Forex",
+        "published": "2026-08-14 19:50:26",
+        "matched_keywords": [
+          "rate hike"
+        ]
+      },
+      {
+        "title": "U.S. Treasuries consolidate as two-year yield lingers near multi-week lows",
+        "link": "https://www.investing.com/news/forex-news/european-debt-desks-digest-disinflation-and-persian-gulf-energy-risks-4859881",
+        "source": "Investing.com Forex",
+        "published": "2026-08-14 12:09:22",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Wheat futures decline as traders take profits after rally",
+        "link": "https://www.investing.com/news/commodities-news/wheat-futures-decline-as-traders-take-profits-after-rally-93CH-4863948",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-17 20:35:23",
+        "matched_keywords": [
+          "wheat"
+        ]
+      },
+      {
+        "title": "Soybean futures rise on stronger crush pace and oil prices",
+        "link": "https://www.investing.com/news/commodities-news/soybean-futures-rise-on-stronger-crush-pace-and-oil-prices-93CH-4863872",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-17 20:03:36",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil rises more than 2%, Brent tops $90 a barrel as Trump threatens to bomb Oman",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-edge-lower-after-strong-week-iran-jitters-persist-4862062",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-17 19:29:27",
+        "matched_keywords": [
+          "oil",
+          "threatens to"
+        ]
+      },
+      {
+        "title": "Copper coiled between $6.57 and $6.65: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/copper-stalls-at-686-resistance-doubletop-risk-live-levels-93CH-4862230",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-17 19:19:20",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "London Gas Oil overbought near $1,328 resistance: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-coils-near-1241-before-breakout-live-levels-93CH-4862236",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-17 19:18:58",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI tests $84.50 resistance: Live setups",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-stalls-below-vwap-at-8108-hourly-levels-93CH-4862232",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-17 19:18:57",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are reacting to a softening U.S. dollar driven by tempered Federal Reserve rate hike expectations and surging crude oil prices, which topped $90 amid severe Middle East supply concerns. Meanwhile, geopolitical friction and maritime disruptions in the Strait of Hormuz continue to underpin energy markets, while agricultural commodities show mixed sentiment with wheat declining on profit-taking and soybeans rising on crush demand.",
+      "wheat_impact": "BEARISH",
+      "wheat_impact_reason": "Wheat futures are declining as traders take profits following the recent rally.",
+      "usd_ils_impact": "BEARISH",
+      "usd_ils_impact_reason": "The broad weakening of the U.S. dollar due to pared Fed rate hike expectations is weighing on its relative valuation.",
+      "key_risk": "Escalating geopolitical tensions in the Middle East and ongoing clandestine tanker movements threatening Hormuz shipping chokepoints.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "An active blockade breach by an Iranian LPG carrier, combined with heavy dark-transit activity and high threat levels in the Strait of Hormuz, is actively disrupting regional maritime traffic."
+    }
+  },
+  {
     "timestamp": "2026-08-17T21:20:30.454212+00:00",
     "total_scanned": 227,
     "flagged_count": 161,
