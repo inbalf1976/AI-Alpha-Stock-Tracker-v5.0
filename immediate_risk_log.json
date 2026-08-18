@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 11,
+    "alert_timestamp": "2026-08-18T10:35:29.303314+00:00",
+    "reason": "The Strait of Hormuz is experiencing active physical disruption, including suppressed transits, dark-fleet activities, Iranian boardings of tankers, and idle export terminals.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 693.0,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 10,
     "alert_timestamp": "2026-08-18T09:56:34.932841+00:00",
     "reason": "The Strait of Hormuz is experiencing severe operational suppression with Iranian boarding incidents, idle terminals, and significant dark-fleet tanker disruptions active right now.",
