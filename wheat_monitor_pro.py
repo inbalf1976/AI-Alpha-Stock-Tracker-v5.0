@@ -79,25 +79,44 @@ def get_live_price(ticker=TICKER):
     by days around holidays/weekends or while today's session is
     still forming — this pulls the real current quote instead.
 
-    Returns (price, is_live). is_live=False means the live fetch
-    failed and the caller should fall back to the last daily close,
-    while flagging it clearly rather than trusting it silently.
-    """
-    try:
-        fast = yf.Ticker(ticker).fast_info
-        live = fast.get('last_price') or fast.get('lastPrice')
-        if live and live > 0:
-            return float(live), True
-    except Exception as e:
-        print(f"   fast_info live price failed: {e}")
+    UPDATED 2026-08-18: now tries the current front-month SPECIFIC
+    contract (e.g. ZWU26.CBT) first, via get_front_month_ticker() —
+    the same fix already proven for volume (see get_accurate_volume()
+    below, confirmed 2026-07-10/11: ZW=F's continuous series has a
+    real data lag/discrepancy vs. the specific contract). Falls back
+    to the plain TICKER (ZW=F) only if the front-month fetch fails,
+    with a clear log line either way. This was flagged as a real live
+    discrepancy on 2026-08-18 — a Telegram alert showed 688c current
+    price while the actual quote was 674.75c, an ~1.9% gap large
+    enough to materially change the trade setup's entry/stop/target
+    math, not just a display rounding issue.
 
-    # Fallback: try 1-minute intraday bars for today
-    try:
-        intraday = yf.Ticker(ticker).history(period='1d', interval='1m')
-        if not intraday.empty:
-            return float(intraday['Close'].iloc[-1]), True
-    except Exception as e:
-        print(f"   intraday fallback failed: {e}")
+    Returns (price, is_live). is_live=False means every live fetch
+    attempt failed and the caller should fall back to the last daily
+    close, while flagging it clearly rather than trusting it silently.
+    """
+    front_month = get_front_month_ticker()
+    sources = [front_month] if ticker == front_month else [front_month, ticker]
+
+    for i, t in enumerate(sources):
+        try:
+            fast = yf.Ticker(t).fast_info
+            live = fast.get('last_price') or fast.get('lastPrice')
+            if live and live > 0:
+                if i > 0:
+                    print(f"   ⚠️ Live price from FALLBACK source ({t}) — front-month ({front_month}) fetch failed")
+                return float(live), True
+        except Exception as e:
+            print(f"   fast_info live price failed ({t}): {e}")
+
+    # Fallback: try 1-minute intraday bars for today, same source order
+    for t in sources:
+        try:
+            intraday = yf.Ticker(t).history(period='1d', interval='1m')
+            if not intraday.empty:
+                return float(intraday['Close'].iloc[-1]), True
+        except Exception as e:
+            print(f"   intraday fallback failed ({t}): {e}")
 
     return None, False
 
