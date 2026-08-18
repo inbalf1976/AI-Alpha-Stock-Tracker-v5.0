@@ -499,7 +499,7 @@ class WeeklyRangeEngine:
     def format_alert(self, weekly, monthly=None, tier=0, gate_conds=None,
                      wasde=None, weather=None, seasonal=None, cost_signal=None,
                      gate_accuracy=None, gate_reason=None, final_direction=None,
-                     daily_direction=None, status_line=None):
+                     daily_direction=None, status_line=None, current_price=None):
         """
         UPDATED 2026-07-14 — new weekly plan design:
           - weekly['final_call'] is now the FROZEN weekly direction
@@ -599,6 +599,41 @@ class WeeklyRangeEngine:
         # line above already states the real tier/accuracy honestly.
         weekly_final_call = weekly.get('final_call', final_direction)
 
+        # ── ENTRY REACHABILITY CHECK (2026-08-19) ────────────────────────────
+        # ADDED after a real incident: 'entry' is set to current_price at
+        # the moment the weekly plan is FROZEN (Monday, or a mid-week
+        # break/regeneration) — see predict_next_week()'s entry=current_price
+        # assignment. It is NOT a technical support/resistance level to
+        # wait for. But the alert re-displays that same frozen number
+        # every day, with no indication it's a week-old snapshot rather
+        # than a live actionable level. A user who placed an automatic
+        # resting order at that frozen entry, after price had already run
+        # in the predicted direction well past it, correctly found the
+        # order would never fill (confirmed: entry=689, price fell to
+        # 660.25 without ever returning to 689). This warning makes that
+        # visible in the alert itself rather than silently re-showing a
+        # stale number as if it were still fresh. Purely informational —
+        # does not change entry/stop/target, does not touch the freeze/
+        # break strategy logic.
+        reachability_warning = ""
+        if current_price is not None and weekly.get('entry') is not None:
+            entry = weekly['entry']
+            drift_pct = (current_price - entry) / entry * 100
+            REACHABILITY_WARN_THRESHOLD_PCT = 1.0
+
+            ran_away = (
+                (weekly_final_call == 'DOWN' and drift_pct < -REACHABILITY_WARN_THRESHOLD_PCT) or
+                (weekly_final_call == 'UP' and drift_pct > REACHABILITY_WARN_THRESHOLD_PCT)
+            )
+            if ran_away:
+                reachability_warning = (
+                    f"⚠️ Entry is from when this weekly plan was frozen — price has "
+                    f"since moved {abs(drift_pct):.1f}% {'below' if drift_pct < 0 else 'above'} "
+                    f"it (now {current_price:.0f}c). A resting order at the entry level "
+                    f"may not fill; treat this as an already-in-progress move, not a "
+                    f"fresh entry point.\n\n"
+                )
+
         if weekly.get('entry') is not None:
             trade_setup_block = (
                 f"TRADE SETUP:\n"
@@ -638,6 +673,7 @@ class WeeklyRangeEngine:
             f"CONVICTION: {tier_label}\n"
             f"{rsi_str} | {vol_str}\n"
             f"DECISION: {decision}\n\n"
+            f"{reachability_warning}"
             f"{trade_setup_block}"
             f"{monthly_line}"
             f"{status_block}"
