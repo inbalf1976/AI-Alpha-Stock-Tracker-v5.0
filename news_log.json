@@ -1,5 +1,170 @@
 [
   {
+    "timestamp": "2026-08-18T23:04:01.573960+00:00",
+    "total_scanned": 223,
+    "flagged_count": 163,
+    "flagged_headlines": [
+      {
+        "title": "Dollar mostly flat amid pared Fed rate hike bets, bond sell-off, and rising oil",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-lacks-direction-with-fed-outlook-usiran-tensions-in-focus-4864264",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 19:16:10",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "oil"
+        ]
+      },
+      {
+        "title": "Canadian dollar slips as investors await tariff deal with US",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-investors-await-tariff-deal-with-us-93CH-4865853",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 18:08:27",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "BofA sees lower EUR/USD through Q3 on Fed policy outlook",
+        "link": "https://www.investing.com/news/forex-news/bofa-sees-lower-eurusd-through-q3-on-fed-policy-outlook-93CH-4864635",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 09:55:47",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as dollar firms on energy, yields",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-dollar-firms-on-energy-yields-4864498",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 08:32:48",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar slips on pared Fed rate hike bets, but losses capped by rising oil prices",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-ticks-up-on-reduced-fed-hike-bets-yen-gains-despite-weak-japan-gdp-4862111",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 20:18:03",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "oil"
+        ]
+      },
+      {
+        "title": "Latin American currencies gain as Fed rate hike bets ease",
+        "link": "https://www.investing.com/news/forex-news/latin-american-currencies-gain-as-fed-rate-hike-bets-ease-93CH-4863871",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 20:02:27",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Canadian dollar rises as inflation exceeds expectations",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-as-inflation-exceeds-expectations-93CH-4863620",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 15:26:59",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Russia says its economy is strong. It just fired a top economist who warned otherwise",
+        "link": "https://www.cnbc.com/2026/08/18/ukraine-war-russia-economy-klepach.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 18 Aug 2026 11:51:15 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "The Iran war risks bringing the G7's fastest-growing economy to a halt",
+        "link": "https://www.cnbc.com/2026/08/13/iran-war-g7s-fastest-growing-economy.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 13 Aug 2026 12:42:10 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Here are five key takeaways from the July CPI inflation report",
+        "link": "https://www.cnbc.com/2026/08/12/here-are-five-key-takeaways-from-the-july-cpi-inflation-report.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 12 Aug 2026 17:14:09 GMT",
+        "matched_keywords": [
+          "cpi",
+          "inflation"
+        ]
+      },
+      {
+        "title": "AI’s costly build-out complicates the Fed’s inflation fight",
+        "link": "https://www.cnbc.com/2026/08/12/ais-costly-buildout-complicates-the-feds-inflation-fight.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 13 Aug 2026 15:59:16 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "An inflation report Wednesday should be a big deal for the Fed. Here's what to expect",
+        "link": "https://www.cnbc.com/2026/08/11/an-inflation-report-wednesday-should-be-a-big-deal-for-the-fed-heres-what-to-expect.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 12 Aug 2026 14:04:06 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Oil ticks up, Brent briefly hits $92 after Trump says no talks ongoing with Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-creep-higher-remain-underpinned-as-iran-crisis-rages-on-4864188",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 20:48:20",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US natural gas futures climb as oil prices rise",
+        "link": "https://www.investing.com/news/commodities-news/us-natural-gas-futures-climb-as-oil-prices-rise-93CH-4865986",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 20:09:07",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold falls over 1.5%, weighed down by elevated Treasury yields, higher oil prices",
+        "link": "https://www.investing.com/news/commodities-news/gold-rises-near-4450-as-fed-hike-bets-fade-dollar-weakens-risks-persist-4864147",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 19:52:02",
+        "matched_keywords": [
+          "oil",
+          "yield",
+          "treasury"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by rising oil prices—with Brent touching $92 amid escalating tensions and tanker boardings near the Strait of Hormuz—alongside sticky inflation reports and shifting Federal Reserve rate expectations. Meanwhile, geopolitical friction, including the firing of a Russian economist over war-attrition warnings, reinforces structural energy and commodity risks.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_reason": "Surging energy and natural gas prices, driven by Middle East supply disruptions, increase agricultural input and fertilizer costs.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Escalating regional conflict risks around the Strait of Hormuz and Iran increase geopolitical risk premiums, supporting the USD against the Israeli Shekel.",
+      "key_risk": "Active maritime disruptions and potential military escalation in the Strait of Hormuz threatening global energy and commodity flows.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Iranian forces reportedly boarded a product tanker near Qeshm Island, Kharg Island export terminals remain largely idle, and Hormuz transit volumes are heavily suppressed with elevated dark-fleet activity."
+    }
+  },
+  {
     "timestamp": "2026-08-18T10:49:15.016621+00:00",
     "total_scanned": 227,
     "flagged_count": 170,
