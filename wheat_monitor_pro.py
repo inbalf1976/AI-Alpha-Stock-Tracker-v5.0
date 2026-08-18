@@ -463,15 +463,61 @@ class ConvictionGate:
 
 
 MONTHLY_CACHE_FILE = Path("monthly_range_cache.json")
+MONTHLY_BREAK_LOG_FILE = Path("monthly_break_log.json")
+# Same 0.1% "even a small breach counts" philosophy as weekly's
+# BREAK_THRESHOLD_PCT (see that constant's comment) — kept as its own
+# named constant rather than reusing BREAK_THRESHOLD_PCT so the two
+# timeframes can be tuned independently later if needed.
+MONTHLY_BREAK_THRESHOLD_PCT = 0.001
+
+
+def log_monthly_break(month_key, current_price, old_monthly, reason):
+    """Records when/why a monthly outlook range got breached and
+    regenerated — mirrors log_weekly_break() exactly, see that
+    function. New file, monthly_break_log.json, parallel to
+    weekly_break_log.json."""
+    log = []
+    if MONTHLY_BREAK_LOG_FILE.exists():
+        try:
+            log = json.loads(MONTHLY_BREAK_LOG_FILE.read_text())
+        except Exception:
+            log = []
+
+    log.append({
+        'month_key': month_key,
+        'broken_at': datetime.now(IL).isoformat(),
+        'price_at_break': round(current_price, 2),
+        'old_range': f"{old_monthly['monthly_low']:.0f}-{old_monthly['monthly_high']:.0f}",
+        'reason': reason,
+    })
+
+    try:
+        MONTHLY_BREAK_LOG_FILE.write_text(json.dumps(log, indent=2))
+    except Exception as e:
+        print(f"   Failed to log monthly break: {e}")
 
 
 def get_frozen_monthly_range(wre, df, current_price, cost_floor_cents):
     """
-    Same freeze pattern as get_frozen_weekly_range(), applied to the
-    monthly outlook — see that function's docstring and
-    predict_monthly_range()'s docstring for the full reasoning.
-    Computed once per real calendar month, reused until the month
-    actually changes.
+    UPDATED 2026-08-19: previously this ONLY regenerated when the
+    calendar flipped to a new month — it never checked whether
+    CURRENT PRICE had actually moved outside the frozen
+    [monthly_low, monthly_high] range in between. Confirmed live:
+    August's frozen range (594-669c) stayed displayed unchanged even
+    after price reached 681c — a real, meaningful breach with no
+    mechanism to catch it, unlike the weekly plan (get_frozen_weekly_
+    plan) which already re-checks for a break on every single run.
+    This was inconsistent with the project's own core design ("weekly
+    frozen unless broken, then regenerate, since it's the most
+    reliable") — monthly is meant to follow the same rule, just on
+    its own timeframe/tolerance, not skip breach-checking entirely.
+
+    Now mirrors get_frozen_weekly_plan()'s pattern: on each run,
+    checks current_price against the frozen range (with
+    MONTHLY_BREAK_THRESHOLD_PCT tolerance); if breached, logs it
+    (log_monthly_break(), new monthly_break_log.json) and regenerates
+    a fresh range centered on current price, still frozen at the
+    calendar-month cache_key so it doesn't over-regenerate.
     """
     today = datetime.now(IL)
     cache_key = f"{today.year}-{today.month:02d}"
@@ -484,8 +530,37 @@ def get_frozen_monthly_range(wre, df, current_price, cost_floor_cents):
             cached = None
 
     if cached and cached.get('month_key') == cache_key:
+        old_monthly = cached['monthly']
+        low, high = old_monthly.get('monthly_low'), old_monthly.get('monthly_high')
+
+        breached = False
+        if low is not None and high is not None:
+            if current_price > high * (1 + MONTHLY_BREAK_THRESHOLD_PCT):
+                breached, reason = True, f"price {current_price:.0f}c broke above monthly high {high:.0f}c"
+            elif current_price < low * (1 - MONTHLY_BREAK_THRESHOLD_PCT):
+                breached, reason = True, f"price {current_price:.0f}c broke below monthly low {low:.0f}c"
+
+        if breached:
+            print(f"   ⚠️ MONTHLY RANGE BREACHED: {reason} — regenerating")
+            log_monthly_break(cache_key, current_price, old_monthly, reason)
+
+            monthly = wre.predict_monthly_range(df, current_price, cost_floor_cents)
+            if monthly:
+                try:
+                    MONTHLY_CACHE_FILE.write_text(json.dumps({
+                        'month_key': cache_key,
+                        'frozen_at': today.isoformat(),
+                        'regenerated_after_breach': True,
+                        'monthly': monthly,
+                    }, indent=2))
+                    print(f"   Re-froze monthly range after breach: "
+                          f"{monthly['monthly_low']:.0f}-{monthly['monthly_high']:.0f}c")
+                except Exception as e:
+                    print(f"   Failed to cache regenerated monthly range: {e}")
+            return monthly
+
         print(f"   Using FROZEN monthly range (locked earlier this month, {cache_key})")
-        return cached['monthly']
+        return old_monthly
 
     monthly = wre.predict_monthly_range(df, current_price, cost_floor_cents)
     if monthly:
