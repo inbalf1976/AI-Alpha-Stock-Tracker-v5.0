@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-08-18T05:09:03.259290+00:00",
+    "total_scanned": 227,
+    "flagged_count": 172,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Oil climbs as fading US-Iran peace hopes raise supply risks",
+        "link": "https://www.investing.com/news/commodities-news/oil-climbs-as-fading-usiran-peace-hopes-raise-supply-risks-4864170",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 04:30:32",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices creep higher, remain underpinned as Iran crisis rages on",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-creep-higher-remain-underpinned-as-iran-crisis-rages-on-4864188",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 01:37:00",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold rises near $4,450 as Fed hike bets fade, dollar weakens, risks persist",
+        "link": "https://www.investing.com/news/commodities-news/gold-rises-near-4450-as-fed-hike-bets-fade-dollar-weakens-risks-persist-4864147",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 00:54:25",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Gold rises 1% amid softer dollar, falling Fed rate hike bets; oil caps gains",
+        "link": "https://www.investing.com/news/commodities-news/gold-rises-near-4400-as-fed-minutes-oil-risks-shape-rate-outlook-4862058",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-17 21:57:54",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "oil"
+        ]
+      },
+      {
+        "title": "Wheat futures decline as traders take profits after rally",
+        "link": "https://www.investing.com/news/commodities-news/wheat-futures-decline-as-traders-take-profits-after-rally-93CH-4863948",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-17 20:35:23",
+        "matched_keywords": [
+          "wheat"
+        ]
+      },
+      {
+        "title": "Soybean futures rise on stronger crush pace and oil prices",
+        "link": "https://www.investing.com/news/commodities-news/soybean-futures-rise-on-stronger-crush-pace-and-oil-prices-93CH-4863872",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-17 20:03:36",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Financial markets are reacting to fading Federal Reserve rate hike expectations and a weaker dollar, which are supporting gold prices and soybean crush demand. Concurrently, ongoing geopolitical tensions in the Middle East and Strait of Hormuz disruptions are keeping oil prices elevated despite reported blockade breaches.",
+      "wheat_impact": "BEARISH",
+      "wheat_impact_reason": "Wheat futures are declining as traders take profits following recent speculative rallies.",
+      "usd_ils_impact": "NEUTRAL",
+      "usd_ils_impact_reason": "Regional Middle East tensions create mixed currency pressures that currently lack a clear directional catalyst for the Israeli Shekel.",
+      "key_risk": "Escalation of tanker blockades and supply bottlenecks in the Strait of Hormuz driving further energy price volatility.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "The Strait of Hormuz is experiencing active dark-heavy traffic patterns, ongoing vessel interdiction rings, and the first confirmed blockade breach by an Iranian tanker carrying a false flag."
+    }
+  },
+  {
     "timestamp": "2026-08-17T23:17:22.994701+00:00",
     "total_scanned": 227,
     "flagged_count": 163,
