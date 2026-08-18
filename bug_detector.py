@@ -87,6 +87,50 @@ def check_missed_run(state):
     return issues
 
 
+# ── 1b. MISSED WEEKDAY ALERT (decision-level check, 2026-08-17) ─────────────
+# check_missed_run() above only confirms the SCRIPT executed — it can't
+# tell if the script then made a wrong call and silently skipped
+# sending. That's exactly what happened on 2026-08-17: a bug in the
+# "is the market closed" logic caused a real Monday alert to be
+# skipped, while last_check still updated normally and every other
+# check here stayed green. This check is deliberately OUTCOME-based
+# rather than cause-based — it doesn't know or care WHY an alert may
+# be missing, so it will catch this same failure shape again even if
+# the next bug is completely unrelated to market-closed logic.
+def check_missed_weekday_alert(state):
+    issues = []
+    if not isinstance(state, dict) or "__load_error__" in (state or {}):
+        return issues
+
+    last_alert_date_str = state.get("last_alert_date")
+    if not last_alert_date_str:
+        return issues  # no alert history yet — nothing to compare
+
+    try:
+        last_alert_date = datetime.fromisoformat(last_alert_date_str).date()
+    except Exception:
+        return issues
+
+    today = datetime.now(IL).date()
+
+    # Most recent COMPLETED weekday (Mon-Fri) strictly before today —
+    # by the time this check runs, that day's ~01:00 IL alert cycle
+    # should already have happened.
+    check_date = today - timedelta(days=1)
+    while check_date.weekday() >= 5:  # Sat=5, Sun=6
+        check_date -= timedelta(days=1)
+
+    if last_alert_date < check_date:
+        issues.append(
+            f"No alert recorded since {last_alert_date_str}, but {check_date.isoformat()} "
+            f"was a weekday that should have had one — possible silent skip (e.g. a bad "
+            f"'market closed' decision) even though the monitor script itself ran on schedule. "
+            f"NOTE: this can also fire on a genuine multi-day market holiday — check the "
+            f"Actions log for that date before assuming it's a bug."
+        )
+    return issues
+
+
 # ── 2. PREDICTION LOG SANITY ─────────────────────────────────────────────────
 
 def check_prediction_log(log):
@@ -285,6 +329,7 @@ def main():
 
     all_issues = []
     all_issues += check_missed_run(state)
+    all_issues += check_missed_weekday_alert(state)
     all_issues += check_prediction_log(log)
     all_issues += check_accuracy_divergence(log, validated, state)
     all_issues += check_state_health(state)
