@@ -683,10 +683,10 @@
     "confidence": 0.6,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 17.24
   },
   {
     "timestamp": "2026-08-18T00:29:15.539658+03:00",
