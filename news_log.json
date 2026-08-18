@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-08-18T10:49:15.016621+00:00",
+    "total_scanned": 227,
+    "flagged_count": 170,
+    "flagged_headlines": [
+      {
+        "title": "Gold hovers below $4,400 as oil, Treasury yields pressure bullion",
+        "link": "https://www.investing.com/news/commodities-news/gold-rises-near-4450-as-fed-hike-bets-fade-dollar-weakens-risks-persist-4864147",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 10:13:09",
+        "matched_keywords": [
+          "oil",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Hormuz Strait to remain shut until U.S. meets interim deal conditions, Iran says",
+        "link": "https://www.investing.com/news/commodities-news/hormuz-strait-to-remain-shut-until-us-meets-interim-deal-conditions-iran-says-4864613",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 09:48:27",
+        "matched_keywords": [
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Oil prices at near three-week high as US-Iran peace hopes fade",
+        "link": "https://www.investing.com/news/commodities-news/oil-climbs-as-fading-usiran-peace-hopes-raise-supply-risks-4864170",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 08:48:27",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices jump as waning U.S.-Iran peace hopes fuel supply concerns",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-creep-higher-remain-underpinned-as-iran-crisis-rages-on-4864188",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 08:39:35",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "European gas locks In 5-day winning streak as Strait of Hormuz freeze deepens",
+        "link": "https://www.investing.com/news/commodities-news/european-gas-locks-in-5day-winning-streak-as-strait-of-hormuz-freeze-deepens-4864493",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 08:29:50",
+        "matched_keywords": [
+          "hormuz"
+        ]
+      },
+      {
+        "title": "London Gas Oil nears $1,328 double top overbought: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-coils-near-1241-before-breakout-live-levels-93CH-4862236",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 07:11:28",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Natural Gas coils in tight range near $2.710: Hourly levels",
+        "link": "https://www.investing.com/news/commodities-news/natural-gas-bear-flag-breaks-at-2645-live-levels-93CH-4862233",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 07:11:14",
+        "matched_keywords": [
+          "ils",
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI tests $84.50 resistance: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-stalls-below-vwap-at-8108-hourly-levels-93CH-4862232",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 07:11:13",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "BofA sees lower EUR/USD through Q3 on Fed policy outlook",
+        "link": "https://www.investing.com/news/forex-news/bofa-sees-lower-eurusd-through-q3-on-fed-policy-outlook-93CH-4864635",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 09:55:47",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar rebounds from 2-month lows as Middle East war risks truncate FX momentum",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-lacks-direction-with-fed-outlook-usiran-tensions-in-focus-4864264",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 09:26:30",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as dollar firms on energy, yields",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-dollar-firms-on-energy-yields-4864498",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 08:32:48",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar slips on pared Fed rate hike bets, but losses capped by rising oil prices",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-ticks-up-on-reduced-fed-hike-bets-yen-gains-despite-weak-japan-gdp-4862111",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 20:18:03",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "oil"
+        ]
+      },
+      {
+        "title": "Latin American currencies gain as Fed rate hike bets ease",
+        "link": "https://www.investing.com/news/forex-news/latin-american-currencies-gain-as-fed-rate-hike-bets-ease-93CH-4863871",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 20:02:27",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Canadian dollar rises as inflation exceeds expectations",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-as-inflation-exceeds-expectations-93CH-4863620",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 15:26:59",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound advance as weak US retail data dims Fed hike bets",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-advance-as-weak-us-retail-data-dims-fed-hike-bets-4862294",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 07:57:18",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are heavily driven by supply anxieties stemming from the continued closure of the Strait of Hormuz and fading U.S.-Iran peace hopes, pushing crude oil and European natural gas prices higher. Meanwhile, the U.S. dollar is rebounding from two-month lows due to safe-haven demand from Middle East war risks, offsetting lower Federal Reserve rate hike expectations.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Energy and geopolitical supply shocks are dominating macroeconomic and commodity sentiment, leaving wheat fundamentals largely unaffected by these specific inputs.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Escalating regional conflict risks in the Middle East and a strengthening U.S. dollar broadly support upside momentum for USD/ILS.",
+      "key_risk": "Prolonged full or partial closure of the Strait of Hormuz paralyzing Middle Eastern energy exports and severely straining global shipping and energy markets.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "The Strait of Hormuz remains effectively shuttered with heavily suppressed transit volumes, elevated dark-fleet activity, idle terminal facilities, and reported hostile boardings of commercial tankers by Iranian forces."
+    }
+  },
+  {
     "timestamp": "2026-08-18T10:35:29.303314+00:00",
     "total_scanned": 227,
     "flagged_count": 170,
