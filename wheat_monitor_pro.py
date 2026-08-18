@@ -1602,6 +1602,7 @@ def main():
             final_direction = weekly['final_call'],
             daily_direction = direction,
             status_line     = status_line,
+            current_price   = current_price,
         )
 
         # Add ensemble footnote
