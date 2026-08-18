@@ -114,6 +114,25 @@ jobs:
           exit 1
         fi
 
+    - name: Notify Telegram on job failure
+      # ADDED 2026-08-17: previously the ONLY signal for a failed job
+      # (e.g. the push-retry above exhausting all 3 attempts, or any
+      # other step failing) was a red X in the GitHub Actions tab —
+      # nothing proactive, so it's only noticed on a manual check.
+      # This fires on ANY failure in this job, whatever the cause,
+      # and pings Telegram immediately with a link to the failed run.
+      if: failure()
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      run: |
+        MSG=$(printf "⚠️ Wheat Monitor 'monitor' job FAILED\n%s\nCheck the log — this is not a routine skip, something actually broke." "$RUN_URL")
+        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+          -d chat_id="${TELEGRAM_CHAT_ID}" \
+          -d text="$MSG" \
+          || echo "Telegram failure-notify send itself failed — check Actions tab directly."
+
   saturday_report:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -224,3 +243,18 @@ jobs:
           echo "::error::git push failed after 3 attempts — news_log.json / state updates did NOT reach the repo this run."
           exit 1
         fi
+
+    - name: Notify Telegram on job failure
+      # ADDED 2026-08-17: same as the monitor job's failure-notify step
+      # — see that step's comment for the full rationale.
+      if: failure()
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      run: |
+        MSG=$(printf "⚠️ Wheat Monitor 'news_scan' job FAILED\n%s\nCheck the log — this is not a routine skip, something actually broke." "$RUN_URL")
+        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+          -d chat_id="${TELEGRAM_CHAT_ID}" \
+          -d text="$MSG" \
+          || echo "Telegram failure-notify send itself failed — check Actions tab directly."
