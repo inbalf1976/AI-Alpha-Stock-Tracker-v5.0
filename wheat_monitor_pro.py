@@ -1203,23 +1203,48 @@ def get_weather_signal():
 # history all continue using ZW=F's long continuous series.
 WHEAT_MONTH_CODES = {3: 'H', 5: 'K', 7: 'N', 9: 'U', 12: 'Z'}
 
+# UPDATED 2026-08-18: the OLD roll rule rolled to the NEXT contract
+# the instant the calendar entered the current contract's own
+# delivery month (e.g. Sept 1 already pointed to December, skipping
+# September entirely) — overly conservative in the wrong direction.
+# CBOT wheat's real last trading day is the business day before the
+# 15th of the delivery month, so the old rule stopped using each
+# contract roughly TWO WEEKS before it actually expired — during
+# exactly that window, this project's own diagnostic (2026-08-18)
+# confirmed the abandoned contract was still the one actually
+# matching real broker prices (Plus500). Left as-is, this would have
+# reproduced the same ZW=F-vs-specific-contract mismatch this whole
+# fix was built to solve, on a predictable ~2-week cycle, starting
+# as soon as Sept 1. WHEAT_ROLL_BUFFER_DAYS controls how many days
+# before the ~15th cutoff the roll now happens (still rolls a few
+# days early for safety/liquidity, just not two full weeks early).
+WHEAT_ROLL_BUFFER_DAYS = 5
+
 
 def get_front_month_ticker(reference_date=None):
     """
     Returns the current front-month CBOT wheat contract ticker
-    (e.g. 'ZWU26.CBT'), rolling forward to the next contract month
-    once inside the current delivery month (a simple, conservative
-    roll rule — precise CBOT last-trade dates vary, but rolling at
-    the start of delivery month avoids ever using an expired symbol).
+    (e.g. 'ZWU26.CBT'). Stays on the CURRENT delivery-month contract
+    until WHEAT_ROLL_BUFFER_DAYS before its approximate last trading
+    day (~15th of the month), then rolls to the next contract — see
+    the comment above WHEAT_ROLL_BUFFER_DAYS for why. This is still a
+    calendar-based approximation, not a live CME trading-calendar
+    lookup — exact last-trade dates shift by a day or two around
+    weekends/holidays, which is why a buffer is used rather than
+    cutting it exactly at the real expiry.
     """
     ref = reference_date or datetime.now(IL)
     months = sorted(WHEAT_MONTH_CODES.keys())
+    roll_cutoff_day = 15 - WHEAT_ROLL_BUFFER_DAYS
 
     year = ref.year
     for m in months:
         if ref.month < m:
             return f"ZW{WHEAT_MONTH_CODES[m]}{str(year)[-2:]}.CBT"
-    # Past all this year's months — roll to March of next year
+        if ref.month == m and ref.day < roll_cutoff_day:
+            return f"ZW{WHEAT_MONTH_CODES[m]}{str(year)[-2:]}.CBT"
+    # Past all this year's months (including past December's own roll
+    # cutoff) — roll to March of next year
     return f"ZW{WHEAT_MONTH_CODES[3]}{str(year + 1)[-2:]}.CBT"
 
 
