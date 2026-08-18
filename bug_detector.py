@@ -26,6 +26,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 import requests
+import yfinance as yf
 
 IL = ZoneInfo("Asia/Jerusalem")
 
@@ -45,6 +46,40 @@ ACCURACY_DIVERGENCE_PCT      = 15     # flag if live vs backtest win rate gap ex
 MIN_SAMPLE_FOR_ACCURACY_CHECK = 8     # don't judge accuracy off tiny samples
 STALE_SIGNAL_HOURS           = 48     # news/weather age flag (these should update daily)
 STALE_VALIDATED_COND_HOURS   = 200    # validated_conditions.json only regenerates weekly (~168h) — give it slack
+PRICE_DIVERGENCE_PCT_THRESHOLD = 1.5  # flag if ZW=F vs the front-month specific contract differ by more than this
+
+# ══════════════════════════════════════════════════════════════════════════
+# ⚠️  DUPLICATED LOGIC — KEEP IN SYNC WITH wheat_monitor_pro.py  ⚠️
+# WHEAT_MONTH_CODES, WHEAT_ROLL_BUFFER_DAYS, and get_front_month_ticker()
+# below are a deliberate copy of the same names/logic in
+# wheat_monitor_pro.py, NOT an import — bug_detector.py is designed to
+# stay lightweight (no TensorFlow/XGBoost/sklearn), and importing
+# wheat_monitor_pro.py just for this one function would drag in that
+# entire heavy dependency stack. If wheat_monitor_pro.py's roll rule
+# is ever changed (it already was once, 2026-08-18, after the old
+# rule rolled to the next contract two weeks too early), this copy
+# must be updated to match, or check_price_source_divergence() below
+# will start comparing against the WRONG "correct" contract. Search
+# both files for "KEEP IN SYNC" if you touch this logic in one place.
+# ══════════════════════════════════════════════════════════════════════════
+WHEAT_MONTH_CODES = {3: 'H', 5: 'K', 7: 'N', 9: 'U', 12: 'Z'}
+WHEAT_ROLL_BUFFER_DAYS = 5
+
+
+def get_front_month_ticker(reference_date=None):
+    """See wheat_monitor_pro.py's version of this function for the full
+    rationale — this is an intentional duplicate, see KEEP IN SYNC note above."""
+    ref = reference_date or datetime.now(IL)
+    months = sorted(WHEAT_MONTH_CODES.keys())
+    roll_cutoff_day = 15 - WHEAT_ROLL_BUFFER_DAYS
+
+    year = ref.year
+    for m in months:
+        if ref.month < m:
+            return f"ZW{WHEAT_MONTH_CODES[m]}{str(year)[-2:]}.CBT"
+        if ref.month == m and ref.day < roll_cutoff_day:
+            return f"ZW{WHEAT_MONTH_CODES[m]}{str(year)[-2:]}.CBT"
+    return f"ZW{WHEAT_MONTH_CODES[3]}{str(year + 1)[-2:]}.CBT"
 
 
 def _load_json(path):
@@ -128,6 +163,54 @@ def check_missed_weekday_alert(state):
             f"NOTE: this can also fire on a genuine multi-day market holiday — check the "
             f"Actions log for that date before assuming it's a bug."
         )
+    return issues
+
+
+# ── 1c. PRICE SOURCE DIVERGENCE (2026-08-18) ─────────────────────────────────
+# ADDED after a real incident: wheat_monitor_pro.py's live price was
+# reported as ~693-694c while the actual tradeable market (confirmed
+# against Plus500 and a direct side-by-side yfinance diagnostic) was
+# ~677-679c — a ~2.3% gap large enough to materially change trade
+# setup math. Root cause: ZW=F (generic continuous symbol) was
+# silently tracking a different contract month than the specific
+# front-month contract (e.g. ZWU26.CBT). wheat_monitor_pro.py's
+# get_live_price() was fixed to prefer the specific contract, but
+# NOTHING previously checked on an ongoing basis whether these two
+# sources still agree — this fills that gap, the same way
+# check_missed_weekday_alert() fills the "script ran but made a wrong
+# call" gap check_missed_run() can't see.
+#
+# NOTE: some divergence between ZW=F and the specific front-month
+# contract is NORMAL, especially right around a contract roll
+# (calendar spread / contango) — this flags anything above threshold
+# for a human glance, it does not assert something is definitely
+# broken.
+def check_price_source_divergence():
+    issues = []
+    try:
+        front_ticker = get_front_month_ticker()
+
+        zwf_fast = yf.Ticker("ZW=F").fast_info
+        zwf_price = zwf_fast.get("last_price") or zwf_fast.get("lastPrice")
+
+        front_fast = yf.Ticker(front_ticker).fast_info
+        front_price = front_fast.get("last_price") or front_fast.get("lastPrice")
+
+        if zwf_price and front_price and front_price > 0:
+            pct_diff = abs(zwf_price - front_price) / front_price * 100
+            if pct_diff > PRICE_DIVERGENCE_PCT_THRESHOLD:
+                issues.append(
+                    f"ZW=F ({zwf_price}) and front-month contract {front_ticker} ({front_price}) "
+                    f"diverge by {pct_diff:.1f}% — beyond the {PRICE_DIVERGENCE_PCT_THRESHOLD}% "
+                    f"threshold. Can be normal near a contract roll (calendar spread/contango), "
+                    f"but worth a quick check against a live broker price to confirm which "
+                    f"source is currently accurate."
+                )
+    except Exception as e:
+        # Don't fail the whole bug_detector run if Yahoo Finance can't
+        # be reached right now — skip silently, same fail-soft
+        # convention as every other check in this file.
+        pass
     return issues
 
 
@@ -330,6 +413,7 @@ def main():
     all_issues = []
     all_issues += check_missed_run(state)
     all_issues += check_missed_weekday_alert(state)
+    all_issues += check_price_source_divergence()
     all_issues += check_prediction_log(log)
     all_issues += check_accuracy_divergence(log, validated, state)
     all_issues += check_state_health(state)
