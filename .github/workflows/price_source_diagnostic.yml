@@ -1,0 +1,20 @@
+name: Price Source Diagnostic
+
+on:
+  workflow_dispatch: {}   # manual "Run workflow" button only
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install yfinance
+
+      - name: Run price source diagnostic
+        run: python3 price_source_diagnostic.py
