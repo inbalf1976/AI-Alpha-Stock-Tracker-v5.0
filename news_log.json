@@ -1,5 +1,172 @@
 [
   {
+    "timestamp": "2026-08-18T23:16:22.115794+00:00",
+    "total_scanned": 222,
+    "flagged_count": 163,
+    "flagged_headlines": [
+      {
+        "title": "Dollar mostly flat amid pared Fed rate hike bets, bond sell-off, and rising oil",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-lacks-direction-with-fed-outlook-usiran-tensions-in-focus-4864264",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 19:16:10",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "oil"
+        ]
+      },
+      {
+        "title": "Canadian dollar slips as investors await tariff deal with US",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-investors-await-tariff-deal-with-us-93CH-4865853",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 18:08:27",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "BofA sees lower EUR/USD through Q3 on Fed policy outlook",
+        "link": "https://www.investing.com/news/forex-news/bofa-sees-lower-eurusd-through-q3-on-fed-policy-outlook-93CH-4864635",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 09:55:47",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as dollar firms on energy, yields",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-dollar-firms-on-energy-yields-4864498",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 08:32:48",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar slips on pared Fed rate hike bets, but losses capped by rising oil prices",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-ticks-up-on-reduced-fed-hike-bets-yen-gains-despite-weak-japan-gdp-4862111",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 20:18:03",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "oil"
+        ]
+      },
+      {
+        "title": "Latin American currencies gain as Fed rate hike bets ease",
+        "link": "https://www.investing.com/news/forex-news/latin-american-currencies-gain-as-fed-rate-hike-bets-ease-93CH-4863871",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 20:02:27",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Canadian dollar rises as inflation exceeds expectations",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-as-inflation-exceeds-expectations-93CH-4863620",
+        "source": "Investing.com Forex",
+        "published": "2026-08-17 15:26:59",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Oil ticks up, Brent briefly hits $92 after Trump says no talks ongoing with Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-creep-higher-remain-underpinned-as-iran-crisis-rages-on-4864188",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 20:48:20",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US natural gas futures climb as oil prices rise",
+        "link": "https://www.investing.com/news/commodities-news/us-natural-gas-futures-climb-as-oil-prices-rise-93CH-4865986",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 20:09:07",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold falls over 1.5%, weighed down by elevated Treasury yields, higher oil prices",
+        "link": "https://www.investing.com/news/commodities-news/gold-rises-near-4450-as-fed-hike-bets-fade-dollar-weakens-risks-persist-4864147",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 19:52:02",
+        "matched_keywords": [
+          "oil",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Oil closes at three-week high as hopes of US-Iran peace deal fade",
+        "link": "https://www.investing.com/news/commodities-news/oil-climbs-as-fading-usiran-peace-hopes-raise-supply-risks-4864170",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 19:30:53",
+        "matched_keywords": [
+          "oil",
+          "peace deal"
+        ]
+      },
+      {
+        "title": "London Gas Oil tests $1,328 resistance: Live hourly levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-coils-near-1241-before-breakout-live-levels-93CH-4862236",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-18 19:19:02",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are primarily driven by surging crude oil prices—with Brent hitting $92 following a breakdown in US-Iran peace talks—and fluctuating Federal Reserve rate hike expectations. Concurrently, severe maritime supply chain disruptions in the Strait of Hormuz, highlighted by detained tankers and heavily suppressed transit volumes, are keeping energy markets tight and safe-haven demand elevated.",
+      "wheat_impact": {
+        "direction": "NEUTRAL",
+        "reason": "Agricultural markets are currently overshadowed by surging crude oil prices, broader currency shifts, and geopolitical chokepoint disruptions rather than direct grain fundamentals."
+      },
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "Escalating geopolitical tensions in the Middle East, marked by active disruptions in the Strait of Hormuz and rising oil prices, generally drive safe-haven inflows into the US dollar relative to regional currencies like the Israeli shekel."
+      },
+      "key_risk": "Escalation of maritime conflicts and enforcement actions in the Strait of Hormuz threatening further disruptions to regional energy and commodity flows.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active maritime disruptions in the Strait of Hormuz are ongoing, featuring the reported boarding of a product tanker by Iranian forces, suppressed transit volumes, and dark-fleet vessels operating under false registries."
+    }
+  },
+  {
     "timestamp": "2026-08-18T23:04:01.573960+00:00",
     "total_scanned": 223,
     "flagged_count": 163,
