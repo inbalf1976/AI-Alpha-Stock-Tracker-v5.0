@@ -1,27 +1,29 @@
 name: Bug Detector
-
 on:
   schedule:
     # Daily at 06:00 UTC. Silent on clean days — only alerts immediately
     # if an issue is found. Sends a full report every Sunday regardless.
     - cron: '0 6 * * *'
   workflow_dispatch: {}   # manual run button in the Actions tab
-
 jobs:
   detect:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install dependencies
-        run: pip install requests
-
+        # UPDATED 2026-08-18: added yfinance — bug_detector.py's new
+        # check_price_source_divergence() check compares ZW=F against
+        # the front-month specific contract (e.g. ZWU26.CBT) to catch
+        # a repeat of the real price-source mismatch found this same
+        # day. Everything else in this file stays lightweight
+        # (no TensorFlow/XGBoost/sklearn) — yfinance is the only
+        # addition needed for this one check.
+        run: pip install requests yfinance
       - name: Run bug detector
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
