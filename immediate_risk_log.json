@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 17,
+    "alert_timestamp": "2026-08-19T23:17:24.375195+00:00",
+    "reason": "An active kinetic attack in the Strait of Hormuz resulted in the death of a chief engineer on a bulk carrier, alongside ongoing vessel boardings by Iranian forces and suppressed transit volumes.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 696.5,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 16,
     "alert_timestamp": "2026-08-18T23:35:21.039863+00:00",
     "reason": "Ongoing active disruptions in the Strait of Hormuz—including Iranian forces reportedly boarding a tanker (the AMARA), suppressed transit volumes, and idling Kharg Island oil terminals—present a real-time bottleneck to physical energy supply.",
@@ -29,11 +41,11 @@
     "reason": "Active maritime disruptions in the Strait of Hormuz are ongoing, featuring the reported boarding of a product tanker by Iranian forces, suppressed transit volumes, and dark-fleet vessels operating under false registries.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 677.0,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 696.5,
+    "pct_change": 2.88,
+    "scored_at": "2026-08-19T23:17:29.916313+00:00"
   },
   {
     "alert_number": 13,
@@ -41,11 +53,11 @@
     "reason": "Iranian forces reportedly boarded a product tanker near Qeshm Island, Kharg Island export terminals remain largely idle, and Hormuz transit volumes are heavily suppressed with elevated dark-fleet activity.",
     "predicted_direction": "BULLISH",
     "price_at_alert": 677.0,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "HIT",
+    "price_at_scoring": 696.5,
+    "pct_change": 2.88,
+    "scored_at": "2026-08-19T23:17:29.916313+00:00"
   },
   {
     "alert_number": 12,
@@ -53,11 +65,11 @@
     "reason": "The Strait of Hormuz remains effectively shuttered with heavily suppressed transit volumes, elevated dark-fleet activity, idle terminal facilities, and reported hostile boardings of commercial tankers by Iranian forces.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 693.0,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 696.5,
+    "pct_change": 0.505,
+    "scored_at": "2026-08-19T23:17:29.916313+00:00"
   },
   {
     "alert_number": 11,
@@ -65,11 +77,11 @@
     "reason": "The Strait of Hormuz is experiencing active physical disruption, including suppressed transits, dark-fleet activities, Iranian boardings of tankers, and idle export terminals.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 693.0,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 696.5,
+    "pct_change": 0.505,
+    "scored_at": "2026-08-19T23:17:29.916313+00:00"
   },
   {
     "alert_number": 10,
@@ -77,11 +89,11 @@
     "reason": "The Strait of Hormuz is experiencing severe operational suppression with Iranian boarding incidents, idle terminals, and significant dark-fleet tanker disruptions active right now.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 693.5,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 696.5,
+    "pct_change": 0.433,
+    "scored_at": "2026-08-19T23:17:29.916313+00:00"
   },
   {
     "alert_number": 9,
@@ -89,11 +101,11 @@
     "reason": "Active maritime disruptions in the Strait of Hormuz are currently suppressing transit volumes to minimal levels, featuring boarded vessels, idle terminals, and a high proportion of dark-fleet transit.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 693.0,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 696.5,
+    "pct_change": 0.505,
+    "scored_at": "2026-08-19T23:17:29.916313+00:00"
   },
   {
     "alert_number": 8,
@@ -101,11 +113,11 @@
     "reason": "The Strait of Hormuz is experiencing active dark-heavy traffic patterns, ongoing vessel interdiction rings, and the first confirmed blockade breach by an Iranian tanker carrying a false flag.",
     "predicted_direction": "BEARISH",
     "price_at_alert": 688.0,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "MISS",
+    "price_at_scoring": 696.5,
+    "pct_change": 1.235,
+    "scored_at": "2026-08-19T23:17:29.916313+00:00"
   },
   {
     "alert_number": 7,

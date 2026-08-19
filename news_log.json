@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-08-19T23:17:24.375195+00:00",
+    "total_scanned": 227,
+    "flagged_count": 160,
+    "flagged_headlines": [
+      {
+        "title": "Dollar hits three-month low as Treasury buybacks sink yields; Fed flags inflation",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-rises-as-treasury-yields-ease-s-korean-won-hits-1yr-high-4866425",
+        "source": "Investing.com Forex",
+        "published": "2026-08-19 19:45:56",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Deutsche Bank calls Treasury buyback doubling similar to ’operation twist’",
+        "link": "https://www.investing.com/news/forex-news/deutsche-bank-calls-treasury-buyback-doubling-similar-to-operation-twist-4867804",
+        "source": "Investing.com Forex",
+        "published": "2026-08-19 14:26:58",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound steady after in-line inflation damps BoE rate fears",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-steady-after-inline-inflation-damps-boe-rate-fears-4866615",
+        "source": "Investing.com Forex",
+        "published": "2026-08-19 08:06:08",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Dollar mostly flat amid pared Fed rate hike bets, bond sell-off, and rising oil",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-lacks-direction-with-fed-outlook-usiran-tensions-in-focus-4864264",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 19:16:10",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "oil"
+        ]
+      },
+      {
+        "title": "Canadian dollar slips as investors await tariff deal with US",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-investors-await-tariff-deal-with-us-93CH-4865853",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 18:08:27",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "BofA sees lower EUR/USD through Q3 on Fed policy outlook",
+        "link": "https://www.investing.com/news/forex-news/bofa-sees-lower-eurusd-through-q3-on-fed-policy-outlook-93CH-4864635",
+        "source": "Investing.com Forex",
+        "published": "2026-08-18 09:55:47",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "ServiceNow’s stock leads a software rally. Here’s what’s energizing investors.",
+        "link": "https://www.marketwatch.com/story/servicenows-stock-leads-a-software-rally-heres-whats-energizing-investors-0ad74dd1?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 19 Aug 2026 21:50:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Why the Treasury market’s newfound calm could break down in September",
+        "link": "https://www.marketwatch.com/story/treasury-market-reprieve-could-be-fleeting-with-deluge-of-corporate-bond-issuance-due-in-september-33cfaacd?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 19 Aug 2026 21:10:00 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Oil rises, Brent hits four-week high as U.S. and Iran remain at odds over Hormuz",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-rise-further-as-iran-us-remain-at-odds-over-hormuz-4866252",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-19 20:49:51",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Gold pops as dollar, yields fall; spot prices top $4.5k for first time since June",
+        "link": "https://www.investing.com/news/commodities-news/gold-steadies-after-big-drop-as-oil-bond-yields-pressure-bullion-fed-minutes-due-4866317",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-19 19:36:55",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "London Gas Oil rejects $1,316 on overbought MFI: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-coils-near-1241-before-breakout-live-levels-93CH-4862236",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-19 19:19:56",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI stalls at $84.36 volume node: Hourly levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-stalls-below-vwap-at-8108-hourly-levels-93CH-4862232",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-19 19:19:52",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Brent Oil stalls at $91.59 resistance with overbought MFI: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/brent-oil-trapped-at-8842-in-choppy-range-live-levels-93CH-4862231",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-19 19:19:44",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices settle near 4-week high as Middle East crisis escalates",
+        "link": "https://www.investing.com/news/commodities-news/oil-edges-up-on-uncertainty-over-exports-through-hormuz-4866269",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-19 19:18:48",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Trump bemoans Fed interest rate policy, says U.S. should be paying much less",
+        "link": "https://www.cnbc.com/2026/08/19/trump-bemoans-fed-interest-rate-policy-says-us-should-be-paying-much-less.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 19 Aug 2026 21:29:38 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by a weakening U.S. dollar, dropping Treasury yields, and escalating Middle East tensions centered on the Strait of Hormuz. Crude oil prices and gold have surged due to the geopolitical crisis and fears of supply disruptions.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "While energy and shipping costs are elevated due to Middle East tensions, no direct agricultural supply chain disruptions for wheat were reported in the current data.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Escalating Middle East geopolitical tensions typically pressure regional currencies, while a weaker global USD provides mixed effects but heightened risk generally strengthens safe-haven flows.",
+      "key_risk": "Active kinetic disruptions and rising dark-fleet activity in the Strait of Hormuz threatening global crude oil flows.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "An active kinetic attack in the Strait of Hormuz resulted in the death of a chief engineer on a bulk carrier, alongside ongoing vessel boardings by Iranian forces and suppressed transit volumes."
+    }
+  },
+  {
     "timestamp": "2026-08-18T23:35:21.039863+00:00",
     "total_scanned": 222,
     "flagged_count": 162,
