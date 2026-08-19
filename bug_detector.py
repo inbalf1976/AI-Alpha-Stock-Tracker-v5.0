@@ -38,6 +38,8 @@ PREDICTION_LOG   = Path("prediction_log.json")
 VALIDATED_COND   = Path("validated_conditions.json")
 NEWS_LOG         = Path("news_log.json")
 WEATHER_CACHE    = Path("weather_cache.json")
+WEEKLY_CACHE     = Path("weekly_range_cache.json")
+MONTHLY_CACHE    = Path("monthly_range_cache.json")
 
 # ── thresholds (tune these over time, keep them here in one place) ──────────
 MAX_HOURS_SINCE_LAST_CHECK   = 30     # flag if monitor hasn't run in this long
@@ -210,6 +212,61 @@ def check_price_source_divergence():
         # Don't fail the whole bug_detector run if Yahoo Finance can't
         # be reached right now — skip silently, same fail-soft
         # convention as every other check in this file.
+        pass
+    return issues
+
+
+# ── 1d. CURRENTLY-BREACHED RANGE CHECK (2026-08-19) ──────────────────────────
+# ADDED after confirming wheat_monitor_pro.py's weekly/monthly frozen
+# ranges only get re-checked for a breach when wheat_monitor_pro.py
+# itself runs — a real price spike that happens between two of its
+# runs, and reverts before the next one, can never be caught by
+# either range-freezing mechanism (this is an inherent limit of any
+# point-in-time check, not a bug to "fix" away). What CAN be checked
+# independently: is the CURRENTLY CACHED range breached RIGHT NOW,
+# at bug_detector's own separate run time? Since bug_detector runs on
+# its own schedule (06:00 UTC daily), this is a genuinely independent
+# second check, not a duplicate of wheat_monitor_pro.py's — it can
+# catch a case where the regeneration logic itself has a bug and a
+# stale, currently-breached range is stuck showing, which the monitor
+# script's own point-in-time check would have already reported as
+# fine on its last run.
+def check_range_currently_breached():
+    issues = []
+    try:
+        front_ticker = get_front_month_ticker()
+        fast = yf.Ticker(front_ticker).fast_info
+        price = fast.get("last_price") or fast.get("lastPrice")
+        if not price:
+            return issues
+
+        weekly_data = _load_json(WEEKLY_CACHE)
+        if isinstance(weekly_data, dict) and "weekly" in weekly_data:
+            w = weekly_data["weekly"]
+            stop, target, final_call = w.get("stop"), w.get("target"), w.get("final_call")
+            if stop is not None and target is not None and final_call in ("UP", "DOWN"):
+                lo, hi = (stop, target) if final_call == "UP" else (target, stop)
+                if not (lo <= price <= hi):
+                    issues.append(
+                        f"Live price ({price:.1f}) is currently OUTSIDE the frozen weekly "
+                        f"range (stop={stop:.1f}, target={target:.1f}, {final_call}) as of "
+                        f"this check — if wheat_monitor_pro.py hasn't regenerated it yet, "
+                        f"the next monitor run should catch this; if it's been stale for a "
+                        f"while, worth checking the regeneration logic itself."
+                    )
+
+        monthly_data = _load_json(MONTHLY_CACHE)
+        if isinstance(monthly_data, dict) and "monthly" in monthly_data:
+            m = monthly_data["monthly"]
+            lo, hi = m.get("monthly_low"), m.get("monthly_high")
+            if lo is not None and hi is not None and not (lo <= price <= hi):
+                issues.append(
+                    f"Live price ({price:.1f}) is currently OUTSIDE the frozen monthly "
+                    f"range ({lo:.1f}-{hi:.1f}) as of this check — same note as above: "
+                    f"expected to self-correct on the next monitor run, worth a look if "
+                    f"it's been stale for a while."
+                )
+    except Exception:
         pass
     return issues
 
@@ -414,6 +471,7 @@ def main():
     all_issues += check_missed_run(state)
     all_issues += check_missed_weekday_alert(state)
     all_issues += check_price_source_divergence()
+    all_issues += check_range_currently_breached()
     all_issues += check_prediction_log(log)
     all_issues += check_accuracy_divergence(log, validated, state)
     all_issues += check_state_health(state)
