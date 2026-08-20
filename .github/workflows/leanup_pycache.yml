@@ -1,0 +1,35 @@
+name: Cleanup Pycache
+
+on:
+  workflow_dispatch: {}   # manual "Run workflow" button — one-off cleanup, no schedule needed
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Remove __pycache__ from git tracking
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          grep -qxF '__pycache__/' .gitignore || echo '__pycache__/' >> .gitignore
+
+          if [ -d "__pycache__" ]; then
+            git rm -r --cached __pycache__
+          else
+            echo "__pycache__ directory not tracked or doesn't exist — nothing to untrack."
+          fi
+
+          git add .gitignore
+
+          if git diff --staged --quiet; then
+            echo "Nothing to commit — already clean."
+          else
+            git commit -m "Remove __pycache__ from tracking; already in .gitignore"
+            git push
+            echo "Done — __pycache__ untracked and pushed."
+          fi
