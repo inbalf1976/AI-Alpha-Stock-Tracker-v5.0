@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-08-20T23:19:53.670117+00:00",
+    "total_scanned": 227,
+    "flagged_count": 162,
+    "flagged_headlines": [
+      {
+        "title": "Canadian dollar hits near three-month high on oil, trade hopes",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-hits-near-threemonth-high-on-oil-trade-hopes-93CH-4870446",
+        "source": "Investing.com Forex",
+        "published": "2026-08-20 20:19:50",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound rises as dollar slides on Treasury buyback signal",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-rises-as-dollar-slides-on-treasury-buyback-signal-4869066",
+        "source": "Investing.com Forex",
+        "published": "2026-08-20 09:38:56",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "U.S. yields resume ascent as long-end selling overshadows Asian and European rally",
+        "link": "https://www.investing.com/news/forex-news/global-yields-retrench-from-multidecade-peaks-after-us-treasury-buybacks-4868742",
+        "source": "Investing.com Forex",
+        "published": "2026-08-20 07:34:13",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar hits three-month low as Treasury buybacks sink yields; Fed flags inflation",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-rises-as-treasury-yields-ease-s-korean-won-hits-1yr-high-4866425",
+        "source": "Investing.com Forex",
+        "published": "2026-08-19 19:45:56",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Deutsche Bank calls Treasury buyback doubling similar to ’operation twist’",
+        "link": "https://www.investing.com/news/forex-news/deutsche-bank-calls-treasury-buyback-doubling-similar-to-operation-twist-4867804",
+        "source": "Investing.com Forex",
+        "published": "2026-08-19 14:26:58",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Oil hits nearly one-month high as Trump ramps up economic warfare against Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-steady-after-trump-announces-more-economic-sanctions-on-iran-4868505",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-20 21:29:14",
+        "matched_keywords": [
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "Oil settles up more than 2% after Trump threatens countries supporting Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-steady-as-investors-assess-usiran-war-outlook-4868535",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-20 20:25:18",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Spot gold holds above $4.5k a day after topping the mark for first time since June",
+        "link": "https://www.investing.com/news/commodities-news/gold-holds-near-2month-high-as-treasury-buybacks-push-yields-dollar-lower-4868639",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-20 19:38:04",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "London Gas Oil tests $1,300 double top resistance: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-coils-near-1241-before-breakout-live-levels-93CH-4862236",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-20 19:19:17",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI nears $87.52 resistance: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-stalls-below-vwap-at-8108-hourly-levels-93CH-4862232",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-20 19:19:14",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Brent Oil nears $94.19 resistance with RSI at 70.8: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/brent-oil-trapped-at-8842-in-choppy-range-live-levels-93CH-4862231",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-20 19:19:07",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Bessent's efforts in the Treasury market so far haven't worked. Here's what else he can try",
+        "link": "https://www.cnbc.com/2026/08/20/bessents-efforts-in-the-treasury-market-so-far-havent-worked-heres-what-else-he-can-try.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 20 Aug 2026 21:13:14 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Bessent says Treasury buyback operation could be more than $4 billion",
+        "link": "https://www.cnbc.com/2026/08/20/bessent-says-treasury-buyback-operation-could-be-more-than-4-billion.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 20 Aug 2026 15:35:33 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Trump bemoans Fed interest rate policy, says U.S. should be paying much less",
+        "link": "https://www.cnbc.com/2026/08/19/trump-bemoans-fed-interest-rate-policy-says-us-should-be-paying-much-less.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 19 Aug 2026 21:29:38 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Russia says its economy is strong. It just fired a top economist who warned otherwise",
+        "link": "https://www.cnbc.com/2026/08/18/ukraine-war-russia-economy-klepach.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 18 Aug 2026 11:51:15 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by escalating geopolitical tensions in the Middle East, particularly US economic warfare against Iran and active disruptions in the Strait of Hormuz, alongside monetary policy shifts including Treasury buyback signals and Fed inflation flags. Brent oil has surged near $94 while the US dollar hit a three-month low, lifting commodity-linked currencies like the Canadian dollar.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Agricultural fundamentals are overshadowed by energy, FX, and Middle Eastern shipping disruptions that do not directly alter immediate global wheat supply balances.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Geopolitical escalation and threats in the Persian Gulf heighten regional risk premiums, typically driving safe-haven demand that strengthens the dollar against regional pairs like the Israeli shekel.",
+      "key_risk": "Military escalation or formal closures in the Strait of Hormuz disrupting vital energy and maritime trade corridors.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Iranian forces have seized a tanker near Qeshm Island while Chinese-managed tankers abort transits, and a majority of Strait of Hormuz traffic is running dark amid active naval disruptions."
+    }
+  },
+  {
     "timestamp": "2026-08-19T23:17:24.375195+00:00",
     "total_scanned": 227,
     "flagged_count": 160,
