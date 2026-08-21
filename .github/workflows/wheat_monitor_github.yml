@@ -1,7 +1,7 @@
 name: Wheat Monitor PRO - Ultimate Edition
 on:
   schedule:
-    - cron: '0 22 * * 6,0,1,2,3'  # 22:00 UTC Sat-Wed = 01:00 Israel time Sun-Thu (IDT UTC+3)
+    - cron: '0 22 * * 0,1,2,3,4'  # 22:00 UTC Sun-Thu = 01:00 Israel time Mon-Fri (IDT UTC+3)
     - cron: '30 22 * * 6'         # 22:30 UTC Saturday — weekly backtest refresh, after the Sunday monitor run
     - cron: '0 0 * * 6'           # 00:00 UTC Saturday = 03:00 Israel time Saturday — accuracy report ONLY, no new alert
     # UPDATED 2026-08-08: news_scan cron times synchronized with the
