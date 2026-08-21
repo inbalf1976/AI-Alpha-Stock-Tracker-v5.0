@@ -719,10 +719,10 @@
     "confidence": 0.6,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -9.9
   },
   {
     "timestamp": "2026-08-19T02:05:25.319578+03:00",
@@ -731,10 +731,10 @@
     "confidence": 0.6,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -9.9
   },
   {
     "timestamp": "2026-08-19T02:17:33.026462+03:00",
@@ -743,10 +743,10 @@
     "confidence": 0.6,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -9.9
   },
   {
     "timestamp": "2026-08-19T02:29:16.233189+03:00",
@@ -755,10 +755,10 @@
     "confidence": 0.6,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -9.9
   },
   {
     "timestamp": "2026-08-19T02:36:38.266081+03:00",
@@ -767,10 +767,10 @@
     "confidence": 0.6,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -9.9
   },
   {
     "timestamp": "2026-08-20T01:18:15.558719+03:00",
@@ -812,6 +812,18 @@
     "timestamp": "2026-08-20T17:02:51.010212+03:00",
     "direction": "DOWN",
     "entry_price": 690.0,
+    "confidence": 0.6,
+    "tier": 1,
+    "seasonal_phase": "BEARISH",
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
+  },
+  {
+    "timestamp": "2026-08-21T09:52:55.343319+03:00",
+    "direction": "DOWN",
+    "entry_price": 684.25,
     "confidence": 0.6,
     "tier": 1,
     "seasonal_phase": "BEARISH",
