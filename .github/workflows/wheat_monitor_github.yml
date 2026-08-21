@@ -1,8 +1,18 @@
 name: Wheat Monitor PRO - Ultimate Edition
 on:
   schedule:
-    - cron: '0 22 * * 0,1,2,3,4'  # 22:00 UTC Sun-Thu = 01:00 Israel time Mon-Fri (IDT UTC+3)
-    - cron: '30 22 * * 6'         # 22:30 UTC Saturday — weekly backtest refresh, after the Sunday monitor run
+    - cron: '53 21 * * 0,1,2,3,4'  # 21:53 UTC Sun-Thu = 00:53 Israel time Mon-Fri (IDT UTC+3)
+    # UPDATED 2026-08-21: moved from '0 22' (exactly 01:00 IL, on-the-hour)
+    # to '53 21' (00:53 IL) after confirmed real delivery lateness —
+    # GitHub Actions scheduled crons are documented best-effort and can
+    # run late, especially on exact-hour triggers when platform-wide
+    # cron load peaks (news_scan's crons below already avoided this by
+    # using off-round minutes). Triggering earlier gives typical delay
+    # room to land close to the real ~01:00 target. Paired with
+    # should_send()'s window widening to (0,1,2) in wheat_monitor_pro.py
+    # so a low-delay day (executing at/near 00:53) still sends normally
+    # instead of being silently rejected as "not scheduled hour".
+    - cron: '30 22 * * 6'         # 22:30 UTC Saturday — weekly backtest refresh (Mon-Fri is now the only monitor schedule; this runs Sunday, ahead of Monday's first run of the week)
     - cron: '0 0 * * 6'           # 00:00 UTC Saturday = 03:00 Israel time Saturday — accuracy report ONLY, no new alert
     # UPDATED 2026-08-08: news_scan cron times synchronized with the
     # model's own key moments instead of running on an independent,
@@ -17,7 +27,7 @@ on:
     #   13:15 UTC ≈ 16:15 IL — ahead of market open
     - cron: '58 22 * * *'         # news scan #1 — just before the monitor's alert window
     - cron: '35 8 * * *'          # news scan #2 — mid-session
-    - cron: '15 13 * * *'         # news scan #3 — ahead of market open
+    - cron: '5 13 * * *'          # news scan #3 — 13:05 UTC = ~16:05 IL, shifted 10min earlier 2026-08-21 for more delay buffer
   workflow_dispatch:         # manual trigger kept for testing
 jobs:
   monitor:
@@ -25,7 +35,7 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
-    if: contains(fromJSON('["0 22 * * 0,1,2,3,4", "30 22 * * 6"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
+    if: contains(fromJSON('["53 21 * * 0,1,2,3,4", "30 22 * * 6"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -156,7 +166,7 @@ jobs:
     permissions:
       contents: write
     # UPDATED 2026-08-08: matches the new synchronized cron strings above.
-    if: contains(fromJSON('["58 22 * * *", "35 8 * * *", "15 13 * * *"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
+    if: contains(fromJSON('["58 22 * * *", "35 8 * * *", "5 13 * * *"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
