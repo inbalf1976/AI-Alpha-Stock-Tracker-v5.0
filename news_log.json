@@ -1,5 +1,158 @@
 [
   {
+    "timestamp": "2026-08-21T06:51:50.602945+00:00",
+    "total_scanned": 226,
+    "flagged_count": 164,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Bessent's efforts in the Treasury market so far haven't worked. Here's what else he can try",
+        "link": "https://www.cnbc.com/2026/08/20/bessents-efforts-in-the-treasury-market-so-far-havent-worked-heres-what-else-he-can-try.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 20 Aug 2026 21:13:14 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Bessent says Treasury buyback operation could be more than $4 billion",
+        "link": "https://www.cnbc.com/2026/08/20/bessent-says-treasury-buyback-operation-could-be-more-than-4-billion.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 20 Aug 2026 15:35:33 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Trump bemoans Fed interest rate policy, says U.S. should be paying much less",
+        "link": "https://www.cnbc.com/2026/08/19/trump-bemoans-fed-interest-rate-policy-says-us-should-be-paying-much-less.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 19 Aug 2026 21:29:38 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Russia says its economy is strong. It just fired a top economist who warned otherwise",
+        "link": "https://www.cnbc.com/2026/08/18/ukraine-war-russia-economy-klepach.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 18 Aug 2026 11:51:15 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "The Iran war risks bringing the G7's fastest-growing economy to a halt",
+        "link": "https://www.cnbc.com/2026/08/13/iran-war-g7s-fastest-growing-economy.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 13 Aug 2026 12:42:10 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets face crosscurrents from U.S. Treasury Secretary Scott Bessent's aggressive efforts to stabilize the long end of the government debt market through expanded bond buybacks, alongside persistent geopolitical bottlenecks in the Strait of Hormuz. Meanwhile, political friction between the White House and the Federal Reserve persists over interest rate trajectories, and broader macroeconomic data highlights diverging growth trends across G7 economies.",
+      "wheat_impact": "NEUTRAL with a 1-sentence reason: Agricultural fundamentals and grain flows remain largely insulated from ongoing sovereign debt maneuvers and Middle East shipping disruptions targeting crude and gas tankers.",
+      "usd_ils_impact": "BULLISH with a 1-sentence reason: Persistent regional conflict risks and energy price pressures tied to the Strait of Hormuz continue to weigh on Middle Eastern risk sentiment, supporting safe-haven demand against the Israeli Shekel.",
+      "key_risk": "Escalating maritime and energy disruptions in the Strait of Hormuz threatening global liquidity and petroleum supply chains.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active Iranian seizures and rising dark-vessel transits in the Strait of Hormuz are critically disrupting regional maritime traffic and threatening global energy transport."
+    }
+  },
+  {
     "timestamp": "2026-08-20T23:19:53.670117+00:00",
     "total_scanned": 227,
     "flagged_count": 162,
