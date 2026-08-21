@@ -1,5 +1,161 @@
 [
   {
+    "timestamp": "2026-08-21T14:40:25.621670+00:00",
+    "total_scanned": 224,
+    "flagged_count": 163,
+    "flagged_headlines": [
+      {
+        "title": "US, Canadian trade teams to meet again as tariffs deadline looms",
+        "link": "https://www.investing.com/news/commodities-news/us-canadian-trade-teams-to-meet-again-as-tariffs-deadline-looms-4871745",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-21 14:30:42",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Gold floats above $4,500 as weaker dollar, U.S. Treasury moves support rally",
+        "link": "https://www.investing.com/news/commodities-news/gold-holds-above-4500-as-weaker-dollar-treasury-buybacks-boost-weekly-gains-now-4870779",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-21 13:12:47",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Oil prices on track for second straight weekly rise amid Mideast tensions",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-from-1mth-high-set-for-weekly-gain-on-usiran-tensions-4870734",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-21 13:10:07",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Iran says Tehran must overcome ’unjust sanctions’ as U.S. ramps up economic pressure",
+        "link": "https://www.investing.com/news/commodities-news/iran-says-tehran-must-overcome-unjust-sanctions-as-us-ramps-up-economic-pressure-4871042",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-21 08:18:36",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "European gas touches highest since March conflict peak as Hormuz freeze drags on",
+        "link": "https://www.investing.com/news/commodities-news/european-gas-touches-highest-since-march-conflict-peak-as-hormuz-freeze-drags-on-4870980",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-21 07:50:44",
+        "matched_keywords": [
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI tests $87.70 resistance with doji: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-stalls-below-vwap-at-8108-hourly-levels-93CH-4862232",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-21 07:12:04",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Energy and precious metals markets are rallying driven by escalating geopolitical tensions in the Middle East, a persistent Strait of Hormuz disruption, and a weaker U.S. dollar. Meanwhile, trade friction between the US and Canada adds macroeconomic uncertainty as tariff deadlines approach.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Agricultural markets lack direct disruption signals in the current news flow, remaining primarily driven by macro energy and currency trends.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Heightened regional security risks in the Middle East typically increase safe-haven demand and regional currency volatility, supporting the dollar against the shekel.",
+      "key_risk": "Escalation of maritime seizures and military friction in the Strait of Hormuz threatening global energy supplies.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "An IRGC seizure of a Liberia-flagged tanker near Qeshm Island and armed boarding of a sanctioned tanker off Somalia represent active, ongoing security disruptions in critical maritime corridors."
+    }
+  },
+  {
     "timestamp": "2026-08-21T06:51:50.602945+00:00",
     "total_scanned": 226,
     "flagged_count": 164,
