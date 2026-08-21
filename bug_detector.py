@@ -8,8 +8,13 @@ and tell you (via Telegram) so you and Claude can decide what to do.
 Run this on its own schedule (e.g. daily or weekly via GitHub
 Actions) — separate workflow from wheat_monitor_pro.py.
 
-CHECKS INCLUDED (the four "core" ones + drift):
+CHECKS INCLUDED (the four "core" ones + drift, plus two added 2026-08-21):
   1. Missed-run detection      — did the monitor actually run recently?
+  1b. Missed weekday alert     — did the script run but silently skip sending?
+  1c. Workflow schedule sync   — do the cron triggers and job if-conditions
+                                  in the workflow YAML still match each other?
+  1d. Undetected weekly breach — did price cross stop/target intraday and
+                                  recover between runs, unrecorded?
   2. Prediction log sanity     — schema drift, bad values, stuck entries
   3. Live vs backtest accuracy — divergence between real and claimed win rate
   4. State file health         — unbounded growth, stale/unused fields
@@ -21,6 +26,7 @@ in isolation by just calling them and printing the list.
 """
 
 import os
+import re
 import json
 from pathlib import Path
 from datetime import datetime, timedelta
@@ -40,6 +46,7 @@ NEWS_LOG         = Path("news_log.json")
 WEATHER_CACHE    = Path("weather_cache.json")
 WEEKLY_CACHE     = Path("weekly_range_cache.json")
 MONTHLY_CACHE    = Path("monthly_range_cache.json")
+WORKFLOW_FILE    = Path(".github/workflows/wheat_monitor_github.yml")
 
 # ── thresholds (tune these over time, keep them here in one place) ──────────
 MAX_HOURS_SINCE_LAST_CHECK   = 30     # flag if monitor hasn't run in this long
@@ -168,7 +175,134 @@ def check_missed_weekday_alert(state):
     return issues
 
 
-# ── 1c. PRICE SOURCE DIVERGENCE (2026-08-18) ─────────────────────────────────
+# ── 1d. WORKFLOW SCHEDULE/IF-CONDITION CONSISTENCY (2026-08-21) ─────────────
+# ADDED after a real incident: the monitor cron was updated to fix a
+# missing Friday alert, but the monitor job's `if:` condition (which
+# matches github.event.schedule as a literal string) still listed the
+# OLD cron string. GitHub Actions doesn't warn about this — the job
+# just silently skips on every scheduled trigger, with the workflow
+# still showing green. Nothing else in this file could have caught
+# it: check_missed_run() only confirms the SCRIPT ran, but if the job
+# never starts at all, there's no script execution to check.
+# This is a plain text/regex check on the workflow YAML itself — no
+# yaml/pyyaml dependency, kept lightweight on purpose. It checks that
+# every cron string declared under `on: schedule:` is referenced by
+# at least one job's `if:` condition, and vice versa — catching drift
+# in EITHER direction, whatever the specific rename turns out to be.
+def check_workflow_schedule_consistency():
+    issues = []
+    if not WORKFLOW_FILE.exists():
+        return issues  # not fatal — just can't run this check here
+
+    try:
+        text = WORKFLOW_FILE.read_text()
+    except Exception as e:
+        return [f"Could not read {WORKFLOW_FILE}: {e}"]
+
+    declared_crons = set(re.findall(r"- cron:\s*'([^']+)'", text))
+
+    referenced_crons = set()
+    for list_match in re.findall(r"fromJSON\('(\[[^\]]*\])'\)", text):
+        try:
+            referenced_crons.update(json.loads(list_match))
+        except Exception:
+            pass
+    referenced_crons.update(re.findall(r"github\.event\.schedule\s*==\s*'([^']+)'", text))
+
+    missing_from_if = declared_crons - referenced_crons
+    missing_from_schedule = referenced_crons - declared_crons
+
+    if missing_from_if:
+        issues.append(
+            f"Workflow schedule/if-condition MISMATCH: cron(s) {sorted(missing_from_if)} are "
+            f"declared under 'on: schedule:' but not referenced by any job's 'if:' condition — "
+            f"that job would silently never run on this trigger."
+        )
+    if missing_from_schedule:
+        issues.append(
+            f"Workflow schedule/if-condition MISMATCH: cron(s) {sorted(missing_from_schedule)} "
+            f"are referenced in a job's 'if:' condition but no longer exist under 'on: schedule:' — "
+            f"likely a stale string left over from a schedule change."
+        )
+    return issues
+
+
+# ── 1e. UNDETECTED WEEKLY BREACH — INTRADAY CHECK (2026-08-21) ──────────────
+# ADDED after a real (unresolved) ambiguity: get_frozen_weekly_plan() in
+# wheat_monitor_pro.py only compares a single LIVE PRICE SNAPSHOT against
+# stop/target each time it runs. If price crosses the stop or target
+# between scheduled runs and recovers before the next one, the breach
+# is never recorded — even though a real resting order at that stop/
+# target would have been filled. This re-checks the CURRENTLY FROZEN
+# weekly setup against real intraday high/low since it was frozen (not
+# just a snapshot) and flags a likely-missed breach. Supplementary only
+# — never blocks or alters the live monitor's own freeze/break logic,
+# just surfaces the discrepancy for a human to look at.
+def check_undetected_weekly_breach():
+    issues = []
+    cached = _load_json(WEEKLY_CACHE)
+    if not isinstance(cached, dict) or "weekly" not in cached:
+        return issues
+
+    weekly = cached["weekly"]
+    stop, target = weekly.get("stop"), weekly.get("target")
+    final_call = weekly.get("final_call")
+    frozen_at_str = cached.get("frozen_at")
+    if stop is None or target is None or final_call not in ("UP", "DOWN") or not frozen_at_str:
+        return issues
+
+    try:
+        frozen_at = datetime.fromisoformat(frozen_at_str)
+        if frozen_at.tzinfo is None:
+            frozen_at = frozen_at.replace(tzinfo=IL)
+    except Exception:
+        return issues
+
+    try:
+        ticker = get_front_month_ticker()
+        hist = yf.Ticker(ticker).history(period="7d", interval="60m")
+        if hist.empty:
+            return issues
+        hist = hist[hist.index >= frozen_at]
+        if hist.empty:
+            return issues
+        period_high = float(hist['High'].max())
+        period_low  = float(hist['Low'].min())
+    except Exception:
+        return issues  # data-source hiccup — don't fail loudly on a supplementary check
+
+    if final_call == 'UP':
+        if period_low <= stop:
+            issues.append(
+                f"Currently frozen weekly setup (UP, stop {stop:.0f}c) shows an intraday LOW of "
+                f"{period_low:.0f}c since it was frozen ({frozen_at_str}) — the stop may have been "
+                f"crossed and price recovered before the next scheduled run, without being recorded "
+                f"as a LOSS. Worth a manual check against weekly_break_log.json."
+            )
+        if period_high >= target:
+            issues.append(
+                f"Currently frozen weekly setup (UP, target {target:.0f}c) shows an intraday HIGH of "
+                f"{period_high:.0f}c since it was frozen ({frozen_at_str}) — the target may have been "
+                f"reached and price pulled back before the next scheduled run, without being recorded "
+                f"as a WIN."
+            )
+    else:  # DOWN
+        if period_high >= stop:
+            issues.append(
+                f"Currently frozen weekly setup (DOWN, stop {stop:.0f}c) shows an intraday HIGH of "
+                f"{period_high:.0f}c since it was frozen ({frozen_at_str}) — the stop may have been "
+                f"crossed without being recorded as a LOSS."
+            )
+        if period_low <= target:
+            issues.append(
+                f"Currently frozen weekly setup (DOWN, target {target:.0f}c) shows an intraday LOW of "
+                f"{period_low:.0f}c since it was frozen ({frozen_at_str}) — the target may have been "
+                f"reached without being recorded as a WIN."
+            )
+    return issues
+
+
+
 # ADDED after a real incident: wheat_monitor_pro.py's live price was
 # reported as ~693-694c while the actual tradeable market (confirmed
 # against Plus500 and a direct side-by-side yfinance diagnostic) was
@@ -470,8 +604,10 @@ def main():
     all_issues = []
     all_issues += check_missed_run(state)
     all_issues += check_missed_weekday_alert(state)
+    all_issues += check_workflow_schedule_consistency()
     all_issues += check_price_source_divergence()
     all_issues += check_range_currently_breached()
+    all_issues += check_undetected_weekly_breach()
     all_issues += check_prediction_log(log)
     all_issues += check_accuracy_divergence(log, validated, state)
     all_issues += check_state_health(state)
