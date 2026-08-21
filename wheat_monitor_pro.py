@@ -1409,7 +1409,7 @@ def save_state(state):
 # ── ALERT GATE ────────────────────────────────────────────────────────────────
 
 def should_send(state):
-    """Only send at 1AM Israel time. Manual always sends."""
+    """Only send in the 12AM-3AM Israel window. Manual always sends."""
     force  = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
     event  = os.getenv('GITHUB_EVENT_NAME', '')
     manual = force or 'workflow_dispatch' in event
@@ -1429,14 +1429,26 @@ def should_send(state):
     il_hour = israel.hour
     il_date = israel.date().isoformat()
 
-    if il_hour not in (1, 2):
+    # UPDATED 2026-08-21: the monitor cron was moved from exactly 22:00
+    # UTC (01:00 IL, on-the-hour) to 21:53 UTC (00:53 IL) — GitHub
+    # Actions scheduled triggers are documented as best-effort and can
+    # run late, especially on the exact hour when platform-wide cron
+    # load peaks; the earlier trigger gives typical delay room to land
+    # close to the real 01:00 target instead of after it. But on a day
+    # with little/no delay, the script can genuinely execute AT 00:53
+    # (hour 0) — the old (1, 2)-only window would have silently
+    # rejected that as "not scheduled hour" and skipped the alert
+    # entirely, trading "sometimes late" for "sometimes missing", which
+    # is worse. Widened to (0, 1, 2) so the alert sends correctly
+    # whichever hour the actual (possibly delayed) execution lands in.
+    if il_hour not in (0, 1, 2):
         return False, f"Not scheduled hour ({il_hour}:00 Israel)", False
 
     slot_key = f"{il_date}_morning"
     if state.get('alerts_today', {}).get(slot_key):
         return False, "Morning alert already sent today", False
 
-    return True, "Scheduled morning alert (01:00 Israel)", False
+    return True, "Scheduled morning alert (~01:00 Israel)", False
 
 
 # ── TELEGRAM ──────────────────────────────────────────────────────────────────
