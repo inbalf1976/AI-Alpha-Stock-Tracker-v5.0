@@ -14,20 +14,22 @@ on:
     # instead of being silently rejected as "not scheduled hour".
     - cron: '30 22 * * 6'         # 22:30 UTC Saturday — weekly backtest refresh (Mon-Fri is now the only monitor schedule; this runs Sunday, ahead of Monday's first run of the week)
     - cron: '0 0 * * 6'           # 00:00 UTC Saturday = 03:00 Israel time Saturday — accuracy report ONLY, no new alert
-    # UPDATED 2026-08-08: news_scan cron times synchronized with the
-    # model's own key moments instead of running on an independent,
-    # evenly-spaced schedule. Times below are "as close as possible
-    # before" each moment (assuming IDT/UTC+3, same convention as the
-    # 01:00 monitor cron above — during winter/standard time (UTC+2)
-    # these drift ~1h earlier in real Israel time, same accepted
-    # seasonal drift as the existing monitor cron, safely absorbed by
-    # should_send()'s 2-hour (01:00-02:00) alert window):
-    #   22:58 UTC ≈ 01:58 IL — just before the 01:00-02:00 IL alert window
+    # UPDATED 2026-08-08, revised 2026-08-21: news_scan times are
+    # synced to the model's own key moments (assuming IDT/UTC+3 — during
+    # winter/standard time (UTC+2) these drift ~1h earlier in real
+    # Israel time, absorbed by should_send()'s (0,1,2)-hour window for
+    # #1's relationship to the monitor, and by no fixed window at all
+    # for #2/#3 since they don't gate a send decision):
+    #   21:28 UTC ≈ 00:28 IL — BEFORE the monitor's ~00:53 IL target
+    #     (moved 2026-08-21, was previously AFTER at 01:58 IL — the
+    #     monitor was picking up the prior evening's scan instead of a
+    #     same-morning one; now it can use fresh same-morning news)
     #   08:35 UTC ≈ 11:35 IL — mid-session check
-    #   13:15 UTC ≈ 16:15 IL — ahead of market open
-    - cron: '58 22 * * *'         # news scan #1 — just before the monitor's alert window
+    #   13:05 UTC ≈ 16:05 IL — ahead of market open (shifted 10min
+    #     earlier 2026-08-21 for more GitHub Actions delay buffer)
+    - cron: '28 21 * * *'         # news scan #1 — see comment block above
     - cron: '35 8 * * *'          # news scan #2 — mid-session
-    - cron: '5 13 * * *'          # news scan #3 — 13:05 UTC = ~16:05 IL, shifted 10min earlier 2026-08-21 for more delay buffer
+    - cron: '5 13 * * *'          # news scan #3 — see comment block above
   workflow_dispatch:         # manual trigger kept for testing
 jobs:
   monitor:
@@ -166,7 +168,7 @@ jobs:
     permissions:
       contents: write
     # UPDATED 2026-08-08: matches the new synchronized cron strings above.
-    if: contains(fromJSON('["58 22 * * *", "35 8 * * *", "5 13 * * *"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
+    if: contains(fromJSON('["28 21 * * *", "35 8 * * *", "5 13 * * *"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
