@@ -25,7 +25,7 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
-    if: contains(fromJSON('["0 22 * * 6,0,1,2,3", "30 22 * * 6"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
+    if: contains(fromJSON('["0 22 * * 0,1,2,3,4", "30 22 * * 6"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -113,7 +113,6 @@ jobs:
           echo "::error::git push failed after 3 attempts — monitor state updates did NOT reach the repo this run."
           exit 1
         fi
-
     - name: Notify Telegram on job failure
       # ADDED 2026-08-17: previously the ONLY signal for a failed job
       # (e.g. the push-retry above exhausting all 3 attempts, or any
@@ -132,7 +131,6 @@ jobs:
           -d chat_id="${TELEGRAM_CHAT_ID}" \
           -d text="$MSG" \
           || echo "Telegram failure-notify send itself failed — check Actions tab directly."
-
   saturday_report:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -243,7 +241,6 @@ jobs:
           echo "::error::git push failed after 3 attempts — news_log.json / state updates did NOT reach the repo this run."
           exit 1
         fi
-
     - name: Notify Telegram on job failure
       # ADDED 2026-08-17: same as the monitor job's failure-notify step
       # — see that step's comment for the full rationale.
