@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-08-22T08:58:42.635351+00:00",
+    "total_scanned": 223,
+    "flagged_count": 165,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Here’s how Bessent’s newly activist Treasury Department is undercutting the Fed’s Warsh",
+        "link": "https://www.marketwatch.com/story/heres-how-bessents-newly-activist-treasury-department-is-undercutting-the-feds-warsh-480455c2?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 21 Aug 2026 20:11:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "war",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Iran grants permission for a number of Iraqi oil tankers to pass through Hormuz",
+        "link": "https://www.investing.com/news/commodities-news/iran-grants-permission-for-a-number-of-iraqi-oil-tankers-to-pass-through-hormuz-4872318",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-22 08:42:42",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "US hits Canadian goods with 50% tariffs after trade talks fail",
+        "link": "https://www.investing.com/news/commodities-news/us-canadian-trade-teams-to-meet-again-as-tariffs-deadline-looms-4871745",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-22 05:30:25",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Oil prices post weekly surge on Hormuz impasse, Brent now up 12% over two weeks",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-from-1mth-high-set-for-weekly-gain-on-usiran-tensions-4870734",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-21 21:52:54",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Explainer-Why is Trump talking about the Keystone XL oil pipeline?",
+        "link": "https://www.investing.com/news/commodities-news/explainerwhy-is-trump-talking-about-the-keystone-xl-oil-pipeline-4871917",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-21 20:49:33",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Geopolitical tensions in the Middle East and escalating trade disputes are driving severe disruptions in energy markets, highlighted by tanker seizures and blockades in the Strait of Hormuz sending crude and LPG prices surging. Simultaneously, aggressive U.S. tariff actions against Canada and friction between Treasury policies and the Federal Reserve are creating heightened macro volatility.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Current supply chain and geopolitical shocks are primarily concentrated in the energy and industrial metals/shipping sectors rather than directly impacting major global grain corridors.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Escalating regional instability in the Middle East, including active tanker seizures and chokepoint risks near the Persian Gulf, typically drives safe-haven flows into the US dollar while pressuring regional currencies.",
+      "key_risk": "Further kinetic escalation in the Strait of Hormuz threatening global crude and energy supply chains.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "An IRGC seizure of a Liberia-flagged tanker in the Strait of Hormuz, alongside concurrent armed boardings near Somalia and swarms of unidentified craft in the corridor, represents an active maritime chokepoint disruption."
+    }
+  },
+  {
     "timestamp": "2026-08-21T14:40:25.621670+00:00",
     "total_scanned": 224,
     "flagged_count": 163,
