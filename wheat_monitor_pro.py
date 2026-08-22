@@ -1743,6 +1743,25 @@ def main():
     # (which feeds the accuracy stats bug_detector.py checks) still
     # only fires on tier > 0, so Tier 0 days stay excluded from
     # win-rate tracking without going silent/heartbeat-only.
+    #
+    # UPDATED 2026-08-22: real incident found in prediction_log.json —
+    # 4 LOSS entries logged within ~35 minutes on 2026-08-19, 3 of them
+    # from the user manually re-running the script during a volatile
+    # morning to check in. Each run got its own logged prediction row,
+    # scored independently by score_predictions.py against nearly the
+    # same forward price path — one real event counted several times,
+    # inflating both the sample size and the win/loss ratio behind
+    # tier accuracy numbers. Fixed by skipping log_prediction() for
+    # TRUE human button-presses only. Deliberately does NOT skip
+    # price-move-triggered automatic re-runs (check_price_trigger.py,
+    # via FORCE_ALERT + PRICE_MOVE_REASON) — those represent a real,
+    # independent event (a genuine >=2% move) and should keep counting
+    # as their own data point, same as a scheduled run would.
+    is_human_manual = (
+        os.getenv('GITHUB_EVENT_NAME', '') == 'workflow_dispatch'
+        and not os.getenv('PRICE_MOVE_REASON')
+    )
+
     if send:
         success = send_telegram(message)
         if success:
@@ -1751,7 +1770,10 @@ def main():
             if not is_manual:
                 slot_key = f"{datetime.now(IL).date().isoformat()}_morning"
                 state.setdefault('alerts_today', {})[slot_key] = True
-        if tier > 0:
+        if is_human_manual:
+            print("   Manual (human-triggered) run — alert sent, NOT logged as a tracked prediction "
+                  "(avoids inflating win/loss stats with clustered manual re-checks).")
+        elif tier > 0:
             log_prediction(direction, current_price, pred['confidence'], tier, s_phase['phase'])
         else:
             print("   Tier 0 — alert sent for visibility, NOT logged as a tracked prediction.")
