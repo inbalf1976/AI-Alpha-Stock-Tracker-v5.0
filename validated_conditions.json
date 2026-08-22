@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-08-15T22:47:22.812950",
-  "baseline_up": 0.6733,
+  "generated_at": "2026-08-22T19:15:49.965705",
+  "baseline_up": 0.68,
   "validated_conditions": {
-    "momentum_up": 0.773
+    "momentum_up": 0.792
   },
-  "source_backtest_run_date": "2026-08-15T22:47:22.694976"
+  "source_backtest_run_date": "2026-08-22T19:15:49.797026"
 }
