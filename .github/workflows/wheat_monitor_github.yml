@@ -199,6 +199,8 @@ jobs:
   saturday_report:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: write
     if: github.event.schedule == '0 0 * * 6' || github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
@@ -214,6 +216,33 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: python weekly_report.py
+    - name: Commit report run timestamp
+      # ADDED 2026-08-23: weekly_report.py now writes
+      # weekly_report_state.json (see that script) so bug_detector.py
+      # can verify this job actually ran on the correct day/hour — this
+      # job previously had no commit step at all, so that file would
+      # otherwise be created on the runner and immediately lost.
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add -f weekly_report_state.json || true
+        git add -A
+        if git diff --staged --quiet; then
+          echo "Nothing to commit."
+        else
+          git commit -m "Update weekly report state [skip ci]"
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push failed (attempt $attempt) — fetching + merging (prefer local) and retrying..."
+            git fetch origin main
+            git merge -X ours origin/main -m "merge: resolve concurrent state update [skip ci]"
+          done
+          echo "::error::git push failed after 3 attempts — weekly_report_state.json did NOT reach the repo this run."
+          exit 1
+        fi
 
   news_scan:
     runs-on: ubuntu-latest
