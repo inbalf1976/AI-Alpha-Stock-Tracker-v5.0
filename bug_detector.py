@@ -175,9 +175,119 @@ def check_missed_weekday_alert(state):
     return issues
 
 
-# ── 1d. WORKFLOW SCHEDULE/IF-CONDITION CONSISTENCY (2026-08-21) ─────────────
-# ADDED after a real incident: the monitor cron was updated to fix a
-# missing Friday alert, but the monitor job's `if:` condition (which
+# ── 1c2. WEEKEND ALERT SENT + LATE HOUR (2026-08-23) ────────────────────────
+# ADDED after a real incident: the weekly backtest cron shared the same
+# job as the daily monitor, and its cron string ('30 22 * * 6', UTC
+# Saturday) actually landed on IL SUNDAY — not the intended Saturday —
+# so the shared job ran the full monitor and sent a real "scheduled"
+# alert on a non-trading day. Fixed at the source (separate job,
+# corrected cron) AND at the script level (should_send() now refuses to
+# send on Sat/Sun regardless of trigger). This check is the equivalent
+# safety net at the detection layer: rather than trying to prove cron
+# correctness from the YAML alone (which doesn't state day-of-week
+# INTENT, only what it literally does), it judges by the actual
+# recorded outcome — did wheat_monitor_state.json's alerts_today ever
+# get a real entry dated a Saturday or Sunday? That catches this whole
+# incident class regardless of which future cron/job/timezone mistake
+# might cause it.
+#
+# EXTENDED same day: alerts_today's value changed from a bare `True` to
+# the actual HH:MM send time (see wheat_monitor_pro.py), specifically so
+# this check can also verify the HOUR, not just the day — the daily
+# target is ~00:53 IL; a genuine GitHub Actions delay of a few minutes
+# is expected and fine (see the earlier cron-shift fix), but a send
+# hours off target would indicate something is wrong even on a correct
+# weekday. LATE_ALERT_HOUR_THRESHOLD is generous on purpose to avoid
+# false alarms from ordinary platform delay.
+LATE_ALERT_HOUR_THRESHOLD = 4  # flag if the scheduled morning send lands at/after this IL hour
+
+def check_weekend_alert_sent(state):
+    issues = []
+    if not isinstance(state, dict) or "__load_error__" in (state or {}):
+        return issues
+
+    alerts_today = state.get("alerts_today", {})
+    if not isinstance(alerts_today, dict):
+        return issues
+
+    for slot_key, send_time in alerts_today.items():
+        date_str = slot_key.split("_")[0]
+        try:
+            d = datetime.fromisoformat(date_str).date()
+        except Exception:
+            continue
+
+        if d.weekday() >= 5:  # Sat=5, Sun=6
+            issues.append(
+                f"A scheduled alert was recorded as sent on {date_str} "
+                f"({d.strftime('%A')}) — not a trading day (Mon-Fri only). "
+                f"Check which cron/job caused it; should_send()'s day-of-week "
+                f"guard should have blocked this if it's running the current code."
+            )
+            continue  # wrong-day already flagged, skip the hour check for this entry
+
+        # Hour check — only meaningful for entries that DO have a real
+        # HH:MM time recorded (older entries before this fix may still
+        # be a bare `True`, skip those rather than error on them).
+        if isinstance(send_time, str) and ":" in send_time:
+            try:
+                send_hour = int(send_time.split(":")[0])
+                if send_hour >= LATE_ALERT_HOUR_THRESHOLD:
+                    issues.append(
+                        f"Scheduled alert on {date_str} landed at {send_time} IL — "
+                        f"well past the ~00:53 IL target (threshold: hour "
+                        f"{LATE_ALERT_HOUR_THRESHOLD}+). Worth checking Actions run "
+                        f"history for that day for unusual delay or a job that ran "
+                        f"very late."
+                    )
+            except Exception:
+                pass
+    return issues
+
+
+# ── 1c3. BACKTEST RAN ON WRONG DAY OR HOUR (2026-08-23) ──────────────────────
+# ADDED alongside check_weekend_alert_sent() above, same real incident —
+# now that the backtest has its own dedicated job (never sends an
+# alert), it still deserves the same "did it actually land on the
+# intended day AND hour" check. backtest.py writes run_date via
+# datetime.now() with NO timezone — on a GitHub Actions runner that's
+# naive UTC, not IL, so it must be explicitly localized before checking
+# weekday/hour (the same UTC/IL confusion behind several bugs this
+# session). Flags if the most recent backtest run_date, converted to
+# IL, isn't a Saturday, OR lands well outside its ~01:30 IL target.
+BACKTEST_RESULTS_FILE = Path("backtest_results.json")
+BACKTEST_EXPECTED_HOUR_RANGE = (0, 4)  # generous buffer around the ~01:30 IL target
+
+def check_backtest_ran_wrong_day():
+    issues = []
+    data = _load_json(BACKTEST_RESULTS_FILE)
+    if not isinstance(data, dict) or "run_date" not in data:
+        return issues
+
+    try:
+        run_date_naive = datetime.fromisoformat(data["run_date"])
+        run_date_utc = run_date_naive.replace(tzinfo=ZoneInfo("UTC"))
+        run_date_il = run_date_utc.astimezone(IL)
+    except Exception:
+        return issues
+
+    if run_date_il.weekday() != 5:  # Saturday=5
+        issues.append(
+            f"Most recent backtest run_date ({data['run_date']} UTC = "
+            f"{run_date_il.strftime('%Y-%m-%d %H:%M %A')} IL) was NOT a Saturday — "
+            f"the weekly_backtest job's cron may be pointing at the wrong day again, "
+            f"or this was a manual/off-schedule run (check before assuming a bug)."
+        )
+    elif not (BACKTEST_EXPECTED_HOUR_RANGE[0] <= run_date_il.hour < BACKTEST_EXPECTED_HOUR_RANGE[1]):
+        issues.append(
+            f"Most recent backtest ran on the correct day (Saturday) but at "
+            f"{run_date_il.strftime('%H:%M')} IL — outside the expected "
+            f"{BACKTEST_EXPECTED_HOUR_RANGE[0]:02d}:00-{BACKTEST_EXPECTED_HOUR_RANGE[1]:02d}:00 "
+            f"window. Worth checking whether this was a manual run or a real delay."
+        )
+    return issues
+
+
 # matches github.event.schedule as a literal string) still listed the
 # OLD cron string. GitHub Actions doesn't warn about this — the job
 # just silently skips on every scheduled trigger, with the workflow
@@ -577,7 +687,74 @@ def check_signal_freshness():
     return issues
 
 
-# ── REPORT + SEND ─────────────────────────────────────────────────────────────
+# ── NEWS SCAN MISSED WINDOW (2026-08-23) ─────────────────────────────────────
+# ADDED alongside the day/hour checks above, same session — the existing
+# check_signal_freshness() only catches "the MOST RECENT scan is too
+# old overall"; it would miss a case where, say, scan #2 (mid-session)
+# silently failed one day but scan #3 (afternoon) ran fine a few hours
+# later, keeping the overall "most recent" timestamp looking fresh.
+# This checks each of the 3 daily windows independently for the most
+# recent day with any news_log.json activity, and flags a window with
+# ZERO entries. Windows are intentionally generous (not tied to the
+# exact 00:28/11:35/16:05 IL targets) since entries aren't individually
+# labeled with which of the 3 daily scans wrote them — this catches a
+# genuinely MISSED slot, not precise per-scan lateness (a tighter check
+# would need news_scanner.py to tag which scan number wrote each
+# entry — not done here, kept simple and low-risk of false positives).
+# News scans run every day (no day-of-week restriction by design), so
+# this checks the most recent calendar day, weekday or not.
+NEWS_SCAN_WINDOWS = [
+    ("scan #1 (~00:28 IL)", 0, 4),
+    ("scan #2 (~11:35 IL)", 9, 13),
+    ("scan #3 (~16:05 IL)", 14, 19),
+]
+
+def check_news_scan_missed_window():
+    issues = []
+    log = _load_json(NEWS_LOG)
+    if not isinstance(log, list) or not log:
+        return issues
+
+    entries_il = []
+    for e in log:
+        ts_str = e.get("timestamp") if isinstance(e, dict) else None
+        if not ts_str:
+            continue
+        try:
+            ts = datetime.fromisoformat(ts_str)
+            if ts.tzinfo is None:
+                ts = ts.replace(tzinfo=ZoneInfo("UTC"))
+            entries_il.append(ts.astimezone(IL))
+        except Exception:
+            continue
+    if not entries_il:
+        return issues
+
+    most_recent_date = max(e.date() for e in entries_il)
+    today_entries = [e for e in entries_il if e.date() == most_recent_date]
+    now_il = datetime.now(IL)
+
+    for label, start_hour, end_hour in NEWS_SCAN_WINDOWS:
+        # Only judge a window as "missed" once it has actually fully
+        # elapsed — caught in testing: without this, any run of this
+        # check during the current day (before later windows have even
+        # happened yet) would falsely flag scan #2/#3 as missing simply
+        # because the day isn't over. Only skip this guard for a date
+        # strictly before today, which is always fully elapsed.
+        if most_recent_date == now_il.date() and now_il.hour < end_hour:
+            continue
+
+        covered = any(start_hour <= e.hour < end_hour for e in today_entries)
+        if not covered:
+            issues.append(
+                f"No news_log.json entry found for {label} on {most_recent_date.isoformat()} "
+                f"({most_recent_date.strftime('%A')}) — that scan may have silently failed "
+                f"that day, even if scans before/after it ran fine."
+            )
+    return issues
+
+
+
 
 def send_telegram(message):
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT:
@@ -604,6 +781,8 @@ def main():
     all_issues = []
     all_issues += check_missed_run(state)
     all_issues += check_missed_weekday_alert(state)
+    all_issues += check_weekend_alert_sent(state)
+    all_issues += check_backtest_ran_wrong_day()
     all_issues += check_workflow_schedule_consistency()
     all_issues += check_price_source_divergence()
     all_issues += check_range_currently_breached()
@@ -612,6 +791,7 @@ def main():
     all_issues += check_accuracy_divergence(log, validated, state)
     all_issues += check_state_health(state)
     all_issues += check_signal_freshness()
+    all_issues += check_news_scan_missed_window()
 
     now = datetime.now(IL)
     now_str = now.strftime("%Y-%m-%d %H:%M")
