@@ -779,10 +779,10 @@
     "confidence": 0.6,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -10.19
   },
   {
     "timestamp": "2026-08-20T02:18:37.648465+03:00",
@@ -791,10 +791,10 @@
     "confidence": 0.6,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -10.19
   },
   {
     "timestamp": "2026-08-20T12:07:41.859746+03:00",
@@ -803,10 +803,10 @@
     "confidence": 0.6,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -10.28
   },
   {
     "timestamp": "2026-08-20T17:02:51.010212+03:00",
@@ -815,10 +815,10 @@
     "confidence": 0.6,
     "tier": 1,
     "seasonal_phase": "BEARISH",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -10.35
   },
   {
     "timestamp": "2026-08-21T09:52:55.343319+03:00",
