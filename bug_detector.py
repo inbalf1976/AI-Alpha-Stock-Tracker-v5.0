@@ -288,8 +288,45 @@ def check_backtest_ran_wrong_day():
     return issues
 
 
-# matches github.event.schedule as a literal string) still listed the
-# OLD cron string. GitHub Actions doesn't warn about this — the job
+# ── WEEKLY REPORT RAN ON WRONG DAY OR HOUR (2026-08-23) ──────────────────────
+# ADDED to close a real gap identified alongside the backtest/weekend-alert
+# checks: weekly_report.py previously wrote NOTHING to disk, so there was
+# no way to verify it actually ran on the correct day/hour — it now
+# writes weekly_report_state.json (already IL-aware, no naive-UTC issue
+# like the backtest had). Target is IL Saturday ~03:00.
+WEEKLY_REPORT_STATE_FILE = Path("weekly_report_state.json")
+WEEKLY_REPORT_EXPECTED_HOUR_RANGE = (2, 6)  # generous buffer around the ~03:00 IL target
+
+def check_weekly_report_ran_wrong_day():
+    issues = []
+    data = _load_json(WEEKLY_REPORT_STATE_FILE)
+    if not isinstance(data, dict) or "last_run" not in data:
+        return issues
+
+    try:
+        last_run = datetime.fromisoformat(data["last_run"])
+        if last_run.tzinfo is None:
+            last_run = last_run.replace(tzinfo=IL)
+        last_run_il = last_run.astimezone(IL)
+    except Exception:
+        return issues
+
+    if last_run_il.weekday() != 5:  # Saturday=5
+        issues.append(
+            f"Most recent weekly_report.py run ({last_run_il.strftime('%Y-%m-%d %H:%M %A')} IL) "
+            f"was NOT a Saturday — the saturday_report job's cron may be pointing at the "
+            f"wrong day, or this was a manual/off-schedule run (check before assuming a bug)."
+        )
+    elif not (WEEKLY_REPORT_EXPECTED_HOUR_RANGE[0] <= last_run_il.hour < WEEKLY_REPORT_EXPECTED_HOUR_RANGE[1]):
+        issues.append(
+            f"Most recent weekly_report.py run was on the correct day (Saturday) but at "
+            f"{last_run_il.strftime('%H:%M')} IL — outside the expected "
+            f"{WEEKLY_REPORT_EXPECTED_HOUR_RANGE[0]:02d}:00-{WEEKLY_REPORT_EXPECTED_HOUR_RANGE[1]:02d}:00 "
+            f"window. Worth checking whether this was a manual run or a real delay."
+        )
+    return issues
+
+
 # just silently skips on every scheduled trigger, with the workflow
 # still showing green. Nothing else in this file could have caught
 # it: check_missed_run() only confirms the SCRIPT ran, but if the job
@@ -783,6 +820,7 @@ def main():
     all_issues += check_missed_weekday_alert(state)
     all_issues += check_weekend_alert_sent(state)
     all_issues += check_backtest_ran_wrong_day()
+    all_issues += check_weekly_report_ran_wrong_day()
     all_issues += check_workflow_schedule_consistency()
     all_issues += check_price_source_divergence()
     all_issues += check_range_currently_breached()
