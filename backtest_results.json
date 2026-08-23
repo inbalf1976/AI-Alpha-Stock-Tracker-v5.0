@@ -1,7 +1,7 @@
 {
-  "run_date": "2026-08-22T22:47:11.347232",
-  "baseline_up_full": 0.6793587174348698,
-  "baseline_down_full": 0.27054108216432865,
+  "run_date": "2026-08-23T17:32:20.167403",
+  "baseline_up_full": 0.6733466933867736,
+  "baseline_down_full": 0.2725450901803607,
   "train_period": "2025-08-25 to 2026-05-05",
   "holdout_period": "2026-05-06 to 2026-08-21",
   "individual_conditions_train": [
@@ -14,92 +14,68 @@
       "best_accuracy": 0.806
     },
     {
-      "condition": "in_upper_half",
-      "n": 53,
-      "up_accuracy": 0.698,
-      "down_accuracy": 0.264,
-      "best_direction": "UP",
-      "best_accuracy": 0.698
-    },
-    {
       "condition": "wc_bullish",
       "n": 66,
-      "up_accuracy": 0.697,
+      "up_accuracy": 0.682,
       "down_accuracy": 0.303,
       "best_direction": "UP",
-      "best_accuracy": 0.697
+      "best_accuracy": 0.682
+    },
+    {
+      "condition": "in_upper_half",
+      "n": 53,
+      "up_accuracy": 0.679,
+      "down_accuracy": 0.264,
+      "best_direction": "UP",
+      "best_accuracy": 0.679
     },
     {
       "condition": "rsi_neutral",
       "n": 91,
-      "up_accuracy": 0.67,
+      "up_accuracy": 0.659,
       "down_accuracy": 0.286,
       "best_direction": "UP",
-      "best_accuracy": 0.67
+      "best_accuracy": 0.659
     },
     {
       "condition": "macd_bullish",
       "n": 102,
       "up_accuracy": 0.657,
-      "down_accuracy": 0.314,
+      "down_accuracy": 0.324,
       "best_direction": "UP",
       "best_accuracy": 0.657
     },
     {
       "condition": "momentum_up",
       "n": 64,
-      "up_accuracy": 0.656,
+      "up_accuracy": 0.641,
       "down_accuracy": 0.328,
       "best_direction": "UP",
-      "best_accuracy": 0.656
+      "best_accuracy": 0.641
     },
     {
       "condition": "inside_bb",
       "n": 133,
-      "up_accuracy": 0.647,
-      "down_accuracy": 0.301,
+      "up_accuracy": 0.639,
+      "down_accuracy": 0.308,
       "best_direction": "UP",
-      "best_accuracy": 0.647
+      "best_accuracy": 0.639
     },
     {
       "condition": "trend_aligned",
       "n": 109,
-      "up_accuracy": 0.633,
+      "up_accuracy": 0.624,
       "down_accuracy": 0.321,
       "best_direction": "UP",
-      "best_accuracy": 0.633
+      "best_accuracy": 0.624
     },
     {
       "condition": "vol_good",
       "n": 175,
-      "up_accuracy": 0.623,
-      "down_accuracy": 0.337,
+      "up_accuracy": 0.617,
+      "down_accuracy": 0.343,
       "best_direction": "UP",
-      "best_accuracy": 0.623
-    },
-    {
-      "condition": "bullish_month",
-      "n": 87,
-      "up_accuracy": 0.609,
-      "down_accuracy": 0.345,
-      "best_direction": "UP",
-      "best_accuracy": 0.609
-    },
-    {
-      "condition": "above_sma50",
-      "n": 117,
-      "up_accuracy": 0.607,
-      "down_accuracy": 0.35,
-      "best_direction": "UP",
-      "best_accuracy": 0.607
-    },
-    {
-      "condition": "above_sma20",
-      "n": 105,
-      "up_accuracy": 0.6,
-      "down_accuracy": 0.333,
-      "best_direction": "UP",
-      "best_accuracy": 0.6
+      "best_accuracy": 0.617
     },
     {
       "condition": "rsi_overbought",
@@ -110,10 +86,26 @@
       "best_accuracy": 0.6
     },
     {
+      "condition": "above_sma50",
+      "n": 117,
+      "up_accuracy": 0.598,
+      "down_accuracy": 0.35,
+      "best_direction": "UP",
+      "best_accuracy": 0.598
+    },
+    {
       "condition": "in_lower_half",
       "n": 112,
       "up_accuracy": 0.598,
-      "down_accuracy": 0.357,
+      "down_accuracy": 0.366,
+      "best_direction": "UP",
+      "best_accuracy": 0.598
+    },
+    {
+      "condition": "bullish_month",
+      "n": 87,
+      "up_accuracy": 0.598,
+      "down_accuracy": 0.345,
       "best_direction": "UP",
       "best_accuracy": 0.598
     },
@@ -124,6 +116,14 @@
       "down_accuracy": 0.404,
       "best_direction": "UP",
       "best_accuracy": 0.596
+    },
+    {
+      "condition": "above_sma20",
+      "n": 105,
+      "up_accuracy": 0.59,
+      "down_accuracy": 0.343,
+      "best_direction": "UP",
+      "best_accuracy": 0.59
     },
     {
       "condition": "near_bb_upper",
@@ -137,7 +137,7 @@
       "condition": "wc_bearish",
       "n": 63,
       "up_accuracy": 0.556,
-      "down_accuracy": 0.397,
+      "down_accuracy": 0.413,
       "best_direction": "UP",
       "best_accuracy": 0.556
     },
@@ -161,7 +161,7 @@
       "condition": "vol_high",
       "n": 68,
       "up_accuracy": 0.485,
-      "down_accuracy": 0.441,
+      "down_accuracy": 0.456,
       "best_direction": "UP",
       "best_accuracy": 0.485
     }
@@ -187,33 +187,14 @@
       "held_up": "True"
     },
     {
-      "condition": "in_upper_half",
-      "train": {
-        "condition": "in_upper_half",
-        "n": 53,
-        "up_accuracy": 0.698,
-        "down_accuracy": 0.264,
-        "best_direction": "UP",
-        "best_accuracy": 0.698
-      },
-      "holdout": {
-        "n": 54,
-        "up_accuracy": 0.611,
-        "down_accuracy": 0.333,
-        "best_direction": "UP",
-        "best_accuracy": 0.611
-      },
-      "held_up": "True"
-    },
-    {
       "condition": "wc_bullish",
       "train": {
         "condition": "wc_bullish",
         "n": 66,
-        "up_accuracy": 0.697,
+        "up_accuracy": 0.682,
         "down_accuracy": 0.303,
         "best_direction": "UP",
-        "best_accuracy": 0.697
+        "best_accuracy": 0.682
       },
       "holdout": {
         "n": 59,
@@ -225,14 +206,33 @@
       "held_up": "False"
     },
     {
+      "condition": "in_upper_half",
+      "train": {
+        "condition": "in_upper_half",
+        "n": 53,
+        "up_accuracy": 0.679,
+        "down_accuracy": 0.264,
+        "best_direction": "UP",
+        "best_accuracy": 0.679
+      },
+      "holdout": {
+        "n": 54,
+        "up_accuracy": 0.611,
+        "down_accuracy": 0.333,
+        "best_direction": "UP",
+        "best_accuracy": 0.611
+      },
+      "held_up": "True"
+    },
+    {
       "condition": "rsi_neutral",
       "train": {
         "condition": "rsi_neutral",
         "n": 91,
-        "up_accuracy": 0.67,
+        "up_accuracy": 0.659,
         "down_accuracy": 0.286,
         "best_direction": "UP",
-        "best_accuracy": 0.67
+        "best_accuracy": 0.659
       },
       "holdout": {
         "n": 38,
@@ -249,7 +249,7 @@
         "condition": "macd_bullish",
         "n": 102,
         "up_accuracy": 0.657,
-        "down_accuracy": 0.314,
+        "down_accuracy": 0.324,
         "best_direction": "UP",
         "best_accuracy": 0.657
       },
@@ -267,10 +267,10 @@
       "train": {
         "condition": "momentum_up",
         "n": 64,
-        "up_accuracy": 0.656,
+        "up_accuracy": 0.641,
         "down_accuracy": 0.328,
         "best_direction": "UP",
-        "best_accuracy": 0.656
+        "best_accuracy": 0.641
       },
       "holdout": {
         "n": 24,
@@ -286,10 +286,10 @@
       "train": {
         "condition": "inside_bb",
         "n": 133,
-        "up_accuracy": 0.647,
-        "down_accuracy": 0.301,
+        "up_accuracy": 0.639,
+        "down_accuracy": 0.308,
         "best_direction": "UP",
-        "best_accuracy": 0.647
+        "best_accuracy": 0.639
       },
       "holdout": {
         "n": 53,
@@ -305,10 +305,10 @@
       "train": {
         "condition": "trend_aligned",
         "n": 109,
-        "up_accuracy": 0.633,
+        "up_accuracy": 0.624,
         "down_accuracy": 0.321,
         "best_direction": "UP",
-        "best_accuracy": 0.633
+        "best_accuracy": 0.624
       },
       "holdout": {
         "n": 50,
@@ -324,10 +324,10 @@
       "train": {
         "condition": "vol_good",
         "n": 175,
-        "up_accuracy": 0.623,
-        "down_accuracy": 0.337,
+        "up_accuracy": 0.617,
+        "down_accuracy": 0.343,
         "best_direction": "UP",
-        "best_accuracy": 0.623
+        "best_accuracy": 0.617
       },
       "holdout": {
         "n": 60,
@@ -335,63 +335,6 @@
         "down_accuracy": 0.3,
         "best_direction": "UP",
         "best_accuracy": 0.633
-      },
-      "held_up": "True"
-    },
-    {
-      "condition": "bullish_month",
-      "train": {
-        "condition": "bullish_month",
-        "n": 87,
-        "up_accuracy": 0.609,
-        "down_accuracy": 0.345,
-        "best_direction": "UP",
-        "best_accuracy": 0.609
-      },
-      "holdout": {
-        "n": 17,
-        "up_accuracy": 0.412,
-        "down_accuracy": 0.471,
-        "best_direction": "DOWN",
-        "best_accuracy": 0.471
-      },
-      "held_up": "False"
-    },
-    {
-      "condition": "above_sma50",
-      "train": {
-        "condition": "above_sma50",
-        "n": 117,
-        "up_accuracy": 0.607,
-        "down_accuracy": 0.35,
-        "best_direction": "UP",
-        "best_accuracy": 0.607
-      },
-      "holdout": {
-        "n": 46,
-        "up_accuracy": 0.609,
-        "down_accuracy": 0.326,
-        "best_direction": "UP",
-        "best_accuracy": 0.609
-      },
-      "held_up": "True"
-    },
-    {
-      "condition": "above_sma20",
-      "train": {
-        "condition": "above_sma20",
-        "n": 105,
-        "up_accuracy": 0.6,
-        "down_accuracy": 0.333,
-        "best_direction": "UP",
-        "best_accuracy": 0.6
-      },
-      "holdout": {
-        "n": 37,
-        "up_accuracy": 0.676,
-        "down_accuracy": 0.243,
-        "best_direction": "UP",
-        "best_accuracy": 0.676
       },
       "held_up": "True"
     },
@@ -415,12 +358,31 @@
       "held_up": "True"
     },
     {
+      "condition": "above_sma50",
+      "train": {
+        "condition": "above_sma50",
+        "n": 117,
+        "up_accuracy": 0.598,
+        "down_accuracy": 0.35,
+        "best_direction": "UP",
+        "best_accuracy": 0.598
+      },
+      "holdout": {
+        "n": 46,
+        "up_accuracy": 0.609,
+        "down_accuracy": 0.326,
+        "best_direction": "UP",
+        "best_accuracy": 0.609
+      },
+      "held_up": "True"
+    },
+    {
       "condition": "in_lower_half",
       "train": {
         "condition": "in_lower_half",
         "n": 112,
         "up_accuracy": 0.598,
-        "down_accuracy": 0.357,
+        "down_accuracy": 0.366,
         "best_direction": "UP",
         "best_accuracy": 0.598
       },
@@ -431,6 +393,25 @@
         "note": "Condition never occurred in holdout period"
       },
       "held_up": false
+    },
+    {
+      "condition": "bullish_month",
+      "train": {
+        "condition": "bullish_month",
+        "n": 87,
+        "up_accuracy": 0.598,
+        "down_accuracy": 0.345,
+        "best_direction": "UP",
+        "best_accuracy": 0.598
+      },
+      "holdout": {
+        "n": 17,
+        "up_accuracy": 0.412,
+        "down_accuracy": 0.471,
+        "best_direction": "DOWN",
+        "best_accuracy": 0.471
+      },
+      "held_up": "False"
     },
     {
       "condition": "momentum_down",
@@ -450,187 +431,28 @@
         "best_accuracy": 0.6
       },
       "held_up": "True"
+    },
+    {
+      "condition": "above_sma20",
+      "train": {
+        "condition": "above_sma20",
+        "n": 105,
+        "up_accuracy": 0.59,
+        "down_accuracy": 0.343,
+        "best_direction": "UP",
+        "best_accuracy": 0.59
+      },
+      "holdout": {
+        "n": 37,
+        "up_accuracy": 0.676,
+        "down_accuracy": 0.243,
+        "best_direction": "UP",
+        "best_accuracy": 0.676
+      },
+      "held_up": "True"
     }
   ],
   "combinations_train_and_holdout": [
-    {
-      "conditions": [
-        "vol_low",
-        "wc_bullish",
-        "rsi_neutral",
-        "above_sma20"
-      ],
-      "train": {
-        "conditions": [
-          "vol_low",
-          "wc_bullish",
-          "rsi_neutral",
-          "above_sma20"
-        ],
-        "n": 12,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      },
-      "holdout": {
-        "n": 5,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      }
-    },
-    {
-      "conditions": [
-        "vol_low",
-        "wc_bullish",
-        "rsi_neutral",
-        "trend_aligned",
-        "above_sma20"
-      ],
-      "train": {
-        "conditions": [
-          "vol_low",
-          "wc_bullish",
-          "rsi_neutral",
-          "trend_aligned",
-          "above_sma20"
-        ],
-        "n": 12,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      },
-      "holdout": {
-        "n": 1,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      }
-    },
-    {
-      "conditions": [
-        "vol_low",
-        "wc_bullish",
-        "rsi_neutral",
-        "vol_good",
-        "above_sma20"
-      ],
-      "train": {
-        "conditions": [
-          "vol_low",
-          "wc_bullish",
-          "rsi_neutral",
-          "vol_good",
-          "above_sma20"
-        ],
-        "n": 12,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      },
-      "holdout": {
-        "n": 5,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      }
-    },
-    {
-      "conditions": [
-        "vol_low",
-        "wc_bullish",
-        "rsi_neutral",
-        "above_sma50",
-        "above_sma20"
-      ],
-      "train": {
-        "conditions": [
-          "vol_low",
-          "wc_bullish",
-          "rsi_neutral",
-          "above_sma50",
-          "above_sma20"
-        ],
-        "n": 12,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      },
-      "holdout": {
-        "n": 2,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      }
-    },
-    {
-      "conditions": [
-        "vol_low",
-        "wc_bullish",
-        "rsi_neutral",
-        "inside_bb",
-        "above_sma20"
-      ],
-      "train": {
-        "conditions": [
-          "vol_low",
-          "wc_bullish",
-          "rsi_neutral",
-          "inside_bb",
-          "above_sma20"
-        ],
-        "n": 11,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      },
-      "holdout": {
-        "n": 3,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      }
-    },
-    {
-      "conditions": [
-        "vol_low",
-        "wc_bullish",
-        "rsi_neutral",
-        "bullish_month",
-        "above_sma20"
-      ],
-      "train": {
-        "conditions": [
-          "vol_low",
-          "wc_bullish",
-          "rsi_neutral",
-          "bullish_month",
-          "above_sma20"
-        ],
-        "n": 10,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      },
-      "holdout": {
-        "n": 1,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      }
-    },
     {
       "conditions": [
         "vol_low",
@@ -657,34 +479,6 @@
         "down_accuracy": 0.125,
         "best_direction": "UP",
         "best_accuracy": 0.75
-      }
-    },
-    {
-      "conditions": [
-        "vol_low",
-        "wc_bullish",
-        "momentum_up",
-        "bullish_month"
-      ],
-      "train": {
-        "conditions": [
-          "vol_low",
-          "wc_bullish",
-          "momentum_up",
-          "bullish_month"
-        ],
-        "n": 9,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
-      },
-      "holdout": {
-        "n": 2,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
-        "best_direction": "UP",
-        "best_accuracy": 1.0
       }
     },
     {
@@ -807,10 +601,68 @@
     {
       "conditions": [
         "vol_low",
+        "rsi_neutral",
+        "macd_bullish",
+        "momentum_up",
+        "vol_good"
+      ],
+      "train": {
+        "conditions": [
+          "vol_low",
+          "rsi_neutral",
+          "macd_bullish",
+          "momentum_up",
+          "vol_good"
+        ],
+        "n": 9,
+        "up_accuracy": 1.0,
+        "down_accuracy": 0.0,
+        "best_direction": "UP",
+        "best_accuracy": 1.0
+      },
+      "holdout": {
+        "n": 6,
+        "up_accuracy": 1.0,
+        "down_accuracy": 0.0,
+        "best_direction": "UP",
+        "best_accuracy": 1.0
+      }
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "macd_bullish",
+        "momentum_up",
+        "inside_bb"
+      ],
+      "train": {
+        "conditions": [
+          "vol_low",
+          "macd_bullish",
+          "momentum_up",
+          "inside_bb"
+        ],
+        "n": 8,
+        "up_accuracy": 1.0,
+        "down_accuracy": 0.0,
+        "best_direction": "UP",
+        "best_accuracy": 1.0
+      },
+      "holdout": {
+        "n": 2,
+        "up_accuracy": 1.0,
+        "down_accuracy": 0.0,
+        "best_direction": "UP",
+        "best_accuracy": 1.0
+      }
+    },
+    {
+      "conditions": [
+        "vol_low",
         "wc_bullish",
         "rsi_neutral",
         "macd_bullish",
-        "above_sma20"
+        "inside_bb"
       ],
       "train": {
         "conditions": [
@@ -818,39 +670,39 @@
           "wc_bullish",
           "rsi_neutral",
           "macd_bullish",
-          "above_sma20"
+          "inside_bb"
         ],
-        "n": 9,
+        "n": 8,
         "up_accuracy": 1.0,
         "down_accuracy": 0.0,
         "best_direction": "UP",
         "best_accuracy": 1.0
       },
       "holdout": {
-        "n": 4,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
+        "n": 6,
+        "up_accuracy": 0.667,
+        "down_accuracy": 0.167,
         "best_direction": "UP",
-        "best_accuracy": 1.0
+        "best_accuracy": 0.667
       }
     },
     {
       "conditions": [
         "vol_low",
-        "wc_bullish",
+        "macd_bullish",
         "momentum_up",
-        "trend_aligned",
-        "bullish_month"
+        "inside_bb",
+        "vol_good"
       ],
       "train": {
         "conditions": [
           "vol_low",
-          "wc_bullish",
+          "macd_bullish",
           "momentum_up",
-          "trend_aligned",
-          "bullish_month"
+          "inside_bb",
+          "vol_good"
         ],
-        "n": 9,
+        "n": 8,
         "up_accuracy": 1.0,
         "down_accuracy": 0.0,
         "best_direction": "UP",
@@ -867,31 +719,171 @@
     {
       "conditions": [
         "vol_low",
-        "wc_bullish",
+        "macd_bullish",
+        "momentum_up"
+      ],
+      "train": {
+        "conditions": [
+          "vol_low",
+          "macd_bullish",
+          "momentum_up"
+        ],
+        "n": 17,
+        "up_accuracy": 0.941,
+        "down_accuracy": 0.059,
+        "best_direction": "UP",
+        "best_accuracy": 0.941
+      },
+      "holdout": {
+        "n": 7,
+        "up_accuracy": 1.0,
+        "down_accuracy": 0.0,
+        "best_direction": "UP",
+        "best_accuracy": 1.0
+      }
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "macd_bullish",
         "momentum_up",
-        "vol_good",
-        "bullish_month"
+        "vol_good"
+      ],
+      "train": {
+        "conditions": [
+          "vol_low",
+          "macd_bullish",
+          "momentum_up",
+          "vol_good"
+        ],
+        "n": 17,
+        "up_accuracy": 0.941,
+        "down_accuracy": 0.059,
+        "best_direction": "UP",
+        "best_accuracy": 0.941
+      },
+      "holdout": {
+        "n": 7,
+        "up_accuracy": 1.0,
+        "down_accuracy": 0.0,
+        "best_direction": "UP",
+        "best_accuracy": 1.0
+      }
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "wc_bullish",
+        "macd_bullish",
+        "inside_bb"
       ],
       "train": {
         "conditions": [
           "vol_low",
           "wc_bullish",
-          "momentum_up",
-          "vol_good",
-          "bullish_month"
+          "macd_bullish",
+          "inside_bb"
         ],
-        "n": 9,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
+        "n": 16,
+        "up_accuracy": 0.938,
+        "down_accuracy": 0.062,
         "best_direction": "UP",
-        "best_accuracy": 1.0
+        "best_accuracy": 0.938
       },
       "holdout": {
-        "n": 2,
-        "up_accuracy": 1.0,
-        "down_accuracy": 0.0,
+        "n": 6,
+        "up_accuracy": 0.667,
+        "down_accuracy": 0.167,
         "best_direction": "UP",
-        "best_accuracy": 1.0
+        "best_accuracy": 0.667
+      }
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "wc_bullish",
+        "macd_bullish",
+        "inside_bb",
+        "trend_aligned"
+      ],
+      "train": {
+        "conditions": [
+          "vol_low",
+          "wc_bullish",
+          "macd_bullish",
+          "inside_bb",
+          "trend_aligned"
+        ],
+        "n": 16,
+        "up_accuracy": 0.938,
+        "down_accuracy": 0.062,
+        "best_direction": "UP",
+        "best_accuracy": 0.938
+      },
+      "holdout": {
+        "n": 0,
+        "up_accuracy": null,
+        "down_accuracy": null,
+        "note": "Condition never occurred in holdout period"
+      }
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "wc_bullish",
+        "macd_bullish",
+        "inside_bb",
+        "vol_good"
+      ],
+      "train": {
+        "conditions": [
+          "vol_low",
+          "wc_bullish",
+          "macd_bullish",
+          "inside_bb",
+          "vol_good"
+        ],
+        "n": 16,
+        "up_accuracy": 0.938,
+        "down_accuracy": 0.062,
+        "best_direction": "UP",
+        "best_accuracy": 0.938
+      },
+      "holdout": {
+        "n": 6,
+        "up_accuracy": 0.667,
+        "down_accuracy": 0.167,
+        "best_direction": "UP",
+        "best_accuracy": 0.667
+      }
+    },
+    {
+      "conditions": [
+        "vol_low",
+        "wc_bullish",
+        "macd_bullish",
+        "inside_bb",
+        "above_sma50"
+      ],
+      "train": {
+        "conditions": [
+          "vol_low",
+          "wc_bullish",
+          "macd_bullish",
+          "inside_bb",
+          "above_sma50"
+        ],
+        "n": 16,
+        "up_accuracy": 0.938,
+        "down_accuracy": 0.062,
+        "best_direction": "UP",
+        "best_accuracy": 0.938
+      },
+      "holdout": {
+        "n": 0,
+        "up_accuracy": null,
+        "down_accuracy": null,
+        "note": "Condition never occurred in holdout period"
       }
     }
   ],
@@ -947,7 +939,7 @@
           "start": "2026-02-23",
           "end": "2026-05-20",
           "n": 62,
-          "accuracy": 0.677
+          "accuracy": 0.661
         },
         {
           "start": "2026-05-21",
@@ -978,7 +970,7 @@
           "start": "2026-02-23",
           "end": "2026-05-20",
           "n": 35,
-          "accuracy": 0.686
+          "accuracy": 0.657
         },
         {
           "start": "2026-05-21",
@@ -1040,7 +1032,7 @@
           "start": "2026-02-23",
           "end": "2026-05-20",
           "n": 23,
-          "accuracy": 0.739
+          "accuracy": 0.696
         },
         {
           "start": "2026-05-21",
@@ -1071,7 +1063,7 @@
           "start": "2026-02-23",
           "end": "2026-05-20",
           "n": 44,
-          "accuracy": 0.727
+          "accuracy": 0.705
         },
         {
           "start": "2026-05-21",
@@ -1080,7 +1072,7 @@
           "accuracy": 0.587
         }
       ],
-      "spread": 0.185
+      "spread": 0.163
     },
     {
       "condition": "vol_good",
@@ -1102,7 +1094,7 @@
           "start": "2026-02-23",
           "end": "2026-05-20",
           "n": 62,
-          "accuracy": 0.677
+          "accuracy": 0.661
         },
         {
           "start": "2026-05-21",
@@ -1112,68 +1104,6 @@
         }
       ],
       "spread": 0.161
-    },
-    {
-      "condition": "above_sma50",
-      "direction": "UP",
-      "periods": [
-        {
-          "start": "2025-08-25",
-          "end": "2025-11-19",
-          "n": 32,
-          "accuracy": 0.531
-        },
-        {
-          "start": "2025-11-20",
-          "end": "2026-02-20",
-          "n": 35,
-          "accuracy": 0.571
-        },
-        {
-          "start": "2026-02-23",
-          "end": "2026-05-20",
-          "n": 61,
-          "accuracy": 0.672
-        },
-        {
-          "start": "2026-05-21",
-          "end": "2026-08-19",
-          "n": 35,
-          "accuracy": 0.6
-        }
-      ],
-      "spread": 0.141
-    },
-    {
-      "condition": "above_sma20",
-      "direction": "UP",
-      "periods": [
-        {
-          "start": "2025-08-25",
-          "end": "2025-11-19",
-          "n": 33,
-          "accuracy": 0.576
-        },
-        {
-          "start": "2025-11-20",
-          "end": "2026-02-20",
-          "n": 33,
-          "accuracy": 0.455
-        },
-        {
-          "start": "2026-02-23",
-          "end": "2026-05-20",
-          "n": 47,
-          "accuracy": 0.702
-        },
-        {
-          "start": "2026-05-21",
-          "end": "2026-08-19",
-          "n": 29,
-          "accuracy": 0.724
-        }
-      ],
-      "spread": 0.269
     },
     {
       "condition": "rsi_overbought",
@@ -1207,6 +1137,37 @@
       "spread": 0.515
     },
     {
+      "condition": "above_sma50",
+      "direction": "UP",
+      "periods": [
+        {
+          "start": "2025-08-25",
+          "end": "2025-11-19",
+          "n": 32,
+          "accuracy": 0.531
+        },
+        {
+          "start": "2025-11-20",
+          "end": "2026-02-20",
+          "n": 35,
+          "accuracy": 0.571
+        },
+        {
+          "start": "2026-02-23",
+          "end": "2026-05-20",
+          "n": 61,
+          "accuracy": 0.656
+        },
+        {
+          "start": "2026-05-21",
+          "end": "2026-08-19",
+          "n": 35,
+          "accuracy": 0.6
+        }
+      ],
+      "spread": 0.125
+    },
+    {
       "condition": "momentum_down",
       "direction": "UP",
       "periods": [
@@ -1236,6 +1197,37 @@
         }
       ],
       "spread": 0.214
+    },
+    {
+      "condition": "above_sma20",
+      "direction": "UP",
+      "periods": [
+        {
+          "start": "2025-08-25",
+          "end": "2025-11-19",
+          "n": 33,
+          "accuracy": 0.576
+        },
+        {
+          "start": "2025-11-20",
+          "end": "2026-02-20",
+          "n": 33,
+          "accuracy": 0.455
+        },
+        {
+          "start": "2026-02-23",
+          "end": "2026-05-20",
+          "n": 47,
+          "accuracy": 0.681
+        },
+        {
+          "start": "2026-05-21",
+          "end": "2026-08-19",
+          "n": 29,
+          "accuracy": 0.724
+        }
+      ],
+      "spread": 0.269
     }
   ]
 }
