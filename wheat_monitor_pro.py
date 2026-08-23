@@ -1429,6 +1429,22 @@ def should_send(state):
     il_hour = israel.hour
     il_date = israel.date().isoformat()
 
+    # ADDED 2026-08-23: real incident — the weekly backtest cron
+    # ('30 22 * * 6', UTC Saturday 22:30 = IL Sunday ~01:30) shares the
+    # SAME job as the daily monitor and unconditionally runs the full
+    # wheat_monitor_pro.py afterward, sending a real "scheduled morning
+    # alert" — even though Sunday is not a trading day (trading is
+    # Mon-Fri, see the trading_calendar_2026.csv-confirmed rule fixed
+    # 2026-08-21). should_send() previously only checked the HOUR, never
+    # the day of week, so it happily approved a Sunday morning send.
+    # This is a defense-in-depth fix independent of workflow cron
+    # correctness: whatever job or cron triggers this script, it will
+    # now refuse a "scheduled" send outside Mon-Fri (weekday() 0-4),
+    # regardless of hour. Manual/price-triggered runs are unaffected —
+    # they return earlier above and always send, same as before.
+    if israel.weekday() not in (0, 1, 2, 3, 4):
+        return False, f"Not a trading day ({israel.strftime('%A')})", False
+
     # UPDATED 2026-08-21: the monitor cron was moved from exactly 22:00
     # UTC (01:00 IL, on-the-hour) to 21:53 UTC (00:53 IL) — GitHub
     # Actions scheduled triggers are documented as best-effort and can
@@ -1626,6 +1642,29 @@ def main():
         direction          = 'DOWN' if direction == 'UP' else 'UP'
         pred['confidence'] = 0.58
         print(f"  Trend filter → {direction}")
+
+    # UPDATED 2026-08-23: real incident found — gate.evaluate() computes
+    # tier/accuracy BEFORE the seasonal/trend override above can flip
+    # direction, and every currently-validated condition (momentum_up
+    # etc.) has ONLY ever been backtested for predicting UP moves (see
+    # ConvictionGate's own docstring). When an override flips direction
+    # to DOWN, the tier/accuracy badge stayed attached anyway, showing
+    # e.g. "TIER 1 - 77.3% holdout-validated accuracy" on a DOWN call
+    # that number has zero evidence for. Confirmed live: every Tier 1
+    # entry in prediction_log.json since the 2026-08-04 stats cutoff was
+    # direction=DOWN via seasonal override, with a 9.1% live win rate
+    # against the 77.3% badge shown — not model failure, a mislabeled
+    # confidence score. Downgrading to Tier 0 here means it also stops
+    # being logged as a tracked prediction (existing "if tier > 0" gate
+    # further down), so it no longer pollutes accuracy stats either.
+    # Does NOT touch the weekly trade setup (entry/stop/target) — that
+    # has its own separate freeze/break logic, unaffected either way.
+    if (seasonal_blocked or trend_blocked) and tier > 0:
+        print(f"  Tier downgraded: {tier} -> 0 — validated condition only proven for UP, "
+              f"override flipped direction to {direction}")
+        gate_reason = f"⚪ NO SIGNAL — validated condition is UP-only; direction overridden to {direction}"
+        tier = 0
+        accuracy = gate.BASELINE_UP
 
     # ── Cost floor ──
     print("\nCalculating cost floor...")
