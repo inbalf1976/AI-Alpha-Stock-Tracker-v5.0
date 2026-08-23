@@ -1,5 +1,160 @@
 [
   {
+    "timestamp": "2026-08-23T13:33:22.389841+00:00",
+    "total_scanned": 219,
+    "flagged_count": 157,
+    "flagged_headlines": [
+      {
+        "title": "Iran says new sanctions threatened by ’desperate’ US will fail",
+        "link": "https://www.investing.com/news/commodities-news/iran-says-new-sanctions-threatened-by-desperate-us-will-fail-4872444",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-23 12:30:30",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Iran condemns US plans to announce new sanctions",
+        "link": "https://www.investing.com/news/commodities-news/iran-condemns-us-plans-to-announce-new-sanctions-4872376",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-23 03:00:37",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "US hits Canadian goods with 50% tariffs after trade talks fail",
+        "link": "https://www.investing.com/news/commodities-news/us-canadian-trade-teams-to-meet-again-as-tariffs-deadline-looms-4871745",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-22 11:48:43",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Iran grants permission for a number of Iraqi oil tankers to pass through Hormuz",
+        "link": "https://www.investing.com/news/commodities-news/iran-grants-permission-for-a-number-of-iraqi-oil-tankers-to-pass-through-hormuz-4872318",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-22 08:42:42",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Oil prices post weekly surge on Hormuz impasse, Brent now up 12% over two weeks",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-from-1mth-high-set-for-weekly-gain-on-usiran-tensions-4870734",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-21 21:52:54",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Explainer-Why is Trump talking about the Keystone XL oil pipeline?",
+        "link": "https://www.investing.com/news/commodities-news/explainerwhy-is-trump-talking-about-the-keystone-xl-oil-pipeline-4871917",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-21 20:49:33",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Why does the USD outlook depend on UST and Fed policy credibility?",
+        "link": "https://www.investing.com/news/forex-news/why-does-the-usd-outlook-depend-on-ust-and-fed-policy-credibility-4872435",
+        "source": "Investing.com Forex",
+        "published": "2026-08-23 09:15:22",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "The Treasury’s bond-market intervention isn’t working. So what comes next?",
+        "link": "https://www.marketwatch.com/story/the-treasurys-bond-market-intervention-isnt-working-so-what-comes-next-ba5e132a?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 23 Aug 2026 12:00:00 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Canada announces retaliatory tariffs on U.S. goods after trade talks break down",
+        "link": "https://www.marketwatch.com/story/canada-announces-retaliatory-tariffs-on-u-s-goods-after-trade-talks-break-down-45081c2f?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 22 Aug 2026 20:31:00 GMT",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are being driven by escalating geopolitical tensions, including U.S.-Canada tariff retaliations and ongoing Hormuz shipping disruptions that have pushed Brent crude up 12% in two weeks. Meanwhile, macroeconomic focus remains fixed on Federal Reserve policy credibility and the efficacy of Treasury bond-market interventions.",
+      "wheat_impact": "NEUTRAL",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating trade friction between the US and Canada combined with persistent Middle East maritime transit bottlenecks threatening energy supplies.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active geopolitical and maritime chokepoint tensions in the Strait of Hormuz, highlighted by a record number of dark transits and ongoing tanker disruptions, are actively threatening energy flows."
+    }
+  },
+  {
     "timestamp": "2026-08-23T08:59:09.455158+00:00",
     "total_scanned": 220,
     "flagged_count": 158,
