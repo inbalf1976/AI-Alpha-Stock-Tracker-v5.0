@@ -1807,8 +1807,16 @@ def main():
             state['alerts_sent'] = state.get('alerts_sent', 0) + 1
             state['last_alert_date'] = datetime.now(IL).date().isoformat()
             if not is_manual:
+                # UPDATED 2026-08-23: was `= True`, now stores the actual
+                # HH:MM send time. This slot only ever gets set for a
+                # genuine SCHEDULED send (never a price-triggered
+                # mid-day re-run, which legitimately varies in hour and
+                # would make a blanket hour-check meaningless) — so it's
+                # a clean, unambiguous signal for bug_detector.py to
+                # verify the daily alert actually landed close to its
+                # intended ~00:53 IL target, not just on the right day.
                 slot_key = f"{datetime.now(IL).date().isoformat()}_morning"
-                state.setdefault('alerts_today', {})[slot_key] = True
+                state.setdefault('alerts_today', {})[slot_key] = datetime.now(IL).strftime('%H:%M')
         if is_human_manual:
             print("   Manual (human-triggered) run — alert sent, NOT logged as a tracked prediction "
                   "(avoids inflating win/loss stats with clustered manual re-checks).")
