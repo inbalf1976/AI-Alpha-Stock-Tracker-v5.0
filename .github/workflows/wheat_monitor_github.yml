@@ -12,7 +12,7 @@ on:
     # should_send()'s window widening to (0,1,2) in wheat_monitor_pro.py
     # so a low-delay day (executing at/near 00:53) still sends normally
     # instead of being silently rejected as "not scheduled hour".
-    - cron: '30 22 * * 6'         # 22:30 UTC Saturday — weekly backtest refresh (Mon-Fri is now the only monitor schedule; this runs Sunday, ahead of Monday's first run of the week)
+    - cron: '30 22 * * 5'         # 22:30 UTC Friday = 01:30 Israel time Saturday — weekly backtest refresh, own dedicated job (see weekly_backtest below), never sends a monitor alert
     - cron: '0 0 * * 6'           # 00:00 UTC Saturday = 03:00 Israel time Saturday — accuracy report ONLY, no new alert
     # UPDATED 2026-08-08, revised 2026-08-21: news_scan times are
     # synced to the model's own key moments (assuming IDT/UTC+3 — during
@@ -37,7 +37,7 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
-    if: contains(fromJSON('["53 21 * * 0,1,2,3,4", "30 22 * * 6"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
+    if: contains(fromJSON('["53 21 * * 0,1,2,3,4"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -50,19 +50,6 @@ jobs:
         pip install yfinance pandas numpy scikit-learn requests
         pip install tensorflow-cpu keras
         pip install xgboost beautifulsoup4 lxml
-    - name: Determine if this is the weekly backtest run
-      id: check_schedule
-      run: |
-        if [ "${{ github.event.schedule }}" = "30 22 * * 6" ]; then
-          echo "is_backtest_run=true" >> $GITHUB_OUTPUT
-        else
-          echo "is_backtest_run=false" >> $GITHUB_OUTPUT
-        fi
-    - name: Weekly backtest refresh
-      if: steps.check_schedule.outputs.is_backtest_run == 'true'
-      run: |
-        python backtest.py
-        python generate_validated_conditions.py
     - name: Run Professional Monitor
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -143,6 +130,72 @@ jobs:
           -d chat_id="${TELEGRAM_CHAT_ID}" \
           -d text="$MSG" \
           || echo "Telegram failure-notify send itself failed — check Actions tab directly."
+  weekly_backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    # ADDED 2026-08-23: split out of the 'monitor' job — real incident:
+    # the backtest previously shared monitor's job/steps, so it also ran
+    # the full wheat_monitor_pro.py and sent a real "scheduled" alert
+    # every week, on what was additionally the WRONG day (the old cron
+    # '30 22 * * 6' = UTC Saturday = IL Sunday, not Saturday as intended).
+    # This job now only runs the backtest itself — never touches
+    # wheat_monitor_pro.py, so it can never send a monitor alert — on a
+    # cron that actually lands on IL Saturday (UTC Friday 22:30).
+    if: github.event.schedule == '30 22 * * 5' || github.event_name == 'workflow_dispatch'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    - name: Install packages
+      run: |
+        pip install yfinance pandas numpy scikit-learn requests
+        pip install tensorflow-cpu keras
+        pip install xgboost beautifulsoup4 lxml
+    - name: Weekly backtest refresh
+      run: |
+        python backtest.py
+        python generate_validated_conditions.py
+    - name: Commit backtest results
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add -f backtest_results.json || true
+        git add -f validated_conditions.json || true
+        git add -A
+        if git diff --staged --quiet; then
+          echo "Nothing to commit."
+        else
+          git commit -m "Update backtest results [skip ci]"
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push failed (attempt $attempt) — fetching + merging (prefer local) and retrying..."
+            git fetch origin main
+            git merge -X ours origin/main -m "merge: resolve concurrent state update [skip ci]"
+          done
+          echo "::error::git push failed after 3 attempts — backtest results did NOT reach the repo this run."
+          exit 1
+        fi
+    - name: Notify Telegram on job failure
+      if: failure()
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      run: |
+        MSG=$(printf "⚠️ Wheat Monitor 'weekly_backtest' job FAILED\n%s\nCheck the log — this is not a routine skip, something actually broke." "$RUN_URL")
+        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+          -d chat_id="${TELEGRAM_CHAT_ID}" \
+          -d text="$MSG" \
+          || echo "Telegram failure-notify send itself failed — check Actions tab directly."
+
   saturday_report:
     runs-on: ubuntu-latest
     timeout-minutes: 5
