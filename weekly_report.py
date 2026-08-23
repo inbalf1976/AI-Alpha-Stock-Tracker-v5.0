@@ -29,8 +29,26 @@ IL = ZoneInfo("Asia/Jerusalem")
 PERFORMANCE_LOG_FILE = Path("weekly_performance_log.json")
 BREAK_LOG_FILE = Path("weekly_break_log.json")
 
+# ADDED 2026-08-23: this script previously wrote NOTHING to disk — it only
+# sent to Telegram and exited, so there was no way for bug_detector.py to
+# verify it actually ran on the correct day/hour (a real gap identified
+# alongside the weekend-alert and backtest-day checks, same session).
+STATE_FILE = Path("weekly_report_state.json")
+
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT  = os.getenv("TELEGRAM_CHAT_ID")
+
+
+def record_run():
+    """Writes a small timestamp marker after every send attempt (even the
+    'no data' early-exit cases) so bug_detector.py has something real to
+    check against."""
+    try:
+        STATE_FILE.write_text(json.dumps({
+            "last_run": datetime.now(IL).isoformat()
+        }, indent=2))
+    except Exception as e:
+        print(f"Failed to record run timestamp: {e}")
 
 
 def send_telegram(message):
@@ -64,6 +82,7 @@ def main():
         msg = f"WEEKLY REPORT — {iso_key}\nNo performance log found. Nothing to report."
         print(msg)
         send_telegram(msg)
+        record_run()
         return
 
     all_entries = json.loads(PERFORMANCE_LOG_FILE.read_text())
@@ -74,6 +93,7 @@ def main():
         msg = f"WEEKLY REPORT — {iso_key}\nNo entries logged for this week yet."
         print(msg)
         send_telegram(msg)
+        record_run()
         return
 
     breaks_this_week = []
@@ -134,6 +154,7 @@ def main():
 
     print(message)
     send_telegram(message)
+    record_run()
 
 
 if __name__ == "__main__":
