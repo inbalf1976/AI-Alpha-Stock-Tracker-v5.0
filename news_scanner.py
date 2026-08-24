@@ -83,17 +83,23 @@ CHANGELOG (2026-08-08):
      market-moving Investing.com/MarketWatch articles further down
      the list never attempted. Now sorts LOW_PRIORITY_FETCH_SOURCES
      to the back before taking the top N.
-  4. Added a scan-time guard so scheduled runs are synchronized with
-     wheat_monitor_pro.py's alert timing instead of running on an
-     independent, uncoordinated cron. Target: a scan lands as close
-     as possible before each of the model's key moments —
-     01:58 IL (just before the 01:00-02:00 IL alert window),
-     11:35 IL, and 16:15 IL (ahead of market open) — so the freshest
-     possible news/maritime context is available when the model
-     actually computes its alert. See TARGET_SCAN_TIMES_IL and
-     should_run_scheduled_scan() below. Manual/workflow_dispatch
-     runs always proceed regardless of time, same convention as
-     wheat_monitor_pro.py's should_send().
+  4. REMOVED 2026-08-24 — a scan-time guard (should_run_scheduled_scan(),
+     TARGET_SCAN_TIMES_IL) previously rejected a scheduled run unless it
+     landed within 30min of a target time. Its original purpose (see
+     old comment history) was to skip a redundant twin cron in a
+     dual-cron DST-safety setup — that setup no longer exists (the
+     workflow now has exactly one cron per scan slot). With no
+     redundant twin to filter out, the guard's only remaining effect
+     was rejecting legitimately late-but-real cron-triggered runs on a
+     bad GitHub Actions delay day — confirmed live 2026-08-24: a
+     ~50min-delayed run (target 11:35 IL, actual 12:25 IL) was silently
+     skipped entirely, which also skipped that run's check_price_trigger.py
+     call, missing a real >2% move breach. Removed — the workflow's own
+     cron + if-condition (see wheat_monitor_github.yml, and
+     bug_detector.py's check_workflow_schedule_consistency() which
+     verifies they stay in sync) is now the sole source of truth for
+     whether a scheduled run should happen; a late cron-triggered run
+     now always proceeds, same as a manual run always did.
   5. Added an "immediate risk" Telegram alert — informational ONLY,
      does not touch wheat_monitor_pro.py, ConvictionGate, any gate
      logic, weight, or parameter, and does not read or write anything
@@ -174,8 +180,25 @@ LOW_PRIORITY_FETCH_SOURCES = {"Fed Reserve Press Releases"}
 # can fire several minutes late under load, so the tolerance is
 # deliberately wide to avoid silently skipping a legitimately-
 # triggered scheduled run. Manual runs always scan regardless.
-TARGET_SCAN_TIMES_IL = [(1, 58), (11, 35), (16, 15)]
-SCAN_TIME_TOLERANCE_MINUTES = 30
+# UPDATED 2026-08-24: real incident — this was left at the OLD scan
+# times (1:58, 16:15) after wheat_monitor_github.yml's crons were
+# shifted to 00:28/16:05 on 2026-08-23 to counter GitHub Actions'
+# scheduling delay. Nobody updated this internal guard to match, so
+# scan #1 (cron now firing ~00:28 IL) was ~90 minutes outside this
+# guard's old 01:58±30min tolerance window and silently rejected
+# itself EVERY DAY since — confirmed live: zero news_log.json entries
+# for a full day, which meant check_price_trigger.py never got a
+# chance to run either, so a real ~4% price move (well past the
+# frozen weekly target) went undetected all day. Scan #3's smaller
+# 10-minute shift happened to stay within the old tolerance by luck,
+# which is why only scan #1 broke. Same class of bug as the
+# workflow-level cron/if-condition mismatches from the day before —
+# a value changed in one place, a dependent hardcoded value elsewhere
+# wasn't. If the cron times in wheat_monitor_github.yml ever change
+# again, update this list to match in the same commit.
+# REMOVED 2026-08-24: TARGET_SCAN_TIMES_IL and SCAN_TIME_TOLERANCE_MINUTES
+# were only used by should_run_scheduled_scan(), also removed — see the
+# changelog comment near the top of this file for the full reasoning.
 
 # Windward AI maritime chokepoint dashboard — free, no registration,
 # no API. See CHANGELOG (2026-08-08) above for why this is fetched
@@ -668,41 +691,9 @@ def update_news_log(scan_data):
 # SCAN-TIME GUARD (synchronize with wheat_monitor_pro.py, 2026-08-08)
 # ---------------------------------------------------------------------------
 
-def should_run_scheduled_scan():
-    """
-    Returns (should_run: bool, reason: str). Manual triggers
-    (workflow_dispatch, or FORCE_SCAN=true locally) always run. A
-    scheduled (cron) trigger only runs if current Israel time is
-    within SCAN_TIME_TOLERANCE_MINUTES of one of TARGET_SCAN_TIMES_IL
-    — otherwise it's a redundant DST-safety cron firing (see the
-    companion workflow's dual-cron entries) and should exit quietly.
-    """
-    force = os.getenv("FORCE_SCAN", "").lower() in ("true", "1", "yes")
-    event = os.getenv("GITHUB_EVENT_NAME", "")
-    manual = force or "workflow_dispatch" in event
-
-    if manual:
-        return True, "Manual trigger"
-
-    now = datetime.now(IL)
-    for h, m in TARGET_SCAN_TIMES_IL:
-        target = now.replace(hour=h, minute=m, second=0, microsecond=0)
-        diff_minutes = abs((now - target).total_seconds()) / 60
-        if diff_minutes <= SCAN_TIME_TOLERANCE_MINUTES:
-            return True, f"Within {SCAN_TIME_TOLERANCE_MINUTES}min of target {h:02d}:{m:02d} IL"
-
-    return False, f"Not near any target scan time (now {now.strftime('%H:%M')} IL)"
-
-
 def main():
     now_iso = datetime.now(timezone.utc).isoformat()
     logger.info(f"News scan triggered at {now_iso}")
-
-    should_run, reason = should_run_scheduled_scan()
-    logger.info(f"Scan gate: {reason}")
-    if not should_run:
-        logger.info("Skipping — not a manual run and not near a target scan time.")
-        return
 
     # 1. Fetch
     logger.info(f"Scanning {len(KEYWORD_QUERIES)} keyword queries + {len(RSS_FEEDS)} direct feeds...")
