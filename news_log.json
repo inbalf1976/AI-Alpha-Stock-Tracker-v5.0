@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-08-24T13:52:48.868397+00:00",
+    "total_scanned": 217,
+    "flagged_count": 164,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Yields are the highest they’ve been in years — but are bonds cheap enough to buy? Two strategists disagree.",
+        "link": "https://www.marketwatch.com/story/theyre-the-highest-theyve-been-in-years-but-are-bonds-cheap-enough-to-buy-here-two-strategists-disagree-348fe330?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 24 Aug 2026 13:04:00 GMT",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "The Treasury’s bond-market intervention isn’t working. So what comes next?",
+        "link": "https://www.marketwatch.com/story/the-treasurys-bond-market-intervention-isnt-working-so-what-comes-next-ba5e132a?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 24 Aug 2026 13:02:00 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "This market shift resembles the post–World War II era — and bond yields have room to go higher, says Morgan Stanley",
+        "link": "https://www.marketwatch.com/story/the-post-world-war-ii-market-shift-is-here-and-bond-yields-could-have-higher-to-go-says-morgan-stanley-9381532c?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 24 Aug 2026 12:10:00 GMT",
+        "matched_keywords": [
+          "war",
+          "yield"
+        ]
+      },
+      {
+        "title": "Oil falls ahead of US announcement of new sanctions on Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-falls-1-ahead-of-us-announcement-to-impose-further-sanctions-on-iran-4872489",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-24 13:31:50",
+        "matched_keywords": [
+          "sanction",
+          "oil"
+        ]
+      },
+      {
+        "title": "U.S. Treasury to broaden scope of secondary sanctions on Iran, source says",
+        "link": "https://www.investing.com/news/commodities-news/us-treasury-to-broaden-scope-of-secondary-sanctions-on-iran-source-says-4873545",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-24 12:54:28",
+        "matched_keywords": [
+          "sanction",
+          "treasury"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are grappling with multi-year high bond yields, aggressive Federal Reserve regulatory and monetary actions, and escalating U.S. sanctions targeting Iranian energy exports. Meanwhile, maritime intelligence highlights persistent dark-vessel activity and covert loading in the Strait of Hormuz despite intensifying enforcement.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Agricultural fundamentals remain largely insulated from the current macroeconomic policy debates and localized Middle Eastern maritime tracking disruptions.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Escalating geopolitical tensions involving Iran alongside broader dollar-supportive high Treasury yields tend to strengthen the greenback against regional currencies like the shekel.",
+      "key_risk": "Escalating Middle Eastern energy sanctions and persistent covert tanker operations threatening Strait of Hormuz supply stability.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active covert crude loading at Kharg Island and multiple dark-transiting tankers attempting to evade newly widening U.S. sanctions represent an ongoing, volatile chokepoint disruption."
+    }
+  },
+  {
     "timestamp": "2026-08-24T10:58:29.498806+00:00",
     "total_scanned": 216,
     "flagged_count": 159,
