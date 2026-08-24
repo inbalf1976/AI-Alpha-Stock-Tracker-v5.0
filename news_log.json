@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-08-24T10:50:40.185883+00:00",
+    "total_scanned": 215,
+    "flagged_count": 158,
+    "flagged_headlines": [
+      {
+        "title": "Iran threatens 45 tankers with fines, confiscation in Hormuz escalation",
+        "link": "https://www.investing.com/news/commodities-news/iran-threatens-45-tankers-with-fines-confiscation-in-hormuz-escalation-4873062",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-24 10:43:13",
+        "matched_keywords": [
+          "hormuz",
+          "escalation"
+        ]
+      },
+      {
+        "title": "Iran says new sanctions threatened by ’desperate’ US will fail",
+        "link": "https://www.investing.com/news/commodities-news/iran-says-new-sanctions-threatened-by-desperate-us-will-fail-4872444",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-24 10:13:15",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Oil falls ahead of US announcement of new sanctions on Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-falls-1-ahead-of-us-announcement-to-impose-further-sanctions-on-iran-4872489",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-24 10:00:50",
+        "matched_keywords": [
+          "sanction",
+          "oil"
+        ]
+      },
+      {
+        "title": "Six countries want EU talks in September on taxing windfall profits of oil companies",
+        "link": "https://www.investing.com/news/commodities-news/six-countries-want-eu-talks-in-september-on-taxing-windfall-profits-of-oil-companies-4872824",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-24 08:54:28",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil falls as Iran allows Iraqi tankers through Hormuz, easing supply concerns",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-drop-nearly-1-as-us-prepares-more-iran-sanctions-4872509",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-24 08:50:51",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Natural gas rally takes a breather ahead of Washington’s sanctions announcement",
+        "link": "https://www.investing.com/news/commodities-news/natural-gas-rally-takes-a-breather-ahead-of-washingtons-sanctions-announcement-4872731",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-24 08:46:14",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "London Gas Oil overbought at $1,280: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-overbought-at-1280-live-levels-93CH-4872746",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-24 07:12:08",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Crude oil markets face downward pressure amid easing supply concerns as Iran permits Iraqi tankers through the Strait of Hormuz, offsetting geopolitical tensions over pending US sanctions and tanker threats. Meanwhile, maritime tracking highlights ongoing covert ship-to-ship transfers and dark transits in the Persian Gulf, keeping energy chokepoint risks elevated despite the immediate price relief.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Recent macroeconomic and energy headlines lack direct drivers for global grain supply or agricultural input costs.",
+      "usd_ils_impact": "NEUTRAL",
+      "usd_ils_impact_reason": "Geopolitical friction in the Middle East is currently dominated by broader oil market dynamics rather than immediate localized currency shocks for the Shekel.",
+      "key_risk": "Escalation in the Strait of Hormuz involving covert tanker operations, potential Iranian enforcement actions, and impending US sanctions.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active maritime intelligence reports high volumes of dark-vessel transits, covert loading events at Kharg Island, and enforcement threats against tankers in the Strait of Hormuz."
+    }
+  },
+  {
     "timestamp": "2026-08-23T17:31:45.922087+00:00",
     "total_scanned": 218,
     "flagged_count": 159,
