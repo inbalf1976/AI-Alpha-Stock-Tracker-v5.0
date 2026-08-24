@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 28,
+    "alert_timestamp": "2026-08-24T10:58:29.498806+00:00",
+    "reason": "Active maritime escalation in the Strait of Hormuz, featuring covert loading events, dark transits, ship-to-ship transfers, and Iranian threats to fine and confiscate tankers.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 714.5,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 27,
     "alert_timestamp": "2026-08-24T10:50:40.185883+00:00",
     "reason": "Active maritime intelligence reports high volumes of dark-vessel transits, covert loading events at Kharg Island, and enforcement threats against tankers in the Strait of Hormuz.",

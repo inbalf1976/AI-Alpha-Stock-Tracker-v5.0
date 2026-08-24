@@ -1,5 +1,159 @@
 [
   {
+    "timestamp": "2026-08-24T10:58:29.498806+00:00",
+    "total_scanned": 216,
+    "flagged_count": 159,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar drifts near 3-month lows on trade retaliation and Iran sanctions threat",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-rangebound-dollar-holds-near-3mth-lows-amid-us-debt-iran-risks-4872621",
+        "source": "Investing.com Forex",
+        "published": "2026-08-24 09:19:29",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as dollar policy jitters, Iran sanctions weigh",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-dollar-policy-jitters-iran-sanctions-weigh-4872845",
+        "source": "Investing.com Forex",
+        "published": "2026-08-24 08:39:58",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Why does the USD outlook depend on UST and Fed policy credibility?",
+        "link": "https://www.investing.com/news/forex-news/why-does-the-usd-outlook-depend-on-ust-and-fed-policy-credibility-4872435",
+        "source": "Investing.com Forex",
+        "published": "2026-08-23 09:15:22",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Iran threatens 45 tankers with fines, confiscation in Hormuz escalation",
+        "link": "https://www.investing.com/news/commodities-news/iran-threatens-45-tankers-with-fines-confiscation-in-hormuz-escalation-4873062",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-24 10:43:13",
+        "matched_keywords": [
+          "hormuz",
+          "escalation"
+        ]
+      },
+      {
+        "title": "Iran says new sanctions threatened by ’desperate’ US will fail",
+        "link": "https://www.investing.com/news/commodities-news/iran-says-new-sanctions-threatened-by-desperate-us-will-fail-4872444",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-24 10:13:15",
+        "matched_keywords": [
+          "sanction"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "The macroeconomic landscape is dominated by a weakening US dollar drifting near 3-month lows amid trade retaliation fears and escalating tensions with Iran. Simultaneously, maritime intelligence reveals intensifying covert activity, ship-to-ship transfers, and dark transits in the Strait of Hormuz, heightening geopolitical supply chain risks.",
+      "wheat_impact": "NEUTRAL",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalation in the Strait of Hormuz threatening critical energy and maritime trade corridors, alongside potential US-Iran sanction fallout.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active maritime escalation in the Strait of Hormuz, featuring covert loading events, dark transits, ship-to-ship transfers, and Iranian threats to fine and confiscate tankers."
+    }
+  },
+  {
     "timestamp": "2026-08-24T10:50:40.185883+00:00",
     "total_scanned": 215,
     "flagged_count": 158,
