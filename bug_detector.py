@@ -205,13 +205,40 @@ def check_weekend_alert_sent(state):
         except Exception:
             continue
 
+        # UPDATED 2026-08-25, real incident: wheat_monitor_pro.py's
+        # alerts_today write is gated `if not is_manual` (since
+        # 2026-08-23), so any entry written by the CURRENT code can
+        # only be a genuine scheduled send — never a manual trigger.
+        # But entries written BEFORE that gating fix landed still
+        # exist in the wild, stored as a bare `True` rather than the
+        # HH:MM string format introduced the same day. A bare-`True`
+        # weekend entry is unattributable history (could predate
+        # several different fixes, including the day-of-week guard
+        # itself) — NOT proof the current code has a live bug. An
+        # HH:MM-format weekend entry, by contrast, could only have
+        # been written by the current, already-fixed code, so it IS
+        # solid evidence of a real, ongoing problem.
+        is_new_format = isinstance(send_time, str) and ":" in send_time
+
         if is_weekend(datetime(d.year, d.month, d.day, tzinfo=IL)):
-            issues.append(
-                f"A scheduled alert was recorded as sent on {date_str} "
-                f"({d.strftime('%A')}) — not a trading day (Mon-Fri only). "
-                f"Check which cron/job caused it; should_send()'s day-of-week "
-                f"guard should have blocked this if it's running the current code."
-            )
+            if is_new_format:
+                issues.append(
+                    f"⚠️ LIVE BUG: a scheduled alert landed at {send_time} IL on "
+                    f"{date_str} ({d.strftime('%A')}) — not a trading day. This "
+                    f"entry uses the current HH:MM format (introduced 2026-08-23 "
+                    f"alongside is_manual-gated writes), meaning the CURRENT "
+                    f"should_send() code did not block a real scheduled send — "
+                    f"investigate the actual cron trigger for that day."
+                )
+            else:
+                issues.append(
+                    f"Historical note only: an old-format alert record exists for "
+                    f"{date_str} ({d.strftime('%A')}) — not a trading day. This "
+                    f"entry predates the 2026-08-23 alerts_today format/gating "
+                    f"change, so it can't be attributed to the current code — "
+                    f"likely old history from before an earlier fix. No action "
+                    f"needed unless a NEW-format (HH:MM) weekend entry also appears."
+                )
             continue  # wrong-day already flagged, skip the hour check for this entry
 
         # Hour check — only meaningful for entries that DO have a real
