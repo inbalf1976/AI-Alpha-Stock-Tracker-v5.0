@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-08-24T10:58:57.444808",
-  "baseline_up": 0.6733,
+  "generated_at": "2026-08-25T04:05:37.329298",
+  "baseline_up": 0.6794,
   "validated_conditions": {
     "momentum_up": 0.8,
     "above_sma20": 0.684
   },
-  "source_backtest_run_date": "2026-08-24T10:58:57.340031"
+  "source_backtest_run_date": "2026-08-25T04:05:37.227611"
 }
