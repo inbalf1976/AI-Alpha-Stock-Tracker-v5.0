@@ -1,5 +1,162 @@
 [
   {
+    "timestamp": "2026-08-25T09:09:29.509168+00:00",
+    "total_scanned": 226,
+    "flagged_count": 165,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Ford’s $3 billion Canadian bet is getting caught in trade-war crosshairs",
+        "link": "https://www.marketwatch.com/story/u-s-automakers-and-home-builders-are-among-the-big-losers-as-trump-launches-a-trade-war-against-canada-063c1d4c?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 24 Aug 2026 20:22:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Oil hits one-week low as investors shrug off latest US sanctions on Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-steady-as-investors-weigh-impact-of-expanded-us-sanctions-against-iran-4874373",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-25 08:48:30",
+        "matched_keywords": [
+          "sanction",
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI coils inside Ichimoku cloud: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-consolidates-near-highs-at-8511-hourly-levels-93CH-4872742",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-25 07:12:05",
+        "matched_keywords": [
+          "ils",
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "London Gas Oil trapped in $1,216-$1,277 range: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-overbought-at-1280-live-levels-93CH-4872746",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-25 07:11:27",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Copper coils in tight range near $6.61: Live breakout levels",
+        "link": "https://www.investing.com/news/commodities-news/copper-wedged-at-6582-in-bullbear-standoff-live-levels-93CH-4872740",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-25 07:11:14",
+        "matched_keywords": [
+          "ils",
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Financial markets digest a busy Federal Reserve regulatory and policy agenda alongside tightening geopolitical tensions in the Middle East, where Strait of Hormuz outbound transits have dropped to zero. Meanwhile, energy markets shrug off fresh US sanctions on Iran as crude trades near weekly lows and industrial metals coil in tight ranges.",
+      "wheat_impact": "NEUTRAL",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Complete operational paralysis and escalating security incidents in the Strait of Hormuz disrupting global energy and maritime logistics.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Outbound vessel transits through the Strait of Hormuz have fallen to zero, accompanied by a confirmed tanker strike off Yanbu and a growing pool of suspicious dark tankers waiting off Kharg Island."
+    }
+  },
+  {
     "timestamp": "2026-08-25T04:05:06.407389+00:00",
     "total_scanned": 227,
     "flagged_count": 168,

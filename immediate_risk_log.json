@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 31,
+    "alert_timestamp": "2026-08-25T09:09:29.509168+00:00",
+    "reason": "Outbound vessel transits through the Strait of Hormuz have fallen to zero, accompanied by a confirmed tanker strike off Yanbu and a growing pool of suspicious dark tankers waiting off Kharg Island.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 695.75,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 30,
     "alert_timestamp": "2026-08-25T04:05:06.407389+00:00",
     "reason": "An active, full-scale trade war has erupted between the U.S. and Canada following the implementation of 50% U.S. tariffs on $20 billion of Canadian imports and retaliatory measures announced by Ottawa.",
