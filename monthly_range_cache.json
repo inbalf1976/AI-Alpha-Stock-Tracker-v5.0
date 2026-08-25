@@ -1,12 +1,12 @@
 {
   "month_key": "2026-08",
-  "frozen_at": "2026-08-19T17:01:10.343675+03:00",
+  "frozen_at": "2026-08-26T01:04:43.939642+03:00",
   "regenerated_after_breach": true,
   "monthly": {
-    "monthly_low": 620.85,
-    "monthly_high": 700.01,
+    "monthly_low": 657.33,
+    "monthly_high": 739.79,
     "bias": "DOWN",
-    "avg_return": -1.83,
+    "avg_return": -0.84,
     "month_label": "August"
   }
 }
