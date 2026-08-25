@@ -29,8 +29,9 @@ import os
 import re
 import json
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from zoneinfo import ZoneInfo
+import numpy as np
 import requests
 import yfinance as yf
 
@@ -57,38 +58,25 @@ STALE_SIGNAL_HOURS           = 48     # news/weather age flag (these should upda
 STALE_VALIDATED_COND_HOURS   = 200    # validated_conditions.json only regenerates weekly (~168h) — give it slack
 PRICE_DIVERGENCE_PCT_THRESHOLD = 1.5  # flag if ZW=F vs the front-month specific contract differ by more than this
 
-# ══════════════════════════════════════════════════════════════════════════
-# ⚠️  DUPLICATED LOGIC — KEEP IN SYNC WITH wheat_monitor_pro.py  ⚠️
-# WHEAT_MONTH_CODES, WHEAT_ROLL_BUFFER_DAYS, and get_front_month_ticker()
-# below are a deliberate copy of the same names/logic in
-# wheat_monitor_pro.py, NOT an import — bug_detector.py is designed to
-# stay lightweight (no TensorFlow/XGBoost/sklearn), and importing
-# wheat_monitor_pro.py just for this one function would drag in that
-# entire heavy dependency stack. If wheat_monitor_pro.py's roll rule
-# is ever changed (it already was once, 2026-08-18, after the old
-# rule rolled to the next contract two weeks too early), this copy
-# must be updated to match, or check_price_source_divergence() below
-# will start comparing against the WRONG "correct" contract. Search
-# both files for "KEEP IN SYNC" if you touch this logic in one place.
-# ══════════════════════════════════════════════════════════════════════════
-WHEAT_MONTH_CODES = {3: 'H', 5: 'K', 7: 'N', 9: 'U', 12: 'Z'}
-WHEAT_ROLL_BUFFER_DAYS = 5
+# UPDATED 2026-08-25: front-month contract resolution + trading-day
+# checks now live in a single shared module, trading_calendar.py,
+# imported by both this file and wheat_monitor_pro.py — see that
+# module's docstring for the full history/reasoning. This resolves
+# the tension that used to force duplication here (bug_detector.py
+# stays free of wheat_monitor_pro.py's heavy TensorFlow/XGBoost/
+# sklearn dependencies, since trading_calendar.py only needs
+# numpy/yfinance, which this file already imports anyway). If this
+# logic ever needs to change again, change it once in
+# trading_calendar.py — both files pick it up automatically.
+from trading_calendar import (
+    is_trading_day,
+    is_weekend,
+    WHEAT_MONTH_CODES,
+    WHEAT_ROLL_BUFFER_DAYS,
+    VOLUME_CROSSOVER_MULTIPLIER,
+    get_front_month_ticker,
+)
 
-
-def get_front_month_ticker(reference_date=None):
-    """See wheat_monitor_pro.py's version of this function for the full
-    rationale — this is an intentional duplicate, see KEEP IN SYNC note above."""
-    ref = reference_date or datetime.now(IL)
-    months = sorted(WHEAT_MONTH_CODES.keys())
-    roll_cutoff_day = 15 - WHEAT_ROLL_BUFFER_DAYS
-
-    year = ref.year
-    for m in months:
-        if ref.month < m:
-            return f"ZW{WHEAT_MONTH_CODES[m]}{str(year)[-2:]}.CBT"
-        if ref.month == m and ref.day < roll_cutoff_day:
-            return f"ZW{WHEAT_MONTH_CODES[m]}{str(year)[-2:]}.CBT"
-    return f"ZW{WHEAT_MONTH_CODES[3]}{str(year + 1)[-2:]}.CBT"
 
 
 def _load_json(path):
@@ -161,7 +149,7 @@ def check_missed_weekday_alert(state):
     # by the time this check runs, that day's ~01:00 IL alert cycle
     # should already have happened.
     check_date = today - timedelta(days=1)
-    while check_date.weekday() >= 5:  # Sat=5, Sun=6
+    while is_weekend(datetime(check_date.year, check_date.month, check_date.day, tzinfo=IL)):
         check_date -= timedelta(days=1)
 
     if last_alert_date < check_date:
@@ -217,7 +205,7 @@ def check_weekend_alert_sent(state):
         except Exception:
             continue
 
-        if d.weekday() >= 5:  # Sat=5, Sun=6
+        if is_weekend(datetime(d.year, d.month, d.day, tzinfo=IL)):
             issues.append(
                 f"A scheduled alert was recorded as sent on {date_str} "
                 f"({d.strftime('%A')}) — not a trading day (Mon-Fri only). "
