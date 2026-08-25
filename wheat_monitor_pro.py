@@ -45,7 +45,7 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from zoneinfo import ZoneInfo
 
 IL = ZoneInfo("Asia/Jerusalem")   # Israel timezone — used everywhere
@@ -1276,51 +1276,24 @@ def get_weather_signal():
 # has a few months of tradeable history, so it's used ONLY for the
 # live volume display/diagnostic — price, seasonal, and backtest
 # history all continue using ZW=F's long continuous series.
-WHEAT_MONTH_CODES = {3: 'H', 5: 'K', 7: 'N', 9: 'U', 12: 'Z'}
+# UPDATED 2026-08-25: front-month contract resolution now lives in a
+# single shared module, trading_calendar.py, imported by both this
+# file and bug_detector.py — see that module's docstring for the
+# full history/reasoning. Previously this logic was duplicated
+# between the two files (to keep bug_detector.py free of this file's
+# heavy TensorFlow/XGBoost/sklearn dependencies); trading_calendar.py
+# resolves that tension since it only needs numpy/yfinance, which
+# bug_detector.py already imports anyway. If this logic ever needs to
+# change again, change it once in trading_calendar.py — both files
+# pick it up automatically.
+from trading_calendar import (
+    is_trading_day,
+    WHEAT_MONTH_CODES,
+    WHEAT_ROLL_BUFFER_DAYS,
+    VOLUME_CROSSOVER_MULTIPLIER,
+    get_front_month_ticker,
+)
 
-# UPDATED 2026-08-18: the OLD roll rule rolled to the NEXT contract
-# the instant the calendar entered the current contract's own
-# delivery month (e.g. Sept 1 already pointed to December, skipping
-# September entirely) — overly conservative in the wrong direction.
-# CBOT wheat's real last trading day is the business day before the
-# 15th of the delivery month, so the old rule stopped using each
-# contract roughly TWO WEEKS before it actually expired — during
-# exactly that window, this project's own diagnostic (2026-08-18)
-# confirmed the abandoned contract was still the one actually
-# matching real broker prices (Plus500). Left as-is, this would have
-# reproduced the same ZW=F-vs-specific-contract mismatch this whole
-# fix was built to solve, on a predictable ~2-week cycle, starting
-# as soon as Sept 1. WHEAT_ROLL_BUFFER_DAYS controls how many days
-# before the ~15th cutoff the roll now happens (still rolls a few
-# days early for safety/liquidity, just not two full weeks early).
-WHEAT_ROLL_BUFFER_DAYS = 5
-
-
-def get_front_month_ticker(reference_date=None):
-    """
-    Returns the current front-month CBOT wheat contract ticker
-    (e.g. 'ZWU26.CBT'). Stays on the CURRENT delivery-month contract
-    until WHEAT_ROLL_BUFFER_DAYS before its approximate last trading
-    day (~15th of the month), then rolls to the next contract — see
-    the comment above WHEAT_ROLL_BUFFER_DAYS for why. This is still a
-    calendar-based approximation, not a live CME trading-calendar
-    lookup — exact last-trade dates shift by a day or two around
-    weekends/holidays, which is why a buffer is used rather than
-    cutting it exactly at the real expiry.
-    """
-    ref = reference_date or datetime.now(IL)
-    months = sorted(WHEAT_MONTH_CODES.keys())
-    roll_cutoff_day = 15 - WHEAT_ROLL_BUFFER_DAYS
-
-    year = ref.year
-    for m in months:
-        if ref.month < m:
-            return f"ZW{WHEAT_MONTH_CODES[m]}{str(year)[-2:]}.CBT"
-        if ref.month == m and ref.day < roll_cutoff_day:
-            return f"ZW{WHEAT_MONTH_CODES[m]}{str(year)[-2:]}.CBT"
-    # Past all this year's months (including past December's own roll
-    # cutoff) — roll to March of next year
-    return f"ZW{WHEAT_MONTH_CODES[3]}{str(year + 1)[-2:]}.CBT"
 
 
 def get_accurate_volume():
@@ -1442,7 +1415,7 @@ def should_send(state):
     # now refuse a "scheduled" send outside Mon-Fri (weekday() 0-4),
     # regardless of hour. Manual/price-triggered runs are unaffected —
     # they return earlier above and always send, same as before.
-    if israel.weekday() not in (0, 1, 2, 3, 4):
+    if not is_trading_day(israel):
         return False, f"Not a trading day ({israel.strftime('%A')})", False
 
     # UPDATED 2026-08-21: the monitor cron was moved from exactly 22:00
