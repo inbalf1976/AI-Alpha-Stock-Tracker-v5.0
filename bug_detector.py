@@ -182,11 +182,14 @@ def check_missed_weekday_alert(state):
 # EXTENDED same day: alerts_today's value changed from a bare `True` to
 # the actual HH:MM send time (see wheat_monitor_pro.py), specifically so
 # this check can also verify the HOUR, not just the day — the daily
-# target is ~00:53 IL; a genuine GitHub Actions delay of a few minutes
-# is expected and fine (see the earlier cron-shift fix), but a send
-# hours off target would indicate something is wrong even on a correct
-# weekday. LATE_ALERT_HOUR_THRESHOLD is generous on purpose to avoid
-# false alarms from ordinary platform delay.
+# target is ~02:53 IL (retimed 2026-08-25, see wheat_monitor_github.yml's
+# monitor cron comment); a genuine GitHub Actions delay of a few minutes
+# is expected and fine, but a send hours off target would indicate
+# something is wrong even on a correct weekday. LATE_ALERT_HOUR_THRESHOLD
+# is generous on purpose to avoid false alarms from ordinary platform
+# delay — value unchanged at 4 since it still sits at the top edge of
+# should_send()'s (2,3,4) window under the new target, same relative
+# position as before the retiming.
 LATE_ALERT_HOUR_THRESHOLD = 4  # flag if the scheduled morning send lands at/after this IL hour
 
 def check_weekend_alert_sent(state):
@@ -250,7 +253,7 @@ def check_weekend_alert_sent(state):
                 if send_hour >= LATE_ALERT_HOUR_THRESHOLD:
                     issues.append(
                         f"Scheduled alert on {date_str} landed at {send_time} IL — "
-                        f"well past the ~00:53 IL target (threshold: hour "
+                        f"well past the ~02:53 IL target (threshold: hour "
                         f"{LATE_ALERT_HOUR_THRESHOLD}+). Worth checking Actions run "
                         f"history for that day for unusual delay or a job that ran "
                         f"very late."
