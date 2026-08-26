@@ -257,7 +257,13 @@ jobs:
 
   news_scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    # UPDATED 2026-08-26: widened from 10 to 15 minutes as a second
+    # layer of protection alongside the step-reorder below — real
+    # runs have been observed landing close to or over the old
+    # 10-minute limit (article-fetch timeouts, Gemini calls, and
+    # Windward fetch stacking up inside news_scanner.py), which
+    # caused this job to hit its timeout and get cancelled mid-run.
     permissions:
       contents: write
     # UPDATED 2026-08-08: matches the new synchronized cron strings above.
@@ -271,13 +277,18 @@ jobs:
         python-version: '3.10'
     - name: Install news scanner packages
       run: pip install feedparser google-genai yfinance beautifulsoup4
-    - name: Run news scan
-      # Now synchronized to land just before the model's own key
-      # moments (see cron comments above) instead of an independent
-      # evenly-spaced schedule — see news_scanner.py CHANGELOG 2026-08-08.
-      env:
-        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      run: python news_scanner.py
+    # UPDATED 2026-08-26, real incident: "Check for large price move"
+    # previously ran AFTER "Run news scan" — a real run that hit the
+    # job's timeout mid-way through news_scanner.py (10min limit, run
+    # took 9m53s and was cancelled by GitHub Actions) meant the price
+    # check NEVER RAN AT ALL that cycle, even though a large price
+    # move (confirmed independently against Plus500, ~748c) had
+    # already happened. The price-move check is the safety-critical,
+    # fast half of this job — it should never be gated behind the
+    # slower, more failure-prone news-scanning work. Now runs FIRST:
+    # even if news_scanner.py itself times out or fails afterward, the
+    # price-trigger check (and any resulting forced monitor re-run)
+    # has already safely completed.
     - name: Check for large price move
       id: price_check
       run: python check_price_trigger.py
@@ -295,6 +306,28 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: python wheat_monitor_pro.py
+    - name: Run news scan
+      # Now synchronized to land just before the model's own key
+      # moments (see cron comments above) instead of an independent
+      # evenly-spaced schedule — see news_scanner.py CHANGELOG 2026-08-08.
+      # Moved to run AFTER the price check (2026-08-26) — see comment
+      # above "Check for large price move" for why.
+      # UPDATED 2026-08-26, real incident: this step was missing
+      # TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID — news_scanner.py's
+      # send_immediate_risk_alert() needs both to actually send, but
+      # they were never passed here (only GEMINI_API_KEY was). Result:
+      # every immediate-risk detection in this step silently logged
+      # "Telegram not configured, skipping send" and never reached
+      # Telegram — confirmed live, a real Hormuz-area tanker-attack
+      # alert (event #36) was correctly detected and then silently
+      # dropped. The event still got logged to immediate_risk_log.json
+      # for tracking (that part doesn't depend on Telegram), only the
+      # notification itself was lost.
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: python news_scanner.py
     - name: Commit news + state logs
       # UPDATED 2026-08-12: "git push || echo Nothing to push" was
       # silently swallowing REAL push failures, not just genuine
