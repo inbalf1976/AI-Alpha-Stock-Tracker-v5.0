@@ -1,25 +1,25 @@
 {
-  "run_date": "2026-08-26T01:59:14.436287",
-  "baseline_up_full": 0.68,
-  "baseline_down_full": 0.27,
-  "train_period": "2025-08-26 to 2026-05-06",
-  "holdout_period": "2026-05-07 to 2026-08-25",
+  "run_date": "2026-08-26T18:35:06.044498",
+  "baseline_up_full": 0.6806387225548902,
+  "baseline_down_full": 0.2694610778443114,
+  "train_period": "2025-08-26 to 2026-05-07",
+  "holdout_period": "2026-05-08 to 2026-08-26",
   "individual_conditions_train": [
     {
       "condition": "vol_low",
-      "n": 67,
-      "up_accuracy": 0.806,
-      "down_accuracy": 0.179,
+      "n": 68,
+      "up_accuracy": 0.809,
+      "down_accuracy": 0.176,
       "best_direction": "UP",
-      "best_accuracy": 0.806
+      "best_accuracy": 0.809
     },
     {
       "condition": "in_upper_half",
-      "n": 54,
-      "up_accuracy": 0.704,
-      "down_accuracy": 0.259,
+      "n": 55,
+      "up_accuracy": 0.709,
+      "down_accuracy": 0.255,
       "best_direction": "UP",
-      "best_accuracy": 0.704
+      "best_accuracy": 0.709
     },
     {
       "condition": "wc_bullish",
@@ -31,11 +31,11 @@
     },
     {
       "condition": "rsi_neutral",
-      "n": 91,
-      "up_accuracy": 0.67,
-      "down_accuracy": 0.286,
+      "n": 92,
+      "up_accuracy": 0.674,
+      "down_accuracy": 0.283,
       "best_direction": "UP",
-      "best_accuracy": 0.67
+      "best_accuracy": 0.674
     },
     {
       "condition": "macd_bullish",
@@ -55,51 +55,51 @@
     },
     {
       "condition": "inside_bb",
-      "n": 133,
-      "up_accuracy": 0.647,
-      "down_accuracy": 0.301,
+      "n": 134,
+      "up_accuracy": 0.649,
+      "down_accuracy": 0.299,
       "best_direction": "UP",
-      "best_accuracy": 0.647
+      "best_accuracy": 0.649
     },
     {
       "condition": "trend_aligned",
-      "n": 110,
-      "up_accuracy": 0.636,
-      "down_accuracy": 0.318,
+      "n": 111,
+      "up_accuracy": 0.64,
+      "down_accuracy": 0.315,
       "best_direction": "UP",
-      "best_accuracy": 0.636
+      "best_accuracy": 0.64
     },
     {
       "condition": "vol_good",
-      "n": 175,
-      "up_accuracy": 0.623,
-      "down_accuracy": 0.337,
+      "n": 176,
+      "up_accuracy": 0.625,
+      "down_accuracy": 0.335,
       "best_direction": "UP",
-      "best_accuracy": 0.623
+      "best_accuracy": 0.625
     },
     {
       "condition": "bullish_month",
-      "n": 88,
-      "up_accuracy": 0.614,
-      "down_accuracy": 0.341,
+      "n": 89,
+      "up_accuracy": 0.618,
+      "down_accuracy": 0.337,
       "best_direction": "UP",
-      "best_accuracy": 0.614
+      "best_accuracy": 0.618
     },
     {
       "condition": "above_sma50",
-      "n": 118,
-      "up_accuracy": 0.61,
-      "down_accuracy": 0.347,
+      "n": 119,
+      "up_accuracy": 0.613,
+      "down_accuracy": 0.345,
       "best_direction": "UP",
-      "best_accuracy": 0.61
+      "best_accuracy": 0.613
     },
     {
       "condition": "momentum_down",
-      "n": 53,
-      "up_accuracy": 0.604,
-      "down_accuracy": 0.396,
+      "n": 54,
+      "up_accuracy": 0.611,
+      "down_accuracy": 0.389,
       "best_direction": "UP",
-      "best_accuracy": 0.604
+      "best_accuracy": 0.611
     },
     {
       "condition": "above_sma20",
@@ -171,11 +171,11 @@
       "condition": "vol_low",
       "train": {
         "condition": "vol_low",
-        "n": 67,
-        "up_accuracy": 0.806,
-        "down_accuracy": 0.179,
+        "n": 68,
+        "up_accuracy": 0.809,
+        "down_accuracy": 0.176,
         "best_direction": "UP",
-        "best_accuracy": 0.806
+        "best_accuracy": 0.809
       },
       "holdout": {
         "n": 26,
@@ -190,11 +190,11 @@
       "condition": "in_upper_half",
       "train": {
         "condition": "in_upper_half",
-        "n": 54,
-        "up_accuracy": 0.704,
-        "down_accuracy": 0.259,
+        "n": 55,
+        "up_accuracy": 0.709,
+        "down_accuracy": 0.255,
         "best_direction": "UP",
-        "best_accuracy": 0.704
+        "best_accuracy": 0.709
       },
       "holdout": {
         "n": 55,
@@ -228,18 +228,18 @@
       "condition": "rsi_neutral",
       "train": {
         "condition": "rsi_neutral",
-        "n": 91,
-        "up_accuracy": 0.67,
-        "down_accuracy": 0.286,
+        "n": 92,
+        "up_accuracy": 0.674,
+        "down_accuracy": 0.283,
         "best_direction": "UP",
-        "best_accuracy": 0.67
+        "best_accuracy": 0.674
       },
       "holdout": {
-        "n": 37,
-        "up_accuracy": 0.649,
-        "down_accuracy": 0.297,
+        "n": 36,
+        "up_accuracy": 0.639,
+        "down_accuracy": 0.306,
         "best_direction": "UP",
-        "best_accuracy": 0.649
+        "best_accuracy": 0.639
       },
       "held_up": "True"
     },
@@ -254,11 +254,11 @@
         "best_accuracy": 0.653
       },
       "holdout": {
-        "n": 39,
-        "up_accuracy": 0.667,
-        "down_accuracy": 0.231,
+        "n": 40,
+        "up_accuracy": 0.675,
+        "down_accuracy": 0.225,
         "best_direction": "UP",
-        "best_accuracy": 0.667
+        "best_accuracy": 0.675
       },
       "held_up": "True"
     },
@@ -273,11 +273,11 @@
         "best_accuracy": 0.651
       },
       "holdout": {
-        "n": 25,
-        "up_accuracy": 0.8,
-        "down_accuracy": 0.2,
+        "n": 26,
+        "up_accuracy": 0.808,
+        "down_accuracy": 0.192,
         "best_direction": "UP",
-        "best_accuracy": 0.8
+        "best_accuracy": 0.808
       },
       "held_up": "True"
     },
@@ -285,11 +285,11 @@
       "condition": "inside_bb",
       "train": {
         "condition": "inside_bb",
-        "n": 133,
-        "up_accuracy": 0.647,
-        "down_accuracy": 0.301,
+        "n": 134,
+        "up_accuracy": 0.649,
+        "down_accuracy": 0.299,
         "best_direction": "UP",
-        "best_accuracy": 0.647
+        "best_accuracy": 0.649
       },
       "holdout": {
         "n": 53,
@@ -304,11 +304,11 @@
       "condition": "trend_aligned",
       "train": {
         "condition": "trend_aligned",
-        "n": 110,
-        "up_accuracy": 0.636,
-        "down_accuracy": 0.318,
+        "n": 111,
+        "up_accuracy": 0.64,
+        "down_accuracy": 0.315,
         "best_direction": "UP",
-        "best_accuracy": 0.636
+        "best_accuracy": 0.64
       },
       "holdout": {
         "n": 51,
@@ -323,11 +323,11 @@
       "condition": "vol_good",
       "train": {
         "condition": "vol_good",
-        "n": 175,
-        "up_accuracy": 0.623,
-        "down_accuracy": 0.337,
+        "n": 176,
+        "up_accuracy": 0.625,
+        "down_accuracy": 0.335,
         "best_direction": "UP",
-        "best_accuracy": 0.623
+        "best_accuracy": 0.625
       },
       "holdout": {
         "n": 61,
@@ -342,30 +342,30 @@
       "condition": "bullish_month",
       "train": {
         "condition": "bullish_month",
-        "n": 88,
-        "up_accuracy": 0.614,
-        "down_accuracy": 0.341,
+        "n": 89,
+        "up_accuracy": 0.618,
+        "down_accuracy": 0.337,
         "best_direction": "UP",
-        "best_accuracy": 0.614
+        "best_accuracy": 0.618
       },
       "holdout": {
-        "n": 16,
-        "up_accuracy": 0.375,
-        "down_accuracy": 0.5,
+        "n": 15,
+        "up_accuracy": 0.333,
+        "down_accuracy": 0.533,
         "best_direction": "DOWN",
-        "best_accuracy": 0.5
+        "best_accuracy": 0.533
       },
-      "held_up": "False"
+      "held_up": "True"
     },
     {
       "condition": "above_sma50",
       "train": {
         "condition": "above_sma50",
-        "n": 118,
-        "up_accuracy": 0.61,
-        "down_accuracy": 0.347,
+        "n": 119,
+        "up_accuracy": 0.613,
+        "down_accuracy": 0.345,
         "best_direction": "UP",
-        "best_accuracy": 0.61
+        "best_accuracy": 0.613
       },
       "holdout": {
         "n": 47,
@@ -380,18 +380,18 @@
       "condition": "momentum_down",
       "train": {
         "condition": "momentum_down",
-        "n": 53,
-        "up_accuracy": 0.604,
-        "down_accuracy": 0.396,
+        "n": 54,
+        "up_accuracy": 0.611,
+        "down_accuracy": 0.389,
         "best_direction": "UP",
-        "best_accuracy": 0.604
+        "best_accuracy": 0.611
       },
       "holdout": {
-        "n": 24,
-        "up_accuracy": 0.583,
-        "down_accuracy": 0.417,
+        "n": 23,
+        "up_accuracy": 0.565,
+        "down_accuracy": 0.435,
         "best_direction": "UP",
-        "best_accuracy": 0.583
+        "best_accuracy": 0.565
       },
       "held_up": "True"
     },
@@ -406,11 +406,11 @@
         "best_accuracy": 0.6
       },
       "holdout": {
-        "n": 39,
-        "up_accuracy": 0.692,
-        "down_accuracy": 0.231,
+        "n": 40,
+        "up_accuracy": 0.7,
+        "down_accuracy": 0.225,
         "best_direction": "UP",
-        "best_accuracy": 0.692
+        "best_accuracy": 0.7
       },
       "held_up": "True"
     },
@@ -425,11 +425,11 @@
         "best_accuracy": 0.6
       },
       "holdout": {
-        "n": 13,
-        "up_accuracy": 0.615,
-        "down_accuracy": 0.308,
+        "n": 14,
+        "up_accuracy": 0.643,
+        "down_accuracy": 0.286,
         "best_direction": "UP",
-        "best_accuracy": 0.615
+        "best_accuracy": 0.643
       },
       "held_up": "True"
     },
@@ -883,7 +883,7 @@
         "best_accuracy": 0.938
       },
       "holdout": {
-        "n": 8,
+        "n": 9,
         "up_accuracy": 1.0,
         "down_accuracy": 0.0,
         "best_direction": "UP",
@@ -904,24 +904,24 @@
         },
         {
           "start": "2025-11-24",
-          "end": "2026-02-24",
-          "n": 18,
-          "accuracy": 0.667
+          "end": "2026-02-25",
+          "n": 19,
+          "accuracy": 0.684
         },
         {
-          "start": "2026-02-25",
-          "end": "2026-05-22",
-          "n": 33,
-          "accuracy": 0.818
+          "start": "2026-02-26",
+          "end": "2026-05-26",
+          "n": 32,
+          "accuracy": 0.812
         },
         {
-          "start": "2026-05-26",
-          "end": "2026-08-21",
-          "n": 21,
-          "accuracy": 0.905
+          "start": "2026-05-27",
+          "end": "2026-08-24",
+          "n": 22,
+          "accuracy": 0.909
         }
       ],
-      "spread": 0.285
+      "spread": 0.268
     },
     {
       "condition": "in_upper_half",
@@ -935,24 +935,24 @@
         },
         {
           "start": "2025-11-24",
-          "end": "2026-02-24",
-          "n": 4,
+          "end": "2026-02-25",
+          "n": 5,
           "accuracy": 1.0
         },
         {
-          "start": "2026-02-25",
-          "end": "2026-05-22",
+          "start": "2026-02-26",
+          "end": "2026-05-26",
           "n": 62,
-          "accuracy": 0.645
+          "accuracy": 0.629
         },
         {
-          "start": "2026-05-26",
-          "end": "2026-08-21",
+          "start": "2026-05-27",
+          "end": "2026-08-24",
           "n": 43,
-          "accuracy": 0.651
+          "accuracy": 0.674
         }
       ],
-      "spread": 0.355
+      "spread": 0.371
     },
     {
       "condition": "rsi_neutral",
@@ -966,21 +966,21 @@
         },
         {
           "start": "2025-11-24",
-          "end": "2026-02-24",
+          "end": "2026-02-25",
           "n": 29,
           "accuracy": 0.586
         },
         {
-          "start": "2026-02-25",
-          "end": "2026-05-22",
-          "n": 37,
-          "accuracy": 0.649
+          "start": "2026-02-26",
+          "end": "2026-05-26",
+          "n": 38,
+          "accuracy": 0.632
         },
         {
-          "start": "2026-05-26",
-          "end": "2026-08-21",
-          "n": 29,
-          "accuracy": 0.69
+          "start": "2026-05-27",
+          "end": "2026-08-24",
+          "n": 28,
+          "accuracy": 0.714
         }
       ],
       "spread": 0.141
@@ -997,24 +997,24 @@
         },
         {
           "start": "2025-11-24",
-          "end": "2026-02-24",
-          "n": 34,
-          "accuracy": 0.559
+          "end": "2026-02-25",
+          "n": 35,
+          "accuracy": 0.571
         },
         {
-          "start": "2026-02-25",
-          "end": "2026-05-22",
-          "n": 36,
-          "accuracy": 0.639
+          "start": "2026-02-26",
+          "end": "2026-05-26",
+          "n": 35,
+          "accuracy": 0.629
         },
         {
-          "start": "2026-05-26",
-          "end": "2026-08-21",
-          "n": 30,
-          "accuracy": 0.767
+          "start": "2026-05-27",
+          "end": "2026-08-24",
+          "n": 31,
+          "accuracy": 0.774
         }
       ],
-      "spread": 0.208
+      "spread": 0.203
     },
     {
       "condition": "momentum_up",
@@ -1028,24 +1028,24 @@
         },
         {
           "start": "2025-11-24",
-          "end": "2026-02-24",
+          "end": "2026-02-25",
           "n": 21,
           "accuracy": 0.571
         },
         {
-          "start": "2026-02-25",
-          "end": "2026-05-22",
+          "start": "2026-02-26",
+          "end": "2026-05-26",
           "n": 23,
           "accuracy": 0.739
         },
         {
-          "start": "2026-05-26",
-          "end": "2026-08-21",
-          "n": 22,
-          "accuracy": 0.818
+          "start": "2026-05-27",
+          "end": "2026-08-24",
+          "n": 23,
+          "accuracy": 0.826
         }
       ],
-      "spread": 0.247
+      "spread": 0.255
     },
     {
       "condition": "inside_bb",
@@ -1059,24 +1059,24 @@
         },
         {
           "start": "2025-11-24",
-          "end": "2026-02-24",
-          "n": 46,
-          "accuracy": 0.522
+          "end": "2026-02-25",
+          "n": 47,
+          "accuracy": 0.532
         },
         {
-          "start": "2026-02-25",
-          "end": "2026-05-22",
+          "start": "2026-02-26",
+          "end": "2026-05-26",
           "n": 46,
-          "accuracy": 0.696
+          "accuracy": 0.674
         },
         {
-          "start": "2026-05-26",
-          "end": "2026-08-21",
+          "start": "2026-05-27",
+          "end": "2026-08-24",
           "n": 45,
-          "accuracy": 0.622
+          "accuracy": 0.644
         }
       ],
-      "spread": 0.174
+      "spread": 0.162
     },
     {
       "condition": "vol_good",
@@ -1090,24 +1090,55 @@
         },
         {
           "start": "2025-11-24",
-          "end": "2026-02-24",
-          "n": 62,
-          "accuracy": 0.516
+          "end": "2026-02-25",
+          "n": 63,
+          "accuracy": 0.524
         },
         {
-          "start": "2026-02-25",
-          "end": "2026-05-22",
+          "start": "2026-02-26",
+          "end": "2026-05-26",
           "n": 62,
-          "accuracy": 0.645
+          "accuracy": 0.629
         },
         {
-          "start": "2026-05-26",
-          "end": "2026-08-21",
+          "start": "2026-05-27",
+          "end": "2026-08-24",
           "n": 49,
-          "accuracy": 0.673
+          "accuracy": 0.694
         }
       ],
-      "spread": 0.167
+      "spread": 0.17
+    },
+    {
+      "condition": "bullish_month",
+      "direction": "UP",
+      "periods": [
+        {
+          "start": "2025-08-26",
+          "end": "2025-11-21",
+          "n": 15,
+          "accuracy": 0.733
+        },
+        {
+          "start": "2025-11-24",
+          "end": "2026-02-25",
+          "n": 26,
+          "accuracy": 0.423
+        },
+        {
+          "start": "2026-02-26",
+          "end": "2026-05-26",
+          "n": 60,
+          "accuracy": 0.633
+        },
+        {
+          "start": "2026-05-27",
+          "end": "2026-08-24",
+          "n": 3,
+          "accuracy": 0.0
+        }
+      ],
+      "spread": 0.733
     },
     {
       "condition": "above_sma50",
@@ -1121,24 +1152,24 @@
         },
         {
           "start": "2025-11-24",
-          "end": "2026-02-24",
-          "n": 35,
-          "accuracy": 0.571
+          "end": "2026-02-25",
+          "n": 36,
+          "accuracy": 0.583
         },
         {
-          "start": "2026-02-25",
-          "end": "2026-05-22",
+          "start": "2026-02-26",
+          "end": "2026-05-26",
           "n": 61,
-          "accuracy": 0.639
+          "accuracy": 0.623
         },
         {
-          "start": "2026-05-26",
-          "end": "2026-08-21",
+          "start": "2026-05-27",
+          "end": "2026-08-24",
           "n": 35,
-          "accuracy": 0.657
+          "accuracy": 0.686
         }
       ],
-      "spread": 0.098
+      "spread": 0.127
     },
     {
       "condition": "momentum_down",
@@ -1152,24 +1183,24 @@
         },
         {
           "start": "2025-11-24",
-          "end": "2026-02-24",
-          "n": 19,
-          "accuracy": 0.474
-        },
-        {
-          "start": "2026-02-25",
-          "end": "2026-05-22",
-          "n": 16,
-          "accuracy": 0.562
-        },
-        {
-          "start": "2026-05-26",
-          "end": "2026-08-21",
+          "end": "2026-02-25",
           "n": 20,
-          "accuracy": 0.6
+          "accuracy": 0.5
+        },
+        {
+          "start": "2026-02-26",
+          "end": "2026-05-26",
+          "n": 16,
+          "accuracy": 0.5
+        },
+        {
+          "start": "2026-05-27",
+          "end": "2026-08-24",
+          "n": 19,
+          "accuracy": 0.632
         }
       ],
-      "spread": 0.253
+      "spread": 0.227
     },
     {
       "condition": "above_sma20",
@@ -1183,24 +1214,24 @@
         },
         {
           "start": "2025-11-24",
-          "end": "2026-02-24",
-          "n": 35,
-          "accuracy": 0.486
+          "end": "2026-02-25",
+          "n": 36,
+          "accuracy": 0.5
         },
         {
-          "start": "2026-02-25",
-          "end": "2026-05-22",
-          "n": 47,
-          "accuracy": 0.66
+          "start": "2026-02-26",
+          "end": "2026-05-26",
+          "n": 46,
+          "accuracy": 0.652
         },
         {
-          "start": "2026-05-26",
-          "end": "2026-08-21",
-          "n": 29,
-          "accuracy": 0.793
+          "start": "2026-05-27",
+          "end": "2026-08-24",
+          "n": 30,
+          "accuracy": 0.8
         }
       ],
-      "spread": 0.307
+      "spread": 0.3
     },
     {
       "condition": "rsi_overbought",
@@ -1214,24 +1245,24 @@
         },
         {
           "start": "2025-11-24",
-          "end": "2026-02-24",
-          "n": 6,
-          "accuracy": 0.5
+          "end": "2026-02-25",
+          "n": 7,
+          "accuracy": 0.571
         },
         {
-          "start": "2026-02-25",
-          "end": "2026-05-22",
-          "n": 15,
-          "accuracy": 0.733
+          "start": "2026-02-26",
+          "end": "2026-05-26",
+          "n": 14,
+          "accuracy": 0.714
         },
         {
-          "start": "2026-05-26",
-          "end": "2026-08-21",
-          "n": 11,
-          "accuracy": 0.545
+          "start": "2026-05-27",
+          "end": "2026-08-24",
+          "n": 12,
+          "accuracy": 0.583
         }
       ],
-      "spread": 0.233
+      "spread": 0.169
     }
   ]
 }
