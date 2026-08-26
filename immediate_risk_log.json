@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 36,
+    "alert_timestamp": "2026-08-26T09:13:15.087438+00:00",
+    "reason": "The Liberia-flagged Aframax tanker METRO VENETIAN was struck by an unknown projectile off Oman while carrying jet fuel, and nearly half of recent Strait of Hormuz transits are operating with AIS dark, underscoring active physical security threats to regional energy shipping.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 714.5,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 35,
     "alert_timestamp": "2026-08-26T01:58:42.282849+00:00",
     "reason": "Outbound tanker transits through the Strait of Hormuz have fallen to zero, with dark tankers accumulating near Kharg Island and heightened screening for blockade-breakers.",
@@ -53,11 +65,11 @@
     "reason": "Outbound vessel transits through the Strait of Hormuz have fallen to zero, accompanied by a confirmed tanker strike off Yanbu and a growing pool of suspicious dark tankers waiting off Kharg Island.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 695.75,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 714.5,
+    "pct_change": 2.695,
+    "scored_at": "2026-08-26T09:13:22.996693+00:00"
   },
   {
     "alert_number": 30,
@@ -65,11 +77,11 @@
     "reason": "An active, full-scale trade war has erupted between the U.S. and Canada following the implementation of 50% U.S. tariffs on $20 billion of Canadian imports and retaliatory measures announced by Ottawa.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 702.5,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 714.5,
+    "pct_change": 1.708,
+    "scored_at": "2026-08-26T09:13:22.996693+00:00"
   },
   {
     "alert_number": 29,

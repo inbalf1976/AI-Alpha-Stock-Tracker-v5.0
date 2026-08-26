@@ -1,5 +1,162 @@
 [
   {
+    "timestamp": "2026-08-26T09:13:15.087438+00:00",
+    "total_scanned": 228,
+    "flagged_count": 165,
+    "flagged_headlines": [
+      {
+        "title": "Oil prices extend slide as Iran and Oman eye temporary Hormuz deal",
+        "link": "https://www.marketwatch.com/story/oil-prices-extend-slide-as-iran-and-oman-eye-temporary-hormuz-deal-a86a86bf?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 26 Aug 2026 08:54:00 GMT",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Are older Americans spoiling the economy for everyone else?",
+        "link": "https://www.marketwatch.com/story/are-older-americans-spoiling-the-economy-for-everyone-else-064b5820?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 26 Aug 2026 01:41:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "China needs U.S. dollars but is building a hedge against Washington’s sanctions",
+        "link": "https://www.cnbc.com/2026/08/25/china-iran-us-sanctions-banks-cips.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 25 Aug 2026 16:00:40 GMT",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Bessent could tap near $1 trillion Treasury General Account to fund bond buybacks, sources said",
+        "link": "https://www.cnbc.com/2026/08/24/bessent-1-trillion-treasury-general-account-bond-buybacks.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 24 Aug 2026 13:17:35 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "'They asked too much': Canadian dollar slides as Ottawa and Washington head for all-out trade war",
+        "link": "https://www.cnbc.com/2026/08/24/canada-us-trade-war-deal.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 24 Aug 2026 13:35:08 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Singapore inflation hits highest in nearly two years, but undershoots expectations",
+        "link": "https://www.cnbc.com/2026/08/24/singapore-inflation-budget-iran-war.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 24 Aug 2026 05:24:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Bessent's bond gambit aimed at calming markets is instead stirring inflation worries",
+        "link": "https://www.cnbc.com/2026/08/21/bessents-bond-gambit-aimed-at-calming-markets-is-instead-stirring-inflation-worries-.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 21 Aug 2026 17:51:10 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Bessent's efforts in the Treasury market so far haven't worked. Here's what else he can try",
+        "link": "https://www.cnbc.com/2026/08/20/bessents-efforts-in-the-treasury-market-so-far-havent-worked-heres-what-else-he-can-try.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 21 Aug 2026 12:43:04 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Bessent says Treasury buyback operation could be more than $4 billion",
+        "link": "https://www.cnbc.com/2026/08/20/bessent-says-treasury-buyback-operation-could-be-more-than-4-billion.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 20 Aug 2026 15:35:33 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "European gas Slumps 3% as Middle East ceasefire hopes unwind supply risk premium",
+        "link": "https://www.investing.com/news/commodities-news/european-gas-slumps-3-as-middle-east-ceasefire-hopes-unwind-supply-risk-premium-4876517",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-26 08:43:37",
+        "matched_keywords": [
+          "ceasefire"
+        ]
+      },
+      {
+        "title": "Oil prices slide over 2% amid hopes for progress in Mideast diplomacy",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-extend-losses-after-iran-resumes-hormuz-talks-with-oman-4876083",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-26 08:32:40",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "London Gas Oil breaks cloud support at $1,184: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-overbought-at-1280-live-levels-93CH-4872746",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-26 07:12:21",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Brent Oil clings to $85.16 support on 5h chart: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/brent-oil-slips-below-91-with-doubletop-breakdown-live-levels-93CH-4872744",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-26 07:11:40",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI hits 200 SMA/VWAP support at $80.37: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-consolidates-near-highs-at-8511-hourly-levels-93CH-4872742",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-26 07:11:39",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold tests $4,692 as bull flag meets MACD warning: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/gold-hits-4703-deep-in-overbought-territory-live-levels-93CH-4872739",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-26 07:11:19",
+        "matched_keywords": [
+          "war"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are reacting to easing Middle East geopolitical tensions—which are driving down oil and European gas prices—alongside escalating U.S.-Canada trade frictions and Treasury debt management maneuvers by Secretary Scott Bessent that have stoked inflation anxiety.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "While higher energy costs and adverse weather continue to pose structural agricultural risks, current market drivers are dominated by crude oil sell-offs, currency fluctuations, and macro bond policy rather than direct grain shocks.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "The broad weakening of the U.S. dollar amid rising domestic inflation expectations and Treasury interventions tends to provide relative support or mixed stability for cross-rates, though easing Mideast risk premiums temper safe-haven dollar demand.",
+      "key_risk": "Escalation of the sudden U.S.-Canada trade war and its downstream effects on cross-border supply chains and North American economic growth.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "The Liberia-flagged Aframax tanker METRO VENETIAN was struck by an unknown projectile off Oman while carrying jet fuel, and nearly half of recent Strait of Hormuz transits are operating with AIS dark, underscoring active physical security threats to regional energy shipping."
+    }
+  },
+  {
     "timestamp": "2026-08-26T01:58:42.282849+00:00",
     "total_scanned": 229,
     "flagged_count": 165,
