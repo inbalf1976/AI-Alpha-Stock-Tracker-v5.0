@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 35,
+    "alert_timestamp": "2026-08-26T01:58:42.282849+00:00",
+    "reason": "Outbound tanker transits through the Strait of Hormuz have fallen to zero, with dark tankers accumulating near Kharg Island and heightened screening for blockade-breakers.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 713.25,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 34,
     "alert_timestamp": "2026-08-25T21:50:06.868143+00:00",
     "reason": "Outbound vessel transits through the Strait of Hormuz have dropped to zero, accompanied by confirmed tanker attacks and a rising concentration of dark-fleet tankers holding millions of barrels of crude.",
