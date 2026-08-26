@@ -1,35 +1,46 @@
 name: Wheat Monitor PRO - Ultimate Edition
 on:
   schedule:
-    - cron: '53 21 * * 0,1,2,3,4'  # 21:53 UTC Sun-Thu = 00:53 Israel time Mon-Fri (IDT UTC+3)
-    # UPDATED 2026-08-21: moved from '0 22' (exactly 01:00 IL, on-the-hour)
-    # to '53 21' (00:53 IL) after confirmed real delivery lateness —
-    # GitHub Actions scheduled crons are documented best-effort and can
-    # run late, especially on exact-hour triggers when platform-wide
-    # cron load peaks (news_scan's crons below already avoided this by
-    # using off-round minutes). Triggering earlier gives typical delay
-    # room to land close to the real ~01:00 target. Paired with
-    # should_send()'s window widening to (0,1,2) in wheat_monitor_pro.py
-    # so a low-delay day (executing at/near 00:53) still sends normally
-    # instead of being silently rejected as "not scheduled hour".
+    - cron: '53 23 * * 0,1,2,3,4'  # 23:53 UTC Sun-Thu = 02:53 Israel time Mon-Fri (IDT UTC+3)
+    # UPDATED 2026-08-25: retimed from ~01:00 IL to ~03:00 IL after the
+    # user confirmed Plus500's actual trading day starts at 03:00 IL
+    # (Session 1: 03:00-15:45, then closed 15:45-16:30, then Session 2:
+    # 16:30-21:20, Mon-Fri). The underlying futures daily-bar data is
+    # already fresh well before 03:00 (CME Globex's own session
+    # boundary is ~01:00 IL) — but the alert is only truly ACTIONABLE
+    # once Plus500 itself opens, so firing right before 03:00 maximizes
+    # the real usable window (both sessions, ~14h) instead of sitting
+    # unactioned for 2 hours. A second scheduled alert for Session 2
+    # (16:30) was considered and deliberately rejected — the daily bar
+    # doesn't refresh again by then, so a second scheduled read would
+    # just be re-reading the same day's data; check_price_trigger.py
+    # already provides an event-driven re-check during Session 2 (or
+    # anytime) if something material happens, without needing a second
+    # *scheduled* slot. Still fires 7 minutes before the real 03:00
+    # target (same delay-buffer convention as before) — paired with
+    # should_send()'s window widening to (2,3,4) in wheat_monitor_pro.py
+    # so a low-delay day still sends normally instead of being silently
+    # rejected as "not scheduled hour".
     - cron: '30 22 * * 5'         # 22:30 UTC Friday = 01:30 Israel time Saturday — weekly backtest refresh, own dedicated job (see weekly_backtest below), never sends a monitor alert
     - cron: '0 0 * * 6'           # 00:00 UTC Saturday = 03:00 Israel time Saturday — accuracy report ONLY, no new alert
-    # UPDATED 2026-08-08, revised 2026-08-21: news_scan times are
-    # synced to the model's own key moments (assuming IDT/UTC+3 — during
-    # winter/standard time (UTC+2) these drift ~1h earlier in real
-    # Israel time, absorbed by should_send()'s (0,1,2)-hour window for
-    # #1's relationship to the monitor, and by no fixed window at all
-    # for #2/#3 since they don't gate a send decision):
-    #   21:28 UTC ≈ 00:28 IL — BEFORE the monitor's ~00:53 IL target
-    #     (moved 2026-08-21, was previously AFTER at 01:58 IL — the
-    #     monitor was picking up the prior evening's scan instead of a
-    #     same-morning one; now it can use fresh same-morning news)
-    #   08:35 UTC ≈ 11:35 IL — mid-session check
-    #   13:05 UTC ≈ 16:05 IL — ahead of market open (shifted 10min
-    #     earlier 2026-08-21 for more GitHub Actions delay buffer)
-    - cron: '28 21 * * *'         # news scan #1 — see comment block above
+    # UPDATED 2026-08-25: news_scan times re-anchored to the CORRECTED
+    # Plus500 session structure (see monitor cron comment above for the
+    # full story). Previous scan #3 comment ("ahead of market open" at
+    # 16:05/16:15 IL) was based on a wrong assumption — Plus500's real
+    # Session 2 doesn't open until 16:30, so that scan was landing
+    # BEFORE a close that had already happened at 15:45, not before an
+    # open. Now:
+    #   23:28 UTC ≈ 02:28 IL — ~25min BEFORE the monitor's ~02:53 IL
+    #     target (same "scan lands before monitor consumes it" pattern
+    #     as before, just retimed to the new target)
+    #   08:35 UTC ≈ 11:35 IL — mid-Session-1 check (unchanged, still
+    #     falls comfortably inside the real 03:00-15:45 session)
+    #   13:20 UTC ≈ 16:20 IL — NOW correctly just before the REAL
+    #     Session 2 bourse-open at 16:30 (previously 16:05/16:15,
+    #     which was actually AFTER Session 1 already closed at 15:45)
+    - cron: '28 23 * * *'         # news scan #1 — see comment block above
     - cron: '35 8 * * *'          # news scan #2 — mid-session
-    - cron: '5 13 * * *'          # news scan #3 — see comment block above
+    - cron: '20 13 * * *'         # news scan #3 — see comment block above
   workflow_dispatch:         # manual trigger kept for testing
 jobs:
   monitor:
@@ -37,7 +48,7 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
-    if: contains(fromJSON('["53 21 * * 0,1,2,3,4"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
+    if: contains(fromJSON('["53 23 * * 0,1,2,3,4"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -250,7 +261,7 @@ jobs:
     permissions:
       contents: write
     # UPDATED 2026-08-08: matches the new synchronized cron strings above.
-    if: contains(fromJSON('["28 21 * * *", "35 8 * * *", "5 13 * * *"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
+    if: contains(fromJSON('["28 23 * * *", "35 8 * * *", "20 13 * * *"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
