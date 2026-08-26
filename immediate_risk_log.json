@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 37,
+    "alert_timestamp": "2026-08-26T18:35:37.633397+00:00",
+    "reason": "The Liberia-flagged tanker METRO VENETIAN was struck by an unknown projectile 9nm off Oman while transiting the Strait of Hormuz, disabling its engine room and highlighting active physical threats to maritime transit.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 748.25,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 36,
     "alert_timestamp": "2026-08-26T09:13:15.087438+00:00",
     "reason": "The Liberia-flagged Aframax tanker METRO VENETIAN was struck by an unknown projectile off Oman while carrying jet fuel, and nearly half of recent Strait of Hormuz transits are operating with AIS dark, underscoring active physical security threats to regional energy shipping.",
@@ -41,11 +53,11 @@
     "reason": "Outbound tanker transits through the Strait of Hormuz have fallen to zero, with growing numbers of dark tankers accumulating off Kharg Island amid active Red Sea attacks and military threats.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 694.5,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 748.25,
+    "pct_change": 7.739,
+    "scored_at": "2026-08-26T18:35:44.063919+00:00"
   },
   {
     "alert_number": 32,
@@ -53,11 +65,11 @@
     "reason": "Outbound vessel transits through the Strait of Hormuz have dropped to zero and dark-tanker holding areas near Kharg Island continue to swell amid active maritime security incidents.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 694.25,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 748.25,
+    "pct_change": 7.778,
+    "scored_at": "2026-08-26T18:35:44.063919+00:00"
   },
   {
     "alert_number": 31,
