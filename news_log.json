@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-08-27T22:59:34.235097+00:00",
+    "total_scanned": 226,
+    "flagged_count": 172,
+    "flagged_headlines": [
+      {
+        "title": "US nears deal to secure long-term access to Venezuela’s oil reserves, sources say",
+        "link": "https://www.investing.com/news/commodities-news/us-nears-deal-to-secure-longterm-access-to-venezuelas-oil-reserves-sources-say-4880291",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-27 22:00:53",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Iran sets conditions for reopening Strait of Hormuz, top security official Rezaei says",
+        "link": "https://www.investing.com/news/commodities-news/iran-sets-conditions-for-reopening-strait-of-hormuz-top-security-official-rezaei-says-4880217",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-27 20:54:33",
+        "matched_keywords": [
+          "hormuz"
+        ]
+      },
+      {
+        "title": "US in talks to acquire major stake in Venezuelan oil fields, Bloomberg reports",
+        "link": "https://www.investing.com/news/commodities-news/us-in-talks-to-acquire-major-stake-in-venezuelan-oil-fields-bloomberg-reports-4880209",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-27 20:50:07",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold marginally higher a day ahead of Fed chief Warsh’s Jackson Hole speech",
+        "link": "https://www.investing.com/news/commodities-news/gold-steadies-near-4600-after-inflation-setback-as-warsh-speech-looms-4878233",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-27 19:28:40",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "London Gas Oil tests $1,250-$1,275 resistance: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-overbought-at-1280-live-levels-93CH-4872746",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-27 19:19:37",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI tests $84 resistance: Live hourly levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-consolidates-near-highs-at-8511-hourly-levels-93CH-4872742",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-27 19:19:32",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "CrowdStrike’s stock jumps after record-breaking earnings. Wall Street is lapping it up.",
+        "link": "https://www.marketwatch.com/story/crowdstrikes-stock-has-jumped-after-record-breaking-earnings-wall-street-is-lapping-it-up-dbdaca83?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 27 Aug 2026 22:53:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Salesforce’s stock rockets 20% and gives the software sector a major lift",
+        "link": "https://www.marketwatch.com/story/salesforce-stock-is-jumping-what-wall-street-is-saying-about-its-earnings-and-its-anthropic-relationship-853ada85?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 27 Aug 2026 22:51:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "The options market is signaling further gains for the S&P 500, but one indicator is flashing a warning",
+        "link": "https://www.marketwatch.com/story/the-s-p-500-is-nearing-an-especially-positive-price-and-the-options-market-suggests-a-surge-is-likely-a54d866d?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 27 Aug 2026 22:12:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Dollar flat as traders await Fed chair Warsh’s Jackson Hole speech for rate cues",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-dollar-holds-gains-ahead-of-jackson-hole-won-rises-on-bok-hike-4878318",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 19:09:56",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Canadian dollar falls as traders weigh Fed outlook and U.S. dollar strength",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-falls-as-traders-weigh-fed-outlook-and-us-dollar-strength-4879654",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 13:58:09",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. yields tick higher as energy drop pauses amid Fed uncertainty",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-bounce-off-2week-lows-as-schnabel-warnings-dampen-rally-4878481",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 11:35:16",
+        "matched_keywords": [
+          "fed",
+          "yield"
+        ]
+      },
+      {
+        "title": "Canadian dollar weakens as trade tensions and U.S. inflation weigh",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-weakens-as-trade-tensions-and-us-inflation-weigh-4877935",
+        "source": "Investing.com Forex",
+        "published": "2026-08-26 20:48:08",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Dollar rises as PCE, GDP data keeps traders on edge about Fed rate outlook",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-ahead-of-us-pce-inflation-aussie-dollar-gains-on-hot-cpi-4876252",
+        "source": "Investing.com Forex",
+        "published": "2026-08-26 19:48:27",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Treasury yields muted after headline PCE ticks up ahead of Jackson Hole",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-slide-as-crude-tumble-overshadows-hawkish-ecb-warnings-4876453",
+        "source": "Investing.com Forex",
+        "published": "2026-08-26 12:54:45",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are focused on impending Fed rate cues from Jackson Hole, featuring remarks from Fed chief Warsh, alongside shifting energy dynamics driven by U.S.-Venezuela talks and ongoing maritime friction in the Strait of Hormuz. Meanwhile, equities show resilience led by strong tech earnings from Salesforce and CrowdStrike.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Agricultural fundamentals are largely decoupled from the current macro focus on energy supply, currency movements, and central bank policy.",
+      "usd_ils_impact": "NEUTRAL",
+      "usd_ils_impact_reason": "The Israeli Shekel remains primarily driven by domestic security developments rather than the broader USD consolidation ahead of Jackson Hole.",
+      "key_risk": "Escalation or prolonged uncertainty surrounding Strait of Hormuz transit security and shadow-fleet maneuvers threatening regional energy flows.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Ongoing tactical disruptions in the Strait of Hormuz—including repeated vessel course reversals, shadow-fleet flag/name switching, and a localized oil spill near desalination infrastructure—represent active regional friction."
+    }
+  },
+  {
     "timestamp": "2026-08-27T19:13:31.694332+00:00",
     "total_scanned": 225,
     "flagged_count": 168,
