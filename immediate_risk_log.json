@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 39,
+    "alert_timestamp": "2026-08-27T19:13:31.694332+00:00",
+    "reason": "Ongoing maritime disruptions in the Strait of Hormuz—highlighted by shadow-fleet tanker transits, reversed courses, and active discussions on a temporary navigation corridor—continue to pose an active physical chokepoint risk tied to regional conflict.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 758.0,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 38,
     "alert_timestamp": "2026-08-27T04:34:07.119944+00:00",
     "reason": "The Liberia-flagged Aframax tanker METRO VENETIAN was struck by an unknown projectile near Oman while carrying jet fuel, resulting in engine-room damage amid a high volume of dark-AIS transits in the Strait of Hormuz.",
@@ -17,11 +29,11 @@
     "reason": "The Liberia-flagged tanker METRO VENETIAN was struck by an unknown projectile 9nm off Oman while transiting the Strait of Hormuz, disabling its engine room and highlighting active physical threats to maritime transit.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 748.25,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 758.0,
+    "pct_change": 1.303,
+    "scored_at": "2026-08-27T19:13:41.172575+00:00"
   },
   {
     "alert_number": 36,
@@ -29,11 +41,11 @@
     "reason": "The Liberia-flagged Aframax tanker METRO VENETIAN was struck by an unknown projectile off Oman while carrying jet fuel, and nearly half of recent Strait of Hormuz transits are operating with AIS dark, underscoring active physical security threats to regional energy shipping.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 714.5,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 758.0,
+    "pct_change": 6.088,
+    "scored_at": "2026-08-27T19:13:41.172575+00:00"
   },
   {
     "alert_number": 35,
