@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-08-27T04:34:07.119944+00:00",
+    "total_scanned": 227,
+    "flagged_count": 166,
+    "flagged_headlines": [
+      {
+        "title": "Oil prices fall further on M.East diplomacy hopes",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-further-on-meast-diplomacy-hopes-4878098",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-26 23:54:22",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil dips in volatile session amid Mideast diplomacy hopes, Russia-Ukraine tensions",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-extend-losses-after-iran-resumes-hormuz-talks-with-oman-4876083",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-26 21:24:43",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US Army awards up to $2.2 billion to five companies to build microreactors on bases",
+        "link": "https://www.investing.com/news/commodities-news/us-army-awards-up-to-22-billion-to-five-companies-to-build-microreactors-on-bases-4877815",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-26 20:06:53",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Gold falls amid firmer dollar after PCE, GDP data muddles Fed interest rate path",
+        "link": "https://www.investing.com/news/commodities-news/gold-edges-lower-but-stays-near-3month-high-as-oil-yields-retreat-4876127",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-26 20:01:44",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "London Gas Oil wedged at key resistance $1,245: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-overbought-at-1280-live-levels-93CH-4872746",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-26 19:19:09",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI double top breakdown below $84: Hourly",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-consolidates-near-highs-at-8511-hourly-levels-93CH-4872742",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-26 19:19:05",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Canadian dollar weakens as trade tensions and U.S. inflation weigh",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-weakens-as-trade-tensions-and-us-inflation-weigh-4877935",
+        "source": "Investing.com Forex",
+        "published": "2026-08-26 20:48:08",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Dollar rises as PCE, GDP data keeps traders on edge about Fed rate outlook",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-ahead-of-us-pce-inflation-aussie-dollar-gains-on-hot-cpi-4876252",
+        "source": "Investing.com Forex",
+        "published": "2026-08-26 19:48:27",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Treasury yields muted after headline PCE ticks up ahead of Jackson Hole",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-slide-as-crude-tumble-overshadows-hawkish-ecb-warnings-4876453",
+        "source": "Investing.com Forex",
+        "published": "2026-08-26 12:54:45",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "UBS raises EUR/SEK price target on low-yielding krona concerns",
+        "link": "https://www.investing.com/news/forex-news/ubs-raises-eursek-price-target-on-lowyielding-krona-concerns-93CH-4876537",
+        "source": "Investing.com Forex",
+        "published": "2026-08-26 08:57:22",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Global yields stabilize following U.S. sanctions threat and potential cash plan",
+        "link": "https://www.investing.com/news/forex-news/global-yields-stabilize-on-toothless-sanctions-threat-and-potential-cash-plan-4874562",
+        "source": "Investing.com Forex",
+        "published": "2026-08-25 12:06:06",
+        "matched_keywords": [
+          "sanction",
+          "yield"
+        ]
+      },
+      {
+        "title": "Can Warsh stop the dollar selling at Jackson Hole?",
+        "link": "https://www.investing.com/news/forex-news/can-warsh-stop-the-dollar-selling-at-jackson-hole-4875137",
+        "source": "Investing.com Forex",
+        "published": "2026-08-25 11:34:23",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are navigating conflicting crosscurrents as firmer U.S. PCE and GDP data bolster the dollar and weigh on commodities, while geopolitical tensions in the Middle East and Ukraine maintain underlying supply anxieties. Despite diplomatic hopes easing crude prices, persistent shipping risks in the Strait of Hormuz—highlighted by recent tanker attacks and dark transits—keep energy markets volatile.",
+      "wheat_impact": {
+        "direction": "NEUTRAL",
+        "reason": "Agricultural markets remain largely influenced by broader macroeconomic trends and currency shifts rather than direct supply shocks in the provided data."
+      },
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "A strengthening U.S. dollar driven by robust PCE and GDP data, coupled with ongoing Middle East geopolitical tensions, generally supports upward momentum in USD/ILS."
+      },
+      "key_risk": "Escalating kinetic disruptions and rising dark-vessel traffic in the Strait of Hormuz threatening critical energy supply routes.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "The Liberia-flagged Aframax tanker METRO VENETIAN was struck by an unknown projectile near Oman while carrying jet fuel, resulting in engine-room damage amid a high volume of dark-AIS transits in the Strait of Hormuz."
+    }
+  },
+  {
     "timestamp": "2026-08-26T18:35:37.633397+00:00",
     "total_scanned": 228,
     "flagged_count": 168,

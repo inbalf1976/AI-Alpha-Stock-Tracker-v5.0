@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 38,
+    "alert_timestamp": "2026-08-27T04:34:07.119944+00:00",
+    "reason": "The Liberia-flagged Aframax tanker METRO VENETIAN was struck by an unknown projectile near Oman while carrying jet fuel, resulting in engine-room damage amid a high volume of dark-AIS transits in the Strait of Hormuz.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 757.5,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 37,
     "alert_timestamp": "2026-08-26T18:35:37.633397+00:00",
     "reason": "The Liberia-flagged tanker METRO VENETIAN was struck by an unknown projectile 9nm off Oman while transiting the Strait of Hormuz, disabling its engine room and highlighting active physical threats to maritime transit.",
@@ -29,11 +41,11 @@
     "reason": "Outbound tanker transits through the Strait of Hormuz have fallen to zero, with dark tankers accumulating near Kharg Island and heightened screening for blockade-breakers.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 713.25,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 757.5,
+    "pct_change": 6.204,
+    "scored_at": "2026-08-27T04:34:12.282446+00:00"
   },
   {
     "alert_number": 34,
@@ -41,11 +53,11 @@
     "reason": "Outbound vessel transits through the Strait of Hormuz have dropped to zero, accompanied by confirmed tanker attacks and a rising concentration of dark-fleet tankers holding millions of barrels of crude.",
     "predicted_direction": "BULLISH",
     "price_at_alert": 704.5,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "HIT",
+    "price_at_scoring": 757.5,
+    "pct_change": 7.523,
+    "scored_at": "2026-08-27T04:34:12.282446+00:00"
   },
   {
     "alert_number": 33,
