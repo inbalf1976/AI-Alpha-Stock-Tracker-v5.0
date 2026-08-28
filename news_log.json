@@ -1,5 +1,173 @@
 [
   {
+    "timestamp": "2026-08-28T19:00:36.293555+00:00",
+    "total_scanned": 225,
+    "flagged_count": 170,
+    "flagged_headlines": [
+      {
+        "title": "The biggest risk to retirement plans may no longer be a stock market crash or inflation",
+        "link": "https://www.marketwatch.com/story/your-portfolio-can-recover-from-a-bear-market-but-can-it-survive-you-living-to-110-cc6d344c?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 28 Aug 2026 16:46:00 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Dollar steadies after Warsh warns Fed may not be done fighting inflation",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-dollar-muted-ahead-of-warsh-speech-won-hits-13mth-high-post-bok-hike-4880492",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 14:32:06",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields rise amid Fed chief Warsh’s Jackson Hole opening remarks",
+        "link": "https://www.investing.com/news/stock-market-news/german-10year-yield-touches-highest-level-since-2011-on-inflation-threats-4880683",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 14:21:45",
+        "matched_keywords": [
+          "fed",
+          "war",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Aussie dollar set for strong week as hot inflation boosts RBA hike bets",
+        "link": "https://www.investing.com/news/forex-news/aussie-dollar-set-for-strong-week-as-hot-inflation-boosts-rba-hike-bets-4880527",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 06:01:58",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Dollar flat as traders await Fed chair Warsh’s Jackson Hole speech for rate cues",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-dollar-holds-gains-ahead-of-jackson-hole-won-rises-on-bok-hike-4878318",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 19:09:56",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Canadian dollar falls as traders weigh Fed outlook and U.S. dollar strength",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-falls-as-traders-weigh-fed-outlook-and-us-dollar-strength-4879654",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 13:58:09",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. yields tick higher as energy drop pauses amid Fed uncertainty",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-bounce-off-2week-lows-as-schnabel-warnings-dampen-rally-4878481",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 11:35:16",
+        "matched_keywords": [
+          "fed",
+          "yield"
+        ]
+      },
+      {
+        "title": "Canadian dollar weakens as trade tensions and U.S. inflation weigh",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-weakens-as-trade-tensions-and-us-inflation-weigh-4877935",
+        "source": "Investing.com Forex",
+        "published": "2026-08-26 20:48:08",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Dollar rises as PCE, GDP data keeps traders on edge about Fed rate outlook",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-ahead-of-us-pce-inflation-aussie-dollar-gains-on-hot-cpi-4876252",
+        "source": "Investing.com Forex",
+        "published": "2026-08-26 19:48:27",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Treasury yields muted after headline PCE ticks up ahead of Jackson Hole",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-slide-as-crude-tumble-overshadows-hawkish-ecb-warnings-4876453",
+        "source": "Investing.com Forex",
+        "published": "2026-08-26 12:54:45",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Trump to meet refiners, fuel retailers as Iran war boosts gas prices ahead of midterms, sources say",
+        "link": "https://www.investing.com/news/commodities-news/trump-to-meet-refiners-fuel-retailers-as-iran-war-pressures-gas-prices-ahead-of-midterms-sources-say-4880014",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-28 16:26:01",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Oil slides on clues about Fed policy, rumors of Hormuz deal",
+        "link": "https://www.investing.com/news/commodities-news/oil-on-track-for-weekly-loss-even-as-iran-tensions-simmer-4880409",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-28 16:25:41",
+        "matched_keywords": [
+          "fed",
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Gold falls after Warsh flags persistent inflation, tighter Fed policy",
+        "link": "https://www.investing.com/news/commodities-news/gold-dips-ahead-of-warshs-jackson-hole-speech-set-for-weekly-fall-4880473",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-28 14:13:34",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "Senior Ukrainian official expects ’technical talks’ on Russia’s war soon",
+        "link": "https://www.investing.com/news/commodities-news/senior-ukrainian-official-expects-technical-talks-on-russias-war-soon-4881510",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-28 14:06:37",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Oil prices slip with Venezuela supply reports, Hormuz deal in focus",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-edge-lower-with-venezuela-supply-reports-hormuz-deal-in-focus-4880410",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-28 12:14:55",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by hawkish Federal Reserve signals from Jackson Hole—highlighted by comments from Fed chief Warsh pointing to persistent inflation and tighter monetary policy—which are lifting the U.S. dollar and Treasury yields while weighing on gold and oil. Concurrently, energy and commodity markets remain sensitive to Middle East tensions following reports of a tanker strike and dark-fleet transit anomalies in the Strait of Hormuz.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Macroeconomic drivers such as Fed policy and energy price fluctuations are dominating market sentiment with no direct wheat-specific supply shocks reported.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "A strengthening U.S. dollar driven by hawkish Fed rate expectations and rising Treasury yields typically exerts upward pressure on the USD/ILS exchange rate.",
+      "key_risk": "Escalating military friction and transit security disruptions in the Strait of Hormuz threatening global energy supplies.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "An unidentified tanker was struck by a projectile in the Strait of Hormuz, accompanied by ongoing high-risk dark-fleet transits and lingering naval tensions in a critical energy chokepoint."
+    }
+  },
+  {
     "timestamp": "2026-08-28T06:58:17.955961+00:00",
     "total_scanned": 50,
     "flagged_count": 35,
