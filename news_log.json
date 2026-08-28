@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-08-28T23:06:29.175206+00:00",
+    "total_scanned": 228,
+    "flagged_count": 172,
+    "flagged_headlines": [
+      {
+        "title": "Microsoft’s stock seals its longest winning streak of the year as AI software fears fade",
+        "link": "https://www.marketwatch.com/story/microsofts-stock-seals-its-longest-winning-streak-of-the-year-as-ai-software-fears-fade-e5669f5b?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 28 Aug 2026 21:34:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Kevin Warsh gets what every Fed chair hopes for: a bond market that trusts his word",
+        "link": "https://www.marketwatch.com/story/kevin-warsh-gets-what-every-fed-chair-hopes-for-a-bond-market-that-trust-his-words-5103dad5?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 28 Aug 2026 20:10:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Fed Chairman Warsh expresses concern about inflation, advocates for 'quieter' central bank",
+        "link": "https://www.cnbc.com/2026/08/28/kevin-warsh-jackson-hole-federal-reserve-inflation.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 28 Aug 2026 16:11:51 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "Fed's Hammack says 'now is the time to act' on raising interest rates",
+        "link": "https://www.cnbc.com/2026/08/27/feds-hammack-says-now-is-the-time-to-act-on-raising-interest-rates.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 27 Aug 2026 17:31:09 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Fed’s preferred inflation gauge shows core prices rose 3.3% annually in July",
+        "link": "https://www.cnbc.com/2026/08/26/feds-preferred-inflation-gauge-shows-core-prices-rose-3point3percent-annually-in-july.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 26 Aug 2026 13:35:50 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "China needs U.S. dollars but is building a hedge against Washington’s sanctions",
+        "link": "https://www.cnbc.com/2026/08/25/china-iran-us-sanctions-banks-cips.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 25 Aug 2026 16:00:40 GMT",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Bessent could tap near $1 trillion Treasury General Account to fund bond buybacks, sources said",
+        "link": "https://www.cnbc.com/2026/08/24/bessent-1-trillion-treasury-general-account-bond-buybacks.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 24 Aug 2026 13:17:35 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "'They asked too much': Canadian dollar slides as Ottawa and Washington head for all-out trade war",
+        "link": "https://www.cnbc.com/2026/08/24/canada-us-trade-war-deal.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 24 Aug 2026 13:35:08 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Singapore inflation hits highest in nearly two years, but undershoots expectations",
+        "link": "https://www.cnbc.com/2026/08/24/singapore-inflation-budget-iran-war.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 24 Aug 2026 05:24:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Bessent's bond gambit aimed at calming markets is instead stirring inflation worries",
+        "link": "https://www.cnbc.com/2026/08/21/bessents-bond-gambit-aimed-at-calming-markets-is-instead-stirring-inflation-worries-.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 21 Aug 2026 17:51:10 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Bessent's efforts in the Treasury market so far haven't worked. Here's what else he can try",
+        "link": "https://www.cnbc.com/2026/08/20/bessents-efforts-in-the-treasury-market-so-far-havent-worked-heres-what-else-he-can-try.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 21 Aug 2026 12:43:04 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are reacting to hawkish signals from Fed Chairman Kevin Warsh at Jackson Hole, who left the door open for interest rate hikes amid persistent inflation, while escalating U.S.-Canada trade tensions and heightened geopolitical risks in the Strait of Hormuz weigh on risk sentiment.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "While trade tensions and supply chain frictions are rising broadly, there are no direct, crop-specific supply shocks impacting wheat fundamentals in the current news flow.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Hawkish Federal Reserve commentary and rising Treasury yields are strengthening the greenback broadly against major and emerging market currencies, including the Israeli shekel.",
+      "key_risk": "Escalating trade wars, particularly the U.S.-Canada tariff conflict, combined with potential Federal Reserve tightening and Middle East shipping disruptions.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "An unidentified tanker was struck by a projectile in the Strait of Hormuz, and multiple sanctioned, dark-fleet vessels continue navigating the heavily restricted chokepoint amid an ongoing naval standoff."
+    }
+  },
+  {
     "timestamp": "2026-08-28T20:20:40.921747+00:00",
     "total_scanned": 225,
     "flagged_count": 167,

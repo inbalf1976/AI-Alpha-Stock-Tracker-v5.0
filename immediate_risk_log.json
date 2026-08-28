@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 44,
+    "alert_timestamp": "2026-08-28T23:06:29.175206+00:00",
+    "reason": "An unidentified tanker was struck by a projectile in the Strait of Hormuz, and multiple sanctioned, dark-fleet vessels continue navigating the heavily restricted chokepoint amid an ongoing naval standoff.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 783.5,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 43,
     "alert_timestamp": "2026-08-28T20:20:40.921747+00:00",
     "reason": "An unidentified tanker was struck by a projectile in the Strait of Hormuz causing a fire, and multiple vessels are operating dark or facing active maritime security threats in the vital chokepoint.",
@@ -41,11 +53,11 @@
     "reason": "Ongoing tactical disruptions in the Strait of Hormuz—including repeated vessel course reversals, shadow-fleet flag/name switching, and a localized oil spill near desalination infrastructure—represent active regional friction.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 758.0,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 783.5,
+    "pct_change": 3.364,
+    "scored_at": "2026-08-28T23:06:35.605079+00:00"
   },
   {
     "alert_number": 39,
