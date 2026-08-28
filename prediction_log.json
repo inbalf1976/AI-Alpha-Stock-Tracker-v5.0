@@ -899,10 +899,10 @@
     "confidence": 0.7954818580374797,
     "tier": 2,
     "seasonal_phase": "NEUTRAL",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 17.61
   },
   {
     "timestamp": "2026-08-26T12:14:29.148053+03:00",
@@ -911,10 +911,10 @@
     "confidence": 0.7725485184198645,
     "tier": 2,
     "seasonal_phase": "NEUTRAL",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 17.86
   },
   {
     "timestamp": "2026-08-26T21:35:36.256233+03:00",
@@ -923,9 +923,9 @@
     "confidence": 0.7741737582689551,
     "tier": 2,
     "seasonal_phase": "NEUTRAL",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -11.22
   }
 ]
