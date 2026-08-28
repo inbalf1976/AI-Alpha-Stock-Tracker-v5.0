@@ -1,5 +1,161 @@
 [
   {
+    "timestamp": "2026-08-28T06:58:17.955961+00:00",
+    "total_scanned": 50,
+    "flagged_count": 35,
+    "flagged_headlines": [
+      {
+        "title": "CrowdStrike’s stock jumps after record-breaking earnings. Wall Street is lapping it up.",
+        "link": "https://www.marketwatch.com/story/crowdstrikes-stock-has-jumped-after-record-breaking-earnings-wall-street-is-lapping-it-up-dbdaca83?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 27 Aug 2026 22:53:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Salesforce’s stock rockets 20% and gives the software sector a major lift",
+        "link": "https://www.marketwatch.com/story/salesforce-stock-is-jumping-what-wall-street-is-saying-about-its-earnings-and-its-anthropic-relationship-853ada85?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 27 Aug 2026 22:51:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "The options market is signaling further gains for the S&P 500, but one indicator is flashing a warning",
+        "link": "https://www.marketwatch.com/story/the-s-p-500-is-nearing-an-especially-positive-price-and-the-options-market-suggests-a-surge-is-likely-a54d866d?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 27 Aug 2026 22:12:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Fed's Hammack says 'now is the time to act' on raising interest rates",
+        "link": "https://www.cnbc.com/2026/08/27/feds-hammack-says-now-is-the-time-to-act-on-raising-interest-rates.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 27 Aug 2026 17:31:09 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Fed’s preferred inflation gauge shows core prices rose 3.3% annually in July",
+        "link": "https://www.cnbc.com/2026/08/26/feds-preferred-inflation-gauge-shows-core-prices-rose-3point3percent-annually-in-july.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 26 Aug 2026 13:35:50 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "China needs U.S. dollars but is building a hedge against Washington’s sanctions",
+        "link": "https://www.cnbc.com/2026/08/25/china-iran-us-sanctions-banks-cips.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 25 Aug 2026 16:00:40 GMT",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Bessent could tap near $1 trillion Treasury General Account to fund bond buybacks, sources said",
+        "link": "https://www.cnbc.com/2026/08/24/bessent-1-trillion-treasury-general-account-bond-buybacks.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 24 Aug 2026 13:17:35 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "'They asked too much': Canadian dollar slides as Ottawa and Washington head for all-out trade war",
+        "link": "https://www.cnbc.com/2026/08/24/canada-us-trade-war-deal.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 24 Aug 2026 13:35:08 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Singapore inflation hits highest in nearly two years, but undershoots expectations",
+        "link": "https://www.cnbc.com/2026/08/24/singapore-inflation-budget-iran-war.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 24 Aug 2026 05:24:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Bessent's bond gambit aimed at calming markets is instead stirring inflation worries",
+        "link": "https://www.cnbc.com/2026/08/21/bessents-bond-gambit-aimed-at-calming-markets-is-instead-stirring-inflation-worries-.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 21 Aug 2026 17:51:10 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Bessent's efforts in the Treasury market so far haven't worked. Here's what else he can try",
+        "link": "https://www.cnbc.com/2026/08/20/bessents-efforts-in-the-treasury-market-so-far-havent-worked-heres-what-else-he-can-try.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 21 Aug 2026 12:43:04 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are grappling with sticky inflation prints and aggressive monetary tightening rhetoric, led by Cleveland Fed President Hammack's calls for rate hikes. Simultaneously, escalating trade wars—including a sudden 50% U.S. tariff on Canadian imports and tightening U.S. sanctions enforcement against Iran—are driving geopolitical tensions and currency volatility. Meanwhile, the Treasury's intervention in the long bond market via buybacks is struggling to suppress yields, instead amplifying fiscal and inflation anxieties.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Agricultural trade is caught in broader U.S.-Canada tariff retaliations, but direct impacts on global wheat supply balances remain ambiguous without specific crop-level shocks.",
+      "usd_ils_impact": "NEUTRAL",
+      "usd_ils_impact_reason": "While global dollar strength is supported by persistent U.S. inflation and aggressive monetary policy stances, Middle East chokepoint friction (Hormuz) exerts cross-currents without a clear direct catalyst for the shekel today.",
+      "key_risk": "Escalating U.S.-Canada trade war tariffs and tightening financial sanctions compounding global inflation expectations.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active trade hostilities have erupted with the U.S. imposing a 50% tariff on $20 billion of Canadian imports and Canada preparing immediate dollar-for-dollar retaliation, accompanied by ongoing shadow-fleet tanker disruptions in the Strait of Hormuz."
+    }
+  },
+  {
     "timestamp": "2026-08-27T22:59:34.235097+00:00",
     "total_scanned": 226,
     "flagged_count": 172,
