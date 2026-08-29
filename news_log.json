@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-08-29T11:31:56.812425+00:00",
+    "total_scanned": 228,
+    "flagged_count": 167,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields rise, 2-yr soars as Sept hike back in play after Warsh speech",
+        "link": "https://www.investing.com/news/stock-market-news/german-10year-yield-touches-highest-level-since-2011-on-inflation-threats-4880683",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 21:17:57",
+        "matched_keywords": [
+          "war",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Canadian dollar slips as trade tensions, Fed outlook keep loonie under pressure",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-trade-tensions-fed-outlook-keep-loonie-under-pressure-4881822",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 20:44:08",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar firms on hawkish Warsh at Jackson Hole, heads for weekly gain of nearly 1%",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-dollar-muted-ahead-of-warsh-speech-won-hits-13mth-high-post-bok-hike-4880492",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 19:42:07",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Aussie dollar set for strong week as hot inflation boosts RBA hike bets",
+        "link": "https://www.investing.com/news/forex-news/aussie-dollar-set-for-strong-week-as-hot-inflation-boosts-rba-hike-bets-4880527",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 06:01:58",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Dollar flat as traders await Fed chair Warsh’s Jackson Hole speech for rate cues",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-dollar-holds-gains-ahead-of-jackson-hole-won-rises-on-bok-hike-4878318",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 19:09:56",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Canadian dollar falls as traders weigh Fed outlook and U.S. dollar strength",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-falls-as-traders-weigh-fed-outlook-and-us-dollar-strength-4879654",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 13:58:09",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by a hawkish pivot from Fed Chair Warsh at Jackson Hole, which has sent Treasury yields soaring and strengthened the U.S. dollar. Meanwhile, geopolitical tensions in the Strait of Hormuz persist following an unidentified tanker strike and ongoing dark-fleet movements, though broader energy and trade channels remain heavily monitored.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Macroeconomic dollar strength and Fed policy shifts are offset by persistent Middle East maritime security concerns that have limited direct impact on global wheat logistics.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "A resurgent U.S. dollar driven by hawkish Federal Reserve rhetoric and elevated Treasury yields broadly supports the greenback against emerging market and regional currencies.",
+      "key_risk": "Escalation of kinetic incidents and dark-fleet transit anomalies in the Strait of Hormuz threatening global energy supply chains.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "An unidentified tanker was struck by a projectile while transiting the Strait of Hormuz, accompanied by ongoing detentions and high volumes of dark-fleet vessel activity."
+    }
+  },
+  {
     "timestamp": "2026-08-29T04:13:25.382464+00:00",
     "total_scanned": 227,
     "flagged_count": 172,
