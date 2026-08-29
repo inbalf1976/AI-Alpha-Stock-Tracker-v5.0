@@ -306,6 +306,51 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: python wheat_monitor_pro.py
+    - name: Commit state immediately after price-triggered alert
+      # ADDED 2026-08-28, real incident: a price-triggered alert
+      # (this step above) can succeed — Telegram sends, local
+      # wheat_monitor_state.json updates (last_alert_date, etc.) — but
+      # the ONLY commit step in this job previously ran at the very
+      # END, AFTER "Run news scan", which has its own history of
+      # running long or timing out (see the 2026-08-26 timeout fix).
+      # If news_scan failed/timed out AFTER a successful price-
+      # triggered Telegram send but BEFORE the final commit step, the
+      # alert genuinely went out to Telegram, but the corresponding
+      # state update never reached the repo — so bug_detector.py's
+      # check_missed_weekday_alert() (reading last_alert_date from the
+      # REPO's committed state, not from what happened on the runner)
+      # correctly-per-its-own-logic reported "no alert" even though a
+      # real one had gone out. This step commits the price-triggered
+      # run's state RIGHT AWAY, decoupled from whatever happens to the
+      # slower news-scanning step afterward — same retry-with-merge
+      # logic as the job's final commit step (see that step's comments
+      # for the full history of the retry design itself).
+      if: steps.price_check.outputs.trigger == 'true'
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add -f wheat_monitor_state.json || true
+        git add -f prediction_log.json || true
+        git add -f weekly_range_cache.json || true
+        git add -f weekly_performance_log.json || true
+        git add -f weekly_break_log.json || true
+        git add -A
+        if git diff --staged --quiet; then
+          echo "Nothing to commit."
+        else
+          git commit -m "Update state after price-triggered alert [skip ci]"
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push failed (attempt $attempt) — fetching + merging (prefer local) and retrying..."
+            git fetch origin main
+            git merge -X ours origin/main -m "merge: resolve concurrent state update [skip ci]"
+          done
+          echo "::error::git push failed after 3 attempts — the price-triggered alert's state update did NOT reach the repo this run (but the Telegram alert itself was already sent successfully)."
+          exit 1
+        fi
     - name: Run news scan
       # Now synchronized to land just before the model's own key
       # moments (see cron comments above) instead of an independent
