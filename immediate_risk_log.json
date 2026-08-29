@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 45,
+    "alert_timestamp": "2026-08-29T04:13:25.382464+00:00",
+    "reason": "An unidentified tanker was struck by a projectile while transiting the Strait of Hormuz, accompanied by high volumes of dark-fleet and sanctioned shipping activity.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 783.5,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 44,
     "alert_timestamp": "2026-08-28T23:06:29.175206+00:00",
     "reason": "An unidentified tanker was struck by a projectile in the Strait of Hormuz, and multiple sanctioned, dark-fleet vessels continue navigating the heavily restricted chokepoint amid an ongoing naval standoff.",
