@@ -1,5 +1,159 @@
 [
   {
+    "timestamp": "2026-08-30T13:59:44.072606+00:00",
+    "total_scanned": 222,
+    "flagged_count": 174,
+    "flagged_headlines": [
+      {
+        "title": "Oil prices slide for the week even as U.S. and Iran mark six months of conflict",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-edge-lower-with-venezuela-supply-reports-hormuz-deal-in-focus-4880410",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-28 20:57:35",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil settles lower on clues about Fed policy, rumors of Hormuz deal",
+        "link": "https://www.investing.com/news/commodities-news/oil-on-track-for-weekly-loss-even-as-iran-tensions-simmer-4880409",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-28 20:24:55",
+        "matched_keywords": [
+          "fed",
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Gold prices shed about 3% on hawkish Warsh at Jackson Hole, set for weekly decline",
+        "link": "https://www.investing.com/news/commodities-news/gold-dips-ahead-of-warshs-jackson-hole-speech-set-for-weekly-fall-4880473",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-28 20:02:45",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI trapped in $82.50-$84.50 chop: Hourly levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-consolidates-near-highs-at-8511-hourly-levels-93CH-4872742",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-28 19:28:29",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "London Gas Oil breaks resistance at $1,273: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-overbought-at-1280-live-levels-93CH-4872746",
+        "source": "Investing.com Commodities",
+        "published": "2026-08-28 19:27:05",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Party balloons could become a ‘luxury’ as the Iran war spurs a helium shortage",
+        "link": "https://www.marketwatch.com/story/party-balloons-could-become-a-luxury-as-the-iran-war-spurs-a-helium-shortage-89e3f86e?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 30 Aug 2026 12:30:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "AI isn’t eating software after all — and the sector’s ‘epic’ rally could run through October",
+        "link": "https://www.marketwatch.com/story/ai-isnt-eating-software-after-all-and-the-sectors-epic-rally-could-run-through-october-a4610583?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 30 Aug 2026 12:00:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "US Treasury’s Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil",
+        "link": "https://www.investing.com/news/forex-news/us-treasurys-bessent-faces-g20-diplomacy-test-amid-tariffs-iran-war-bond-turmoil-4882036",
+        "source": "Investing.com Forex",
+        "published": "2026-08-30 10:06:32",
+        "matched_keywords": [
+          "tariff",
+          "oil",
+          "war",
+          "treasury"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields rise, 2-yr soars as Sept hike back in play after Warsh speech",
+        "link": "https://www.investing.com/news/stock-market-news/german-10year-yield-touches-highest-level-since-2011-on-inflation-threats-4880683",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 21:17:57",
+        "matched_keywords": [
+          "war",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Canadian dollar slips as trade tensions, Fed outlook keep loonie under pressure",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-trade-tensions-fed-outlook-keep-loonie-under-pressure-4881822",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 20:44:08",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar firms on hawkish Warsh at Jackson Hole, heads for weekly gain of nearly 1%",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-dollar-muted-ahead-of-warsh-speech-won-hits-13mth-high-post-bok-hike-4880492",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 19:42:07",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Aussie dollar set for strong week as hot inflation boosts RBA hike bets",
+        "link": "https://www.investing.com/news/forex-news/aussie-dollar-set-for-strong-week-as-hot-inflation-boosts-rba-hike-bets-4880527",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 06:01:58",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Dollar flat as traders await Fed chair Warsh’s Jackson Hole speech for rate cues",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-dollar-holds-gains-ahead-of-jackson-hole-won-rises-on-bok-hike-4878318",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 19:09:56",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Canadian dollar falls as traders weigh Fed outlook and U.S. dollar strength",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-falls-as-traders-weigh-fed-outlook-and-us-dollar-strength-4879654",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 13:58:09",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. yields tick higher as energy drop pauses amid Fed uncertainty",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-bounce-off-2week-lows-as-schnabel-warnings-dampen-rally-4878481",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 11:35:16",
+        "matched_keywords": [
+          "fed",
+          "yield"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": null
+  },
+  {
     "timestamp": "2026-08-30T01:23:10.198726+00:00",
     "total_scanned": 224,
     "flagged_count": 165,
