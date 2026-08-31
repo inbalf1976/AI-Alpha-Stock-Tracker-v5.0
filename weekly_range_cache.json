@@ -1,94 +1,29 @@
 {
   "iso_year": 2026,
-  "iso_week": 35,
-  "frozen_at": "2026-08-30T16:59:41.076403+03:00",
-  "broken_and_regenerated": true,
+  "iso_week": 36,
+  "frozen_at": "2026-08-31T04:42:48.533702+03:00",
   "weekly": {
-    "range_low": 747.27,
-    "range_high": 780.16,
-    "range_width_pct": 4.29,
-    "bias": "DOWN",
-    "bias_pct": 25.0,
-    "confidence": 0.52,
-    "key_level": 648.18,
+    "range_low": 762.49,
+    "range_high": 785.01,
+    "range_width_pct": 2.91,
+    "bias": "NEUTRAL",
+    "bias_pct": 50.0,
+    "confidence": 0.36,
+    "key_level": 651.2,
     "key_level_label": "SMA50 (key support)",
-    "entry": 767.0,
-    "stop": 781.8,
-    "target": 747.27,
-    "rr": 1.33,
-    "week_num": 35,
-    "next_week_label": "Week 35 (starting Mon Aug 24)",
+    "entry": 773.75,
+    "stop": 754.87,
+    "target": 792.86,
+    "rr": 1.01,
+    "week_num": 36,
+    "next_week_label": "Week 36 (starting Mon Aug 31)",
     "month_label": "Summer lull",
-    "hist_up_pct": 75.0,
-    "hist_avg_return": 5.18,
-    "sample_count": 4,
-    "sample_confidence_note": "moderate confidence \u2014 4 years of data",
-    "current_price": 767.0,
-    "final_call": "DOWN",
-    "history": [
-      {
-        "closed_at": "2026-08-24T13:59:21.759728+03:00",
-        "entry": 681.5,
-        "stop": 671.34,
-        "target": 695.04,
-        "final_call": "UP",
-        "outcome": "WIN",
-        "price_at_close": 696.75
-      },
-      {
-        "closed_at": "2026-08-25T00:51:52.416378+03:00",
-        "entry": 696.75,
-        "stop": 686.61,
-        "target": 710.27,
-        "final_call": "UP",
-        "outcome": "LOSS",
-        "price_at_close": 682.5
-      },
-      {
-        "closed_at": "2026-08-25T12:55:03.650831+03:00",
-        "entry": 682.5,
-        "stop": 691.9,
-        "target": 669.97,
-        "final_call": "DOWN",
-        "outcome": "LOSS",
-        "price_at_close": 694.0
-      },
-      {
-        "closed_at": "2026-08-26T04:59:44.185825+03:00",
-        "entry": 694.0,
-        "stop": 684.7,
-        "target": 706.39,
-        "final_call": "UP",
-        "outcome": "WIN",
-        "price_at_close": 713.5
-      },
-      {
-        "closed_at": "2026-08-26T21:35:35.936437+03:00",
-        "entry": 713.5,
-        "stop": 703.25,
-        "target": 727.16,
-        "final_call": "UP",
-        "outcome": "WIN",
-        "price_at_close": 748.25
-      },
-      {
-        "closed_at": "2026-08-28T22:01:44.668490+03:00",
-        "entry": 748.25,
-        "stop": 738.15,
-        "target": 761.72,
-        "final_call": "UP",
-        "outcome": "WIN",
-        "price_at_close": 783.5
-      },
-      {
-        "closed_at": "2026-08-30T16:59:41.076395+03:00",
-        "entry": 783.5,
-        "stop": 770.57,
-        "target": 800.75,
-        "final_call": "UP",
-        "outcome": "LOSS",
-        "price_at_close": 767.0
-      }
-    ]
+    "hist_up_pct": 33.3,
+    "hist_avg_return": -1.01,
+    "sample_count": 3,
+    "sample_confidence_note": "LOW CONFIDENCE \u2014 only 3 years of data",
+    "current_price": 773.75,
+    "final_call": "UP",
+    "history": []
   }
 }
