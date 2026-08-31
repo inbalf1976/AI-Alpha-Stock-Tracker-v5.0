@@ -46,6 +46,21 @@ jobs:
   monitor:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # ADDED 2026-08-30, real incident: duplicate/near-identical alerts
+    # were received on the same day. Root cause: this workflow had NO
+    # concurrency control at all — if two triggers of the same job
+    # ever overlapped (plausible given the GitHub schedule-caching
+    # issue already found this week, where old+new cron entries may
+    # have briefly both been active), each run reads state
+    # independently, and each can fire its own alert before the other
+    # commits its update. This forces any second trigger of THIS job
+    # to wait for the first to fully finish (including its commit)
+    # before starting, instead of racing it. cancel-in-progress: false
+    # is deliberate — we want to QUEUE the second run, not cancel a
+    # legitimate in-progress one.
+    concurrency:
+      group: monitor-job
+      cancel-in-progress: false
     permissions:
       contents: write
     if: contains(fromJSON('["53 23 * * 0,1,2,3,4"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
@@ -258,6 +273,18 @@ jobs:
   news_scan:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # ADDED 2026-08-30, real incident: this is the specific job
+    # responsible for check_price_trigger.py — the most likely source
+    # of the duplicate-alert incident, since two overlapping runs
+    # would each independently read the SAME stale last_price (only
+    # updated once a triggered monitor run fully commits) and each
+    # independently fire a near-identical "price move detected" alert.
+    # See the monitor job's matching concurrency block above for the
+    # full reasoning — same fix, same logic, applied here specifically
+    # because this is where the duplicate actually originated.
+    concurrency:
+      group: news-scan-job
+      cancel-in-progress: false
     # UPDATED 2026-08-26: widened from 10 to 15 minutes as a second
     # layer of protection alongside the step-reorder below — real
     # runs have been observed landing close to or over the old
