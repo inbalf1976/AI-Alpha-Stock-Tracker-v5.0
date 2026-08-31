@@ -1,5 +1,170 @@
 [
   {
+    "timestamp": "2026-08-31T01:25:28.841440+00:00",
+    "total_scanned": 221,
+    "flagged_count": 174,
+    "flagged_headlines": [
+      {
+        "title": "Fed Chairman Warsh expresses concern about inflation, advocates for 'quieter' central bank",
+        "link": "https://www.cnbc.com/2026/08/28/kevin-warsh-jackson-hole-federal-reserve-inflation.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 28 Aug 2026 16:11:51 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "Fed's Hammack says 'now is the time to act' on raising interest rates",
+        "link": "https://www.cnbc.com/2026/08/27/feds-hammack-says-now-is-the-time-to-act-on-raising-interest-rates.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 27 Aug 2026 17:31:09 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Fed’s preferred inflation gauge shows core prices rose 3.3% annually in July",
+        "link": "https://www.cnbc.com/2026/08/26/feds-preferred-inflation-gauge-shows-core-prices-rose-3point3percent-annually-in-july.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 26 Aug 2026 13:35:50 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "China needs U.S. dollars but is building a hedge against Washington’s sanctions",
+        "link": "https://www.cnbc.com/2026/08/25/china-iran-us-sanctions-banks-cips.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 25 Aug 2026 16:00:40 GMT",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Bessent could tap near $1 trillion Treasury General Account to fund bond buybacks, sources said",
+        "link": "https://www.cnbc.com/2026/08/24/bessent-1-trillion-treasury-general-account-bond-buybacks.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 24 Aug 2026 13:17:35 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "'They asked too much': Canadian dollar slides as Ottawa and Washington head for all-out trade war",
+        "link": "https://www.cnbc.com/2026/08/24/canada-us-trade-war-deal.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 24 Aug 2026 13:35:08 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Singapore inflation hits highest in nearly two years, but undershoots expectations",
+        "link": "https://www.cnbc.com/2026/08/24/singapore-inflation-budget-iran-war.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 24 Aug 2026 05:24:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "US Treasury’s Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil",
+        "link": "https://www.investing.com/news/forex-news/us-treasurys-bessent-faces-g20-diplomacy-test-amid-tariffs-iran-war-bond-turmoil-4882036",
+        "source": "Investing.com Forex",
+        "published": "2026-08-30 17:18:58",
+        "matched_keywords": [
+          "tariff",
+          "oil",
+          "war",
+          "treasury"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields rise, 2-yr soars as Sept hike back in play after Warsh speech",
+        "link": "https://www.investing.com/news/stock-market-news/german-10year-yield-touches-highest-level-since-2011-on-inflation-threats-4880683",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 21:17:57",
+        "matched_keywords": [
+          "war",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Canadian dollar slips as trade tensions, Fed outlook keep loonie under pressure",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-trade-tensions-fed-outlook-keep-loonie-under-pressure-4881822",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 20:44:08",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar firms on hawkish Warsh at Jackson Hole, heads for weekly gain of nearly 1%",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-dollar-muted-ahead-of-warsh-speech-won-hits-13mth-high-post-bok-hike-4880492",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 19:42:07",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Aussie dollar set for strong week as hot inflation boosts RBA hike bets",
+        "link": "https://www.investing.com/news/forex-news/aussie-dollar-set-for-strong-week-as-hot-inflation-boosts-rba-hike-bets-4880527",
+        "source": "Investing.com Forex",
+        "published": "2026-08-28 06:01:58",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Dollar flat as traders await Fed chair Warsh’s Jackson Hole speech for rate cues",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-dollar-holds-gains-ahead-of-jackson-hole-won-rises-on-bok-hike-4878318",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 19:09:56",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Canadian dollar falls as traders weigh Fed outlook and U.S. dollar strength",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-falls-as-traders-weigh-fed-outlook-and-us-dollar-strength-4879654",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 13:58:09",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. yields tick higher as energy drop pauses amid Fed uncertainty",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-bounce-off-2week-lows-as-schnabel-warnings-dampen-rally-4878481",
+        "source": "Investing.com Forex",
+        "published": "2026-08-27 11:35:16",
+        "matched_keywords": [
+          "fed",
+          "yield"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are reacting to hawkish signals from Fed officials, notably Chairman Kevin Warsh at Jackson Hole, which have driven up bond yields and fueled expectations of near-term rate hikes. Concurrently, escalating trade tensions between the U.S. and Canada, alongside ongoing Middle East supply disruptions via the Strait of Hormuz blockade, are heightening macroeconomic and commodity volatility.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "While escalating global trade protectionism and energy costs could influence agricultural input prices, there are no direct supply shocks or chokepoint blockades specifically threatening global wheat trade lines today.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Aggressive Fed rate-hike signaling and surging U.S. Treasury yields are strengthening the greenback globally, creating upward pressure on the USD/ILS exchange rate.",
+      "key_risk": "Aggressive monetary tightening combined with escalating U.S.-Canada trade wars and ongoing Middle East energy supply disruptions.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "The ongoing Iran-led blockade at the Strait of Hormuz has completely halted Iranian crude exports, maintaining an active disruption in a vital global energy chokepoint."
+    }
+  },
+  {
     "timestamp": "2026-08-30T17:36:38.760182+00:00",
     "total_scanned": 223,
     "flagged_count": 177,
