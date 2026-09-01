@@ -1,5 +1,160 @@
 [
   {
+    "timestamp": "2026-09-01T17:21:13.343697+00:00",
+    "total_scanned": 228,
+    "flagged_count": 174,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Global oil prices surge above $94  a barrel after the U.S. strikes Iranian targets",
+        "link": "https://www.marketwatch.com/story/global-oil-prices-extend-move-over-90-after-report-of-two-tankers-struck-in-hormuz-0effd708?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 01 Sep 2026 17:12:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "As U.S. bond prices tumble, yields are jumping globally — from Japan to the U.K. and beyond",
+        "link": "https://www.marketwatch.com/story/from-the-u-k-to-japan-bond-yields-are-jumping-as-u-s-bonds-tumble-d8b71075?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 01 Sep 2026 13:05:00 GMT",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar holds near two-week high as JOLTS data keeps Fed hike bets alive",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-steady-as-yen-hovers-near-160-bessent-backs-boj-hikes-4883482",
+        "source": "Investing.com Forex",
+        "published": "2026-09-01 14:34:03",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Global bond sell-off worsens as U.S. 2-year yield touches highest level since 2025",
+        "link": "https://www.investing.com/news/forex-news/global-bond-rout-deepens-as-middle-east-escalation-and-inflation-shock-push-yields-4883611",
+        "source": "Investing.com Forex",
+        "published": "2026-09-01 11:45:35",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Iran says it has enough foreign currency despite US sanctions",
+        "link": "https://www.investing.com/news/forex-news/iran-says-it-has-enough-foreign-currency-despite-us-sanctions-4883541",
+        "source": "Investing.com Forex",
+        "published": "2026-09-01 06:54:27",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Canadian dollar rebounds from two-week low as oil prices rise, BoC decision looms",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rebounds-from-twoweek-low-as-oil-prices-rise-boc-decision-looms-4883302",
+        "source": "Investing.com Forex",
+        "published": "2026-08-31 21:14:09",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are reacting to surging oil prices above $94 a barrel following U.S. strikes on Iranian targets, which coincide with a severe global bond sell-off and rising yields. Meanwhile, persistent maritime disruptions in the Strait of Hormuz—highlighted by recent projectile strikes and heavy tanker backlogs—continue to elevate geopolitical risk premiums.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "Agricultural fundamentals remain largely uninfluenced by the macro-driven energy spike and ongoing Middle East maritime chokepoint disruptions.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Escalating geopolitical tensions in the Middle East and a strengthening U.S. dollar supported by firm Fed rate-hike expectations favor upward pressure on USD/ILS.",
+      "key_risk": "Further military escalation in the Strait of Hormuz threatening critical energy flows and broader regional stability.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "U.S. military strikes on Iranian targets have driven crude oil prices above $94 a barrel while active disruptions and projectile strikes in the Strait of Hormuz continue to impair maritime transit."
+    }
+  },
+  {
     "timestamp": "2026-09-01T13:39:53.104322+00:00",
     "total_scanned": 230,
     "flagged_count": 171,
