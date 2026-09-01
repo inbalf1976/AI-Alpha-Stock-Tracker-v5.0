@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 52,
+    "alert_timestamp": "2026-09-01T13:39:53.104322+00:00",
+    "reason": "Active disruptions in the Strait of Hormuz—highlighted by a projectile strike on a tanker near Khasab, extensive dark fleet activity, and growing vessel backlogs off Kharg Island—are actively restricting maritime energy logistics.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 778.5,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 51,
     "alert_timestamp": "2026-08-31T16:22:24.532103+00:00",
     "reason": "U.S. and Iran have exchanged direct fire for the first time in a month, pushing global oil prices above $91 a barrel and escalating geopolitical risks in the Middle East.",
