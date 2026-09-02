@@ -1426,11 +1426,23 @@ def should_send(state):
     # comment for the full reasoning on why 03:00 was chosen over a
     # second alert near Session 2's 16:30 open). The cron now targets
     # 02:53 IL (7min early, same GitHub Actions delay-buffer convention
-    # as before) — window widened to (2, 3, 4) so the alert still sends
-    # correctly whichever hour the actual (possibly delayed) execution
-    # lands in, same "sometimes late is better than sometimes missing"
-    # reasoning as the previous (0,1,2) window.
-    if il_hour not in (2, 3, 4):
+    # as before).
+    #
+    # UPDATED 2026-09-02: real incident — GitHub Actions scheduling
+    # delay pushed the run to 5:05 IL (target 02:53), landing on
+    # il_hour=5, outside the old (2,3,4) window. should_send() returned
+    # False, the job still exited 0 (no exception), so the run showed
+    # green in Actions with zero visible signal that the alert never
+    # sent — confirmed live 2026-09-01, commit e834b53: full pipeline
+    # ran and logged a Tier 2 prediction, but alerts_sent/last_alert_date
+    # never updated because send_telegram() was never reached. Widened
+    # through hour 15 (Session 1 closes 15:45 IL — past that the day's
+    # data is stale, so no point sending) so a late-but-still-useful
+    # run still sends instead of being silently dropped. The
+    # alerts_today slot-key check right below this is the real
+    # duplicate-prevention guard, not this hour window — widening this
+    # does not risk a second send for the same day.
+    if il_hour not in (2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15):
         return False, f"Not scheduled hour ({il_hour}:00 Israel)", False
 
     slot_key = f"{il_date}_morning"
