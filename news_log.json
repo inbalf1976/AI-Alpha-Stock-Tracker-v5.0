@@ -1,5 +1,161 @@
 [
   {
+    "timestamp": "2026-09-02T12:57:41.893950+00:00",
+    "total_scanned": 228,
+    "flagged_count": 170,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "How one strategist warned on semiconductor stocks within a day of their top",
+        "link": "https://www.marketwatch.com/story/how-one-strategist-warned-on-semiconductor-stocks-within-a-day-of-their-top-03ee8d34?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 02 Sep 2026 12:22:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Europe’s largest airline warns of jet-fuel prices hitting $140 this winter as it cuts capacity",
+        "link": "https://www.marketwatch.com/story/europes-largest-airline-warns-of-jet-fuel-prices-at-140-this-winter-as-it-cuts-capacity-ba7821a9?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 02 Sep 2026 11:31:00 GMT",
+        "matched_keywords": [
+          "war",
+          "warns of"
+        ]
+      },
+      {
+        "title": "Ships adopt makeshift anti-drone defences as Black Sea attacks intensify",
+        "link": "https://www.investing.com/news/commodities-news/ships-adopt-makeshift-antidrone-defences-as-black-sea-attacks-intensify-4886093",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-02 12:24:39",
+        "matched_keywords": [
+          "black sea"
+        ]
+      },
+      {
+        "title": "Oil prices fall after hitting over one-month high; traders weigh supply risks",
+        "link": "https://www.investing.com/news/commodities-news/oil-up-nearly-1-as-us-and-iran-trade-fresh-strikes-4885234",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-02 11:54:46",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Blackout risk rises as heat wave stresses largest US electric grids",
+        "link": "https://www.investing.com/news/commodities-news/blackout-risk-rises-as-heat-wave-stresses-largest-us-electric-grids-4885983",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-02 11:54:32",
+        "matched_keywords": [
+          "heat wave"
+        ]
+      },
+      {
+        "title": "Gold extends losses to 3-week low as stronger dollar, Fed hike bets weigh",
+        "link": "https://www.investing.com/news/commodities-news/gold-falls-as-oil-bond-yields-and-fed-hike-bets-climb-on-iran-escalation-4885255",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-02 11:45:47",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Geopolitical shocks in the Middle East dominate markets as near-simultaneous strikes on VLCC tankers in the Strait of Hormuz prompt US retaliatory strikes and severe AIS jamming, causing inbound transits to collapse. Meanwhile, energy markets grapple with escalating Black Sea maritime attacks, rising jet-fuel price warnings up to $140, and a stronger US dollar weighing on commodities.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_reason": "While maritime chokepoint disruptions in the Middle East and Black Sea are escalating energy and shipping costs, direct impacts on global wheat supply lines remain indirect at this stage.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Spiking geopolitical conflict in the Persian Gulf and retaliatory military strikes increase regional risk premiums, boosting the safe-haven US dollar against regional currencies like the Israeli Shekel.",
+      "key_risk": "Total disruption or prolonged closure of crude oil and shipping transit through the Strait of Hormuz following military escalations.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Two Saudi-crude VLCC tankers were struck by unknown projectiles in the Strait of Hormuz, triggering US retaliatory airstrikes on IRGC sites and a near-complete collapse of inbound vessel transits amid severe AIS jamming."
+    }
+  },
+  {
     "timestamp": "2026-09-02T01:09:12.976991+00:00",
     "total_scanned": 230,
     "flagged_count": 170,
