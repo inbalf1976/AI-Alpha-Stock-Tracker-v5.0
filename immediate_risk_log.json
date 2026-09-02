@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 54,
+    "alert_timestamp": "2026-09-02T01:09:12.976991+00:00",
+    "reason": "Active military escalation between the U.S. and Iran has directly impacted the Strait of Hormuz, resulting in vessel projectile strikes, rising anchorage backlogs off Kharg Island, and extensive use of dark-fleet maneuvers.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 782.0,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 53,
     "alert_timestamp": "2026-09-01T17:21:13.343697+00:00",
     "reason": "U.S. military strikes on Iranian targets have driven crude oil prices above $94 a barrel while active disruptions and projectile strikes in the Strait of Hormuz continue to impair maritime transit.",
