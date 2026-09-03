@@ -1477,7 +1477,24 @@ def send_telegram(message):
 
 # ── PERFORMANCE LOG ───────────────────────────────────────────────────────────
 
-def log_prediction(direction, price, confidence, tier, seasonal_phase):
+def log_prediction(direction, price, confidence, tier, seasonal_phase,
+                    stop_price=None, target_price=None):
+    """
+    UPDATED 2026-09-03, real fix: previously only logged entry_price and
+    left it to score_predictions.py to invent its own synthetic stop/
+    target (1.5%/2.5% from entry_price) — a definition that matched
+    neither the actual weekly setup shown in the Telegram alert nor
+    anything the user was actually trading off of. Now also stores the
+    REAL stop/target from the live weekly setup (weekly['stop'],
+    weekly['target']) at the moment of logging, so score_predictions.py
+    can score against what was actually communicated instead of a
+    disconnected synthetic trade. stop_price/target_price are optional
+    (default None) so this stays backward compatible with any code path
+    that doesn't have a weekly setup handy; None is later treated by
+    score_predictions.py as "use the legacy synthetic definition" so old
+    entries logged before this change keep scoring exactly as they
+    always did — nothing retroactive, going-forward only.
+    """
     log_file = Path("prediction_log.json")
     try:
         log = json.loads(log_file.read_text()) if log_file.exists() else []
@@ -1491,6 +1508,8 @@ def log_prediction(direction, price, confidence, tier, seasonal_phase):
         'confidence':     confidence,
         'tier':           tier,
         'seasonal_phase': seasonal_phase,
+        'stop_price':     stop_price,
+        'target_price':   target_price,
         'validated':      False,
         'outcome':        None,
         'exit_reason':    None,
@@ -1808,7 +1827,8 @@ def main():
             print("   Manual (human-triggered) run — alert sent, NOT logged as a tracked prediction "
                   "(avoids inflating win/loss stats with clustered manual re-checks).")
         elif tier > 0:
-            log_prediction(direction, current_price, pred['confidence'], tier, s_phase['phase'])
+            log_prediction(direction, current_price, pred['confidence'], tier, s_phase['phase'],
+                           stop_price=weekly.get('stop'), target_price=weekly.get('target'))
         else:
             print("   Tier 0 — alert sent for visibility, NOT logged as a tracked prediction.")
     else:
