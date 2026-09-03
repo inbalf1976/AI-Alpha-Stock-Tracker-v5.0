@@ -46,6 +46,7 @@ something assumed here.
 """
 
 import os
+import re
 import json
 import logging
 import urllib.request
@@ -107,6 +108,72 @@ def get_price_now():
     except Exception as e:
         logger.warning(f"   Price fetch failed: {e}")
         return None
+
+
+# ---------------------------------------------------------------------------
+# DEDUPLICATION (added 2026-09-03) — real incident: news_scanner.py has no
+# concept of "already alerted on this". When an ongoing situation (e.g. a
+# multi-day Hormuz blockade) stays the top headline across scans, Gemini can
+# re-flag immediate_risk=true every single cycle even though nothing new is
+# happening. Confirmed real duplicates: alert #47/#48 and #49/#50. This also
+# contaminates the HIT/MISS sample in score_pending() — repeats of the same
+# event get scored as independent cycles, skewing the hit rate.
+#
+# First attempt used word-overlap text similarity to detect "same topic."
+# Tested against the real log before shipping and rejected: non-duplicate
+# consecutive alerts scored just as high (0.5-0.57 overlap coefficient) as
+# the two confirmed real duplicates (0.40, 0.50) — Hormuz/tanker/Iran/
+# blockade vocabulary is inherently clustered in this domain regardless of
+# whether it's actually the same specific event, so text similarity alone
+# can't reliably separate them.
+#
+# Simplified to pure time-based cooldown instead: ANY immediate_risk flag
+# within DEDUP_COOLDOWN_HOURS of the last one is suppressed, regardless of
+# content. Justified by immediate_risk's own definition — a "rare, high-bar
+# flag" for genuinely new, actively-unfolding events — so two truly
+# independent immediate-risk events landing in the same 18h window should
+# itself be rare. Missing that rare case costs less than the duplicate-spam
+# already observed (50+ alerts logged, the large majority about the same
+# ongoing situation).
+# ---------------------------------------------------------------------------
+DEDUP_COOLDOWN_HOURS = 18
+
+
+def is_duplicate_risk(cooldown_hours=DEDUP_COOLDOWN_HOURS):
+    """
+    Returns True if ANY immediate_risk alert was already logged within
+    cooldown_hours, regardless of content (see module comment above for
+    why content-based similarity was tried and rejected). Called by
+    news_scanner.py BEFORE both send_immediate_risk_alert() and
+    log_event() — a suppressed duplicate should neither spam Telegram nor
+    count as a fresh, independent data point for scoring.
+    """
+    now = datetime.now(timezone.utc)
+    entries = _load_log()
+
+    for e in entries:
+        try:
+            ts = datetime.fromisoformat(e["alert_timestamp"])
+            if ts.tzinfo is None:
+                ts = ts.replace(tzinfo=IL)
+            ts = ts.astimezone(timezone.utc)
+        except Exception:
+            continue
+
+        age_hours = (now - ts).total_seconds() / 3600
+        if age_hours > cooldown_hours:
+            # entries are newest-first (log_event() inserts at index 0),
+            # so nothing after this can be within the window either
+            break
+
+        logger.info(
+            f"   Duplicate risk suppressed — alert #{e.get('alert_number')} "
+            f"was logged {age_hours:.1f}h ago, within the {cooldown_hours}h "
+            f"cooldown"
+        )
+        return True
+
+    return False
 
 
 def get_next_alert_number():
