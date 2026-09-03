@@ -737,14 +737,27 @@ def main():
         if isinstance(wheat_impact, dict):
             wheat_impact = wheat_impact.get("direction", "UNKNOWN")
         if reason:
-            logger.info(f"   IMMEDIATE RISK flagged: {reason}")
-            alert_number = immediate_risk_tracker.get_next_alert_number()
-            send_immediate_risk_alert(reason, wheat_impact, now_iso, alert_number=alert_number)
-            # Log for outcome tracking (2026-08-15) — see
-            # immediate_risk_tracker.py. Purely additive: writes to
-            # its own file, never touches news_log.json or anything
-            # the model reads.
-            immediate_risk_tracker.log_event(reason, wheat_impact, now_iso, alert_number=alert_number)
+            # Dedup check added 2026-09-03 — see immediate_risk_tracker.py's
+            # is_duplicate_risk() docstring for the real incident this
+            # fixes (an ongoing situation re-flagging every scan cycle).
+            # Checked before BOTH the send and the log call: a duplicate
+            # should neither spam Telegram nor count as a fresh,
+            # independent data point in the HIT/MISS sample.
+            if immediate_risk_tracker.is_duplicate_risk():
+                logger.info(
+                    f"   IMMEDIATE RISK flagged but matches a recent alert "
+                    f"within the cooldown window — suppressing duplicate "
+                    f"send/log: {reason}"
+                )
+            else:
+                logger.info(f"   IMMEDIATE RISK flagged: {reason}")
+                alert_number = immediate_risk_tracker.get_next_alert_number()
+                send_immediate_risk_alert(reason, wheat_impact, now_iso, alert_number=alert_number)
+                # Log for outcome tracking (2026-08-15) — see
+                # immediate_risk_tracker.py. Purely additive: writes to
+                # its own file, never touches news_log.json or anything
+                # the model reads.
+                immediate_risk_tracker.log_event(reason, wheat_impact, now_iso, alert_number=alert_number)
         else:
             logger.info("   immediate_risk=true but no reason text provided — skipping alert send.")
 
