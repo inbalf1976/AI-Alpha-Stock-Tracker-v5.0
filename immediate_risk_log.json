@@ -29,11 +29,11 @@
     "reason": "Two Saudi-crude VLCC tankers were struck by unknown projectiles in the Strait of Hormuz, triggering US retaliatory airstrikes on IRGC sites and a near-complete collapse of inbound vessel transits amid severe AIS jamming.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 775.75,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 742.75,
+    "pct_change": -4.254,
+    "scored_at": "2026-09-03T13:00:46.718693+00:00"
   },
   {
     "alert_number": 54,
