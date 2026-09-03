@@ -1019,10 +1019,10 @@
     "confidence": 0.7983439461003806,
     "tier": 2,
     "seasonal_phase": "NEUTRAL",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -11.61
   },
   {
     "timestamp": "2026-08-31T19:22:22.066453+03:00",
@@ -1077,6 +1077,18 @@
     "direction": "UP",
     "entry_price": 772.0,
     "confidence": 0.8112296673961418,
+    "tier": 2,
+    "seasonal_phase": "NEUTRAL",
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
+  },
+  {
+    "timestamp": "2026-09-03T04:33:35.041863+03:00",
+    "direction": "UP",
+    "entry_price": 771.5,
+    "confidence": 0.795511316588316,
     "tier": 2,
     "seasonal_phase": "NEUTRAL",
     "validated": false,
