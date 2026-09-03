@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 57,
+    "alert_timestamp": "2026-09-03T01:16:09.958549+00:00",
+    "reason": "Two Saudi-crude VLCCs were struck by unknown projectiles near the Strait of Hormuz, triggering US retaliatory strikes on IRGC sites and a near-total collapse of inbound transit coupled with severe AIS jamming.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 772.0,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 56,
     "alert_timestamp": "2026-09-02T17:13:57.010270+00:00",
     "reason": "Near-simultaneous attacks on two Saudi-crude VLCC tankers in the Strait of Hormuz have triggered US military retaliation against IRGC sites, causing inbound transits to collapse and AIS jamming to spike over 500%.",
@@ -29,11 +41,11 @@
     "reason": "Active military escalation between the U.S. and Iran has directly impacted the Strait of Hormuz, resulting in vessel projectile strikes, rising anchorage backlogs off Kharg Island, and extensive use of dark-fleet maneuvers.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 782.0,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 772.0,
+    "pct_change": -1.279,
+    "scored_at": "2026-09-03T01:16:15.264015+00:00"
   },
   {
     "alert_number": 53,
@@ -41,11 +53,11 @@
     "reason": "U.S. military strikes on Iranian targets have driven crude oil prices above $94 a barrel while active disruptions and projectile strikes in the Strait of Hormuz continue to impair maritime transit.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 778.25,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 772.0,
+    "pct_change": -0.803,
+    "scored_at": "2026-09-03T01:16:15.264015+00:00"
   },
   {
     "alert_number": 52,
