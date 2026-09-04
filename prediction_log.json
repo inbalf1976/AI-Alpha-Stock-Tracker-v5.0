@@ -1043,10 +1043,11 @@
     "confidence": 0.8085892169309606,
     "tier": 2,
     "seasonal_phase": "NEUTRAL",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -11.7,
+    "scoring_method": "legacy_synthetic"
   },
   {
     "timestamp": "2026-09-02T15:57:39.605785+03:00",
@@ -1055,10 +1056,11 @@
     "confidence": 0.7896070864862743,
     "tier": 2,
     "seasonal_phase": "NEUTRAL",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -11.64,
+    "scoring_method": "legacy_synthetic"
   },
   {
     "timestamp": "2026-09-02T20:13:54.320094+03:00",
@@ -1067,10 +1069,11 @@
     "confidence": 0.8007404791381502,
     "tier": 2,
     "seasonal_phase": "NEUTRAL",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -11.74,
+    "scoring_method": "legacy_synthetic"
   },
   {
     "timestamp": "2026-09-03T04:16:07.502595+03:00",
@@ -1115,6 +1118,20 @@
     "direction": "DOWN",
     "entry_price": 750.25,
     "confidence": 0.8448367927951999,
+    "tier": 1,
+    "seasonal_phase": "NEUTRAL",
+    "stop_price": 752.69,
+    "target_price": 729.5,
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
+  },
+  {
+    "timestamp": "2026-09-04T04:27:17.211965+03:00",
+    "direction": "DOWN",
+    "entry_price": 751.5,
+    "confidence": 0.8363814451510058,
     "tier": 1,
     "seasonal_phase": "NEUTRAL",
     "stop_price": 752.69,
