@@ -1634,13 +1634,30 @@ def main():
     print(f"  Ensemble: {direction} | LSTM={pred['lstm']:.3f} RF={pred['rf']:.3f} XGB={pred['xgb']:.3f}")
 
     # ── Filters ──
+    # UPDATED 2026-09-04: real bug found and confirmed — trend_blocked
+    # was computed from the SAME pre-override `direction` as
+    # seasonal_blocked, before either override ran. So if the seasonal
+    # filter flipped direction (e.g. UP -> DOWN), trend_blocked had
+    # already been evaluated against the OLD 'UP' value and couldn't
+    # re-check the NEW 'DOWN' value against the trend — meaning
+    # TrendEngine's whole purpose ("block signals that fight a strong
+    # confirmed trend") silently failed to catch exactly the case it
+    # exists for: a seasonal override flipping into a strong opposing
+    # trend. Confirmed as the root cause of a real 9-day losing streak
+    # (2026-08-13 to 2026-08-21, 9.1% win rate, DOWN calls forced by a
+    # BEARISH seasonal override straight into a real STRONG uptrend).
+    # Fix: apply the seasonal override FIRST, then evaluate
+    # trend_blocked against the direction AS IT STANDS AFTER that
+    # override — so the trend filter can actually catch a bad flip,
+    # not just the original ensemble call.
     seasonal_blocked, _ = seasonal.blocks_direction(direction)
-    trend_blocked, _    = trend_engine.blocks_direction(direction, trend_data)
 
     if seasonal_blocked:
         direction          = 'DOWN' if direction == 'UP' else 'UP'
         pred['confidence'] = 0.60
         print(f"  Seasonal override → {direction}")
+
+    trend_blocked, _ = trend_engine.blocks_direction(direction, trend_data)
 
     if trend_blocked:
         direction          = 'DOWN' if direction == 'UP' else 'UP'
