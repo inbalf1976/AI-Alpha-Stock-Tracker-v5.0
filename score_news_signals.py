@@ -142,6 +142,16 @@ def main():
 
     newly_scored = 0
     for entry in log:
+        # UPDATED 2026-09-04, real bug found on first run: 5 entries
+        # from 2026-07-23 to 07-26 use an even older schema
+        # (scan_time/headlines, no llm_analysis at all) from before
+        # the 2026-07-28 news_scanner.py rewrite — predates the schema
+        # this whole file already assumes. They can't be scored (no
+        # signal data exists in that format), so skip cleanly instead
+        # of crashing on the missing key.
+        if 'timestamp' not in entry or 'llm_analysis' not in entry:
+            continue
+
         ts_key = entry['timestamp']
         if ts_key in scored:
             continue
