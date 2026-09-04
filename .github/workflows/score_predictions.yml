@@ -1,0 +1,49 @@
+name: Score Predictions (manual)
+on:
+  workflow_dispatch:   # manual trigger only — run this from the Actions tab
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install packages
+      run: pip install yfinance pandas
+    - name: Score past predictions
+      # Idempotent — skips anything already marked validated/direction_scored,
+      # so running this manually any time (including right after the daily
+      # monitor job already ran it) is always safe, never double-scores.
+      run: python score_predictions.py
+    - name: Commit updated prediction_log.json
+      # Same commit+retry pattern as wheat_monitor_github.yml's monitor
+      # job — score_predictions.py only ever touches prediction_log.json,
+      # so this only needs to stage that one file. The retry-with-merge
+      # logic matters here too: a manual run could land close in time to
+      # the automated daily monitor job's own score_predictions.py step,
+      # both touching the same file.
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add -f prediction_log.json || true
+        if git diff --staged --quiet; then
+          echo "Nothing to commit."
+        else
+          git commit -m "Update prediction_log.json (manual score run) [skip ci]"
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push failed (attempt $attempt) — fetching + merging (prefer local) and retrying..."
+            git fetch origin main
+            git merge -X ours origin/main -m "merge: resolve concurrent state update [skip ci]"
+          done
+          echo "::error::git push failed after 3 attempts — prediction_log.json updates did NOT reach the repo this run."
+          exit 1
+        fi
