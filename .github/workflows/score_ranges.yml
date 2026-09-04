@@ -1,0 +1,24 @@
+name: Score Ranges (weekly/monthly range accuracy)
+on:
+  workflow_dispatch:   # manual trigger only — run this from the Actions tab
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install packages
+      run: pip install yfinance pandas
+    - name: Run per-period range accuracy scoring
+      # score_ranges.py is read-only — it only reads weekly_break_log.json,
+      # weekly_range_cache.json, monthly_break_log.json,
+      # monthly_range_cache.json, weekly_performance_log.json, and fetches
+      # price history. It never writes or commits anything, so this job
+      # can be run as often as wanted with zero risk to any tracked file.
+      run: python score_ranges.py
