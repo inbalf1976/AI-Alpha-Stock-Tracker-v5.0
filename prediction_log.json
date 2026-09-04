@@ -14,7 +14,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.19
+    "pnl_cents": -9.19,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-06-22"
   },
   {
     "timestamp": "2026-06-19T11:54:41.925669",
@@ -26,7 +29,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 15.14
+    "pnl_cents": 15.14,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-06-22"
   },
   {
     "timestamp": "2026-06-22T04:32:24.415898+03:00",
@@ -38,7 +44,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.26
+    "pnl_cents": -9.26,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-06-23"
   },
   {
     "timestamp": "2026-06-23T02:17:54.652235+03:00",
@@ -50,7 +59,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.11
+    "pnl_cents": -9.11,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-06-24"
   },
   {
     "timestamp": "2026-06-24T02:07:12.082631+03:00",
@@ -62,7 +74,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -8.97
+    "pnl_cents": -8.97,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-06-25"
   },
   {
     "timestamp": "2026-06-25T02:03:04.698122+03:00",
@@ -74,7 +89,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -8.94
+    "pnl_cents": -8.94,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-06-26"
   },
   {
     "timestamp": "2026-06-26T02:16:09.012943+03:00",
@@ -86,7 +104,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.02
+    "pnl_cents": -9.02,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-06-29"
   },
   {
     "timestamp": "2026-06-30T01:54:31.000213+03:00",
@@ -98,7 +119,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 14.45
+    "pnl_cents": 14.45,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-01"
   },
   {
     "timestamp": "2026-07-01T02:09:29.748609+03:00",
@@ -110,7 +134,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 14.69
+    "pnl_cents": 14.69,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-02"
   },
   {
     "timestamp": "2026-07-02T02:12:26.244369+03:00",
@@ -122,7 +149,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.01
+    "pnl_cents": -9.01,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-06"
   },
   {
     "timestamp": "2026-07-03T02:02:39.610233+03:00",
@@ -134,7 +164,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.0
+    "pnl_cents": -9.0,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-06"
   },
   {
     "timestamp": "2026-07-06T14:21:27.676684+03:00",
@@ -146,7 +179,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -8.86
+    "pnl_cents": -8.86,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-07"
   },
   {
     "timestamp": "2026-07-06T21:54:54.748080+03:00",
@@ -158,7 +194,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.21
+    "pnl_cents": -9.21,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-07"
   },
   {
     "timestamp": "2026-07-07T02:04:52.643620+03:00",
@@ -170,7 +209,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.21
+    "pnl_cents": -9.21,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-08"
   },
   {
     "timestamp": "2026-07-07T14:01:16.904256+03:00",
@@ -182,7 +224,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.2
+    "pnl_cents": -9.2,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-07-08T01:58:38.134152+03:00",
@@ -194,7 +239,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.27
+    "pnl_cents": -9.27,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-09"
   },
   {
     "timestamp": "2026-07-09T02:03:43.523894+03:00",
@@ -206,7 +254,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.09
+    "pnl_cents": -9.09,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-10"
   },
   {
     "timestamp": "2026-07-09T10:09:00.683461+03:00",
@@ -218,7 +269,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.07
+    "pnl_cents": -9.07,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-10"
   },
   {
     "timestamp": "2026-07-09T10:48:08.717934+03:00",
@@ -230,7 +284,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.08
+    "pnl_cents": -9.08,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-10"
   },
   {
     "timestamp": "2026-07-09T14:45:58.864799+03:00",
@@ -242,7 +299,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.11
+    "pnl_cents": -9.11,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-10"
   },
   {
     "timestamp": "2026-07-09T21:49:28.462727+03:00",
@@ -254,7 +314,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.29
+    "pnl_cents": -9.29,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-10"
   },
   {
     "timestamp": "2026-07-10T02:10:21.604662+03:00",
@@ -266,7 +329,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 15.48
+    "pnl_cents": 15.48,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-13"
   },
   {
     "timestamp": "2026-07-10T04:14:11.123153+03:00",
@@ -278,7 +344,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 15.44
+    "pnl_cents": 15.44,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-13"
   },
   {
     "timestamp": "2026-07-10T04:23:35.635334+03:00",
@@ -290,7 +359,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 15.44
+    "pnl_cents": 15.44,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-07-10T04:43:15.863701+03:00",
@@ -302,7 +374,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 15.43
+    "pnl_cents": 15.43,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-13"
   },
   {
     "timestamp": "2026-07-10T05:03:17.671414+03:00",
@@ -314,7 +389,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 15.46
+    "pnl_cents": 15.46,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-07-10T14:39:59.867324+03:00",
@@ -326,7 +404,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 15.39
+    "pnl_cents": 15.39,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-13"
   },
   {
     "timestamp": "2026-07-11T09:06:03.053039+03:00",
@@ -338,7 +419,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 15.8
+    "pnl_cents": 15.8,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-13"
   },
   {
     "timestamp": "2026-07-13T02:13:15.581921+03:00",
@@ -350,7 +434,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.6
+    "pnl_cents": -9.6,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-14"
   },
   {
     "timestamp": "2026-07-14T01:54:18.838037+03:00",
@@ -362,7 +449,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 15.88
+    "pnl_cents": 15.88,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-15"
   },
   {
     "timestamp": "2026-07-15T01:56:08.991137+03:00",
@@ -374,7 +464,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.66
+    "pnl_cents": -9.66,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-16"
   },
   {
     "timestamp": "2026-07-16T01:57:06.871406+03:00",
@@ -386,7 +479,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.17
+    "pnl_cents": -10.17,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-17"
   },
   {
     "timestamp": "2026-07-17T01:55:33.712456+03:00",
@@ -398,7 +494,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 16.86
+    "pnl_cents": 16.86,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-20"
   },
   {
     "timestamp": "2026-07-17T10:40:09.198313+03:00",
@@ -410,7 +509,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 16.74
+    "pnl_cents": 16.74,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-20"
   },
   {
     "timestamp": "2026-07-17T11:29:49.382919+03:00",
@@ -422,7 +524,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 16.79
+    "pnl_cents": 16.79,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-20"
   },
   {
     "timestamp": "2026-07-18T09:45:02.655861+03:00",
@@ -434,7 +539,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 17.07
+    "pnl_cents": 17.07,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-20"
   },
   {
     "timestamp": "2026-07-21T01:57:47.797377+03:00",
@@ -446,7 +554,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 16.82
+    "pnl_cents": 16.82,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-22"
   },
   {
     "timestamp": "2026-07-22T01:53:55.597432+03:00",
@@ -458,7 +569,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.18
+    "pnl_cents": -10.18,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-23"
   },
   {
     "timestamp": "2026-07-23T01:59:44.950743+03:00",
@@ -470,7 +584,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 17.66
+    "pnl_cents": 17.66,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-24"
   },
   {
     "timestamp": "2026-07-23T14:26:15.417230+03:00",
@@ -482,7 +599,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 17.7
+    "pnl_cents": 17.7,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-24"
   },
   {
     "timestamp": "2026-07-23T16:18:10.139493+03:00",
@@ -494,7 +614,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 17.68
+    "pnl_cents": 17.68,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-24"
   },
   {
     "timestamp": "2026-07-23T19:43:21.590734+03:00",
@@ -506,7 +629,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "same_bar_ambiguous_conservative_loss",
-    "pnl_cents": -10.49
+    "pnl_cents": -10.49,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-24"
   },
   {
     "timestamp": "2026-07-24T01:53:47.147273+03:00",
@@ -518,7 +644,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.42
+    "pnl_cents": -10.42,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-27"
   },
   {
     "timestamp": "2026-07-24T11:09:43.899469+03:00",
@@ -530,7 +659,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.54
+    "pnl_cents": -10.54,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-27"
   },
   {
     "timestamp": "2026-07-24T11:39:49.081311+03:00",
@@ -542,7 +674,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.58
+    "pnl_cents": -10.58,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-27"
   },
   {
     "timestamp": "2026-07-27T00:07:35.211344+03:00",
@@ -554,7 +689,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 16.95
+    "pnl_cents": 16.95,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-28"
   },
   {
     "timestamp": "2026-07-28T01:58:26.857810+03:00",
@@ -566,7 +704,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.87
+    "pnl_cents": -9.87,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-07-29"
   },
   {
     "timestamp": "2026-07-29T01:55:56.170688+03:00",
@@ -578,7 +719,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.97
+    "pnl_cents": -9.97,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-30"
   },
   {
     "timestamp": "2026-07-30T01:58:21.237165+03:00",
@@ -590,7 +734,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 16.5
+    "pnl_cents": 16.5,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-07-31"
   },
   {
     "timestamp": "2026-07-31T02:03:15.475212+03:00",
@@ -602,7 +749,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 16.59
+    "pnl_cents": 16.59,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-03"
   },
   {
     "timestamp": "2026-07-31T16:53:34.884041+03:00",
@@ -614,7 +764,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.64
+    "pnl_cents": -9.64,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-08-03"
   },
   {
     "timestamp": "2026-08-06T01:56:30.981125+03:00",
@@ -626,7 +779,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.66
+    "pnl_cents": -9.66,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-07"
   },
   {
     "timestamp": "2026-08-09T01:21:01.090313+03:00",
@@ -638,7 +794,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.6
+    "pnl_cents": -9.6,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-08-10"
   },
   {
     "timestamp": "2026-08-13T01:33:26.996541+03:00",
@@ -650,7 +809,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.79
+    "pnl_cents": -9.79,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-08-14"
   },
   {
     "timestamp": "2026-08-14T02:35:56.318670+03:00",
@@ -662,7 +824,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.03
+    "pnl_cents": -10.03,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-08-17"
   },
   {
     "timestamp": "2026-08-16T01:13:35.267324+03:00",
@@ -674,7 +839,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.12
+    "pnl_cents": -10.12,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-08-17"
   },
   {
     "timestamp": "2026-08-16T11:59:38.565723+03:00",
@@ -686,7 +854,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 17.24
+    "pnl_cents": 17.24,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-17"
   },
   {
     "timestamp": "2026-08-18T00:29:15.539658+03:00",
@@ -698,7 +869,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.34
+    "pnl_cents": -10.34,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-19"
   },
   {
     "timestamp": "2026-08-18T01:16:43.642840+03:00",
@@ -710,7 +884,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.34
+    "pnl_cents": -10.34,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-08-19T01:15:35.322808+03:00",
@@ -722,7 +899,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.9
+    "pnl_cents": -9.9,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-08-20"
   },
   {
     "timestamp": "2026-08-19T02:05:25.319578+03:00",
@@ -734,7 +914,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.9
+    "pnl_cents": -9.9,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-08-19T02:17:33.026462+03:00",
@@ -746,7 +929,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.9
+    "pnl_cents": -9.9,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-08-19T02:29:16.233189+03:00",
@@ -758,7 +944,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.9
+    "pnl_cents": -9.9,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-08-19T02:36:38.266081+03:00",
@@ -770,7 +959,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.9
+    "pnl_cents": -9.9,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-08-20T01:18:15.558719+03:00",
@@ -782,7 +974,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.19
+    "pnl_cents": -10.19,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-08-21"
   },
   {
     "timestamp": "2026-08-20T02:18:37.648465+03:00",
@@ -794,7 +989,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.19
+    "pnl_cents": -10.19,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-08-20T12:07:41.859746+03:00",
@@ -806,7 +1004,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.28
+    "pnl_cents": -10.28,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-21"
   },
   {
     "timestamp": "2026-08-20T17:02:51.010212+03:00",
@@ -818,7 +1019,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.35
+    "pnl_cents": -10.35,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-21"
   },
   {
     "timestamp": "2026-08-21T09:52:55.343319+03:00",
@@ -830,7 +1034,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.26
+    "pnl_cents": -10.26,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-24"
   },
   {
     "timestamp": "2026-08-21T17:41:25.918603+03:00",
@@ -842,7 +1049,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.25
+    "pnl_cents": -10.25,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-24"
   },
   {
     "timestamp": "2026-08-24T01:01:40.229462+03:00",
@@ -854,7 +1064,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 17.04
+    "pnl_cents": 17.04,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-25"
   },
   {
     "timestamp": "2026-08-25T00:51:52.987188+03:00",
@@ -866,7 +1079,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 17.06
+    "pnl_cents": 17.06,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-26"
   },
   {
     "timestamp": "2026-08-25T01:07:49.604315+03:00",
@@ -878,7 +1094,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 17.06
+    "pnl_cents": 17.06,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-08-25T16:52:56.703473+03:00",
@@ -890,7 +1109,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "same_bar_ambiguous_conservative_loss",
-    "pnl_cents": -10.41
+    "pnl_cents": -10.41,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-26"
   },
   {
     "timestamp": "2026-08-26T01:04:44.378831+03:00",
@@ -902,7 +1124,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 17.61
+    "pnl_cents": 17.61,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-27"
   },
   {
     "timestamp": "2026-08-26T12:14:29.148053+03:00",
@@ -914,7 +1139,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 17.86
+    "pnl_cents": 17.86,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-08-27"
   },
   {
     "timestamp": "2026-08-26T21:35:36.256233+03:00",
@@ -926,7 +1154,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -11.22
+    "pnl_cents": -11.22,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-08-27"
   },
   {
     "timestamp": "2026-08-28T23:20:39.818237+03:00",
@@ -938,7 +1169,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -11.75
+    "pnl_cents": -11.75,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-08-31"
   },
   {
     "timestamp": "2026-08-29T02:06:28.275880+03:00",
@@ -950,7 +1184,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -11.75
+    "pnl_cents": -11.75,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-08-31"
   },
   {
     "timestamp": "2026-08-29T07:13:24.544840+03:00",
@@ -962,7 +1199,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -11.75
+    "pnl_cents": -11.75,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-08-29T14:31:53.415817+03:00",
@@ -974,7 +1214,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -11.76
+    "pnl_cents": -11.76,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-08-29T16:59:11.371742+03:00",
@@ -986,7 +1229,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -11.76
+    "pnl_cents": -11.76,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-08-30T04:23:07.049540+03:00",
@@ -998,7 +1244,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -11.76
+    "pnl_cents": -11.76,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-08-31"
   },
   {
     "timestamp": "2026-08-30T16:59:41.594657+03:00",
@@ -1010,7 +1259,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -11.5
+    "pnl_cents": -11.5,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-08-31"
   },
   {
     "timestamp": "2026-08-31T04:42:49.180508+03:00",
@@ -1022,7 +1274,10 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -11.61
+    "pnl_cents": -11.61,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-09-01"
   },
   {
     "timestamp": "2026-08-31T19:22:22.066453+03:00",
@@ -1034,7 +1289,10 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 18.95
+    "pnl_cents": 18.95,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-09-01"
   },
   {
     "timestamp": "2026-09-02T04:30:10.829258+03:00",
@@ -1047,7 +1305,10 @@
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
     "pnl_cents": -11.7,
-    "scoring_method": "legacy_synthetic"
+    "scoring_method": "legacy_synthetic",
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-09-04"
   },
   {
     "timestamp": "2026-09-02T15:57:39.605785+03:00",
@@ -1060,7 +1321,10 @@
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
     "pnl_cents": -11.64,
-    "scoring_method": "legacy_synthetic"
+    "scoring_method": "legacy_synthetic",
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-09-04"
   },
   {
     "timestamp": "2026-09-02T20:13:54.320094+03:00",
@@ -1073,7 +1337,10 @@
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
     "pnl_cents": -11.74,
-    "scoring_method": "legacy_synthetic"
+    "scoring_method": "legacy_synthetic",
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-09-04"
   },
   {
     "timestamp": "2026-09-03T04:16:07.502595+03:00",
@@ -1085,7 +1352,10 @@
     "validated": false,
     "outcome": null,
     "exit_reason": null,
-    "pnl_cents": null
+    "pnl_cents": null,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-09-04"
   },
   {
     "timestamp": "2026-09-03T04:33:35.041863+03:00",
@@ -1097,7 +1367,10 @@
     "validated": false,
     "outcome": null,
     "exit_reason": null,
-    "pnl_cents": null
+    "pnl_cents": null,
+    "direction_scored": true,
+    "direction_correct": null,
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-09-03T16:00:08.822571+03:00",
@@ -1111,7 +1384,10 @@
     "validated": false,
     "outcome": null,
     "exit_reason": null,
-    "pnl_cents": null
+    "pnl_cents": null,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-09-04"
   },
   {
     "timestamp": "2026-09-04T04:07:53.219657+03:00",
