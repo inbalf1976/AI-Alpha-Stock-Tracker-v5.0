@@ -1,0 +1,16 @@
+{
+  "2026-08-30T17:36:38.760182+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -1.18,
+    "final_price": 774.75,
+    "key_phrase": "An escalating U.S.-Canada trade war and tightening monetary policy pushing bond yields higher while stoking inflation fears."
+  },
+  "2026-08-25T21:50:06.868143+00:00": {
+    "signal": "BULLISH",
+    "outcome": "WIN",
+    "pct_move": 9.65,
+    "final_price": 784.0,
+    "key_phrase": "Total outbound transit standstill in the Strait of Hormuz and intensifying retaliatory trade wars between the U.S., China, and Canada."
+  }
+}
