@@ -12,5 +12,278 @@
     "pct_move": 9.65,
     "final_price": 784.0,
     "key_phrase": "Total outbound transit standstill in the Strait of Hormuz and intensifying retaliatory trade wars between the U.S., China, and Canada."
+  },
+  "2026-08-18T23:04:01.573960+00:00": {
+    "signal": "BULLISH",
+    "outcome": "WIN",
+    "pct_move": 2.38,
+    "final_price": 699.25,
+    "key_phrase": "Active maritime disruptions and potential military escalation in the Strait of Hormuz threatening global energy and commodity flows."
+  },
+  "2026-08-18T05:09:03.259290+00:00": {
+    "signal": "BEARISH",
+    "outcome": "FLAT",
+    "pct_move": 0.72,
+    "final_price": 698.5,
+    "key_phrase": "Escalation of tanker blockades and supply bottlenecks in the Strait of Hormuz driving further energy price volatility."
+  },
+  "2026-08-17T23:17:22.994701+00:00": {
+    "signal": "BEARISH",
+    "outcome": "LOSS",
+    "pct_move": 2.14,
+    "final_price": 703.5,
+    "key_phrase": "Escalating geopolitical conflict and dark-fleet shipping disruptions in the Strait of Hormuz driving sustained spikes in global crude and gas oil prices."
+  },
+  "2026-08-17T21:28:04.673024+00:00": {
+    "signal": "BEARISH",
+    "outcome": "LOSS",
+    "pct_move": 1.56,
+    "final_price": 700.5,
+    "key_phrase": "Escalating geopolitical tensions in the Middle East and ongoing clandestine tanker movements threatening Hormuz shipping chokepoints."
+  },
+  "2026-08-16T08:58:21.448823+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -1.12,
+    "final_price": 681.75,
+    "key_phrase": "Prolonged military impasse and physical disruption in the Strait of Hormuz and Bab el-Mandeb chokepoints, severely choking global energy and bulk transit."
+  },
+  "2026-08-15T23:14:07.136201+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": -0.94,
+    "final_price": 683.0,
+    "key_phrase": "Escalation of tanker attacks and complete transit closures in the Strait of Hormuz restricting global energy flows."
+  },
+  "2026-08-15T08:56:53.462954+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": 0.18,
+    "final_price": 690.75,
+    "key_phrase": "Persistent kinetic threats and tactical evasion (AIS-dark transits) around key maritime chokepoints like the Strait of Hormuz and Bab el-Mandeb threatening global energy and bulk commodity flows."
+  },
+  "2026-08-12T16:26:26.389075+00:00": {
+    "signal": "BULLISH",
+    "outcome": "WIN",
+    "pct_move": 5.59,
+    "final_price": 689.5,
+    "key_phrase": "Escalating kinetic activity and maritime enforcement actions across key chokepoints (Hormuz, Bab el-Mandeb, and Black Sea) threatening global energy and agricultural flows."
+  },
+  "2026-08-09T23:24:38.545431+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": -0.08,
+    "final_price": 652.0,
+    "key_phrase": "Prolonged closure or severe restriction of the Strait of Hormuz bottleneck combined with escalated geopolitical conflict driving a sustained oil price shock."
+  },
+  "2026-08-08T20:30:13.085401+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -1.06,
+    "final_price": 633.0,
+    "key_phrase": "A potential Fed interest rate hike in September amidst persistent inflation and intensifying geopolitical supply shocks."
+  },
+  "2026-08-08T18:42:15.537017+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -1.45,
+    "final_price": 630.5,
+    "key_phrase": "Prolonged closure or severely restricted transit through the Strait of Hormuz keeping global energy and freight markets under extreme stress."
+  },
+  "2026-08-08T12:37:04.715387+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -1.56,
+    "final_price": 629.75,
+    "key_phrase": "Escalating monetary policy tightening by the Federal Reserve triggered by persistent inflation and energy shocks, potentially stalling broader economic growth."
+  },
+  "2026-08-08T06:53:52.182476+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": 0.86,
+    "final_price": 645.25,
+    "key_phrase": "Persistent inflation driven by supply and energy shocks combined with central bank policy division."
+  },
+  "2026-08-07T12:52:18.113038+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": 0.04,
+    "final_price": 641.75,
+    "key_phrase": "Escalating climate and drought disruptions to key agricultural transportation arteries and supply chains."
+  },
+  "2026-08-07T10:37:24.725074+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": 0.86,
+    "final_price": 647.0,
+    "key_phrase": "Accelerating inflation pressures coupled with slowing economic growth (stagflationary risks) and severe climate-induced supply chain disruptions."
+  },
+  "2026-08-07T10:25:32.389604+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": 0.86,
+    "final_price": 647.0,
+    "key_phrase": "Potential military escalation or prolonged disruption in the Strait of Hormuz triggering a severe oil supply shock and reigniting global inflation."
+  },
+  "2026-08-07T00:06:06.416682+00:00": {
+    "signal": "BULLISH",
+    "outcome": "WIN",
+    "pct_move": 3.12,
+    "final_price": 652.0,
+    "key_phrase": "Escalating Middle Eastern hostilities driving prolonged energy price spikes that lock in persistent global inflation and force aggressive central bank monetary tightening."
+  },
+  "2026-08-06T08:36:43.857620+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": -0.66,
+    "final_price": 639.75,
+    "key_phrase": "Escalating geopolitical tensions in the Middle East driving renewed energy price shocks and compounding global inflationary pressures."
+  },
+  "2026-08-05T19:40:34.804283+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": -0.66,
+    "final_price": 639.75,
+    "key_phrase": "Accelerating inflation and geopolitical energy shocks forcing an aggressive monetary policy tightening cycle by the Federal Reserve."
+  },
+  "2026-08-05T16:00:17.314980+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": -0.66,
+    "final_price": 639.75,
+    "key_phrase": "Escalation of Middle Eastern geopolitical conflict triggering renewed oil price shocks and persistent supply chain bottlenecks."
+  },
+  "2026-08-04T13:58:46.610699+00:00": {
+    "signal": "BEARISH",
+    "outcome": "FLAT",
+    "pct_move": 0.78,
+    "final_price": 643.5,
+    "key_phrase": "Persistent underlying manufacturing price pressures and geopolitical supply volatility reigniting inflation before the Federal Reserve can ease policy."
+  },
+  "2026-08-02T19:16:19.328374+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": 0.74,
+    "final_price": 644.0,
+    "key_phrase": "Persistent energy-driven supply shocks fueling inflation, which could force a more aggressive Fed reaction despite ongoing economic uncertainties."
+  },
+  "2026-08-01T13:07:56.733589+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": -0.12,
+    "final_price": 638.5,
+    "key_phrase": "Further escalation of the Middle East conflict threatening critical maritime shipping lanes, energy supplies, and global agricultural logistics."
+  },
+  "2026-08-01T09:04:58.306433+00:00": {
+    "signal": "BULLISH",
+    "outcome": "FLAT",
+    "pct_move": 0.23,
+    "final_price": 640.75,
+    "key_phrase": "Escalation of Middle East conflict threatening critical energy shipping lanes and supply infrastructure, alongside sticky inflation complicating central bank policy paths."
+  },
+  "2026-08-01T08:21:43.619602+00:00": {
+    "signal": "BEARISH",
+    "outcome": "FLAT",
+    "pct_move": 0.51,
+    "final_price": 642.5,
+    "key_phrase": "Unforeseen escalation in geopolitical conflicts suddenly injecting the war premium back into agricultural commodities."
+  },
+  "2026-07-31T13:52:17.587351+00:00": {
+    "signal": "BULLISH",
+    "outcome": "WIN",
+    "pct_move": 2.51,
+    "final_price": 653.0,
+    "key_phrase": "Escalation of geopolitical conflicts impacting critical maritime supply routes like the Black Sea and the Strait of Hormuz."
+  },
+  "2026-07-31T08:50:19.229843+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -2.1,
+    "final_price": 640.25,
+    "key_phrase": "Geopolitical escalation in the Middle East disrupting critical maritime choke points like the Suez Canal and Strait of Hormuz, thereby reigniting global energy inflation."
+  },
+  "2026-07-30T19:39:20.134646+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -3.65,
+    "final_price": 639.25,
+    "key_phrase": "Widening Middle East military conflict severely disrupting critical maritime trade routes and energy transit chokepoints like the Suez Canal."
+  },
+  "2026-07-30T13:47:42.012070+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -4.02,
+    "final_price": 639.25,
+    "key_phrase": "Further escalation of Middle Eastern military actions threatening critical energy and commodity transit chokepoints like the Suez Canal and Strait of Hormuz."
+  },
+  "2026-07-30T09:58:56.911605+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -5.3,
+    "final_price": 639.25,
+    "key_phrase": "Further escalation of the Middle East conflict threatening broader energy supplies and global shipping choke points."
+  },
+  "2026-07-30T08:27:41.104481+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -5.78,
+    "final_price": 639.25,
+    "key_phrase": "Further military escalation in the Middle East causing severe, sustained disruptions to global energy supplies and maritime trade routes."
+  },
+  "2026-07-29T13:58:39.324493+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -3.36,
+    "final_price": 639.25,
+    "key_phrase": "Further military escalation in the Middle East causing prolonged oil supply shocks and unanchoring global inflation expectations."
+  },
+  "2026-07-29T09:22:44.535101+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -3.69,
+    "final_price": 639.25,
+    "key_phrase": "Unchecked escalation of the Middle East conflict driving energy shocks and persistent inflation, forcing a more aggressive Fed rate path."
+  },
+  "2026-07-29T08:41:40.948247+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -3.94,
+    "final_price": 639.25,
+    "key_phrase": "Escalating Middle Eastern military conflict driving a sustained oil price shock that accelerates global inflation and disrupts supply chains."
+  },
+  "2026-07-28T19:38:14.354913+00:00": {
+    "signal": "BEARISH",
+    "outcome": "WIN",
+    "pct_move": -3.84,
+    "final_price": 639.25,
+    "key_phrase": "Unexpected escalation or disruption in Red Sea maritime trade routes despite diplomatic interventions."
+  },
+  "2026-07-28T18:24:55.754861+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -3.84,
+    "final_price": 639.25,
+    "key_phrase": "Hawkish monetary policy surprises or sticky inflation prints reigniting global bond yield spikes and equity sell-offs."
+  },
+  "2026-07-28T13:53:57.950053+00:00": {
+    "signal": "BEARISH",
+    "outcome": "WIN",
+    "pct_move": -3.67,
+    "final_price": 637.0,
+    "key_phrase": "Hawkish surprises or unexpected policy signals from the Federal Reserve rate decision that could trigger severe volatility across bonds, equities, and the U.S. dollar."
+  },
+  "2026-07-27T21:14:05.781998+00:00": {
+    "signal": "BEARISH",
+    "outcome": "FLAT",
+    "pct_move": -0.75,
+    "final_price": 658.75,
+    "key_phrase": "Unanticipated hawkish surprises or shifting guidance from the upcoming Federal Reserve and Bank of England monetary policy decisions."
+  },
+  "2026-07-26T21:21:07.742613+00:00": {
+    "signal": "BULLISH",
+    "outcome": "LOSS",
+    "pct_move": -1.74,
+    "final_price": 665.0,
+    "key_phrase": "Further escalation of the Middle East conflict threatening critical maritime shipping lanes and global energy supplies."
   }
 }
