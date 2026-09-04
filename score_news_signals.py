@@ -85,9 +85,23 @@ def save_scored(scored):
     SCORED_FILE.write_text(json.dumps(scored, indent=2))
 
 
-def fetch_price_history():
+def fetch_price_history(earliest_needed=None):
+    """
+    UPDATED 2026-09-04, real bug found on the first real run: this used
+    a fixed 10-day window, but news_log.json's real entries go back to
+    2026-07-26 — every entry older than 10 days was silently
+    unscoreable (empty price lookup, treated as "not enough data yet"
+    even though it never would be, since the window always slides
+    forward with "now"). Now takes the earliest timestamp actually
+    needing to be scored and reaches back far enough to cover it, with
+    a small buffer. Falls back to the old 10-day window if nothing is
+    passed in (e.g. if called standalone).
+    """
     end = datetime.now(IL)
-    start = end - timedelta(days=10)
+    if earliest_needed is not None:
+        start = earliest_needed - timedelta(days=1)  # 1-day buffer before the earliest entry
+    else:
+        start = end - timedelta(days=10)
     df = yf.Ticker(TICKER).history(start=start, end=end, interval='1h', auto_adjust=False)
     df.index = df.index.tz_localize(None) if df.index.tz else df.index
     return df
@@ -137,7 +151,20 @@ def main():
     scored = load_scored()
     print(f"Loaded {len(log)} logged news scans.")
 
-    price_df = fetch_price_history()
+    # Find the earliest not-yet-scored directional entry so the price
+    # fetch reaches back far enough to cover it — see
+    # fetch_price_history()'s docstring for why this matters.
+    candidates = [
+        e['timestamp'] for e in log
+        if 'timestamp' in e and 'llm_analysis' in e
+        and e['timestamp'] not in scored
+        and normalize_signal(e) is not None
+    ]
+    earliest_needed = None
+    if candidates:
+        earliest_needed = datetime.fromisoformat(min(candidates)).astimezone(IL)
+
+    price_df = fetch_price_history(earliest_needed)
     print(f"Fetched {len(price_df)} hourly bars for scoring.\n")
 
     newly_scored = 0
