@@ -158,6 +158,106 @@ def score_one_prediction(entry, price_df):
     return None, None, None, None  # still open, not enough time elapsed yet
 
 
+def score_daily_direction(log, price_df):
+    """
+    Separate metric from score_one_prediction() above — added 2026-09-03
+    after a real conversation surfaced that "win/loss accuracy" was being
+    asked about without anyone being sure which of several different
+    things was actually meant. There are (at least) two genuinely
+    different questions this codebase can answer, and they must never be
+    blended into one number:
+
+      - score_one_prediction() / 'real_setup': did the actual weekly
+        setup (entry/stop/target from weekly_range_cache.json, the same
+        numbers shown in the Telegram "TRADE SETUP" line) hit its real
+        target or stop? This is what the summary below calls SETUP
+        win/loss.
+
+      - score_daily_direction() (this function): was the "Daily
+        direction (today)" UP/DOWN call — a fresh live ensemble read
+        every run, independent of the frozen setup, see
+        wheat_monitor_pro.py's `direction` variable and its
+        "Daily direction (today)" print line — actually right, checked
+        against the next real trading day's Close? This is DIRECTION
+        accuracy, a completely different, much simpler question with
+        no stop-loss involved at all.
+
+    These can and do diverge substantially — confirmed in the real
+    2026-08-13 to 2026-08-21 window, where SETUP win rate and DIRECTION
+    accuracy told two different stories for the same days.
+
+    Dedup: prediction_log.json can carry multiple log entries for the
+    same real underlying call (see the still-open price-triggered
+    duplicate-logging issue) — collapses to one scoring attempt per
+    (calendar day, direction, ~entry_price) so that bug doesn't also
+    contaminate this metric. This is a stopgap, not a fix for the
+    underlying duplicate-logging bug itself.
+
+    Known caveat, not fixed here: price_df comes from plain TICKER=ZW=F
+    (see module docstring), not the front-month-correct contract
+    wheat_monitor_pro.py actually uses — so results near a contract
+    roll may carry a little price noise. Flagged, not silently fixed,
+    since fixing it is a separate, already-tracked open item.
+
+    Mutates log in place with 'direction_scored' (bool),
+    'direction_correct' (bool or None), 'direction_check_date' (str) —
+    entirely separate fields from validated/outcome/scoring_method
+    above, so this never interferes with SETUP scoring.
+    """
+    seen_keys = set()
+    newly_scored = 0
+
+    for entry in log:
+        if entry.get('direction_scored'):
+            continue  # already scored in a previous run
+
+        day = entry['timestamp'][:10]
+        key = (day, entry['direction'], round(entry['entry_price']))
+        if key in seen_keys:
+            entry['direction_scored'] = True
+            entry['direction_correct'] = None  # duplicate of a same-day call, not independently scored
+            entry['direction_check_date'] = None
+            continue
+        seen_keys.add(key)
+
+        entry_date = datetime.fromisoformat(entry['timestamp']).date()
+        future = price_df[price_df.index.date > entry_date]
+        if future.empty:
+            continue  # too soon — next trading day hasn't happened yet, try again next run
+
+        next_bar = future.iloc[0]
+        next_close = float(next_bar['Close'])
+        next_date = future.index[0].date().isoformat()
+
+        correct = (next_close > entry['entry_price']) if entry['direction'] == 'UP' \
+            else (next_close < entry['entry_price'])
+
+        entry['direction_scored'] = True
+        entry['direction_correct'] = correct
+        entry['direction_check_date'] = next_date
+        newly_scored += 1
+
+    return newly_scored
+
+
+def print_direction_accuracy_summary(log):
+    scored = [e for e in log if e.get('direction_scored') and e.get('direction_correct') is not None]
+    print(f"\n--- DAILY DIRECTION accuracy — separate metric, see score_daily_direction() docstring (n={len(scored)}) ---")
+    if not scored:
+        print("(No entries scored yet.)")
+        return
+    correct = sum(1 for e in scored if e['direction_correct'])
+    print(f"Overall: {correct}/{len(scored)} = {correct/len(scored):.1%}")
+    tiers = sorted(set(e.get('tier', 'N/A') for e in scored), key=lambda x: (x == 'N/A', x))
+    for t in tiers:
+        tier_entries = [e for e in scored if e.get('tier', 'N/A') == t]
+        tier_correct = sum(1 for e in tier_entries if e['direction_correct'])
+        print(f"  Tier {t}: {tier_correct}/{len(tier_entries)} = {tier_correct/len(tier_entries):.1%}  (n={len(tier_entries)})")
+    print("(This is DIRECTION only — no stop/target involved. Compare against")
+    print(" 'Scored against the REAL weekly setup' above only if you mean to")
+    print(" ask two different questions; they are not the same metric.)")
+
+
 def main():
     log = load_log()
     if not log:
@@ -193,6 +293,10 @@ def main():
 
     save_log(log)
     print(f"\nNewly scored this run: {newly_scored}")
+
+    newly_direction_scored = score_daily_direction(log, price_df)
+    save_log(log)
+    print(f"Newly direction-scored this run: {newly_direction_scored}")
 
     # ── Summary stats, overall and by tier ──
     scored = [e for e in log if e.get('validated')]
@@ -239,6 +343,8 @@ def main():
     print("(This is the OLD metric — matches backtest.py's holdout definition,")
     print(" but does not correspond to the real entry/stop/target shown in the")
     print(" Telegram alert. Kept only so nothing from before 2026-09-03 is lost.)")
+
+    print_direction_accuracy_summary(log)
 
     print("\nNote: ConvictionGate's HOLDOUT_ACCURACY claims (84.8%/84.0%/70.0%/68.0%)")
     print("were computed by backtest.py using the legacy synthetic 1.5%/2.5%")
