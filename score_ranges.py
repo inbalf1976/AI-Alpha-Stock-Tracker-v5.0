@@ -75,8 +75,15 @@ def _walk_outcome(stop, target, start_iso, end_iso, price_df):
     setup, not this one; same convention score_predictions.py already
     uses via `> entry_date`, found necessary here too during testing —
     see 2026-09-03 fix note) through end_iso (exclusive, or None for
-    open-ended). Returns 'WIN' (target hit first), 'LOSS' (stop hit
-    first), or None (neither hit yet within available data).
+    open-ended). Returns (outcome, diagnostic) where outcome is 'WIN'
+    (target hit first), 'LOSS' (stop hit first), or None (neither hit
+    yet within available data); diagnostic is a dict with the actual
+    max High / min Low seen in the window, to make it possible to see
+    WHY something didn't resolve — added 2026-09-04 after a real case
+    where a period showed unresolved despite real settlement data
+    clearly showing the target was hit; root cause was the known
+    TICKER=ZW=F caveat (see module docstring) diverging from the
+    correct front-month contract price around a contract roll.
     """
     direction = _direction_of(stop, target)
     start_date = datetime.fromisoformat(start_iso).date()
@@ -86,6 +93,11 @@ def _walk_outcome(stop, target, start_iso, end_iso, price_df):
     if end_date:
         bars = bars[bars.index.date < end_date]
 
+    diag = {'bars_checked': len(bars), 'max_high': None, 'min_low': None}
+    if not bars.empty:
+        diag['max_high'] = float(bars['High'].max())
+        diag['min_low'] = float(bars['Low'].min())
+
     for _, bar in bars.iterrows():
         if direction == 'UP':
             hit_target = bar['High'] >= target
@@ -94,10 +106,10 @@ def _walk_outcome(stop, target, start_iso, end_iso, price_df):
             hit_target = bar['Low'] <= target
             hit_stop = bar['High'] >= stop
         if hit_target:
-            return 'WIN'
+            return 'WIN', diag
         if hit_stop:
-            return 'LOSS'
-    return None
+            return 'LOSS', diag
+    return None, diag
 
 
 def _build_weekly_segments():
@@ -135,6 +147,12 @@ def score_weekly_ranges():
     through to real resolution — matching "if it was corrected during
     the window and was right/wrong" rather than clipping the
     resolution check to exactly 7 days.
+
+    Also returns {iso_key: diagnostic} in a second dict, so an
+    unexpected None can be checked against the real max High / min Low
+    actually seen — see _walk_outcome()'s docstring for why this
+    matters (the TICKER=ZW=F caveat can otherwise make a real,
+    already-resolved period look unresolved with no visible reason).
     """
     segments = _build_weekly_segments()
     price_df = fetch_price_history()
@@ -142,11 +160,12 @@ def score_weekly_ranges():
     iso_keys = sorted(set(e['iso_key'] for e in perf))
 
     results = {}
+    diagnostics = {}
     for iso_key in iso_keys:
         year, week = iso_key.split('-W')
         year, week = int(year), int(week)
         week_end = datetime.fromisocalendar(year, week, 7).replace(
-            tzinfo=IL, hour=23, minute=59) + timedelta(seconds=1)
+            tzinfo=IL, hour=23, minute=59, second=59, microsecond=0) + timedelta(seconds=1)
         week_end_iso = week_end.isoformat()
 
         # last segment that had already started by this week's end
@@ -159,12 +178,16 @@ def score_weekly_ranges():
 
         if active is None:
             results[iso_key] = None
+            diagnostics[iso_key] = {'note': 'no segment found for this week'}
             continue
 
-        outcome = _walk_outcome(active['stop'], active['target'],
-                                 active['start'], active['end'], price_df)
+        outcome, diag = _walk_outcome(active['stop'], active['target'],
+                                       active['start'], active['end'], price_df)
+        diag['stop'] = active['stop']
+        diag['target'] = active['target']
         results[iso_key] = outcome
-    return results
+        diagnostics[iso_key] = diag
+    return results, diagnostics
 
 
 def score_monthly_ranges():
@@ -234,7 +257,7 @@ def score_monthly_ranges():
     return results
 
 
-def _print_summary(label, results):
+def _print_summary(label, results, diagnostics=None):
     print(f"\n--- {label} ---")
     resolved = {k: v for k, v in results.items() if v is not None}
     pending = [k for k, v in results.items() if v is None]
@@ -247,10 +270,23 @@ def _print_summary(label, results):
             print(f"  {k}: {resolved[k]}")
     if pending:
         print(f"  (still open / not yet resolvable: {', '.join(sorted(pending))})")
+        if diagnostics:
+            print("  Diagnostic detail for the above (real max High / min Low")
+            print("  actually seen, vs the stop/target being checked — if the")
+            print("  real numbers you're seeing elsewhere clearly crossed the")
+            print("  target/stop but this still shows unresolved, that's the")
+            print("  known TICKER=ZW=F caveat, see module docstring):")
+            for k in sorted(pending):
+                d = diagnostics.get(k, {})
+                if d.get('bars_checked') is None:
+                    print(f"    {k}: {d.get('note', 'no diagnostic available')}")
+                else:
+                    print(f"    {k}: stop={d.get('stop')} target={d.get('target')} | "
+                          f"bars_checked={d['bars_checked']} max_high={d['max_high']} min_low={d['min_low']}")
 
 
 def main():
-    weekly = score_weekly_ranges()
+    weekly, weekly_diag = score_weekly_ranges()
     monthly = score_monthly_ranges()
 
     print("=" * 60)
@@ -261,7 +297,7 @@ def main():
     print("same break/hold event — the numbers below apply to all three")
     print("alert lines identically. See module docstring for why.")
 
-    _print_summary("WEEKLY FINAL CALL-% / EXPECTED RANGE-% / TRADE SETUP-% (weekly)", weekly)
+    _print_summary("WEEKLY FINAL CALL-% / EXPECTED RANGE-% / TRADE SETUP-% (weekly)", weekly, weekly_diag)
     _print_summary("MONTHLY OUTLOOK Range-%", monthly)
 
 
