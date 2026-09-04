@@ -1,5 +1,153 @@
 [
   {
+    "timestamp": "2026-09-04T16:53:45.560745+00:00",
+    "total_scanned": 228,
+    "flagged_count": 165,
+    "flagged_headlines": [
+      {
+        "title": "Adobe just announced its next CEO. Here’s why its stock is dropping.",
+        "link": "https://www.marketwatch.com/story/adobe-just-announced-its-next-ceo-heres-why-its-stock-is-dropping-bad9ed8a?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 04 Sep 2026 13:42:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Oil slides on Friday, heads for weekly gain on US-Iran fight",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-set-for-weekly-gain-as-usiran-hostilities-intensify-4888883",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-04 16:12:48",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US sanctions Turkish bank, two subsidiaries to pressure Iran",
+        "link": "https://www.investing.com/news/commodities-news/us-targets-turkish-entities-with-iranrelated-sanctions-4889783",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-04 15:43:19",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Gold slips after stronger-than-expected US jobs data, Fed rate hike bets in focus",
+        "link": "https://www.investing.com/news/commodities-news/gold-holds-near-4500-as-waller-cools-fed-hike-bets-4888741",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-04 12:52:26",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Oil dips near six-week highs as Iran tensions keep Hormuz supply risks elevated",
+        "link": "https://www.investing.com/news/commodities-news/oil-heads-for-sharp-weekly-gains-on-escalating-usiran-tensions-4888752",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-04 12:00:58",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "European gas inches up to lock in fourth weekly gain after breaching war-era peaks",
+        "link": "https://www.investing.com/news/commodities-news/european-gas-inches-up-to-lock-in-fourth-weekly-gain-after-breaching-warera-peaks-4888892",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-04 10:14:48",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "U.S. 10-year Treasury yield spikes following blockbuster NFP report",
+        "link": "https://www.investing.com/news/forex-news/global-bond-rout-pauses-for-second-day-as-feds-waller-sparks-ratehold-hopes-4888831",
+        "source": "Investing.com Forex",
+        "published": "2026-09-04 12:46:20",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Yen soars to one-month high against dollar amid intervention, rate hike chatter",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-rise-as-yen-surges-toward-158-intervention-risk-returns-4886966",
+        "source": "Investing.com Forex",
+        "published": "2026-09-03 18:53:09",
+        "matched_keywords": [
+          "rate hike"
+        ]
+      },
+      {
+        "title": "U.S. bond market extends global rally, Fed’s Waller provides some relief",
+        "link": "https://www.investing.com/news/forex-news/global-bond-rout-takes-a-breath-as-european-and-aussie-yieldsease-from-peaks-4887089",
+        "source": "Investing.com Forex",
+        "published": "2026-09-03 17:50:16",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar hits one-week high as BoC inflation warnings bolster loonie",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-hits-oneweek-high-as-boc-inflation-warnings-bolster-loonie-4888261",
+        "source": "Investing.com Forex",
+        "published": "2026-09-03 15:20:08",
+        "matched_keywords": [
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": null
+  },
+  {
     "timestamp": "2026-09-04T12:53:59.680003+00:00",
     "total_scanned": 219,
     "flagged_count": 168,
