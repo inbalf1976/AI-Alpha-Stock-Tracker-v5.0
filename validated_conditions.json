@@ -1,13 +1,12 @@
 {
-  "generated_at": "2026-09-05T00:16:13.376222",
-  "baseline_up": 0.6747,
+  "generated_at": "2026-09-05T20:34:12.299412",
+  "baseline_up": 0.68,
   "validated_conditions": {
     "momentum_up": 0.828,
-    "macd_bullish": 0.738,
     "rsi_overbought": 0.737,
-    "bullish_month": 1.0,
+    "macd_bullish": 0.738,
     "above_sma20": 0.756,
     "near_bb_upper": 0.842
   },
-  "source_backtest_run_date": "2026-09-05T00:16:13.283169"
+  "source_backtest_run_date": "2026-09-05T20:34:12.155786"
 }
