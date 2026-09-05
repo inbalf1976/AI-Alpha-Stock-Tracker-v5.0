@@ -404,6 +404,24 @@ def check_workflow_schedule_consistency():
 # — never blocks or alters the live monitor's own freeze/break logic,
 # just surfaces the discrepancy for a human to look at.
 def check_undetected_weekly_breach():
+    """
+    UPDATED 2026-09-05, real inconsistency found and confirmed: this
+    used to check INTRADAY High/Low (60-minute bars) since the setup
+    froze — the exact philosophy wheat_monitor_pro.py's own breach
+    check used to use too, before a real, deliberate correction today.
+    A live case (DOWN setup, stop=753c, real intraday High touched
+    762c but closed back within bounds) was watched happening in real
+    time and confirmed as NOT a real break — the live system was fixed
+    to check daily CLOSE instead of intraday High/Low, so a wick that
+    reverts by end of day no longer counts, for either WIN or LOSS.
+    This check was NOT updated at the same time, meaning it would have
+    kept flagging that exact, now-correctly-ignored case as a problem
+    forever, permanently contradicting the live system's own fixed
+    logic. Rewritten to check daily CLOSE since frozen_at, matching
+    wheat_monitor_pro.py exactly — an intraday touch that reverted by
+    close is noted separately, clearly labeled as informational only,
+    not reported as a likely-missed break.
+    """
     issues = []
     cached = _load_json(WEEKLY_CACHE)
     if not isinstance(cached, dict) or "weekly" not in cached:
@@ -425,45 +443,66 @@ def check_undetected_weekly_breach():
 
     try:
         ticker = get_front_month_ticker()
-        hist = yf.Ticker(ticker).history(period="7d", interval="60m")
+        hist = yf.Ticker(ticker).history(period="10d", interval="1d")
         if hist.empty:
             return issues
-        hist = hist[hist.index >= frozen_at]
-        if hist.empty:
+        hist = hist[hist.index.date > frozen_at.date()]  # day AFTER freeze, matching
+        if hist.empty:                                   # wheat_monitor_pro.py's own convention
             return issues
         period_high = float(hist['High'].max())
-        period_low  = float(hist['Low'].min())
+        period_low = float(hist['Low'].min())
+        closes_breach_stop = False
+        closes_breach_target = False
+        for _, bar in hist.iterrows():
+            close_price = float(bar['Close'])
+            if final_call == 'UP':
+                if close_price < stop:
+                    closes_breach_stop = True
+                if close_price > target:
+                    closes_breach_target = True
+            else:
+                if close_price > stop:
+                    closes_breach_stop = True
+                if close_price < target:
+                    closes_breach_target = True
     except Exception:
         return issues  # data-source hiccup — don't fail loudly on a supplementary check
 
-    if final_call == 'UP':
-        if period_low <= stop:
-            issues.append(
-                f"Currently frozen weekly setup (UP, stop {stop:.0f}c) shows an intraday LOW of "
-                f"{period_low:.0f}c since it was frozen ({frozen_at_str}) — the stop may have been "
-                f"crossed and price recovered before the next scheduled run, without being recorded "
-                f"as a LOSS. Worth a manual check against weekly_break_log.json."
-            )
-        if period_high >= target:
-            issues.append(
-                f"Currently frozen weekly setup (UP, target {target:.0f}c) shows an intraday HIGH of "
-                f"{period_high:.0f}c since it was frozen ({frozen_at_str}) — the target may have been "
-                f"reached and price pulled back before the next scheduled run, without being recorded "
-                f"as a WIN."
-            )
-    else:  # DOWN
-        if period_high >= stop:
-            issues.append(
-                f"Currently frozen weekly setup (DOWN, stop {stop:.0f}c) shows an intraday HIGH of "
-                f"{period_high:.0f}c since it was frozen ({frozen_at_str}) — the stop may have been "
-                f"crossed without being recorded as a LOSS."
-            )
-        if period_low <= target:
-            issues.append(
-                f"Currently frozen weekly setup (DOWN, target {target:.0f}c) shows an intraday LOW of "
-                f"{period_low:.0f}c since it was frozen ({frozen_at_str}) — the target may have been "
-                f"reached without being recorded as a WIN."
-            )
+    stop_touched_intraday = (period_high >= stop) if final_call == 'DOWN' else (period_low <= stop)
+    target_touched_intraday = (period_low <= target) if final_call == 'DOWN' else (period_high >= target)
+
+    if closes_breach_stop:
+        issues.append(
+            f"Currently frozen weekly setup ({final_call}, stop {stop:.0f}c) shows a real "
+            f"CLOSE beyond the stop since it was frozen ({frozen_at_str}) — this is a real "
+            f"break by the same definition wheat_monitor_pro.py itself uses, and does not "
+            f"appear to have been recorded as a LOSS. Worth a manual check against "
+            f"weekly_break_log.json."
+        )
+    elif stop_touched_intraday:
+        issues.append(
+            f"(Informational only, NOT a likely-missed break) Currently frozen weekly setup "
+            f"({final_call}, stop {stop:.0f}c) had an intraday touch beyond the stop since it "
+            f"was frozen, but closed back within bounds every day — per wheat_monitor_pro.py's "
+            f"own Close-based definition, this correctly does NOT count as a break."
+        )
+
+    if closes_breach_target:
+        issues.append(
+            f"Currently frozen weekly setup ({final_call}, target {target:.0f}c) shows a real "
+            f"CLOSE beyond the target since it was frozen ({frozen_at_str}) — this is a real "
+            f"win by the same definition wheat_monitor_pro.py itself uses, and does not appear "
+            f"to have been recorded as a WIN."
+        )
+    elif target_touched_intraday:
+        issues.append(
+            f"(Informational only, NOT a likely-missed win) Currently frozen weekly setup "
+            f"({final_call}, target {target:.0f}c) had an intraday touch beyond the target "
+            f"since it was frozen, but closed back within bounds every day — per "
+            f"wheat_monitor_pro.py's own Close-based definition, this correctly does NOT "
+            f"count as a win yet."
+        )
+
     return issues
 
 
