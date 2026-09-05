@@ -1,0 +1,22 @@
+name: Find Significant Price Moves (one-off)
+on:
+  workflow_dispatch:   # manual trigger only — run this from the Actions tab
+
+jobs:
+  find:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install packages
+      run: pip install yfinance pandas
+    - name: Find significant price moves
+      # Fully read-only — only fetches real ZW=F price history and
+      # prints the biggest moves, never writes or commits anything.
+      # Safe to run any number of times.
+      run: python find_significant_price_moves.py
