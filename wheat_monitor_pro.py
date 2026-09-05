@@ -1426,6 +1426,29 @@ def load_state():
 
 def save_state(state):
     state['last_check'] = datetime.now(IL).isoformat()
+
+    # UPDATED 2026-09-05, real bug found by bug_detector.py: alerts_today
+    # only ever gets keys added, never removed — bug_detector.py flagged
+    # 43 entries with no cleanup, some from May. Only the last couple of
+    # days' keys are ever actually checked (see should_send()'s slot_key
+    # lookup), so anything older than a small buffer is pure dead weight.
+    # Pruned here, once per save, rather than in a separate cleanup pass —
+    # keeps the file from growing unbounded without needing a dedicated
+    # maintenance job.
+    ALERTS_TODAY_RETENTION_DAYS = 30
+    alerts_today = state.get('alerts_today', {})
+    if alerts_today:
+        cutoff = (datetime.now(IL) - timedelta(days=ALERTS_TODAY_RETENTION_DAYS)).date()
+        pruned = {}
+        for key, value in alerts_today.items():
+            try:
+                key_date = datetime.fromisoformat(key.rsplit('_', 1)[0]).date()
+                if key_date >= cutoff:
+                    pruned[key] = value
+            except Exception:
+                pruned[key] = value  # malformed key — keep rather than risk losing data
+        state['alerts_today'] = pruned
+
     STATE_FILE.write_text(json.dumps(state, indent=2))
 
 
