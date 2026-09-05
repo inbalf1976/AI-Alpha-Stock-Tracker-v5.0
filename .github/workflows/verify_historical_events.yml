@@ -1,0 +1,22 @@
+name: Verify Historical Events (one-off)
+on:
+  workflow_dispatch:   # manual trigger only — run this from the Actions tab
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install packages
+      run: pip install yfinance pandas
+    - name: Verify historical event price claims against real data
+      # verify_historical_events.py is fully read-only — it only fetches
+      # real ZW=F price history and prints a comparison table, never
+      # writes or commits anything. Safe to run any number of times.
+      run: python verify_historical_events.py
