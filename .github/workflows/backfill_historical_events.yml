@@ -1,0 +1,41 @@
+name: Backfill Historical Events (one-off)
+on:
+  workflow_dispatch:   # manual trigger only — run this from the Actions tab
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install packages
+      run: pip install yfinance pandas
+    - name: Backfill verified historical events
+      # Idempotent — safe to re-run, skips anything already present.
+      run: python backfill_historical_events.py
+    - name: Commit updated news_signal_scored.json
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add -f news_signal_scored.json || true
+        if git diff --staged --quiet; then
+          echo "Nothing to commit."
+        else
+          git commit -m "Backfill 2 verified historical news signal events [skip ci]"
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push failed (attempt $attempt) — fetching + merging (prefer local) and retrying..."
+            git fetch origin main
+            git merge -X ours origin/main -m "merge: resolve concurrent state update [skip ci]"
+          done
+          echo "::error::git push failed after 3 attempts."
+          exit 1
+        fi
