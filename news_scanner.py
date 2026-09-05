@@ -615,6 +615,24 @@ def interpret_with_gemini(flagged_headlines, maritime_context=None):
         Provide a concise analysis in JSON format with the following keys:
         - "summary": A 2-3 sentence overview of main market drivers.
         - "wheat_impact": "BULLISH", "BEARISH", or "NEUTRAL" with a 1-sentence reason.
+        - "wheat_impact_category": the SOURCE of the wheat_impact call above — exactly
+          one of these five, chosen by what's actually driving it, not by topic alone:
+            - "confirmed_physical_disruption": a VERIFIED, already-happening blockage,
+              closure, or physical interruption of a real shipping route, port, or supply
+              chain wheat actually uses (not a risk of one — an actual one).
+            - "speculative_tension": geopolitical tension, conflict, or risk of disruption
+              with NO confirmed physical blockage yet — most "attack", "tension rising",
+              "threatens shipping" headlines belong here, not in the category above.
+            - "self_fulfilling_sentiment": an analyst forecast, price target, or narrative
+              that could move price through belief/positioning alone, independent of any
+              physical supply fact (e.g. "top analyst predicts $X wheat").
+            - "weather_crop_damage": drought, flooding, frost, or other weather/growing-
+              condition news affecting the actual crop.
+            - "other_fundamental": WASDE-type supply/demand data, trade policy, tariffs,
+              or anything else genuinely fundamental that doesn't fit the four above.
+          When in doubt between confirmed_physical_disruption and speculative_tension. the
+          test is simple: has the disruption ACTUALLY happened and been confirmed, or is
+          it still a risk/threat/tension? If still a risk, use speculative_tension.
         - "usd_ils_impact": "BULLISH", "BEARISH", or "NEUTRAL" with a 1-sentence reason.
         - "key_risk": Single main threat to watch today.
         - "headline_overstated": true or false — for items where you have ARTICLE TEXT,
