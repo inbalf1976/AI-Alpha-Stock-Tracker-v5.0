@@ -1730,10 +1730,23 @@ def main():
     # further down), so it no longer pollutes accuracy stats either.
     # Does NOT touch the weekly trade setup (entry/stop/target) — that
     # has its own separate freeze/break logic, unaffected either way.
-    if (seasonal_blocked or trend_blocked) and tier > 0:
+    # UPDATED 2026-09-05, real gap found in the 2026-08-23 fix above:
+    # that fix only downgraded Tier when seasonal_blocked or
+    # trend_blocked caused the flip to DOWN — it didn't cover the case
+    # where the ensemble's OWN raw vote is natively DOWN with no
+    # override involved at all. momentum_up/macd_bullish are
+    # independent technical checks (momentum, MACD crossover) that can
+    # easily still read "active" on a day the ensemble concludes DOWN
+    # on its own — in that case Tier could still show e.g. "Tier 2 —
+    # momentum_up + macd_bullish" attached to a DOWN call, using
+    # UP-only-validated accuracy, and the override-flag check above
+    # wouldn't catch it since neither flag would be true. Checking
+    # direction directly instead of the two override flags covers
+    # both cases uniformly — simpler and more robust than the original.
+    if direction == 'DOWN' and tier > 0:
         print(f"  Tier downgraded: {tier} -> 0 — validated condition only proven for UP, "
-              f"override flipped direction to {direction}")
-        gate_reason = f"⚪ NO SIGNAL — validated condition is UP-only; direction overridden to {direction}"
+              f"but direction is {direction}")
+        gate_reason = f"⚪ NO SIGNAL — validated condition is UP-only; direction is {direction}"
         tier = 0
         accuracy = gate.BASELINE_UP
 
