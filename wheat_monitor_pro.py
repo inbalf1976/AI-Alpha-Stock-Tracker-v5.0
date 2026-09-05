@@ -813,9 +813,11 @@ def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direc
         stop   = old_weekly.get('stop')
         target = old_weekly.get('target')
         final_call = old_weekly.get('final_call', daily_direction)
+        frozen_at = cached.get('frozen_at')
 
         broken = False
         break_type = None  # 'target' (win) or 'stop' (loss)
+        breach_price = current_price  # may be replaced below by a more extreme real daily High/Low
         if stop is not None and target is not None:
             if final_call == 'UP':
                 if current_price > target * (1 + BREAK_THRESHOLD_PCT):
@@ -828,11 +830,44 @@ def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direc
                 elif current_price > stop * (1 + BREAK_THRESHOLD_PCT):
                     broken, break_type = True, 'stop'
 
+        # UPDATED 2026-09-05, real bug found and confirmed by bug_detector.py:
+        # the check above only ever compared the LIVE snapshot price at
+        # whatever moment a script happened to run — it could miss a real
+        # break that happened between checks and reverted before the next
+        # one. First fix attempt checked intraday High/Low, but that's
+        # asymmetric in practice: a stop wick that reverts by end of day
+        # was watched happening in real time and should NOT count as a
+        # break, same as a target wick that reverts shouldn't count as a
+        # win. Corrected to check each trading day's CLOSE since this
+        # setup was frozen, not the intraday High/Low — a brief touch
+        # that reverts by end of day doesn't count either way; a breach
+        # still true at close is real, for either direction. Same rule
+        # for WIN and LOSS, no favoritism.
+        if not broken and stop is not None and target is not None and frozen_at:
+            frozen_date = datetime.fromisoformat(frozen_at).date()
+            bars_since_freeze = df[df.index.date >= frozen_date]
+            for close_date, bar in bars_since_freeze.iterrows():
+                close_price = float(bar['Close'])
+                if final_call == 'UP':
+                    if close_price > target * (1 + BREAK_THRESHOLD_PCT):
+                        broken, break_type, breach_price = True, 'target', close_price
+                    elif close_price < stop * (1 - BREAK_THRESHOLD_PCT):
+                        broken, break_type, breach_price = True, 'stop', close_price
+                else:  # DOWN
+                    if close_price < target * (1 - BREAK_THRESHOLD_PCT):
+                        broken, break_type, breach_price = True, 'target', close_price
+                    elif close_price > stop * (1 + BREAK_THRESHOLD_PCT):
+                        broken, break_type, breach_price = True, 'stop', close_price
+                if broken:
+                    print(f"   ⚠️ Breach found via daily CLOSE check ({close_date.date()} "
+                          f"close={close_price:.2f}c), not caught by live snapshot checks")
+                    break
+
         if broken:
             outcome = 'WIN' if break_type == 'target' else 'LOSS'
-            reason = f"price {current_price:.0f}c broke past {break_type} ({outcome})"
+            reason = f"price {breach_price:.0f}c broke past {break_type} ({outcome})"
             print(f"   ⚠️ WEEKLY SETUP BROKEN: {reason} — regenerating")
-            log_weekly_break(iso_year, iso_week, current_price, old_weekly, reason)
+            log_weekly_break(iso_year, iso_week, breach_price, old_weekly, reason)
 
             # Win → keep same direction, fresh real forecast.
             # Loss → the directional read was wrong, flip it.
