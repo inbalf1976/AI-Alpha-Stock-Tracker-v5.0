@@ -1430,5 +1430,19 @@
     "outcome": null,
     "exit_reason": null,
     "pnl_cents": null
+  },
+  {
+    "timestamp": "2026-09-05T15:01:12.544469+03:00",
+    "direction": "DOWN",
+    "entry_price": 734.0,
+    "confidence": 0.8387426112991713,
+    "tier": 1,
+    "seasonal_phase": "NEUTRAL",
+    "stop_price": 752.69,
+    "target_price": 729.5,
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
   }
 ]
