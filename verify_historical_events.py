@@ -147,8 +147,21 @@ def main():
             print("  REAL DATA: no bars available after this date")
             continue
 
-        entry_price = float(before.iloc[-1]['Close'])
+        entry_bar = before.iloc[-1]
+        entry_price = float(entry_bar['Close'])
         entry_actual_date = before.index[-1].date().isoformat()
+
+        # Same-day intraday range — added 2026-09-04 after event #9 (2010
+        # export ban) showed a real spike ON the announcement day itself
+        # that a next-day-only check completely missed. Shows whether a
+        # same-day announcement caused an intraday move even if it
+        # reversed by that day's own close.
+        entry_open = float(entry_bar['Open'])
+        entry_high = float(entry_bar['High'])
+        entry_low = float(entry_bar['Low'])
+        intraday_high_pct = (entry_high - entry_open) / entry_open * 100
+        intraday_low_pct = (entry_low - entry_open) / entry_open * 100
+
         final_price = float(after_window.iloc[-1]['Close'])
         final_actual_date = after_window.index[-1].date().isoformat()
         peak_high = float(after_window['High'].max())
@@ -157,7 +170,9 @@ def main():
         peak_pct = (peak_high - entry_price) / entry_price * 100
         trough_pct = (trough_low - entry_price) / entry_price * 100
 
-        print(f"  REAL DATA: entry {entry_actual_date} @ {entry_price:.2f}c -> "
+        print(f"  SAME-DAY intraday ({entry_actual_date}): open {entry_open:.2f}c -> "
+              f"high {intraday_high_pct:+.1f}% / low {intraday_low_pct:+.1f}% (from open)")
+        print(f"  REAL DATA: entry {entry_actual_date} @ {entry_price:.2f}c (close) -> "
               f"{final_actual_date} @ {final_price:.2f}c  ({pct_move:+.1f}% net)")
         print(f"             window peak: {peak_pct:+.1f}%  |  window trough: {trough_pct:+.1f}%")
         print("  >>> COMPARE the line above to Gemini's claim by hand — does it roughly match?")
