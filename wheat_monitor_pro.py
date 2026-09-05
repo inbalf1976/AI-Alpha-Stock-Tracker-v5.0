@@ -688,10 +688,25 @@ BREAK_THRESHOLD_PCT = 0.001
 def log_daily_performance(iso_year, iso_week, current_price, weekly):
     """
     Appends today's price vs. this week's frozen range to a running
-    log, so a Friday/Saturday report can show a real day-by-day
-    breakdown (not a memory-based impression) of how the week's
-    forecast actually held up.
+    log, so a Friday report can show a real day-by-day breakdown (not
+    a memory-based impression) of how the week's forecast actually
+    held up.
+
+    UPDATED 2026-09-05, real bug found and confirmed — this used to
+    also log on Saturday (see weekly_report.py's original docstring:
+    "so a Friday/Saturday report can show..."), but Saturday isn't a
+    real CBOT trading day. Whatever "current_price" is available on a
+    Saturday is just Friday's stale closing price re-logged under a
+    new day label — not a real new data point. This produced a fake
+    "6th day" in weekly_report.py's day-by-day breakdown and inflated
+    its day-count math. Guarded here (inside the function itself,
+    rather than at each of this function's 3 call sites) so it can
+    never happen regardless of which code path calls this.
     """
+    from trading_calendar import is_trading_day
+    if not is_trading_day(datetime.now(IL)):
+        return
+
     log = []
     if WEEKLY_PERFORMANCE_LOG_FILE.exists():
         try:
