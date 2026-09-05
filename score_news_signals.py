@@ -1,68 +1,86 @@
 """
-SCORE NEWS SIGNALS
-=====================
+SCORE NEWS SIGNALS — category-aware, abnormal-return adjusted
+=================================================================
 Companion to score_predictions.py, for the LLM news signal (from
-news_scanner.py). Checks every news_log.json entry old enough to have
-a real outcome, and marks it WIN/LOSS the same way score_predictions.py
-already does for ConvictionGate's conditions.
+news_scanner.py). Real, sourced institutional methodology (RavenPack/
+LSEG-style categorization, event-study abnormal returns, EGARCH
+volatility-vs-direction separation) confirmed 2026-09-04 that a single
+blended BULLISH/BEARISH score across all news types is the wrong
+design — see this file's git history / the 2026-09-04 conversation
+for the full research. Rebuilt around three real, sourced ideas,
+scaled down to match the sample size actually available (institutions
+want N>=30 per category before trusting a result with a formal
+t-test; we have far less, so this stays data-collection only — no
+weighting decision should be made off these numbers yet):
 
-REWRITTEN 2026-09-04, real fix: this script originally read
-news_signal_log.json and expected a stored entry_price + numeric
-confidence on each entry. news_scanner.py was rewritten on 2026-07-28
-to a broader macro/commodity scanner writing news_log.json instead
-(see wheat_monitor_pro.py's get_news_signal() docstring) — nothing has
-written news_signal_log.json since, so this script had been silently
-scoring nothing for over a month despite running find (it just always
-printed "no entries" and exited quietly, no error). This version reads
-news_log.json directly and reconstructs entry_price by fetching real
-price history at each entry's timestamp (news_log.json never stored
-one), using the exact same wheat_impact normalization logic as
-get_news_signal() (string or dict shape, see below) so this scores
-against precisely what the live signal actually is, not an assumption.
+1. CATEGORY SEPARATION — news_scanner.py's Gemini prompt now tags each
+   entry with wheat_impact_category (confirmed_physical_disruption,
+   speculative_tension, self_fulfilling_sentiment, weather_crop_damage,
+   other_fundamental). Each category is scored SEPARATELY, never
+   blended — "not every bombed boat matters," and blending categories
+   with different real accuracy rates just averages them into noise.
+   Entries logged before 2026-09-04 have no category (Gemini prompt
+   change is not retroactive) and are bucketed as 'uncategorized'.
 
-Deliberately does NOT write scoring fields back onto news_log.json
-entries — that file is the shared raw scan log other things read
-(bug_detector.py, immediate_risk_tracker.py indirectly). Scored
-results go in their own file, news_signal_scored.json, same
-separation-of-concerns pattern immediate_risk_log.json already uses
-relative to news_log.json.
+2. ABNORMAL RETURN, not raw price move — real event studies subtract
+   a control/baseline return to isolate what the NEWS actually caused
+   vs. what the broader market was doing anyway (institutions use
+   BCOM/GSCI Grains; this project already tracks corn (ZC=F)
+   correlation elsewhere, so corn's contemporaneous move is used here
+   as a lightweight version of the same idea — NOT full GARCH, which
+   would need far more data per category than exists yet to mean
+   anything real).
 
-This is the actual reward/punishment mechanism for the news signal:
-run this for a few weeks, then check the real win rate below against
-what get_news_signal() currently assumes in wheat_monitor_pro.py.
-If it's not meaningfully better than a coin flip after 15-20+ scored
-signals, its nudge weight should be reduced further, not increased —
-same discipline used to validate (and in vol_low's case, invalidate)
-every other signal in this system.
+3. SPECULATIVE TENSION scored as A VOLATILITY change, not a direction
+   — real institutions price "tension, no confirmed disruption" as an
+   options-volatility input, not a directional bet, precisely because
+   it usually doesn't have a reliable direction. Scored here as
+   whether realized volatility (simple rolling stdev of daily returns,
+   not EGARCH) picked up in the following days — a coin-flip result
+   on THIS category specifically would match real practice, not
+   indicate a broken signal.
+
+HORIZON: daily only (~2 trading days), matching the real institutional
+standard of -1 to +3 days. The monthly horizon from an earlier version
+of this file was removed 2026-09-04 — real event-study literature
+explicitly treats weeks/months as "treacherous" (confounding variables
+compound and make the measurement unreliable), which is a hard
+correction, not a refinement, of the earlier design.
+
+Deliberately does NOT write scoring fields back onto news_log.json —
+that file is the shared raw scan log other things read. Scored results
+go in their own file, news_signal_scored.json.
 
 Usage:
   python3 score_news_signals.py
 """
 
 import json
+import statistics
 from pathlib import Path
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 import yfinance as yf
 
 IL = ZoneInfo("Asia/Jerusalem")
-TICKER = "ZW=F"
-MOVE_THRESHOLD_PCT = 0.01  # 1% move within the window counts as a real WIN/LOSS
-MIN_AGE_HOURS = 24
-MAX_LOOKFORWARD_HOURS = 72
+WHEAT_TICKER = "ZW=F"
+CORN_TICKER = "ZC=F"
+MOVE_THRESHOLD_PCT = 0.01   # 1% abnormal move counts as directional; below is FLAT
+DAILY_OFFSET = 2            # ~2 trading days — matches real -1 to +3 day standard
+VOL_WINDOW = 5              # trading days, for realized-volatility comparison
 
 NEWS_LOG_FILE = Path("news_log.json")
 SCORED_FILE = Path("news_signal_scored.json")
 
+DIRECTIONAL_CATEGORIES = {
+    'confirmed_physical_disruption', 'self_fulfilling_sentiment',
+    'weather_crop_damage', 'other_fundamental',
+}
+VOLATILITY_CATEGORIES = {'speculative_tension'}
+
 
 def normalize_signal(entry):
-    """
-    Exact same normalization as wheat_monitor_pro.py's get_news_signal()
-    — wheat_impact can be a plain string ("BULLISH"/"BEARISH"/"NEUTRAL")
-    or a dict ({"direction": ..., "reason": ...}) depending on how the
-    model formatted its JSON that run. Returns 'BULLISH', 'BEARISH', or
-    None (NEUTRAL/unrecognized — nothing directional to score).
-    """
+    """Same normalization as get_news_signal() in wheat_monitor_pro.py."""
     analysis = entry.get('llm_analysis')
     if not analysis:
         return None
@@ -73,6 +91,17 @@ def normalize_signal(entry):
         signal = wheat_impact or 'NEUTRAL'
     signal = str(signal).upper()
     return signal if signal in ('BULLISH', 'BEARISH') else None
+
+
+def normalize_category(entry):
+    """
+    Returns the wheat_impact_category, or 'uncategorized' for entries
+    logged before 2026-09-04 (Gemini prompt change is not retroactive).
+    """
+    analysis = entry.get('llm_analysis') or {}
+    cat = analysis.get('wheat_impact_category')
+    known = DIRECTIONAL_CATEGORIES | VOLATILITY_CATEGORIES
+    return cat if cat in known else 'uncategorized'
 
 
 def load_scored():
@@ -86,51 +115,45 @@ def save_scored(scored):
 
 
 def fetch_price_history(earliest_needed=None):
-    """
-    UPDATED 2026-09-04, real bug found on the first real run: this used
-    a fixed 10-day window, but news_log.json's real entries go back to
-    2026-07-26 — every entry older than 10 days was silently
-    unscoreable (empty price lookup, treated as "not enough data yet"
-    even though it never would be, since the window always slides
-    forward with "now"). Now takes the earliest timestamp actually
-    needing to be scored and reaches back far enough to cover it, with
-    a small buffer. Falls back to the old 10-day window if nothing is
-    passed in (e.g. if called standalone).
-    """
+    """Daily bars for both wheat and corn (for the abnormal-return baseline)."""
     end = datetime.now(IL)
-    if earliest_needed is not None:
-        start = earliest_needed - timedelta(days=1)  # 1-day buffer before the earliest entry
+    start = (earliest_needed - timedelta(days=10)) if earliest_needed else (end - timedelta(days=40))
+    wheat = yf.Ticker(WHEAT_TICKER).history(start=start, end=end, interval='1d', auto_adjust=False)
+    corn = yf.Ticker(CORN_TICKER).history(start=start, end=end, interval='1d', auto_adjust=False)
+    wheat.index = wheat.index.tz_localize(None) if wheat.index.tz else wheat.index
+    corn.index = corn.index.tz_localize(None) if corn.index.tz else corn.index
+    return wheat, corn
+
+
+def score_directional(entry_price, entry_date, signal, wheat_df, corn_df):
+    """
+    Abnormal-return version of the daily check: wheat's move minus
+    corn's contemporaneous move over the same window, isolating what
+    wheat did BEYOND the broader grain market — see module docstring
+    point 2. Returns None if not enough trading days have elapsed yet.
+    """
+    future_wheat = wheat_df[wheat_df.index.date > entry_date]
+    if len(future_wheat) < DAILY_OFFSET:
+        return None
+
+    target_date = future_wheat.index[DAILY_OFFSET - 1].date()
+    wheat_final = float(future_wheat.iloc[DAILY_OFFSET - 1]['Close'])
+    wheat_pct = (wheat_final - entry_price) / entry_price
+
+    corn_before = corn_df[corn_df.index.date <= entry_date]
+    corn_after = corn_df[corn_df.index.date == target_date]
+    if corn_before.empty or corn_after.empty:
+        corn_pct = 0.0  # no corn data available — fall back to raw wheat move
     else:
-        start = end - timedelta(days=10)
-    df = yf.Ticker(TICKER).history(start=start, end=end, interval='1h', auto_adjust=False)
-    df.index = df.index.tz_localize(None) if df.index.tz else df.index
-    return df
+        corn_entry = float(corn_before.iloc[-1]['Close'])
+        corn_final = float(corn_after.iloc[-1]['Close'])
+        corn_pct = (corn_final - corn_entry) / corn_entry
 
-
-def score_one_signal(entry_time, signal, price_df):
-    age_hours = (datetime.now(IL).replace(tzinfo=None) - entry_time).total_seconds() / 3600
-    if age_hours < MIN_AGE_HOURS:
-        return None, None, None
-
-    # entry_price reconstructed from real price history — news_log.json
-    # never stored one (see module docstring)
-    at_or_before = price_df[price_df.index <= entry_time]
-    if at_or_before.empty:
-        return None, None, None
-    entry_price = float(at_or_before.iloc[-1]['Close'])
-
-    future_bars = price_df[price_df.index > entry_time]
-    window_end = entry_time + timedelta(hours=MAX_LOOKFORWARD_HOURS)
-    future_bars = future_bars[future_bars.index <= window_end]
-    if future_bars.empty:
-        return None, None, None
-
-    final_price = float(future_bars['Close'].iloc[-1])
-    pct_move = (final_price - entry_price) / entry_price
+    abnormal_pct = wheat_pct - corn_pct  # wheat's move BEYOND corn's move
 
     predicted_up = signal == 'BULLISH'
-    actual_up = pct_move > MOVE_THRESHOLD_PCT
-    actual_down = pct_move < -MOVE_THRESHOLD_PCT
+    actual_up = abnormal_pct > MOVE_THRESHOLD_PCT
+    actual_down = abnormal_pct < -MOVE_THRESHOLD_PCT
 
     if not actual_up and not actual_down:
         outcome = 'FLAT'
@@ -139,7 +162,38 @@ def score_one_signal(entry_time, signal, price_df):
     else:
         outcome = 'LOSS'
 
-    return outcome, round(pct_move * 100, 2), round(final_price, 2)
+    return {'outcome': outcome, 'raw_wheat_pct': round(wheat_pct * 100, 2),
+            'corn_baseline_pct': round(corn_pct * 100, 2),
+            'abnormal_pct': round(abnormal_pct * 100, 2),
+            'checked_date': target_date.isoformat()}
+
+
+def score_volatility(entry_date, wheat_df):
+    """
+    For speculative_tension: did realized volatility (simple rolling
+    stdev of daily returns) increase in the VOL_WINDOW trading days
+    after the entry, vs. the VOL_WINDOW trading days before it? See
+    module docstring point 3 for why this category is scored this way
+    instead of directionally. Returns None if not enough data yet.
+    """
+    before = wheat_df[wheat_df.index.date <= entry_date].tail(VOL_WINDOW + 1)
+    after = wheat_df[wheat_df.index.date > entry_date].head(VOL_WINDOW)
+    if len(before) < VOL_WINDOW + 1 or len(after) < VOL_WINDOW:
+        return None
+
+    before_returns = before['Close'].pct_change().dropna().tolist()
+    after_returns = after['Close'].pct_change().dropna().tolist()
+    if len(before_returns) < 2 or len(after_returns) < 2:
+        return None
+
+    vol_before = statistics.stdev(before_returns)
+    vol_after = statistics.stdev(after_returns)
+    vol_increased = vol_after > vol_before * 1.1  # 10% buffer against noise
+
+    return {'outcome': 'VOL_UP' if vol_increased else 'VOL_FLAT_OR_DOWN',
+            'vol_before_pct': round(vol_before * 100, 3),
+            'vol_after_pct': round(vol_after * 100, 3),
+            'checked_date': after.index[-1].date().isoformat()}
 
 
 def main():
@@ -151,75 +205,85 @@ def main():
     scored = load_scored()
     print(f"Loaded {len(log)} logged news scans.")
 
-    # Find the earliest not-yet-scored directional entry so the price
-    # fetch reaches back far enough to cover it — see
-    # fetch_price_history()'s docstring for why this matters.
-    candidates = [
-        e['timestamp'] for e in log
-        if 'timestamp' in e and 'llm_analysis' in e
-        and e['timestamp'] not in scored
-        and normalize_signal(e) is not None
-    ]
-    earliest_needed = None
-    if candidates:
-        earliest_needed = datetime.fromisoformat(min(candidates)).astimezone(IL)
+    def needs_work(entry):
+        if 'timestamp' not in entry or 'llm_analysis' not in entry:
+            return False
+        if normalize_signal(entry) is None:
+            return False
+        return entry['timestamp'] not in scored or scored[entry['timestamp']].get('result') is None
 
-    price_df = fetch_price_history(earliest_needed)
-    print(f"Fetched {len(price_df)} hourly bars for scoring.\n")
+    candidates = [e['timestamp'] for e in log if needs_work(e)]
+    earliest_needed = datetime.fromisoformat(min(candidates)).astimezone(IL) if candidates else None
+
+    wheat_df, corn_df = fetch_price_history(earliest_needed)
+    print(f"Fetched {len(wheat_df)} wheat bars, {len(corn_df)} corn bars.\n")
 
     newly_scored = 0
     for entry in log:
-        # UPDATED 2026-09-04, real bug found on first run: 5 entries
-        # from 2026-07-23 to 07-26 use an even older schema
-        # (scan_time/headlines, no llm_analysis at all) from before
-        # the 2026-07-28 news_scanner.py rewrite — predates the schema
-        # this whole file already assumes. They can't be scored (no
-        # signal data exists in that format), so skip cleanly instead
-        # of crashing on the missing key.
         if 'timestamp' not in entry or 'llm_analysis' not in entry:
             continue
-
         ts_key = entry['timestamp']
-        if ts_key in scored:
-            continue
-
         signal = normalize_signal(entry)
         if signal is None:
-            continue  # NEUTRAL or unrecognized — nothing directional to score
+            continue
 
-        entry_time = datetime.fromisoformat(ts_key).replace(tzinfo=None)
-        outcome, pct_move, final_price = score_one_signal(entry_time, signal, price_df)
-        if outcome is None:
-            continue  # too soon, or no price data available yet
+        if ts_key in scored and scored[ts_key].get('result') is not None:
+            continue  # already resolved
 
+        category = normalize_category(entry)
         key_phrase = (entry.get('llm_analysis', {}) or {}).get('key_risk') \
             or (entry.get('llm_analysis', {}) or {}).get('summary', '')[:80]
 
-        scored[ts_key] = {
-            'signal': signal, 'outcome': outcome,
-            'pct_move': pct_move, 'final_price': final_price,
-            'key_phrase': key_phrase,
-        }
+        entry_time = datetime.fromisoformat(ts_key).replace(tzinfo=None)
+        entry_date = entry_time.date()
+        at_or_before = wheat_df[wheat_df.index.date <= entry_date]
+        if at_or_before.empty:
+            continue
+        entry_price = float(at_or_before.iloc[-1]['Close'])
+
+        if category in VOLATILITY_CATEGORIES:
+            result = score_volatility(entry_date, wheat_df)
+        else:
+            result = score_directional(entry_price, entry_date, signal, wheat_df, corn_df)
+
+        if result is None:
+            scored.setdefault(ts_key, {'signal': signal, 'category': category,
+                                        'key_phrase': key_phrase, 'result': None})
+            continue
+
+        scored[ts_key] = {'signal': signal, 'category': category,
+                           'key_phrase': key_phrase, 'result': result}
         newly_scored += 1
-        print(f"  {ts_key[:16]} | {signal:<8} -> {outcome} ({pct_move:+.2f}% move) | \"{key_phrase}\"")
+        print(f"  {ts_key[:16]} | {category:<28} | {signal:<8} -> {result['outcome']}")
 
     save_scored(scored)
     print(f"\nNewly scored this run: {newly_scored}")
 
-    directional = [v for v in scored.values() if v['outcome'] in ('WIN', 'LOSS')]
-    if not directional:
-        print("\nNo directional (non-NEUTRAL, non-FLAT) signals scored yet.")
-        return
-
-    wins = sum(1 for v in directional if v['outcome'] == 'WIN')
     print("\n" + "=" * 60)
-    print("LIVE NEWS SIGNAL ACCURACY")
+    print("LIVE NEWS SIGNAL ACCURACY — BY CATEGORY")
     print("=" * 60)
-    print(f"Directional signals scored: {len(directional)}")
-    print(f"Win rate: {wins}/{len(directional)} = {wins/len(directional):.1%}")
-    print("\nCompare this to a coin flip (50%). Do NOT increase the news")
-    print("signal's nudge weight in weekly_range_engine.py until this has")
-    print("15-20+ scored signals AND stays meaningfully above 50-55%.")
+    print("(Every category below is DATA COLLECTION ONLY. Real")
+    print(" institutional practice wants N>=30 per category with formal")
+    print(" significance testing before acting on any of this — none of")
+    print(" these categories are anywhere near that yet.)")
+
+    all_categories = sorted(set(v['category'] for v in scored.values() if v.get('result')))
+    for cat in all_categories:
+        entries = [v for v in scored.values() if v['category'] == cat and v.get('result')]
+        print(f"\n--- {cat} (n={len(entries)}) ---")
+        if cat in VOLATILITY_CATEGORIES:
+            vol_up = sum(1 for e in entries if e['result']['outcome'] == 'VOL_UP')
+            print(f"  Volatility increased afterward: {vol_up}/{len(entries)} = "
+                  f"{vol_up/len(entries):.1%}" if entries else "  (none)")
+        else:
+            directional = [e for e in entries if e['result']['outcome'] in ('WIN', 'LOSS')]
+            flats = len(entries) - len(directional)
+            if directional:
+                wins = sum(1 for e in directional if e['result']['outcome'] == 'WIN')
+                print(f"  Directional (abnormal-return adjusted): {wins}/{len(directional)} = "
+                      f"{wins/len(directional):.1%}  (+ {flats} FLAT)")
+            else:
+                print("  (No directional results yet.)")
 
 
 if __name__ == "__main__":
