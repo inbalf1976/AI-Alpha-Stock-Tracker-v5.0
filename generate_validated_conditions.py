@@ -23,6 +23,19 @@ RULES FOR INCLUDING A CONDITION (all must hold):
   3. Holdout accuracy beats the real baseline UP rate — a condition
      that doesn't beat baseline adds no value even if its raw
      accuracy number looks high in isolation.
+  4. UPDATED 2026-09-05, real bug found and confirmed — this only
+     ever stored the accuracy NUMBER, never the direction it actually
+     applied to. Every condition's accuracy here means "chance of
+     UP" specifically (this project's established convention — see
+     wheat_monitor_pro.py's ConvictionGate class docstring, which
+     already documents bearish_month's OWN historical accuracy as
+     "68.0% UP", not DOWN). A condition named with "bullish"/"bearish"
+     whose real holdout best_direction doesn't match that name (e.g.
+     bullish_month scoring 100% but for the DOWN direction, n=8,
+     2026-09-05 run) is either mislabeled or reflects a pattern that
+     flipped since it was named — either way it should not be
+     silently trusted as-is. Excluded rather than included with a
+     misleading name.
 
 Usage:
   python3 generate_validated_conditions.py
@@ -71,6 +84,7 @@ def main():
         holdout = entry.get('holdout', {})
         n = holdout.get('n', 0)
         acc = holdout.get('best_accuracy')
+        direction = holdout.get('best_direction')
 
         if n < MIN_HOLDOUT_N or acc is None:
             excluded_report.append((name, f"insufficient holdout sample (n={n}, need >={MIN_HOLDOUT_N})"))
@@ -78,6 +92,20 @@ def main():
 
         if acc <= baseline_up:
             excluded_report.append((name, f"does not beat baseline ({acc:.1%} <= {baseline_up:.1%})"))
+            continue
+
+        # Direction-name consistency check — see rule 4 above.
+        name_lower = name.lower()
+        if 'bullish' in name_lower and direction != 'UP':
+            excluded_report.append((name, f"name implies UP but real holdout best_direction is "
+                                            f"{direction} — mislabeled or pattern has flipped"))
+            continue
+        if 'bearish' in name_lower and direction != 'DOWN':
+            excluded_report.append((name, f"name implies DOWN but real holdout best_direction is "
+                                            f"{direction} — this project's own convention measures "
+                                            f"UP-accuracy regardless of condition name (see "
+                                            f"ConvictionGate's docstring) — flagged for manual review, "
+                                            f"not silently trusted"))
             continue
 
         validated[name] = round(acc, 4)
