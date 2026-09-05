@@ -124,11 +124,51 @@ def main():
             break_lines += f"  {b['broken_at'][:16]} — {b['reason']}\n"
 
     if breaks_this_week:
+        # UPDATED 2026-09-05, real bug found and confirmed — the old
+        # conclusion here led with "X/Y days (Z%) stayed within
+        # whichever range was active that day", which is structurally
+        # near-meaningless right after a break: a freshly-regenerated
+        # range is calibrated AROUND wherever price already is, so it
+        # will show "in range" almost every time regardless of whether
+        # the week actually went well. Real case that exposed this:
+        # 2026-W36 broke Thursday with a real stop-hit LOSS, then
+        # showed "100% (6/6 days) stayed within range" as the headline
+        # — the opposite impression of what actually happened. Fixed
+        # to lead with each break's real WIN/LOSS outcome (parsed from
+        # the break log's own reason text) instead, and to separately
+        # report only whether the CURRENT (most recent, possibly still
+        # open) range is holding as of the latest data — which is the
+        # one part of "days in range" that's still a real, meaningful,
+        # forward-looking fact rather than a tautology.
+        outcomes = []
+        for b in breaks_this_week:
+            reason = b.get('reason', '')
+            if '(WIN)' in reason:
+                outcomes.append('WIN')
+            elif '(LOSS)' in reason:
+                outcomes.append('LOSS')
+            else:
+                outcomes.append('UNKNOWN')
+        wins = outcomes.count('WIN')
+        losses = outcomes.count('LOSS')
+        outcome_summary = ' + '.join(
+            f"{n} {label}" for label, n in (('WIN', wins), ('LOSS', losses)) if n > 0
+        ) or 'outcome unclear from break log'
+
+        last_entry = week_entries[-1]
+        current_range_status = (
+            f"the current range (as of {last_entry['day_name']}) is still holding "
+            f"({last_entry['position_in_range_pct']:.0f}% through it)"
+            if last_entry['within_range'] else
+            f"the current range is ALSO broken as of {last_entry['day_name']}"
+        )
+
         conclusion = (
-            f"Forecast broke {len(breaks_this_week)}x this week — "
-            f"real market move exceeded the frozen plan. "
-            f"{days_in_range}/{total_days} days ({in_range_rate:.0f}%) stayed within "
-            f"whichever range was active that day."
+            f"Forecast broke {len(breaks_this_week)}x this week — real market move(s) "
+            f"exceeded the frozen plan ({outcome_summary}). {current_range_status}. "
+            f"(The old 'X/Y days stayed in range' stat is not shown here after a break — "
+            f"it's structurally misleading, since a freshly-regenerated range is fitted "
+            f"around wherever price already is.)"
         )
     elif in_range_rate == 100:
         conclusion = f"Frozen range held for all {total_days} days — clean week, no breaks."
