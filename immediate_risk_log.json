@@ -17,11 +17,11 @@
     "reason": "U.S. military strikes on Iranian government tankers and severely restricted vessel transits in the Strait of Hormuz are actively disrupting critical energy shipping lanes.",
     "predicted_direction": "BEARISH",
     "price_at_alert": 732.75,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "FLAT",
+    "price_at_scoring": 734.0,
+    "pct_change": 0.171,
+    "scored_at": "2026-09-06T12:19:59.359204+00:00"
   },
   {
     "alert_number": 58,
