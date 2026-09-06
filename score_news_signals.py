@@ -80,7 +80,14 @@ VOLATILITY_CATEGORIES = {'speculative_tension'}
 
 
 def normalize_signal(entry):
-    """Same normalization as get_news_signal() in wheat_monitor_pro.py."""
+    """
+    Same normalization as get_news_signal() in wheat_monitor_pro.py —
+    including the 2026-09-06 startswith() fix for glued label+reason
+    strings like "BULLISH - Severe European drought...", found via
+    loss_forensics.py cross-referencing real losses against news_log.json
+    (4 real directional entries were being silently dropped by an exact
+    match). Keep these two functions in sync.
+    """
     analysis = entry.get('llm_analysis')
     if not analysis:
         return None
@@ -89,7 +96,11 @@ def normalize_signal(entry):
         signal = wheat_impact.get('direction', 'NEUTRAL')
     else:
         signal = wheat_impact or 'NEUTRAL'
-    signal = str(signal).upper()
+    signal = str(signal).upper().strip()
+    if signal.startswith('BULLISH'):
+        signal = 'BULLISH'
+    elif signal.startswith('BEARISH'):
+        signal = 'BEARISH'
     return signal if signal in ('BULLISH', 'BEARISH') else None
 
 
