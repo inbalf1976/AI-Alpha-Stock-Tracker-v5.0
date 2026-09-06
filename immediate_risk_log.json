@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 60,
+    "alert_timestamp": "2026-09-06T01:09:03.102601+00:00",
+    "reason": "Direct U.S. military strikes on Iranian tankers in the Strait of Hormuz have caused traffic to plummet to just three vessel crossings and left multiple tankers disabled in the critical energy chokepoint.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 716.0,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 59,
     "alert_timestamp": "2026-09-05T01:10:23.792934+00:00",
     "reason": "U.S. military strikes on Iranian government tankers and severely restricted vessel transits in the Strait of Hormuz are actively disrupting critical energy shipping lanes.",
