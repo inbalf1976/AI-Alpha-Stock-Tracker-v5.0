@@ -660,7 +660,22 @@ def get_news_signal():
             signal = wheat_impact.get('direction', 'NEUTRAL')
         else:
             signal = wheat_impact or 'NEUTRAL'
-        signal = str(signal).upper()
+        signal = str(signal).upper().strip()
+
+        # UPDATED 2026-09-06, real bug found via loss_forensics.py cross-
+        # referencing: Gemini occasionally returns a plain string with the
+        # label glued to leaked reasoning text instead of a clean word —
+        # e.g. "BULLISH - Severe European drought..." or "BEARISH:
+        # European wheat prices...". An exact match against 'BULLISH' was
+        # silently dropping these as unrecognized, losing real directional
+        # signals (confirmed: 4 real BULLISH/BEARISH entries in
+        # news_log.json were being lost this way). Checking startswith()
+        # instead of exact equality catches the label regardless of what
+        # follows it.
+        if signal.startswith('BULLISH'):
+            signal = 'BULLISH'
+        elif signal.startswith('BEARISH'):
+            signal = 'BEARISH'
 
         if signal not in ('BULLISH', 'BEARISH'):
             return None  # NEUTRAL or unrecognized — no nudge this run
