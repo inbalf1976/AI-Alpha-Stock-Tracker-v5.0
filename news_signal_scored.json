@@ -516,5 +516,59 @@
       "checked_date": "2024-12-13"
     },
     "backfilled_verified": true
+  },
+  "2026-09-05T01:10:23.792934+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Severe military escalation in the Strait of Hormuz triggering a sustained oil supply shock and broader Middle East instability.",
+    "result": null
+  },
+  "2026-08-09T10:30:25.411231+00:00": {
+    "signal": "BULLISH",
+    "category": "uncategorized",
+    "key_phrase": "Escalation of Middle East conflict threatening energy supplies and driving further inflationary pressures that could force a Federal Reserve rate hike.",
+    "result": {
+      "outcome": "FLAT",
+      "raw_wheat_pct": -1.48,
+      "corn_baseline_pct": -0.51,
+      "abnormal_pct": -0.97,
+      "checked_date": "2026-08-11"
+    }
+  },
+  "2026-08-01T08:38:12.438906+00:00": {
+    "signal": "BULLISH",
+    "category": "uncategorized",
+    "key_phrase": "Further escalation of the Middle East conflict expanding the oil supply disruption stemming from shadow fleet tanker incidents.",
+    "result": {
+      "outcome": "FLAT",
+      "raw_wheat_pct": -0.12,
+      "corn_baseline_pct": 0.34,
+      "abnormal_pct": -0.46,
+      "checked_date": "2026-08-04"
+    }
+  },
+  "2026-07-29T18:10:34.984588+00:00": {
+    "signal": "BULLISH",
+    "category": "uncategorized",
+    "key_phrase": "Further military escalation in the Middle East leading to prolonged supply chain disruptions in energy markets and sustained high oil prices.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": -3.25,
+      "corn_baseline_pct": -1.84,
+      "abnormal_pct": -1.42,
+      "checked_date": "2026-07-31"
+    }
+  },
+  "2026-07-28T20:48:20.091163+00:00": {
+    "signal": "BEARISH",
+    "category": "uncategorized",
+    "key_phrase": "Unforeseen escalations in Middle Eastern geopolitics or renewed disruptions to critical maritime trade routes like the Red Sea.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": 0.15,
+      "corn_baseline_pct": -2.78,
+      "abnormal_pct": 2.93,
+      "checked_date": "2026-07-30"
+    }
   }
 }
