@@ -1,58 +1,29 @@
 {
   "iso_year": 2026,
-  "iso_week": 36,
-  "frozen_at": "2026-09-06T15:19:51.102283+03:00",
-  "broken_and_regenerated": true,
+  "iso_week": 37,
+  "frozen_at": "2026-09-07T04:21:56.970029+03:00",
   "weekly": {
-    "range_low": 702.08,
-    "range_high": 725.28,
-    "range_width_pct": 3.24,
-    "bias": "DOWN",
-    "bias_pct": 75.0,
-    "confidence": 0.52,
+    "range_low": 706.49,
+    "range_high": 730.26,
+    "range_width_pct": 3.32,
+    "bias": "UP",
+    "bias_pct": 66.7,
+    "confidence": 0.36,
     "key_level": 663.41,
     "key_level_label": "SMA50 (key support)",
     "entry": 716.0,
-    "stop": 726.44,
-    "target": 702.08,
+    "stop": 705.31,
+    "target": 730.26,
     "rr": 1.33,
-    "week_num": 36,
-    "next_week_label": "Week 36 (starting Mon Aug 31)",
-    "month_label": "Summer lull",
-    "hist_up_pct": 25.0,
-    "hist_avg_return": -1.5,
-    "sample_count": 4,
-    "sample_confidence_note": "moderate confidence \u2014 4 years of data",
+    "week_num": 37,
+    "next_week_label": "Week 37 (starting Mon Sep 07)",
+    "month_label": "Fall recovery",
+    "hist_up_pct": 66.7,
+    "hist_avg_return": 3.67,
+    "sample_count": 3,
+    "sample_confidence_note": "LOW CONFIDENCE \u2014 only 3 years of data",
     "current_price": 716.0,
-    "final_call": "DOWN",
-    "history": [
-      {
-        "closed_at": "2026-09-03T16:00:07.995226+03:00",
-        "entry": 773.75,
-        "stop": 754.87,
-        "target": 792.86,
-        "final_call": "UP",
-        "outcome": "LOSS",
-        "price_at_close": 742.75
-      },
-      {
-        "closed_at": "2026-09-05T19:08:53.212149+03:00",
-        "entry": 742.75,
-        "stop": 752.69,
-        "target": 729.5,
-        "final_call": "DOWN",
-        "outcome": "WIN",
-        "price_at_close": 734.0
-      },
-      {
-        "closed_at": "2026-09-06T15:19:51.102275+03:00",
-        "entry": 734.0,
-        "stop": 744.9,
-        "target": 719.47,
-        "final_call": "DOWN",
-        "outcome": "WIN",
-        "price_at_close": 716.0
-      }
-    ]
+    "final_call": "UP",
+    "history": []
   }
 }
