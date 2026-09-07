@@ -798,9 +798,9 @@ def check_signal_freshness():
 # News scans run every day (no day-of-week restriction by design), so
 # this checks the most recent calendar day, weekday or not.
 NEWS_SCAN_WINDOWS = [
-    ("scan #1 (~00:28 IL)", 0, 4),
-    ("scan #2 (~11:35 IL)", 9, 13),
-    ("scan #3 (~16:05 IL)", 14, 19),
+    ("scan #1 (~00:28 IL)", 0, 6),
+    ("scan #2 (~11:35 IL)", 9, 15),
+    ("scan #3 (~16:05 IL)", 14, 21),
 ]
 
 def check_news_scan_missed_window():
