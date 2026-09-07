@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-09-07T14:25:04.113232+00:00",
+    "total_scanned": 219,
+    "flagged_count": 161,
+    "flagged_headlines": [
+      {
+        "title": "Oil prices climb after reports of Saudi Aramco refinery being hit by Houthi rebels",
+        "link": "https://www.marketwatch.com/story/oil-prices-hit-near-seven-week-highs-before-edging-lower-as-iran-plans-to-increase-control-of-hormuz-5070167c?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 07 Sep 2026 11:54:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Trump turns up the heat on Warsh as Fed rate hike looms",
+        "link": "https://www.cnbc.com/2026/09/05/trump-warsh-fed-september-rate-hike.html",
+        "source": "CNBC Economy",
+        "published": "Sat, 05 Sep 2026 19:12:53 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "war"
+        ]
+      },
+      {
+        "title": "Fed Governor Waller indicates he will support holding rates steady at September meeting",
+        "link": "https://www.cnbc.com/2026/09/03/fed-governor-waller-indicates-he-will-support-holding-rates-steady-at-september-meeting.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 03 Sep 2026 14:06:52 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "'Danger zone of extreme weather': UN warns of supersized El Niño set to hit global economy and markets",
+        "link": "https://www.cnbc.com/2026/09/03/supersized-el-nino-un-economy.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 03 Sep 2026 12:25:53 GMT",
+        "matched_keywords": [
+          "war",
+          "warns of"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound edges up as dollar stays soft on Fed rate-hike bets",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-edges-up-as-dollar-stays-soft-on-fed-ratehike-bets-4890558",
+        "source": "Investing.com Forex",
+        "published": "2026-09-07 09:09:45",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "European bond yields tick up, snapping two-day rally",
+        "link": "https://www.investing.com/news/forex-news/european-bond-yields-tick-up-snapping-twoday-rally-4890484",
+        "source": "Investing.com Forex",
+        "published": "2026-09-07 07:44:25",
+        "matched_keywords": [
+          "ppi",
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar firms as jobs data boosts Fed rate hike bets, yen eases after huge rally",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-rise-as-yen-set-for-best-week-since-july-fed-bets-fade-4888814",
+        "source": "Investing.com Forex",
+        "published": "2026-09-04 19:44:21",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "U.S. 10-year Treasury yield spikes following blockbuster NFP report",
+        "link": "https://www.investing.com/news/forex-news/global-bond-rout-pauses-for-second-day-as-feds-waller-sparks-ratehold-hopes-4888831",
+        "source": "Investing.com Forex",
+        "published": "2026-09-04 12:46:20",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Gold edges down as strong payrolls revive Fed hike bets",
+        "link": "https://www.investing.com/news/commodities-news/gold-holds-near-4400-as-strong-payrolls-iran-tensions-lift-fed-hike-bets-4890334",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-07 13:55:13",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil ticks higher after fresh U.S.-Iran attacks in Strait of Hormuz",
+        "link": "https://www.investing.com/news/commodities-news/oil-extends-sharp-weekly-gains-after-usiran-tanker-attacks-in-hormuz-4890339",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-07 13:51:54",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Oil prices hold near six-week highs on US-Iran attacks",
+        "link": "https://www.investing.com/news/commodities-news/oil-extends-gains-after-us-and-iran-strike-ships-4890330",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-07 13:48:29",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "UAE says its energy exports will not be ’held hostage’ by Iran war",
+        "link": "https://www.investing.com/news/commodities-news/uae-says-its-energy-exports-will-not-be-held-hostage-by-iran-war-4890634",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-07 13:12:34",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Geopolitical tensions in the Middle East, including attacks near the Strait of Hormuz and strikes on energy infrastructure, are supporting oil prices and driving safe-haven flows. Meanwhile, markets are intensely focused on a looming Federal Reserve rate decision amid an unprecedented political pressure campaign from the Trump administration, while the UN warns of a supersized El Niño event threatening global agricultural yields.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_category": "weather_crop_damage",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating geopolitical conflict in the Middle East disrupting global energy supplies and broader supply chains.",
+      "headline_overstated": true,
+      "headline_vs_article_note": "The UN warning headline declares a 'supersized El Niño set to hit global economy and markets' as a present reality, whereas the article text describes it as an intensifying event projected to persist until February 2027.",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active military engagements and attacks involving the U.S. and Iran in and around the Strait of Hormuz pose a continuous threat to maritime trade and energy flows."
+    }
+  },
+  {
     "timestamp": "2026-09-07T01:09:19.216524+00:00",
     "total_scanned": 218,
     "flagged_count": 161,
