@@ -1,12 +1,13 @@
 {
-  "generated_at": "2026-09-05T20:34:12.299412",
+  "generated_at": "2026-09-08T03:31:12.591380",
   "baseline_up": 0.68,
   "validated_conditions": {
-    "momentum_up": 0.828,
-    "rsi_overbought": 0.737,
-    "macd_bullish": 0.738,
-    "above_sma20": 0.756,
-    "near_bb_upper": 0.842
+    "momentum_up": 0.857,
+    "rsi_overbought": 0.75,
+    "above_sma50": 0.681,
+    "macd_bullish": 0.762,
+    "above_sma20": 0.78,
+    "near_bb_upper": 0.889
   },
-  "source_backtest_run_date": "2026-09-05T20:34:12.155786"
+  "source_backtest_run_date": "2026-09-08T03:31:12.490697"
 }
