@@ -1,5 +1,160 @@
 [
   {
+    "timestamp": "2026-09-08T01:16:03.275576+00:00",
+    "total_scanned": 220,
+    "flagged_count": 166,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil prices climb after reports of Saudi Aramco refinery being hit by Houthi rebels",
+        "link": "https://www.marketwatch.com/story/oil-prices-hit-near-seven-week-highs-before-edging-lower-as-iran-plans-to-increase-control-of-hormuz-5070167c?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 08 Sep 2026 00:23:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Chip stock investors beware — these charts could warn of further weakness ahead",
+        "link": "https://www.marketwatch.com/story/chip-stock-investors-beware-these-charts-could-warn-of-further-weakness-ahead-1bd890cc?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 07 Sep 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Brent Oil stalls at resistance with RSI at 72: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/brent-oil-overbought-at-97-rsi-74-hourly-levels-93CH-4890477",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-07 19:12:24",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI tests $93.64 resistance with overbought RSI: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-doubletop-at-9364-resistance-live-levels-93CH-4890479",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-07 19:12:24",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "London Gas Oil spikes 12% above 50-MA, overbought: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-stretched-10-above-50ma-live-levels-93CH-4890480",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-07 19:12:09",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices rise to six-week highs on worsening Middle East conflict",
+        "link": "https://www.investing.com/news/commodities-news/oil-extends-gains-after-us-and-iran-strike-ships-4890330",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-07 18:00:49",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Oil prices have climbed to six-week highs, driven by escalating Middle East conflicts including reported strikes on Saudi Aramco refineries and technical overbought conditions in crude and gas oil. Meanwhile, the Federal Reserve continues to process routine bank enforcement actions and regulatory approvals alongside ongoing FOMC minutes review.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating Middle East military engagements potentially disrupting broader energy and regional trade flows.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": ""
+    }
+  },
+  {
     "timestamp": "2026-09-07T18:17:27.807049+00:00",
     "total_scanned": 220,
     "flagged_count": 164,
