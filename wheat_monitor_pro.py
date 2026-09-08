@@ -30,6 +30,51 @@ CHANGELOG (this version):
     only the single "current price" used for entry/stop/target is
     live. If the live fetch fails, this is now flagged explicitly
     (⚠️ STALE) instead of failing silently.
+  - CHANGE (2026-08-07): full formatted alert now sends EVERY day
+    the alert gate is open, regardless of tier — restoring the
+    original daily visibility. Only log_prediction() (the accuracy
+    tracking) stays gated on tier > 0, so Tier 0 days are still
+    excluded from win-rate stats (per the 2026-07-29 fix that
+    stopped Tier 0 from dragging live accuracy down to 43.5%), but
+    no longer go silent/heartbeat-only. Sending and logging are now
+    fully decoupled.
+  - FIX (2026-09-08): real incident — get_live_price()'s fallback
+    source (ZW=F, used whenever the front-month specific contract
+    fetch fails, e.g. the ZWU26.CBT "possibly delisted" errors seen
+    2026-09-07/08) was confirmed returning a STUCK/STALE value via
+    fast_info: 716.00c reported as "LIVE" two days running while the
+    real market (confirmed against Plus500 and the daily-CLOSE
+    breach check, which uses real history bars and correctly saw
+    754.50c) had already moved to ~754-757c, a 5%+ gap. This silently
+    drove the ensemble, ConvictionGate, cost-floor distance, and the
+    weekly range regeneration off a wrong price with no visible
+    warning — worst case, get_frozen_weekly_plan() re-froze a brand
+    new weekly setup anchored on the same stale number right after a
+    real WIN breach, making the "new" setup look identical to the one
+    that just closed. Added a sanity check right after get_live_price()
+    returns: if the "live" price differs from the most recent real
+    daily CLOSE (already fetched into df_raw, unaffected by this bug)
+    by more than LIVE_PRICE_SANITY_PCT, the live price is rejected and
+    the script falls back to the daily close instead, with a clear
+    ⚠️ log line. This does not fix why fast_info returned a stale
+    value — worth continuing to watch, especially given ZWU26 is
+    close to its 2026-09-14 expiry — but it stops a known-bad number
+    from silently driving real trade setups.
+  - FIX (2026-09-08, same day, second incident): the sanity check
+    above can't catch every case — a Yahoo crumb/rate-limit (HTTP
+    429) was confirmed to make BOTH the live quote AND the daily
+    history fetch return the same stale cached data at once (real
+    incident: last real candle was 4 trading days old, "live" price
+    matched it exactly), so the two sides agreed and no divergence
+    was caught. Added a second, independent guard right after the
+    missed-business-days count: if the daily bar itself is >=2
+    trading days stale, the run now refuses to compute/send a real
+    trade setup at all — sends a short "data looks stale" Telegram
+    warning instead and exits. Unlike the existing market-closed
+    check, this one is NOT bypassed by is_manual, since the real
+    incident was a human-triggered manual run that went ahead and
+    sent a real DOWN alert off 4-day-old data — the whole point of
+    this guard is to stop exactly that.
 """
 
 import os, sys, json, warnings, requests
@@ -37,7 +82,7 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from zoneinfo import ZoneInfo
 
 IL = ZoneInfo("Asia/Jerusalem")   # Israel timezone — used everywhere
@@ -62,6 +107,12 @@ TELEGRAM_CHAT   = os.getenv("TELEGRAM_CHAT_ID")
 # Years to exclude from seasonal calculation (global anomalies)
 EXCLUDE_YEARS   = [2022]
 
+# UPDATED 2026-09-08: see CHANGELOG above — a "live" quote that
+# diverges from the most recent real daily CLOSE by more than this
+# is treated as unreliable (stale/cached fast_info, wrong contract,
+# etc.) rather than trusted silently.
+LIVE_PRICE_SANITY_PCT = 0.04  # 4%
+
 # ── LIVE PRICE FETCH ──────────────────────────────────────────────────────────
 
 def get_live_price(ticker=TICKER):
@@ -71,25 +122,50 @@ def get_live_price(ticker=TICKER):
     by days around holidays/weekends or while today's session is
     still forming — this pulls the real current quote instead.
 
-    Returns (price, is_live). is_live=False means the live fetch
-    failed and the caller should fall back to the last daily close,
-    while flagging it clearly rather than trusting it silently.
-    """
-    try:
-        fast = yf.Ticker(ticker).fast_info
-        live = fast.get('last_price') or fast.get('lastPrice')
-        if live and live > 0:
-            return float(live), True
-    except Exception as e:
-        print(f"   fast_info live price failed: {e}")
+    UPDATED 2026-08-18: now tries the current front-month SPECIFIC
+    contract (e.g. ZWU26.CBT) first, via get_front_month_ticker() —
+    the same fix already proven for volume (see get_accurate_volume()
+    below, confirmed 2026-07-10/11: ZW=F's continuous series has a
+    real data lag/discrepancy vs. the specific contract). Falls back
+    to the plain TICKER (ZW=F) only if the front-month fetch fails,
+    with a clear log line either way. This was flagged as a real live
+    discrepancy on 2026-08-18 — a Telegram alert showed 688c current
+    price while the actual quote was 674.75c, an ~1.9% gap large
+    enough to materially change the trade setup's entry/stop/target
+    math, not just a display rounding issue.
 
-    # Fallback: try 1-minute intraday bars for today
-    try:
-        intraday = yf.Ticker(ticker).history(period='1d', interval='1m')
-        if not intraday.empty:
-            return float(intraday['Close'].iloc[-1]), True
-    except Exception as e:
-        print(f"   intraday fallback failed: {e}")
+    Returns (price, is_live). is_live=False means every live fetch
+    attempt failed and the caller should fall back to the last daily
+    close, while flagging it clearly rather than trusting it silently.
+
+    NOTE (2026-09-08): this function's OWN success/failure signal
+    (is_live) is not enough on its own anymore — a "successful" fetch
+    can still return a stale/wrong number (see CHANGELOG). The caller
+    (main()) now runs an additional sanity check against the real
+    daily close before trusting whatever this returns.
+    """
+    front_month = get_front_month_ticker()
+    sources = [front_month] if ticker == front_month else [front_month, ticker]
+
+    for i, t in enumerate(sources):
+        try:
+            fast = yf.Ticker(t).fast_info
+            live = fast.get('last_price') or fast.get('lastPrice')
+            if live and live > 0:
+                if i > 0:
+                    print(f"   ⚠️ Live price from FALLBACK source ({t}) — front-month ({front_month}) fetch failed")
+                return float(live), True
+        except Exception as e:
+            print(f"   fast_info live price failed ({t}): {e}")
+
+    # Fallback: try 1-minute intraday bars for today, same source order
+    for t in sources:
+        try:
+            intraday = yf.Ticker(t).history(period='1d', interval='1m')
+            if not intraday.empty:
+                return float(intraday['Close'].iloc[-1]), True
+        except Exception as e:
+            print(f"   intraday fallback failed ({t}): {e}")
 
     return None, False
 
@@ -436,15 +512,61 @@ class ConvictionGate:
 
 
 MONTHLY_CACHE_FILE = Path("monthly_range_cache.json")
+MONTHLY_BREAK_LOG_FILE = Path("monthly_break_log.json")
+# Same 0.1% "even a small breach counts" philosophy as weekly's
+# BREAK_THRESHOLD_PCT (see that constant's comment) — kept as its own
+# named constant rather than reusing BREAK_THRESHOLD_PCT so the two
+# timeframes can be tuned independently later if needed.
+MONTHLY_BREAK_THRESHOLD_PCT = 0.001
+
+
+def log_monthly_break(month_key, current_price, old_monthly, reason):
+    """Records when/why a monthly outlook range got breached and
+    regenerated — mirrors log_weekly_break() exactly, see that
+    function. New file, monthly_break_log.json, parallel to
+    weekly_break_log.json."""
+    log = []
+    if MONTHLY_BREAK_LOG_FILE.exists():
+        try:
+            log = json.loads(MONTHLY_BREAK_LOG_FILE.read_text())
+        except Exception:
+            log = []
+
+    log.append({
+        'month_key': month_key,
+        'broken_at': datetime.now(IL).isoformat(),
+        'price_at_break': round(current_price, 2),
+        'old_range': f"{old_monthly['monthly_low']:.0f}-{old_monthly['monthly_high']:.0f}",
+        'reason': reason,
+    })
+
+    try:
+        MONTHLY_BREAK_LOG_FILE.write_text(json.dumps(log, indent=2))
+    except Exception as e:
+        print(f"   Failed to log monthly break: {e}")
 
 
 def get_frozen_monthly_range(wre, df, current_price, cost_floor_cents):
     """
-    Same freeze pattern as get_frozen_weekly_range(), applied to the
-    monthly outlook — see that function's docstring and
-    predict_monthly_range()'s docstring for the full reasoning.
-    Computed once per real calendar month, reused until the month
-    actually changes.
+    UPDATED 2026-08-19: previously this ONLY regenerated when the
+    calendar flipped to a new month — it never checked whether
+    CURRENT PRICE had actually moved outside the frozen
+    [monthly_low, monthly_high] range in between. Confirmed live:
+    August's frozen range (594-669c) stayed displayed unchanged even
+    after price reached 681c — a real, meaningful breach with no
+    mechanism to catch it, unlike the weekly plan (get_frozen_weekly_
+    plan) which already re-checks for a break on every single run.
+    This was inconsistent with the project's own core design ("weekly
+    frozen unless broken, then regenerate, since it's the most
+    reliable") — monthly is meant to follow the same rule, just on
+    its own timeframe/tolerance, not skip breach-checking entirely.
+
+    Now mirrors get_frozen_weekly_plan()'s pattern: on each run,
+    checks current_price against the frozen range (with
+    MONTHLY_BREAK_THRESHOLD_PCT tolerance); if breached, logs it
+    (log_monthly_break(), new monthly_break_log.json) and regenerates
+    a fresh range centered on current price, still frozen at the
+    calendar-month cache_key so it doesn't over-regenerate.
     """
     today = datetime.now(IL)
     cache_key = f"{today.year}-{today.month:02d}"
@@ -457,8 +579,37 @@ def get_frozen_monthly_range(wre, df, current_price, cost_floor_cents):
             cached = None
 
     if cached and cached.get('month_key') == cache_key:
+        old_monthly = cached['monthly']
+        low, high = old_monthly.get('monthly_low'), old_monthly.get('monthly_high')
+
+        breached = False
+        if low is not None and high is not None:
+            if current_price > high * (1 + MONTHLY_BREAK_THRESHOLD_PCT):
+                breached, reason = True, f"price {current_price:.0f}c broke above monthly high {high:.0f}c"
+            elif current_price < low * (1 - MONTHLY_BREAK_THRESHOLD_PCT):
+                breached, reason = True, f"price {current_price:.0f}c broke below monthly low {low:.0f}c"
+
+        if breached:
+            print(f"   ⚠️ MONTHLY RANGE BREACHED: {reason} — regenerating")
+            log_monthly_break(cache_key, current_price, old_monthly, reason)
+
+            monthly = wre.predict_monthly_range(df, current_price, cost_floor_cents)
+            if monthly:
+                try:
+                    MONTHLY_CACHE_FILE.write_text(json.dumps({
+                        'month_key': cache_key,
+                        'frozen_at': today.isoformat(),
+                        'regenerated_after_breach': True,
+                        'monthly': monthly,
+                    }, indent=2))
+                    print(f"   Re-froze monthly range after breach: "
+                          f"{monthly['monthly_low']:.0f}-{monthly['monthly_high']:.0f}c")
+                except Exception as e:
+                    print(f"   Failed to cache regenerated monthly range: {e}")
+            return monthly
+
         print(f"   Using FROZEN monthly range (locked earlier this month, {cache_key})")
-        return cached['monthly']
+        return old_monthly
 
     monthly = wre.predict_monthly_range(df, current_price, cost_floor_cents)
     if monthly:
@@ -512,33 +663,75 @@ NEWS_SIGNAL_MAX_AGE_HOURS = 12  # only trust a signal this fresh
 
 def get_news_signal():
     """
-    Reads the most recent LLM news interpretation (from news_scanner.py)
+    Reads the most recent LLM news interpretation from news_log.json
+    (produced by news_scanner.py's macro/commodity Gemini analysis)
     if it's fresh enough. Returns None if missing, stale, or NEUTRAL —
     caller should treat None as "no news nudge this run", not guess.
 
-    WEIGHT NOTE (2026-07-19): this is a brand new, UNVALIDATED signal.
-    It gets a deliberately small nudge in predict_next_week() — see
-    NEWS_SIGNAL_NUDGE_SCALE there — much smaller than the real,
-    holdout-validated backtest nudge. Do not increase this weight
-    based on a good week or two; check score_news_signals.py's real
-    win rate over many scored signals first. Same discipline that
-    caught vol_low being unreliable applies here.
+    UPDATED 2026-07-28: news_scanner.py was rewritten to a broader
+    macro/commodity scanner writing news_log.json (not the original
+    news_signal_log.json), with entries newest-first and wheat signal
+    nested under llm_analysis.wheat_impact — which appears as either
+    a string ("BULLISH"/"BEARISH"/"NEUTRAL") or a dict
+    ({"direction": ..., "reason": ...}) depending on how the model
+    formatted its JSON that run. This function normalizes both shapes.
+    The new scanner does not emit a numeric confidence, so a fixed
+    moderate confidence (60) is used — kept deliberately unremarkable
+    since, same as before, this signal is unvalidated and gets only a
+    small nudge weight in predict_next_week() (see NEWS_SIGNAL_NUDGE_SCALE
+    there). Do not treat this fixed value as a real confidence score.
+
+    WEIGHT NOTE (2026-07-19, still applies): this is a brand new,
+    UNVALIDATED signal. Do not increase its nudge weight based on a
+    good week or two; check score_news_signals.py's real win rate
+    over many scored signals first.
     """
-    path = Path("news_signal_log.json")
+    path = Path("news_log.json")
     if not path.exists():
         return None
     try:
         log = json.loads(path.read_text())
         if not log:
             return None
-        latest = log[-1]
+
+        latest = log[0]  # newest-first (news_scanner.py inserts at index 0)
         ts = datetime.fromisoformat(latest['timestamp'])
         age_hours = (datetime.now(IL) - ts).total_seconds() / 3600
         if age_hours > NEWS_SIGNAL_MAX_AGE_HOURS:
             return None
-        if latest['signal'] == 'NEUTRAL':
+
+        analysis = latest.get('llm_analysis')
+        if not analysis:
             return None
-        return latest['signal'], latest['confidence']
+
+        wheat_impact = analysis.get('wheat_impact')
+        if isinstance(wheat_impact, dict):
+            signal = wheat_impact.get('direction', 'NEUTRAL')
+        else:
+            signal = wheat_impact or 'NEUTRAL'
+        signal = str(signal).upper().strip()
+
+        # UPDATED 2026-09-06, real bug found via loss_forensics.py cross-
+        # referencing: Gemini occasionally returns a plain string with the
+        # label glued to leaked reasoning text instead of a clean word —
+        # e.g. "BULLISH - Severe European drought..." or "BEARISH:
+        # European wheat prices...". An exact match against 'BULLISH' was
+        # silently dropping these as unrecognized, losing real directional
+        # signals (confirmed: 4 real BULLISH/BEARISH entries in
+        # news_log.json were being lost this way). Checking startswith()
+        # instead of exact equality catches the label regardless of what
+        # follows it.
+        if signal.startswith('BULLISH'):
+            signal = 'BULLISH'
+        elif signal.startswith('BEARISH'):
+            signal = 'BEARISH'
+
+        if signal not in ('BULLISH', 'BEARISH'):
+            return None  # NEUTRAL or unrecognized — no nudge this run
+
+        confidence = 60  # fixed — see docstring; new scanner has no numeric confidence
+        return signal, confidence
+
     except Exception as e:
         print(f"   Failed to read news signal: {e}")
         return None
@@ -559,10 +752,25 @@ BREAK_THRESHOLD_PCT = 0.001
 def log_daily_performance(iso_year, iso_week, current_price, weekly):
     """
     Appends today's price vs. this week's frozen range to a running
-    log, so a Friday/Saturday report can show a real day-by-day
-    breakdown (not a memory-based impression) of how the week's
-    forecast actually held up.
+    log, so a Friday report can show a real day-by-day breakdown (not
+    a memory-based impression) of how the week's forecast actually
+    held up.
+
+    UPDATED 2026-09-05, real bug found and confirmed — this used to
+    also log on Saturday (see weekly_report.py's original docstring:
+    "so a Friday/Saturday report can show..."), but Saturday isn't a
+    real CBOT trading day. Whatever "current_price" is available on a
+    Saturday is just Friday's stale closing price re-logged under a
+    new day label — not a real new data point. This produced a fake
+    "6th day" in weekly_report.py's day-by-day breakdown and inflated
+    its day-count math. Guarded here (inside the function itself,
+    rather than at each of this function's 3 call sites) so it can
+    never happen regardless of which code path calls this.
     """
+    from trading_calendar import is_trading_day
+    if not is_trading_day(datetime.now(IL)):
+        return
+
     log = []
     if WEEKLY_PERFORMANCE_LOG_FILE.exists():
         try:
@@ -669,9 +877,11 @@ def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direc
         stop   = old_weekly.get('stop')
         target = old_weekly.get('target')
         final_call = old_weekly.get('final_call', daily_direction)
+        frozen_at = cached.get('frozen_at')
 
         broken = False
         break_type = None  # 'target' (win) or 'stop' (loss)
+        breach_price = current_price  # may be replaced below by a more extreme real daily High/Low
         if stop is not None and target is not None:
             if final_call == 'UP':
                 if current_price > target * (1 + BREAK_THRESHOLD_PCT):
@@ -684,11 +894,44 @@ def get_frozen_weekly_plan(wre, df, current_price, cost_floor_cents, daily_direc
                 elif current_price > stop * (1 + BREAK_THRESHOLD_PCT):
                     broken, break_type = True, 'stop'
 
+        # UPDATED 2026-09-05, real bug found and confirmed by bug_detector.py:
+        # the check above only ever compared the LIVE snapshot price at
+        # whatever moment a script happened to run — it could miss a real
+        # break that happened between checks and reverted before the next
+        # one. First fix attempt checked intraday High/Low, but that's
+        # asymmetric in practice: a stop wick that reverts by end of day
+        # was watched happening in real time and should NOT count as a
+        # break, same as a target wick that reverts shouldn't count as a
+        # win. Corrected to check each trading day's CLOSE since this
+        # setup was frozen, not the intraday High/Low — a brief touch
+        # that reverts by end of day doesn't count either way; a breach
+        # still true at close is real, for either direction. Same rule
+        # for WIN and LOSS, no favoritism.
+        if not broken and stop is not None and target is not None and frozen_at:
+            frozen_date = datetime.fromisoformat(frozen_at).date()
+            bars_since_freeze = df[df.index.date >= frozen_date]
+            for close_date, bar in bars_since_freeze.iterrows():
+                close_price = float(bar['Close'])
+                if final_call == 'UP':
+                    if close_price > target * (1 + BREAK_THRESHOLD_PCT):
+                        broken, break_type, breach_price = True, 'target', close_price
+                    elif close_price < stop * (1 - BREAK_THRESHOLD_PCT):
+                        broken, break_type, breach_price = True, 'stop', close_price
+                else:  # DOWN
+                    if close_price < target * (1 - BREAK_THRESHOLD_PCT):
+                        broken, break_type, breach_price = True, 'target', close_price
+                    elif close_price > stop * (1 + BREAK_THRESHOLD_PCT):
+                        broken, break_type, breach_price = True, 'stop', close_price
+                if broken:
+                    print(f"   ⚠️ Breach found via daily CLOSE check ({close_date.date()} "
+                          f"close={close_price:.2f}c), not caught by live snapshot checks")
+                    break
+
         if broken:
             outcome = 'WIN' if break_type == 'target' else 'LOSS'
-            reason = f"price {current_price:.0f}c broke past {break_type} ({outcome})"
+            reason = f"price {breach_price:.0f}c broke past {break_type} ({outcome})"
             print(f"   ⚠️ WEEKLY SETUP BROKEN: {reason} — regenerating")
-            log_weekly_break(iso_year, iso_week, current_price, old_weekly, reason)
+            log_weekly_break(iso_year, iso_week, breach_price, old_weekly, reason)
 
             # Win → keep same direction, fresh real forecast.
             # Loss → the directional read was wrong, flip it.
@@ -1147,26 +1390,24 @@ def get_weather_signal():
 # has a few months of tradeable history, so it's used ONLY for the
 # live volume display/diagnostic — price, seasonal, and backtest
 # history all continue using ZW=F's long continuous series.
-WHEAT_MONTH_CODES = {3: 'H', 5: 'K', 7: 'N', 9: 'U', 12: 'Z'}
+# UPDATED 2026-08-25: front-month contract resolution now lives in a
+# single shared module, trading_calendar.py, imported by both this
+# file and bug_detector.py — see that module's docstring for the
+# full history/reasoning. Previously this logic was duplicated
+# between the two files (to keep bug_detector.py free of this file's
+# heavy TensorFlow/XGBoost/sklearn dependencies); trading_calendar.py
+# resolves that tension since it only needs numpy/yfinance, which
+# bug_detector.py already imports anyway. If this logic ever needs to
+# change again, change it once in trading_calendar.py — both files
+# pick it up automatically.
+from trading_calendar import (
+    is_trading_day,
+    WHEAT_MONTH_CODES,
+    WHEAT_ROLL_BUFFER_DAYS,
+    VOLUME_CROSSOVER_MULTIPLIER,
+    get_front_month_ticker,
+)
 
-
-def get_front_month_ticker(reference_date=None):
-    """
-    Returns the current front-month CBOT wheat contract ticker
-    (e.g. 'ZWU26.CBT'), rolling forward to the next contract month
-    once inside the current delivery month (a simple, conservative
-    roll rule — precise CBOT last-trade dates vary, but rolling at
-    the start of delivery month avoids ever using an expired symbol).
-    """
-    ref = reference_date or datetime.now(IL)
-    months = sorted(WHEAT_MONTH_CODES.keys())
-
-    year = ref.year
-    for m in months:
-        if ref.month < m:
-            return f"ZW{WHEAT_MONTH_CODES[m]}{str(year)[-2:]}.CBT"
-    # Past all this year's months — roll to March of next year
-    return f"ZW{WHEAT_MONTH_CODES[3]}{str(year + 1)[-2:]}.CBT"
 
 
 def get_accurate_volume():
@@ -1249,32 +1490,103 @@ def load_state():
 
 def save_state(state):
     state['last_check'] = datetime.now(IL).isoformat()
+
+    # UPDATED 2026-09-05, real bug found by bug_detector.py: alerts_today
+    # only ever gets keys added, never removed — bug_detector.py flagged
+    # 43 entries with no cleanup, some from May. Only the last couple of
+    # days' keys are ever actually checked (see should_send()'s slot_key
+    # lookup), so anything older than a small buffer is pure dead weight.
+    # Pruned here, once per save, rather than in a separate cleanup pass —
+    # keeps the file from growing unbounded without needing a dedicated
+    # maintenance job.
+    ALERTS_TODAY_RETENTION_DAYS = 30
+    alerts_today = state.get('alerts_today', {})
+    if alerts_today:
+        cutoff = (datetime.now(IL) - timedelta(days=ALERTS_TODAY_RETENTION_DAYS)).date()
+        pruned = {}
+        for key, value in alerts_today.items():
+            try:
+                key_date = datetime.fromisoformat(key.rsplit('_', 1)[0]).date()
+                if key_date >= cutoff:
+                    pruned[key] = value
+            except Exception:
+                pruned[key] = value  # malformed key — keep rather than risk losing data
+        state['alerts_today'] = pruned
+
     STATE_FILE.write_text(json.dumps(state, indent=2))
 
 
 # ── ALERT GATE ────────────────────────────────────────────────────────────────
 
 def should_send(state):
-    """Only send at 1AM Israel time. Manual always sends."""
+    """Only send in the target Israel-time window (see hour check
+    below for the current target). Manual always sends."""
     force  = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
     event  = os.getenv('GITHUB_EVENT_NAME', '')
     manual = force or 'workflow_dispatch' in event
 
     if manual:
+        # UPDATED 2026-07-31: distinguish a genuine manual test run from
+        # a price-move-triggered re-run (see check_price_trigger.py) —
+        # both set FORCE_ALERT, but only the latter sets
+        # PRICE_MOVE_REASON, so the log/reason accurately reflects why
+        # this run actually happened instead of always saying "Manual".
+        price_move_reason = os.getenv('PRICE_MOVE_REASON')
+        if price_move_reason:
+            return True, price_move_reason, True
         return True, "Manual trigger", True
 
     israel  = datetime.now(IL)
     il_hour = israel.hour
     il_date = israel.date().isoformat()
 
-    if il_hour not in (1, 2):
+    # ADDED 2026-08-23: real incident — the weekly backtest cron
+    # ('30 22 * * 6', UTC Saturday 22:30 = IL Sunday ~01:30) shares the
+    # SAME job as the daily monitor and unconditionally runs the full
+    # wheat_monitor_pro.py afterward, sending a real "scheduled morning
+    # alert" — even though Sunday is not a trading day (trading is
+    # Mon-Fri, see the trading_calendar_2026.csv-confirmed rule fixed
+    # 2026-08-21). should_send() previously only checked the HOUR, never
+    # the day of week, so it happily approved a Sunday morning send.
+    # This is a defense-in-depth fix independent of workflow cron
+    # correctness: whatever job or cron triggers this script, it will
+    # now refuse a "scheduled" send outside Mon-Fri (weekday() 0-4),
+    # regardless of hour. Manual/price-triggered runs are unaffected —
+    # they return earlier above and always send, same as before.
+    if not is_trading_day(israel):
+        return False, f"Not a trading day ({israel.strftime('%A')})", False
+
+    # UPDATED 2026-08-25: retimed from ~01:00 IL to ~03:00 IL after the
+    # user confirmed Plus500's actual trading day starts at 03:00 IL
+    # (not aligned with the underlying CME Globex daily-bar rollover,
+    # which is ~01:00 IL — see wheat_monitor_github.yml's monitor cron
+    # comment for the full reasoning on why 03:00 was chosen over a
+    # second alert near Session 2's 16:30 open). The cron now targets
+    # 02:53 IL (7min early, same GitHub Actions delay-buffer convention
+    # as before).
+    #
+    # UPDATED 2026-09-02: real incident — GitHub Actions scheduling
+    # delay pushed the run to 5:05 IL (target 02:53), landing on
+    # il_hour=5, outside the old (2,3,4) window. should_send() returned
+    # False, the job still exited 0 (no exception), so the run showed
+    # green in Actions with zero visible signal that the alert never
+    # sent — confirmed live 2026-09-01, commit e834b53: full pipeline
+    # ran and logged a Tier 2 prediction, but alerts_sent/last_alert_date
+    # never updated because send_telegram() was never reached. Widened
+    # through hour 15 (Session 1 closes 15:45 IL — past that the day's
+    # data is stale, so no point sending) so a late-but-still-useful
+    # run still sends instead of being silently dropped. The
+    # alerts_today slot-key check right below this is the real
+    # duplicate-prevention guard, not this hour window — widening this
+    # does not risk a second send for the same day.
+    if il_hour not in (2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15):
         return False, f"Not scheduled hour ({il_hour}:00 Israel)", False
 
     slot_key = f"{il_date}_morning"
     if state.get('alerts_today', {}).get(slot_key):
         return False, "Morning alert already sent today", False
 
-    return True, "Scheduled morning alert (01:00 Israel)", False
+    return True, "Scheduled morning alert (~03:00 Israel)", False
 
 
 # ── TELEGRAM ──────────────────────────────────────────────────────────────────
@@ -1302,7 +1614,24 @@ def send_telegram(message):
 
 # ── PERFORMANCE LOG ───────────────────────────────────────────────────────────
 
-def log_prediction(direction, price, confidence, tier, seasonal_phase):
+def log_prediction(direction, price, confidence, tier, seasonal_phase,
+                    stop_price=None, target_price=None):
+    """
+    UPDATED 2026-09-03, real fix: previously only logged entry_price and
+    left it to score_predictions.py to invent its own synthetic stop/
+    target (1.5%/2.5% from entry_price) — a definition that matched
+    neither the actual weekly setup shown in the Telegram alert nor
+    anything the user was actually trading off of. Now also stores the
+    REAL stop/target from the live weekly setup (weekly['stop'],
+    weekly['target']) at the moment of logging, so score_predictions.py
+    can score against what was actually communicated instead of a
+    disconnected synthetic trade. stop_price/target_price are optional
+    (default None) so this stays backward compatible with any code path
+    that doesn't have a weekly setup handy; None is later treated by
+    score_predictions.py as "use the legacy synthetic definition" so old
+    entries logged before this change keep scoring exactly as they
+    always did — nothing retroactive, going-forward only.
+    """
     log_file = Path("prediction_log.json")
     try:
         log = json.loads(log_file.read_text()) if log_file.exists() else []
@@ -1316,6 +1645,8 @@ def log_prediction(direction, price, confidence, tier, seasonal_phase):
         'confidence':     confidence,
         'tier':           tier,
         'seasonal_phase': seasonal_phase,
+        'stop_price':     stop_price,
+        'target_price':   target_price,
         'validated':      False,
         'outcome':        None,
         'exit_reason':    None,
@@ -1366,15 +1697,105 @@ def main():
         df_raw = df_raw.iloc[:-1]
 
     last_candle_date  = df_raw.index[-1].date()
-    days_since_candle = (datetime.now(IL).date() - last_candle_date).days
+    today_date        = datetime.now(IL).date()
+    days_since_candle = (today_date - last_candle_date).days  # kept for the log line only, NOT used to decide closure anymore — see fix below
 
-    if days_since_candle >= 3 and not is_manual:
-        print(f"\nMarket closed — last candle {last_candle_date} ({days_since_candle}d ago). No alert.")
+    # ── FIX: get the live quote BEFORE deciding whether the market is
+    # closed, not after. A successful live fetch is direct, unambiguous
+    # proof trading is happening right now — it should always win over
+    # any date-based guess about the daily bar.
+    live_price, is_live_price = get_live_price()
+
+    # ADDED 2026-09-08: real incident — get_live_price()'s fallback
+    # source (ZW=F) was confirmed returning a STUCK value (716.00c,
+    # unchanged 2 days running, reported as "LIVE") while the real
+    # market (confirmed via Plus500 and the daily-CLOSE breach check
+    # below, which independently saw a real 754.50c close) had moved
+    # over 5% away. get_live_price()'s own is_live flag only proves a
+    # fetch call SUCCEEDED — it says nothing about whether the number
+    # it returned is actually current. Since df_raw's real daily
+    # history bars are fetched independently and were NOT affected by
+    # this bug, they're a reliable cross-check: a genuinely live price
+    # should never be wildly far from the most recent real daily
+    # close. If it is, treat it as unreliable rather than trusting it
+    # silently — same divergence-threshold philosophy bug_detector.py's
+    # check_price_source_divergence() already uses, applied here in
+    # the live pipeline itself so a bad number can't silently drive
+    # the ensemble, ConvictionGate, cost floor, or weekly range
+    # regeneration. This does not explain WHY the fetch returned a
+    # stale value (worth continued attention, especially with ZWU26
+    # close to its 2026-09-14 expiry) — it only stops a known-bad
+    # number from being trusted.
+    if is_live_price:
+        last_close_for_sanity_check = float(df_raw['Close'].iloc[-1])
+        price_divergence_pct = abs(live_price - last_close_for_sanity_check) / last_close_for_sanity_check
+        if price_divergence_pct > LIVE_PRICE_SANITY_PCT:
+            print(f"   ⚠️ LIVE PRICE REJECTED: {live_price:.2f}c diverges "
+                  f"{price_divergence_pct:.1%} from last close "
+                  f"{last_close_for_sanity_check:.2f}c (threshold {LIVE_PRICE_SANITY_PCT:.0%}) — "
+                  f"treating as unreliable (stale/cached fetch), falling back to daily close.")
+            is_live_price = False
+
+    # UPDATED 2026-08-17: the old check used raw CALENDAR days since
+    # the last daily candle (>=3 => "closed"). That counts weekends,
+    # so every Monday ~01:00 IL run — where the last candle is Friday's
+    # close — saw a 3-CALENDAR-day gap and incorrectly skipped the
+    # alert as "market closed", even though the market is open normally
+    # every Monday. This was a real, recurring bug (confirmed missed
+    # on 2026-08-17), not a one-off. Fixed two ways, applied together:
+    #   1. missed_business_days uses np.busday_count on the days AFTER
+    #      the last candle, which automatically excludes weekends —
+    #      Fri->Mon correctly reads 0 missed business days, while a
+    #      real holiday cluster (e.g. Thu holiday + weekend) still
+    #      correctly reads >=1.
+    #   2. Even if missed_business_days looks large, a successful live
+    #      quote (is_live_price=True) overrides it — if get_live_price()
+    #      is actually returning fresh data, the market is plainly not
+    #      closed, whatever the daily-bar gap suggests.
+    missed_business_days = np.busday_count(last_candle_date + timedelta(days=1), today_date)
+    market_likely_closed = (missed_business_days >= 2) and not is_live_price
+
+    if market_likely_closed and not is_manual:
+        print(f"\nMarket closed — last candle {last_candle_date} "
+              f"({missed_business_days} business day(s) missed, live fetch also failed). No alert.")
         save_state(state)
         return
 
-    # ── FIX: use LIVE price for current_price, daily bars stay for indicators ──
-    live_price, is_live_price = get_live_price()
+    # ADDED 2026-09-08: real incident — a Yahoo crumb/rate-limit issue
+    # ("Crumb fetch rate-limited (HTTP 429), continuing without crumb")
+    # caused BOTH df_raw's daily history AND get_live_price()'s "live"
+    # quote to silently return the same stale cached data at once (last
+    # real candle was 4 trading days old, live price matched it exactly
+    # at 716.00c). Because both sides agreed, the LIVE_PRICE_SANITY_PCT
+    # check above found no divergence to catch — it can only catch ONE
+    # side going stale while the other stays real, not both going stale
+    # together from the same root cause. This is a separate, harder
+    # guard: it checks the age of the daily bar data itself, regardless
+    # of what is_live_price claims. A manual run during this incident
+    # went on to compute and SEND a real DOWN alert entirely off 4-day-
+    # old data — this only stops the send when data is this stale;
+    # is_manual no longer bypasses it, since sending a wrong trade
+    # setup during a real data outage is the actual harm to prevent,
+    # not something a human-triggered test run should be allowed to do
+    # unknowingly. A clearly-labeled warning is sent instead so a
+    # manual run still gets visible feedback rather than pure silence.
+    STALE_DATA_HARD_BLOCK_DAYS = 2  # trading days
+    data_critically_stale = missed_business_days >= STALE_DATA_HARD_BLOCK_DAYS
+    if data_critically_stale:
+        print(f"\n⚠️⚠️ DATA CRITICALLY STALE: last real daily candle is {last_candle_date} "
+              f"({missed_business_days} trading day(s) old) — this looks like a data-source "
+              f"outage (e.g. Yahoo rate-limiting), not a real market closure. Refusing to "
+              f"compute/send a real trade setup off this data.")
+        if TELEGRAM_TOKEN and TELEGRAM_CHAT:
+            send_telegram(
+                f"⚠️ Wheat Monitor: data source appears stale/rate-limited "
+                f"(last real candle {last_candle_date}, {missed_business_days} trading "
+                f"day(s) old) — skipped this run rather than send a setup off bad data. "
+                f"Check the Actions log."
+            )
+        save_state(state)
+        return
+
     if is_live_price:
         current_price = live_price
         print(f"Price: {current_price:.2f}c  (LIVE — daily bar was {last_candle_date})")
@@ -1415,18 +1836,71 @@ def main():
     print(f"  Ensemble: {direction} | LSTM={pred['lstm']:.3f} RF={pred['rf']:.3f} XGB={pred['xgb']:.3f}")
 
     # ── Filters ──
+    # UPDATED 2026-09-04: real bug found and confirmed — trend_blocked
+    # was computed from the SAME pre-override `direction` as
+    # seasonal_blocked, before either override ran. So if the seasonal
+    # filter flipped direction (e.g. UP -> DOWN), trend_blocked had
+    # already been evaluated against the OLD 'UP' value and couldn't
+    # re-check the NEW 'DOWN' value against the trend — meaning
+    # TrendEngine's whole purpose ("block signals that fight a strong
+    # confirmed trend") silently failed to catch exactly the case it
+    # exists for: a seasonal override flipping into a strong opposing
+    # trend. Confirmed as the root cause of a real 9-day losing streak
+    # (2026-08-13 to 2026-08-21, 9.1% win rate, DOWN calls forced by a
+    # BEARISH seasonal override straight into a real STRONG uptrend).
+    # Fix: apply the seasonal override FIRST, then evaluate
+    # trend_blocked against the direction AS IT STANDS AFTER that
+    # override — so the trend filter can actually catch a bad flip,
+    # not just the original ensemble call.
     seasonal_blocked, _ = seasonal.blocks_direction(direction)
-    trend_blocked, _    = trend_engine.blocks_direction(direction, trend_data)
 
     if seasonal_blocked:
         direction          = 'DOWN' if direction == 'UP' else 'UP'
         pred['confidence'] = 0.60
         print(f"  Seasonal override → {direction}")
 
+    trend_blocked, _ = trend_engine.blocks_direction(direction, trend_data)
+
     if trend_blocked:
         direction          = 'DOWN' if direction == 'UP' else 'UP'
         pred['confidence'] = 0.58
         print(f"  Trend filter → {direction}")
+
+    # UPDATED 2026-08-23: real incident found — gate.evaluate() computes
+    # tier/accuracy BEFORE the seasonal/trend override above can flip
+    # direction, and every currently-validated condition (momentum_up
+    # etc.) has ONLY ever been backtested for predicting UP moves (see
+    # ConvictionGate's own docstring). When an override flips direction
+    # to DOWN, the tier/accuracy badge stayed attached anyway, showing
+    # e.g. "TIER 1 - 77.3% holdout-validated accuracy" on a DOWN call
+    # that number has zero evidence for. Confirmed live: every Tier 1
+    # entry in prediction_log.json since the 2026-08-04 stats cutoff was
+    # direction=DOWN via seasonal override, with a 9.1% live win rate
+    # against the 77.3% badge shown — not model failure, a mislabeled
+    # confidence score. Downgrading to Tier 0 here means it also stops
+    # being logged as a tracked prediction (existing "if tier > 0" gate
+    # further down), so it no longer pollutes accuracy stats either.
+    # Does NOT touch the weekly trade setup (entry/stop/target) — that
+    # has its own separate freeze/break logic, unaffected either way.
+    # UPDATED 2026-09-05, real gap found in the 2026-08-23 fix above:
+    # that fix only downgraded Tier when seasonal_blocked or
+    # trend_blocked caused the flip to DOWN — it didn't cover the case
+    # where the ensemble's OWN raw vote is natively DOWN with no
+    # override involved at all. momentum_up/macd_bullish are
+    # independent technical checks (momentum, MACD crossover) that can
+    # easily still read "active" on a day the ensemble concludes DOWN
+    # on its own — in that case Tier could still show e.g. "Tier 2 —
+    # momentum_up + macd_bullish" attached to a DOWN call, using
+    # UP-only-validated accuracy, and the override-flag check above
+    # wouldn't catch it since neither flag would be true. Checking
+    # direction directly instead of the two override flags covers
+    # both cases uniformly — simpler and more robust than the original.
+    if direction == 'DOWN' and tier > 0:
+        print(f"  Tier downgraded: {tier} -> 0 — validated condition only proven for UP, "
+              f"but direction is {direction}")
+        gate_reason = f"⚪ NO SIGNAL — validated condition is UP-only; direction is {direction}"
+        tier = 0
+        accuracy = gate.BASELINE_UP
 
     # ── Cost floor ──
     print("\nCalculating cost floor...")
@@ -1444,6 +1918,7 @@ def main():
     news_signal = get_news_signal()
     if news_signal:
         print(f"   News signal (unvalidated, small nudge): {news_signal[0]} ({news_signal[1]}%)")
+    break_outcome = None  # safe default — set for real inside the try block below
     try:
         from weekly_range_engine import WeeklyRangeEngine
         wre = WeeklyRangeEngine()
@@ -1489,6 +1964,7 @@ def main():
             final_direction = weekly['final_call'],
             daily_direction = direction,
             status_line     = status_line,
+            current_price   = current_price,
         )
 
         # Add ensemble footnote
@@ -1520,18 +1996,73 @@ def main():
             f"Entry: {current_price:.2f}c | Stop: {stop:.2f}c | Target: {target:.2f}c\n"
         )
 
+    # UPDATED 2026-07-31: make the trigger reason visible in the actual
+    # alert, not just the GitHub Actions console log. Previously
+    # PRICE_MOVE_REASON only affected should_send()'s internal reason
+    # string, invisible to anyone just reading Telegram — this adds a
+    # short header line so a price-triggered alert is distinguishable
+    # from the routine scheduled 1am one at a glance.
+    price_move_reason = os.getenv('PRICE_MOVE_REASON')
+    if price_move_reason:
+        message = f"⚡ {price_move_reason}\n\n" + message
+
     print(f"\nFINAL: {direction} | Tier {tier}")
 
     # ── Send ──
+    # UPDATED 2026-08-07: full formatted alert now sends every day the
+    # alert gate is open, regardless of tier — restoring the original
+    # daily visibility that was lost when the 2026-07-29 tier-gating
+    # fix (correctly) stopped Tier 0 from being logged as a tracked
+    # prediction. Sending and logging are now fully decoupled: every
+    # send still updates alerts_sent/alerts_today, but log_prediction()
+    # (which feeds the accuracy stats bug_detector.py checks) still
+    # only fires on tier > 0, so Tier 0 days stay excluded from
+    # win-rate tracking without going silent/heartbeat-only.
+    #
+    # UPDATED 2026-08-22: real incident found in prediction_log.json —
+    # 4 LOSS entries logged within ~35 minutes on 2026-08-19, 3 of them
+    # from the user manually re-running the script during a volatile
+    # morning to check in. Each run got its own logged prediction row,
+    # scored independently by score_predictions.py against nearly the
+    # same forward price path — one real event counted several times,
+    # inflating both the sample size and the win/loss ratio behind
+    # tier accuracy numbers. Fixed by skipping log_prediction() for
+    # TRUE human button-presses only. Deliberately does NOT skip
+    # price-move-triggered automatic re-runs (check_price_trigger.py,
+    # via FORCE_ALERT + PRICE_MOVE_REASON) — those represent a real,
+    # independent event (a genuine >=2% move) and should keep counting
+    # as their own data point, same as a scheduled run would.
+    is_human_manual = (
+        os.getenv('GITHUB_EVENT_NAME', '') == 'workflow_dispatch'
+        and not os.getenv('PRICE_MOVE_REASON')
+    )
+
     if send:
         success = send_telegram(message)
         if success:
             state['alerts_sent'] = state.get('alerts_sent', 0) + 1
             state['last_alert_date'] = datetime.now(IL).date().isoformat()
             if not is_manual:
+                # UPDATED 2026-08-23: was `= True`, now stores the actual
+                # HH:MM send time. This slot only ever gets set for a
+                # genuine SCHEDULED send (never a price-triggered
+                # mid-day re-run, which legitimately varies in hour and
+                # would make a blanket hour-check meaningless) — so it's
+                # a clean, unambiguous signal for bug_detector.py to
+                # verify the daily alert actually landed close to its
+                # intended ~02:53 IL target (retimed 2026-08-25, see
+                # should_send() and wheat_monitor_github.yml's monitor
+                # cron comment), not just on the right day.
                 slot_key = f"{datetime.now(IL).date().isoformat()}_morning"
-                state.setdefault('alerts_today', {})[slot_key] = True
-            log_prediction(direction, current_price, pred['confidence'], tier, s_phase['phase'])
+                state.setdefault('alerts_today', {})[slot_key] = datetime.now(IL).strftime('%H:%M')
+        if is_human_manual:
+            print("   Manual (human-triggered) run — alert sent, NOT logged as a tracked prediction "
+                  "(avoids inflating win/loss stats with clustered manual re-checks).")
+        elif tier > 0:
+            log_prediction(direction, current_price, pred['confidence'], tier, s_phase['phase'],
+                           stop_price=weekly.get('stop'), target_price=weekly.get('target'))
+        else:
+            print("   Tier 0 — alert sent for visibility, NOT logged as a tracked prediction.")
     else:
         print(f"No alert: {reason}")
 
