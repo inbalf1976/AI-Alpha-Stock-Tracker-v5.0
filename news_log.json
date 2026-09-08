@@ -1,5 +1,161 @@
 [
   {
+    "timestamp": "2026-09-08T13:05:18.169586+00:00",
+    "total_scanned": 220,
+    "flagged_count": 160,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Chip stock investors beware — these charts could warn of further weakness ahead",
+        "link": "https://www.marketwatch.com/story/chip-stock-investors-beware-these-charts-could-warn-of-further-weakness-ahead-1bd890cc?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 08 Sep 2026 11:07:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "U.S. oil prices reach highest level in over three months after Saudi Arabia says civilian and energy sites struck",
+        "link": "https://www.marketwatch.com/story/u-s-oil-prices-reach-highest-level-in-over-three-months-after-saudi-arabia-says-civilian-and-energy-sites-struck-b28ae417?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 08 Sep 2026 10:54:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold edges lower after earlier gains as dollar weakness offsets Fed hike concerns",
+        "link": "https://www.investing.com/news/commodities-news/gold-rises-as-yen-surge-weakens-dollar-oil-and-fed-bets-cap-gains-4890770",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-08 12:02:10",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Brent advances toward $100/bbl after Iran threat to Gulf energy infrastructure",
+        "link": "https://www.investing.com/news/commodities-news/oil-extends-climb-after-iran-threat-to-gulf-energy-infrastructure-4890768",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-08 11:54:32",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Why isn’t oil above $100 despite supply disruptions?",
+        "link": "https://www.investing.com/news/commodities-news/explainerwhy-isnt-oil-above-100-despite-supply-disruptions-4890766",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-08 09:43:05",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Treasury yields hold near multi-year highs after hot jobs report and oil surge",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-push-higher-with-crude-near-100-and-ecb-hike-imminent-4890937",
+        "source": "Investing.com Forex",
+        "published": "2026-09-08 12:17:43",
+        "matched_keywords": [
+          "oil",
+          "yield",
+          "treasury"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Crude oil prices surged to multi-month highs following physical attacks on Saudi energy sites and escalating threats in the Strait of Hormuz, driving Treasury yields higher amid renewed inflation fears. Meanwhile, the Federal Reserve maintained its regulatory focus with various enforcement actions and approvals while markets digested recent FOMC minutes and labor market data.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating military conflict in the Middle East and Persian Gulf threatening critical energy and maritime trade chokepoints.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active military strikes on Saudi civilian and energy sites combined with US tanker-for-tanker retaliation campaigns and Iranian Persian Gulf exclusion zones pose an unfolding physical threat to Middle East shipping corridors."
+    }
+  },
+  {
     "timestamp": "2026-09-08T13:02:38.126361+00:00",
     "total_scanned": 220,
     "flagged_count": 158,
