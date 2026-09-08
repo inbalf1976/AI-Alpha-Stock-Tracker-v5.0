@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-09-08T03:30:41.922040+00:00",
+    "total_scanned": 220,
+    "flagged_count": 165,
+    "flagged_headlines": [
+      {
+        "title": "Oil prices climb after reports of Saudi Aramco refinery being hit by Houthi rebels",
+        "link": "https://www.marketwatch.com/story/oil-prices-hit-near-seven-week-highs-before-edging-lower-as-iran-plans-to-increase-control-of-hormuz-5070167c?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 08 Sep 2026 03:09:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Chip stock investors beware — these charts could warn of further weakness ahead",
+        "link": "https://www.marketwatch.com/story/chip-stock-investors-beware-these-charts-could-warn-of-further-weakness-ahead-1bd890cc?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 07 Sep 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound edges up as dollar stays soft on Fed rate-hike bets",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-edges-up-as-dollar-stays-soft-on-fed-ratehike-bets-4890558",
+        "source": "Investing.com Forex",
+        "published": "2026-09-07 09:09:45",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "European bond yields tick up, snapping two-day rally",
+        "link": "https://www.investing.com/news/forex-news/european-bond-yields-tick-up-snapping-twoday-rally-4890484",
+        "source": "Investing.com Forex",
+        "published": "2026-09-07 07:44:25",
+        "matched_keywords": [
+          "ppi",
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar firms as jobs data boosts Fed rate hike bets, yen eases after huge rally",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-rise-as-yen-set-for-best-week-since-july-fed-bets-fade-4888814",
+        "source": "Investing.com Forex",
+        "published": "2026-09-04 19:44:21",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "U.S. 10-year Treasury yield spikes following blockbuster NFP report",
+        "link": "https://www.investing.com/news/forex-news/global-bond-rout-pauses-for-second-day-as-feds-waller-sparks-ratehold-hopes-4888831",
+        "source": "Investing.com Forex",
+        "published": "2026-09-04 12:46:20",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Trump turns up the heat on Warsh as Fed rate hike looms",
+        "link": "https://www.cnbc.com/2026/09/05/trump-warsh-fed-september-rate-hike.html",
+        "source": "CNBC Economy",
+        "published": "Sat, 05 Sep 2026 19:12:53 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "war"
+        ]
+      },
+      {
+        "title": "Fed Governor Waller indicates he will support holding rates steady at September meeting",
+        "link": "https://www.cnbc.com/2026/09/03/fed-governor-waller-indicates-he-will-support-holding-rates-steady-at-september-meeting.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 03 Sep 2026 14:06:52 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "'Danger zone of extreme weather': UN warns of supersized El Niño set to hit global economy and markets",
+        "link": "https://www.cnbc.com/2026/09/03/supersized-el-nino-un-economy.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 03 Sep 2026 12:25:53 GMT",
+        "matched_keywords": [
+          "war",
+          "warns of"
+        ]
+      },
+      {
+        "title": "Why isn’t oil above $100 despite supply disruptions?",
+        "link": "https://www.investing.com/news/commodities-news/explainerwhy-isnt-oil-above-100-despite-supply-disruptions-4890766",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-08 02:36:24",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold rises as yen surge weakens dollar; oil and Fed bets cap gains",
+        "link": "https://www.investing.com/news/commodities-news/gold-rises-as-yen-surge-weakens-dollar-oil-and-fed-bets-cap-gains-4890770",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-08 02:29:45",
+        "matched_keywords": [
+          "fed",
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil extends climb after Iran threat to Gulf energy infrastructure",
+        "link": "https://www.investing.com/news/commodities-news/oil-extends-climb-after-iran-threat-to-gulf-energy-infrastructure-4890768",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-08 02:24:51",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil rises as risks of prolonged Mideast conflict heighten supply worries",
+        "link": "https://www.investing.com/news/commodities-news/oil-rises-as-risks-of-prolonged-mideast-conflict-heighten-supply-worries-4890754",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-08 00:54:49",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Brent Oil stalls at resistance with RSI at 72: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/brent-oil-overbought-at-97-rsi-74-hourly-levels-93CH-4890477",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-07 19:12:24",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI tests $93.64 resistance with overbought RSI: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-doubletop-at-9364-resistance-live-levels-93CH-4890479",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-07 19:12:24",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by heightened Middle East geopolitical tensions threatening Gulf energy infrastructure and driving up oil prices, alongside an intense political pressure campaign by the U.S. administration on the Federal Reserve to cut interest rates despite strong labor data. Meanwhile, macroeconomic focus centers on upcoming inflation data and potential diverging signals among Fed officials regarding a September rate hike.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating Middle East conflict disrupting critical energy and maritime supply routes.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": ""
+    }
+  },
+  {
     "timestamp": "2026-09-08T01:16:03.275576+00:00",
     "total_scanned": 220,
     "flagged_count": 166,
