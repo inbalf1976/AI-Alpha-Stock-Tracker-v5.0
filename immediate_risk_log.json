@@ -17,11 +17,11 @@
     "reason": "Active military engagements and attacks involving the U.S. and Iran in and around the Strait of Hormuz pose a continuous threat to maritime trade and energy flows.",
     "predicted_direction": "BULLISH",
     "price_at_alert": 716.0,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "HIT",
+    "price_at_scoring": 742.75,
+    "pct_change": 3.736,
+    "scored_at": "2026-09-08T17:18:39.839318+00:00"
   },
   {
     "alert_number": 60,
