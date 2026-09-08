@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-09-08T13:44:55.960179+00:00",
+    "total_scanned": 219,
+    "flagged_count": 158,
+    "flagged_headlines": [
+      {
+        "title": "Chip stock investors beware — these charts could warn of further weakness ahead",
+        "link": "https://www.marketwatch.com/story/chip-stock-investors-beware-these-charts-could-warn-of-further-weakness-ahead-1bd890cc?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 08 Sep 2026 11:07:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Treasury yields hold near multi-year highs after hot jobs report and oil surge",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-push-higher-with-crude-near-100-and-ecb-hike-imminent-4890937",
+        "source": "Investing.com Forex",
+        "published": "2026-09-08 12:17:43",
+        "matched_keywords": [
+          "oil",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Citi expects BOJ rate hike to 1.25%, says political votes and Fed hold key to yen",
+        "link": "https://www.investing.com/news/forex-news/citi-expects-boj-rate-hike-to-125-says-political-votes-and-fed-hold-key-to-yen-4891238",
+        "source": "Investing.com Forex",
+        "published": "2026-09-08 10:31:47",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound edges up as dollar stays soft on Fed rate-hike bets",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-edges-up-as-dollar-stays-soft-on-fed-ratehike-bets-4890558",
+        "source": "Investing.com Forex",
+        "published": "2026-09-07 09:09:45",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "European bond yields tick up, snapping two-day rally",
+        "link": "https://www.investing.com/news/forex-news/european-bond-yields-tick-up-snapping-twoday-rally-4890484",
+        "source": "Investing.com Forex",
+        "published": "2026-09-07 07:44:25",
+        "matched_keywords": [
+          "ppi",
+          "yield"
+        ]
+      },
+      {
+        "title": "Hormuz disruptions hitting small businesses hardest, UN trade agency warns",
+        "link": "https://www.investing.com/news/commodities-news/hormuz-disruptions-hitting-small-businesses-hardest-un-trade-agency-warns-4891725",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-08 13:00:34",
+        "matched_keywords": [
+          "war",
+          "hormuz"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets face crosscurrents from persistent Middle East maritime disruptions—highlighted by US retaliation against Iranian tankers and a declared Persian Gulf Exclusion Zone—alongside shifting monetary policy expectations driven by strong US employment data and high treasury yields. Meanwhile, the Federal Reserve continues active regulatory enforcement across multiple banking entities.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating military conflict in the Strait of Hormuz and Bab el-Mandeb threatening critical regional trade and energy transit corridors.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active US military retaliation disabling five Iranian tankers and Iran's declaration of a 'Persian Gulf Exclusion Zone' are severely disrupting tanker traffic and maritime transit in the Strait of Hormuz."
+    }
+  },
+  {
     "timestamp": "2026-09-08T13:10:26.953429+00:00",
     "total_scanned": 220,
     "flagged_count": 158,
