@@ -1,5 +1,161 @@
 [
   {
+    "timestamp": "2026-09-08T13:10:26.953429+00:00",
+    "total_scanned": 220,
+    "flagged_count": 158,
+    "flagged_headlines": [
+      {
+        "title": "Chip stock investors beware — these charts could warn of further weakness ahead",
+        "link": "https://www.marketwatch.com/story/chip-stock-investors-beware-these-charts-could-warn-of-further-weakness-ahead-1bd890cc?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 08 Sep 2026 11:07:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "U.S. oil prices reach highest level in over three months after Saudi Arabia says civilian and energy sites struck",
+        "link": "https://www.marketwatch.com/story/u-s-oil-prices-reach-highest-level-in-over-three-months-after-saudi-arabia-says-civilian-and-energy-sites-struck-b28ae417?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 08 Sep 2026 10:54:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canada's retaliatory tariffs worth $27.6 billion take effect as trade rift with U.S. deepens",
+        "link": "https://www.cnbc.com/2026/09/08/canada-retaliatory-tariffs.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 08 Sep 2026 08:21:33 GMT",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Trump turns up the heat on Warsh as Fed rate hike looms",
+        "link": "https://www.cnbc.com/2026/09/05/trump-warsh-fed-september-rate-hike.html",
+        "source": "CNBC Economy",
+        "published": "Sat, 05 Sep 2026 19:12:53 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "war"
+        ]
+      },
+      {
+        "title": "Fed Governor Waller indicates he will support holding rates steady at September meeting",
+        "link": "https://www.cnbc.com/2026/09/03/fed-governor-waller-indicates-he-will-support-holding-rates-steady-at-september-meeting.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 03 Sep 2026 14:06:52 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Gold edges lower after earlier gains as dollar weakness offsets Fed hike concerns",
+        "link": "https://www.investing.com/news/commodities-news/gold-rises-as-yen-surge-weakens-dollar-oil-and-fed-bets-cap-gains-4890770",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-08 12:02:10",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are being driven by escalating trade tensions—highlighted by Canada's $27.6 billion retaliatory tariffs against the U.S.—rising oil prices due to Middle East strikes on Saudi infrastructure, and a fierce policy tug-of-war between the White House and the Federal Reserve over interest rates ahead of the September FOMC meeting.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Potential escalation of retaliatory trade tariffs and active Middle East supply shocks spilling over into broader energy and agricultural freight costs.",
+      "headline_overstated": true,
+      "headline_vs_article_note": "The CNBC headline claiming Trump 'turns up the heat on Warsh' over a rate hike is somewhat overstated, as the article notes that Trump has specifically avoided directly criticizing Fed Chair Kevin Warsh while directing his broader pressure campaign at the central bank as a whole.",
+      "immediate_risk": true,
+      "immediate_risk_reason": "A U.S. tanker-for-tanker military campaign in the Strait of Hormuz has disabled five Iranian tankers, accompanied by Iranian exclusion zones, dark AIS transits, and Houthi offensives threatening key Red Sea ports."
+    }
+  },
+  {
     "timestamp": "2026-09-08T13:05:18.169586+00:00",
     "total_scanned": 220,
     "flagged_count": 160,
