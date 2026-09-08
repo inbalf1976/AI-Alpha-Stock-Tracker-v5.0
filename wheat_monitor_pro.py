@@ -38,6 +38,28 @@ CHANGELOG (this version):
     stopped Tier 0 from dragging live accuracy down to 43.5%), but
     no longer go silent/heartbeat-only. Sending and logging are now
     fully decoupled.
+  - FIX (2026-09-08): real incident — get_live_price()'s fallback
+    source (ZW=F, used whenever the front-month specific contract
+    fetch fails, e.g. the ZWU26.CBT "possibly delisted" errors seen
+    2026-09-07/08) was confirmed returning a STUCK/STALE value via
+    fast_info: 716.00c reported as "LIVE" two days running while the
+    real market (confirmed against Plus500 and the daily-CLOSE
+    breach check, which uses real history bars and correctly saw
+    754.50c) had already moved to ~754-757c, a 5%+ gap. This silently
+    drove the ensemble, ConvictionGate, cost-floor distance, and the
+    weekly range regeneration off a wrong price with no visible
+    warning — worst case, get_frozen_weekly_plan() re-froze a brand
+    new weekly setup anchored on the same stale number right after a
+    real WIN breach, making the "new" setup look identical to the one
+    that just closed. Added a sanity check right after get_live_price()
+    returns: if the "live" price differs from the most recent real
+    daily CLOSE (already fetched into df_raw, unaffected by this bug)
+    by more than LIVE_PRICE_SANITY_PCT, the live price is rejected and
+    the script falls back to the daily close instead, with a clear
+    ⚠️ log line. This does not fix why fast_info returned a stale
+    value — worth continuing to watch, especially given ZWU26 is
+    close to its 2026-09-14 expiry — but it stops a known-bad number
+    from silently driving real trade setups.
 """
 
 import os, sys, json, warnings, requests
@@ -70,6 +92,12 @@ TELEGRAM_CHAT   = os.getenv("TELEGRAM_CHAT_ID")
 # Years to exclude from seasonal calculation (global anomalies)
 EXCLUDE_YEARS   = [2022]
 
+# UPDATED 2026-09-08: see CHANGELOG above — a "live" quote that
+# diverges from the most recent real daily CLOSE by more than this
+# is treated as unreliable (stale/cached fast_info, wrong contract,
+# etc.) rather than trusted silently.
+LIVE_PRICE_SANITY_PCT = 0.04  # 4%
+
 # ── LIVE PRICE FETCH ──────────────────────────────────────────────────────────
 
 def get_live_price(ticker=TICKER):
@@ -94,6 +122,12 @@ def get_live_price(ticker=TICKER):
     Returns (price, is_live). is_live=False means every live fetch
     attempt failed and the caller should fall back to the last daily
     close, while flagging it clearly rather than trusting it silently.
+
+    NOTE (2026-09-08): this function's OWN success/failure signal
+    (is_live) is not enough on its own anymore — a "successful" fetch
+    can still return a stale/wrong number (see CHANGELOG). The caller
+    (main()) now runs an additional sanity check against the real
+    daily close before trusting whatever this returns.
     """
     front_month = get_front_month_ticker()
     sources = [front_month] if ticker == front_month else [front_month, ticker]
@@ -1656,6 +1690,36 @@ def main():
     # proof trading is happening right now — it should always win over
     # any date-based guess about the daily bar.
     live_price, is_live_price = get_live_price()
+
+    # ADDED 2026-09-08: real incident — get_live_price()'s fallback
+    # source (ZW=F) was confirmed returning a STUCK value (716.00c,
+    # unchanged 2 days running, reported as "LIVE") while the real
+    # market (confirmed via Plus500 and the daily-CLOSE breach check
+    # below, which independently saw a real 754.50c close) had moved
+    # over 5% away. get_live_price()'s own is_live flag only proves a
+    # fetch call SUCCEEDED — it says nothing about whether the number
+    # it returned is actually current. Since df_raw's real daily
+    # history bars are fetched independently and were NOT affected by
+    # this bug, they're a reliable cross-check: a genuinely live price
+    # should never be wildly far from the most recent real daily
+    # close. If it is, treat it as unreliable rather than trusting it
+    # silently — same divergence-threshold philosophy bug_detector.py's
+    # check_price_source_divergence() already uses, applied here in
+    # the live pipeline itself so a bad number can't silently drive
+    # the ensemble, ConvictionGate, cost floor, or weekly range
+    # regeneration. This does not explain WHY the fetch returned a
+    # stale value (worth continued attention, especially with ZWU26
+    # close to its 2026-09-14 expiry) — it only stops a known-bad
+    # number from being trusted.
+    if is_live_price:
+        last_close_for_sanity_check = float(df_raw['Close'].iloc[-1])
+        price_divergence_pct = abs(live_price - last_close_for_sanity_check) / last_close_for_sanity_check
+        if price_divergence_pct > LIVE_PRICE_SANITY_PCT:
+            print(f"   ⚠️ LIVE PRICE REJECTED: {live_price:.2f}c diverges "
+                  f"{price_divergence_pct:.1%} from last close "
+                  f"{last_close_for_sanity_check:.2f}c (threshold {LIVE_PRICE_SANITY_PCT:.0%}) — "
+                  f"treating as unreliable (stale/cached fetch), falling back to daily close.")
+            is_live_price = False
 
     # UPDATED 2026-08-17: the old check used raw CALENDAR days since
     # the last daily candle (>=3 => "closed"). That counts weekends,
