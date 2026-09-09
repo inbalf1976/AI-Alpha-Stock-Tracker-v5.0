@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-08T17:28:03.587393",
+  "generated_at": "2026-09-09T00:44:02.109651",
   "baseline_up": 0.68,
   "validated_conditions": {
     "momentum_up": 0.857,
@@ -9,5 +9,5 @@
     "above_sma20": 0.78,
     "near_bb_upper": 0.889
   },
-  "source_backtest_run_date": "2026-09-08T17:28:03.470224"
+  "source_backtest_run_date": "2026-09-09T00:44:02.013175"
 }
