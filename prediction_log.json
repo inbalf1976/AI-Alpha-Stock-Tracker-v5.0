@@ -1476,7 +1476,10 @@
     "validated": false,
     "outcome": null,
     "exit_reason": null,
-    "pnl_cents": null
+    "pnl_cents": null,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-09-09"
   },
   {
     "timestamp": "2026-09-08T16:45:11.791036+03:00",
@@ -1488,7 +1491,10 @@
     "validated": false,
     "outcome": null,
     "exit_reason": null,
-    "pnl_cents": null
+    "pnl_cents": null,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-09-09"
   },
   {
     "timestamp": "2026-09-08T20:18:30.919802+03:00",
@@ -1500,7 +1506,10 @@
     "validated": false,
     "outcome": null,
     "exit_reason": null,
-    "pnl_cents": null
+    "pnl_cents": null,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-09-09"
   },
   {
     "timestamp": "2026-09-09T04:39:27.376610+03:00",
