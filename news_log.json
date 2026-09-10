@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-09-10T13:05:45.572799+00:00",
+    "total_scanned": 224,
+    "flagged_count": 173,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Wholesale inflation stirred up by Iran war and high oil prices. What does it mean for the Fed?",
+        "link": "https://www.marketwatch.com/story/wholesale-inflation-stirred-up-again-by-iran-conflict-and-higher-oil-prices-3f497534?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 10 Sep 2026 12:34:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "U.S. reveals import ban on slew of Canadian goods as trade war escalates",
+        "link": "https://www.cnbc.com/2026/09/09/us-canada-trade-war-import-ban.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 09 Sep 2026 16:17:46 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Canada's retaliatory tariffs worth CA$27.6 billion take effect as trade rift with U.S. deepens",
+        "link": "https://www.cnbc.com/2026/09/08/canada-retaliatory-tariffs.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 08 Sep 2026 17:11:11 GMT",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Trump turns up the heat on Warsh as Fed rate hike looms",
+        "link": "https://www.cnbc.com/2026/09/05/trump-warsh-fed-september-rate-hike.html",
+        "source": "CNBC Economy",
+        "published": "Sat, 05 Sep 2026 19:12:53 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "war"
+        ]
+      },
+      {
+        "title": "Washington tariff plans for copper imports stall, premiums drop",
+        "link": "https://www.investing.com/news/commodities-news/washington-tariff-plans-for-copper-imports-stall-premiums-drop-93CH-4895959",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-10 12:56:21",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "OPEC further lowers 2026 global oil demand growth forecast",
+        "link": "https://www.investing.com/news/commodities-news/opec-further-lowers-2026-global-oil-demand-growth-forecast-4895797",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-10 12:36:51",
+        "matched_keywords": [
+          "opec",
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are roiled by escalating U.S.-Canada trade wars, fierce White House pressure on the Federal Reserve to cut interest rates ahead of a likely hike, and military clashes in the Strait of Hormuz involving U.S. strikes on Iranian tankers. Meanwhile, OPEC has lowered its 2026 global oil demand growth forecast, and wholesale inflation fears are mounting amid the Middle East conflict.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_category": "other_fundamental",
+      "wheat_impact_reason": "Canada's retaliatory tariffs targeting U.S. agricultural equipment and goods increase input costs, supporting an inflationary macro environment for grain production.",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Heightened geopolitical conflict in the Middle East, including missile exchanges and tanker attacks near the Gulf, drives safe-haven flows into the US dollar against regional currencies like the Israeli shekel.",
+      "key_risk": "Escalation of military conflict in the Strait of Hormuz threatening global crude supplies and driving severe energy-driven wholesale inflation.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "U.S. forces have actively struck five IRGC-linked oil tankers in the Strait of Hormuz, and Iran has launched missile strikes in retaliation, causing immediate disruption risks in a vital maritime energy chokepoint."
+    }
+  },
+  {
     "timestamp": "2026-09-10T02:26:39.505277+00:00",
     "total_scanned": 224,
     "flagged_count": 171,
