@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-09T14:15:01.755457",
-  "baseline_up": 0.6806,
+  "generated_at": "2026-09-10T02:27:12.812212",
+  "baseline_up": 0.68,
   "validated_conditions": {
     "in_upper_half": 0.691,
     "momentum_up": 0.857,
@@ -10,5 +10,5 @@
     "above_sma20": 0.805,
     "near_bb_upper": 0.889
   },
-  "source_backtest_run_date": "2026-09-09T14:15:01.632321"
+  "source_backtest_run_date": "2026-09-10T02:27:12.692141"
 }
