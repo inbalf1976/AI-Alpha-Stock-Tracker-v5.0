@@ -1755,7 +1755,22 @@ def main():
     missed_business_days = np.busday_count(last_candle_date + timedelta(days=1), today_date)
     market_likely_closed = (missed_business_days >= 2) and not is_live_price
 
-    if market_likely_closed and not is_manual:
+    # UPDATED 2026-09-09, real gap found on review: this block only
+    # returned silently for a NON-manual run — the assumption being an
+    # automated run hitting this combination is probably just a normal
+    # weekend/holiday, and only a manual run's user needs telling.
+    # But that's not always true: if the live fetch genuinely FAILS
+    # (is_live_price=False, not just "succeeded but stale") on a real
+    # TRADING day, an automated run would silently exit here too,
+    # never reaching the data_critically_stale warning below at all —
+    # a real, ongoing data outage on a normal weekday could go
+    # completely unreported. Fixed by checking whether today is
+    # actually a trading day: a genuine weekend/holiday still exits
+    # silently (no false-alarm spam on every normal weekend), but a
+    # stale/failed fetch on an actual trading day now warns regardless
+    # of is_manual — "today should be a trading day and this looks
+    # broken" is worth surfacing either way.
+    if market_likely_closed and not is_manual and not is_trading_day(datetime.now(IL)):
         print(f"\nMarket closed — last candle {last_candle_date} "
               f"({missed_business_days} business day(s) missed, live fetch also failed). No alert.")
         save_state(state)
