@@ -17,11 +17,11 @@
     "reason": "U.S. military forces have actively struck multiple Iranian-linked oil tankers near Kharg Island following missile attacks on a U.S. Navy warship, presenting an active kinetic disruption in the Strait of Hormuz chokepoint.",
     "predicted_direction": "BULLISH",
     "price_at_alert": 746.5,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "MISS",
+    "price_at_scoring": 736.5,
+    "pct_change": -1.34,
+    "scored_at": "2026-09-10T17:02:42.777736+00:00"
   },
   {
     "alert_number": 62,
