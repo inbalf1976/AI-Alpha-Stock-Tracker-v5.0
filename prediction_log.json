@@ -1505,13 +1505,14 @@
     "confidence": 0.827903623263379,
     "tier": 1,
     "seasonal_phase": "NEUTRAL",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null,
+    "validated": true,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 18.57,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-09-09"
+    "direction_check_date": "2026-09-09",
+    "scoring_method": "legacy_synthetic"
   },
   {
     "timestamp": "2026-09-09T04:39:27.376610+03:00",
@@ -1525,7 +1526,10 @@
     "validated": false,
     "outcome": null,
     "exit_reason": null,
-    "pnl_cents": null
+    "pnl_cents": null,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-09-10"
   },
   {
     "timestamp": "2026-09-09T17:15:24.688518+03:00",
@@ -1536,9 +1540,13 @@
     "seasonal_phase": "NEUTRAL",
     "stop_price": 744.9,
     "target_price": 722.97,
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "same_bar_ambiguous_conservative_loss",
+    "pnl_cents": 9.4,
+    "scoring_method": "real_setup",
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-09-10"
   }
 ]
