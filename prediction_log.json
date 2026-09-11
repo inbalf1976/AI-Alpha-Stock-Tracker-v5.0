@@ -1548,5 +1548,19 @@
     "direction_scored": true,
     "direction_correct": true,
     "direction_check_date": "2026-09-10"
+  },
+  {
+    "timestamp": "2026-09-11T04:32:49.166891+03:00",
+    "direction": "UP",
+    "entry_price": 735.5,
+    "confidence": 0.8138470927905338,
+    "tier": 2,
+    "seasonal_phase": "NEUTRAL",
+    "stop_price": 748.64,
+    "target_price": 723.81,
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
   }
 ]
