@@ -1,5 +1,161 @@
 [
   {
+    "timestamp": "2026-09-11T17:03:24.916325+00:00",
+    "total_scanned": 225,
+    "flagged_count": 173,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "How rising bond yields can wreck some portfolios while pumping up others with cash",
+        "link": "https://www.marketwatch.com/story/how-rising-bond-yields-can-wreck-some-portfolios-while-pumping-up-others-with-cash-c415faf3?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 11 Sep 2026 16:17:00 GMT",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Forget the Fed. The Bank of Japan could deliver next week’s market shock.",
+        "link": "https://www.marketwatch.com/story/forget-the-fed-the-bank-of-japan-could-deliver-next-weeks-market-shock-bd8d56d7?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 11 Sep 2026 15:23:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "All the ways $6 diesel and rising gas prices are about to make your life more expensive — from commuting to grocery shopping",
+        "link": "https://www.marketwatch.com/story/all-the-ways-record-high-diesel-and-rising-gas-prices-are-about-to-make-your-life-more-expensive-from-commuting-to-grocery-shopping-2083fec3?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 11 Sep 2026 14:22:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "U.S. 10-year yield briefly breaks 5% for first time since 2024 after Aug CPI",
+        "link": "https://www.investing.com/news/forex-news/european-debt-extended-in-5week-decline-on-rate-hikes-and-surging-oil-prices-4897325",
+        "source": "Investing.com Forex",
+        "published": "2026-09-11 13:03:28",
+        "matched_keywords": [
+          "cpi",
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar steadies after US inflation data, yen set for second weekly gain",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-weaken-as-yen-slips-dollar-holds-near-weekly-high-4897219",
+        "source": "Investing.com Forex",
+        "published": "2026-09-11 12:46:54",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound steady as UK GDP beats, dollar firms on CPI bets",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-steady-as-uk-gdp-beats-dollar-firms-on-cpi-bets-4897403",
+        "source": "Investing.com Forex",
+        "published": "2026-09-11 09:09:22",
+        "matched_keywords": [
+          "cpi"
+        ]
+      },
+      {
+        "title": "Fed tightening bets boost dollar, euro slips after ECB hike while yen halts rally",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-steady-as-riskoff-tone-weighs-yen-holds-near-highs-4894923",
+        "source": "Investing.com Forex",
+        "published": "2026-09-10 18:43:26",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar edges lower as oil stays above $100, US inflation data in focus",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-edges-lower-as-oil-stays-above-100-us-inflation-data-in-focus-4896604",
+        "source": "Investing.com Forex",
+        "published": "2026-09-10 17:24:08",
+        "matched_keywords": [
+          "inflation",
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are grappling with surging inflation pressures, with U.S. 10-year yields breaking 5% following hot CPI prints and renewed Fed tightening bets. Meanwhile, severe disruptions in the Strait of Hormuz—highlighted by tanker attacks, port seizures in Yemen, and critically low transit volumes—are driving up energy costs, with oil holding above $100 and diesel reaching $6.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_category": "confirmed_physical_disruption",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating kinetic conflict in the Middle East severely choking critical energy and shipping corridors, driving up global logistics and input costs.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active attacks on bunkering tankers and Houthi seizures of Red Sea ports are compounding severe transit bottlenecks in the Strait of Hormuz, directly threatening global energy supplies and agricultural transport logistics."
+    }
+  },
+  {
     "timestamp": "2026-09-11T12:59:36.716261+00:00",
     "total_scanned": 228,
     "flagged_count": 177,
