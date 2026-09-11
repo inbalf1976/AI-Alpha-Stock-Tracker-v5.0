@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-09-11T01:14:42.225448+00:00",
+    "total_scanned": 228,
+    "flagged_count": 164,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "All the ways record-high diesel and rising gas prices are about to make your life more expensive — from commuting to grocery shopping",
+        "link": "https://www.marketwatch.com/story/all-the-ways-record-high-diesel-and-rising-gas-prices-are-about-to-make-your-life-more-expensive-from-commuting-to-grocery-shopping-2083fec3?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 10 Sep 2026 22:54:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Treasury yields surge after Bessent’s beefed-up buyback operation fails to calm market",
+        "link": "https://www.marketwatch.com/story/treasury-yields-surge-toward-the-danger-zone-for-stocks-as-inflation-pressures-heat-up-fe0f9aa6?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 10 Sep 2026 20:24:00 GMT",
+        "matched_keywords": [
+          "ils",
+          "fed",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Grains Rally, With Soybeans Hitting New Highs on China Buys, Higher Energy Prices: Is $14 Next? - AgWeb",
+        "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQR2JMLVlsX1RmQ0wyNWhYX3J1SEVXSHVhNlFkRXRYc0Z1dzlZU3RDWEpmZWZwdmlLb0c2WEhrQ0h4VVZvU0I2SzdPMXhSdHJDMzRCck0yRlg3TmFBZ2labU4tQ0lqSjlNNHZkVXVDSzBiRzFlSTR1OFJMOVJjTHByTE5HeG5ZTzdSVXRCaWhlb25fVTJ6ZE1GZjlhaFRud21jdmhIeGZsbUFxRnp6ZFIxLUx6eVljakhNaWg0?oc=5",
+        "source": "AgWeb Markets",
+        "published": "Thu, 10 Sep 2026 20:40:00 GMT",
+        "matched_keywords": [
+          "grain"
+        ]
+      },
+      {
+        "title": "Could USDA Provide a Yield Surprise in the September Report? - AgWeb",
+        "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOQjYySFhDWTJWMXBJOEVrQ0JNQW1PclpySkg0UU9LQjNJcWFJRjI3ck5rRzhPajBBejRrNnNnbTRWLXBxLW1WZUpNSFcydURPYWJSMlpuVS1KZFRVOS16YlRxMGhmVmpqdkdrTGRfSm1BZ3I1NU5xSzE4US0wb0p1LWdVd1Q1eWM?oc=5",
+        "source": "AgWeb Markets",
+        "published": "Thu, 10 Sep 2026 21:41:00 GMT",
+        "matched_keywords": [
+          "usda",
+          "yield"
+        ]
+      },
+      {
+        "title": "Fed tightening bets boost dollar, euro slips after ECB hike while yen halts rally",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-steady-as-riskoff-tone-weighs-yen-holds-near-highs-4894923",
+        "source": "Investing.com Forex",
+        "published": "2026-09-10 18:43:26",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar edges lower as oil stays above $100, US inflation data in focus",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-edges-lower-as-oil-stays-above-100-us-inflation-data-in-focus-4896604",
+        "source": "Investing.com Forex",
+        "published": "2026-09-10 17:24:08",
+        "matched_keywords": [
+          "inflation",
+          "oil"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound pares gains as dollar firms on U.S. inflation data",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-rises-as-boe-rate-hike-bets-build-4895211",
+        "source": "Investing.com Forex",
+        "published": "2026-09-10 13:22:11",
+        "matched_keywords": [
+          "inflation"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are reacting to a potent mix of surging energy prices, geopolitical escalation in the Strait of Hormuz involving U.S. strikes on Iranian tankers, and strong agricultural demand led by Chinese grain purchases. Meanwhile, rising Treasury yields and stubborn inflation data are driving aggressive central bank tightening bets, strengthening the U.S. dollar.",
+      "wheat_impact": "BULLISH",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": "BULLISH",
+      "usd_ils_impact_reason": "Escalating geopolitical conflict in the Middle East combined with a surging U.S. dollar driven by strong inflation data and Fed tightening bets tends to strengthen the USD against regional safe-haven and emerging market currencies.",
+      "key_risk": "Further military escalation in the Strait of Hormuz disrupting global energy and commodity supply chains, driving inflation higher.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "U.S. forces have actively struck multiple Iranian-linked oil tankers in the Strait of Hormuz following missile attacks, and the IRGC has ordered regional tanker evacuations, creating an active, highly volatile disruption to Middle Eastern maritime trade."
+    }
+  },
+  {
     "timestamp": "2026-09-11T00:34:34.357513+00:00",
     "total_scanned": 228,
     "flagged_count": 167,
