@@ -17,11 +17,11 @@
     "reason": "Active U.S. military strikes on Iranian-linked tankers and Iranian missile retaliation near Iraq and Jordan are severely disrupting shipping corridors in the Strait of Hormuz.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 739.25,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 707.0,
+    "pct_change": -4.363,
+    "scored_at": "2026-09-12T16:23:00.905276+00:00"
   },
   {
     "alert_number": 64,
