@@ -1,0 +1,22 @@
+name: Test Flip Heuristic (one-off)
+on:
+  workflow_dispatch:   # manual trigger only — run this from the Actions tab
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install packages
+      run: pip install yfinance pandas
+    - name: Test the flip-on-loss heuristic against real history
+      # Fully read-only — only reads weekly_break_log.json and
+      # weekly_range_cache.json, fetches real price history, and
+      # prints a comparison. Never writes or commits anything.
+      run: python test_flip_heuristic.py
