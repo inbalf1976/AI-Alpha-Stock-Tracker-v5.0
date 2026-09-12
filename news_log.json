@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-09-12T12:20:41.939887+00:00",
+    "total_scanned": 224,
+    "flagged_count": 177,
+    "flagged_headlines": [
+      {
+        "title": "Saudis shut down oil pipeline as Houthis tighten grip on Red Sea shipping",
+        "link": "https://www.investing.com/news/commodities-news/saudis-shut-down-oil-pipeline-as-houthis-tighten-grip-on-red-sea-shipping-4898593",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-12 07:24:43",
+        "matched_keywords": [
+          "ppi",
+          "oil",
+          "red sea",
+          "shipping"
+        ]
+      },
+      {
+        "title": "Oil on track to settle above $100 a barrel after whopping 20% two-week surge",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-rise-brent-tests-110-a-barrel-as-meast-supply-risks-grow-4897144",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-11 20:34:04",
+        "matched_keywords": [
+          "ppi",
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil grades decline as US drilling rises and Hormuz talks advance",
+        "link": "https://www.investing.com/news/commodities-news/oil-grades-decline-as-us-drilling-rises-and-hormuz-talks-advance-93CH-4898422",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-11 20:32:58",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Oil falls but head for 8% weekly gain on tight supply; US diesel hits record",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-set-to-end-week-over-100-for-first-time-in-nearly-4-months-4897153",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-11 20:19:03",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold headed for a weekly loss of nearly 2% on surging oil, raised Fed hike bets",
+        "link": "https://www.investing.com/news/commodities-news/gold-steadies-after-sharp-drop-as-hotter-ppi-lifts-fed-hike-bets-4897138",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-11 19:37:26",
+        "matched_keywords": [
+          "fed",
+          "oil"
+        ]
+      },
+      {
+        "title": "London Gas Oil stalls at $1,480 after overbought surge: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-stretched-10-above-50ma-live-levels-93CH-4890480",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-11 19:18:46",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI rejects $104.44 hard: Live mean-reversion levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-doubletop-at-9364-resistance-live-levels-93CH-4890479",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-11 19:18:31",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar up on Fed rate hike bets, yen set for first two-week win streak since May",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-weaken-as-yen-slips-dollar-holds-near-weekly-high-4897219",
+        "source": "Investing.com Forex",
+        "published": "2026-09-11 19:17:21",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Severe geopolitical disruptions in key Middle Eastern energy chokepoints, including the Strait of Hormuz and Red Sea, have driven crude oil prices surging above $100 a barrel amid tightening supplies. Concurrently, escalating energy costs are fueling inflation fears, strengthening the US dollar and hardening Federal Reserve interest rate hike expectations.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Further escalation of military conflicts in the Red Sea and Strait of Hormuz severely restricting global shipping and keeping energy prices elevated.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active military strikes and security threats in the Strait of Hormuz and Red Sea have severely choked maritime transit, resulting in bunkering tanker attacks with fatalities and critical disruptions to oil and LNG supply flows."
+    }
+  },
+  {
     "timestamp": "2026-09-12T01:17:18.508859+00:00",
     "total_scanned": 223,
     "flagged_count": 174,

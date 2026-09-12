@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 66,
+    "alert_timestamp": "2026-09-12T12:20:41.939887+00:00",
+    "reason": "Active military strikes and security threats in the Strait of Hormuz and Red Sea have severely choked maritime transit, resulting in bunkering tanker attacks with fatalities and critical disruptions to oil and LNG supply flows.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 707.0,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 65,
     "alert_timestamp": "2026-09-11T12:59:36.716261+00:00",
     "reason": "Active U.S. military strikes on Iranian-linked tankers and Iranian missile retaliation near Iraq and Jordan are severely disrupting shipping corridors in the Strait of Hormuz.",
