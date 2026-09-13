@@ -1,15 +1,27 @@
 [
   {
-    "alert_number": 66,
-    "alert_timestamp": "2026-09-12T12:20:41.939887+00:00",
-    "reason": "Active military strikes and security threats in the Strait of Hormuz and Red Sea have severely choked maritime transit, resulting in bunkering tanker attacks with fatalities and critical disruptions to oil and LNG supply flows.",
-    "predicted_direction": "NEUTRAL",
-    "price_at_alert": 707.0,
+    "alert_number": 67,
+    "alert_timestamp": "2026-09-13T13:26:57.458130+00:00",
+    "reason": "Active military disruptions and vessel attacks are severely restricting traffic through the Strait of Hormuz (only 10 transits in 24 hours) alongside Houthi advances on the Bab el-Mandeb chokepoint.",
+    "predicted_direction": "BULLISH",
+    "price_at_alert": 726.25,
     "scored": false,
     "outcome": null,
     "price_at_scoring": null,
     "pct_change": null,
     "scored_at": null
+  },
+  {
+    "alert_number": 66,
+    "alert_timestamp": "2026-09-12T12:20:41.939887+00:00",
+    "reason": "Active military strikes and security threats in the Strait of Hormuz and Red Sea have severely choked maritime transit, resulting in bunkering tanker attacks with fatalities and critical disruptions to oil and LNG supply flows.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 707.0,
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 726.25,
+    "pct_change": 2.723,
+    "scored_at": "2026-09-13T13:27:02.473958+00:00"
   },
   {
     "alert_number": 65,
