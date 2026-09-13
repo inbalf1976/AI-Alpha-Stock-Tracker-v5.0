@@ -815,13 +815,61 @@ def log_daily_performance(iso_year, iso_week, current_price, weekly):
 
 
 def log_weekly_break(iso_year, iso_week, current_price, old_weekly, reason):
-    """Records when/why a weekly forecast got broken and regenerated."""
+    """
+    Records when/why a weekly forecast got broken and regenerated.
+
+    UPDATED 2026-09-13, real bug found and confirmed via loss_forensics.py
+    cross-referencing: two manual re-runs 2h18m apart on 2026-09-08
+    (04:30, 06:48) both detected what was almost certainly the SAME
+    underlying target break — old_stop/old_target were within a cent of
+    each other on both — because the second run's state hadn't yet
+    caught up to reflect the first run's regeneration (a race condition
+    between closely-timed manual runs, not something the existing
+    GitHub Actions concurrency lock protects against, since that only
+    guards scheduled triggers against each other). Confirmed via a full
+    scan: this exact near-duplicate signature appears exactly once in
+    the whole history — a real, if rare, gap, not a widespread one.
+    Guarded here going forward: skip logging (and therefore skip
+    regenerating a second time) if the most recent existing entry has
+    a near-identical old_stop/old_target AND happened within
+    DUPLICATE_BREAK_WINDOW_HOURS — genuine distinct sequential breaks
+    always have meaningfully different stop/target (each regeneration
+    is based on a fresh price), so near-identical values close in time
+    is a reliable signal of a re-detection, not a real second event.
+    Not retroactive — the one historical duplicate stays as-is, same
+    policy as every other dedup fix in this project.
+    """
     log = []
     if WEEKLY_BREAK_LOG_FILE.exists():
         try:
             log = json.loads(WEEKLY_BREAK_LOG_FILE.read_text())
         except Exception:
             log = []
+
+    DUPLICATE_BREAK_WINDOW_HOURS = 6
+    DUPLICATE_BREAK_TOLERANCE_CENTS = 2.0
+    if log:
+        last = log[-1]
+        try:
+            last_time = datetime.fromisoformat(last['broken_at'])
+            if last_time.tzinfo is None:
+                last_time = last_time.replace(tzinfo=IL)
+            hours_since = (datetime.now(IL) - last_time).total_seconds() / 3600
+        except Exception:
+            hours_since = None
+
+        stop_close = abs((last.get('old_stop') or 0) - (old_weekly.get('stop') or 0)) < DUPLICATE_BREAK_TOLERANCE_CENTS
+        target_close = abs((last.get('old_target') or 0) - (old_weekly.get('target') or 0)) < DUPLICATE_BREAK_TOLERANCE_CENTS
+        same_outcome = ('(WIN)' in last.get('reason', '')) == ('(WIN)' in reason)
+
+        if (hours_since is not None and hours_since < DUPLICATE_BREAK_WINDOW_HOURS
+                and stop_close and target_close and same_outcome):
+            print(f"   Skipped logging weekly break — matches the previous entry "
+                  f"from {hours_since:.1f}h ago (old_stop/old_target within "
+                  f"{DUPLICATE_BREAK_TOLERANCE_CENTS}c, same outcome type). Likely "
+                  f"the same underlying event re-detected by a closely-timed rerun, "
+                  f"not a genuine second break.")
+            return
 
     log.append({
         'iso_key': f"{iso_year}-W{iso_week}",
