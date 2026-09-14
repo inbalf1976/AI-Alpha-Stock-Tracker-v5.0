@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-09-14T01:16:58.311479+00:00",
+    "total_scanned": 215,
+    "flagged_count": 168,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil prices jump over 3% on more M.East action, Hormuz meeting delay",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-jump-over-3-on-more-meast-action-hormuz-meeting-delay-4898772",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-13 23:48:44",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Diplomacy stumbles with postponement of meeting on Strait of Hormuz proposal",
+        "link": "https://www.investing.com/news/commodities-news/diplomacy-stumbles-with-postponement-of-meeting-on-strait-of-hormuz-proposal-4898762",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-13 23:12:48",
+        "matched_keywords": [
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Oil prices jump more than $3 after new strikes on Saudi, Strait of Hormuz",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-jump-more-than-3-after-new-strikes-on-saudi-strait-of-hormuz-4898759",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-13 22:24:25",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "New attacks in Hormuz and Saudi test nerves as war’s spread worsens oil disruption",
+        "link": "https://www.investing.com/news/commodities-news/new-report-of-attack-on-strait-of-hormuz-shipping-fans-fears-of-threats-to-oil-supplies-4898701",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-13 20:18:27",
+        "matched_keywords": [
+          "oil",
+          "war",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Saudi pipeline outage threatens loss of 4% of global oil supply",
+        "link": "https://www.investing.com/news/commodities-news/saudi-pipeline-outage-threatens-loss-of-4-of-global-oil-supply-4898730",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-13 12:30:24",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Saudis shut down oil pipeline as Houthis tighten grip on Red Sea shipping",
+        "link": "https://www.investing.com/news/commodities-news/saudis-shut-down-oil-pipeline-as-houthis-tighten-grip-on-red-sea-shipping-4898593",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-12 19:36:26",
+        "matched_keywords": [
+          "ppi",
+          "oil",
+          "red sea",
+          "shipping"
+        ]
+      },
+      {
+        "title": "Iran and UAE back joint BRICS statement urging restraint in war",
+        "link": "https://www.investing.com/news/commodities-news/brics-agrees-on-joint-declaration-before-new-delhi-summit-sources-say-4898638",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-12 19:12:24",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "EUR/USD could retest 1.17 after Fed decision - Citi says",
+        "link": "https://www.investing.com/news/forex-news/eurusd-could-retest-117-after-fed-decision--citi-says-4898692",
+        "source": "Investing.com Forex",
+        "published": "2026-09-12 22:52:48",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Crude oil prices surged over 3% following severe disruptions in the Middle East, including new strikes in Saudi Arabia and the Strait of Hormuz, a critical pipeline outage threatening 4% of global supply, and a bunkering tanker fatality near UAE waters. Meanwhile, the Federal Reserve released routine regulatory enforcement actions and FOMC minutes while currency markets digested potential EUR/USD retests following Fed decisions.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalation of Middle East military conflict severely disrupting vital maritime chokepoints and energy supplies, driving broader macroeconomic volatility.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active military strikes, pipeline outages, and vessel attacks in the Strait of Hormuz and Red Sea are causing severe physical disruptions to regional maritime transit and oil flows."
+    }
+  },
+  {
     "timestamp": "2026-09-14T01:09:34.314579+00:00",
     "total_scanned": 215,
     "flagged_count": 168,
