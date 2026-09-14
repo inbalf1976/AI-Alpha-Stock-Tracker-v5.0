@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-09-14T01:09:34.314579+00:00",
+    "total_scanned": 215,
+    "flagged_count": 168,
+    "flagged_headlines": [
+      {
+        "title": "‘I still don’t have my MRI’: My health insurer canceled my plan without warning. Is that legal?",
+        "link": "https://www.marketwatch.com/story/i-still-dont-have-my-mri-my-health-insurer-canceled-my-plan-without-warning-is-that-legal-02143710?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 14 Sep 2026 01:00:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Fed rate hikes won’t bring down gas prices. Why the bond market is pushing for them anyway.",
+        "link": "https://www.marketwatch.com/story/fed-rate-hikes-wont-bring-down-gas-prices-why-the-bond-market-is-pushing-for-them-anyway-98f2c7e3?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 13 Sep 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "EUR/USD could retest 1.17 after Fed decision - Citi says",
+        "link": "https://www.investing.com/news/forex-news/eurusd-could-retest-117-after-fed-decision--citi-says-4898692",
+        "source": "Investing.com Forex",
+        "published": "2026-09-12 22:52:48",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar up on Fed rate hike bets, yen set for first two-week win streak since May",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-weaken-as-yen-slips-dollar-holds-near-weekly-high-4897219",
+        "source": "Investing.com Forex",
+        "published": "2026-09-11 19:17:21",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "U.S. 10-year yield briefly breaks 5% for first time since 2024 after Aug CPI",
+        "link": "https://www.investing.com/news/forex-news/european-debt-extended-in-5week-decline-on-rate-hikes-and-surging-oil-prices-4897325",
+        "source": "Investing.com Forex",
+        "published": "2026-09-11 13:03:28",
+        "matched_keywords": [
+          "cpi",
+          "yield"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound steady as UK GDP beats, dollar firms on CPI bets",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-steady-as-uk-gdp-beats-dollar-firms-on-cpi-bets-4897403",
+        "source": "Investing.com Forex",
+        "published": "2026-09-11 09:09:22",
+        "matched_keywords": [
+          "cpi"
+        ]
+      },
+      {
+        "title": "Fed tightening bets boost dollar, euro slips after ECB hike while yen halts rally",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-steady-as-riskoff-tone-weighs-yen-holds-near-highs-4894923",
+        "source": "Investing.com Forex",
+        "published": "2026-09-10 18:43:26",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar edges lower as oil stays above $100, US inflation data in focus",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-edges-lower-as-oil-stays-above-100-us-inflation-data-in-focus-4896604",
+        "source": "Investing.com Forex",
+        "published": "2026-09-10 17:24:08",
+        "matched_keywords": [
+          "inflation",
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are dominated by aggressive Federal Reserve tightening bets, pushing the U.S. 10-year yield above 5% and driving the dollar higher following strong inflation data. Meanwhile, severe physical disruptions in the Strait of Hormuz and Red Sea are constraining energy transit, keeping oil prices elevated above $100.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating maritime disruptions in the Middle East chokepoints spilling over into broader supply chain shocks and persistent inflationary pressures.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Ongoing kinetic attacks and vessel strikes in the Strait of Hormuz and Red Sea—including a bunkering tanker hit with a fatality and Houthi port advances—are severely disrupting maritime transit and oil flows."
+    }
+  },
+  {
     "timestamp": "2026-09-14T00:26:03.146574+00:00",
     "total_scanned": 216,
     "flagged_count": 170,
