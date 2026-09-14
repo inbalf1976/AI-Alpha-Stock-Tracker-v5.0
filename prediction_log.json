@@ -1523,13 +1523,14 @@
     "seasonal_phase": "NEUTRAL",
     "stop_price": 734.42,
     "target_price": 759.69,
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null,
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -7.08,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-09-10"
+    "direction_check_date": "2026-09-10",
+    "scoring_method": "real_setup"
   },
   {
     "timestamp": "2026-09-09T17:15:24.688518+03:00",
@@ -1558,9 +1559,13 @@
     "seasonal_phase": "NEUTRAL",
     "stop_price": 748.64,
     "target_price": 723.81,
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "same_bar_ambiguous_conservative_loss",
+    "pnl_cents": 13.14,
+    "scoring_method": "real_setup",
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-09-13"
   }
 ]
