@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-09-14T18:42:40.913488+00:00",
+    "total_scanned": 220,
+    "flagged_count": 170,
+    "flagged_headlines": [
+      {
+        "title": "U.S. Treasury yields hold near multi-year highs as Fed hike bets anchor curve",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-hold-at-multiyear-peaks-as-crude-surge-precedes-cbank-decisions-4898851",
+        "source": "Investing.com Forex",
+        "published": "2026-09-14 12:13:47",
+        "matched_keywords": [
+          "fed",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Dollar charges to near two-week peak as Fed hike bets hit near-certainty",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-weaken-as-dollar-rises-yen-holds-near-sevenmonth-high-4898821",
+        "source": "Investing.com Forex",
+        "published": "2026-09-14 10:17:45",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "BofA sees dollar sideways into year-end despite Fed hike bets",
+        "link": "https://www.investing.com/news/forex-news/bofa-sees-dollar-sideways-into-yearend-despite-fed-hike-bets-93CH-4899034",
+        "source": "Investing.com Forex",
+        "published": "2026-09-14 09:55:05",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as oil-driven dollar rally weighs",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-oildriven-dollar-rally-weighs-4898927",
+        "source": "Investing.com Forex",
+        "published": "2026-09-14 08:16:38",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "EUR/USD could retest 1.17 after Fed decision - Citi says",
+        "link": "https://www.investing.com/news/forex-news/eurusd-could-retest-117-after-fed-decision--citi-says-4898692",
+        "source": "Investing.com Forex",
+        "published": "2026-09-12 22:52:48",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar up on Fed rate hike bets, yen set for first two-week win streak since May",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-weaken-as-yen-slips-dollar-holds-near-weekly-high-4897219",
+        "source": "Investing.com Forex",
+        "published": "2026-09-11 19:17:21",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "U.S. 10-year yield briefly breaks 5% for first time since 2024 after Aug CPI",
+        "link": "https://www.investing.com/news/forex-news/european-debt-extended-in-5week-decline-on-rate-hikes-and-surging-oil-prices-4897325",
+        "source": "Investing.com Forex",
+        "published": "2026-09-11 13:03:28",
+        "matched_keywords": [
+          "cpi",
+          "yield"
+        ]
+      },
+      {
+        "title": "The Fed may be on the verge of a serious mistake, prominent economists warn",
+        "link": "https://www.marketwatch.com/story/the-fed-may-be-on-the-verge-of-a-serious-mistake-prominent-economists-warn-3ccb6581?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 14 Sep 2026 18:37:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "10-year Treasury yield eases back from crucial 5% level despite concerns about AI and the surge in oil prices",
+        "link": "https://www.marketwatch.com/story/10-year-treasury-yield-tops-5-for-the-first-time-since-2007-as-bond-market-selloff-deepens-14c81f75?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 14 Sep 2026 18:14:00 GMT",
+        "matched_keywords": [
+          "oil",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Inflation is sinking your high-yield savings account’s returns. Here’s one way to fight it.",
+        "link": "https://www.marketwatch.com/story/inflation-is-sinking-your-high-yield-savings-accounts-returns-heres-one-way-to-fight-it-6aa798e9?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 14 Sep 2026 17:46:00 GMT",
+        "matched_keywords": [
+          "inflation",
+          "yield"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global financial markets are heavily driven by rising U.S. Treasury yields and a surging U.S. dollar amid near-certainty of Federal Reserve rate hikes and persistent inflation concerns. Concurrently, regional maritime tensions in the Middle East, including a tanker strike in the Strait of Hormuz and defensive fleet positioning by Saudi Arabia, continue to elevate geopolitical risk premiums in energy and shipping corridors.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalation of Middle Eastern maritime security threats impacting broader regional trade and energy supplies.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "An unconfirmed tanker strike and potential oil spill signature in the Strait of Hormuz, combined with heightened Saudi naval sheltering, present an active security risk to critical Middle Eastern shipping corridors."
+    }
+  },
+  {
     "timestamp": "2026-09-14T15:12:53.142485+00:00",
     "total_scanned": 215,
     "flagged_count": 171,
