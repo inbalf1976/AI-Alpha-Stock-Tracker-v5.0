@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-14T00:26:39.246310",
-  "baseline_up": 0.6794,
+  "generated_at": "2026-09-14T01:10:15.539547",
+  "baseline_up": 0.6733,
   "validated_conditions": {
     "in_upper_half": 0.759,
     "rsi_overbought": 0.762,
@@ -13,5 +13,5 @@
     "above_sma20": 0.857,
     "near_bb_upper": 0.889
   },
-  "source_backtest_run_date": "2026-09-14T00:26:39.143356"
+  "source_backtest_run_date": "2026-09-14T01:10:15.448298"
 }
