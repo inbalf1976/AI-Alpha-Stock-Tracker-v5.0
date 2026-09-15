@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-09-15T01:37:18.698588+00:00",
+    "total_scanned": 223,
+    "flagged_count": 171,
+    "flagged_headlines": [
+      {
+        "title": "The oil market is sending an increasingly loud warning about gas prices at the pump",
+        "link": "https://www.marketwatch.com/story/the-oil-market-is-sending-an-increasingly-loud-warning-about-gas-prices-at-the-pump-18177588?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 14 Sep 2026 21:31:00 GMT",
+        "matched_keywords": [
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "CrowdStrike and Palo Alto Networks lead software stocks to a never-before-seen feat",
+        "link": "https://www.marketwatch.com/story/crowdstrike-and-palo-alto-networks-are-leading-software-stocks-toward-a-never-before-seen-feat-5b8989b2?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 14 Sep 2026 21:11:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "10-year Treasury yield hits 5% as oil prices jump and Fed meeting looms",
+        "link": "https://www.marketwatch.com/story/10-year-treasury-yield-tops-5-for-the-first-time-since-2007-as-bond-market-selloff-deepens-14c81f75?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 14 Sep 2026 20:47:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "oil",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Loonie holds near 12-day low as oil support fails to offset dollar strength",
+        "link": "https://www.investing.com/news/forex-news/loonie-holds-near-12day-low-as-oil-support-fails-to-offset-dollar-strength-4900629",
+        "source": "Investing.com Forex",
+        "published": "2026-09-14 21:54:08",
+        "matched_keywords": [
+          "ils",
+          "oil"
+        ]
+      },
+      {
+        "title": "Dollar at highest level in almost two weeks as Fed rate hike bets hit nearly 95%",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-weaken-as-dollar-rises-yen-holds-near-sevenmonth-high-4898821",
+        "source": "Investing.com Forex",
+        "published": "2026-09-14 21:03:42",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields hold near multi-year highs as Fed hike bets anchor curve",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-hold-at-multiyear-peaks-as-crude-surge-precedes-cbank-decisions-4898851",
+        "source": "Investing.com Forex",
+        "published": "2026-09-14 12:13:47",
+        "matched_keywords": [
+          "fed",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "BofA sees dollar sideways into year-end despite Fed hike bets",
+        "link": "https://www.investing.com/news/forex-news/bofa-sees-dollar-sideways-into-yearend-despite-fed-hike-bets-93CH-4899034",
+        "source": "Investing.com Forex",
+        "published": "2026-09-14 09:55:05",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as oil-driven dollar rally weighs",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-oildriven-dollar-rally-weighs-4898927",
+        "source": "Investing.com Forex",
+        "published": "2026-09-14 08:16:38",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are grappling with surging oil prices—exacerbated by a tanker strike in the Strait of Hormuz—and aggressive Federal Reserve rate-hike expectations that have pushed the 10-year Treasury yield to 5% and driven the U.S. dollar to multi-week highs. Concurrently, regional maritime security risks are escalating, with Saudi fleets sheltering in territorial waters and heightened tracking anomalies in key Middle Eastern corridors.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Unchecked escalation in the Strait of Hormuz causing severe energy supply shocks and a sustained flight to the U.S. dollar.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "A vessel was struck by an unknown projectile in the Strait of Hormuz, accompanied by a confirmed candidate dark tanker showing an oil-spill signature and Saudi fleet movements retreating to territorial waters."
+    }
+  },
+  {
     "timestamp": "2026-09-14T18:42:40.913488+00:00",
     "total_scanned": 220,
     "flagged_count": 170,
