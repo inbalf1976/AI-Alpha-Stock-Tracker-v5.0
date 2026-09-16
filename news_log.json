@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-09-16T17:39:21.986578+00:00",
+    "total_scanned": 221,
+    "flagged_count": 169,
+    "flagged_headlines": [
+      {
+        "title": "Why a Federal Reserve rate hike could be a ‘rare win’ for your retirement money",
+        "link": "https://www.marketwatch.com/story/why-a-federal-reserve-rate-hike-could-be-a-rare-win-for-your-retirement-money-3ae337df?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 16 Sep 2026 14:01:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Continental Resources signs Venezuela oil development deal",
+        "link": "https://www.investing.com/news/commodities-news/continental-resources-signs-venezuela-oil-development-deal-93CH-4904218",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-16 17:24:44",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold up 1% as oil prices take a breather ahead of consequential Fed rate decision",
+        "link": "https://www.investing.com/news/commodities-news/gold-slips-ahead-of-fed-decision-as-oil-yields-keep-ratehike-bets-elevated-4902839",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-16 17:04:48",
+        "matched_keywords": [
+          "fed",
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil slips as Saudi Arabia offers more crude via Oman",
+        "link": "https://www.investing.com/news/commodities-news/oil-falls-as-us-crude-inventories-rise-despite-saudi-supply-concerns-4902799",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-16 15:49:30",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Raw sugar edges lower as oil prices weigh on market",
+        "link": "https://www.investing.com/news/commodities-news/raw-sugar-edges-lower-as-oil-prices-weigh-on-market-93CH-4904115",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-16 15:49:03",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US crude oil inventories decline as fuel stocks increase",
+        "link": "https://www.investing.com/news/commodities-news/us-crude-oil-inventories-decline-as-fuel-stocks-increase-93CH-4904033",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-16 14:46:10",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Wheat futures ease on technical selling and weaker crude oil",
+        "link": "https://www.investing.com/news/commodities-news/wheat-futures-ease-on-technical-selling-and-weaker-crude-oil-93CH-4903947",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-16 13:57:24",
+        "matched_keywords": [
+          "wheat",
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Saudis pound Yemen as Houthis solidify gains in new theatre of Middle East war",
+        "link": "https://www.investing.com/news/commodities-news/saudi-coalition-says-houthi-drone-destroyed-near-mecca-4902841",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-16 13:55:10",
+        "matched_keywords": [
+          "war"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are balancing ongoing Middle East geopolitical tensions—highlighted by attacks in the Red Sea and Strait of Hormuz alongside halted crude exports at Yanbu—with macroeconomic positioning ahead of an anticipated Federal Reserve rate decision. Meanwhile, commodities like oil, sugar, and wheat faced downward pressure due to technical selling, broader crude weakness, and shifting supply dynamics, including Continental Resources securing a Venezuela oil development deal.",
+      "wheat_impact": "BEARISH",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "NEUTRAL",
+      "key_risk": "Escalating Middle East military actions further destabilizing key maritime chokepoints and energy supply chains.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Ongoing military strikes and shipping disruptions in the Strait of Hormuz and Red Sea chokepoints, including the halted crude exports at Yanbu following a pipeline attack."
+    }
+  },
+  {
     "timestamp": "2026-09-16T13:42:41.417597+00:00",
     "total_scanned": 226,
     "flagged_count": 172,
