@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-09-17T17:39:38.776405+00:00",
+    "total_scanned": 227,
+    "flagged_count": 166,
+    "flagged_headlines": [
+      {
+        "title": "Oil falls 2% to one-week low as Middle East supply disruption fears ease",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-extend-losses-as-fears-of-middle-east-supply-disruptions-ease-4904737",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-17 16:18:38",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Saudis and Houthis exchange strikes, Yemenis take to boats to flee as Middle East war spreads",
+        "link": "https://www.investing.com/news/commodities-news/trump-hopes-iran-war-nearing-end-as-houthisaudi-fighting-escalates-4904794",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-17 15:24:52",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Oil prices extend losses amid easing Mideast supply jitters",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-steady-amid-cooling-meast-supply-jitters-4904755",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-17 13:53:48",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Rising oil, rates and yields brew up stagflation cocktail for markets",
+        "link": "https://www.investing.com/news/commodities-news/rising-oil-rates-and-yields-brew-up-stagflation-cocktail-for-markets-4905605",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-17 12:31:11",
+        "matched_keywords": [
+          "oil",
+          "yield"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Global yields ease as Fed hike and BoE rate hold anchor debt bourses",
+        "link": "https://www.investing.com/news/forex-news/us-10year-treasury-yield-eases-in-the-afterglow-of-fed-hike-4904832",
+        "source": "Investing.com Forex",
+        "published": "2026-09-17 12:07:30",
+        "matched_keywords": [
+          "fed",
+          "yield"
+        ]
+      },
+      {
+        "title": "Yen rise as markets price BOJ rate hike  while dollar pauses post-Fed",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-holds-sevenweek-high-yen-steadies-4904802",
+        "source": "Investing.com Forex",
+        "published": "2026-09-17 09:27:30",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Loonie weakens after Fed hike as dollar gains on hawkish outlook",
+        "link": "https://www.investing.com/news/forex-news/loonie-weakens-after-fed-hike-as-dollar-gains-on-hawkish-outlook-4904309",
+        "source": "Investing.com Forex",
+        "published": "2026-09-16 18:46:08",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar gains after Fed raises interest rates",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-holds-gains-yen-slips-to-oneweek-low-4902879",
+        "source": "Investing.com Forex",
+        "published": "2026-09-16 18:28:59",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets face a crosscurrent of easing Middle Eastern supply disruption fears—which have pulled oil prices down 2%—and tightening monetary policy as central banks navigate interest rate adjustments and stagflation risks. Meanwhile, maritime intelligence shows elevated dark-fleet transits and sanctions-skirting behavior in the Strait of Hormuz, underscoring persistent geopolitical vulnerability despite headline de-escalation.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalation of Middle Eastern conflict causing sudden disruptions to key energy and maritime corridors, further fueling global stagflation risks.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": ""
+    }
+  },
+  {
     "timestamp": "2026-09-17T13:44:58.659254+00:00",
     "total_scanned": 228,
     "flagged_count": 171,
@@ -31154,61 +31313,6 @@
         "source_query": "wheat drought harvest",
         "flagged_keywords": [
           "drought"
-        ]
-      }
-    ]
-  },
-  {
-    "scan_time": "2026-07-25T22:18:17.459643+03:00",
-    "total_headlines": 7,
-    "high_impact_count": 2,
-    "headlines": [
-      {
-        "title": "Farmers seek early wheat policy, fair support price - | Associated Press Of Pakistan",
-        "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbnVGYU5MVzJncFFyc05vOV83cjgtclFwdW9PSml2dlFkZmVCV2xHYnp0d1QtWEdNR3VMcEMwZFk0TzM0Mk9jZmNXb054QVNzaWVBaGR0amVFTGs4UHA2SHF5UFJhSnh2X1dlVzhHZGR2am5ENkNmbkFFVW5DN2lrTzlWWFY1dFk0?oc=5",
-        "published": "2026-07-25T13:52:04+03:00",
-        "source_query": "wheat price"
-      },
-      {
-        "title": "Burkina Faso lifts four year ban on cereal flour exports - Milling Middle East & Africa",
-        "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOTWRHRjVubjg1a2xtQlFHSXpIaWpLQllMZ0g1S2d2NzhyZXpyVksyVEdDQVBxSUdQMkJrODQ3dTY5NXhqQ2VQZ01DTEptZHdWdUl2X3kzSFpGeU1RWTgyLWtvWENkbG1HaHJNTjYtdml6dTJGbkswRkVvOVljWUllamJGcE1WQ1U?oc=5",
-        "published": "2026-07-25T15:22:07+03:00",
-        "source_query": "wheat export"
-      },
-      {
-        "title": "Ukraine updates grain export protection plan – Zelenskyy - UkrAgroConsult",
-        "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQbzBYZHlFNVVaSVA2OUwzbzVLQUt3Mk9LS0Zxckh2Y1BVTmNDQ0IwM09YWHRhSlI1WFkyMFFwbk8yeW92bHhrUy1aTnVyU0gwbk5DTHo4M1gweHJBdlhrNXUwY2gwWjMwUWluVERPM3V2MFN3dV9aVjFkdDhNNUwwWXNITUN4LWZNM1VuOEI5NnVGNTVM?oc=5",
-        "published": "2026-07-25T15:59:49+03:00",
-        "source_query": "Ukraine grain export"
-      },
-      {
-        "title": "Ukraine updates plan to protect grain exports - Новини аграрного бізнесу",
-        "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5tZ1dCYXUwSXNnVjRrOTZlbjJoTF80ckZGbFpNMlJNQmFIUmRzZWIwb25qVmpTZ0tIM0tTYVZmNzVwazVPZTYxTEFzMXpFaFAxQThpTjlUQUdNRzBLZkVNWXpnaFdHX05welg1YjZfdk9UNk1qQ1J5V0ttV3NKU1U?oc=5",
-        "published": "2026-07-25T13:14:00+03:00",
-        "source_query": "Ukraine grain export"
-      },
-      {
-        "title": "Weather, Exports and Black Sea Risk Share the Driver’s Seat in Grain Rally - Rural Radio Network",
-        "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNYjkwdW1ockVaeDRfaHJzcWR0RW9yd0lJbkljNU1KdzFGUnVLYjNnWEVtdEpERkZKMHM4Z0s4TGNhdFhoNEhoQ2J3c2Y0S1FlUGkyQkM0dVVZcXFFbURKMVVTMDVxMjVYUnB6VGNFTHQwbWhXakhVZVRXWmh0eVQxdHE0eUc3bFQyMlpVLVE3ZVJtUHBIdkFROUh5ZXFkVlRveGd3cU12czN2cHgzNElv?oc=5",
-        "published": "2026-07-25T19:47:54+03:00",
-        "source_query": "Black Sea grain"
-      },
-      {
-        "title": "Ukraine accuses Russia of turning Black Sea into a \"second Strait of Hormuz\" - Українська правда",
-        "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5hSDN4UmZFcjl4dTlVMkt3Z1NJRlU4UERlTWhLOVl4aWZtVFF3c0JRVWd6dW8wY2dIVGc4THJhdE1FUGdKYlZmX0IyRnAyRkFoOWZ3dkFpZ3hzQjg3SDNqRnp6ZFTSAXBBVV95cUxNR3l1STVfdHBrUWhfT1RpcE1Rd056ODNuMkgzM0pEdXlUTmFHQk9xb2psbGswWTJwdXU1U3hTeHNYOHFES1JHenp5dVZadDRjX1ZFY251MFlNYnhqZkxvVks2S0NhNzBpV1BVX0ZVTjRP?oc=5",
-        "published": "2026-07-25T15:50:00+03:00",
-        "source_query": "Black Sea grain",
-        "flagged_keywords": [
-          "strait"
-        ]
-      },
-      {
-        "title": "Hormuz Closure And Black Sea Attacks Drive Crop Prices To Three-Year High, Threatening Global Food Security - foreignpolicyjournal.com",
-        "link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQMXhPREhUSl8xbzJOOXZiMHZqN25mQ1ZBR0hrMW5odVl6TEVBNHBMQW5UR3Z0VXM4VzJXVGtiQ0Q4V3VMcVZOM2Nzem0xVEJueWthdnZkOGZCYzZzdnJ5djRxTkFVV2d6RVpzRHhEbmM4SWp0QlprcmNYRmczOWlNemN5c1VRWEh3cmNDZUNkVk1MYS1jV3pyVWFmamNNdVhWWEFvSVF3azJhMlZqeDl3SWhKaEwtQzNMSkdOMVpSckxWUmxMcm0wNGFtb29jbHRaU1dwbUQ4LUFiYWNOaThYX2x3MzQyVXJVN2NV?oc=5",
-        "published": "2026-07-25T19:24:00+03:00",
-        "source_query": "Black Sea grain",
-        "flagged_keywords": [
-          "attack"
         ]
       }
     ]
