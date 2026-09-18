@@ -563,6 +563,67 @@ def filter_high_impact(headlines):
     return flagged
 
 
+def compute_wheat_impact_from_factors(analysis):
+    """
+    ADDED 2026-09-15, real fix — replaces asking Gemini to directly judge
+    BULLISH/BEARISH/NEUTRAL. Real evidence that day: three scans of the
+    same underlying facts (Houthi attacks, Saudi pipeline outages, tanker
+    rate spikes) produced three different judgments (NEUTRAL, BEARISH,
+    NEUTRAL) when Gemini was asked to weigh everything and decide
+    directly. Free-form LLM reasoning on a genuinely disputed, multi-
+    factor economic question isn't reliably consistent — that's not a
+    prompt-wording problem, it's inherent to how these models reason on
+    ambiguous questions.
+
+    Fix: Gemini now only extracts narrow, factual sub-signals (is there
+    a CONFIRMED physical disruption, is the dollar strengthening or
+    weakening, is weather damaging or helping the crop) — each a much
+    more mechanical, answerable question than "should I be bullish or
+    bearish." This function then applies FIXED, DETERMINISTIC economic
+    logic (not a judgment call, textbook relationships) to combine them:
+      - confirmed physical disruption -> BULLISH (less real supply)
+      - USD strengthening -> BEARISH (dollar-priced commodity costs more
+        for foreign buyers, demand pressure) / weakening -> BULLISH
+      - crop damage -> BULLISH (less future supply) / beneficial weather
+        -> BEARISH
+
+    Equal weight per factor, no backtested weighting exists yet (matches
+    this project's small-sample discipline — don't invent an unvalidated
+    weighting scheme). Ties/no-signal cancel to NEUTRAL rather than
+    forcing a directional guess — the same conservative default real
+    institutional practice uses when signals disagree (see this
+    project's 2026-09-04 research on how professional desks price
+    ambiguous news as uncertainty, not a directional bet).
+
+    Same output shape as before ("BULLISH"/"BEARISH"/"NEUTRAL") — fully
+    backward compatible with normalize_signal()/get_news_signal()/
+    score_news_signals.py, none of which need to change.
+    """
+    score = 0
+
+    if analysis.get("physical_supply_disruption_confirmed") is True:
+        score += 1
+
+    usd = analysis.get("usd_strength_signal")
+    if usd == "STRENGTHENING":
+        score -= 1
+    elif usd == "WEAKENING":
+        score += 1
+
+    weather = analysis.get("weather_crop_signal")
+    if weather == "DAMAGING":
+        score += 1
+    elif weather == "BENEFICIAL":
+        score -= 1
+
+    if score > 0:
+        return "BULLISH"
+    elif score < 0:
+        return "BEARISH"
+    else:
+        return "NEUTRAL"
+
+
 def interpret_with_gemini(flagged_headlines, maritime_context=None):
     """
     Send flagged headlines (with full article text where available) to
@@ -614,7 +675,28 @@ def interpret_with_gemini(flagged_headlines, maritime_context=None):
         {maritime_block}
         Provide a concise analysis in JSON format with the following keys:
         - "summary": A 2-3 sentence overview of main market drivers.
-        - "wheat_impact": "BULLISH", "BEARISH", or "NEUTRAL" with a 1-sentence reason.
+        - "wheat_impact": DO NOT judge this directly — leave it out. It gets
+          computed afterward from the structured factors below, by fixed
+          code logic, not by your own free-form judgment. (Real evidence
+          2026-09-15: three scans the same day, describing the same
+          underlying facts, produced three different wheat_impact
+          judgments when asked directly — this restructuring removes that
+          inconsistency by moving the final call out of free-form
+          reasoning into deterministic rules.)
+        - "physical_supply_disruption_confirmed": true or false — is
+          there a REAL, ALREADY-HAPPENING (not just risk of, not just
+          tension) disruption to actual wheat supply, shipping, or a
+          route wheat actually uses. Purely factual — don't judge
+          direction, just whether this is confirmed and current.
+        - "usd_strength_signal": "STRENGTHENING", "WEAKENING", or
+          "NEUTRAL" — purely factual: does this news describe the US
+          dollar getting stronger or weaker (Fed policy, rate
+          expectations, currency moves)? Not your judgment of what that
+          means for wheat — just the factual direction described.
+        - "weather_crop_signal": "DAMAGING", "BENEFICIAL", or "NEUTRAL" —
+          for weather/crop-condition news specifically: is the described
+          weather damaging or helping the wheat crop? "NEUTRAL" if this
+          isn't a weather/crop story at all.
         - "wheat_impact_category": the SOURCE of the wheat_impact call above — exactly
           one of these five, chosen by what's actually driving it, not by topic alone:
             - "confirmed_physical_disruption": a VERIFIED, already-happening blockage,
@@ -668,7 +750,9 @@ def interpret_with_gemini(flagged_headlines, maritime_context=None):
             text = text[:-3]
         text = text.strip()
 
-        return json.loads(text)
+        analysis = json.loads(text)
+        analysis["wheat_impact"] = compute_wheat_impact_from_factors(analysis)
+        return analysis
 
     except Exception as e:
         logger.error(f"   Gemini interpretation failed: {e}")
