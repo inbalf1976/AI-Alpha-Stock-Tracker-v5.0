@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-09-18T01:20:40.869059+00:00",
+    "total_scanned": 223,
+    "flagged_count": 172,
+    "flagged_headlines": [
+      {
+        "title": "The 10-year Treasury is having its worst run in over 100 years. Why investors are buying bonds anyway.",
+        "link": "https://www.marketwatch.com/story/the-bond-market-is-seeing-trouble-why-investors-are-buying-now-anyway-065a2f9f?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 17 Sep 2026 21:22:00 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Wall Street is betting Trump backs down on Iran — but what if the ‘TACO’ trade fails this time?",
+        "link": "https://www.marketwatch.com/story/wall-street-is-betting-trump-backs-down-on-iran-but-what-if-the-taco-trade-fails-this-time-53845c77?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 17 Sep 2026 21:09:00 GMT",
+        "matched_keywords": [
+          "ils"
+        ]
+      },
+      {
+        "title": "Saudi Arabia is now pushing to export more oil through the Strait of Hormuz",
+        "link": "https://www.marketwatch.com/story/saudi-arabia-is-now-pushing-to-export-more-oil-through-the-strait-of-hormuz-bcce044b?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 17 Sep 2026 19:52:00 GMT",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Bank of England defies Fed’s rate-hike lead, leaving rates unchanged",
+        "link": "https://www.cnbc.com/2026/09/17/bank-of-england-interest-rate-decision-fed-rate-hike-uk-inflation.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 17 Sep 2026 12:27:10 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Consumers hit by one-two punch of oil and rates from Iran war. The estimated bill is $1,700 per household",
+        "link": "https://www.cnbc.com/2026/09/16/oil-prices-treasury-yields-consumers-iran.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 16 Sep 2026 17:32:22 GMT",
+        "matched_keywords": [
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "UK inflation jumps to 3.1% as energy costs soar",
+        "link": "https://www.cnbc.com/2026/09/16/uk-august-inflation-energy-gasoline.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 17 Sep 2026 07:36:04 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Counting the votes: Warsh faces a tough battle as the Fed girds for expected interest rate hike",
+        "link": "https://www.cnbc.com/2026/09/14/counting-the-votes-warsh-faces-tough-battle-as-fed-girds-for-expected-rate-hike.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 14 Sep 2026 19:47:42 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "war"
+        ]
+      },
+      {
+        "title": "Inflation is outpacing wage growth again, squeezing Americans’ paychecks",
+        "link": "https://www.cnbc.com/2026/09/12/inflation-is-outpacing-wage-growth-again-squeezing-americans-paychecks.html",
+        "source": "CNBC Economy",
+        "published": "Sat, 12 Sep 2026 12:49:15 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are grappling with surging energy costs and sticky inflation driven by the ongoing U.S.-Iran conflict, leading to severe pressures on consumer purchasing power. While the Federal Reserve and other central banks navigate rate hikes and divergent monetary paths amid energy shocks, the Strait of Hormuz experiences heightened volatility with increased dark transits and routing shifts.",
+      "wheat_impact": "NEUTRAL",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalation of the Iran conflict further disrupting critical energy supplies and maritime chokepoints like the Strait of Hormuz.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active military conflict with Iran is causing severe disruptions, pipeline closures, and dark-fleet tanker transits in the Strait of Hormuz, driving global energy prices sharply higher."
+    }
+  },
+  {
     "timestamp": "2026-09-17T17:39:38.776405+00:00",
     "total_scanned": 227,
     "flagged_count": 166,
@@ -31250,70 +31410,6 @@
         "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQNjlvUlk2aHRPczFiZ2pDaTVyRmRKMXZjRGEzZDE2Y2FwWktBU0EwMjlfT3N5UVdfX2FDWTFTOV9adE82dnZaWUg3REhmd3JCV3FuNlM3b1NMWm1UOF9fMm5jQUZoZ1AzNUJfTG9FWDlfcE5SdndvZXFReDFFaV91OWF2bExxMzJw?oc=5",
         "published": "2026-07-24T05:41:50+03:00",
         "source_query": "Baltic Dry Index"
-      }
-    ]
-  },
-  {
-    "scan_time": "2026-07-24T16:26:34.341620+03:00",
-    "total_headlines": 8,
-    "high_impact_count": 3,
-    "headlines": [
-      {
-        "title": "Black Sea Tensions Send Grain Prices Soaring - Devdiscourse",
-        "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNTnZYZkFkU2hwQWN0ZlB1QlRUWGdPSnN0VFU1alVIU0dib1JWMWJNZVdFQm8xV3AteFpvaUs2YXh0OEoxS1VBYnp2MlU5Z21HV2RtQ0ZXYlhjUVJnQ2dncHJlWEtXaVMtNzAzQVJRTS1Rc1lBYkUxQ2hXWi1fN0RXekIybldyWk5nRy10UDBRd05oLTNidDJKNDRCTjJ2TW_SAaQBQVVfeXFMTkI3RFpJeXZXemVMWWhiQVNDMlRLaElXUVZlQ01pZHhYR2tKYXBZUVpYbGxLWVk0bzMzVTJHdUhNSzBlZXByNmJZRjJDOXJlemJtNG1ZSkhwWWZzeVByNXNQTEQyckU0M19ibWgtT0F4QTNaX0RvRTdqUzlKR24zTGpMMFRSMlRaTjk1SGUwdVNVMTN6WG1MVzVoMWFpNXJIcVVBTkE?oc=5",
-        "published": "2026-07-24T15:20:29+03:00",
-        "source_query": "wheat price"
-      },
-      {
-        "title": "Grains markets hit new highs on Black Sea attacks, crude oil rally - The Edge Malaysia",
-        "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1rR1dSWmJ6dHBVdUV4WEstSzZRQ1RQb0hHbGZ1YWs4Ny0xRi0yV2xTcXItSGsyRmcxYlRweVBna3NVWmJUbWlOU0d6TTFSUXhCTUFj?oc=5",
-        "published": "2026-07-24T15:30:34+03:00",
-        "source_query": "wheat price",
-        "flagged_keywords": [
-          "attack"
-        ]
-      },
-      {
-        "title": "Feedgrain Focus: Prices keep kicking, growers hold in dry week - Grain Central",
-        "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQX0toc2tETmw2UGE5REdBc0lJMmxobHNGQkhheWFIMHc5SnJLMG9MdVk0bWctbmlrNmw5X0JRVTV4UFFScDQ2T3EzU2RTSnhnSVVvWDU2Z1ZBcWhHbDBaTjBxemxDTk9zSG90VXBDX3FlQWRhUmV6WGJDby15bm0wcEF2ZFhaWkRyNURsVE05UU02VG5ucTRwYnJHa1UzR2M?oc=5",
-        "published": "2026-07-24T09:04:56+03:00",
-        "source_query": "wheat price"
-      },
-      {
-        "title": "Kazakhstan seeks stronger opportunities for grain trade with Morocco - trend.az",
-        "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE03cVBUeldteWI3YVdjZ2g5dGh5TWo1ZWlkcWdEelZYZ0p0REh6V2lGUlhpSnNZeFhjQWNOTUJVWGttYWZKc0tBc0lEMDJReTgzWExVYk1MeUpORjJXSUE0?oc=5",
-        "published": "2026-07-24T08:52:00+03:00",
-        "source_query": "wheat export"
-      },
-      {
-        "title": "Ukraine can export up to 3.5 mln tons of grain per month without deep-sea ports - UkrAgroConsult",
-        "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNTFJPSHpzTkdFb2ZqTGNQU21aQjZoT1h0SlR4RFpMMGxFRVdSNzF4Vkc1cjd4ZWI2ejU1Z205UDBueWdXWnFNWXJjbF9mTk9Ka0VsZnhuWW9NSWRWUXdhcTVMUkc5aHJrYTkwa3pXUDNVWG9oS2F4dGhlM2F6ZUhPbjFVVE5CVjBSQ0ZYXzhBZUl2N1FPNFM2WkRpY2xUbWFaRFN2UHlTa1V6MkFOeEZ0WHJBekl6dw?oc=5",
-        "published": "2026-07-24T12:05:37+03:00",
-        "source_query": "Ukraine grain export"
-      },
-      {
-        "title": "Conflict escalations driving the market - mecardo.com.au",
-        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE44SGVQa3lSTWdHSmQzdU5KQUZmdGdXTGNuSW91dFpuRWdPOVJvVFMxQkMzRU9LMnRnNzNZSUZ1YUFNVWVVYVhEc2VfRGtiSmpPdUY5SVJOT2lVYmt6RVJpUFRzWDM1TUotU05HWWJQZlI?oc=5",
-        "published": "2026-07-24T08:31:57+03:00",
-        "source_query": "Ukraine grain export",
-        "flagged_keywords": [
-          "conflict"
-        ]
-      },
-      {
-        "title": "US wheat on track for fourth weekly gain on Black Sea supply concerns - Zawya",
-        "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNVUhMWm9fTm5lRDJNWUZlT1BuR2JOcHN1Yzk1VnVDOF9HdGk1NWgwaUQtdUk1LWpJVXlXLUFELUFFWHZxUnRtdkpZLWVhRENINTlzQURYbUIzRkREcUhqQmYtWU5HLVJaZzZpSVRQR1RSUklubXd5d1lacUlJQnJVTE55SmNSeFdnd0tqRjZVc29qUGtrQl8tOXVlZ1FYLUVFaG8yZ0dpcUpIalRwcXdN?oc=5",
-        "published": "2026-07-24T13:48:00+03:00",
-        "source_query": "Black Sea grain"
-      },
-      {
-        "title": "Extreme Heat and Drought Bring Harvest Weeks ahead of Schedule - Hungary Today",
-        "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNTEhxaVRjNHdXWkxHU1VQNlJmWTctOUNnTG5qZlBvZ0xxNlI2c25zTGdmT0dwV1lCcGt4eDJUanBkREsyUFhscEpOVkpRdEdxVUZOcWZKaVpTNjhrSDcxbnFfQUVPQm1kS2FyaERRcnFIVUZkbDc1QmU5dHl2d0F2RC1RWk96YUsxMjl0bURyaS0?oc=5",
-        "published": "2026-07-24T06:28:05+03:00",
-        "source_query": "wheat drought harvest",
-        "flagged_keywords": [
-          "drought"
-        ]
       }
     ]
   }
