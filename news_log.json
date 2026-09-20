@@ -1,5 +1,168 @@
 [
   {
+    "timestamp": "2026-09-20T13:11:54.817785+00:00",
+    "total_scanned": 215,
+    "flagged_count": 158,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces termination of enforcement action with SNB Bancshares and Bank of Eufaula",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Consumer sentiment is in the dumps despite a solid economy. Goldman Sachs blames 'lower happiness'",
+        "link": "https://www.cnbc.com/2026/09/19/goldman-sachs-happiness-struggling-consumer-sentiment.html",
+        "source": "CNBC Economy",
+        "published": "Sat, 19 Sep 2026 12:50:49 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Why Japan’s markets flipped the usual script after central bank rate hike",
+        "link": "https://www.cnbc.com/2026/09/18/japan-rate-hike-stocks-rise-bond-yields-yen-fall.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 18 Sep 2026 07:40:29 GMT",
+        "matched_keywords": [
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Bank of England defies Fed’s rate-hike lead, leaving rates unchanged",
+        "link": "https://www.cnbc.com/2026/09/17/bank-of-england-interest-rate-decision-fed-rate-hike-uk-inflation.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 17 Sep 2026 12:27:10 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Consumers hit by one-two punch of oil and rates from Iran war. The estimated bill is $1,700 per household",
+        "link": "https://www.cnbc.com/2026/09/16/oil-prices-treasury-yields-consumers-iran.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 16 Sep 2026 17:32:22 GMT",
+        "matched_keywords": [
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "UK inflation jumps to 3.1% as energy costs soar",
+        "link": "https://www.cnbc.com/2026/09/16/uk-august-inflation-energy-gasoline.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 17 Sep 2026 07:36:04 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Counting the votes: Warsh faces a tough battle as the Fed girds for expected interest rate hike",
+        "link": "https://www.cnbc.com/2026/09/14/counting-the-votes-warsh-faces-tough-battle-as-fed-girds-for-expected-rate-hike.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 14 Sep 2026 19:47:42 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "war"
+        ]
+      },
+      {
+        "title": "U.S. Treasury curve flattens as long-end yields ease off multi-year peaks",
+        "link": "https://www.investing.com/news/forex-news/euro-zone-yields-head-for-weekly-decline-as-postfed-rally-soothes-duration-fears-4906685",
+        "source": "Investing.com Forex",
+        "published": "2026-09-18 12:16:35",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Dollar halts six-day rally after Fed hike, sterling slips after BoE stands pat",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-holds-sevenweek-high-yen-steadies-4904802",
+        "source": "Investing.com Forex",
+        "published": "2026-09-17 19:24:32",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global central banks are diverging in their monetary policies as the Federal Reserve implements a quarter-point rate hike amid persistent inflation driven by energy shocks from the U.S.-Iran conflict. Meanwhile, consumer sentiment remains severely depressed despite a solid economy, increasingly weighed down by rising energy and borrowing costs, lower societal happiness, and declining trust in public institutions.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalation of the U.S.-Iran conflict driving sustained high crude oil and diesel prices, exacerbating global inflationary pressures and prompting aggressive central bank tightening.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-09-20T01:19:34.740477+00:00",
     "total_scanned": 221,
     "flagged_count": 164,
@@ -31319,159 +31482,6 @@
       "usd_ils_impact": "BULLISH",
       "usd_ils_impact_reason": "While direct U.S.-Iran strikes have momentarily paused, the spread of the conflict to the Red Sea and Caspian maintains a high-risk security environment in the Middle East that typically supports safe-haven demand for the USD against the ILS.",
       "key_risk": "Escalation of regional conflict in the Red Sea and Caspian threatening broader energy supplies and global trade routes."
-    }
-  },
-  {
-    "timestamp": "2026-07-26T22:24:23.822207+00:00",
-    "total_scanned": 221,
-    "flagged_count": 159,
-    "flagged_headlines": [
-      {
-        "title": "Oil prices sink, stock futures rally as U.S. and Iran pause attacks, Wall Street awaits busy week",
-        "link": "https://www.marketwatch.com/story/oil-prices-sink-stock-futures-rally-as-u-s-and-iran-pause-attacks-wall-street-awaits-busy-week-75030e00?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 26 Jul 2026 22:16:00 GMT",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "The Treasury market is sending Fed Chair Kevin Warsh a clear warning about rates",
-        "link": "https://www.marketwatch.com/story/the-treasury-market-is-sending-fed-chair-kevin-warsh-a-clear-warning-about-rates-d0026da9?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 26 Jul 2026 12:30:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "war",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Iran war spreads to Red Sea and Caspian, Gulf quiet as US forgoes strikes",
-        "link": "https://www.investing.com/news/commodities-news/iran-war-spreads-to-red-sea-and-caspian-gulf-quiet-as-us-forgoes-strikes-4812822",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-26 03:36:25",
-        "matched_keywords": [
-          "war",
-          "red sea"
-        ]
-      },
-      {
-        "title": "Houthis fire on Saudi oil sites; no US strike on Iran for first time in two weeks",
-        "link": "https://www.investing.com/news/commodities-news/trump-vows-to-punish-iran-and-houthis-for-attacks-in-red-sea-4810448",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-25 20:24:29",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Swiss cheesemakers try to fill hole in sales from US tariffs",
-        "link": "https://www.investing.com/news/commodities-news/swiss-cheesemakers-try-to-fill-hole-in-sales-from-us-tariffs-4812765",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-25 10:12:52",
-        "matched_keywords": [
-          "tariff"
-        ]
-      },
-      {
-        "title": "Gold snaps two-week losing run as technical buying offsets inflationary pressures",
-        "link": "https://www.investing.com/news/commodities-news/gold-set-for-first-weekly-gain-in-three-as-fed-meast-stay-in-focus-4810406",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-24 21:06:55",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Oil falls on report China pushing for end US-Iran war",
-        "link": "https://www.investing.com/news/commodities-news/oil-set-for-weekly-rise-amid-red-sea-shipping-attacks-kazakhstan-output-cuts-4810381",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-24 20:06:54",
-        "matched_keywords": [
-          "oil",
-          "war"
-        ]
-      },
-      {
-        "title": "Canadian dollar slips as oil retreats, Fed decision looms",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-oil-retreats-fed-decision-looms-93CH-4812379",
-        "source": "Investing.com Forex",
-        "published": "2026-07-24 18:12:27",
-        "matched_keywords": [
-          "fed",
-          "oil"
-        ]
-      },
-      {
-        "title": "U.S. bond sell-off deepens as energy shock and trade friction lock in hawkish Fed",
-        "link": "https://www.investing.com/news/forex-news/german-yields-eases-from-multiyear-peaks-100-oil-surge-threatens-euro-growth-4810548",
-        "source": "Investing.com Forex",
-        "published": "2026-07-24 12:36:52",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound steady as dollar bid dominates on Fed repricing",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-steady-as-dollar-bid-dominates-on-fed-repricing-4811621",
-        "source": "Investing.com Forex",
-        "published": "2026-07-24 12:13:02",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "BofA sees Hong Kong dollar rates spike risk on Fed hikes",
-        "link": "https://www.investing.com/news/forex-news/bofa-sees-hong-kong-dollar-rates-spike-risk-on-fed-hikes-93CH-4810869",
-        "source": "Investing.com Forex",
-        "published": "2026-07-24 09:41:20",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "US Treasury finds no trading partner manipulated currency for trade advantage in 2025",
-        "link": "https://www.investing.com/news/forex-news/us-treasury-finds-no-trading-partner-manipulated-currency-for-trade-advantage-in-2025-4809864",
-        "source": "Investing.com Forex",
-        "published": "2026-07-23 20:06:49",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "Canadian dollar rises as oil prices jump on supply concerns",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-as-oil-prices-jump-on-supply-concerns-93CH-4809736",
-        "source": "Investing.com Forex",
-        "published": "2026-07-23 17:58:57",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "UBS adds Norwegian krone to top FX picks as oil rally seen capped",
-        "link": "https://www.investing.com/news/forex-news/ubs-adds-norwegian-krone-to-top-fx-picks-as-oil-rally-seen-capped-4809440",
-        "source": "Investing.com Forex",
-        "published": "2026-07-23 14:58:21",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "Global markets are reacting to a delicate pause in direct U.S.-Iran hostilities alongside escalating Red Sea supply disruptions, while bond markets signal hawkish Federal Reserve expectations driven by ongoing energy shocks and trade frictions.",
-      "wheat_impact": "NEUTRAL",
-      "usd_ils_impact": "BULLISH",
-      "key_risk": "Resurgence of Middle Eastern conflict impacting critical shipping chokepoints like the Red Sea and energy supply lines."
     }
   }
 ]
