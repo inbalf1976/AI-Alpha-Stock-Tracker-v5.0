@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-09-23T01:34:47.839182+00:00",
+    "total_scanned": 228,
+    "flagged_count": 168,
+    "flagged_headlines": [
+      {
+        "title": "Treasury curve flattens as easing oil input costs and UN diplomacy offer respite",
+        "link": "https://www.investing.com/news/forex-news/euro-area-debt-bourses-face-risk-drag-from-paris-debt-trajectory-4910015",
+        "source": "Investing.com Forex",
+        "published": "2026-09-22 12:15:26",
+        "matched_keywords": [
+          "oil",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as hawkish Fed talk lifts dollar broadly",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-hawkish-fed-talk-lifts-dollar-broadly-4910096",
+        "source": "Investing.com Forex",
+        "published": "2026-09-22 09:01:07",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar under pressure as oil retreats and US rate outlook supports greenb",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-under-pressure-as-oil-retreats-and-us-rate-outlook-supports-greenb-4909475",
+        "source": "Investing.com Forex",
+        "published": "2026-09-21 17:16:09",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields ease on crude pull-back ;  rate hike bets stay",
+        "link": "https://www.investing.com/news/forex-news/euro-zone-yields-ease-as-markets-await-of-ecbs-lagarde-speech-4908370",
+        "source": "Investing.com Forex",
+        "published": "2026-09-21 12:07:57",
+        "matched_keywords": [
+          "rate hike",
+          "crude",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Goldman sees Hungary inflation target cut as positive for forint",
+        "link": "https://www.investing.com/news/forex-news/goldman-sees-hungary-inflation-target-cut-as-positive-for-forint-93CH-4908570",
+        "source": "Investing.com Forex",
+        "published": "2026-09-21 10:09:50",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Oil extends losses as Trump signals progress in U.S.-Iran talks",
+        "link": "https://www.investing.com/news/commodities-news/oil-extends-losses-as-trump-signals-progress-in-usiran-talks-4911933",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-23 00:38:30",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Trump supports diesel export ban as fuel prices hit records",
+        "link": "https://www.investing.com/news/commodities-news/trump-says-he-backs-the-idea-of-a-ban-on-diesel-exports-4911466",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-22 23:24:26",
+        "matched_keywords": [
+          "export ban"
+        ]
+      },
+      {
+        "title": "Oil on five-day losing run, Brent settles below $100 for first time in two weeks",
+        "link": "https://www.investing.com/news/commodities-news/oil-edges-higher-as-markets-eye-usiran-talks-saudi-flows-4909809",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-22 21:53:43",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold slightly higher as slide in oil prices counters drag from firmer dollar",
+        "link": "https://www.investing.com/news/commodities-news/gold-rises-as-oil-slide-eases-inflation-fears-trump-signals-iran-talks-4909810",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-22 21:18:56",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "London Gas Oil trapped at $1,465 between support and SMA: Live",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-stuck-in-chop-zone-at-1480-live-levels-93CH-4908349",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-22 19:18:20",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI near oversold support at $87.72: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-tests-94-support-after-double-top-live-levels-93CH-4908350",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-22 19:18:09",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Jet fuel is following diesel’s price jump as the Hormuz supply shock hits the skies",
+        "link": "https://www.marketwatch.com/story/jet-fuel-is-following-diesels-price-jump-as-the-hormuz-supply-shock-hits-the-skies-6fc21238?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 22 Sep 2026 19:59:00 GMT",
+        "matched_keywords": [
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by BancFirst Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260922a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 22 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement action with SNB Bancshares and Bank of Eufaula",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Crude oil markets extended losses below $100 amid easing US-Iran diplomatic progress and a pullback in input costs, which also flattened the Treasury curve and boosted the US dollar against the pound and Canadian dollar. Meanwhile, maritime transit disruptions continued in the Strait of Hormuz with recent vessel strikes, though overarching crude sentiment remained weighed down by diplomatic talks and supply adjustments.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH with a 1-sentence reason. A strengthening US dollar driven by firm Federal Reserve rate expectations and safe-haven flows tends to pressure emerging market currencies like the Israeli Shekel.",
+      "key_risk": "Escalation of maritime attacks in the Strait of Hormuz causing broader energy supply chain shocks and sustained fuel price volatility.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Recent drone strikes and projectile attacks on commercial vessels (such as the LPG carrier AL MARYAH and crude tanker LR STEPHANIE) within the Strait of Hormuz represent an active, unfolding maritime security threat.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-09-22T17:40:14.309963+00:00",
     "total_scanned": 224,
     "flagged_count": 170,
@@ -31386,164 +31548,6 @@
         "reason": "The U.S. dollar is maintaining multi-week highs supported by 'higher-for-longer' rate bets ahead of the Fed decision, which inherently strengthens the USD against the Israeli Shekel."
       },
       "key_risk": "Hawkish surprises or unexpected policy signals from the Federal Reserve rate decision that could trigger severe volatility across bonds, equities, and the U.S. dollar."
-    }
-  },
-  {
-    "timestamp": "2026-07-28T08:35:08.278510+00:00",
-    "total_scanned": 225,
-    "flagged_count": 164,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Small Business Bank and announces termination enforcement actions with BNP Paribas S.A., BNP Paribas USA, Inc., BNP Paribas Securities Corp., and Community Bankshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260702a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 2 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues initial findings from its 2025 triennial payments study",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260701a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 1 Jul 2026 18:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Nvidia’s potential new deal with OpenAI would revive a spooky tech-bubble habit, analyst warns",
-        "link": "https://www.marketwatch.com/story/nvidias-potential-new-deal-with-openai-would-revive-a-spooky-tech-bubble-habit-analyst-warns-ae34ed64?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Tue, 28 Jul 2026 01:19:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Euro yields stay pinned near multi-year peaks as markets price in elevated rates",
-        "link": "https://www.investing.com/news/forex-news/euro-yields-stay-pinned-near-multiyear-peaks-as-markets-price-in-elevated-rates-4815606",
-        "source": "Investing.com Forex",
-        "published": "2026-07-28 07:30:31",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "Dollar steadies near one-month high as Fed bets weigh on Asian currencies",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-muted-as-dollar-steadies-near-onemonth-high-4815434",
-        "source": "Investing.com Forex",
-        "published": "2026-07-28 07:05:52",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Dollar rises slightly as traders eye crucial Fed decision later in the week",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-firms-as-oil-slump-dents-dollar-strenght-4812988",
-        "source": "Investing.com Forex",
-        "published": "2026-07-27 16:32:27",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Global yields retreat as crude slide eases inflation fears ahead of Fed, BOE calls",
-        "link": "https://www.investing.com/news/forex-news/german-yields-retreat-as-crude-slide-eases-inflation-fears-ahead-of-fed-boe-calls-4813005",
-        "source": "Investing.com Forex",
-        "published": "2026-07-27 12:20:12",
-        "matched_keywords": [
-          "fed",
-          "inflation",
-          "crude",
-          "yield"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound edges lower against dollar ahead of Fed, BoE meetings",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-edges-lower-against-dollar-ahead-of-fed-boe-meetings-4813819",
-        "source": "Investing.com Forex",
-        "published": "2026-07-27 11:47:01",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Canadian dollar slips as oil retreats, Fed decision looms",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-oil-retreats-fed-decision-looms-93CH-4812379",
-        "source": "Investing.com Forex",
-        "published": "2026-07-24 18:12:27",
-        "matched_keywords": [
-          "fed",
-          "oil"
-        ]
-      },
-      {
-        "title": "Gold prices slip as firm dollar weighs; Fed decision eyed",
-        "link": "https://www.investing.com/news/commodities-news/gold-prices-slip-as-firm-dollar-weighs-fed-decision-eyed-4815435",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-28 07:11:02",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "Global markets are tightly focused on upcoming Federal Reserve decisions and FOMC minutes, with a firm U.S. dollar weighing on commodities and foreign currencies. Meanwhile, declining crude oil prices are helping to ease broader inflation fears ahead of crucial central bank meetings.",
-      "wheat_impact": {
-        "direction": "NEUTRAL",
-        "reason": "Macro drivers are dominated by Fed policy, USD strength, and crude oil movements, with no direct agricultural supply or demand news present."
-      },
-      "usd_ils_impact": {
-        "direction": "BULLISH",
-        "reason": "The U.S. dollar is steadying near recent highs supported by elevated Federal Reserve rate expectations, which generally exerts upward pressure on the USD/ILS exchange rate."
-      },
-      "key_risk": "An unexpectedly hawkish Federal Reserve decision or tone that triggers further dollar appreciation and pressures risk assets and commodities."
     }
   }
 ]
