@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-09-24T13:44:50.613034+00:00",
+    "total_scanned": 223,
+    "flagged_count": 159,
+    "flagged_headlines": [
+      {
+        "title": "Three reasons to stick with stocks despite rising yields, according to Barclays",
+        "link": "https://www.marketwatch.com/story/three-reasons-to-stick-with-stocks-despite-rising-yields-according-to-barclays-9b8ea2c3?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 24 Sep 2026 12:58:00 GMT",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by BancFirst Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260922a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 22 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement action with SNB Bancshares and Bank of Eufaula",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "France's fresh budget battle threatens to topple another government",
+        "link": "https://www.cnbc.com/2026/09/24/france-budget-debt-deficit-government.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 24 Sep 2026 06:21:00 GMT",
+        "matched_keywords": [
+          "threatens to"
+        ]
+      },
+      {
+        "title": "World heads into food crises 'blind' as U.S. aid cuts squeeze UN food agency, experts warn",
+        "link": "https://www.cnbc.com/2026/09/24/hormuz-blacksea-ukraine-iran-food-security-united-nations-.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 24 Sep 2026 04:02:26 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Here's what happens to the economy when Treasury yields soar like they are now",
+        "link": "https://www.cnbc.com/2026/09/23/what-happens-to-the-economy-when-treasury-yields-soar.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 24 Sep 2026 02:50:12 GMT",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Consumer sentiment is in the dumps despite a solid economy. Goldman Sachs blames 'lower happiness'",
+        "link": "https://www.cnbc.com/2026/09/19/goldman-sachs-happiness-struggling-consumer-sentiment.html",
+        "source": "CNBC Economy",
+        "published": "Sat, 19 Sep 2026 12:50:49 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Why Japan’s markets flipped the usual script after central bank rate hike",
+        "link": "https://www.cnbc.com/2026/09/18/japan-rate-hike-stocks-rise-bond-yields-yen-fall.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 21 Sep 2026 01:02:25 GMT",
+        "matched_keywords": [
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Bank of England defies Fed’s rate-hike lead, leaving rates unchanged",
+        "link": "https://www.cnbc.com/2026/09/17/bank-of-england-interest-rate-decision-fed-rate-hike-uk-inflation.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 17 Sep 2026 12:27:10 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil extends gains amid U.S.-Iran diplomacy doubts",
+        "link": "https://www.investing.com/news/commodities-news/oil-slips-1-after-sharp-gains-amid-usiran-diplomacy-doubts-4914284",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-24 13:30:12",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are grappling with surging sovereign bond yields and divergent central bank policies, led by a U.S. Federal Reserve rate hike and sticky global inflation. Meanwhile, escalating maritime disruptions in the Strait of Hormuz and potential U.S. foreign aid cuts to the UN food agency pose severe risks to international food security and agricultural supply chains.",
+      "physical_supply_disruption_confirmed": true,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "DAMAGING",
+      "wheat_impact_category": "confirmed_physical_disruption",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating maritime conflict and GPS jamming in the Strait of Hormuz threatening critical energy, fertilizer, and agricultural flows.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "A cargo vessel was struck by a projectile in the Strait of Hormuz causing a fire and casualties, alongside a growing oil slick and severe GPS jamming affecting hundreds of vessels.",
+      "wheat_impact": "BULLISH"
+    }
+  },
+  {
     "timestamp": "2026-09-24T01:31:16.558643+00:00",
     "total_scanned": 225,
     "flagged_count": 166,
@@ -31416,156 +31576,6 @@
         "reason": "Rising crude oil prices and heightened Middle Eastern geopolitical conflict typically increase safe-haven demand while weighing on regional currencies."
       },
       "key_risk": "Escalating Middle Eastern military conflict driving a sustained oil price shock that accelerates global inflation and disrupts supply chains."
-    }
-  },
-  {
-    "timestamp": "2026-07-28T20:48:20.091163+00:00",
-    "total_scanned": 229,
-    "flagged_count": 171,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Small Business Bank and announces termination enforcement actions with BNP Paribas S.A., BNP Paribas USA, Inc., BNP Paribas Securities Corp., and Community Bankshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260702a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 2 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues initial findings from its 2025 triennial payments study",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260701a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 1 Jul 2026 18:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "US Senate to vote on Russia sanctions bill in tribute to Graham",
-        "link": "https://www.investing.com/news/commodities-news/us-senate-to-vote-on-russia-sanctions-bill-in-tribute-to-graham-4817844",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-28 20:00:31",
-        "matched_keywords": [
-          "sanction"
-        ]
-      },
-      {
-        "title": "Oil prices fall 5% to two-week low after several days without US-Iran strikes",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-5-to-twoweek-low-on-hopes-for-usiran-conflict-easing-4817775",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-28 19:48:55",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil prices settle at lowest in over a week, as US pauses attacks on Iran",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-settle-at-lowest-in-over-a-week-as-us-pauses-attacks-on-iran-4817880",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-28 18:54:47",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "European wheat prices fall as Black Sea risks seen priced in",
-        "link": "https://www.investing.com/news/commodities-news/european-wheat-prices-fall-as-black-sea-risks-seen-priced-in-93CH-4817886",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-28 18:46:38",
-        "matched_keywords": [
-          "wheat",
-          "black sea"
-        ]
-      },
-      {
-        "title": "China in touch with Yemen’s Houthis to allow ships to sail through Red Sea, sources say",
-        "link": "https://www.investing.com/news/commodities-news/china-in-touch-with-yemens-houthis-to-allow-ships-to-sail-through-red-sea-sources-say-4817803",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-28 17:30:36",
-        "matched_keywords": [
-          "red sea"
-        ]
-      },
-      {
-        "title": "Corn prices rise after USDA cuts crop condition rating",
-        "link": "https://www.investing.com/news/commodities-news/corn-prices-rise-after-usda-cuts-crop-condition-rating-93CH-4817014",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-28 13:31:26",
-        "matched_keywords": [
-          "usda",
-          "crop"
-        ]
-      },
-      {
-        "title": "Canadian dollar rises slightly as markets await Fed decision",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-slightly-as-markets-await-fed-decision-93CH-4817871",
-        "source": "Investing.com Forex",
-        "published": "2026-07-28 18:32:22",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "South African rand holds steady ahead of Fed decision",
-        "link": "https://www.investing.com/news/forex-news/south-african-rand-holds-steady-ahead-of-fed-decision-93CH-4817316",
-        "source": "Investing.com Forex",
-        "published": "2026-07-28 15:31:44",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "Global markets are reacting to de-escalating geopolitical tensions in the Middle East, which have driven oil prices down significantly, alongside ongoing central bank positioning ahead of Federal Reserve announcements. In agriculture, Black Sea risk premiums are fading for wheat while adverse USDA crop ratings are providing localized support for corn.",
-      "wheat_impact": "BEARISH: European wheat prices are falling as Black Sea supply risks are increasingly perceived by the market as fully priced in.",
-      "usd_ils_impact": "BEARISH: Easing military tensions involving Iran, combined with ongoing diplomatic efforts with the Houthis regarding Red Sea shipping, reduce regional risk premiums affecting the Israeli Shekel.",
-      "key_risk": "Unforeseen escalations in Middle Eastern geopolitics or renewed disruptions to critical maritime trade routes like the Red Sea."
     }
   }
 ]
