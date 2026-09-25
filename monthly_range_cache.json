@@ -1,12 +1,12 @@
 {
   "month_key": "2026-09",
-  "frozen_at": "2026-09-08T06:48:15.585812+03:00",
+  "frozen_at": "2026-09-25T04:59:47.563240+03:00",
   "regenerated_after_breach": true,
   "monthly": {
-    "monthly_low": 697.72,
-    "monthly_high": 780.28,
+    "monthly_low": 629.7,
+    "monthly_high": 704.9,
     "bias": "DOWN",
-    "avg_return": -2.57,
+    "avg_return": -3.43,
     "month_label": "September"
   }
 }
