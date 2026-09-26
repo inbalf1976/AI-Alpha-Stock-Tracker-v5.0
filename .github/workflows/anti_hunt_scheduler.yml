@@ -2,15 +2,8 @@ name: Anti-Hunt Morning Filter
 
 on:
   schedule:
-    # Signal runs: 08:45 and 09:45 America/Chicago.
-    # GitHub Actions supports timezone-aware schedules, so DST is handled automatically.
-    - cron: '45 8 * * 1-5'
-      timezone: 'America/Chicago'
-    - cron: '45 9 * * 1-5'
-      timezone: 'America/Chicago'
-    # Outcome/learning run: after the 12:30 CT setup expiry.
-    - cron: '15 13 * * 1-5'
-      timezone: 'America/Chicago'
+    - cron: '45 13 * * 1-5'
+    - cron: '45 14 * * 1-5'
   workflow_dispatch:
 
 concurrency:
@@ -50,14 +43,9 @@ jobs:
             echo "MANUAL TEST RUN"
             echo "=============================================="
             python anti_hunt_filter.py --manual
-          elif [ "${{ github.event.schedule }}" = "15 13 * * 1-5" ]; then
-            echo "=============================================="
-            echo "AFTERNOON OUTCOME / LEARNING RUN"
-            echo "=============================================="
-            python anti_hunt_filter.py --resolve
           else
             echo "=============================================="
-            echo "MORNING SIGNAL RUN"
+            echo "SCHEDULED RUN"
             echo "=============================================="
             python anti_hunt_filter.py
           fi
