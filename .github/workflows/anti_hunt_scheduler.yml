@@ -2,9 +2,9 @@ name: Anti-Hunt Morning Filter
 
 on:
   schedule:
-    # 14:45 UTC is exactly 8:45 AM Chicago Time (CST)
+    # 14:45 UTC is exactly 8:45 AM Chicago Time (CST) Monday through Friday
     - cron: '45 14 * * 1-5'
-  workflow_dispatch: # Allows you to manually trigger it via GitHub UI to test
+  workflow_dispatch: # Allows you to manually trigger it via GitHub UI to test right now
 
 jobs:
   run-filter:
@@ -13,13 +13,11 @@ jobs:
       - name: Checkout Repository Code
         uses: actions/checkout@v4
 
-      # FIXED: Clean, simple Python setup without automatic file-matching constraints
       - name: Set up Python Environment
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      # Explicitly install the exact packages needed for the new file
       - name: Install Necessary Libraries
         run: |
           python -m pip install --upgrade pip
