@@ -185,11 +185,12 @@ def main():
         if direction not in {"UP", "DOWN"}:
             continue
 
-        # Match the production recommendation: counter-trend spikes are not
-        # executable setups; they remain informational.
+        # Counter-trend signals are INCLUDED, not excluded: a spike against
+        # the daily direction is the institutional counter-move this system
+        # exists to catch (see the Sept 25 683->702+ real example). Alignment
+        # is tracked as a field for breakdown analysis, not a filter.
         daily_direction = macro.get("daily_direction", "NEUTRAL")
-        if daily_direction in {"UP", "DOWN"} and daily_direction != direction:
-            continue
+        aligned_with_daily = daily_direction not in {"UP", "DOWN"} or daily_direction == direction
 
         if signal_time in seen_signals:
             continue
@@ -203,6 +204,7 @@ def main():
             "signal_time_ct": signal_time.isoformat(),
             "direction": direction,
             "daily_direction": daily_direction,
+            "aligned_with_daily": aligned_with_daily,
             "stage": spike.get("stage"),
             "score": spike.get("score"),
             "up_score": spike.get("up_score"),
@@ -249,7 +251,7 @@ def main():
             "reward_points": SPIKE_TARGET_DISTANCE,
             "rr": round(SPIKE_TARGET_DISTANCE / SPIKE_STOP_DISTANCE, 2),
         },
-        "counter_trend_policy": "excluded from executable backtest",
+        "counter_trend_policy": "included — this is the primary use case (institutional counter-move against the daily direction), not something to filter out",
         "signals_tested": total,
         "wins": wins,
         "losses": losses,
@@ -259,6 +261,7 @@ def main():
         "win_rate_resolved": round(wins / resolved, 4) if resolved else None,
         "loss_rate_resolved": round(losses / resolved, 4) if resolved else None,
         "by_direction": {},
+        "by_alignment": {},
     }
 
     if total:
@@ -268,6 +271,19 @@ def main():
             rl = int((sub["outcome"] == "LOSS").sum())
             rr = rw + rl
             report["by_direction"][direction] = {
+                "signals": len(sub),
+                "wins": rw,
+                "losses": rl,
+                "ambiguous": int((sub["outcome"] == "AMBIGUOUS").sum()),
+                "expired": int((sub["outcome"] == "EXPIRED").sum()),
+                "win_rate_resolved": round(rw / rr, 4) if rr else None,
+            }
+        for label, mask in [("counter_trend", ~df["aligned_with_daily"]), ("aligned", df["aligned_with_daily"])]:
+            sub = df[mask]
+            rw = int((sub["outcome"] == "WIN").sum())
+            rl = int((sub["outcome"] == "LOSS").sum())
+            rr = rw + rl
+            report["by_alignment"][label] = {
                 "signals": len(sub),
                 "wins": rw,
                 "losses": rl,
