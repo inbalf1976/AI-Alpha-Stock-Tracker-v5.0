@@ -9,6 +9,11 @@ on:
     - cron: '15 13 * * 1-5'
       timezone: 'America/Chicago'
   workflow_dispatch:
+    inputs:
+      force_stale:
+        description: 'Bypass staleness gate for this manual test run'
+        type: boolean
+        default: false
 
 concurrency:
   group: anti-hunt-filter
@@ -45,7 +50,11 @@ jobs:
             echo "=============================================="
             echo "V5 MANUAL TEST RUN"
             echo "=============================================="
-            python anti_hunt_filter.py --manual
+            if [ "${{ inputs.force_stale }}" = "true" ]; then
+              python anti_hunt_filter.py --manual --force-stale
+            else
+              python anti_hunt_filter.py --manual
+            fi
           elif [ "${{ github.event.schedule }}" = "15 13 * * 1-5" ]; then
             echo "=============================================="
             echo "V5 OUTCOME RESOLUTION / LEARNING RUN"
