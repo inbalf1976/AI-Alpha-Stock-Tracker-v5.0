@@ -1,161 +1,255 @@
 import json
+import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
+import numpy as np
 import pandas as pd
 import yfinance as yf
 
-import anti_hunt_filter as ahf
+# Load the exact V5 spike detector from the repo so the backtest uses the
+# same directional scoring logic as production.
+import anti_hunt_filter as v5
 
-# ============================================================
-# Backfills anti_hunt_filter.py's learning_state.json with
-# historical setups so the shadow ML model doesn't have to wait
-# weeks to accumulate ML_MIN_SAMPLES=60 live.
-#
-# Yahoo/yfinance caps 15m intraday data at ~60 days — that's a
-# hard external limit, not a choice. This is NOT a 2-year
-# backtest like backtest.py; every setup built here is tagged
-# "source": "backtest" and is deliberately excluded from the
-# bounded profile-switch decision in maybe_learn() (see there).
-# It only accelerates the ML shadow model's bootstrap.
-# ============================================================
+CHICAGO_TZ = ZoneInfo("America/Chicago")
+TICKER = os.environ.get("TICKER", "ZW=F")
+PERIOD = os.environ.get("BACKTEST_PERIOD", "60d")
+HORIZON_BARS = int(os.environ.get("SPIKE_HORIZON_BARS", "32"))
+MIN_BARS = int(os.environ.get("SPIKE_MIN_BARS", "35"))
 
-RESULTS_FILE = "anti_hunt_backtest_results.json"
+# Directional spike setup geometry requested for V5.
+# Example: UP entry 683 -> stop 678 -> target 715.
+SPIKE_STOP_DISTANCE = float(os.environ.get("SPIKE_STOP_DISTANCE", "5.0"))
+SPIKE_TARGET_DISTANCE = float(os.environ.get("SPIKE_TARGET_DISTANCE", "32.0"))
 
-
-def fetch_backtest_data():
-    intraday = ahf._flatten(yf.download(
-        ahf.TICKER, period="60d", interval="15m", auto_adjust=False, progress=False
-    ))
-    daily = ahf._flatten(yf.download(
-        ahf.TICKER, period="90d", interval="1d", auto_adjust=False, progress=False
-    ))
-    hourly = ahf._flatten(yf.download(
-        ahf.TICKER, period="60d", interval="60m", auto_adjust=False, progress=False
-    ))
-    if intraday.empty or daily.empty or hourly.empty:
-        raise ValueError("Yahoo returned empty backtest data.")
-    return intraday, daily, hourly
+OUTPUT_JSON = os.environ.get("BACKTEST_OUTPUT", "backtest_v5_spike_report.json")
+OUTPUT_CSV = os.environ.get("BACKTEST_CSV", "backtest_v5_spike_trades.csv")
 
 
-def build_backtest_setups(intraday, daily, hourly):
-    idx = ahf.chicago_index(intraday)
-    df = intraday.copy()
-    df.index = idx
-    df = df.sort_index()
-
-    last_bar_ts = df.index.max()
-    trading_days = sorted({ts.date() for ts in df.index})
-
-    setups = []
-    for day in trading_days:
-        if day in ahf.HOLIDAYS or day.weekday() >= 5:
-            continue
-
-        signal_dt = datetime.combine(day, ahf.WINDOW_OPEN, tzinfo=ahf.CHICAGO_TZ)
-        valid_until = datetime.combine(day, ahf.WINDOW_CLOSE, tzinfo=ahf.CHICAGO_TZ)
-        if valid_until > last_bar_ts:
-            continue  # not enough future data in the 60d window to fully resolve this one
-
-        past_intraday = df.loc[df.index <= signal_dt]
-        if past_intraday.empty:
-            continue
-        today_bars = past_intraday.loc[[ts.date() == day for ts in past_intraday.index]]
-        if today_bars.empty:
-            continue
-
-        # NOTE: intentionally not calling ahf.resolve_session_open() here — it
-        # uses datetime.now(CHICAGO_TZ) internally to find "today's" bars, which
-        # is correct for live runs but always misses when replaying a historical
-        # day, silently falling back to the same single stale daily open for
-        # every day. today_bars's own first Open is this day's real session open.
-        try:
-            daily_open = float(today_bars["Open"].iloc[0])
-            current_price = float(today_bars["Close"].iloc[-1])
-            atr = ahf.compute_atr(past_intraday)
-        except (KeyError, IndexError, ValueError):
-            continue
-        if atr is None:
-            continue
-
-        setup = ahf.build_setup(daily_open, current_price, atr, ahf.DEFAULT_PROFILE)
-        setup["timestamp_ct"] = signal_dt.isoformat()
-        setup["valid_until_ct"] = valid_until.isoformat()
-        setup["manual_mode"] = False
-        setup["stale_data_min"] = 0.0
-        setup["source"] = "backtest"
-
-        try:
-            context = ahf.market_context(past_intraday, daily, hourly, signal_dt)
-        except (KeyError, IndexError, ValueError):
-            continue
-        setup["market_context"] = context
-        setup.update(context)
-
-        if setup["invalidated"]:
-            continue  # matches live: invalidated setups are never appended to state["setups"]
-
-        setups.append(setup)
-
-    return setups, df
+def clean_download(df):
+    if df is None or df.empty:
+        return pd.DataFrame()
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = df.columns.get_level_values(0)
+    needed = [c for c in ["Open", "High", "Low", "Close", "Volume"] if c in df.columns]
+    df = df[needed].copy()
+    df = df.dropna(subset=["Open", "High", "Low", "Close"])
+    df.index = v5.chicago_index(df)
+    return df.sort_index()
 
 
-def resolve_backtest_setups(setups, df):
-    resolved = []
-    for setup in setups:
-        evaluations = {
-            profile_name: ahf.evaluate_geometry(setup, df, df.index, profile_name)
-            for profile_name in ahf.PROFILES
-        }
-        setup["resolved_profiles"] = evaluations
-        actual = evaluations.get(setup["profile"])
-        if actual:
-            setup["actual_outcome"] = actual["outcome"]
-            setup["actual_r_multiple"] = actual.get("r_multiple")
-            setup["actual_entry_time_ct"] = actual.get("entry_time_ct")
-            setup["actual_mfe_r"] = actual.get("mfe_r")
-            setup["actual_mae_r"] = actual.get("mae_r")
-            setup["actual_bars_after_entry"] = actual.get("bars_after_entry")
-            setup["outcome_version"] = ahf.OUTCOME_VERSION
-        resolved.append(setup)
-    return resolved
+def directional_setup(direction, entry):
+    entry = float(v5.round_tick(entry))
+    if direction == "UP":
+        stop = v5.round_tick(entry - SPIKE_STOP_DISTANCE)
+        target = v5.round_tick(entry + SPIKE_TARGET_DISTANCE)
+    elif direction == "DOWN":
+        stop = v5.round_tick(entry + SPIKE_STOP_DISTANCE)
+        target = v5.round_tick(entry - SPIKE_TARGET_DISTANCE)
+    else:
+        return None
+    risk = abs(entry - stop)
+    reward = abs(target - entry)
+    return {
+        "direction": direction,
+        "entry": entry,
+        "stop": stop,
+        "target": target,
+        "risk": round(risk, 4),
+        "reward": round(reward, 4),
+        "rr": round(reward / risk, 2) if risk else 0.0,
+    }
+
+
+def resolve_trade(df, signal_idx, setup):
+    pos = df.index.get_loc(signal_idx)
+    future = df.iloc[pos + 1: pos + 1 + HORIZON_BARS]
+    if future.empty:
+        return "EXPIRED", None, None, 0
+
+    direction = setup["direction"]
+    entry = setup["entry"]
+    stop = setup["stop"]
+    target = setup["target"]
+
+    mfe = 0.0
+    mae = 0.0
+    entry_time = signal_idx
+
+    for bars_after, (ts, row) in enumerate(future.iterrows(), start=1):
+        high = float(row["High"])
+        low = float(row["Low"])
+
+        if direction == "UP":
+            mfe = max(mfe, high - entry)
+            mae = max(mae, entry - low)
+            hit_stop = low <= stop
+            hit_target = high >= target
+        else:
+            mfe = max(mfe, entry - low)
+            mae = max(mae, high - entry)
+            hit_stop = high >= stop
+            hit_target = low <= target
+
+        # Conservative rule when both levels occur in one OHLC bar:
+        # mark AMBIGUOUS instead of assuming which level came first.
+        if hit_stop and hit_target:
+            return "AMBIGUOUS", ts, bars_after, mfe, mae
+        if hit_target:
+            return "WIN", ts, bars_after, mfe, mae
+        if hit_stop:
+            return "LOSS", ts, bars_after, mfe, mae
+
+    return "EXPIRED", future.index[-1], len(future), mfe, mae
+
+
+def daily_direction_at(daily, ts, current_price):
+    try:
+        available = daily.loc[daily.index <= ts]
+    except Exception:
+        available = daily
+    if len(available) < 30:
+        return "NEUTRAL", None
+    macro = v5.daily_spike_context(available, current_price, ts)
+    return macro.get("daily_direction", "NEUTRAL"), macro
 
 
 def main():
-    print("Fetching ZW=F backtest data (Yahoo 15m cap: last ~60 days)...")
-    intraday, daily, hourly = fetch_backtest_data()
+    print(f"Downloading {TICKER} {PERIOD} 15m data...")
+    intraday = clean_download(yf.download(TICKER, period=PERIOD, interval="15m", auto_adjust=False, progress=False))
+    if intraday.empty or len(intraday) < MIN_BARS + 5:
+        raise RuntimeError("Insufficient intraday data for backtest.")
 
-    setups, df = build_backtest_setups(intraday, daily, hourly)
-    print(f"Built {len(setups)} candidate backtest setups.")
+    print("Downloading daily and hourly context...")
+    daily = clean_download(yf.download(TICKER, period="2y", interval="1d", auto_adjust=False, progress=False))
+    hourly = clean_download(yf.download(TICKER, period=PERIOD, interval="1h", auto_adjust=False, progress=False))
+    if daily.empty or hourly.empty:
+        raise RuntimeError("Missing daily/hourly context data.")
 
-    resolved = resolve_backtest_setups(setups, df)
-    print(f"Resolved {len(resolved)} backtest setups.")
+    trades = []
+    seen_signals = set()
 
-    state = ahf.load_state()
-    existing_ts = {
-        s.get("timestamp_ct") for s in state.get("setups", []) if s.get("source") == "backtest"
+    # Walk forward one completed 15m bar at a time. The production detector
+    # only sees bars through the signal bar, preventing look-ahead in the signal.
+    for i in range(MIN_BARS, len(intraday)):
+        signal_time = intraday.index[i]
+        history = intraday.iloc[: i + 1].copy()
+        current_price = float(history["Close"].iloc[-1])
+
+        d = daily.loc[daily.index <= signal_time]
+        h = hourly.loc[hourly.index <= signal_time]
+        if len(d) < 30 or len(h) < 4:
+            continue
+
+        macro = v5.daily_spike_context(d, current_price, signal_time)
+        spike = v5.spike_watch_context(history, d, h, signal_time, macro=macro)
+
+        if spike.get("stage") != "SPIKE_CONFIRMED":
+            continue
+        direction = spike.get("direction", "NONE")
+        if direction not in {"UP", "DOWN"}:
+            continue
+
+        # Match the production recommendation: counter-trend spikes are not
+        # executable setups; they remain informational.
+        daily_direction = macro.get("daily_direction", "NEUTRAL")
+        if daily_direction in {"UP", "DOWN"} and daily_direction != direction:
+            continue
+
+        if signal_time in seen_signals:
+            continue
+        seen_signals.add(signal_time)
+
+        setup = directional_setup(direction, current_price)
+        result = resolve_trade(intraday, signal_time, setup)
+        outcome, exit_time, bars_after, mfe, mae = result
+
+        trades.append({
+            "signal_time_ct": signal_time.isoformat(),
+            "direction": direction,
+            "daily_direction": daily_direction,
+            "stage": spike.get("stage"),
+            "score": spike.get("score"),
+            "up_score": spike.get("up_score"),
+            "down_score": spike.get("down_score"),
+            "signal_price": round(current_price, 4),
+            "entry": setup["entry"],
+            "stop": setup["stop"],
+            "target": setup["target"],
+            "risk": setup["risk"],
+            "reward": setup["reward"],
+            "rr": setup["rr"],
+            "outcome": outcome,
+            "exit_time_ct": exit_time.isoformat() if exit_time is not None else None,
+            "bars_after": bars_after,
+            "mfe": round(float(mfe), 4),
+            "mae": round(float(mae), 4),
+            "volume_ratio": spike.get("volume_ratio"),
+            "atr_expansion_ratio": spike.get("atr_expansion_ratio"),
+            "breakout_pct": spike.get("breakout_pct"),
+            "trend_16bar_pct": spike.get("trend_16bar_pct"),
+            "trend_1h_pct": spike.get("trend_1h_pct"),
+        })
+
+    df = pd.DataFrame(trades)
+    total = len(df)
+    wins = int((df["outcome"] == "WIN").sum()) if total else 0
+    losses = int((df["outcome"] == "LOSS").sum()) if total else 0
+    ambiguous = int((df["outcome"] == "AMBIGUOUS").sum()) if total else 0
+    expired = int((df["outcome"] == "EXPIRED").sum()) if total else 0
+    resolved = wins + losses
+
+    report = {
+        "version": 1,
+        "generated_at_ct": datetime.now(CHICAGO_TZ).isoformat(),
+        "ticker": TICKER,
+        "period": PERIOD,
+        "signal_logic_source": "anti_hunt_filter.py / V5 spike_watch_context",
+        "lookahead_control": "signal uses bars through current 15m bar only; outcome starts on next bar",
+        "horizon_bars": HORIZON_BARS,
+        "directional_setup": {
+            "UP": "entry=current signal close; stop=entry-5.0; target=entry+32.0",
+            "DOWN": "entry=current signal close; stop=entry+5.0; target=entry-32.0",
+            "risk_points": SPIKE_STOP_DISTANCE,
+            "reward_points": SPIKE_TARGET_DISTANCE,
+            "rr": round(SPIKE_TARGET_DISTANCE / SPIKE_STOP_DISTANCE, 2),
+        },
+        "counter_trend_policy": "excluded from executable backtest",
+        "signals_tested": total,
+        "wins": wins,
+        "losses": losses,
+        "ambiguous": ambiguous,
+        "expired": expired,
+        "resolved": resolved,
+        "win_rate_resolved": round(wins / resolved, 4) if resolved else None,
+        "loss_rate_resolved": round(losses / resolved, 4) if resolved else None,
+        "by_direction": {},
     }
-    new_setups = [s for s in resolved if s["timestamp_ct"] not in existing_ts]
-    state["setups"].extend(new_setups)
-    ahf.save_json(ahf.STATE_FILE, state)
-    print(
-        f"Appended {len(new_setups)} new backtest setups to {ahf.STATE_FILE} "
-        f"(skipped {len(resolved) - len(new_setups)} already present)."
-    )
 
-    summary = {
-        "generated_at_ct": datetime.now(ahf.CHICAGO_TZ).isoformat(),
-        "note": "Backtest limited to ~60 real trading days (Yahoo 15m data cap). "
-                "Excluded from the live bounded profile-switch decision; only "
-                "feeds the shadow ML model's training set.",
-        "total_backtest_setups": len(resolved),
-        "newly_added": len(new_setups),
-        "profile_stats_backtest_only": ahf.profile_stats({"setups": resolved}),
-    }
-    ahf.save_json(RESULTS_FILE, summary)
-    print(json.dumps(summary, indent=2))
-    return 0
+    if total:
+        for direction in ["UP", "DOWN"]:
+            sub = df[df["direction"] == direction]
+            rw = int((sub["outcome"] == "WIN").sum())
+            rl = int((sub["outcome"] == "LOSS").sum())
+            rr = rw + rl
+            report["by_direction"][direction] = {
+                "signals": len(sub),
+                "wins": rw,
+                "losses": rl,
+                "ambiguous": int((sub["outcome"] == "AMBIGUOUS").sum()),
+                "expired": int((sub["outcome"] == "EXPIRED").sum()),
+                "win_rate_resolved": round(rw / rr, 4) if rr else None,
+            }
+
+    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
+        json.dump(report, f, indent=2)
+    df.to_csv(OUTPUT_CSV, index=False)
+
+    print(json.dumps(report, indent=2))
+    print(f"Wrote {OUTPUT_JSON}")
+    print(f"Wrote {OUTPUT_CSV}")
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
