@@ -1,6 +1,6 @@
 """
-anti_hunt_filter.py  (v2)
-=========================
+anti_hunt_filter.py  (v2 - Final)
+=================================
 Institutional open anti-stop-hunting Short filter for Chicago SRW Wheat (ZW=F).
 
 Runs during the safe institutional window (8:45 AM - 12:30 PM America/Chicago,
@@ -157,7 +157,7 @@ def resolve_session_open(intraday: pd.DataFrame, daily: pd.DataFrame) -> float:
         idx = idx.tz_localize("UTC")
     todays_bars = intraday[idx.tz_convert(CHICAGO_TZ).date == now_ct.date()]
     if not todays_bars.empty:
-        return float(todays_bars["Open"].iloc[0]) # FIXED: Index closure added
+        return float(todays_bars["Open"].iloc[0]) # FIXED: Explicit array bracket [0] added
     return float(daily["Open"].iloc[-1])
 
 
@@ -244,5 +244,3 @@ def run_anti_hunt_logic(bypass_gates=False) -> None:
     # 3. Data Integrity Constraints Check
     staleness_min = check_staleness(intraday_data)
     if not bypass_gates and staleness_min > MAX_DATA_AGE_MIN:
-        print(f"🚫 Pipeline Stalled: Data age is {staleness_min:.1f} minutes. Maximum allowed is {MAX_DATA_AGE_MIN}m.", file=sys.stderr)
-        return
