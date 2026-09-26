@@ -16,7 +16,7 @@ jobs:
       with:
         python-version: '3.10'
     - name: Install packages
-      run: pip install "yfinance>=0.2.40,<0.3" "pandas>=2.0,<3" "numpy>=1.24,<3"
+      run: pip install "yfinance>=0.2.40,<0.3" "pandas>=2.0,<3" "numpy>=1.24,<3" "requests>=2.31,<3" "scikit-learn>=1.3,<2"
     - name: Run anti-hunt backtest
       # Idempotent — safe to re-run, dedupes on timestamp_ct.
       # Backfilled setups are tagged source: "backtest" and are excluded
