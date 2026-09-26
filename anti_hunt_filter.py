@@ -1,6 +1,6 @@
 """
-anti_hunt_filter.py  (v2 - Final Verified)
-=========================================
+anti_hunt_filter.py  (v2 - Sanitized Production)
+==============================================
 Institutional open anti-stop-hunting Short filter for Chicago SRW Wheat (ZW=F).
 """
 
@@ -138,7 +138,7 @@ def check_staleness(intraday: pd.DataFrame) -> float:
 
 
 # ---------------------------------------------------------------------------
-# Telegram alerting
+# Telegram alerting (With Auto-Sanitize Bug Fix)
 # ---------------------------------------------------------------------------
 def send_telegram_alert(text: str) -> bool:
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
@@ -146,9 +146,17 @@ def send_telegram_alert(text: str) -> bool:
         print(text)
         return False
 
-    url = f"https://telegram.org{TELEGRAM_BOT_TOKEN}/sendMessage"
+    # 🛡️ THE CRITICAL AUTO-SANITY FIX:
+    # Strips out any full URLs or trailing text that leaked into the secret variable
+    clean_token = TELEGRAM_BOT_TOKEN.strip()
+    if "bot" in clean_token:
+        clean_token = clean_token.split("bot")[-1]
+    if "api.telegram.org" in clean_token:
+        clean_token = clean_token.split("/")[-1]
+
+    url = f"https://telegram.org{clean_token}/sendMessage"
     payload = {
-        "chat_id": TELEGRAM_CHAT_ID,
+        "chat_id": TELEGRAM_CHAT_ID.strip(),
         "text": text,
         "parse_mode": "HTML",
         "disable_web_page_preview": True,
@@ -159,10 +167,10 @@ def send_telegram_alert(text: str) -> bool:
             print("📲 Telegram alert delivered successfully!")
             return True
         else:
-            print(f"❌ Telegram API returned error: {response.text}", file=sys.stderr)
+            print(f"❌ Telegram API error: {response.text}", file=sys.stderr)
             return False
     except Exception as exc:
-        print(f"❌ Network error trying to call Telegram: {exc}", file=sys.stderr)
+        print(f"❌ Network error: {exc}", file=sys.stderr)
         return False
 
 
@@ -220,7 +228,6 @@ def run_anti_hunt_logic(bypass_gates=False) -> None:
     if noise_floor_warn:
         warning_block = f"\n⚠️ <b>RISK WARNING:</b> Stop distance ({stop_distance_points:.2f}c) is thinner than 2x ATR threshold."
 
-    # Robust multi-line string allocation without standard bracket configurations
     msg = f"""🌾 <b>ANTI-HUNT WHEAT FILTER (v2)</b>
 🕒 Time: <code>{now_ct.strftime('%H:%M:%S')} CST</code>
 
@@ -256,7 +263,7 @@ def run_anti_hunt_logic(bypass_gates=False) -> None:
 
 
 if __name__ == "__main__":
-    # 🧪 TEST MODE ACTIVE: Changed to True to force a live weekend notification
+    # 🧪 KEPT ON TRUE FOR IMMEDIATE WEEKEND TESTING:
     FORCE_WEEKEND_TEST = True
     
     if FORCE_WEEKEND_TEST:
