@@ -1,0 +1,57 @@
+name: V5 Spike Research Matrix
+
+on:
+  workflow_dispatch:
+    inputs:
+      period:
+        description: "yfinance intraday backtest period"
+        required: false
+        default: "60d"
+      horizon_bars:
+        description: "15m bars evaluated after each confirmed spike"
+        required: false
+        default: "32"
+  schedule:
+    - cron: "45 14 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install yfinance pandas numpy requests scikit-learn
+
+      - name: Run spike research matrix
+        env:
+          BACKTEST_PERIOD: ${{ inputs.period || '60d' }}
+          SPIKE_HORIZON_BARS: ${{ inputs.horizon_bars || '32' }}
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python backtest_v5_spike_research.py
+
+      - name: Upload research artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: v5-spike-research
+          path: |
+            backtest_v5_spike_research_report.json
+            backtest_v5_spike_research_trades.csv
+            backtest_v5_spike_delayed_entry.csv
+            backtest_v5_spike_first_episode.csv
+            backtest_v5_spike_signal_episodes.csv
+          if-no-files-found: error
+          retention-days: 30
