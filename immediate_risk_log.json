@@ -17,11 +17,11 @@
     "reason": "Active attacks and disruptions in the Strait of Hormuz and surrounding energy infrastructure (such as the striking of the CAPE DAO and Petroline pipeline fallout) are actively impacting maritime security and critical logistics.",
     "predicted_direction": "BULLISH",
     "price_at_alert": 685.75,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "HIT",
+    "price_at_scoring": 703.25,
+    "pct_change": 2.552,
+    "scored_at": "2026-09-26T17:16:30.794202+00:00"
   },
   {
     "alert_number": 73,
