@@ -1,4 +1,3 @@
-```
 name: Anti-Hunt Morning Filter
 
 on:
@@ -83,4 +82,4 @@ jobs:
             -d chat_id="${TELEGRAM_CHAT_ID}" \
             --data-urlencode \
             "text=⚠️ Anti-hunt workflow FAILED (run ${{ github.run_id }}): ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-```
+
