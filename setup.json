@@ -1,7 +1,7 @@
 {
   "ticker": "ZW=F",
   "profile": "BASE",
-  "timestamp_ct": "2026-09-26T13:27:07.911451-05:00",
+  "timestamp_ct": "2026-09-26T13:32:55.505591-05:00",
   "valid_until_ct": "2026-09-26T12:30:00-05:00",
   "daily_open": 707.0,
   "current_price": 703.25,
@@ -16,7 +16,7 @@
   "vol_warning": false,
   "invalidated": false,
   "manual_mode": true,
-  "stale_data_min": 1452.1,
+  "stale_data_min": 1457.9,
   "market_context": {
     "rsi_14": 85.8974,
     "vwap": 693.8209,
