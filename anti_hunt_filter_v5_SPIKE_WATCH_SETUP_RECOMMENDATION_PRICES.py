@@ -3,6 +3,7 @@ import os
 import sys
 import time
 from datetime import datetime, time as dt_time, date, timedelta
+from collections.abc import Mapping
 from zoneinfo import ZoneInfo
 
 import numpy as np
@@ -40,6 +41,18 @@ WINDOW_OPEN = dt_time(8, 45)
 WINDOW_CLOSE = dt_time(12, 30)
 ENTRY_CUTOFF = dt_time(11, 30)
 
+# Spike-watch layer: designed to detect a developing upside volatility expansion
+# BEFORE the normal trade signal window. It is informational only and never
+# changes the existing short setup or ML decision.
+SPIKE_WATCH_OPEN = dt_time(7, 30)
+SPIKE_WATCH_CLOSE = dt_time(12, 30)
+SPIKE_SCORE_THRESHOLD = 5
+SPIKE_LOOKBACK_BARS = 12
+SPIKE_BREAKOUT_LOOKBACK = 20
+SPIKE_COMPRESSION_THRESHOLD = 0.85
+SPIKE_VOLUME_THRESHOLD = 1.25
+SPIKE_ATR_EXPANSION_THRESHOLD = 1.10
+
 PROFILES = {
     "BASE": {"entry_mult": 0.994, "stop_mult": 1.012, "target_mult": 0.960},
     "ENTRY_993": {"entry_mult": 0.993, "stop_mult": 1.012, "target_mult": 0.960},
@@ -66,12 +79,13 @@ ML_MIN_TRAIN_SAMPLES = 40
 
 STATE_FILE = "learning_state.json"
 OUTCOME_VERSION = 5
+SPIKE_WATCH_VERSION = 2
 SETUP_FILE = "setup.json"
 REPORT_FILE = "learning_report.json"
 ML_REPORT_FILE = "ml_report.json"
 
-TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
-TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 HEALTHCHECK_URL = os.environ.get("HEALTHCHECK_URL", "").strip()
 
 HOLIDAYS = {
@@ -105,6 +119,16 @@ ML_FEATURES = [
     "atr_regime_ratio",
     "trend_1h_pct",
     "regime_score",
+    "daily_5bar_pct",
+    "daily_20bar_pct",
+    "daily_20d_breakout_pct",
+    "daily_60d_breakout_pct",
+    "daily_252d_breakout_pct",
+    "daily_volatility_ratio",
+    "daily_range_compression_ratio",
+    "daily_volume_ratio",
+    "weekly_4bar_pct",
+    "weekly_13bar_pct",
 ]
 
 
@@ -160,16 +184,19 @@ def fetch_market_data():
                 TICKER, period="2d", interval="15m",
                 auto_adjust=False, progress=False
             ))
-            daily = _flatten(yf.download(
-                TICKER, period="5d", interval="1d",
-                auto_adjust=False, progress=False
-            ))
             hourly = _flatten(yf.download(
                 TICKER, period="5d", interval="60m",
                 auto_adjust=False, progress=False
             ))
-            if not intraday.empty and not daily.empty and not hourly.empty:
-                return intraday, daily, hourly
+            # Keep enough daily history to detect the type of multi-month/year
+            # compression and breakout visible in the long-term charts. Five
+            # days is not enough for this layer.
+            daily_long = _flatten(yf.download(
+                TICKER, period="5y", interval="1d",
+                auto_adjust=False, progress=False
+            ))
+            if not intraday.empty and not hourly.empty and not daily_long.empty:
+                return intraday, daily_long, hourly
             last_error = "Yahoo returned empty data."
         except Exception as exc:
             last_error = str(exc)
@@ -239,7 +266,7 @@ def load_state():
 def save_json(path, data):
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as fh:
-        json.dump(data, fh, indent=2)
+        json.dump(json_safe(data), fh, indent=2)
     os.replace(tmp, path)
 
 
@@ -356,408 +383,323 @@ def market_context(intraday, daily, hourly, now_ct):
         "regime_score": trend_score,
     }
 
-def build_setup(daily_open, current_price, atr, profile_name):
-    params = PROFILES[profile_name]
-    entry = round_tick(daily_open * params["entry_mult"])
-    stop = round_tick(daily_open * params["stop_mult"])
-    target = round_tick(daily_open * params["target_mult"])
-    risk = round(stop - entry, 4)
-    reward = round(entry - target, 4)
-    now = datetime.now(CHICAGO_TZ)
+def daily_spike_context(daily, current_price, now_ct):
+    """Measure the multi-week/month regime visible in the long-term charts.
+
+    This is not a prediction by itself. It identifies compression, trend,
+    breakout and volatility-expansion conditions on daily data so the
+    intraday SPIKE WATCH can distinguish an ordinary move from a move that is
+    occurring inside a larger expansion regime.
+    """
+    d = daily.copy()
+    d.index = chicago_index(d)
+    d = d.sort_index()
+    # Use only completed daily bars for long-term measurements. The current
+    # session is represented by current_price from the 15m feed and must not
+    # leak a partial daily bar into the historical reference levels.
+    completed = d.loc[d.index.date < now_ct.date()].copy()
+    if not completed.empty:
+        d = completed
+    close = d["Close"].astype(float)
+    high = d["High"].astype(float)
+    low = d["Low"].astype(float)
+    volume = d["Volume"].astype(float) if "Volume" in d.columns else pd.Series(1.0, index=d.index)
+
+    if len(close) < 70:
+        return {
+            "enabled": True,
+            "qualified": False,
+            "stage": "INSUFFICIENT_DAILY_HISTORY",
+            "reason": "Need at least 70 daily bars for long-term spike context.",
+            "version": SPIKE_WATCH_VERSION,
+        }
+
+    def pct_from_lag(n):
+        return (float(current_price) / float(close.iloc[-1 - n]) - 1.0) * 100.0 if len(close) > n else 0.0
+
+    daily_5 = pct_from_lag(5)
+    daily_20 = pct_from_lag(20)
+
+    # Breakout distances use the highest completed daily bar before today.
+    high20 = float(high.tail(20).max())
+    high60 = float(high.tail(60).max())
+    high252 = float(high.tail(min(252, len(high))).max())
+    breakout20 = (float(current_price) / high20 - 1.0) * 100.0 if high20 else 0.0
+    breakout60 = (float(current_price) / high60 - 1.0) * 100.0 if high60 else 0.0
+    breakout252 = (float(current_price) / high252 - 1.0) * 100.0 if high252 else 0.0
+
+    tr = pd.concat([
+        high - low,
+        (high - close.shift()).abs(),
+        (low - close.shift()).abs(),
+    ], axis=1).max(axis=1)
+    atr20 = tr.rolling(20).mean()
+    atr60 = tr.rolling(60).mean()
+    daily_volatility_ratio = float(atr20.iloc[-1] / atr60.iloc[-1]) if pd.notna(atr20.iloc[-1]) and pd.notna(atr60.iloc[-1]) and atr60.iloc[-1] > 0 else 1.0
+
+    range20 = (high.tail(20) - low.tail(20)).mean()
+    range60 = (high.tail(60) - low.tail(60)).mean()
+    compression_ratio = float(range20 / range60) if range60 > 0 else 1.0
+
+    recent_volume = float(volume.tail(5).mean())
+    base_volume = float(volume.tail(60).head(55).median()) if len(volume) >= 60 else recent_volume
+    volume_ratio = recent_volume / base_volume if base_volume > 0 else 1.0
+
+    weekly = close.resample("W-FRI").last().dropna()
+    weekly_4 = (float(weekly.iloc[-1]) / float(weekly.iloc[-5]) - 1.0) * 100.0 if len(weekly) >= 5 else 0.0
+    weekly_13 = (float(weekly.iloc[-1]) / float(weekly.iloc[-14]) - 1.0) * 100.0 if len(weekly) >= 14 else 0.0
+
+    # Directional daily regime used by the spike alert. This is descriptive
+    # context, not a trade trigger: the spike direction is compared against
+    # the prevailing daily direction in the alert recommendation.
+    if daily_20 >= 0.50 and weekly_13 >= -0.50:
+        daily_direction = "UP"
+    elif daily_20 <= -0.50 and weekly_13 <= 0.50:
+        daily_direction = "DOWN"
+    else:
+        daily_direction = "NEUTRAL"
+
+    checks = {
+        "daily_compression": compression_ratio <= 0.85,
+        "daily_volatility_expansion": daily_volatility_ratio >= 1.15,
+        "daily_20d_breakout": breakout20 >= 0.0,
+        "daily_60d_breakout": breakout60 >= 0.0,
+        "daily_252d_breakout": breakout252 >= -0.5,
+        "daily_momentum": daily_20 >= 2.0,
+        "volume_expansion": volume_ratio >= 1.15,
+        "weekly_trend": weekly_13 > 3.0,
+    }
+    score = sum(bool(v) for v in checks.values())
+
+    if score >= 6:
+        stage = "MACRO_SPIKE_REGIME"
+    elif score >= 4:
+        stage = "MACRO_SPIKE_WATCH"
+    else:
+        stage = "NORMAL_REGIME"
 
     return {
-        "ticker": TICKER,
-        "profile": profile_name,
-        "timestamp_ct": now.isoformat(),
-        "valid_until_ct": datetime.combine(
-            now.date(), WINDOW_CLOSE, tzinfo=CHICAGO_TZ
-        ).isoformat(),
-        "daily_open": round(daily_open, 4),
-        "current_price": round(current_price, 4),
-        "entry": entry,
-        "stop": stop,
-        "target": target,
-        "risk": risk,
-        "reward": reward,
-        "rr": round(reward / risk, 2) if risk > 0 else 0.0,
-        "atr_15m": round(atr, 4) if atr else None,
-        "stop_atr_multiple": round(risk / atr, 2) if atr and atr > 0 else None,
-        "vol_warning": bool(atr and risk < ATR_STOP_MIN_MULT * atr),
-        "invalidated": current_price > stop,
-    }
-
-
-def feature_vector(setup):
-    ts = datetime.fromisoformat(setup["timestamp_ct"])
-    daily_open = float(setup["daily_open"])
-    current = float(setup["current_price"])
-    atr = float(setup["atr_15m"]) if setup.get("atr_15m") else 0.0
-    return [
-        (float(setup["entry"]) - daily_open) / daily_open * 100.0,
-        (atr / daily_open * 100.0) if daily_open else 0.0,
-        float(setup["stop_atr_multiple"] or 0.0),
-        float(setup["rr"]),
-        ts.hour + ts.minute / 60.0,
-        float(setup.get("stale_data_min", 0.0)),
-        1.0 if setup.get("vol_warning") else 0.0,
-        (current - daily_open) / daily_open * 100.0 if daily_open else 0.0,
-        *[_safe_float(setup.get(name), 0.0) for name in ML_FEATURES[8:]],
-    ]
-
-
-def historical_ml_rows(state):
-    rows = []
-    for setup in state.get("setups", []):
-        outcome = setup.get("actual_outcome")
-        if outcome not in {"WIN", "LOSS"}:
-            continue
-        if not setup.get("market_context"):
-            continue
-        try:
-            rows.append({
-                "timestamp": setup.get("timestamp_ct", ""),
-                "features": feature_vector(setup),
-                "label": 1 if outcome == "WIN" else 0,
-            })
-        except (KeyError, TypeError, ValueError):
-            continue
-    rows.sort(key=lambda x: x["timestamp"])
-    return rows
-
-
-def make_logistic():
-    return Pipeline([
-        ("scale", StandardScaler()),
-        ("logistic", LogisticRegression(max_iter=1500, class_weight="balanced", random_state=42)),
-    ])
-
-
-def make_boosting():
-    return HistGradientBoostingClassifier(
-        max_iter=120,
-        learning_rate=0.05,
-        max_leaf_nodes=7,
-        l2_regularization=1.0,
-        random_state=42,
-    )
-
-
-def train_ml_model(state):
-    rows = historical_ml_rows(state)
-    n = len(rows)
-    if n < ML_MIN_SAMPLES:
-        return None, {
-            "trained": False,
-            "reason": f"Need at least {ML_MIN_SAMPLES} resolved WIN/LOSS samples.",
-            "samples": n,
-        }
-
-    y = [r["label"] for r in rows]
-    if len(set(y)) < 2 or min(y.count(0), y.count(1)) < ML_MIN_CLASS_COUNT:
-        return None, {
-            "trained": False,
-            "reason": f"Both WIN and LOSS classes need at least {ML_MIN_CLASS_COUNT} samples.",
-            "samples": n,
-            "wins": y.count(1),
-            "losses": y.count(0),
-        }
-
-    X = [r["features"] for r in rows]
-    test_n = min(ML_TEST_WINDOW, max(10, n // 5))
-    split = n - test_n
-    if split < ML_MIN_TRAIN_SAMPLES or len(set(y[:split])) < 2:
-        return None, {
-            "trained": False,
-            "reason": "Not enough earlier time-ordered data for a walk-forward test.",
-            "samples": n,
-            "test_window": test_n,
-        }
-
-    candidates = [("logistic", make_logistic()), ("boosting", make_boosting())]
-    evaluations = []
-    for name, candidate in candidates:
-        candidate.fit(X[:split], y[:split])
-        probs = candidate.predict_proba(X[split:])[:, 1]
-        preds = (probs >= ML_CONFIDENCE_THRESHOLD).astype(int)
-        actual = y[split:]
-        eval_row = {
-            "model": name,
-            "accuracy_at_threshold": round(float(accuracy_score(actual, preds)), 4),
-            "brier_score": round(float(brier_score_loss(actual, probs)), 6),
-            "log_loss": round(float(log_loss(actual, np.clip(probs, 1e-6, 1-1e-6))), 6),
-        }
-        high = [i for i, p in enumerate(probs) if p >= ML_CONFIDENCE_THRESHOLD or p <= 1-ML_CONFIDENCE_THRESHOLD]
-        eval_row["high_confidence_samples"] = len(high)
-        eval_row["high_confidence_accuracy"] = round(
-            sum(int((probs[i] >= ML_CONFIDENCE_THRESHOLD) == bool(actual[i])) for i in high) / len(high), 4
-        ) if high else None
-        evaluations.append(eval_row)
-
-    # Select by lower Brier score, then lower log loss. This selection is itself
-    # only used for shadow reporting; it does not change the live strategy.
-    selected_name = sorted(evaluations, key=lambda x: (x["brier_score"], x["log_loss"]))[0]["model"]
-    selected = make_logistic() if selected_name == "logistic" else make_boosting()
-    selected.fit(X, y)
-
-    report = {
-        "trained": True,
-        "samples": n,
-        "wins": y.count(1),
-        "losses": y.count(0),
-        "walk_forward_test_window": test_n,
-        "walk_forward_train_samples": split,
-        "candidate_models": evaluations,
-        "selected_model": selected_name,
-        "selection_rule": "lowest walk-forward Brier score, then log loss",
-        "shadow_only": ML_SHADOW_ONLY,
-    }
-    return selected, report
-
-
-def add_ml_prediction(state, setup):
-    model, report = train_ml_model(state)
-    setup["ml_shadow"] = {
         "enabled": True,
-        "trained": bool(model),
-        "probability_win": None,
-        "confidence_threshold": ML_CONFIDENCE_THRESHOLD,
-        "decision": "INSUFFICIENT_DATA",
-        "model_samples": report.get("samples", 0),
-        "selected_model": report.get("selected_model"),
-    }
-    if model is not None:
-        probability = float(model.predict_proba([feature_vector(setup)])[0][1])
-        decision = "WATCH" if probability >= ML_CONFIDENCE_THRESHOLD else "LOW_CONFIDENCE"
-        setup["ml_shadow"].update({
-            "probability_win": round(probability, 4),
-            "decision": decision,
-        })
-    return report
-
-
-def completed_bars(intraday):
-    idx = chicago_index(intraday)
-    now = datetime.now(CHICAGO_TZ)
-    mask = [(ts + timedelta(minutes=15)) <= now for ts in idx]
-    return intraday.loc[mask].copy(), idx[mask]
-
-
-def evaluate_geometry(setup, bars, idx, profile_name):
-    daily_open = float(setup["daily_open"])
-    valid_until = datetime.fromisoformat(setup["valid_until_ct"])
-    setup_time = datetime.fromisoformat(setup["timestamp_ct"])
-    params = PROFILES[profile_name]
-    entry = round_tick(daily_open * params["entry_mult"])
-    stop = round_tick(daily_open * params["stop_mult"])
-    target = round_tick(daily_open * params["target_mult"])
-    risk = stop - entry
-    reward = entry - target
-
-    entered = False
-    entry_time = None
-    max_favorable = 0.0
-    max_adverse = 0.0
-
-    for i, (_, bar) in enumerate(bars.iterrows()):
-        bar_time = idx[i]
-        if bar_time <= setup_time:
-            continue
-        if bar_time > valid_until:
-            break
-
-        high = float(bar["High"])
-        low = float(bar["Low"])
-
-        if not entered and low <= entry <= high:
-            entered = True
-            entry_time = bar_time
-        if entered:
-            max_favorable = max(max_favorable, (entry - low) / risk if risk > 0 else 0.0)
-            max_adverse = max(max_adverse, (high - entry) / risk if risk > 0 else 0.0)
-            if high >= stop and low <= target:
-                return {"outcome": "AMBIGUOUS", "r_multiple": None, "entry_time_ct": entry_time.isoformat(),
-                        "mfe_r": round(max_favorable, 4), "mae_r": round(max_adverse, 4), "bars_after_entry": i + 1}
-            if high >= stop:
-                return {"outcome": "LOSS", "r_multiple": -1.0, "entry_time_ct": entry_time.isoformat(),
-                        "mfe_r": round(max_favorable, 4), "mae_r": round(max_adverse, 4), "bars_after_entry": i + 1}
-            if low <= target:
-                return {"outcome": "WIN", "r_multiple": round(reward / risk, 4), "entry_time_ct": entry_time.isoformat(),
-                        "mfe_r": round(max_favorable, 4), "mae_r": round(max_adverse, 4), "bars_after_entry": i + 1}
-
-    if not entered:
-        return {"outcome": "NO_ENTRY", "r_multiple": 0.0, "entry_time_ct": None, "mfe_r": 0.0, "mae_r": 0.0, "bars_after_entry": 0}
-    return {"outcome": "EXPIRED_AFTER_ENTRY", "r_multiple": 0.0, "entry_time_ct": entry_time.isoformat(),
-            "mfe_r": round(max_favorable, 4), "mae_r": round(max_adverse, 4), "bars_after_entry": len(bars)}
-
-
-def resolve_previous_setups(state, intraday):
-    bars, idx = completed_bars(intraday)
-    if bars.empty:
-        return 0
-
-    changed = 0
-    for setup in state.get("setups", []):
-        if setup.get("resolved_profiles"):
-            continue
-
-        try:
-            valid_until = datetime.fromisoformat(setup["valid_until_ct"])
-            if datetime.now(CHICAGO_TZ) <= valid_until:
-                continue
-        except (KeyError, ValueError):
-            continue
-
-        evaluations = {}
-        for profile_name in PROFILES:
-            result = evaluate_geometry(setup, bars, idx, profile_name)
-            evaluations[profile_name] = result
-
-        setup["resolved_profiles"] = evaluations
-
-        actual_profile = setup.get("profile", DEFAULT_PROFILE)
-        actual = evaluations.get(actual_profile)
-        if actual:
-            setup["actual_outcome"] = actual["outcome"]
-            setup["actual_r_multiple"] = actual.get("r_multiple")
-            setup["actual_entry_time_ct"] = actual.get("entry_time_ct")
-            setup["actual_mfe_r"] = actual.get("mfe_r")
-            setup["actual_mae_r"] = actual.get("mae_r")
-            setup["actual_bars_after_entry"] = actual.get("bars_after_entry")
-            setup["outcome_version"] = OUTCOME_VERSION
-
-        changed += 1
-
-    return changed
-
-
-def profile_stats(state):
-    stats = {}
-    for profile_name in PROFILES:
-        evaluations = []
-        for setup in state.get("setups", []):
-            result = (setup.get("resolved_profiles") or {}).get(profile_name)
-            if result:
-                evaluations.append(result)
-
-        trades = [x for x in evaluations if x["outcome"] in {"WIN", "LOSS"}]
-        entered = [x for x in evaluations if x["outcome"] in {"WIN", "LOSS", "AMBIGUOUS", "EXPIRED_AFTER_ENTRY"}]
-        r_values = [float(x["r_multiple"]) for x in evaluations if x.get("r_multiple") is not None]
-        recent = evaluations[-20:]
-        recent_r = [float(x["r_multiple"]) for x in recent if x.get("r_multiple") is not None]
-        wins = sum(x["outcome"] == "WIN" for x in trades)
-
-        stats[profile_name] = {
-            "setups": len(evaluations),
-            "trades": len(trades),
-            "wins": wins,
-            "losses": sum(x["outcome"] == "LOSS" for x in trades),
-            "entries": len(entered),
-            "no_entry": sum(x["outcome"] == "NO_ENTRY" for x in evaluations),
-            "ambiguous": sum(x["outcome"] == "AMBIGUOUS" for x in evaluations),
-            "expired_after_entry": sum(x["outcome"] == "EXPIRED_AFTER_ENTRY" for x in evaluations),
-            "win_rate": round(wins / len(trades), 4) if trades else None,
-            "expected_r": round(sum(r_values) / len(evaluations), 4) if evaluations else None,
-            "avg_r_per_trade": round(sum(r_values) / len(trades), 4) if trades else None,
-            "recent_expected_r": round(sum(recent_r) / len(recent), 4) if recent else None,
-        }
-    return stats
-
-
-def maybe_learn(state):
-    # Backfilled backtest setups (source == "backtest") are excluded here on
-    # purpose: they're allowed to bootstrap the shadow ML model faster, but
-    # a live profile switch must be earned by real forward-confirmed setups
-    # only, same discipline as everywhere else in this project.
-    live_setups = [s for s in state.get("setups", []) if s.get("source") != "backtest"]
-    stats = profile_stats({"setups": live_setups})
-    report = {
-        "generated_at_ct": datetime.now(CHICAGO_TZ).isoformat(),
-        "active_profile": state["active_profile"],
-        "profiles": stats,
-        "learning_applied": False,
-        "reason": "Not enough completed setups.",
+        "version": SPIKE_WATCH_VERSION,
+        "qualified": score >= 4,
+        "stage": stage,
+        "score": score,
+        "max_score": len(checks),
+        "checks": checks,
+        "daily_5bar_pct": round(daily_5, 4),
+        "daily_20bar_pct": round(daily_20, 4),
+        "daily_20d_breakout_pct": round(breakout20, 4),
+        "daily_60d_breakout_pct": round(breakout60, 4),
+        "daily_252d_breakout_pct": round(breakout252, 4),
+        "daily_volatility_ratio": round(daily_volatility_ratio, 4),
+        "daily_range_compression_ratio": round(compression_ratio, 4),
+        "daily_volume_ratio": round(volume_ratio, 4),
+        "weekly_4bar_pct": round(weekly_4, 4),
+        "weekly_13bar_pct": round(weekly_13, 4),
+        "daily_direction": daily_direction,
+        "month": now_ct.month,
+        "week_of_year": int(now_ct.isocalendar().week),
     }
 
-    completed_count = max((x["setups"] for x in stats.values()), default=0)
-    if completed_count < MIN_LEARNING_SETUPS:
-        return report
-    if completed_count % LEARNING_CHECKPOINT != 0:
-        report["reason"] = "Not at a learning checkpoint."
-        return report
+def spike_watch_context(intraday, daily, hourly, now_ct, macro=None):
+    """Detect directional spike conditions: UP or DOWN. Shadow/informational only."""
+    df = intraday.copy()
+    idx = chicago_index(df)
+    df.index = idx
+    df = df.sort_index()
+    close = df["Close"].astype(float)
+    high = df["High"].astype(float)
+    low = df["Low"].astype(float)
+    volume = df["Volume"].astype(float) if "Volume" in df.columns else pd.Series(1.0, index=df.index)
+    if len(df) < 35:
+        return {"enabled": True, "qualified": False, "score": 0, "max_score": 10,
+                "stage": "INSUFFICIENT_DATA", "direction": "NONE",
+                "reason": "Need at least 35 completed 15m bars."}
+    latest = float(close.iloc[-1])
+    bar_range = (high - low).replace([np.inf, -np.inf], np.nan)
+    recent_range = _safe_float(bar_range.tail(8).mean(), 0.0)
+    baseline_range = _safe_float(bar_range.tail(32).head(24).mean(), recent_range)
+    compression_ratio = recent_range / baseline_range if baseline_range > 0 else 1.0
+    compressed = compression_ratio <= SPIKE_COMPRESSION_THRESHOLD
+    recent_volume = volume.tail(4).mean()
+    base_volume = volume.tail(24).head(20).median()
+    volume_ratio = recent_volume / base_volume if base_volume and base_volume > 0 else 1.0
+    volume_expansion = volume_ratio >= SPIKE_VOLUME_THRESHOLD
+    tr = pd.concat([high - low, (high - close.shift()).abs(), (low - close.shift()).abs()], axis=1).max(axis=1)
+    atr_series = tr.rolling(ATR_PERIOD).mean()
+    atr_now = _safe_float(atr_series.iloc[-1], 0.0)
+    atr_prev = _safe_float(atr_series.iloc[-5], atr_now)
+    atr_expansion_ratio = atr_now / atr_prev if atr_prev > 0 else 1.0
+    atr_expansion = atr_expansion_ratio >= SPIKE_ATR_EXPANSION_THRESHOLD
+    macro = macro or daily_spike_context(daily, latest, now_ct)
+    macro_qualified = bool(macro.get("qualified"))
 
-    current_name = state["active_profile"]
-    current = stats.get(current_name, {})
-    if current.get("recent_expected_r") is None:
-        report["reason"] = "Current profile has insufficient recent data."
-        return report
+    recent_lows = low.tail(8).to_numpy()
+    recent_highs_8 = high.tail(8).to_numpy()
+    higher_low_count = int(np.sum(np.diff(recent_lows) > 0))
+    lower_high_count = int(np.sum(np.diff(recent_highs_8) < 0))
+    higher_lows = higher_low_count >= 4
+    lower_highs = lower_high_count >= 4
 
-    candidates = []
-    for name, data in stats.items():
-        if data["setups"] >= MIN_LEARNING_SETUPS and data["recent_expected_r"] is not None:
-            candidates.append((data["recent_expected_r"], data["expected_r"], name))
-    if not candidates:
-        report["reason"] = "No profile has enough observations."
-        return report
+    prior_20_high = high.rolling(SPIKE_BREAKOUT_LOOKBACK).max().shift(1)
+    prior_20_low = low.rolling(SPIKE_BREAKOUT_LOOKBACK).min().shift(1)
+    recent_resistance = prior_20_high.tail(SPIKE_LOOKBACK_BARS)
+    recent_support = prior_20_low.tail(SPIKE_LOOKBACK_BARS)
+    recent_highs = high.tail(SPIKE_LOOKBACK_BARS)
+    recent_lows_window = low.tail(SPIKE_LOOKBACK_BARS)
+    valid_resistance = recent_resistance.notna()
+    valid_support = recent_support.notna()
+    resistance_tests = int(((recent_highs[valid_resistance] >= recent_resistance[valid_resistance] * 0.997)).sum()) if valid_resistance.any() else 0
+    support_tests = int(((recent_lows_window[valid_support] <= recent_support[valid_support] * 1.003)).sum()) if valid_support.any() else 0
+    resistance_pressure = resistance_tests >= 2
+    support_pressure = support_tests >= 2
+    prior_resistance = _safe_float(prior_20_high.iloc[-1], latest)
+    prior_support = _safe_float(prior_20_low.iloc[-1], latest)
+    breakout_up_pct = (latest / prior_resistance - 1.0) * 100.0 if prior_resistance else 0.0
+    breakout_down_pct = (latest / prior_support - 1.0) * 100.0 if prior_support else 0.0
+    breakout_up = breakout_up_pct >= 0.15
+    breakout_down = breakout_down_pct <= -0.15
 
-    candidates.sort(reverse=True)
-    best_recent, best_overall, best_name = candidates[0]
-    if best_name == current_name:
-        report["reason"] = "Current profile remains the best observed profile."
-        return report
+    mom_now = (latest / float(close.iloc[-5]) - 1.0) * 100.0
+    prior_close = float(close.iloc[-9])
+    mom_prev = (float(close.iloc[-5]) / prior_close - 1.0) * 100.0 if prior_close else 0.0
+    momentum_up = mom_now > 0.10 and mom_now > mom_prev
+    momentum_down = mom_now < -0.10 and mom_now < mom_prev
 
-    improvement_recent = best_recent - current["recent_expected_r"]
-    improvement_overall = best_overall - (current.get("expected_r") or 0.0)
+    h = hourly.copy()
+    h.index = chicago_index(h)
+    hclose = h["Close"].astype(float)
+    trend_1h = (float(hclose.iloc[-1]) / float(hclose.iloc[-4]) - 1.0) * 100.0 if len(hclose) >= 4 else 0.0
+    trend_16 = (latest / float(close.iloc[-17]) - 1.0) * 100.0
+    trend_up = trend_16 > 0.15 and trend_1h > 0.10
+    trend_down = trend_16 < -0.15 and trend_1h < -0.10
 
-    if improvement_recent < MIN_RECENT_EXPECTED_R_IMPROVEMENT:
-        report["reason"] = "Recent improvement is below the safety threshold."
-        return report
-    if improvement_overall < MIN_EXPECTED_R_IMPROVEMENT:
-        report["reason"] = "Overall improvement is below the safety threshold."
-        return report
+    today = df.loc[df.index.date == now_ct.date()]
+    if today.empty:
+        today = df.tail(32)
+    day_low = float(today["Low"].min())
+    day_high = float(today["High"].max())
+    day_span = day_high - day_low
+    recovery_position = (latest - day_low) / day_span if day_span > 0 else 0.5
+    morning_reversal_up = recovery_position >= 0.70 and latest > day_low
+    morning_reversal_down = recovery_position <= 0.30 and latest < day_high
 
-    previous = state["active_profile"]
-    state["active_profile"] = best_name
-    state["last_learning_update"] = datetime.now(CHICAGO_TZ).isoformat()
-    state["learning_updates"].append({
-        "timestamp_ct": state["last_learning_update"],
-        "previous_profile": previous,
-        "new_profile": best_name,
-        "previous_recent_expected_r": current["recent_expected_r"],
-        "new_recent_expected_r": best_recent,
-        "previous_expected_r": current.get("expected_r"),
-        "new_expected_r": best_overall,
-    })
+    neutral = {"compression": compressed, "volume_expansion": volume_expansion,
+               "atr_expansion": atr_expansion, "macro_spike_regime": macro_qualified}
+    up_checks = {**neutral, "higher_lows": higher_lows, "resistance_pressure": resistance_pressure,
+                 "breakout": breakout_up, "momentum_acceleration": momentum_up,
+                 "trend_alignment": trend_up, "morning_reversal": morning_reversal_up}
+    down_checks = {**neutral, "lower_highs": lower_highs, "support_pressure": support_pressure,
+                   "breakdown": breakout_down, "momentum_acceleration": momentum_down,
+                   "trend_alignment": trend_down, "morning_reversal": morning_reversal_down}
+    up_score = sum(bool(v) for v in up_checks.values())
+    down_score = sum(bool(v) for v in down_checks.values())
 
-    report.update({
-        "learning_applied": True,
-        "reason": "New bounded profile passed recent and overall improvement thresholds.",
-        "previous_profile": previous,
-        "new_profile": best_name,
-        "improvement_recent_expected_r": round(improvement_recent, 4),
-        "improvement_overall_expected_r": round(improvement_overall, 4),
-    })
-    return report
+    if up_score >= SPIKE_SCORE_THRESHOLD and breakout_up:
+        direction, score, checks, stage = "UP", up_score, up_checks, "SPIKE_CONFIRMED"
+    elif down_score >= SPIKE_SCORE_THRESHOLD and breakout_down:
+        direction, score, checks, stage = "DOWN", down_score, down_checks, "SPIKE_CONFIRMED"
+    elif max(up_score, down_score) >= SPIKE_SCORE_THRESHOLD - 1:
+        if up_score >= down_score:
+            direction, score, checks = "UP", up_score, up_checks
+        else:
+            direction, score, checks = "DOWN", down_score, down_checks
+        stage = "SPIKE_WATCH"
+    elif max(up_score, down_score) >= 3:
+        if up_score >= down_score:
+            direction, score, checks = "UP", up_score, up_checks
+        else:
+            direction, score, checks = "DOWN", down_score, down_checks
+        stage = "EARLY_WATCH"
+    else:
+        direction, score, checks, stage = "NONE", max(up_score, down_score), {}, "NO_SPIKE_SIGNAL"
+
+    return {"enabled": True, "qualified": stage in {"SPIKE_CONFIRMED", "SPIKE_WATCH"},
+            "score": score, "up_score": up_score, "down_score": down_score, "max_score": 10,
+            "stage": stage, "direction": direction, "checks": checks,
+            "compression_ratio": round(compression_ratio, 4), "higher_low_count": higher_low_count,
+            "lower_high_count": lower_high_count, "resistance_tests": resistance_tests,
+            "support_tests": support_tests, "breakout_pct": round(breakout_up_pct if direction == "UP" else breakout_down_pct, 4),
+            "breakout_up_pct": round(breakout_up_pct, 4), "breakout_down_pct": round(breakout_down_pct, 4),
+            "volume_ratio": round(volume_ratio, 4), "momentum_4bar_pct": round(mom_now, 4),
+            "momentum_prev_4bar_pct": round(mom_prev, 4), "atr_expansion_ratio": round(atr_expansion_ratio, 4),
+            "trend_16bar_pct": round(trend_16, 4), "trend_1h_pct": round(trend_1h, 4),
+            "recovery_position": round(recovery_position, 4), "threshold": SPIKE_SCORE_THRESHOLD,
+            "macro_context": macro, "version": SPIKE_WATCH_VERSION + 1}
 
 
-def ml_shadow_report(state):
-    model, report = train_ml_model(state)
-    report["generated_at_ct"] = datetime.now(CHICAGO_TZ).isoformat()
-    report["model_type"] = "Walk-forward LogisticRegression / HistGradientBoosting"
-    report["features"] = ML_FEATURES
-    report["confidence_threshold"] = ML_CONFIDENCE_THRESHOLD
-    report["shadow_only"] = ML_SHADOW_ONLY
-    return report
+def format_spike_watch_message(spike, now_ct):
+    stage = spike.get("stage", "NO_SPIKE_SIGNAL")
+    direction = spike.get("direction", "NONE")
+    score = spike.get("score", 0)
+    max_score = spike.get("max_score", 10)
+    lines = [
+        "🚨 <b>[ZW=F] SPIKE WATCH V5</b>", "━━━━━━━━━━━━━━━━━━━━",
+        f"📅 {now_ct.strftime('%A %Y-%m-%d %H:%M %Z')}",
+        f"⚡ Stage: <b>{stage}</b>", f"🧭 Direction: <b>{direction}</b>",
+        f"📈 Precursor score: <b>{score}/{max_score}</b>",
+        f"⬆️ UP score: <code>{spike.get('up_score', 0)}/{max_score}</code> | ⬇️ DOWN score: <code>{spike.get('down_score', 0)}/{max_score}</code>",
+        "━━━━━━━━━━━━━━━━━━━━"]
+    labels = {"compression":"Compression","higher_lows":"Higher lows","lower_highs":"Lower highs",
+              "resistance_pressure":"Resistance pressure","support_pressure":"Support pressure",
+              "breakout":"Breakout","breakdown":"Breakdown","volume_expansion":"Volume expansion",
+              "momentum_acceleration":"Momentum acceleration","atr_expansion":"ATR expansion",
+              "trend_alignment":"15m/1h trend alignment","morning_reversal":"Morning reversal",
+              "macro_spike_regime":"Multi-month spike regime"}
+    for key, label in labels.items():
+        if key in spike.get("checks", {}):
+            lines.append(f"{'✅' if spike['checks'].get(key) else '▫️'} {label}")
+    daily_direction = spike.get("macro_context", {}).get("daily_direction", "NEUTRAL")
+    counter_trend = direction in {"UP", "DOWN"} and daily_direction in {"UP", "DOWN"} and direction != daily_direction
+    aligned = direction in {"UP", "DOWN"} and daily_direction == direction
+
+    if stage == "SPIKE_CONFIRMED":
+        if counter_trend:
+            setup_recommendation = f"WAIT — SPIKE {direction} IS AGAINST DAILY DIRECTION {daily_direction}"
+            setup_reason = (
+                f"⚠️ COUNTER-TREND SPIKE. The {direction} spike is against the daily {daily_direction} direction. "
+                f"Do not chase the {direction} move. Wait for exhaustion/rejection and for daily {daily_direction} control to regain confirmation."
+            )
+        elif aligned:
+            setup_recommendation = f"SPIKE {direction} ALIGNED WITH DAILY DIRECTION {daily_direction}"
+            setup_reason = f"✅ The {direction} spike agrees with the daily {daily_direction} direction. Continue monitoring the V5 setup; do not chase the spike."
+        else:
+            setup_recommendation = f"WAIT — SPIKE {direction} CONFIRMED; do not chase the move"
+            setup_reason = f"A {direction.lower()} spike is confirmed, while the daily direction is {daily_direction}. Wait for confirmation/rejection before considering the normal setup."
+    elif stage == "SPIKE_WATCH":
+        if counter_trend:
+            setup_recommendation = f"WAIT — SPIKE WATCH {direction} IS AGAINST DAILY DIRECTION {daily_direction}"
+            setup_reason = f"⚠️ Counter-trend spike watch. The {direction} move is against daily {daily_direction}; wait for exhaustion/rejection and confirmation."
+        elif aligned:
+            setup_recommendation = f"WAIT — SPIKE WATCH {direction} ALIGNED WITH DAILY DIRECTION {daily_direction}"
+            setup_reason = f"The developing {direction} spike agrees with daily {daily_direction}; wait for confirmation and do not chase."
+        else:
+            setup_recommendation = f"WAIT — SPIKE WATCH {direction}; no entry yet"
+            setup_reason = f"A {direction.lower()} spike pattern is developing; daily direction is {daily_direction}. Wait for confirmation or rejection."
+    elif stage == "EARLY_WATCH":
+        setup_recommendation = f"WATCH — {direction} spike developing; no trade yet"
+        setup_reason = f"Daily direction: {daily_direction}. Monitor for confirmation; the normal Anti-Hunt setup is not active premarket."
+    else:
+        setup_recommendation = "NO TRADE — no qualifying spike pattern"
+        setup_reason = f"No actionable directional spike precursor detected. Daily direction: {daily_direction}."
+    lines.extend([
+        "━━━━━━━━━━━━━━━━━━━━",
+        f"📊 <b>Daily Direction: {daily_direction}</b>",
+        f"🧭 <b>Spike Direction: {direction}</b>",
+        "🎯 <b>SETUP RECOMMENDATION</b>",
+        f"<b>{setup_recommendation or 'NO TRADE — recommendation unavailable'}</b>",
+        f"ℹ️ {setup_reason or 'No additional setup guidance is available.'}",
+        "🔻 Normal short setup: <b>NOT ACTIVE in premarket</b>",
+        "━━━━━━━━━━━━━━━━━━━━",
+        f"Breakout/Breakdown: <code>{spike.get('breakout_pct', 0):.2f}%</code> | Volume: <code>{spike.get('volume_ratio', 1):.2f}x</code>",
+        f"ATR expansion: <code>{spike.get('atr_expansion_ratio', 1):.2f}x</code> | Recovery: <code>{spike.get('recovery_position', 0):.0%}</code>",
+        f"Macro regime: <b>{spike.get('macro_context', {}).get('stage', 'N/A')}</b> <code>{spike.get('macro_context', {}).get('score', 0)}/{spike.get('macro_context', {}).get('max_score', 0)}</code>",
+        "⚠️ Spike Watch is shadow/informational only — it does not create or modify a trade."])
+    return "\n".join(lines)
 
 
 def send_telegram_alert(text):
-    """
-    Deliver the alert through Telegram and explicitly verify Telegram's
-    JSON response. A successful HTTP request is not treated as delivery
-    success unless Telegram itself returns {"ok": true}.
-
-    This is intentionally non-fatal to the trading analysis: a Telegram
-    failure is reported loudly in the Actions log but does not fail the job.
-    """
+    """Send Telegram alert and verify Telegram returned ok=true."""
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("TELEGRAM ERROR: TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is missing.")
         print("Alert text follows:")
@@ -771,7 +713,6 @@ def send_telegram_alert(text):
         "parse_mode": "HTML",
         "disable_web_page_preview": True,
     }
-
     try:
         response = requests.post(url, json=payload, timeout=20)
     except requests.RequestException as exc:
@@ -780,7 +721,6 @@ def send_telegram_alert(text):
         print(text)
         return False
 
-    # Telegram returns useful diagnostic JSON for both success and failure.
     try:
         result = response.json()
     except ValueError:
@@ -788,10 +728,8 @@ def send_telegram_alert(text):
 
     if response.ok and isinstance(result, dict) and result.get("ok") is True:
         message_id = ((result.get("result") or {}).get("message_id"))
-        print(
-            "TELEGRAM SUCCESS: alert accepted by Telegram"
-            + (f" (message_id={message_id})." if message_id is not None else ".")
-        )
+        print("TELEGRAM SUCCESS: alert accepted by Telegram" +
+              (f" (message_id={message_id})." if message_id is not None else "."))
         return True
 
     description = None
@@ -799,17 +737,352 @@ def send_telegram_alert(text):
     if isinstance(result, dict):
         error_code = result.get("error_code", response.status_code)
         description = result.get("description")
-
-    print(
-        f"TELEGRAM ERROR: Telegram rejected the alert "
-        f"(HTTP {response.status_code}, error_code {error_code}"
-        + (f", description: {description}" if description else "")
-        + ")."
-    )
+    print(f"TELEGRAM ERROR: Telegram rejected the alert "
+          f"(HTTP {response.status_code}, error_code {error_code}" +
+          (f", description: {description}" if description else "") + ").")
     print("Alert text follows:")
     print(text)
     return False
 
+
+
+def json_safe(value):
+    """Recursively convert NumPy/Pandas values to standard JSON types."""
+    if isinstance(value, Mapping):
+        return {str(k): json_safe(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [json_safe(v) for v in value]
+    if isinstance(value, np.bool_):
+        return bool(value)
+    if isinstance(value, np.integer):
+        return int(value)
+    if isinstance(value, np.floating):
+        return None if not np.isfinite(value) else float(value)
+    if isinstance(value, (pd.Timestamp, datetime, date)):
+        return value.isoformat()
+    if value is pd.NaT:
+        return None
+    if isinstance(value, float) and not np.isfinite(value):
+        return None
+    if isinstance(value, (str, int, float, bool)) or value is None:
+        return value
+    return str(value)
+
+
+def build_setup(daily_open, current_price, atr, profile_name):
+    """Build the bounded V5 Anti-Hunt short setup from the active profile."""
+    profile_name = profile_name if profile_name in PROFILES else DEFAULT_PROFILE
+    p = PROFILES[profile_name]
+    daily_open = float(daily_open)
+    current_price = float(current_price)
+    atr_value = float(atr) if atr is not None and np.isfinite(atr) else 0.0
+
+    entry = round_tick(daily_open * p["entry_mult"])
+    stop = round_tick(daily_open * p["stop_mult"])
+    target = round_tick(daily_open * p["target_mult"])
+    risk = round(max(0.0, stop - entry), 4)
+    reward = round(max(0.0, entry - target), 4)
+    rr = round(reward / risk, 4) if risk > 0 else 0.0
+    open_distance_pct = (current_price / daily_open - 1.0) * 100.0 if daily_open else 0.0
+    atr_pct = atr_value / daily_open * 100.0 if daily_open else 0.0
+    stop_atr_multiple = risk / atr_value if atr_value > 0 else None
+    vol_warning = bool(stop_atr_multiple is not None and stop_atr_multiple < ATR_STOP_MIN_MULT)
+
+    invalid_reasons = []
+    if not (target < entry < stop):
+        invalid_reasons.append("invalid price geometry")
+    if risk <= 0 or reward <= 0:
+        invalid_reasons.append("non-positive risk/reward")
+    if stop_atr_multiple is not None and stop_atr_multiple < ATR_STOP_MIN_MULT:
+        invalid_reasons.append("stop inside minimum ATR noise band")
+
+    now_ct = datetime.now(CHICAGO_TZ)
+    return {
+        "outcome_version": OUTCOME_VERSION,
+        "created_at": now_ct.isoformat(),
+        "timestamp": now_ct.isoformat(),
+        "date": now_ct.date().isoformat(),
+        "profile": profile_name,
+        "direction": "SHORT",
+        "daily_open": round_tick(daily_open),
+        "current_price": round_tick(current_price),
+        "entry": entry,
+        "stop": stop,
+        "target": target,
+        "risk": risk,
+        "reward": reward,
+        "rr": rr,
+        "atr_15m": round(atr_value, 4),
+        "atr_pct": round(atr_pct, 6),
+        "open_distance_pct": round(open_distance_pct, 6),
+        "current_vs_open_pct": round(open_distance_pct, 6),
+        "stop_atr_multiple": round(stop_atr_multiple, 6) if stop_atr_multiple is not None else None,
+        "vol_warning": vol_warning,
+        "invalidated": bool(invalid_reasons),
+        "invalid_reason": "; ".join(invalid_reasons) if invalid_reasons else None,
+        "outcome": None,
+        "outcome_resolved_at": None,
+        "resolution_price": None,
+        "mfe": None,
+        "mae": None,
+        "ml_shadow": {
+            "probability_win": None,
+            "decision": "SHADOW_NOT_READY",
+        },
+    }
+
+
+def _setup_created_time(setup):
+    raw = setup.get("created_at") or setup.get("timestamp")
+    if not raw:
+        return None
+    try:
+        ts = datetime.fromisoformat(str(raw))
+        if ts.tzinfo is None:
+            ts = ts.replace(tzinfo=CHICAGO_TZ)
+        return ts.astimezone(CHICAGO_TZ)
+    except (TypeError, ValueError):
+        return None
+
+
+def resolve_previous_setups(state, intraday):
+    """Resolve unresolved historical short setups using bars after entry creation.
+
+    Conservative same-bar handling: if target and stop are both touched in one
+    bar, mark AMBIGUOUS rather than inventing an execution order.
+    """
+    setups = state.setdefault("setups", [])
+    resolved_count = 0
+    if intraday is None or intraday.empty:
+        return 0
+    df = intraday.copy()
+    df.index = chicago_index(df)
+    df = df.sort_index()
+
+    for setup in setups:
+        if setup.get("outcome") not in (None, "PENDING"):
+            continue
+        if setup.get("invalidated"):
+            setup["outcome"] = "NO_ENTRY"
+            setup["outcome_resolved_at"] = datetime.now(CHICAGO_TZ).isoformat()
+            resolved_count += 1
+            continue
+        created = _setup_created_time(setup)
+        if created is None:
+            continue
+        entry = _safe_float(setup.get("entry"), np.nan)
+        stop = _safe_float(setup.get("stop"), np.nan)
+        target = _safe_float(setup.get("target"), np.nan)
+        if not np.isfinite(entry) or not np.isfinite(stop) or not np.isfinite(target):
+            continue
+
+        future = df.loc[df.index > created]
+        if future.empty:
+            continue
+
+        entered = False
+        entry_time = None
+        max_fav = 0.0
+        max_adv = 0.0
+        outcome = None
+        resolution_time = None
+        resolution_price = None
+
+        for ts, bar in future.iterrows():
+            high = _safe_float(bar.get("High"), np.nan)
+            low = _safe_float(bar.get("Low"), np.nan)
+            close = _safe_float(bar.get("Close"), np.nan)
+            if not np.isfinite(high) or not np.isfinite(low):
+                continue
+
+            if not entered:
+                if low <= entry <= high:
+                    entered = True
+                    entry_time = ts
+                elif high < entry:
+                    # Short limit has not filled; continue waiting.
+                    continue
+
+            if entered:
+                max_fav = max(max_fav, entry - low)
+                max_adv = max(max_adv, high - entry)
+                hit_target = low <= target
+                hit_stop = high >= stop
+                if hit_target and hit_stop:
+                    outcome = "AMBIGUOUS"
+                    resolution_time = ts
+                    resolution_price = close
+                    break
+                if hit_target:
+                    outcome = "WIN"
+                    resolution_time = ts
+                    resolution_price = target
+                    break
+                if hit_stop:
+                    outcome = "LOSS"
+                    resolution_time = ts
+                    resolution_price = stop
+                    break
+
+        if outcome is None:
+            # Keep an unfilled setup pending. An entered setup with no exit yet
+            # remains pending until a later scheduled resolution run.
+            continue
+
+        setup["entry_filled"] = entered
+        setup["entry_time"] = entry_time.isoformat() if entry_time is not None else None
+        setup["outcome"] = outcome
+        setup["outcome_resolved_at"] = resolution_time.isoformat()
+        setup["resolution_price"] = round(float(resolution_price), 4) if resolution_price is not None else None
+        setup["mfe"] = round(float(max_fav), 4)
+        setup["mae"] = round(float(max_adv), 4)
+        if outcome == "WIN":
+            setup["realized_r"] = 1.0
+        elif outcome == "LOSS":
+            setup["realized_r"] = -1.0
+        elif outcome == "AMBIGUOUS":
+            setup["realized_r"] = 0.0
+        resolved_count += 1
+    return resolved_count
+
+
+def _completed_setups(state):
+    return [
+        s for s in state.get("setups", [])
+        if s.get("outcome") in {"WIN", "LOSS", "AMBIGUOUS", "NO_ENTRY", "EXPIRED_AFTER_ENTRY"}
+    ]
+
+
+def _profile_stats(setups):
+    stats = {}
+    for name in PROFILES:
+        rows = [s for s in setups if s.get("profile") == name and s.get("outcome") in {"WIN", "LOSS"}]
+        if not rows:
+            stats[name] = {"count": 0, "win_rate": None, "expected_r": None}
+            continue
+        rs = [float(s.get("realized_r", 1.0 if s.get("outcome") == "WIN" else -1.0)) for s in rows]
+        stats[name] = {
+            "count": len(rows),
+            "win_rate": round(sum(r > 0 for r in rs) / len(rs), 6),
+            "expected_r": round(float(np.mean(rs)), 6),
+        }
+    return stats
+
+
+def maybe_learn(state):
+    """Apply only bounded profile changes after enough completed observations."""
+    completed = _completed_setups(state)
+    stats = _profile_stats(completed)
+    current = state.get("active_profile", DEFAULT_PROFILE)
+    report = {
+        "version": 5,
+        "learning_applied": False,
+        "active_profile": current,
+        "previous_profile": current,
+        "new_profile": current,
+        "completed_setups": len(completed),
+        "eligible": len(completed) >= MIN_LEARNING_SETUPS,
+        "profile_stats": stats,
+        "reason": "insufficient completed setups" if len(completed) < MIN_LEARNING_SETUPS else "no bounded improvement qualified",
+    }
+    if len(completed) < MIN_LEARNING_SETUPS:
+        return report
+
+    current_rows = [s for s in completed if s.get("profile") == current and s.get("outcome") in {"WIN", "LOSS"}]
+    current_r = float(np.mean([s.get("realized_r", 0.0) for s in current_rows])) if current_rows else None
+    candidates = []
+    for name, st in stats.items():
+        if st["count"] >= LEARNING_CHECKPOINT and st["expected_r"] is not None:
+            candidates.append((st["expected_r"], name, st["count"]))
+    if not candidates or current_r is None:
+        return report
+    best_r, best_name, _ = max(candidates)
+    if best_name != current and best_r - current_r >= MIN_EXPECTED_R_IMPROVEMENT:
+        recent = completed[-LEARNING_CHECKPOINT:]
+        recent_current = [s for s in recent if s.get("profile") == current and s.get("outcome") in {"WIN", "LOSS"}]
+        recent_candidate = [s for s in recent if s.get("profile") == best_name and s.get("outcome") in {"WIN", "LOSS"}]
+        recent_current_r = float(np.mean([s.get("realized_r", 0.0) for s in recent_current])) if recent_current else None
+        recent_best_r = float(np.mean([s.get("realized_r", 0.0) for s in recent_candidate])) if recent_candidate else None
+        if recent_current_r is not None and recent_best_r is not None and recent_best_r - recent_current_r >= MIN_RECENT_EXPECTED_R_IMPROVEMENT:
+            state["active_profile"] = best_name
+            state["last_learning_update"] = datetime.now(CHICAGO_TZ).isoformat()
+            update = {"timestamp": state["last_learning_update"], "previous_profile": current, "new_profile": best_name, "reason": "bounded expected-R improvement"}
+            state.setdefault("learning_updates", []).append(update)
+            report.update({"learning_applied": True, "new_profile": best_name, "reason": "bounded expected-R improvement"})
+    return report
+
+
+def _feature_row(setup):
+    return [_safe_float(setup.get(k), 0.0) for k in ML_FEATURES]
+
+
+def ml_shadow_report(state):
+    rows = [s for s in _completed_setups(state) if s.get("outcome") in {"WIN", "LOSS"}]
+    wins = sum(s.get("outcome") == "WIN" for s in rows)
+    losses = sum(s.get("outcome") == "LOSS" for s in rows)
+    report = {
+        "version": 5,
+        "shadow_only": ML_SHADOW_ONLY,
+        "samples": len(rows),
+        "wins": wins,
+        "losses": losses,
+        "ready": False,
+        "model": None,
+        "brier_score": None,
+        "log_loss": None,
+        "accuracy": None,
+    }
+    if len(rows) < ML_MIN_SAMPLES or min(wins, losses) < ML_MIN_CLASS_COUNT:
+        report["reason"] = "minimum sample/class guardrail not met"
+        return report
+    try:
+        X = np.asarray([_feature_row(s) for s in rows], dtype=float)
+        y = np.asarray([1 if s.get("outcome") == "WIN" else 0 for s in rows], dtype=int)
+        split = max(ML_MIN_TRAIN_SAMPLES, len(rows) - ML_TEST_WINDOW)
+        if split >= len(rows):
+            report["reason"] = "insufficient walk-forward test window"
+            return report
+        model = Pipeline([("scaler", StandardScaler()), ("clf", LogisticRegression(max_iter=2000, random_state=42))])
+        model.fit(X[:split], y[:split])
+        proba = model.predict_proba(X[split:])[:, 1]
+        pred = (proba >= 0.5).astype(int)
+        report.update({
+            "ready": True,
+            "model": "LogisticRegression",
+            "brier_score": round(float(brier_score_loss(y[split:], proba)), 6),
+            "log_loss": round(float(log_loss(y[split:], np.column_stack([1-proba, proba]), labels=[0,1])), 6),
+            "accuracy": round(float(accuracy_score(y[split:], pred)), 6),
+            "test_samples": int(len(y[split:])),
+        })
+    except Exception as exc:
+        report["reason"] = f"ML shadow evaluation failed: {exc}"
+    return report
+
+
+def add_ml_prediction(state, setup):
+    """Fit a shadow-only model on prior resolved setups and score this setup."""
+    rows = [s for s in _completed_setups(state) if s.get("outcome") in {"WIN", "LOSS"}]
+    wins = sum(s.get("outcome") == "WIN" for s in rows)
+    losses = sum(s.get("outcome") == "LOSS" for s in rows)
+    training_report = {
+        "samples": len(rows), "wins": wins, "losses": losses,
+        "ready": False, "model": None, "reason": None,
+    }
+    if len(rows) < ML_MIN_SAMPLES or min(wins, losses) < ML_MIN_CLASS_COUNT:
+        training_report["reason"] = "minimum sample/class guardrail not met"
+        return training_report
+    try:
+        X = np.asarray([_feature_row(s) for s in rows], dtype=float)
+        y = np.asarray([1 if s.get("outcome") == "WIN" else 0 for s in rows], dtype=int)
+        model = Pipeline([("scaler", StandardScaler()), ("clf", LogisticRegression(max_iter=2000, random_state=42))])
+        model.fit(X, y)
+        probability = float(model.predict_proba(np.asarray([_feature_row(setup)], dtype=float))[0, 1])
+        setup.setdefault("ml_shadow", {})["probability_win"] = round(probability, 6)
+        setup["ml_shadow"]["decision"] = "WATCH" if probability >= ML_CONFIDENCE_THRESHOLD else "LOW_CONFIDENCE"
+        training_report.update({"ready": True, "model": "LogisticRegression"})
+    except Exception as exc:
+        training_report["reason"] = f"ML prediction failed: {exc}"
+    return training_report
 
 def format_message(setup, report):
     lines = [
@@ -837,6 +1110,12 @@ def format_message(setup, report):
 
     if setup.get("regime"):
         lines.append(f"🌡 Regime: <code>{setup['regime']}</code> | RSI <code>{setup.get('rsi_14', 0):.1f}</code> | VWAP dist <code>{setup.get('vwap_distance_pct', 0):.2f}%</code>")
+    spike = setup.get("spike_watch", {})
+    if spike:
+        lines.append(
+            f"🚨 SPIKE WATCH: <b>{spike.get('stage', 'N/A')}</b> "
+            f"<code>{spike.get('score', 0)}/{spike.get('max_score', 0)}</code>"
+        )
     if setup.get("stop_atr_multiple") is not None:
         lines.append(
             f"ATR: <code>{setup['atr_15m']}</code> | Stop distance: <code>{setup['stop_atr_multiple']}x</code>"
@@ -876,11 +1155,13 @@ def main():
         if now_ct.date() in HOLIDAYS:
             print(f"{now_ct.date()} is a CME holiday. Aborting.")
             return 0
-        if not check_time_window():
-            print(f"[{now_ct:%Y-%m-%d %H:%M %Z}] Outside execution window. Aborting.")
-            return 0
-        if now_ct.time() > ENTRY_CUTOFF:
-            print("Past entry cutoff. Aborting.")
+        # The spike-watch layer is allowed to run earlier than the normal
+        # trade window so it can warn before the breakout. The normal setup
+        # remains restricted to WINDOW_OPEN/WINDOW_CLOSE and ENTRY_CUTOFF.
+        in_spike_window = SPIKE_WATCH_OPEN <= now_ct.time() <= SPIKE_WATCH_CLOSE
+        in_trade_window = check_time_window() and now_ct.time() <= ENTRY_CUTOFF
+        if not in_spike_window:
+            print(f"[{now_ct:%Y-%m-%d %H:%M %Z}] Outside spike-watch window. Aborting.")
             return 0
 
     if manual:
@@ -897,10 +1178,35 @@ def main():
         print(f"Data error: {exc}", file=sys.stderr)
         return 1
 
+    # Calculate both the long-term regime and intraday precursor. The two
+    # layers are intentionally separate: a spike is more interesting when
+    # intraday acceleration occurs inside a multi-week/month expansion regime.
+    current_price_for_context = float(intraday["Close"].iloc[-1])
+    macro = daily_spike_context(daily, current_price_for_context, now_ct)
+    spike = spike_watch_context(intraday, daily, hourly, now_ct, macro=macro)
+    print(json.dumps(json_safe({"spike_watch": spike}), indent=2))
+
     state = load_state()
 
     resolved = resolve_previous_setups(state, intraday)
     print(f"Resolved {resolved} previous setup(s).")
+
+    # Premarket / early-session spike warning. This path intentionally does
+    # not create a trade setup or learning sample.
+    in_trade_window = WINDOW_OPEN <= now_ct.time() <= WINDOW_CLOSE and now_ct.time() <= ENTRY_CUTOFF
+    if not manual and not in_trade_window:
+        if spike.get("qualified"):
+            last_key = state.get("last_spike_watch_key")
+            current_key = f"{now_ct.date().isoformat()}:{spike.get('stage')}:{spike.get('score')}"
+            if last_key != current_key:
+                send_telegram_alert(format_spike_watch_message(spike, now_ct))
+                state["last_spike_watch_key"] = current_key
+                save_json(STATE_FILE, state)
+            else:
+                print("Spike-watch alert already sent for this stage/score.")
+        else:
+            print("No qualifying premarket spike-watch pattern.")
+        return 0
 
     report = maybe_learn(state)
     ml_report = ml_shadow_report(state)
@@ -909,8 +1215,8 @@ def main():
 
     if resolve_only:
         save_json(STATE_FILE, state)
-        print(json.dumps(report, indent=2))
-        print(json.dumps(ml_report, indent=2))
+        print(json.dumps(json_safe(report), indent=2))
+        print(json.dumps(json_safe(ml_report), indent=2))
         return 0
 
     age = check_staleness(intraday)
@@ -933,12 +1239,17 @@ def main():
     context = market_context(intraday, daily, hourly, now_ct)
     setup["market_context"] = context
     setup.update(context)
+    setup["macro_spike_context"] = macro
+    for macro_key in ML_FEATURES:
+        if macro_key in macro:
+            setup[macro_key] = macro[macro_key]
+    setup["spike_watch"] = spike
 
     # Train only on prior resolved actual outcomes.
     ml_training_report = add_ml_prediction(state, setup)
     setup["ml_shadow"]["training_report"] = ml_training_report
 
-    print(json.dumps(setup, indent=2))
+    print(json.dumps(json_safe(setup), indent=2))
 
     if setup["invalidated"]:
         print("Setup invalidated; no alert.")
@@ -955,8 +1266,8 @@ def main():
 
     telegram_sent = send_telegram_alert(format_message(setup, report))
     print(f"TELEGRAM DELIVERY RESULT: {'SENT' if telegram_sent else 'NOT SENT'}")
-    print(json.dumps(report, indent=2))
-    print(json.dumps(ml_report, indent=2))
+    print(json.dumps(json_safe(report), indent=2))
+    print(json.dumps(json_safe(ml_report), indent=2))
     return 0
 
 
