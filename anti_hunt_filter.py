@@ -664,7 +664,12 @@ def profile_stats(state):
 
 
 def maybe_learn(state):
-    stats = profile_stats(state)
+    # Backfilled backtest setups (source == "backtest") are excluded here on
+    # purpose: they're allowed to bootstrap the shadow ML model faster, but
+    # a live profile switch must be earned by real forward-confirmed setups
+    # only, same discipline as everywhere else in this project.
+    live_setups = [s for s in state.get("setups", []) if s.get("source") != "backtest"]
+    stats = profile_stats({"setups": live_setups})
     report = {
         "generated_at_ct": datetime.now(CHICAGO_TZ).isoformat(),
         "active_profile": state["active_profile"],
