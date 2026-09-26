@@ -52,6 +52,13 @@ SPIKE_BREAKOUT_LOOKBACK = 20
 SPIKE_COMPRESSION_THRESHOLD = 0.85
 SPIKE_VOLUME_THRESHOLD = 1.25
 SPIKE_ATR_EXPANSION_THRESHOLD = 1.10
+# Concrete ENTRY/STOP/TARGET recommendation once a spike direction is
+# confirmed or in active watch — same fixed-distance geometry as
+# backtest_v5_spike.py's directional_setup(), so the live alert and its
+# backtest stay consistent. Duplicated there rather than imported so the
+# backtest script keeps working standalone — change both together.
+SPIKE_TRADE_STOP_DISTANCE = 5.0
+SPIKE_TRADE_TARGET_DISTANCE = 32.0
 
 PROFILES = {
     "BASE": {"entry_mult": 0.994, "stop_mult": 1.012, "target_mult": 0.960},
@@ -501,6 +508,36 @@ def daily_spike_context(daily, current_price, now_ct):
         "week_of_year": int(now_ct.isocalendar().week),
     }
 
+def spike_directional_setup(direction, current_price):
+    """Concrete ENTRY/STOP/TARGET recommendation for a confirmed or
+    in-watch spike direction. This is the primary actionable output of the
+    spike-watch layer, intended to fire even when the spike direction is
+    AGAINST the daily model's direction — that is precisely the institutional
+    counter-move this system exists to catch, not a reason to withhold the
+    setup. Uses the same fixed-distance geometry as backtest_v5_spike.py's
+    directional_setup()."""
+    if direction not in {"UP", "DOWN"}:
+        return None
+    entry = round_tick(current_price)
+    if direction == "UP":
+        stop = round_tick(entry - SPIKE_TRADE_STOP_DISTANCE)
+        target = round_tick(entry + SPIKE_TRADE_TARGET_DISTANCE)
+    else:
+        stop = round_tick(entry + SPIKE_TRADE_STOP_DISTANCE)
+        target = round_tick(entry - SPIKE_TRADE_TARGET_DISTANCE)
+    risk = abs(entry - stop)
+    reward = abs(target - entry)
+    return {
+        "direction": direction,
+        "entry": entry,
+        "stop": stop,
+        "target": target,
+        "risk": round(risk, 4),
+        "reward": round(reward, 4),
+        "rr": round(reward / risk, 2) if risk else 0.0,
+    }
+
+
 def spike_watch_context(intraday, daily, hourly, now_ct, macro=None):
     """Detect directional spike conditions: UP or DOWN. Shadow/informational only."""
     df = intraday.copy()
@@ -533,7 +570,6 @@ def spike_watch_context(intraday, daily, hourly, now_ct, macro=None):
     atr_expansion = atr_expansion_ratio >= SPIKE_ATR_EXPANSION_THRESHOLD
     macro = macro or daily_spike_context(daily, latest, now_ct)
     macro_qualified = bool(macro.get("qualified"))
-
     recent_lows = low.tail(8).to_numpy()
     recent_highs_8 = high.tail(8).to_numpy()
     higher_low_count = int(np.sum(np.diff(recent_lows) > 0))
@@ -614,6 +650,12 @@ def spike_watch_context(intraday, daily, hourly, now_ct, macro=None):
     else:
         direction, score, checks, stage = "NONE", max(up_score, down_score), {}, "NO_SPIKE_SIGNAL"
 
+    # Concrete trade recommendation — attached for SPIKE_CONFIRMED/SPIKE_WATCH
+    # regardless of alignment with the daily direction. A counter-trend spike
+    # is not a reason to withhold this; it's the exact scenario the layer
+    # exists to catch (an institutional move against the daily model's bias).
+    trade_setup = spike_directional_setup(direction, latest) if stage in {"SPIKE_CONFIRMED", "SPIKE_WATCH"} else None
+
     return {"enabled": True, "qualified": stage in {"SPIKE_CONFIRMED", "SPIKE_WATCH"},
             "score": score, "up_score": up_score, "down_score": down_score, "max_score": 10,
             "stage": stage, "direction": direction, "checks": checks,
@@ -625,7 +667,7 @@ def spike_watch_context(intraday, daily, hourly, now_ct, macro=None):
             "momentum_prev_4bar_pct": round(mom_prev, 4), "atr_expansion_ratio": round(atr_expansion_ratio, 4),
             "trend_16bar_pct": round(trend_16, 4), "trend_1h_pct": round(trend_1h, 4),
             "recovery_position": round(recovery_position, 4), "threshold": SPIKE_SCORE_THRESHOLD,
-            "macro_context": macro, "version": SPIKE_WATCH_VERSION + 1}
+            "macro_context": macro, "trade_setup": trade_setup, "version": SPIKE_WATCH_VERSION + 1}
 
 
 def format_spike_watch_message(spike, now_ct):
@@ -652,49 +694,61 @@ def format_spike_watch_message(spike, now_ct):
     daily_direction = spike.get("macro_context", {}).get("daily_direction", "NEUTRAL")
     counter_trend = direction in {"UP", "DOWN"} and daily_direction in {"UP", "DOWN"} and direction != daily_direction
     aligned = direction in {"UP", "DOWN"} and daily_direction == direction
+    trade_setup = spike.get("trade_setup")
 
     if stage == "SPIKE_CONFIRMED":
+        setup_recommendation = f"ANTI-HUNT SETUP: {direction} SPIKE CONFIRMED"
         if counter_trend:
-            setup_recommendation = f"WAIT — SPIKE {direction} IS AGAINST DAILY DIRECTION {daily_direction}"
             setup_reason = (
-                f"⚠️ COUNTER-TREND SPIKE. The {direction} spike is against the daily {daily_direction} direction. "
-                f"Do not chase the {direction} move. Wait for exhaustion/rejection and for daily {daily_direction} control to regain confirmation."
+                f"⚡ Institutional-style counter-move: this {direction} spike is AGAINST the daily "
+                f"model's {daily_direction} direction — this is exactly the pattern Anti-Hunt exists "
+                f"to catch. Trade the spike direction, not the daily bias."
             )
         elif aligned:
-            setup_recommendation = f"SPIKE {direction} ALIGNED WITH DAILY DIRECTION {daily_direction}"
-            setup_reason = f"✅ The {direction} spike agrees with the daily {daily_direction} direction. Continue monitoring the V5 setup; do not chase the spike."
+            setup_reason = f"✅ The {direction} spike also agrees with the daily {daily_direction} direction — added conviction."
         else:
-            setup_recommendation = f"WAIT — SPIKE {direction} CONFIRMED; do not chase the move"
-            setup_reason = f"A {direction.lower()} spike is confirmed, while the daily direction is {daily_direction}. Wait for confirmation/rejection before considering the normal setup."
+            setup_reason = f"A {direction.lower()} spike is confirmed; daily direction is currently {daily_direction}."
     elif stage == "SPIKE_WATCH":
+        setup_recommendation = f"ANTI-HUNT SETUP (developing): {direction} SPIKE WATCH"
         if counter_trend:
-            setup_recommendation = f"WAIT — SPIKE WATCH {direction} IS AGAINST DAILY DIRECTION {daily_direction}"
-            setup_reason = f"⚠️ Counter-trend spike watch. The {direction} move is against daily {daily_direction}; wait for exhaustion/rejection and confirmation."
+            setup_reason = (
+                f"⚡ A developing {direction} move against the daily {daily_direction} direction — "
+                f"still forming, watch for confirmation before size/urgency increase."
+            )
         elif aligned:
-            setup_recommendation = f"WAIT — SPIKE WATCH {direction} ALIGNED WITH DAILY DIRECTION {daily_direction}"
-            setup_reason = f"The developing {direction} spike agrees with daily {daily_direction}; wait for confirmation and do not chase."
+            setup_reason = f"A developing {direction} spike that also agrees with daily {daily_direction} — still forming."
         else:
-            setup_recommendation = f"WAIT — SPIKE WATCH {direction}; no entry yet"
-            setup_reason = f"A {direction.lower()} spike pattern is developing; daily direction is {daily_direction}. Wait for confirmation or rejection."
+            setup_reason = f"A {direction.lower()} spike pattern is developing; daily direction is {daily_direction}. Watch for confirmation."
     elif stage == "EARLY_WATCH":
-        setup_recommendation = f"WATCH — {direction} spike developing; no trade yet"
-        setup_reason = f"Daily direction: {daily_direction}. Monitor for confirmation; the normal Anti-Hunt setup is not active premarket."
+        setup_recommendation = f"WATCH ONLY — {direction} spike precursor forming; not confirmed yet"
+        setup_reason = f"Daily direction: {daily_direction}. Too early for a setup; monitor for escalation to SPIKE_WATCH/SPIKE_CONFIRMED."
     else:
-        setup_recommendation = "NO TRADE — no qualifying spike pattern"
+        setup_recommendation = "NO SETUP — no qualifying spike pattern"
         setup_reason = f"No actionable directional spike precursor detected. Daily direction: {daily_direction}."
     lines.extend([
         "━━━━━━━━━━━━━━━━━━━━",
-        f"📊 <b>Daily Direction: {daily_direction}</b>",
+        f"📊 <b>Daily Model Direction: {daily_direction}</b>",
         f"🧭 <b>Spike Direction: {direction}</b>",
-        "🎯 <b>SETUP RECOMMENDATION</b>",
-        f"<b>{setup_recommendation or 'NO TRADE — recommendation unavailable'}</b>",
-        f"ℹ️ {setup_reason or 'No additional setup guidance is available.'}",
-        "🔻 Normal short setup: <b>NOT ACTIVE in premarket</b>",
+        f"<b>{setup_recommendation}</b>",
+        f"ℹ️ {setup_reason}",
+    ])
+    if trade_setup:
+        lines.extend([
+            "━━━━━━━━━━━━━━━━━━━━",
+            "🎯 <b>ANTI-HUNT TRADE LEVELS</b>",
+            f"🔻 ENTRY: <code>{trade_setup['entry']}</code>",
+            f"🛑 STOP: <code>{trade_setup['stop']}</code>",
+            f"🎯 TARGET: <code>{trade_setup['target']}</code>",
+            f"Risk: <code>{trade_setup['risk']}</code> | Reward: <code>{trade_setup['reward']}</code> | R:R <code>{trade_setup['rr']}</code>",
+        ])
+    else:
+        lines.append("🔻 No trade levels yet — spike not confirmed/in-watch.")
+    lines.extend([
         "━━━━━━━━━━━━━━━━━━━━",
         f"Breakout/Breakdown: <code>{spike.get('breakout_pct', 0):.2f}%</code> | Volume: <code>{spike.get('volume_ratio', 1):.2f}x</code>",
         f"ATR expansion: <code>{spike.get('atr_expansion_ratio', 1):.2f}x</code> | Recovery: <code>{spike.get('recovery_position', 0):.0%}</code>",
         f"Macro regime: <b>{spike.get('macro_context', {}).get('stage', 'N/A')}</b> <code>{spike.get('macro_context', {}).get('score', 0)}/{spike.get('macro_context', {}).get('max_score', 0)}</code>",
-        "⚠️ Spike Watch is shadow/informational only — it does not create or modify a trade."])
+        "⚠️ This setup is separate from the normal Anti-Hunt short setup and is not auto-executed."])
     return "\n".join(lines)
 
 
