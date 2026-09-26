@@ -1,20 +1,23 @@
-import json
+
 import os
 import sys
 import time
 from datetime import datetime, time as dt_time, date, timedelta
 from zoneinfo import ZoneInfo
 
+import numpy as np
 import pandas as pd
 import requests
 import yfinance as yf
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, brier_score_loss, log_loss
+from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 
 # ============================================================
-# V4: bounded strategy + shadow ML
+# V5: bounded strategy + richer market features + walk-forward shadow ML
 # ============================================================
 # The ML model is intentionally SHADOW-ONLY in V4.
 # It predicts the probability that the actual generated setup
@@ -55,12 +58,14 @@ MIN_RECENT_EXPECTED_R_IMPROVEMENT = 0.02
 
 # ML guardrails.
 ML_SHADOW_ONLY = True
-ML_MIN_SAMPLES = 30
-ML_MIN_CLASS_COUNT = 5
+ML_MIN_SAMPLES = 60
+ML_MIN_CLASS_COUNT = 15
 ML_CONFIDENCE_THRESHOLD = 0.60
-ML_TEST_WINDOW = 10
+ML_TEST_WINDOW = 20
+ML_MIN_TRAIN_SAMPLES = 40
 
 STATE_FILE = "learning_state.json"
+OUTCOME_VERSION = 5
 SETUP_FILE = "setup.json"
 REPORT_FILE = "learning_report.json"
 ML_REPORT_FILE = "ml_report.json"
@@ -87,6 +92,19 @@ ML_FEATURES = [
     "stale_data_min",
     "vol_warning",
     "current_vs_open_pct",
+    "rsi_14",
+    "vwap_distance_pct",
+    "volume_ratio",
+    "momentum_4bar_pct",
+    "trend_16bar_pct",
+    "range_position",
+    "opening_range_position",
+    "prior_day_range_pct",
+    "current_vs_prior_high_pct",
+    "current_vs_prior_low_pct",
+    "atr_regime_ratio",
+    "trend_1h_pct",
+    "regime_score",
 ]
 
 
@@ -142,8 +160,12 @@ def fetch_market_data():
                 TICKER, period="5d", interval="1d",
                 auto_adjust=False, progress=False
             ))
-            if not intraday.empty and not daily.empty:
-                return intraday, daily
+            hourly = _flatten(yf.download(
+                TICKER, period="5d", interval="60m",
+                auto_adjust=False, progress=False
+            ))
+            if not intraday.empty and not daily.empty and not hourly.empty:
+                return intraday, daily, hourly
             last_error = "Yahoo returned empty data."
         except Exception as exc:
             last_error = str(exc)
@@ -183,7 +205,7 @@ def check_staleness(intraday):
 
 def load_state():
     default = {
-        "version": 4,
+        "version": 5,
         "active_profile": DEFAULT_PROFILE,
         "setups": [],
         "last_learning_update": None,
@@ -196,7 +218,8 @@ def load_state():
             state = json.load(fh)
         if not isinstance(state, dict):
             return default
-        state.setdefault("version", 4)
+        state.setdefault("version", 5)
+        state["version"] = 5
         state.setdefault("active_profile", DEFAULT_PROFILE)
         state.setdefault("setups", [])
         state.setdefault("last_learning_update", None)
@@ -215,6 +238,119 @@ def save_json(path, data):
         json.dump(data, fh, indent=2)
     os.replace(tmp, path)
 
+
+def _safe_float(value, default=0.0):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def rsi(series, period=14):
+    delta = series.astype(float).diff()
+    gain = delta.clip(lower=0).rolling(period).mean()
+    loss = (-delta.clip(upper=0)).rolling(period).mean()
+    rs = gain / loss.replace(0, np.nan)
+    out = 100 - (100 / (1 + rs))
+    return out.fillna(50.0)
+
+
+def session_slice(intraday, ts_date):
+    idx = chicago_index(intraday)
+    mask = [ts.date() == ts_date for ts in idx]
+    return intraday.loc[mask].copy()
+
+
+def market_context(intraday, daily, hourly, now_ct):
+    df = intraday.copy()
+    idx = chicago_index(df)
+    df.index = idx
+    df = df.sort_index()
+    today = df.loc[df.index.date == now_ct.date()].copy()
+    if today.empty:
+        today = df.tail(32).copy()
+
+    close = df["Close"].astype(float)
+    high = df["High"].astype(float)
+    low = df["Low"].astype(float)
+    volume = df["Volume"].astype(float) if "Volume" in df.columns else pd.Series(1.0, index=df.index)
+
+    latest = float(close.iloc[-1])
+    rsi14 = float(rsi(close, 14).iloc[-1])
+    momentum_4 = (latest / float(close.iloc[-5]) - 1.0) * 100.0 if len(close) >= 5 else 0.0
+    trend_16 = (latest / float(close.iloc[-17]) - 1.0) * 100.0 if len(close) >= 17 else 0.0
+
+    recent_vol = volume.tail(20).replace([np.inf, -np.inf], np.nan).dropna()
+    vol_ratio = latest_vol = float(volume.iloc[-1]) / float(recent_vol.median()) if not recent_vol.empty and recent_vol.median() > 0 else 1.0
+
+    typical = (today["High"].astype(float) + today["Low"].astype(float) + today["Close"].astype(float)) / 3.0
+    tv = today["Volume"].astype(float) if "Volume" in today.columns else pd.Series(1.0, index=today.index)
+    denom = float(tv.sum())
+    vwap = float((typical * tv).sum() / denom) if denom > 0 else latest
+    vwap_distance = (latest - vwap) / vwap * 100.0 if vwap else 0.0
+
+    session_high = float(today["High"].astype(float).max())
+    session_low = float(today["Low"].astype(float).min())
+    session_span = session_high - session_low
+    range_position = (latest - session_low) / session_span if session_span > 0 else 0.5
+
+    opening = today.head(4)
+    opening_high = float(opening["High"].astype(float).max()) if not opening.empty else latest
+    opening_low = float(opening["Low"].astype(float).min()) if not opening.empty else latest
+    opening_span = opening_high - opening_low
+    opening_position = (latest - opening_low) / opening_span if opening_span > 0 else 0.5
+
+    prior = daily.iloc[-2] if len(daily) >= 2 else daily.iloc[-1]
+    prior_high = _safe_float(prior.get("High"), latest)
+    prior_low = _safe_float(prior.get("Low"), latest)
+    prior_open = _safe_float(prior.get("Open"), latest)
+    prior_range_pct = (prior_high - prior_low) / prior_open * 100.0 if prior_open else 0.0
+    vs_prior_high = (latest - prior_high) / prior_high * 100.0 if prior_high else 0.0
+    vs_prior_low = (latest - prior_low) / prior_low * 100.0 if prior_low else 0.0
+
+    atr_series = pd.concat([
+        high - low,
+        (high - close.shift()).abs(),
+        (low - close.shift()).abs(),
+    ], axis=1).max(axis=1).rolling(ATR_PERIOD).mean()
+    atr_now = _safe_float(atr_series.iloc[-1], 0.0)
+    atr_short = _safe_float(atr_series.tail(8).mean(), atr_now)
+    atr_regime = atr_now / atr_short if atr_short > 0 else 1.0
+
+    h = hourly.copy()
+    h.index = chicago_index(h)
+    hclose = h["Close"].astype(float)
+    trend_1h = (float(hclose.iloc[-1]) / float(hclose.iloc[-4]) - 1.0) * 100.0 if len(hclose) >= 4 else 0.0
+
+    trend_score = 1 if trend_16 > 0.20 else -1 if trend_16 < -0.20 else 0
+    if atr_regime > 1.35:
+        regime = "HIGH_VOL"
+    elif atr_regime < 0.75:
+        regime = "LOW_VOL"
+    elif trend_score > 0:
+        regime = "TREND_UP"
+    elif trend_score < 0:
+        regime = "TREND_DOWN"
+    else:
+        regime = "RANGE"
+
+    return {
+        "rsi_14": round(rsi14, 4),
+        "vwap": round(vwap, 4),
+        "vwap_distance_pct": round(vwap_distance, 6),
+        "volume_ratio": round(vol_ratio, 4),
+        "momentum_4bar_pct": round(momentum_4, 6),
+        "trend_16bar_pct": round(trend_16, 6),
+        "range_position": round(range_position, 6),
+        "opening_range_position": round(opening_position, 6),
+        "prior_day_range_pct": round(prior_range_pct, 6),
+        "current_vs_prior_high_pct": round(vs_prior_high, 6),
+        "current_vs_prior_low_pct": round(vs_prior_low, 6),
+        "atr_regime_ratio": round(atr_regime, 6),
+        "trend_1h_pct": round(trend_1h, 6),
+        "regime": regime,
+        "regime_score": trend_score,
+    }
 
 def build_setup(daily_open, current_price, atr, profile_name):
     params = PROFILES[profile_name]
@@ -261,6 +397,7 @@ def feature_vector(setup):
         float(setup.get("stale_data_min", 0.0)),
         1.0 if setup.get("vol_warning") else 0.0,
         (current - daily_open) / daily_open * 100.0 if daily_open else 0.0,
+        *[_safe_float(setup.get(name), 0.0) for name in ML_FEATURES[8:]],
     ]
 
 
@@ -270,83 +407,107 @@ def historical_ml_rows(state):
         outcome = setup.get("actual_outcome")
         if outcome not in {"WIN", "LOSS"}:
             continue
+        if not setup.get("market_context"):
+            continue
         try:
-            rows.append((feature_vector(setup), 1 if outcome == "WIN" else 0))
+            rows.append({
+                "timestamp": setup.get("timestamp_ct", ""),
+                "features": feature_vector(setup),
+                "label": 1 if outcome == "WIN" else 0,
+            })
         except (KeyError, TypeError, ValueError):
             continue
+    rows.sort(key=lambda x: x["timestamp"])
     return rows
+
+
+def make_logistic():
+    return Pipeline([
+        ("scale", StandardScaler()),
+        ("logistic", LogisticRegression(max_iter=1500, class_weight="balanced", random_state=42)),
+    ])
+
+
+def make_boosting():
+    return HistGradientBoostingClassifier(
+        max_iter=120,
+        learning_rate=0.05,
+        max_leaf_nodes=7,
+        l2_regularization=1.0,
+        random_state=42,
+    )
 
 
 def train_ml_model(state):
     rows = historical_ml_rows(state)
-    if len(rows) < ML_MIN_SAMPLES:
+    n = len(rows)
+    if n < ML_MIN_SAMPLES:
         return None, {
             "trained": False,
             "reason": f"Need at least {ML_MIN_SAMPLES} resolved WIN/LOSS samples.",
-            "samples": len(rows),
+            "samples": n,
         }
 
-    y = [label for _, label in rows]
+    y = [r["label"] for r in rows]
     if len(set(y)) < 2 or min(y.count(0), y.count(1)) < ML_MIN_CLASS_COUNT:
         return None, {
             "trained": False,
-            "reason": "Both WIN and LOSS classes need enough samples.",
-            "samples": len(rows),
+            "reason": f"Both WIN and LOSS classes need at least {ML_MIN_CLASS_COUNT} samples.",
+            "samples": n,
             "wins": y.count(1),
             "losses": y.count(0),
         }
 
-    X = [features for features, _ in rows]
+    X = [r["features"] for r in rows]
+    test_n = min(ML_TEST_WINDOW, max(10, n // 5))
+    split = n - test_n
+    if split < ML_MIN_TRAIN_SAMPLES or len(set(y[:split])) < 2:
+        return None, {
+            "trained": False,
+            "reason": "Not enough earlier time-ordered data for a walk-forward test.",
+            "samples": n,
+            "test_window": test_n,
+        }
 
-    model = Pipeline([
-        ("scale", StandardScaler()),
-        ("logistic", LogisticRegression(
-            max_iter=1000,
-            class_weight="balanced",
-            random_state=42,
-        )),
-    ])
-    model.fit(X, y)
-
-    # Time-ordered shadow evaluation: train on older rows, test on the newest rows.
-    test_n = min(ML_TEST_WINDOW, max(5, len(rows) // 5))
-    if len(rows) > test_n + 10:
-        split = len(rows) - test_n
-        test_model = Pipeline([
-            ("scale", StandardScaler()),
-            ("logistic", LogisticRegression(
-                max_iter=1000,
-                class_weight="balanced",
-                random_state=42,
-            )),
-        ])
-        test_model.fit(X[:split], y[:split])
-        probs = test_model.predict_proba(X[split:])[:, 1]
+    candidates = [("logistic", make_logistic()), ("boosting", make_boosting())]
+    evaluations = []
+    for name, candidate in candidates:
+        candidate.fit(X[:split], y[:split])
+        probs = candidate.predict_proba(X[split:])[:, 1]
         preds = (probs >= ML_CONFIDENCE_THRESHOLD).astype(int)
         actual = y[split:]
-        directional_accuracy = sum(int(p == a) for p, a in zip(preds, actual)) / len(actual)
-        high_conf = [i for i, p in enumerate(probs) if p >= ML_CONFIDENCE_THRESHOLD or p <= 1 - ML_CONFIDENCE_THRESHOLD]
-        high_conf_accuracy = None
-        if high_conf:
-            high_conf_accuracy = sum(
-                int((probs[i] >= ML_CONFIDENCE_THRESHOLD) == bool(actual[i]))
-                for i in high_conf
-            ) / len(high_conf)
-    else:
-        directional_accuracy = None
-        high_conf_accuracy = None
+        eval_row = {
+            "model": name,
+            "accuracy_at_threshold": round(float(accuracy_score(actual, preds)), 4),
+            "brier_score": round(float(brier_score_loss(actual, probs)), 6),
+            "log_loss": round(float(log_loss(actual, np.clip(probs, 1e-6, 1-1e-6))), 6),
+        }
+        high = [i for i, p in enumerate(probs) if p >= ML_CONFIDENCE_THRESHOLD or p <= 1-ML_CONFIDENCE_THRESHOLD]
+        eval_row["high_confidence_samples"] = len(high)
+        eval_row["high_confidence_accuracy"] = round(
+            sum(int((probs[i] >= ML_CONFIDENCE_THRESHOLD) == bool(actual[i])) for i in high) / len(high), 4
+        ) if high else None
+        evaluations.append(eval_row)
+
+    # Select by lower Brier score, then lower log loss. This selection is itself
+    # only used for shadow reporting; it does not change the live strategy.
+    selected_name = sorted(evaluations, key=lambda x: (x["brier_score"], x["log_loss"]))[0]["model"]
+    selected = make_logistic() if selected_name == "logistic" else make_boosting()
+    selected.fit(X, y)
 
     report = {
         "trained": True,
-        "samples": len(rows),
+        "samples": n,
         "wins": y.count(1),
         "losses": y.count(0),
-        "test_window": test_n,
-        "time_ordered_directional_accuracy": round(directional_accuracy, 4) if directional_accuracy is not None else None,
-        "high_confidence_accuracy": round(high_conf_accuracy, 4) if high_conf_accuracy is not None else None,
+        "walk_forward_test_window": test_n,
+        "walk_forward_train_samples": split,
+        "candidate_models": evaluations,
+        "selected_model": selected_name,
+        "selection_rule": "lowest walk-forward Brier score, then log loss",
         "shadow_only": ML_SHADOW_ONLY,
     }
-    return model, report
+    return selected, report
 
 
 def add_ml_prediction(state, setup):
@@ -358,6 +519,7 @@ def add_ml_prediction(state, setup):
         "confidence_threshold": ML_CONFIDENCE_THRESHOLD,
         "decision": "INSUFFICIENT_DATA",
         "model_samples": report.get("samples", 0),
+        "selected_model": report.get("selected_model"),
     }
     if model is not None:
         probability = float(model.predict_proba([feature_vector(setup)])[0][1])
@@ -381,7 +543,6 @@ def evaluate_geometry(setup, bars, idx, profile_name):
     valid_until = datetime.fromisoformat(setup["valid_until_ct"])
     setup_time = datetime.fromisoformat(setup["timestamp_ct"])
     params = PROFILES[profile_name]
-
     entry = round_tick(daily_open * params["entry_mult"])
     stop = round_tick(daily_open * params["stop_mult"])
     target = round_tick(daily_open * params["target_mult"])
@@ -390,6 +551,8 @@ def evaluate_geometry(setup, bars, idx, profile_name):
 
     entered = False
     entry_time = None
+    max_favorable = 0.0
+    max_adverse = 0.0
 
     for i, (_, bar) in enumerate(bars.iterrows()):
         bar_time = idx[i]
@@ -404,25 +567,23 @@ def evaluate_geometry(setup, bars, idx, profile_name):
         if not entered and low <= entry <= high:
             entered = True
             entry_time = bar_time
-
+        if entered:
+            max_favorable = max(max_favorable, (entry - low) / risk if risk > 0 else 0.0)
+            max_adverse = max(max_adverse, (high - entry) / risk if risk > 0 else 0.0)
             if high >= stop and low <= target:
-                return {"outcome": "AMBIGUOUS", "r_multiple": None, "entry_time_ct": entry_time.isoformat()}
+                return {"outcome": "AMBIGUOUS", "r_multiple": None, "entry_time_ct": entry_time.isoformat(),
+                        "mfe_r": round(max_favorable, 4), "mae_r": round(max_adverse, 4), "bars_after_entry": i + 1}
             if high >= stop:
-                return {"outcome": "LOSS", "r_multiple": -1.0, "entry_time_ct": entry_time.isoformat()}
+                return {"outcome": "LOSS", "r_multiple": -1.0, "entry_time_ct": entry_time.isoformat(),
+                        "mfe_r": round(max_favorable, 4), "mae_r": round(max_adverse, 4), "bars_after_entry": i + 1}
             if low <= target:
-                return {"outcome": "WIN", "r_multiple": round(reward / risk, 4), "entry_time_ct": entry_time.isoformat()}
-
-        elif entered:
-            if high >= stop and low <= target:
-                return {"outcome": "AMBIGUOUS", "r_multiple": None, "entry_time_ct": entry_time.isoformat()}
-            if high >= stop:
-                return {"outcome": "LOSS", "r_multiple": -1.0, "entry_time_ct": entry_time.isoformat()}
-            if low <= target:
-                return {"outcome": "WIN", "r_multiple": round(reward / risk, 4), "entry_time_ct": entry_time.isoformat()}
+                return {"outcome": "WIN", "r_multiple": round(reward / risk, 4), "entry_time_ct": entry_time.isoformat(),
+                        "mfe_r": round(max_favorable, 4), "mae_r": round(max_adverse, 4), "bars_after_entry": i + 1}
 
     if not entered:
-        return {"outcome": "NO_ENTRY", "r_multiple": 0.0, "entry_time_ct": None}
-    return {"outcome": "EXPIRED_AFTER_ENTRY", "r_multiple": 0.0, "entry_time_ct": entry_time.isoformat()}
+        return {"outcome": "NO_ENTRY", "r_multiple": 0.0, "entry_time_ct": None, "mfe_r": 0.0, "mae_r": 0.0, "bars_after_entry": 0}
+    return {"outcome": "EXPIRED_AFTER_ENTRY", "r_multiple": 0.0, "entry_time_ct": entry_time.isoformat(),
+            "mfe_r": round(max_favorable, 4), "mae_r": round(max_adverse, 4), "bars_after_entry": len(bars)}
 
 
 def resolve_previous_setups(state, intraday):
@@ -455,6 +616,10 @@ def resolve_previous_setups(state, intraday):
             setup["actual_outcome"] = actual["outcome"]
             setup["actual_r_multiple"] = actual.get("r_multiple")
             setup["actual_entry_time_ct"] = actual.get("entry_time_ct")
+            setup["actual_mfe_r"] = actual.get("mfe_r")
+            setup["actual_mae_r"] = actual.get("mae_r")
+            setup["actual_bars_after_entry"] = actual.get("bars_after_entry")
+            setup["outcome_version"] = OUTCOME_VERSION
 
         changed += 1
 
@@ -568,7 +733,7 @@ def maybe_learn(state):
 def ml_shadow_report(state):
     model, report = train_ml_model(state)
     report["generated_at_ct"] = datetime.now(CHICAGO_TZ).isoformat()
-    report["model_type"] = "LogisticRegression + StandardScaler"
+    report["model_type"] = "Walk-forward LogisticRegression / HistGradientBoosting"
     report["features"] = ML_FEATURES
     report["confidence_threshold"] = ML_CONFIDENCE_THRESHOLD
     report["shadow_only"] = ML_SHADOW_ONLY
@@ -600,7 +765,7 @@ def send_telegram_alert(text):
 
 def format_message(setup, report):
     lines = [
-        "⛓ <b>[ZW=F] Anti-Hunt Short Setup V4</b>",
+        "⛓ <b>[ZW=F] Anti-Hunt Short Setup V5</b>",
         "━━━━━━━━━━━━━━━━━━━━",
         f"📅 {datetime.now(CHICAGO_TZ).strftime('%A %Y-%m-%d %H:%M %Z')}",
         f"🧠 Profile: <b>{setup['profile']}</b>",
@@ -622,6 +787,8 @@ def format_message(setup, report):
     else:
         lines.append("🤖 ML SHADOW: collecting training data")
 
+    if setup.get("regime"):
+        lines.append(f"🌡 Regime: <code>{setup['regime']}</code> | RSI <code>{setup.get('rsi_14', 0):.1f}</code> | VWAP dist <code>{setup.get('vwap_distance_pct', 0):.2f}%</code>")
     if setup.get("stop_atr_multiple") is not None:
         lines.append(
             f"ATR: <code>{setup['atr_15m']}</code> | Stop distance: <code>{setup['stop_atr_multiple']}x</code>"
@@ -635,7 +802,7 @@ def format_message(setup, report):
             f"🧠 Bounded profile changed: {report['previous_profile']} → {report['new_profile']}"
         )
     lines.append("⏳ Valid until 12:30 CT.")
-    lines.append("🤖 ML is SHADOW-ONLY in V4; it does not change the signal.")
+    lines.append("🤖 ML is SHADOW-ONLY in V5; it does not change the signal.")
     return "\n".join(lines)
 
 
@@ -675,7 +842,7 @@ def main():
 
     print("Fetching ZW=F data...")
     try:
-        intraday, daily = fetch_market_data()
+        intraday, daily, hourly = fetch_market_data()
     except ValueError as exc:
         print(f"Data error: {exc}", file=sys.stderr)
         return 1
@@ -708,6 +875,9 @@ def main():
     setup = build_setup(daily_open, current_price, atr, profile_name)
     setup["manual_mode"] = manual
     setup["stale_data_min"] = round(age, 1)
+    context = market_context(intraday, daily, hourly, now_ct)
+    setup["market_context"] = context
+    setup.update(context)
 
     # Train only on prior resolved actual outcomes.
     ml_training_report = add_ml_prediction(state, setup)
