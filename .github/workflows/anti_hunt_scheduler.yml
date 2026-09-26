@@ -2,30 +2,22 @@ name: Anti-Hunt Morning Filter
 
 on:
   schedule:
-    # 13:45 UTC == 8:45 AM CDT (summer)
-    # 14:45 UTC == 8:45 AM CST (winter)
-    #
-    # Both triggers are intentional.
-    # The Python script uses America/Chicago time to determine
-    # whether the scheduled run is inside the permitted window.
+    # 13:45 UTC = 8:45 AM CDT
+    # 14:45 UTC = 8:45 AM CST
     - cron: '45 13 * * 1-5'
     - cron: '45 14 * * 1-5'
 
-  # Enables the "Run workflow" button in GitHub Actions.
+  # Allows manual testing from:
+  # GitHub -> Actions -> Anti-Hunt Morning Filter -> Run workflow
   workflow_dispatch:
 
-
-# Prevent overlapping runs.
 concurrency:
   group: anti-hunt-filter
   cancel-in-progress: false
 
-
 jobs:
   anti-hunt-filter:
-
     runs-on: ubuntu-latest
-
     timeout-minutes: 10
 
     permissions:
@@ -33,17 +25,8 @@ jobs:
 
     steps:
 
-      # ---------------------------------------------------------------
-      # Checkout repository
-      # ---------------------------------------------------------------
-
       - name: Checkout code
         uses: actions/checkout@v4
-
-
-      # ---------------------------------------------------------------
-      # Python
-      # ---------------------------------------------------------------
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v5
@@ -51,32 +34,10 @@ jobs:
           python-version: '3.10'
           cache: pip
 
-
-      # ---------------------------------------------------------------
-      # Dependencies
-      # ---------------------------------------------------------------
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install "yfinance>=0.2.40,<0.3" "pandas>=2.0,<3" "requests>=2.31,<3"
-
-
-      # ---------------------------------------------------------------
-      # Run anti-hunt filter
-      # ---------------------------------------------------------------
-      #
-      # Automatic scheduled execution:
-      #
-      #     python anti_hunt_filter.py
-      #
-      # Manual GitHub Actions execution:
-      #
-      #     python anti_hunt_filter.py --manual
-      #
-      # This means the normal automated job keeps its safety guards,
-      # while the Run workflow button explicitly requests test mode.
-      # ---------------------------------------------------------------
 
       - name: Run anti-hunt filter
         env:
@@ -86,29 +47,19 @@ jobs:
 
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-
             echo "=============================================="
-            echo "MANUAL WORKFLOW RUN"
-            echo "Running anti_hunt_filter.py --manual"
+            echo "MANUAL TEST RUN"
             echo "=============================================="
 
             python anti_hunt_filter.py --manual
 
           else
-
             echo "=============================================="
-            echo "SCHEDULED WORKFLOW RUN"
-            echo "Running normal safety checks"
+            echo "SCHEDULED RUN"
             echo "=============================================="
 
             python anti_hunt_filter.py
-
           fi
-
-
-      # ---------------------------------------------------------------
-      # Upload setup snapshot
-      # ---------------------------------------------------------------
 
       - name: Upload setup snapshot
         if: always()
@@ -119,14 +70,8 @@ jobs:
           retention-days: 30
           if-no-files-found: ignore
 
-
-      # ---------------------------------------------------------------
-      # Telegram failure notification
-      # ---------------------------------------------------------------
-
       - name: Notify on failure
         if: failure()
-
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
