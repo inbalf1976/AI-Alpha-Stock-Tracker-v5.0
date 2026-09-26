@@ -35,12 +35,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install yfinance pandas numpy requests scikit-learn
 
-      - name: Run V5 directional spike backtest
+      - name: Verify V5 source and run directional spike backtest
         env:
           BACKTEST_PERIOD: ${{ inputs.period || '60d' }}
           SPIKE_HORIZON_BARS: ${{ inputs.horizon_bars || '32' }}
           PYTHONUNBUFFERED: "1"
         run: |
+          echo "Repository Python files:"
+          find . -maxdepth 2 -type f -name '*anti_hunt*.py' -print
+          echo ""
+          echo "Backtest source loader will select the first compatible V5 file."
           python backtest_v5_spike.py
 
       - name: Upload backtest report
