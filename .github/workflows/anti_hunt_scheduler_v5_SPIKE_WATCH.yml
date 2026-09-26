@@ -8,8 +8,10 @@ on:
     # Normal V5 signal: 08:45 CT
     - cron: '45 8 * * 1-5'
       timezone: 'America/Chicago'
+    # Second V5 signal: 09:45 CT
     - cron: '45 9 * * 1-5'
       timezone: 'America/Chicago'
+    # Outcome resolution / learning: 13:15 CT
     - cron: '15 13 * * 1-5'
       timezone: 'America/Chicago'
   workflow_dispatch:
@@ -39,27 +41,61 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install "yfinance>=0.2.40,<0.3" "pandas>=2.0,<3" "numpy>=1.24,<3" "requests>=2.31,<3" "scikit-learn>=1.3,<2"
 
-      - name: Run anti-hunt filter
+      - name: Locate V5 Python file
+        id: locate_v5
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "Repository Python files:"
+          find . -maxdepth 2 -type f -name '*.py' -print | sort
+
+          # Preferred canonical filename.
+          if [ -f "./anti_hunt_filter.py" ]; then
+            V5_FILE="./anti_hunt_filter.py"
+          # Current directional SPIKE-WATCH V5 filename.
+          elif [ -f "./anti_hunt_filter_v5_SPIKE_WATCH_SETUP_RECOMMENDATION_PRICES.py" ]; then
+            V5_FILE="./anti_hunt_filter_v5_SPIKE_WATCH_SETUP_RECOMMENDATION_PRICES.py"
+          elif [ -f "./anti_hunt_filter_v5_SPIKE_WATCH_SETUP_RECOMMENDATION_FIXED2.py" ]; then
+            V5_FILE="./anti_hunt_filter_v5_SPIKE_WATCH_SETUP_RECOMMENDATION_FIXED2.py"
+          elif [ -f "./anti_hunt_filter_v5_SPIKE_WATCH_SETUP_RECOMMENDATION_FIXED.py" ]; then
+            V5_FILE="./anti_hunt_filter_v5_SPIKE_WATCH_SETUP_RECOMMENDATION_FIXED.py"
+          else
+            echo "ERROR: No V5 anti-hunt Python file was found."
+            echo "Expected anti_hunt_filter.py or the current V5 SPIKE-WATCH filename."
+            exit 1
+          fi
+
+          echo "Using V5 file: $V5_FILE"
+          echo "v5_file=$V5_FILE" >> "$GITHUB_OUTPUT"
+
+          python -m py_compile "$V5_FILE"
+
+      - name: Run V5
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           HEALTHCHECK_URL: ${{ secrets.HEALTHCHECK_URL }}
+        shell: bash
         run: |
+          set -euo pipefail
+          V5_FILE="${{ steps.locate_v5.outputs.v5_file }}"
+
+          echo "=============================================="
+          echo "V5 FILE: $V5_FILE"
+          echo "EVENT: ${{ github.event_name }}"
+          echo "SCHEDULE: ${{ github.event.schedule }}"
+          echo "=============================================="
+
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "=============================================="
             echo "V5 MANUAL TEST RUN"
-            echo "=============================================="
-            python anti_hunt_filter.py --manual
+            python "$V5_FILE" --manual
           elif [ "${{ github.event.schedule }}" = "15 13 * * 1-5" ]; then
-            echo "=============================================="
             echo "V5 OUTCOME RESOLUTION / LEARNING RUN"
-            echo "=============================================="
-            python anti_hunt_filter.py --resolve
+            python "$V5_FILE" --resolve
           else
-            echo "=============================================="
             echo "V5 SCHEDULED SIGNAL RUN"
-            echo "=============================================="
-            python anti_hunt_filter.py
+            python "$V5_FILE"
           fi
 
       - name: Upload V5 snapshots
@@ -77,10 +113,13 @@ jobs:
 
       - name: Persist learning state
         if: success()
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add learning_state.json learning_report.json ml_report.json setup.json
+
           if git diff --cached --quiet; then
             echo "No state changes to commit."
           else
@@ -93,9 +132,6 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        shell: bash
         run: |
-          curl -s -X POST \
-            "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            --data-urlencode \
-            "text=⚠️ Anti-hunt V5 workflow FAILED (run ${{ github.run_id }}): ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -s -X POST             "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"             -d chat_id="${TELEGRAM_CHAT_ID}"             --data-urlencode             "text=⚠️ Anti-hunt V5 workflow FAILED (run ${{ github.run_id }}): ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
