@@ -39,9 +39,28 @@ jobs:
         env:
           BACKTEST_PERIOD: ${{ inputs.period || '60d' }}
           SPIKE_HORIZON_BARS: ${{ inputs.horizon_bars || '32' }}
+          ANALYSIS_STOP_DISTANCE: "5"
+          ANALYSIS_TARGET_DISTANCE: "16"
           PYTHONUNBUFFERED: "1"
         run: |
-          python backtest_v5_spike_research.py
+          python backtest_v5_spike_research_FIXED_REPORT.py
+
+      - name: Verify corrected report geometry
+        run: |
+          python - <<'PY'
+          import json
+          with open("backtest_v5_spike_research_report.json", encoding="utf-8") as f:
+              r = json.load(f)
+          assert r["version"] == 3
+          assert r["analysis_geometry"] == {"stop_dist": 5.0, "target_dist": 16.0, "rr": 3.2}
+          assert r["analysis_signal_count"] == r["signal_count"]
+          for key in ("fixed_geometry_by_feature_bucket", "fixed_geometry_by_episode_position", "fixed_geometry_by_direction"):
+              total = sum(x["signals"] for x in r[key])
+              assert total == r["analysis_signal_count"], (key, total, r["analysis_signal_count"])
+          print("CORRECTED REPORT CHECK: PASS")
+          print("Analysis geometry: stop=5, target=16, RR=3.2")
+          print("Breakdown totals match signal_count:", r["analysis_signal_count"])
+          PY
 
       - name: Upload research artifacts
         uses: actions/upload-artifact@v4
