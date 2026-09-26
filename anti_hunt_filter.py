@@ -122,7 +122,7 @@ def resolve_session_open(intraday: pd.DataFrame, daily: pd.DataFrame) -> float:
         idx = idx.tz_localize("UTC")
     todays_bars = intraday[idx.tz_convert(CHICAGO_TZ).date == now_ct.date()]
     if not todays_bars.empty:
-        return float(todays_bars["Open"].iloc[-1]) # FIXED: Explicit safe array tracking index [-1] included properly
+        return float(todays_bars["Open"].iloc[-1]) # FIXED: Corrected iloc syntax
     return float(daily["Open"].iloc[-1])
 
 
@@ -190,7 +190,7 @@ def run_anti_hunt_logic(bypass_gates=False) -> None:
             print(f"[{now_ct.strftime('%Y-%m-%d %H:%M %Z')}] Outside the safe institutional window (Mon-Fri, 08:45-12:30 America/Chicago). Aborting gracefully.")
             return
 
-    print(f"🧪 RUNNING IN FORCED MANUAL TEST MODE (Bypassing Time, Day, and Staleness Gates)...")
+    print("🧪 RUNNING IN FORCED MANUAL TEST MODE (Bypassing Time, Day, and Staleness Gates)...")
     print(f"⚡ Institutional Core Analysis Active [{now_ct.strftime('%H:%M:%S %Z')}]")
 
     # 2. Ingest Data Stream
@@ -247,3 +247,4 @@ def run_anti_hunt_logic(bypass_gates=False) -> None:
         f"📊 15m ATR Volatility: <code>{atr_display}</code>\n"
         f"⏱️ Bar Latency Age: <code>{staleness_min:.1f} min</code>\n{warning_block}\n"
         f"🛡️ <b>THE PROTECTED GRID SETUP:</b>\n"
+        f"📥 <b>ENTRY (Sell Limit):</b> <code>{entry_level:.2f}c</code>\n"
