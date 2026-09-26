@@ -1,0 +1,78 @@
+{
+  "generated_at_ct": "2026-09-26T06:37:24.365023-05:00",
+  "note": "Backtest limited to ~60 real trading days (Yahoo 15m data cap). Excluded from the live bounded profile-switch decision; only feeds the shadow ML model's training set.",
+  "total_backtest_setups": 40,
+  "newly_added": 40,
+  "profile_stats_backtest_only": {
+    "BASE": {
+      "setups": 40,
+      "trades": 3,
+      "wins": 0,
+      "losses": 3,
+      "entries": 25,
+      "no_entry": 15,
+      "ambiguous": 0,
+      "expired_after_entry": 22,
+      "win_rate": 0.0,
+      "expected_r": -0.075,
+      "avg_r_per_trade": -1.0,
+      "recent_expected_r": -0.1
+    },
+    "ENTRY_993": {
+      "setups": 40,
+      "trades": 3,
+      "wins": 0,
+      "losses": 3,
+      "entries": 26,
+      "no_entry": 14,
+      "ambiguous": 0,
+      "expired_after_entry": 23,
+      "win_rate": 0.0,
+      "expected_r": -0.075,
+      "avg_r_per_trade": -1.0,
+      "recent_expected_r": -0.1
+    },
+    "STOP_1010": {
+      "setups": 40,
+      "trades": 5,
+      "wins": 0,
+      "losses": 5,
+      "entries": 25,
+      "no_entry": 15,
+      "ambiguous": 0,
+      "expired_after_entry": 20,
+      "win_rate": 0.0,
+      "expected_r": -0.125,
+      "avg_r_per_trade": -1.0,
+      "recent_expected_r": -0.2
+    },
+    "STOP_1014": {
+      "setups": 40,
+      "trades": 3,
+      "wins": 0,
+      "losses": 3,
+      "entries": 25,
+      "no_entry": 15,
+      "ambiguous": 0,
+      "expired_after_entry": 22,
+      "win_rate": 0.0,
+      "expected_r": -0.075,
+      "avg_r_per_trade": -1.0,
+      "recent_expected_r": -0.1
+    },
+    "TARGET_958": {
+      "setups": 40,
+      "trades": 3,
+      "wins": 0,
+      "losses": 3,
+      "entries": 25,
+      "no_entry": 15,
+      "ambiguous": 0,
+      "expired_after_entry": 22,
+      "win_rate": 0.0,
+      "expected_r": -0.075,
+      "avg_r_per_trade": -1.0,
+      "recent_expected_r": -0.1
+    }
+  }
+}
