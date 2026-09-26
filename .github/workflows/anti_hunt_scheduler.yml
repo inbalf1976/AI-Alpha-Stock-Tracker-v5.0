@@ -1,0 +1,61 @@
+name: Anti-Hunt Morning Filter
+
+on:
+  schedule:
+    # 13:45 UTC == 8:45 AM CDT (summer) | 14:45 UTC == 8:45 AM CST (winter)
+    # Firing both guarantees an 8:45-local trigger regardless of DST;
+    # the script's own window guard deduplicates the second run.
+    - cron: '45 13 * * 1-5'
+    - cron: '45 14 * * 1-5'
+  workflow_dispatch:
+
+# Prevent overlapping runs (cron + manual dispatch at the same time)
+concurrency:
+  group: anti-hunt-filter
+  cancel-in-progress: false
+
+jobs:
+  anti-hunt-filter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install "yfinance>=0.2.40,<0.3" "pandas>=2.0,<3" "requests>=2.31,<3"
+
+      - name: Run anti-hunt filter
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          HEALTHCHECK_URL: ${{ secrets.HEALTHCHECK_URL }}
+        run: python anti_hunt_filter.py
+
+      - name: Upload setup snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: setup-snapshot-${{ github.run_id }}
+          path: setup.json
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Notify on failure
+        if: failure()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"             -d chat_id="${TELEGRAM_CHAT_ID}"             --data-urlencode "text=⚠️ Anti-hunt workflow FAILED (run ${{ github.run_id }}): ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
