@@ -60,6 +60,10 @@ def is_manual() -> bool:
     return "--manual" in sys.argv
 
 
+def is_resolve() -> bool:
+    return "--resolve" in sys.argv
+
+
 def ping_healthcheck() -> None:
     if not HEALTHCHECK_URL or is_manual():
         return
@@ -632,9 +636,27 @@ def format_message(setup: dict, report: dict) -> str:
 
 def main() -> int:
     manual = is_manual()
+    resolve_only = is_resolve() and not manual
     now_ct = datetime.now(CHICAGO_TZ)
 
-    if not manual:
+    if resolve_only:
+        ping_healthcheck()
+
+        if now_ct.date() in HOLIDAYS:
+            print(f"{now_ct.date()} is a CME holiday. Nothing to resolve.")
+            return 0
+
+        if now_ct.weekday() >= 5:
+            print("Weekend. Nothing to resolve.")
+            return 0
+
+        print("=" * 50)
+        print("OUTCOME RESOLUTION MODE")
+        print("No new setup will be created.")
+        print("Previous setups will be evaluated against completed 15m bars.")
+        print("=" * 50)
+
+    elif not manual:
         ping_healthcheck()
 
         if now_ct.date() in HOLIDAYS:
@@ -670,12 +692,15 @@ def main() -> int:
     state = load_state()
 
     resolved = resolve_previous_setups(state, intraday)
-
-    if resolved:
-        print(f"Resolved {resolved} previous setup(s).")
+    print(f"Resolved {resolved} previous setup(s).")
 
     report = maybe_learn(state)
     save_json(REPORT_FILE, report)
+
+    if resolve_only:
+        save_json(STATE_FILE, state)
+        print(json.dumps(report, indent=2))
+        return 0
 
     age = check_staleness(intraday)
 
