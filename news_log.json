@@ -1,5 +1,169 @@
 [
   {
+    "timestamp": "2026-09-26T13:21:33.017374+00:00",
+    "total_scanned": 222,
+    "flagged_count": 159,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260925a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 25 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests public comment on two proposals related to establishing a regulatory framework for Board-supervised payment stablecoin issuers under the GENIUS Act",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Sandy Spring Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by BancFirst Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260922a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 22 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement action with SNB Bancshares and Bank of Eufaula",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Surging Treasury yields pose a brand new problem for Kevin Warsh and the Fed",
+        "link": "https://www.cnbc.com/2026/09/24/surging-treasury-yields-are-posing-a-brand-new-problem-for-kevin-warsh-and-the-fed.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 25 Sep 2026 11:08:05 GMT",
+        "matched_keywords": [
+          "fed",
+          "war",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "France's fresh budget battle threatens to topple another government",
+        "link": "https://www.cnbc.com/2026/09/24/france-budget-debt-deficit-government.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 24 Sep 2026 06:21:00 GMT",
+        "matched_keywords": [
+          "threatens to"
+        ]
+      },
+      {
+        "title": "World heads into food crises 'blind' as U.S. aid cuts squeeze UN food agency, experts warn",
+        "link": "https://www.cnbc.com/2026/09/24/hormuz-blacksea-ukraine-iran-food-security-united-nations-.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 24 Sep 2026 04:02:26 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Here's what happens to the economy when Treasury yields soar like they are now",
+        "link": "https://www.cnbc.com/2026/09/23/what-happens-to-the-economy-when-treasury-yields-soar.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 25 Sep 2026 13:48:19 GMT",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Consumer sentiment is in the dumps despite a solid economy. Goldman Sachs blames 'lower happiness'",
+        "link": "https://www.cnbc.com/2026/09/19/goldman-sachs-happiness-struggling-consumer-sentiment.html",
+        "source": "CNBC Economy",
+        "published": "Sat, 19 Sep 2026 12:50:49 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Why Japan’s markets flipped the usual script after central bank rate hike",
+        "link": "https://www.cnbc.com/2026/09/18/japan-rate-hike-stocks-rise-bond-yields-yen-fall.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 21 Sep 2026 01:02:25 GMT",
+        "matched_keywords": [
+          "rate hike"
+        ]
+      },
+      {
+        "title": "EU warns of energy price crisis, urges gas demand cuts - Bloomberg",
+        "link": "https://www.investing.com/news/commodities-news/eu-warns-of-energy-price-crisis-urges-gas-demand-cuts--bloomberg-4918563",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-26 11:52:40",
+        "matched_keywords": [
+          "war",
+          "warns of"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are grappling with surging U.S. Treasury yields and fiscal crises in Europe, driven by sticky inflation and political budget battles. Meanwhile, geopolitical disruptions in the Strait of Hormuz and funding cuts to international food agencies heighten risks for global supply chains and food security.",
+      "physical_supply_disruption_confirmed": true,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "DAMAGING",
+      "wheat_impact_category": "confirmed_physical_disruption",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating Middle East conflict disrupting critical energy and fertilizer shipping routes alongside surging sovereign bond yields.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Ongoing maritime attacks and severely restricted oil and commodity flows through the Strait of Hormuz and Red Sea chokepoints present active supply chain bottlenecks.",
+      "wheat_impact": "BULLISH"
+    }
+  },
+  {
     "timestamp": "2026-09-26T01:44:46.198367+00:00",
     "total_scanned": 224,
     "flagged_count": 164,
@@ -31450,161 +31614,6 @@
       "usd_ils_impact": "BULLISH",
       "usd_ils_impact_reason": "Hawkish Fed rate expectations combined with escalating Middle East tensions heavily pressure regional currencies, driving strength into the safe-haven U.S. dollar against the Israeli shekel.",
       "key_risk": "Escalation of Middle East geopolitical conflicts disrupting global energy supplies and macro stability."
-    }
-  },
-  {
-    "timestamp": "2026-07-29T19:23:01.426988+00:00",
-    "total_scanned": 230,
-    "flagged_count": 173,
-    "flagged_headlines": [
-      {
-        "title": "Dollar may weaken if Fed holds rates steady, ING says",
-        "link": "https://www.investing.com/news/forex-news/dollar-may-weaken-if-fed-holds-rates-steady-ing-says-93CH-4820808",
-        "source": "Investing.com Forex",
-        "published": "2026-07-29 14:29:33",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Dollar retreats from multi-month high after Fed holds rates steady",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-aussie-slides-on-soft-cpi-won-firms-ahead-of-fed-decision-4818595",
-        "source": "Investing.com Forex",
-        "published": "2026-07-29 14:12:30",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "U.S. Treasuries  pressured as Middle East escalation and hawkish Fed bets weigh",
-        "link": "https://www.investing.com/news/forex-news/eurozone-borrowing-costs-rise-as-middle-east-escalation-and-hawkish-fed-bets-weigh-4818640",
-        "source": "Investing.com Forex",
-        "published": "2026-07-29 12:09:49",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound flat as traders await Fed rate decision",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-flat-as-traders-await-fed-rate-decision-4819493",
-        "source": "Investing.com Forex",
-        "published": "2026-07-29 10:51:49",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Dollar eases back from over a one-month high a day ahead of key Fed rate decision",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-muted-as-dollar-steadies-near-onemonth-high-4815434",
-        "source": "Investing.com Forex",
-        "published": "2026-07-28 21:04:52",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Canadian dollar rises slightly as markets await Fed decision",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-slightly-as-markets-await-fed-decision-93CH-4817871",
-        "source": "Investing.com Forex",
-        "published": "2026-07-28 18:32:22",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "South African rand holds steady ahead of Fed decision",
-        "link": "https://www.investing.com/news/forex-news/south-african-rand-holds-steady-ahead-of-fed-decision-93CH-4817316",
-        "source": "Investing.com Forex",
-        "published": "2026-07-28 15:31:44",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Small Business Bank and announces termination enforcement actions with BNP Paribas S.A., BNP Paribas USA, Inc., BNP Paribas Securities Corp., and Community Bankshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260702a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 2 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues initial findings from its 2025 triennial payments study",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260701a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 1 Jul 2026 18:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "Global markets and foreign exchange rates are primarily driven by the Federal Reserve's decision to hold interest rates steady, causing the U.S. dollar to retreat from recent highs. Meanwhile, ongoing geopolitical tensions, particularly Middle Eastern escalations, continue to add pressure to U.S. Treasuries and broader macroeconomic sentiment.",
-      "wheat_impact": {
-        "direction": "NEUTRAL",
-        "reason": "The Fed's decision to hold rates steady and subsequent dollar easing provide a mild macroeconomic tailwind, but this is largely offset by broader geopolitical and supply-demand factors not directly addressed in the monetary policy headlines."
-      },
-      "usd_ils_impact": {
-        "direction": "BEARISH",
-        "reason": "The broad retreat of the U.S. dollar following the Fed's steady rate decision puts downward pressure on the USD/ILS exchange rate, despite ongoing Middle East geopolitical risk."
-      },
-      "key_risk": "Further escalation of Middle East geopolitical tensions driving safe-haven flows back into the U.S. dollar and disrupting global commodity supply chains."
     }
   }
 ]
