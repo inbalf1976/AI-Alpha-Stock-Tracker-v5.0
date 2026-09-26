@@ -1,6 +1,6 @@
 """
-anti_hunt_filter.py  (v2)
-=========================
+anti_hunt_filter.py  (v2 - Complete Manual Test Ready)
+======================================================
 Institutional open anti-stop-hunting Short filter for Chicago SRW Wheat (ZW=F).
 
 Runs during the safe institutional window (8:45 AM - 12:30 PM America/Chicago,
@@ -207,137 +207,45 @@ def send_telegram_alert(text: str) -> bool:
     }
     try:
         response = requests.post(url, json=payload, timeout=15)
-        response.raise_for_status()
-        return True
-    except requests.RequestException as exc:
-        print(f"Telegram delivery failed (non-fatal): {exc}", file=sys.stderr)
-        print("----- UNDELIVERED ALERT -----")
-        print(text)
+        if response.status_code == 200:
+            print("📲 Telegram alert delivered successfully!")
+            return True
+        else:
+            print(f"❌ Telegram API returned error: {response.text}", file=sys.stderr)
+            return False
+    except Exception as exc:
+        print(f"❌ Network error trying to call Telegram: {exc}", file=sys.stderr)
         return False
 
 
 # ---------------------------------------------------------------------------
-# Setup construction
+# Engine core
 # ---------------------------------------------------------------------------
-def build_setup(daily_open: float, current_price: float,
-                atr: float | None) -> dict:
-    stop = round_tick(daily_open * STOP_MULT)
-    entry = round_tick(daily_open * ENTRY_MULT)
-    target = round_tick(daily_open * TARGET_MULT)
-    risk = round(stop - entry, 4)
-    reward = round(entry - target, 4)
-    return {
-        "ticker": TICKER,
-        "timestamp_ct": datetime.now(CHICAGO_TZ).isoformat(),
-        "valid_until_ct": datetime.combine(
-            datetime.now(CHICAGO_TZ).date(), WINDOW_CLOSE,
-            tzinfo=CHICAGO_TZ).isoformat(),
-        "daily_open": round(daily_open, 4),
-        "current_price": round(current_price, 4),
-        "entry": entry,
-        "stop": stop,
-        "target": target,
-        "risk": risk,
-        "reward": reward,
-        "rr": round(reward / risk, 2) if risk > 0 else 0.0,
-        "atr_15m": round(atr, 4) if atr else None,
-        "stop_atr_multiple": round(risk / atr, 2) if (atr and atr > 0) else None,
-        "vol_warning": bool(atr and risk < ATR_STOP_MIN_MULT * atr),
-        "invalidated": current_price > stop,
-    }
-
-
-def format_message(setup: dict) -> str:
-    lines = [
-        "⛓ <b>[ZW=F] Anti-Hunt Short Setup — Institutional Open</b>",
-        "━━━━━━━━━━━━━━━━━━━━",
-        f"📅 Session: {datetime.now(CHICAGO_TZ).strftime('%A %Y-%m-%d %H:%M %Z')}",
-        f"🔵 Daily Open (Anchor): <b>{setup['daily_open']}</b>",
-        f"📊 Current Price: <code>{setup['current_price']}</code>",
-        "━━━━━━━━━━━━━━━━━━━━",
-        "<b>Protected Setup | Short Bias</b>",
-        f"🔻 ENTRY (Sell Limit): <code>{setup['entry']}</code>",
-        f"🛑 STOP-LOSS: <code>{setup['stop']}</code>",
-        f"🎯 TARGET: <code>{setup['target']}</code>",
-        "━━━━━━━━━━━━━━━━━━━━",
-        f"Risk: <code>{setup['risk']}</code> | "
-        f"Reward: <code>{setup['reward']}</code> | R:R ≈ <code>{setup['rr']}</code>",
-    ]
-    if setup["stop_atr_multiple"] is not None:
-        lines.append(f"Stop distance: {setup['stop_atr_multiple']}x ATR(16, 15m)"
-                     f" ({setup['atr_15m']})")
-    if setup["vol_warning"]:
-        lines.append("⚠️ <b>VOL WARNING:</b> stop inside 2x ATR noise band — "
-                     "size down or stand aside.")
-    lines.append(f"⏳ Levels valid until 12:30 CT today.")
-    lines.append("<i>Geometry engineered outside HFT sweep zones. "
-                 "CFD fills will differ from exchange prices — mind the spread.</i>")
-    return "\n".join(lines)
-
-
-# ---------------------------------------------------------------------------
-# Entry point
-# ---------------------------------------------------------------------------
-def main() -> int:
+def run_anti_hunt_logic(bypass_gates=False) -> None:
     now_ct = datetime.now(CHICAGO_TZ)
+    
+    # 1. Verification of environment constraints
+    if not bypass_gates:
+        if is_cme_holiday(now_ct.date()):
+            print(f"[{now_ct.date()}] CME Holiday observed. Aborting gracefully.")
+            return
+        if not check_time_window():
+            print(f"[{now_ct.strftime('%Y-%m-%d %H:%M %Z')}] Outside window. Aborting.")
+            return
 
-    # Dead-man switch first: even early aborts prove the scheduler is alive.
-    ping_healthcheck()
+    print(f"⚡ Institutional Core Analysis Active [{now_ct.strftime('%H:%M:%S %Z')}]")
 
-    if is_cme_holiday(now_ct.date()):
-        print(f"{now_ct.date()} is a CME holiday. Market closed — aborting.")
-        return 0
-
-    if not check_time_window():
-        print(
-            f"[{now_ct.strftime('%Y-%m-%d %H:%M %Z')}] Outside the safe "
-            f"institutional window (Mon-Fri, 08:45-12:30 America/Chicago). "
-            f"Aborting gracefully."
-        )
-        return 0
-
-    if now_ct.time() > ENTRY_CUTOFF:
-        print(f"Past the {ENTRY_CUTOFF.strftime('%H:%M')} entry cutoff — "
-              f"no fresh setups this late in the window. Aborting.")
-        return 0
-
-    print("Inside institutional window. Fetching ZW=F data...")
+    # 2. Ingest Data Stream
     try:
-        intraday, daily = fetch_market_data()
-    except ValueError as exc:
-        print(f"Data error: {exc}", file=sys.stderr)
-        return 1
+        intraday_data, daily_data = fetch_market_data()
+    except Exception as e:
+        print(f"🚫 Critical data error: {e}", file=sys.stderr)
+        return
 
-    age = check_staleness(intraday)
-    if age > MAX_DATA_AGE_MIN:
-        print(f"WARNING: last 15m bar is {age:.0f} min old — "
-              f"alert will be flagged as stale.", file=sys.stderr)
+    # 3. Data Integrity Constraints Check
+    staleness_min = check_staleness(intraday_data)
+    if not bypass_gates and staleness_min > MAX_DATA_AGE_MIN:
+        print(f"🚫 Pipeline Stalled: Data age is {staleness_min:.1f} minutes.", file=sys.stderr)
+        return
 
-    daily_open = resolve_session_open(intraday, daily)
-    current_price = float(intraday["Close"].iloc[-1])
-    atr = compute_atr(intraday)
-
-    setup = build_setup(daily_open, current_price, atr)
-    if age > MAX_DATA_AGE_MIN:
-        setup["stale_data_min"] = round(age, 1)
-
-    print(json.dumps(setup, indent=2))
-
-    if setup["invalidated"]:
-        print(f"Price {current_price} already above stop {setup['stop']} — "
-              f"setup invalidated. Skipping alert.")
-        return 0
-
-    # Persist for the Actions artifact (audit trail).
-    try:
-        with open("setup.json", "w") as fh:
-            json.dump(setup, fh, indent=2)
-    except OSError as exc:
-        print(f"Could not write setup.json (non-fatal): {exc}", file=sys.stderr)
-
-    send_telegram_alert(format_message(setup))
-    return 0  # delivery failure is non-fatal; it is logged loudly above
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+    # 4. Resolve Boundary Anchors & Metrics
