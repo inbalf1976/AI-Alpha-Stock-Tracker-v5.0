@@ -1,0 +1,33 @@
+{
+  "ticker": "ZW=F",
+  "profile": "BASE",
+  "timestamp_ct": "2026-09-26T05:14:56.542448-05:00",
+  "valid_until_ct": "2026-09-26T12:30:00-05:00",
+  "daily_open": 707.0,
+  "current_price": 703.25,
+  "entry": 702.75,
+  "stop": 715.5,
+  "target": 678.75,
+  "risk": 12.75,
+  "reward": 24.0,
+  "rr": 1.88,
+  "atr_15m": 2.9531,
+  "stop_atr_multiple": 4.32,
+  "vol_warning": false,
+  "invalidated": false,
+  "manual_mode": true,
+  "stale_data_min": 959.9,
+  "ml_shadow": {
+    "enabled": true,
+    "trained": false,
+    "probability_win": null,
+    "confidence_threshold": 0.6,
+    "decision": "INSUFFICIENT_DATA",
+    "model_samples": 0,
+    "training_report": {
+      "trained": false,
+      "reason": "Need at least 30 resolved WIN/LOSS samples.",
+      "samples": 0
+    }
+  }
+}
