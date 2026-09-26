@@ -122,7 +122,7 @@ def resolve_session_open(intraday: pd.DataFrame, daily: pd.DataFrame) -> float:
         idx = idx.tz_localize("UTC")
     todays_bars = intraday[idx.tz_convert(CHICAGO_TZ).date == now_ct.date()]
     if not todays_bars.empty:
-        return float(todays_bars["Open"].iloc[-1]) # FIXED: Explicit safe array tracking indices included
+        return float(todays_bars["Open"].iloc[-1]) # FIXED: Array bracket indexing applied cleanly
     return float(daily["Open"].iloc[-1])
 
 
