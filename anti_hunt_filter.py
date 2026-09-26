@@ -1,27 +1,30 @@
 """
-anti_hunt_filter.py  (v2 + manual test mode)
-================================================
-Institutional open anti-stop-hunting Short filter for Chicago SRW Wheat (ZW=F).
+anti_hunt_filter.py
+===================
+
+Institutional open anti-stop-hunting Short filter for Chicago SRW Wheat
+(ZW=F).
 
 NORMAL MODE:
-    Runs during the safe institutional window
-    (8:45 AM - 12:30 PM America/Chicago, weekdays only).
+    python anti_hunt_filter.py
+
+    Runs only during the configured institutional window:
+    08:45-12:30 America/Chicago, Monday-Friday.
 
 MANUAL MODE:
-    Run with:
-        python anti_hunt_filter.py --manual
+    python anti_hunt_filter.py --manual
 
-    Manual mode bypasses:
-        - CME holiday check
-        - Trading-window check
-        - 11:30 CT entry cutoff
+    Bypasses:
+      - CME holiday check
+      - trading-window check
+      - 11:30 CT entry cutoff
 
-    It still:
-        - Fetches real ZW=F market data
-        - Calculates the setup
-        - Performs data-staleness checks
-        - Writes setup.json
-        - Can send Telegram alerts
+    Manual mode still:
+      - fetches real ZW=F market data
+      - calculates the setup
+      - checks data staleness
+      - writes setup.json
+      - can send Telegram alerts
 
 Dependencies:
     yfinance
@@ -29,9 +32,9 @@ Dependencies:
     requests
 
 Environment:
-    TELEGRAM_BOT_TOKEN   optional for manual/local testing
-    TELEGRAM_CHAT_ID     optional for manual/local testing
-    HEALTHCHECK_URL      optional
+    TELEGRAM_BOT_TOKEN
+    TELEGRAM_CHAT_ID
+    HEALTHCHECK_URL (optional)
 """
 
 import os
@@ -69,24 +72,11 @@ ENTRY_CUTOFF = dt_time(11, 30)
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
-
 HEALTHCHECK_URL = os.environ.get("HEALTHCHECK_URL", "").strip()
 
 
 # ---------------------------------------------------------------------------
 # Manual mode
-# ---------------------------------------------------------------------------
-#
-# Normal automated run:
-#
-#     python anti_hunt_filter.py
-#
-# Manual/local test:
-#
-#     python anti_hunt_filter.py --manual
-#
-# Manual mode intentionally bypasses the time/holiday restrictions while
-# keeping the actual market-data calculation intact.
 # ---------------------------------------------------------------------------
 
 MANUAL_MODE = "--manual" in sys.argv
@@ -102,8 +92,7 @@ TARGET_MULT = 0.960
 
 
 # ---------------------------------------------------------------------------
-# CME full-day closures observed for grain futures.
-# Update yearly.
+# CME full-day closures
 # ---------------------------------------------------------------------------
 
 HOLIDAYS = {
@@ -137,15 +126,24 @@ HOLIDAYS = {
 
 def ping_healthcheck() -> None:
     """
-    Dead-man switch:
-    A monitoring service can alert us if this never fires.
+    Dead-man switch.
+
+    Manual runs intentionally do not ping the production healthcheck,
+    because a manual test should not count as proof that the scheduler
+    is operating normally.
     """
+
+    if MANUAL_MODE:
+        return
 
     if not HEALTHCHECK_URL:
         return
 
     try:
-        requests.get(HEALTHCHECK_URL, timeout=10)
+        requests.get(
+            HEALTHCHECK_URL,
+            timeout=10
+        )
 
     except requests.RequestException as exc:
         print(
@@ -154,18 +152,24 @@ def ping_healthcheck() -> None:
         )
 
 
-def round_tick(price: float, tick: float = TICK_SIZE) -> float:
+def round_tick(
+    price: float,
+    tick: float = TICK_SIZE
+) -> float:
     """
     Round to the exchange tick so levels are actually fillable.
     """
 
-    return round(round(price / tick) * tick, 4)
+    return round(
+        round(price / tick) * tick,
+        4
+    )
 
 
 def check_time_window() -> bool:
     """
     True only if current America/Chicago time is a weekday between
-    8:45 AM and 12:30 PM.
+    08:45 and 12:30.
     """
 
     now_ct = datetime.now(CHICAGO_TZ)
@@ -206,10 +210,12 @@ def fetch_market_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     intraday = None
     daily = None
 
-    for attempt in range(1, MAX_FETCH_ATTEMPTS + 1):
+    for attempt in range(
+        1,
+        MAX_FETCH_ATTEMPTS + 1
+    ):
 
         try:
-
             intraday = _flatten(
                 yf.download(
                     TICKER,
@@ -231,7 +237,6 @@ def fetch_market_data() -> tuple[pd.DataFrame, pd.DataFrame]:
             )
 
         except Exception as exc:
-
             print(
                 f"Fetch attempt {attempt} raised: {exc}",
                 file=sys.stderr
@@ -245,12 +250,12 @@ def fetch_market_data() -> tuple[pd.DataFrame, pd.DataFrame]:
         ):
             return intraday, daily
 
-        # Don't wait after the final attempt.
         if attempt < MAX_FETCH_ATTEMPTS:
             wait_seconds = 10 * attempt
 
             print(
-                f"No usable data. Retrying in {wait_seconds} seconds..."
+                f"No usable data. Retrying in "
+                f"{wait_seconds} seconds..."
             )
 
             time.sleep(wait_seconds)
@@ -269,9 +274,9 @@ def resolve_session_open(
     """
     Anchor:
 
-    1. First 15m candle of the CURRENT Chicago session.
-    2. Falls back to the latest daily bar's open when the intraday
-       series doesn't yet contain today's session.
+    1. First 15m candle of the current Chicago session.
+    2. Falls back to the latest daily bar's open when today's
+       intraday session is not available.
     """
 
     now_ct = datetime.now(CHICAGO_TZ)
@@ -286,12 +291,18 @@ def resolve_session_open(
     ]
 
     if not todays_bars.empty:
-        return float(todays_bars["Open"].iloc[0])
+        return float(
+            todays_bars["Open"].iloc[0]
+        )
 
-    return float(daily["Open"].iloc[-1])
+    return float(
+        daily["Open"].iloc[-1]
+    )
 
 
-def compute_atr(intraday: pd.DataFrame) -> float | None:
+def compute_atr(
+    intraday: pd.DataFrame
+) -> float | None:
     """
     ATR(PERIOD) on 15m bars.
     Returns None if there is not enough history.
@@ -318,7 +329,9 @@ def compute_atr(intraday: pd.DataFrame) -> float | None:
     )
 
 
-def check_staleness(intraday: pd.DataFrame) -> float:
+def check_staleness(
+    intraday: pd.DataFrame
+) -> float:
     """
     Return age of the last 15m bar in minutes.
     """
@@ -348,8 +361,10 @@ def send_telegram_alert(text: str) -> bool:
     Analysis success does NOT depend on Telegram delivery.
     """
 
-    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
-
+    if (
+        not TELEGRAM_BOT_TOKEN
+        or not TELEGRAM_CHAT_ID
+    ):
         print(
             "Telegram credentials missing — "
             "alert printed to stdout instead."
@@ -372,7 +387,6 @@ def send_telegram_alert(text: str) -> bool:
     }
 
     try:
-
         response = requests.post(
             url,
             json=payload,
@@ -384,7 +398,6 @@ def send_telegram_alert(text: str) -> bool:
         return True
 
     except requests.RequestException as exc:
-
         print(
             f"Telegram delivery failed (non-fatal): {exc}",
             file=sys.stderr
@@ -494,7 +507,9 @@ def build_setup(
 # Message formatting
 # ---------------------------------------------------------------------------
 
-def format_message(setup: dict) -> str:
+def format_message(
+    setup: dict
+) -> str:
 
     mode_label = (
         "MANUAL TEST"
@@ -503,7 +518,6 @@ def format_message(setup: dict) -> str:
     )
 
     lines = [
-
         f"⛓ <b>[ZW=F] Anti-Hunt Short Setup — "
         f"Institutional Open ({mode_label})</b>",
 
@@ -543,7 +557,6 @@ def format_message(setup: dict) -> str:
     ]
 
     if setup["stop_atr_multiple"] is not None:
-
         lines.append(
             f"Stop distance: "
             f"{setup['stop_atr_multiple']}x ATR(16, 15m) "
@@ -551,7 +564,6 @@ def format_message(setup: dict) -> str:
         )
 
     if setup["vol_warning"]:
-
         lines.append(
             "⚠️ <b>VOL WARNING:</b> "
             "stop inside 2x ATR noise band — "
@@ -569,7 +581,6 @@ def format_message(setup: dict) -> str:
     )
 
     if MANUAL_MODE:
-
         lines.append(
             "🧪 <b>MANUAL TEST MODE:</b> "
             "normal time/holiday restrictions bypassed."
@@ -586,66 +597,59 @@ def main() -> int:
 
     now_ct = datetime.now(CHICAGO_TZ)
 
-    if MANUAL_MODE:
+    # -----------------------------------------------------------------------
+    # Mode information
+    # -----------------------------------------------------------------------
 
+    if MANUAL_MODE:
         print(
             "=================================================="
         )
-
         print(
             "MANUAL TEST MODE"
         )
-
         print(
-            "Normal trading-window restrictions are bypassed."
+            "Normal time/holiday restrictions are bypassed."
         )
-
         print(
             "Real ZW=F market data will still be fetched."
         )
-
         print(
             "=================================================="
         )
 
     # -----------------------------------------------------------------------
-    # Dead-man switch
+    # Healthcheck
     # -----------------------------------------------------------------------
-    #
-    # This remains enabled in both normal and manual mode.
-    #
+
     ping_healthcheck()
 
     # -----------------------------------------------------------------------
-    # CME holiday check
+    # CME holiday
     # -----------------------------------------------------------------------
 
     if not MANUAL_MODE:
 
         if is_cme_holiday(now_ct.date()):
-
             print(
                 f"{now_ct.date()} is a CME holiday. "
                 f"Market closed — aborting."
             )
-
             return 0
 
     # -----------------------------------------------------------------------
-    # Trading window check
+    # Trading window
     # -----------------------------------------------------------------------
 
     if not MANUAL_MODE:
 
         if not check_time_window():
-
             print(
                 f"[{now_ct.strftime('%Y-%m-%d %H:%M %Z')}] "
                 f"Outside the safe institutional window "
                 f"(Mon-Fri, 08:45-12:30 America/Chicago). "
                 f"Aborting gracefully."
             )
-
             return 0
 
     # -----------------------------------------------------------------------
@@ -655,7 +659,6 @@ def main() -> int:
     if not MANUAL_MODE:
 
         if now_ct.time() > ENTRY_CUTOFF:
-
             print(
                 f"Past the "
                 f"{ENTRY_CUTOFF.strftime('%H:%M')} "
@@ -663,7 +666,6 @@ def main() -> int:
                 f"no fresh setups this late in the window. "
                 f"Aborting."
             )
-
             return 0
 
     # -----------------------------------------------------------------------
@@ -671,30 +673,27 @@ def main() -> int:
     # -----------------------------------------------------------------------
 
     print(
-        "Fetching ZW=F market data..."
+        "Inside permitted execution mode. "
+        "Fetching ZW=F data..."
     )
 
     try:
-
         intraday, daily = fetch_market_data()
 
     except ValueError as exc:
-
         print(
             f"Data error: {exc}",
             file=sys.stderr
         )
-
         return 1
 
     # -----------------------------------------------------------------------
-    # Staleness check
+    # Staleness
     # -----------------------------------------------------------------------
 
     age = check_staleness(intraday)
 
     if age > MAX_DATA_AGE_MIN:
-
         print(
             f"WARNING: last 15m bar is "
             f"{age:.0f} min old — "
@@ -703,12 +702,12 @@ def main() -> int:
         )
 
     # -----------------------------------------------------------------------
-    # Resolve market values
+    # Resolve values
     # -----------------------------------------------------------------------
 
     daily_open = resolve_session_open(
         intraday,
-        daily,
+        daily
     )
 
     current_price = float(
@@ -726,11 +725,10 @@ def main() -> int:
     setup = build_setup(
         daily_open,
         current_price,
-        atr,
+        atr
     )
 
     if age > MAX_DATA_AGE_MIN:
-
         setup["stale_data_min"] = round(
             age,
             1
@@ -752,26 +750,22 @@ def main() -> int:
     # -----------------------------------------------------------------------
 
     if setup["invalidated"]:
-
         print(
             f"Price {current_price} already above "
             f"stop {setup['stop']} — "
             f"setup invalidated. Skipping alert."
         )
-
         return 0
 
     # -----------------------------------------------------------------------
-    # Persist setup.json
+    # Save setup.json
     # -----------------------------------------------------------------------
 
     try:
-
         with open(
             "setup.json",
             "w"
         ) as fh:
-
             json.dump(
                 setup,
                 fh,
@@ -779,7 +773,6 @@ def main() -> int:
             )
 
     except OSError as exc:
-
         print(
             f"Could not write setup.json "
             f"(non-fatal): {exc}",
@@ -787,7 +780,7 @@ def main() -> int:
         )
 
     # -----------------------------------------------------------------------
-    # Telegram alert
+    # Telegram
     # -----------------------------------------------------------------------
 
     send_telegram_alert(
