@@ -2,6 +2,10 @@ name: Anti-Hunt Morning Filter V5
 
 on:
   schedule:
+    # Early spike-watch tick — main() dispatches this to the premarket
+    # spike-watch-only path on its own; nothing below needs to change for it.
+    - cron: '45 7 * * 1-5'
+      timezone: 'America/Chicago'
     - cron: '45 8 * * 1-5'
       timezone: 'America/Chicago'
     - cron: '45 9 * * 1-5'
