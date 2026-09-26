@@ -2,10 +2,10 @@ name: Anti-Hunt Morning Filter V5
 
 on:
   schedule:
-    # Early spike-watch tick — main() dispatches this to the premarket
-    # spike-watch-only path on its own; nothing below needs to change for it.
+    # Early SPIKE WATCH: 07:45 CT
     - cron: '45 7 * * 1-5'
       timezone: 'America/Chicago'
+    # Normal V5 signal: 08:45 CT
     - cron: '45 8 * * 1-5'
       timezone: 'America/Chicago'
     - cron: '45 9 * * 1-5'
@@ -13,11 +13,6 @@ on:
     - cron: '15 13 * * 1-5'
       timezone: 'America/Chicago'
   workflow_dispatch:
-    inputs:
-      force_stale:
-        description: 'Bypass staleness gate for this manual test run'
-        type: boolean
-        default: false
 
 concurrency:
   group: anti-hunt-filter
@@ -54,11 +49,7 @@ jobs:
             echo "=============================================="
             echo "V5 MANUAL TEST RUN"
             echo "=============================================="
-            if [ "${{ inputs.force_stale }}" = "true" ]; then
-              python anti_hunt_filter.py --manual --force-stale
-            else
-              python anti_hunt_filter.py --manual
-            fi
+            python anti_hunt_filter.py --manual
           elif [ "${{ github.event.schedule }}" = "15 13 * * 1-5" ]; then
             echo "=============================================="
             echo "V5 OUTCOME RESOLUTION / LEARNING RUN"
