@@ -1,19 +1,4 @@
-anti_hunt_filter.py v3 - controlled adaptive version
 
-The script:
-1. Fetches real ZW=F data.
-2. Generates the normal anti-hunt setup.
-3. Records setups in learning_state.json.
-4. On later runs, resolves old setups as WIN/LOSS/NO_ENTRY/AMBIGUOUS/EXPIRED.
-5. Evaluates five fixed strategy profiles on every completed setup ("shadow learning").
-6. After enough evidence, it may switch to a better-performing profile.
-7. It never rewrites its own Python code.
-
-Dependencies: yfinance, pandas, requests
-Environment: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, HEALTHCHECK_URL (optional)
-"""
-
-import json
 import os
 import sys
 import time
@@ -268,12 +253,9 @@ def completed_bars(intraday: pd.DataFrame):
 
 
 def evaluate_geometry(setup: dict, bars: pd.DataFrame, idx) -> dict:
-    """
-    Evaluate one profile against future 15m bars.
-
-    If both stop and target are touched in the same 15m bar, the order is
-    unknowable from 15m data, so the result is AMBIGUOUS rather than guessed.
-    """
+    # Evaluate one profile against future 15m bars.
+    # If stop and target are both touched in one 15m bar, the order is
+    # unknowable from 15m data, so classify it as AMBIGUOUS rather than guess.
     daily_open = float(setup["daily_open"])
     valid_until = datetime.fromisoformat(setup["valid_until_ct"])
     setup_time = datetime.fromisoformat(setup["timestamp_ct"])
