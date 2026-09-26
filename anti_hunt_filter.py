@@ -1,4 +1,3 @@
-```python
 """
 anti_hunt_filter.py  (v2 + manual test mode)
 ================================================
