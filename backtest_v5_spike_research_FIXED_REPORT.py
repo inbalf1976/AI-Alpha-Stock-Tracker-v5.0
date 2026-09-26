@@ -163,11 +163,14 @@ def main():
         daily_direction = macro.get("daily_direction", "NEUTRAL")
         if direction not in {"UP", "DOWN"}:
             continue
-        if daily_direction in {"UP", "DOWN"} and daily_direction != direction:
-            continue
+        # Counter-trend signals are INCLUDED, not excluded — a spike against
+        # the daily direction is the institutional counter-move this system
+        # exists to catch. Tracked as a field for breakdown, not filtered.
+        aligned_with_daily = daily_direction not in {"UP", "DOWN"} or daily_direction == direction
         signals.append({
             "signal_i": i, "signal_time_ct": ts.isoformat(), "direction": direction,
-            "daily_direction": daily_direction, "score": spike.get("score"),
+            "daily_direction": daily_direction, "aligned_with_daily": aligned_with_daily,
+            "score": spike.get("score"),
             "up_score": spike.get("up_score"), "down_score": spike.get("down_score"),
             "signal_price": price, "volume_ratio": spike.get("volume_ratio", 1),
             "atr_expansion_ratio": spike.get("atr_expansion_ratio", 1),
@@ -243,7 +246,7 @@ def main():
         "horizon_bars": HORIZON_BARS,
         "analysis_geometry": {"stop_dist": ANALYSIS_STOP_DISTANCE, "target_dist": ANALYSIS_TARGET_DISTANCE, "rr": round(ANALYSIS_TARGET_DISTANCE / ANALYSIS_STOP_DISTANCE, 3)},
         "analysis_signal_count": int(len(analysis)),
-        "counter_trend_policy": "excluded",
+        "counter_trend_policy": "included — this is the primary use case (institutional counter-move against the daily direction), not something to filter out",
         "purpose": "Research only. Does not modify the live bounded learner or production signal.",
         "target_stop_matrix": {
             "rows": int(len(matrix)),
@@ -252,6 +255,7 @@ def main():
         "fixed_geometry_by_feature_bucket": summarize(analysis, ["feature_bucket"]),
         "fixed_geometry_by_episode_position": summarize(analysis, ["episode_position"]),
         "fixed_geometry_by_direction": summarize(analysis, ["direction"]),
+        "fixed_geometry_by_alignment": summarize(analysis, ["aligned_with_daily"]),
         "delayed_entry_5_16": summarize(delayed, ["delay_bars"]),
         "first_signal_per_episode_5_16": summarize(first_df, ["direction"]),
         "episodes": {
