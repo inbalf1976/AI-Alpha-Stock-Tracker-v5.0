@@ -1,54 +1,54 @@
-name: Anti-Hunt Backtest (manual, idempotent)
+name: V5 Spike Direction Backtest
+
 on:
-  workflow_dispatch:   # manual trigger only — run this from the Actions tab
+  workflow_dispatch:
+    inputs:
+      period:
+        description: "yfinance intraday backtest period"
+        required: false
+        default: "60d"
+      horizon_bars:
+        description: "15m bars evaluated after each confirmed spike"
+        required: false
+        default: "32"
+  schedule:
+    - cron: "30 14 * * 1"
+
+permissions:
+  contents: read
 
 jobs:
   backtest:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      contents: write
+    timeout-minutes: 30
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
-    - name: Install packages
-      run: pip install "yfinance>=0.2.40,<0.3" "pandas>=2.0,<3" "numpy>=1.24,<3" "requests>=2.31,<3" "scikit-learn>=1.3,<2"
-    - name: Run anti-hunt backtest
-      # Idempotent — safe to re-run, dedupes on timestamp_ct.
-      # Backfilled setups are tagged source: "backtest" and are excluded
-      # from the live bounded profile-switch decision (see maybe_learn()
-      # in anti_hunt_filter.py); they only bootstrap the shadow ML model.
-      run: python anti_hunt_backtest.py
-    - name: Upload backtest summary
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: anti-hunt-backtest-summary-${{ github.run_id }}
-        path: anti_hunt_backtest_results.json
-        retention-days: 30
-        if-no-files-found: ignore
-    - name: Commit updated learning_state.json
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add -f learning_state.json anti_hunt_backtest_results.json || true
-        if git diff --staged --quiet; then
-          echo "Nothing to commit."
-        else
-          git commit -m "Backfill anti-hunt backtest setups [skip ci]"
-          for attempt in 1 2 3; do
-            if git push; then
-              echo "Push succeeded on attempt $attempt."
-              exit 0
-            fi
-            echo "Push failed (attempt $attempt) — fetching + merging (prefer local) and retrying..."
-            git fetch origin main
-            git merge -X ours origin/main -m "merge: resolve concurrent state update [skip ci]"
-          done
-          echo "::error::git push failed after 3 attempts."
-          exit 1
-        fi
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install yfinance pandas numpy requests scikit-learn
+
+      - name: Run V5 directional spike backtest
+        env:
+          BACKTEST_PERIOD: ${{ inputs.period || '60d' }}
+          SPIKE_HORIZON_BARS: ${{ inputs.horizon_bars || '32' }}
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python backtest_v5_spike.py
+
+      - name: Upload backtest report
+        uses: actions/upload-artifact@v4
+        with:
+          name: v5-spike-backtest
+          path: |
+            backtest_v5_spike_report.json
+            backtest_v5_spike_trades.csv
+          if-no-files-found: error
+          retention-days: 30
