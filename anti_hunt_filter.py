@@ -116,6 +116,10 @@ def is_resolve():
     return "--resolve" in sys.argv
 
 
+def is_force_stale():
+    return "--force-stale" in sys.argv
+
+
 def ping_healthcheck():
     if not HEALTHCHECK_URL or is_manual():
         return
@@ -865,7 +869,15 @@ def main():
 
     age = check_staleness(intraday)
     if age > MAX_DATA_AGE_MIN:
-        print(f"WARNING: last 15m bar is {age:.0f} min old — alert will be flagged as stale.")
+        print(f"WARNING: last 15m bar is {age:.0f} min old (max allowed {MAX_DATA_AGE_MIN} min).")
+        if not (manual and is_force_stale()):
+            print(
+                "ABORT: data too stale — no setup will be built, no alert sent."
+                + (" Use --manual --force-stale to test with stale data anyway." if manual else "")
+            )
+            save_json(STATE_FILE, state)
+            return 0
+        print("--force-stale set: continuing with stale data for manual test only.")
 
     daily_open = resolve_session_open(intraday, daily)
     current_price = float(intraday["Close"].iloc[-1])
