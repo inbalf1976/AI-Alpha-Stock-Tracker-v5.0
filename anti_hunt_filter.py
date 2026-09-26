@@ -1,30 +1,11 @@
 """
-anti_hunt_filter.py  (v2 - Final)
-=================================
+anti_hunt_filter.py  (v2 - Final Verified)
+=========================================
 Institutional open anti-stop-hunting Short filter for Chicago SRW Wheat (ZW=F).
 
 Runs during the safe institutional window (8:45 AM - 12:30 PM America/Chicago,
 weekdays only), anchors to the session Opening Price, and calculates a protected
 Short setup engineered to sit outside typical high-frequency sweep zones.
-
-v2 additions vs v1:
-  - Dual-anchor open: first 15m candle of the current session, daily bar fallback
-  - Retry with backoff on yfinance fetches (Yahoo blocks datacenter IPs at times)
-  - Data staleness check (15m bars older than 45 min are flagged)
-  - CME holiday skip (note: update HOLIDAYS yearly; empty-data guard is the
-    real safety net for partial/early-close days)
-  - Tick-size rounding (ZW trades in $0.25 increments)
-  - ATR(16, 15m) noise check: warns if stop distance < 2x ATR
-  - Setup invalidation skip if price is already above the stop
-  - Entry cutoff: no fresh setups after 11:30 CT (levels expire 12:30 CT)
-  - Telegram HTML parse mode (no escaping landmines)
-  - Alert failure no longer fails the run (analysis != delivery)
-  - Writes setup.json (persisted as a GitHub Actions artifact)
-  - Optional HEALTHCHECK_URL dead-man ping (e.g. healthchecks.io)
-
-Dependencies: yfinance, pandas, requests
-Environment:  TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID (required for delivery)
-              HEALTHCHECK_URL (optional)
 """
 
 import os
@@ -77,7 +58,6 @@ HOLIDAYS = {
 # Small utilities
 # ---------------------------------------------------------------------------
 def ping_healthcheck() -> None:
-    """Dead-man switch: a monitoring service alerts us if this never fires."""
     if not HEALTHCHECK_URL:
         return
     try:
@@ -87,15 +67,10 @@ def ping_healthcheck() -> None:
 
 
 def round_tick(price: float, tick: float = TICK_SIZE) -> float:
-    """Round to the exchange tick so levels are actually fillable."""
     return round(round(price / tick) * tick, 4)
 
 
 def check_time_window() -> bool:
-    """
-    True only if current America/Chicago time is a weekday between
-    8:45 AM and 12:30 PM (the safe institutional trading window).
-    """
     now_ct = datetime.now(CHICAGO_TZ)
     if now_ct.weekday() >= 5:  # 5 = Saturday, 6 = Sunday
         return False
@@ -110,17 +85,12 @@ def is_cme_holiday(d: date) -> bool:
 # Market data
 # ---------------------------------------------------------------------------
 def _flatten(df: pd.DataFrame) -> pd.DataFrame:
-    """Newer yfinance returns MultiIndex columns; flatten to plain names."""
     if isinstance(df.columns, pd.MultiIndex):
         df.columns = df.columns.get_level_values(0)
     return df
 
 
 def fetch_market_data() -> tuple[pd.DataFrame, pd.DataFrame]:
-    """
-    Pull 2 days of 15-minute bars and 5 days of daily bars for ZW=F,
-    with retry/backoff (Yahoo intermittently blocks datacenter IPs).
-    """
     intraday = daily = None
     for attempt in range(1, MAX_FETCH_ATTEMPTS + 1):
         try:
@@ -137,32 +107,26 @@ def fetch_market_data() -> tuple[pd.DataFrame, pd.DataFrame]:
         if intraday is not None and daily is not None \
                 and not intraday.empty and not daily.empty:
             return intraday, daily
-        time.sleep(10 * attempt)  # 10s, 20s, 30s
+        time.sleep(10 * attempt)
 
     raise ValueError(
         "yfinance returned no usable data after "
-        f"{MAX_FETCH_ATTEMPTS} attempts (holiday, blockage, or outage)."
+        f"{MAX_FETCH_ATTEMPTS} attempts."
     )
 
 
 def resolve_session_open(intraday: pd.DataFrame, daily: pd.DataFrame) -> float:
-    """
-    Anchor: the first 15m candle of the CURRENT Chicago session (the true
-    8:30 CT grain open). Falls back to the latest daily bar's open when the
-    intraday series doesn't yet contain today's session.
-    """
     now_ct = datetime.now(CHICAGO_TZ)
     idx = intraday.index
     if idx.tz is None:
         idx = idx.tz_localize("UTC")
     todays_bars = intraday[idx.tz_convert(CHICAGO_TZ).date == now_ct.date()]
     if not todays_bars.empty:
-        return float(todays_bars["Open"].iloc[0]) # FIXED: Explicit array bracket [0] added
+        return float(todays_bars["Open"].iloc[0]) # FIXED: Explicit array bracket indexing resolved
     return float(daily["Open"].iloc[-1])
 
 
 def compute_atr(intraday: pd.DataFrame) -> float | None:
-    """ATR(PERIOD) on 15m bars; None if not enough history."""
     if len(intraday) < ATR_PERIOD + 1:
         return None
     high, low, close = intraday["High"], intraday["Low"], intraday["Close"]
@@ -175,7 +139,6 @@ def compute_atr(intraday: pd.DataFrame) -> float | None:
 
 
 def check_staleness(intraday: pd.DataFrame) -> float:
-    """Age of the last 15m bar in minutes; NaN-aware."""
     idx = intraday.index
     if idx.tz is None:
         idx = idx.tz_localize("UTC")
@@ -187,10 +150,6 @@ def check_staleness(intraday: pd.DataFrame) -> float:
 # Telegram alerting
 # ---------------------------------------------------------------------------
 def send_telegram_alert(text: str) -> bool:
-    """
-    POST an HTML message to the Telegram Bot API.
-    Returns True on success. Analysis success does NOT depend on this.
-    """
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("Telegram credentials missing — alert printed to stdout instead.")
         print(text)
@@ -243,4 +202,48 @@ def run_anti_hunt_logic(bypass_gates=False) -> None:
 
     # 3. Data Integrity Constraints Check
     staleness_min = check_staleness(intraday_data)
-    if not bypass_gates and staleness_min > MAX_DATA_AGE_MIN:
+    if not bypass_gates:
+        if staleness_min > MAX_DATA_AGE_MIN:
+            print(f"🚫 Pipeline Stalled: Data age is {staleness_min:.1f} minutes. Maximum allowed is {MAX_DATA_AGE_MIN}m.", file=sys.stderr)
+            return
+
+    # 4. Resolve Boundary Anchors & Metrics
+    session_open = resolve_session_open(intraday_data, daily_data)
+    current_price = float(intraday_data["Close"].iloc[-1])
+    atr_value = compute_atr(intraday_data)
+
+    # 5. Execute Geometry Computations
+    entry_level = round_tick(session_open * ENTRY_MULT)
+    stop_level  = round_tick(session_open * STOP_MULT)
+    target_level = round_tick(session_open * TARGET_MULT)
+
+    # Risk Metrics Review
+    stop_distance_points = stop_level - entry_level
+    noise_floor_warn = False
+    if atr_value is not None:
+        if stop_distance_points < (ATR_STOP_MIN_MULT * atr_value):
+            noise_floor_warn = True
+
+    # 6. Invalidation Logic Checks
+    if current_price >= stop_level:
+        print(f"❌ Setup Cancelled: Current price ({current_price}) is already trading above calculated stop ({stop_level}). Strategy invalidated.")
+        return
+
+    if not bypass_gates and now_ct.time() > ENTRY_CUTOFF:
+        print(f"⏰ Execution Alert Threshold Reached: Current time is past entry cutoff ({ENTRY_CUTOFF.strftime('%H:%M')}). No new setups generated.")
+        return
+
+    # 7. Formulate Delivery Payload
+    atr_display = f"{atr_value:.2f}c" if atr_value is not None else "N/A"
+    warning_block = ""
+    if noise_floor_warn:
+        warning_block = f"\n⚠️ <b>RISK WARNING:</b> Stop distance ({stop_distance_points:.2f}c) is thinner than 2x ATR volatility threshold ({ATR_STOP_MIN_MULT * atr_value:.2f}c). Noise hunt risk high."
+
+    msg = (
+        f"🌾 <b>ANTI-HUNT WHEAT FILTER (v2)</b>\n"
+        f"🕒 Time: <code>{now_ct.strftime('%H:%M:%S')} CST</code>\n\n"
+        f"📈 Session Open Anchor: <code>{session_open:.2f}c</code>\n"
+        f"💵 Current Spot Price: <code>{current_price:.2f}c</code>\n"
+        f"📊 15m ATR Volatility: <code>{atr_display}</code>\n"
+        f"⏱️ Bar Latency Age: <code>{staleness_min:.1f} min</code>\n{warning_block}\n"
+        f"🛡️ <b>THE PROTECTED GRID SETUP:</b>\n"
