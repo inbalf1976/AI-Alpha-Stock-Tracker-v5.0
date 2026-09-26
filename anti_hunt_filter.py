@@ -40,6 +40,25 @@ WINDOW_OPEN = dt_time(8, 45)
 WINDOW_CLOSE = dt_time(12, 30)
 ENTRY_CUTOFF = dt_time(11, 30)
 
+# Spike-watch layer: detects a developing directional volatility expansion
+# BEFORE the normal trade signal window opens. When a direction is confirmed,
+# spike_directional_setup() below also computes a concrete ENTRY/STOP/TARGET
+# recommendation using the same fixed-distance geometry as
+# backtest_v5_spike.py's directional_setup(), so the live alert and its
+# backtest stay consistent. The two constants below are intentionally
+# duplicated there rather than imported, so the backtest script keeps working
+# standalone — change both together if you ever revise the distances.
+SPIKE_WATCH_OPEN = dt_time(7, 30)
+SPIKE_WATCH_CLOSE = dt_time(12, 30)
+SPIKE_SCORE_THRESHOLD = 5
+SPIKE_LOOKBACK_BARS = 12
+SPIKE_BREAKOUT_LOOKBACK = 20
+SPIKE_COMPRESSION_THRESHOLD = 0.85
+SPIKE_VOLUME_THRESHOLD = 1.25
+SPIKE_ATR_EXPANSION_THRESHOLD = 1.10
+SPIKE_TRADE_STOP_DISTANCE = 5.0
+SPIKE_TRADE_TARGET_DISTANCE = 32.0
+
 PROFILES = {
     "BASE": {"entry_mult": 0.994, "stop_mult": 1.012, "target_mult": 0.960},
     "ENTRY_993": {"entry_mult": 0.993, "stop_mult": 1.012, "target_mult": 0.960},
@@ -66,6 +85,7 @@ ML_MIN_TRAIN_SAMPLES = 40
 
 STATE_FILE = "learning_state.json"
 OUTCOME_VERSION = 5
+SPIKE_WATCH_VERSION = 2
 SETUP_FILE = "setup.json"
 REPORT_FILE = "learning_report.json"
 ML_REPORT_FILE = "ml_report.json"
@@ -160,8 +180,11 @@ def fetch_market_data():
                 TICKER, period="2d", interval="15m",
                 auto_adjust=False, progress=False
             ))
+            # 2y matches backtest.py's own LOOKBACK_DAYS=730 convention elsewhere
+            # in this repo, and comfortably covers daily_spike_context()'s
+            # up-to-252-trading-day breakout/compression/weekly-trend checks.
             daily = _flatten(yf.download(
-                TICKER, period="5d", interval="1d",
+                TICKER, period="2y", interval="1d",
                 auto_adjust=False, progress=False
             ))
             hourly = _flatten(yf.download(
@@ -355,6 +378,379 @@ def market_context(intraday, daily, hourly, now_ct):
         "regime": regime,
         "regime_score": trend_score,
     }
+
+
+def daily_spike_context(daily, current_price, now_ct):
+    """Measure the multi-week/month regime visible in the long-term charts.
+
+    This is not a prediction by itself. It identifies compression, trend,
+    breakout and volatility-expansion conditions on daily data so the
+    intraday SPIKE WATCH can distinguish an ordinary move from a move that is
+    occurring inside a larger expansion regime.
+
+    NOTE: these daily_*/weekly_* fields are NOT currently in ML_FEATURES —
+    deliberately held back given the small live sample size (see maybe_learn
+    discipline elsewhere in this file). They're computed and stored on the
+    setup for visibility/debugging; add them to ML_FEATURES later once real
+    resolved-trade volume justifies the extra dimensionality.
+    """
+    d = daily.copy()
+    d.index = chicago_index(d)
+    d = d.sort_index()
+    # Use only completed daily bars for long-term measurements. The current
+    # session is represented by current_price from the 15m feed and must not
+    # leak a partial daily bar into the historical reference levels.
+    completed = d.loc[d.index.date < now_ct.date()].copy()
+    if not completed.empty:
+        d = completed
+    close = d["Close"].astype(float)
+    high = d["High"].astype(float)
+    low = d["Low"].astype(float)
+    volume = d["Volume"].astype(float) if "Volume" in d.columns else pd.Series(1.0, index=d.index)
+
+    if len(close) < 70:
+        return {
+            "enabled": True,
+            "qualified": False,
+            "stage": "INSUFFICIENT_DAILY_HISTORY",
+            "reason": "Need at least 70 daily bars for long-term spike context.",
+            "version": SPIKE_WATCH_VERSION,
+        }
+
+    def pct_from_lag(n):
+        return (float(current_price) / float(close.iloc[-1 - n]) - 1.0) * 100.0 if len(close) > n else 0.0
+
+    daily_5 = pct_from_lag(5)
+    daily_20 = pct_from_lag(20)
+
+    # Breakout distances use the highest completed daily bar before today.
+    high20 = float(high.tail(20).max())
+    high60 = float(high.tail(60).max())
+    high252 = float(high.tail(min(252, len(high))).max())
+    breakout20 = (float(current_price) / high20 - 1.0) * 100.0 if high20 else 0.0
+    breakout60 = (float(current_price) / high60 - 1.0) * 100.0 if high60 else 0.0
+    breakout252 = (float(current_price) / high252 - 1.0) * 100.0 if high252 else 0.0
+
+    tr = pd.concat([
+        high - low,
+        (high - close.shift()).abs(),
+        (low - close.shift()).abs(),
+    ], axis=1).max(axis=1)
+    atr20 = tr.rolling(20).mean()
+    atr60 = tr.rolling(60).mean()
+    daily_volatility_ratio = float(atr20.iloc[-1] / atr60.iloc[-1]) if pd.notna(atr20.iloc[-1]) and pd.notna(atr60.iloc[-1]) and atr60.iloc[-1] > 0 else 1.0
+
+    range20 = (high.tail(20) - low.tail(20)).mean()
+    range60 = (high.tail(60) - low.tail(60)).mean()
+    compression_ratio = float(range20 / range60) if range60 > 0 else 1.0
+
+    recent_volume = float(volume.tail(5).mean())
+    base_volume = float(volume.tail(60).head(55).median()) if len(volume) >= 60 else recent_volume
+    volume_ratio = recent_volume / base_volume if base_volume > 0 else 1.0
+
+    weekly = close.resample("W-FRI").last().dropna()
+    weekly_4 = (float(weekly.iloc[-1]) / float(weekly.iloc[-5]) - 1.0) * 100.0 if len(weekly) >= 5 else 0.0
+    weekly_13 = (float(weekly.iloc[-1]) / float(weekly.iloc[-14]) - 1.0) * 100.0 if len(weekly) >= 14 else 0.0
+
+    # Directional daily regime used by the spike alert. This is descriptive
+    # context, not a trade trigger: the spike direction is compared against
+    # the prevailing daily direction in the alert recommendation.
+    if daily_20 >= 0.50 and weekly_13 >= -0.50:
+        daily_direction = "UP"
+    elif daily_20 <= -0.50 and weekly_13 <= 0.50:
+        daily_direction = "DOWN"
+    else:
+        daily_direction = "NEUTRAL"
+
+    checks = {
+        "daily_compression": compression_ratio <= 0.85,
+        "daily_volatility_expansion": daily_volatility_ratio >= 1.15,
+        "daily_20d_breakout": breakout20 >= 0.0,
+        "daily_60d_breakout": breakout60 >= 0.0,
+        "daily_252d_breakout": breakout252 >= -0.5,
+        "daily_momentum": daily_20 >= 2.0,
+        "volume_expansion": volume_ratio >= 1.15,
+        "weekly_trend": weekly_13 > 3.0,
+    }
+    score = sum(bool(v) for v in checks.values())
+
+    if score >= 6:
+        stage = "MACRO_SPIKE_REGIME"
+    elif score >= 4:
+        stage = "MACRO_SPIKE_WATCH"
+    else:
+        stage = "NORMAL_REGIME"
+
+    return {
+        "enabled": True,
+        "version": SPIKE_WATCH_VERSION,
+        "qualified": score >= 4,
+        "stage": stage,
+        "score": score,
+        "max_score": len(checks),
+        "checks": checks,
+        "daily_5bar_pct": round(daily_5, 4),
+        "daily_20bar_pct": round(daily_20, 4),
+        "daily_20d_breakout_pct": round(breakout20, 4),
+        "daily_60d_breakout_pct": round(breakout60, 4),
+        "daily_252d_breakout_pct": round(breakout252, 4),
+        "daily_volatility_ratio": round(daily_volatility_ratio, 4),
+        "daily_range_compression_ratio": round(compression_ratio, 4),
+        "daily_volume_ratio": round(volume_ratio, 4),
+        "weekly_4bar_pct": round(weekly_4, 4),
+        "weekly_13bar_pct": round(weekly_13, 4),
+        "daily_direction": daily_direction,
+        "month": now_ct.month,
+        "week_of_year": int(now_ct.isocalendar().week),
+    }
+
+
+def spike_directional_setup(direction, current_price):
+    """Concrete ENTRY/STOP/TARGET recommendation for a confirmed spike
+    direction. Uses the same fixed-distance geometry as
+    backtest_v5_spike.py's directional_setup() — see the constants' comment
+    near SPIKE_TRADE_STOP_DISTANCE for why the values live in both files."""
+    if direction not in {"UP", "DOWN"}:
+        return None
+    entry = round_tick(current_price)
+    if direction == "UP":
+        stop = round_tick(entry - SPIKE_TRADE_STOP_DISTANCE)
+        target = round_tick(entry + SPIKE_TRADE_TARGET_DISTANCE)
+    else:
+        stop = round_tick(entry + SPIKE_TRADE_STOP_DISTANCE)
+        target = round_tick(entry - SPIKE_TRADE_TARGET_DISTANCE)
+    risk = abs(entry - stop)
+    reward = abs(target - entry)
+    return {
+        "direction": direction,
+        "entry": entry,
+        "stop": stop,
+        "target": target,
+        "risk": round(risk, 4),
+        "reward": round(reward, 4),
+        "rr": round(reward / risk, 2) if risk else 0.0,
+    }
+
+
+def spike_watch_context(intraday, daily, hourly, now_ct, macro=None):
+    """Detect directional spike conditions: UP or DOWN. Informational by
+    default (see format_spike_watch_message); when a direction is confirmed,
+    also attaches a concrete trade_setup via spike_directional_setup()."""
+    df = intraday.copy()
+    idx = chicago_index(df)
+    df.index = idx
+    df = df.sort_index()
+    close = df["Close"].astype(float)
+    high = df["High"].astype(float)
+    low = df["Low"].astype(float)
+    volume = df["Volume"].astype(float) if "Volume" in df.columns else pd.Series(1.0, index=df.index)
+    if len(df) < 35:
+        return {"enabled": True, "qualified": False, "score": 0, "max_score": 10,
+                "stage": "INSUFFICIENT_DATA", "direction": "NONE",
+                "reason": "Need at least 35 completed 15m bars.", "trade_setup": None}
+    latest = float(close.iloc[-1])
+    bar_range = (high - low).replace([np.inf, -np.inf], np.nan)
+    recent_range = _safe_float(bar_range.tail(8).mean(), 0.0)
+    baseline_range = _safe_float(bar_range.tail(32).head(24).mean(), recent_range)
+    compression_ratio = recent_range / baseline_range if baseline_range > 0 else 1.0
+    compressed = compression_ratio <= SPIKE_COMPRESSION_THRESHOLD
+    recent_volume = float(volume.tail(4).mean())
+    base_volume = float(volume.tail(24).head(20).median())
+    volume_ratio = recent_volume / base_volume if base_volume > 0 else 1.0
+    volume_expansion = volume_ratio >= SPIKE_VOLUME_THRESHOLD
+    tr = pd.concat([high - low, (high - close.shift()).abs(), (low - close.shift()).abs()], axis=1).max(axis=1)
+    atr_series = tr.rolling(ATR_PERIOD).mean()
+    atr_now = _safe_float(atr_series.iloc[-1], 0.0)
+    atr_prev = _safe_float(atr_series.iloc[-5], atr_now)
+    atr_expansion_ratio = atr_now / atr_prev if atr_prev > 0 else 1.0
+    atr_expansion = atr_expansion_ratio >= SPIKE_ATR_EXPANSION_THRESHOLD
+    macro = macro or daily_spike_context(daily, latest, now_ct)
+    macro_qualified = bool(macro.get("qualified"))
+
+    recent_lows = low.tail(8).to_numpy()
+    recent_highs_8 = high.tail(8).to_numpy()
+    higher_low_count = int(np.sum(np.diff(recent_lows) > 0))
+    lower_high_count = int(np.sum(np.diff(recent_highs_8) < 0))
+    higher_lows = higher_low_count >= 4
+    lower_highs = lower_high_count >= 4
+
+    prior_20_high = high.rolling(SPIKE_BREAKOUT_LOOKBACK).max().shift(1)
+    prior_20_low = low.rolling(SPIKE_BREAKOUT_LOOKBACK).min().shift(1)
+    recent_resistance = prior_20_high.tail(SPIKE_LOOKBACK_BARS)
+    recent_support = prior_20_low.tail(SPIKE_LOOKBACK_BARS)
+    recent_highs = high.tail(SPIKE_LOOKBACK_BARS)
+    recent_lows_window = low.tail(SPIKE_LOOKBACK_BARS)
+    valid_resistance = recent_resistance.notna()
+    valid_support = recent_support.notna()
+    resistance_tests = int(((recent_highs[valid_resistance] >= recent_resistance[valid_resistance] * 0.997)).sum()) if valid_resistance.any() else 0
+    support_tests = int(((recent_lows_window[valid_support] <= recent_support[valid_support] * 1.003)).sum()) if valid_support.any() else 0
+    resistance_pressure = resistance_tests >= 2
+    support_pressure = support_tests >= 2
+    prior_resistance = _safe_float(prior_20_high.iloc[-1], latest)
+    prior_support = _safe_float(prior_20_low.iloc[-1], latest)
+    breakout_up_pct = (latest / prior_resistance - 1.0) * 100.0 if prior_resistance else 0.0
+    breakout_down_pct = (latest / prior_support - 1.0) * 100.0 if prior_support else 0.0
+    breakout_up = breakout_up_pct >= 0.15
+    breakout_down = breakout_down_pct <= -0.15
+
+    mom_now = (latest / float(close.iloc[-5]) - 1.0) * 100.0
+    prior_close = float(close.iloc[-9])
+    mom_prev = (float(close.iloc[-5]) / prior_close - 1.0) * 100.0 if prior_close else 0.0
+    momentum_up = mom_now > 0.10 and mom_now > mom_prev
+    momentum_down = mom_now < -0.10 and mom_now < mom_prev
+
+    h = hourly.copy()
+    h.index = chicago_index(h)
+    hclose = h["Close"].astype(float)
+    trend_1h = (float(hclose.iloc[-1]) / float(hclose.iloc[-4]) - 1.0) * 100.0 if len(hclose) >= 4 else 0.0
+    trend_16 = (latest / float(close.iloc[-17]) - 1.0) * 100.0
+    trend_up = trend_16 > 0.15 and trend_1h > 0.10
+    trend_down = trend_16 < -0.15 and trend_1h < -0.10
+
+    today = df.loc[df.index.date == now_ct.date()]
+    if today.empty:
+        today = df.tail(32)
+    day_low = float(today["Low"].min())
+    day_high = float(today["High"].max())
+    day_span = day_high - day_low
+    recovery_position = (latest - day_low) / day_span if day_span > 0 else 0.5
+    morning_reversal_up = recovery_position >= 0.70 and latest > day_low
+    morning_reversal_down = recovery_position <= 0.30 and latest < day_high
+
+    neutral = {"compression": compressed, "volume_expansion": volume_expansion,
+               "atr_expansion": atr_expansion, "macro_spike_regime": macro_qualified}
+    up_checks = {**neutral, "higher_lows": higher_lows, "resistance_pressure": resistance_pressure,
+                 "breakout": breakout_up, "momentum_acceleration": momentum_up,
+                 "trend_alignment": trend_up, "morning_reversal": morning_reversal_up}
+    down_checks = {**neutral, "lower_highs": lower_highs, "support_pressure": support_pressure,
+                   "breakdown": breakout_down, "momentum_acceleration": momentum_down,
+                   "trend_alignment": trend_down, "morning_reversal": morning_reversal_down}
+    up_score = sum(bool(v) for v in up_checks.values())
+    down_score = sum(bool(v) for v in down_checks.values())
+
+    if up_score >= SPIKE_SCORE_THRESHOLD and breakout_up:
+        direction, score, checks, stage = "UP", up_score, up_checks, "SPIKE_CONFIRMED"
+    elif down_score >= SPIKE_SCORE_THRESHOLD and breakout_down:
+        direction, score, checks, stage = "DOWN", down_score, down_checks, "SPIKE_CONFIRMED"
+    elif max(up_score, down_score) >= SPIKE_SCORE_THRESHOLD - 1:
+        if up_score >= down_score:
+            direction, score, checks = "UP", up_score, up_checks
+        else:
+            direction, score, checks = "DOWN", down_score, down_checks
+        stage = "SPIKE_WATCH"
+    elif max(up_score, down_score) >= 3:
+        if up_score >= down_score:
+            direction, score, checks = "UP", up_score, up_checks
+        else:
+            direction, score, checks = "DOWN", down_score, down_checks
+        stage = "EARLY_WATCH"
+    else:
+        direction, score, checks, stage = "NONE", max(up_score, down_score), {}, "NO_SPIKE_SIGNAL"
+
+    # Concrete trade recommendation — only attached once a direction has
+    # actually been confirmed or is in active spike-watch, not for the
+    # low-confidence EARLY_WATCH/NO_SPIKE_SIGNAL stages.
+    trade_setup = spike_directional_setup(direction, latest) if stage in {"SPIKE_CONFIRMED", "SPIKE_WATCH"} else None
+
+    return {"enabled": True, "qualified": stage in {"SPIKE_CONFIRMED", "SPIKE_WATCH"},
+            "score": score, "up_score": up_score, "down_score": down_score, "max_score": 10,
+            "stage": stage, "direction": direction, "checks": checks,
+            "compression_ratio": round(compression_ratio, 4), "higher_low_count": higher_low_count,
+            "lower_high_count": lower_high_count, "resistance_tests": resistance_tests,
+            "support_tests": support_tests, "breakout_pct": round(breakout_up_pct if direction == "UP" else breakout_down_pct, 4),
+            "breakout_up_pct": round(breakout_up_pct, 4), "breakout_down_pct": round(breakout_down_pct, 4),
+            "volume_ratio": round(volume_ratio, 4), "momentum_4bar_pct": round(mom_now, 4),
+            "momentum_prev_4bar_pct": round(mom_prev, 4), "atr_expansion_ratio": round(atr_expansion_ratio, 4),
+            "trend_16bar_pct": round(trend_16, 4), "trend_1h_pct": round(trend_1h, 4),
+            "recovery_position": round(recovery_position, 4), "threshold": SPIKE_SCORE_THRESHOLD,
+            "macro_context": macro, "trade_setup": trade_setup, "version": SPIKE_WATCH_VERSION + 1}
+
+
+def format_spike_watch_message(spike, now_ct):
+    stage = spike.get("stage", "NO_SPIKE_SIGNAL")
+    direction = spike.get("direction", "NONE")
+    score = spike.get("score", 0)
+    max_score = spike.get("max_score", 10)
+    lines = [
+        "🚨 <b>[ZW=F] SPIKE WATCH V5</b>", "━━━━━━━━━━━━━━━━━━━━",
+        f"📅 {now_ct.strftime('%A %Y-%m-%d %H:%M %Z')}",
+        f"⚡ Stage: <b>{stage}</b>", f"🧭 Direction: <b>{direction}</b>",
+        f"📈 Precursor score: <b>{score}/{max_score}</b>",
+        f"⬆️ UP score: <code>{spike.get('up_score', 0)}/{max_score}</code> | ⬇️ DOWN score: <code>{spike.get('down_score', 0)}/{max_score}</code>",
+        "━━━━━━━━━━━━━━━━━━━━"]
+    labels = {"compression":"Compression","higher_lows":"Higher lows","lower_highs":"Lower highs",
+              "resistance_pressure":"Resistance pressure","support_pressure":"Support pressure",
+              "breakout":"Breakout","breakdown":"Breakdown","volume_expansion":"Volume expansion",
+              "momentum_acceleration":"Momentum acceleration","atr_expansion":"ATR expansion",
+              "trend_alignment":"15m/1h trend alignment","morning_reversal":"Morning reversal",
+              "macro_spike_regime":"Multi-month spike regime"}
+    for key, label in labels.items():
+        if key in spike.get("checks", {}):
+            lines.append(f"{'✅' if spike['checks'].get(key) else '▫️'} {label}")
+    daily_direction = spike.get("macro_context", {}).get("daily_direction", "NEUTRAL")
+    counter_trend = direction in {"UP", "DOWN"} and daily_direction in {"UP", "DOWN"} and direction != daily_direction
+    aligned = direction in {"UP", "DOWN"} and daily_direction == direction
+
+    if stage == "SPIKE_CONFIRMED":
+        if counter_trend:
+            setup_recommendation = f"WAIT — SPIKE {direction} IS AGAINST DAILY DIRECTION {daily_direction}"
+            setup_reason = (
+                f"⚠️ COUNTER-TREND SPIKE. The {direction} spike is against the daily {daily_direction} direction. "
+                f"Do not chase the {direction} move. Wait for exhaustion/rejection and for daily {daily_direction} control to regain confirmation."
+            )
+        elif aligned:
+            setup_recommendation = f"SPIKE {direction} ALIGNED WITH DAILY DIRECTION {daily_direction}"
+            setup_reason = f"✅ The {direction} spike agrees with the daily {daily_direction} direction."
+        else:
+            setup_recommendation = f"SPIKE {direction} CONFIRMED"
+            setup_reason = f"A {direction.lower()} spike is confirmed, while the daily direction is {daily_direction}."
+    elif stage == "SPIKE_WATCH":
+        if counter_trend:
+            setup_recommendation = f"WAIT — SPIKE WATCH {direction} IS AGAINST DAILY DIRECTION {daily_direction}"
+            setup_reason = f"⚠️ Counter-trend spike watch. The {direction} move is against daily {daily_direction}; wait for exhaustion/rejection and confirmation."
+        elif aligned:
+            setup_recommendation = f"SPIKE WATCH {direction} ALIGNED WITH DAILY DIRECTION {daily_direction}"
+            setup_reason = f"The developing {direction} spike agrees with daily {daily_direction}; still forming."
+        else:
+            setup_recommendation = f"SPIKE WATCH {direction}; no confirmation yet"
+            setup_reason = f"A {direction.lower()} spike pattern is developing; daily direction is {daily_direction}. Wait for confirmation or rejection."
+    elif stage == "EARLY_WATCH":
+        setup_recommendation = f"WATCH — {direction} spike developing; no trade yet"
+        setup_reason = f"Daily direction: {daily_direction}. Monitor for confirmation; the normal Anti-Hunt setup is not active premarket."
+    else:
+        setup_recommendation = "NO TRADE — no qualifying spike pattern"
+        setup_reason = f"No actionable directional spike precursor detected. Daily direction: {daily_direction}."
+    lines.extend([
+        "━━━━━━━━━━━━━━━━━━━━",
+        f"📊 <b>Daily Direction: {daily_direction}</b>",
+        f"🧭 <b>Spike Direction: {direction}</b>",
+        f"<b>{setup_recommendation}</b>",
+        f"ℹ️ {setup_reason}",
+    ])
+
+    trade_setup = spike.get("trade_setup")
+    if trade_setup:
+        lines.extend([
+            "━━━━━━━━━━━━━━━━━━━━",
+            "🎯 <b>SPIKE-DIRECTION TRADE LEVELS (informational)</b>",
+            f"🔹 ENTRY: <code>{trade_setup['entry']}</code>",
+            f"🛑 STOP: <code>{trade_setup['stop']}</code>",
+            f"🎯 TARGET: <code>{trade_setup['target']}</code>",
+            f"Risk: <code>{trade_setup['risk']}</code> | Reward: <code>{trade_setup['reward']}</code> | R:R <code>{trade_setup['rr']}</code>",
+            "⚠️ Not the normal Anti-Hunt short setup, and not auto-executed —",
+            "   levels shown for awareness only, same as ML SHADOW elsewhere in V5.",
+        ])
+    else:
+        lines.append("🔻 Normal short setup: <b>NOT ACTIVE in premarket</b>")
+
+    lines.extend([
+        "━━━━━━━━━━━━━━━━━━━━",
+        f"Breakout/Breakdown: <code>{spike.get('breakout_pct', 0):.2f}%</code> | Volume: <code>{spike.get('volume_ratio', 1):.2f}x</code>",
+        f"ATR expansion: <code>{spike.get('atr_expansion_ratio', 1):.2f}x</code> | Recovery: <code>{spike.get('recovery_position', 0):.0%}</code>",
+        f"Macro regime: <b>{spike.get('macro_context', {}).get('stage', 'N/A')}</b> <code>{spike.get('macro_context', {}).get('score', 0)}/{spike.get('macro_context', {}).get('max_score', 0)}</code>",
+        "⚠️ Spike Watch trade levels are shadow/informational only — nothing here creates or modifies a live order."])
+    return "\n".join(lines)
+
 
 def build_setup(daily_open, current_price, atr, profile_name):
     params = PROFILES[profile_name]
@@ -798,6 +1194,12 @@ def format_message(setup, report):
 
     if setup.get("regime"):
         lines.append(f"🌡 Regime: <code>{setup['regime']}</code> | RSI <code>{setup.get('rsi_14', 0):.1f}</code> | VWAP dist <code>{setup.get('vwap_distance_pct', 0):.2f}%</code>")
+    spike = setup.get("spike_watch", {})
+    if spike:
+        lines.append(
+            f"🚨 SPIKE WATCH: <b>{spike.get('stage', 'N/A')}</b> "
+            f"<code>{spike.get('score', 0)}/{spike.get('max_score', 0)}</code>"
+        )
     if setup.get("stop_atr_multiple") is not None:
         lines.append(
             f"ATR: <code>{setup['atr_15m']}</code> | Stop distance: <code>{setup['stop_atr_multiple']}x</code>"
@@ -835,11 +1237,13 @@ def main():
         if now_ct.date() in HOLIDAYS:
             print(f"{now_ct.date()} is a CME holiday. Aborting.")
             return 0
-        if not check_time_window():
-            print(f"[{now_ct:%Y-%m-%d %H:%M %Z}] Outside execution window. Aborting.")
-            return 0
-        if now_ct.time() > ENTRY_CUTOFF:
-            print("Past entry cutoff. Aborting.")
+        # The spike-watch layer is allowed to run earlier than the normal
+        # trade window so it can warn before a confirmed breakout. The
+        # normal short setup below remains restricted to
+        # WINDOW_OPEN/WINDOW_CLOSE and ENTRY_CUTOFF, unchanged.
+        in_spike_window = SPIKE_WATCH_OPEN <= now_ct.time() <= SPIKE_WATCH_CLOSE
+        if not in_spike_window:
+            print(f"[{now_ct:%Y-%m-%d %H:%M %Z}] Outside spike-watch window. Aborting.")
             return 0
 
     if manual:
@@ -856,10 +1260,36 @@ def main():
         print(f"Data error: {exc}", file=sys.stderr)
         return 1
 
+    # Two intentionally separate layers: a spike is more interesting when
+    # intraday acceleration occurs inside a multi-week/month expansion
+    # regime, so compute the long-term macro context first and pass it in.
+    current_price_for_context = float(intraday["Close"].iloc[-1])
+    macro = daily_spike_context(daily, current_price_for_context, now_ct)
+    spike = spike_watch_context(intraday, daily, hourly, now_ct, macro=macro)
+    print(json.dumps({"spike_watch": spike}, indent=2))
+
     state = load_state()
 
     resolved = resolve_previous_setups(state, intraday)
     print(f"Resolved {resolved} previous setup(s).")
+
+    # Premarket / early-session spike-watch path. Deliberately does not
+    # create a trade setup or a learning sample — alert-only, deduped per
+    # stage/score/day so it doesn't repeat on every 15-minute cron tick.
+    in_trade_window = WINDOW_OPEN <= now_ct.time() <= WINDOW_CLOSE and now_ct.time() <= ENTRY_CUTOFF
+    if not manual and not resolve_only and not in_trade_window:
+        if spike.get("qualified"):
+            last_key = state.get("last_spike_watch_key")
+            current_key = f"{now_ct.date().isoformat()}:{spike.get('stage')}:{spike.get('score')}"
+            if last_key != current_key:
+                send_telegram_alert(format_spike_watch_message(spike, now_ct))
+                state["last_spike_watch_key"] = current_key
+                save_json(STATE_FILE, state)
+            else:
+                print("Spike-watch alert already sent for this stage/score.")
+        else:
+            print("No qualifying premarket spike-watch pattern.")
+        return 0
 
     report = maybe_learn(state)
     ml_report = ml_shadow_report(state)
@@ -895,6 +1325,8 @@ def main():
     context = market_context(intraday, daily, hourly, now_ct)
     setup["market_context"] = context
     setup.update(context)
+    setup["macro_spike_context"] = macro
+    setup["spike_watch"] = spike
 
     # Train only on prior resolved actual outcomes.
     ml_training_report = add_ml_prediction(state, setup)
