@@ -45,6 +45,8 @@ EPISODE_GAP_BARS = int(os.environ.get("SPIKE_EPISODE_GAP_BARS", "4"))
 TARGETS = [float(x) for x in os.environ.get("SPIKE_TARGETS", "5,8,10,12,16,20,24,28,32").split(",")]
 STOPS = [float(x) for x in os.environ.get("SPIKE_STOPS", "3,4,5,6,8,10").split(",")]
 DELAY_BARS = [int(x) for x in os.environ.get("SPIKE_DELAY_BARS", "0,1,2,4").split(",")]
+ANALYSIS_STOP_DISTANCE = float(os.environ.get("ANALYSIS_STOP_DISTANCE", "5"))
+ANALYSIS_TARGET_DISTANCE = float(os.environ.get("ANALYSIS_TARGET_DISTANCE", "16"))
 OUT_JSON = os.environ.get("RESEARCH_JSON", "backtest_v5_spike_research_report.json")
 OUT_TRADES = os.environ.get("RESEARCH_CSV", "backtest_v5_spike_research_trades.csv")
 
@@ -109,20 +111,32 @@ def feature_bucket(row):
     return "MID_VOLUME"
 
 
-def summarize(df, group_cols, target=16, stop=5):
+def summarize(df, group_cols):
     rows = []
     for keys, g in df.groupby(group_cols, dropna=False):
         if not isinstance(keys, tuple): keys = (keys,)
         rec = dict(zip(group_cols, keys))
         w = int((g["outcome"] == "WIN").sum())
         l = int((g["outcome"] == "LOSS").sum())
+        a = int((g["outcome"] == "AMBIGUOUS").sum())
+        e = int((g["outcome"] == "EXPIRED").sum())
         r = w + l
-        rec.update({"signals": len(g), "wins": w, "losses": l, "expired": int((g.outcome == "EXPIRED").sum()),
-                    "ambiguous": int((g.outcome == "AMBIGUOUS").sum()),
-                    "resolved": r, "win_rate_resolved": round(w / r, 4) if r else None,
-                    "avg_mfe": round(float(g.mfe.mean()), 3), "avg_mae": round(float(g.mae.mean()), 3)})
+        rr = float(g["rr"].iloc[0]) if len(g) else None
+        expected_r = ((w * rr) - l) / len(g) if len(g) and rr is not None else None
+        rec.update({"signals": len(g), "wins": w, "losses": l, "expired": e,
+                    "ambiguous": a, "resolved": r,
+                    "win_rate_resolved": round(w / r, 4) if r else None,
+                    "expiry_rate": round(e / len(g), 4) if len(g) else None,
+                    "expected_r": round(expected_r, 4) if expected_r is not None else None,
+                    "avg_r_per_trade": round(expected_r, 4) if expected_r is not None else None,
+                    "avg_mfe": round(float(g.mfe.mean()), 3), "median_mfe": round(float(g.mfe.median()), 3),
+                    "avg_mae": round(float(g.mae.mean()), 3), "median_mae": round(float(g.mae.median()), 3)})
         rows.append(rec)
     return rows
+
+
+def fixed_geometry(df):
+    return df[(df.stop_dist == ANALYSIS_STOP_DISTANCE) & (df.target_dist == ANALYSIS_TARGET_DISTANCE)].copy()
 
 
 def main():
@@ -217,8 +231,9 @@ def main():
                            "bars_after": bars, "mfe": mfe, "mae": mae})
     first_df = pd.DataFrame(first_rows)
 
+    analysis = fixed_geometry(matrix)
     report = {
-        "version": 2,
+        "version": 3,
         "generated_at_ct": datetime.now(CHICAGO_TZ).isoformat(),
         "ticker": TICKER,
         "period": PERIOD,
@@ -226,15 +241,17 @@ def main():
         "episode_count": int(base.episode_id.nunique()),
         "episode_gap_bars": EPISODE_GAP_BARS,
         "horizon_bars": HORIZON_BARS,
+        "analysis_geometry": {"stop_dist": ANALYSIS_STOP_DISTANCE, "target_dist": ANALYSIS_TARGET_DISTANCE, "rr": round(ANALYSIS_TARGET_DISTANCE / ANALYSIS_STOP_DISTANCE, 3)},
+        "analysis_signal_count": int(len(analysis)),
         "counter_trend_policy": "excluded",
         "purpose": "Research only. Does not modify the live bounded learner or production signal.",
         "target_stop_matrix": {
             "rows": int(len(matrix)),
             "summary": summarize(matrix, ["stop_dist", "target_dist", "rr"]),
         },
-        "target_16_by_feature_bucket": summarize(matrix[matrix.target_dist == 16], ["feature_bucket"]),
-        "target_16_by_episode_position": summarize(matrix[matrix.target_dist == 16], ["episode_position"]),
-        "target_16_by_direction": summarize(matrix[matrix.target_dist == 16], ["direction"]),
+        "fixed_geometry_by_feature_bucket": summarize(analysis, ["feature_bucket"]),
+        "fixed_geometry_by_episode_position": summarize(analysis, ["episode_position"]),
+        "fixed_geometry_by_direction": summarize(analysis, ["direction"]),
         "delayed_entry_5_16": summarize(delayed, ["delay_bars"]),
         "first_signal_per_episode_5_16": summarize(first_df, ["direction"]),
         "episodes": {
@@ -250,6 +267,7 @@ def main():
             "MID_VOLUME": "remaining signals",
         },
         "interpretation_guardrails": [
+            "Feature, episode-position, and direction breakdowns are restricted to the single analysis geometry above; they do not aggregate across stop distances.",
             "Target/stop results use next-bar OHLC only and mark same-bar stop+target as AMBIGUOUS.",
             "Episode clustering is a research construct; it is not a production rule yet.",
             "Delayed entry is not a pullback/retest model; it only tests waiting N bars.",
