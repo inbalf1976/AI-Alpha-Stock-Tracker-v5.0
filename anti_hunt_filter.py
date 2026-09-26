@@ -2,10 +2,6 @@
 anti_hunt_filter.py  (v2 - Final Fixed Production)
 =================================================
 Institutional open anti-stop-hunting Short filter for Chicago SRW Wheat (ZW=F).
-
-Runs during the safe institutional window (8:45 AM - 12:30 PM America/Chicago,
-weekdays only), anchors to the session Opening Price, and calculates a protected
-Short setup engineered to sit outside typical high-frequency sweep zones.
 """
 
 import os
@@ -24,26 +20,24 @@ from zoneinfo import ZoneInfo
 # ---------------------------------------------------------------------------
 TICKER = "ZW=F"
 CHICAGO_TZ = ZoneInfo("America/Chicago")
-TICK_SIZE = 0.25          # ZW minimum price increment ($/bu)
-ATR_PERIOD = 16           # 15m bars (~4h of session)
-ATR_STOP_MIN_MULT = 2.0   # warn if stop distance < 2x ATR (noise-level)
-MAX_DATA_AGE_MIN = 45     # staleness threshold for the last 15m bar
+TICK_SIZE = 0.25          
+ATR_PERIOD = 16           
+ATR_STOP_MIN_MULT = 2.0   
+MAX_DATA_AGE_MIN = 45     
 MAX_FETCH_ATTEMPTS = 3
 
-WINDOW_OPEN = dt_time(8, 45)    # 8:45 AM Chicago  (grains open 8:30 CT)
-WINDOW_CLOSE = dt_time(12, 30)  # 12:30 PM Chicago
-ENTRY_CUTOFF = dt_time(11, 30)  # no fresh setups sent after this
+WINDOW_OPEN = dt_time(8, 45)    
+WINDOW_CLOSE = dt_time(12, 30)  
+ENTRY_CUTOFF = dt_time(11, 30)  
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 HEALTHCHECK_URL = os.environ.get("HEALTHCHECK_URL", "").strip()
 
-# Anti-hunt geometry (multipliers applied to the open anchor)
-ENTRY_MULT = 0.994   # Sell Limit: waits for a brief pump into the entry zone
-STOP_MULT = 1.012    # Stop-Loss: tucked above the institutional open/high ceiling
-TARGET_MULT = 0.960  # Target: macro support zone
+ENTRY_MULT = 0.994   
+STOP_MULT = 1.012    
+TARGET_MULT = 0.960  
 
-# CME full-day closures observed for grain futures. Update yearly.
 HOLIDAYS = {
     date(2026, 1, 1),  date(2026, 1, 19), date(2026, 2, 16), date(2026, 4, 3),
     date(2026, 5, 25), date(2026, 6, 19), date(2026, 7, 3),  date(2026, 9, 7),
@@ -72,7 +66,7 @@ def round_tick(price: float, tick: float = TICK_SIZE) -> float:
 
 def check_time_window() -> bool:
     now_ct = datetime.now(CHICAGO_TZ)
-    if now_ct.weekday() >= 5:  # 5 = Saturday, 6 = Sunday
+    if now_ct.weekday() >= 5:  
         return False
     return WINDOW_OPEN <= now_ct.time() <= WINDOW_CLOSE
 
@@ -109,22 +103,21 @@ def fetch_market_data() -> tuple[pd.DataFrame, pd.DataFrame]:
             return intraday, daily
         time.sleep(10 * attempt)
 
-    raise ValueError(
-        "yfinance returned no usable data after "
-        f"{MAX_FETCH_ATTEMPTS} attempts."
-    )
+    raise ValueError("yfinance returned no usable data.")
 
 
 def resolve_session_open(intraday: pd.DataFrame, daily: pd.DataFrame) -> float:
+    """קביעת מחיר הפתיחה בצורה מאובטחת ללא שימוש ב-iloc פגום"""
     now_ct = datetime.now(CHICAGO_TZ)
     idx = intraday.index
     if idx.tz is None:
         idx = idx.tz_localize("UTC")
     todays_bars = intraday[idx.tz_convert(CHICAGO_TZ).date == now_ct.date()]
+    
     if not todays_bars.empty:
-        # FIXED: Explicit array bracket tracking index [-1] included properly
-        return float(todays_bars["Open"].iloc[-1]) 
-    return float(daily["Open"].iloc[-1])
+        # שימוש ב-values[-1] במקום iloc כדי למנוע קריסה
+        return float(todays_bars["Open"].values[-1]) 
+    return float(daily["Open"].values[-1])
 
 
 def compute_atr(intraday: pd.DataFrame) -> float | None:
@@ -136,7 +129,7 @@ def compute_atr(intraday: pd.DataFrame) -> float | None:
         (high - close.shift()).abs(),
         (low - close.shift()).abs(),
     ], axis=1).max(axis=1)
-    return float(tr.rolling(ATR_PERIOD).mean().iloc[-1])
+    return float(tr.rolling(ATR_PERIOD).mean().values[-1])
 
 
 def check_staleness(intraday: pd.DataFrame) -> float:
@@ -166,7 +159,7 @@ def send_telegram_alert(text: str) -> bool:
     try:
         response = requests.post(url, json=payload, timeout=15)
         if response.status_code == 200:
-            print("Toon Telegram target confirmed — alert sent!")
+            print("📲 Telegram alert delivered successfully!")
             return True
         else:
             print(f"❌ Telegram API returned error: {response.text}", file=sys.stderr)
@@ -182,63 +175,55 @@ def send_telegram_alert(text: str) -> bool:
 def run_anti_hunt_logic(bypass_gates=False) -> None:
     now_ct = datetime.now(CHICAGO_TZ)
     
-    # 1. Structural Environment Verification
     if not bypass_gates:
         if is_cme_holiday(now_ct.date()):
             print(f"[{now_ct.date()}] CME Holiday observed. Aborting gracefully.")
             return
         if not check_time_window():
-            print(f"[{now_ct.strftime('%Y-%m-%d %H:%M %Z')}] Outside the safe institutional window (Mon-Fri, 08:45-12:30 America/Chicago). Aborting gracefully.")
+            print(f"[{now_ct.strftime('%Y-%m-%d %H:%M %Z')}] Outside the window. Aborting.")
             return
 
-    print("🧪 RUNNING IN FORCED MANUAL TEST MODE (Bypassing Time, Day, and Staleness Gates)...")
+    print("🧪 RUNNING IN FORCED MANUAL TEST MODE (Bypassing Gates)...")
     print(f"⚡ Institutional Core Analysis Active [{now_ct.strftime('%H:%M:%S %Z')}]")
 
-    # 2. Ingest Data Stream
     try:
         intraday_data, daily_data = fetch_market_data()
     except Exception as e:
         print(f"🚫 Critical data error: {e}", file=sys.stderr)
         return
 
-    # 3. Data Integrity Constraints Check
     staleness_min = check_staleness(intraday_data)
     if not bypass_gates:
         if staleness_min > MAX_DATA_AGE_MIN:
-            print(f"🚫 Pipeline Stalled: Data age is {staleness_min:.1f} minutes. Maximum allowed is {MAX_DATA_AGE_MIN}m.", file=sys.stderr)
+            print(f"🚫 Pipeline Stalled: Data age is {staleness_min:.1f} minutes.", file=sys.stderr)
             return
 
-    # 4. Resolve Boundary Anchors & Metrics
     session_open = resolve_session_open(intraday_data, daily_data)
-    current_price = float(intraday_data["Close"].iloc[-1])
+    current_price = float(intraday_data["Close"].values[-1])
     atr_value = compute_atr(intraday_data)
 
-    # 5. Execute Geometry Computations
     entry_level = round_tick(session_open * ENTRY_MULT)
     stop_level  = round_tick(session_open * STOP_MULT)
     target_level = round_tick(session_open * TARGET_MULT)
 
-    # Risk Metrics Review
     stop_distance_points = stop_level - entry_level
     noise_floor_warn = False
     if atr_value is not None:
         if stop_distance_points < (ATR_STOP_MIN_MULT * atr_value):
             noise_floor_warn = True
 
-    # 6. Invalidation Logic Checks
     if current_price >= stop_level:
-        print(f"❌ Setup Cancelled: Current price ({current_price}) is already trading above calculated stop ({stop_level}). Strategy invalidated.")
+        print(f"❌ Setup Cancelled: Price ({current_price}) already above stop ({stop_level}).")
         return
 
     if not bypass_gates and now_ct.time() > ENTRY_CUTOFF:
-        print(f"⏰ Execution Alert Threshold Reached: Current time is past entry cutoff ({ENTRY_CUTOFF.strftime('%H:%M')}). No new setups generated.")
+        print("⏰ Execution Alert Threshold Reached: Past cutoff.")
         return
 
-    # 7. Formulate Delivery Payload using a safe block structure
     atr_display = f"{atr_value:.2f}c" if atr_value is not None else "N/A"
     warning_block = ""
     if noise_floor_warn:
-        warning_block = f"\n⚠️ <b>RISK WARNING:</b> Stop distance ({stop_distance_points:.2f}c) is thinner than 2x ATR volatility threshold ({ATR_STOP_MIN_MULT * atr_value:.2f}c). Noise hunt risk high."
+        warning_block = f"\n⚠️ <b>RISK WARNING:</b> Stop distance ({stop_distance_points:.2f}c) is thinner than 2x ATR volatility threshold ({ATR_STOP_MIN_MULT * atr_value:.2f}c)."
 
     msg = (
         f"🌾 <b>ANTI-HUNT WHEAT FILTER (v2)</b>\n"
@@ -248,3 +233,38 @@ def run_anti_hunt_logic(bypass_gates=False) -> None:
         f"📊 15m ATR Volatility: <code>{atr_display}</code>\n"
         f"⏱️ Bar Latency Age: <code>{staleness_min:.1f} min</code>\n{warning_block}\n"
         f"🛡️ <b>THE PROTECTED GRID SETUP:</b>\n"
+        f"📥 <b>ENTRY (Sell Limit):</b> <code>{entry_level:.2f}c</code>\n"
+        f"🛑 <b>STOP-LOSS:</b> <code>{stop_level:.2f}c</code>\n"
+        f"🎯 <b>TARGET:</b> <code>{target_level:.2f}c</code>\n\n"
+        f"<i>Note: Orders are mapped to standard 0.25c exchange tick size. Stop sits above the structural daily ceiling.</i>"
+    )
+
+    state_payload = {
+        "timestamp": now_ct.isoformat(),
+        "session_open": session_open,
+        "current_price": current_price,
+        "atr_15m": atr_value,
+        "entry": entry_level,
+        "stop": stop_level,
+        "target": target_level,
+        "warning_triggered": noise_floor_warn
+    }
+    with open("setup.json", "w") as f:
+        json.dump(state_payload, f, indent=2)
+    print("💾 Analysis state cached successfully inside setup.json.")
+
+    send_telegram_alert(msg)
+    print("🏁 Execution script run complete.")
+    ping_healthcheck()
+
+
+if __name__ == "__main__":
+    # -----------------------------------------------------------------------
+    # 🧪 השארתי את זה על True בשביל בדיקת סוף השבוע המיידית שלך!
+    # -----------------------------------------------------------------------
+    FORCE_WEEKEND_TEST = True
+    
+    if FORCE_WEEKEND_TEST:
+        run_anti_hunt_logic(bypass_gates=True)
+    else:
+        run_anti_hunt_logic(bypass_gates=False)
