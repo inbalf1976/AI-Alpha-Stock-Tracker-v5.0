@@ -1,6 +1,8 @@
-
+import json
 import os
 import sys
+import importlib.util
+from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -8,9 +10,41 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 
-# Load the exact V5 spike detector from the repo so the backtest uses the
-# same directional scoring logic as production.
-import anti_hunt_filter as v5
+# Load the V5 spike detector directly from the repository file.
+# Do not rely on Python module discovery: GitHub Actions can run this script
+# even when the production file has a different V5 filename.
+
+def load_v5_module():
+    requested = os.environ.get("V5_MODULE_FILE", "").strip()
+    candidates = []
+    if requested:
+        candidates.append(Path(requested))
+    candidates.extend([
+        Path("anti_hunt_filter.py"),
+        Path("anti_hunt_filter_v5.py"),
+        Path("anti_hunt_filter_v5_SPIKE_WATCH_SETUP_RECOMMENDATION_PRICES.py"),
+        Path("anti_hunt_filter_v5_SPIKE_WATCH_SETUP_RECOMMENDATION_FIXED2.py"),
+        Path("anti_hunt_filter_v5_SPIKE_WATCH_SETUP_RECOMMENDATION_FIXED.py"),
+    ])
+    for path in candidates:
+        if path.exists():
+            spec = importlib.util.spec_from_file_location("v5_production", path.resolve())
+            if spec and spec.loader:
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                required = ["chicago_index", "round_tick", "daily_spike_context", "spike_watch_context"]
+                missing = [name for name in required if not hasattr(module, name)]
+                if not missing:
+                    print(f"Using V5 spike detector: {path}")
+                    return module
+                print(f"Skipping {path}: missing {missing}")
+    raise RuntimeError(
+        "Could not find a V5 production file containing "
+        "chicago_index, round_tick, daily_spike_context and spike_watch_context. "
+        f"Checked: {[str(p) for p in candidates]}"
+    )
+
+v5 = load_v5_module()
 
 CHICAGO_TZ = ZoneInfo("America/Chicago")
 TICKER = os.environ.get("TICKER", "ZW=F")
