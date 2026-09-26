@@ -256,8 +256,8 @@ def run_anti_hunt_logic(bypass_gates=False) -> None:
 
 
 if __name__ == "__main__":
-    # 🚨 PRODUCTION ACTIVE: Changed to False so it obeys the 8:45 AM CST window on weekdays
-    FORCE_WEEKEND_TEST = False 
+    # 🧪 TEST MODE ACTIVE: Changed to True to force a live weekend notification
+    FORCE_WEEKEND_TEST = True
     
     if FORCE_WEEKEND_TEST:
         run_anti_hunt_logic(bypass_gates=True)
