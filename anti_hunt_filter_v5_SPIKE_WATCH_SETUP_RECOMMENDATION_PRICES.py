@@ -3,6 +3,7 @@ import os
 import sys
 import time
 from datetime import datetime, time as dt_time, date, timedelta
+from collections.abc import Mapping
 from zoneinfo import ZoneInfo
 
 import numpy as np
@@ -14,41 +15,6 @@ from sklearn.metrics import accuracy_score, brier_score_loss, log_loss
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-
-from collections.abc import Mapping
-
-
-def json_safe(value):
-    """Recursively convert NumPy/Pandas/mapping values to JSON-safe Python types."""
-    if isinstance(value, Mapping):
-        return {str(k): json_safe(v) for k, v in value.items()}
-
-    if isinstance(value, (list, tuple)):
-        return [json_safe(v) for v in value]
-
-    if isinstance(value, np.bool_):
-        return bool(value)
-
-    if isinstance(value, np.integer):
-        return int(value)
-
-    if isinstance(value, np.floating):
-        return float(value)
-
-    if isinstance(value, (pd.Timestamp, datetime, date)):
-        return value.isoformat()
-
-    if value is pd.NaT:
-        return None
-
-    if isinstance(value, float) and not np.isfinite(value):
-        return None
-
-    if isinstance(value, (str, int, float, bool)) or value is None:
-        return value
-
-    return str(value)
-
 
 
 # ============================================================
@@ -300,7 +266,7 @@ def load_state():
 def save_json(path, data):
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as fh:
-        json.dump(data, fh, indent=2)
+        json.dump(json_safe(data), fh, indent=2)
     os.replace(tmp, path)
 
 
@@ -754,6 +720,345 @@ def send_telegram_alert(text):
         print(text)
         return False
 
+
+
+def json_safe(value):
+    """Recursively convert NumPy/Pandas values to standard JSON types."""
+    if isinstance(value, Mapping):
+        return {str(k): json_safe(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [json_safe(v) for v in value]
+    if isinstance(value, np.bool_):
+        return bool(value)
+    if isinstance(value, np.integer):
+        return int(value)
+    if isinstance(value, np.floating):
+        return None if not np.isfinite(value) else float(value)
+    if isinstance(value, (pd.Timestamp, datetime, date)):
+        return value.isoformat()
+    if value is pd.NaT:
+        return None
+    if isinstance(value, float) and not np.isfinite(value):
+        return None
+    if isinstance(value, (str, int, float, bool)) or value is None:
+        return value
+    return str(value)
+
+
+def build_setup(daily_open, current_price, atr, profile_name):
+    """Build the bounded V5 Anti-Hunt short setup from the active profile."""
+    profile_name = profile_name if profile_name in PROFILES else DEFAULT_PROFILE
+    p = PROFILES[profile_name]
+    daily_open = float(daily_open)
+    current_price = float(current_price)
+    atr_value = float(atr) if atr is not None and np.isfinite(atr) else 0.0
+
+    entry = round_tick(daily_open * p["entry_mult"])
+    stop = round_tick(daily_open * p["stop_mult"])
+    target = round_tick(daily_open * p["target_mult"])
+    risk = round(max(0.0, stop - entry), 4)
+    reward = round(max(0.0, entry - target), 4)
+    rr = round(reward / risk, 4) if risk > 0 else 0.0
+    open_distance_pct = (current_price / daily_open - 1.0) * 100.0 if daily_open else 0.0
+    atr_pct = atr_value / daily_open * 100.0 if daily_open else 0.0
+    stop_atr_multiple = risk / atr_value if atr_value > 0 else None
+    vol_warning = bool(stop_atr_multiple is not None and stop_atr_multiple < ATR_STOP_MIN_MULT)
+
+    invalid_reasons = []
+    if not (target < entry < stop):
+        invalid_reasons.append("invalid price geometry")
+    if risk <= 0 or reward <= 0:
+        invalid_reasons.append("non-positive risk/reward")
+    if stop_atr_multiple is not None and stop_atr_multiple < ATR_STOP_MIN_MULT:
+        invalid_reasons.append("stop inside minimum ATR noise band")
+
+    now_ct = datetime.now(CHICAGO_TZ)
+    return {
+        "outcome_version": OUTCOME_VERSION,
+        "created_at": now_ct.isoformat(),
+        "timestamp": now_ct.isoformat(),
+        "date": now_ct.date().isoformat(),
+        "profile": profile_name,
+        "direction": "SHORT",
+        "daily_open": round_tick(daily_open),
+        "current_price": round_tick(current_price),
+        "entry": entry,
+        "stop": stop,
+        "target": target,
+        "risk": risk,
+        "reward": reward,
+        "rr": rr,
+        "atr_15m": round(atr_value, 4),
+        "atr_pct": round(atr_pct, 6),
+        "open_distance_pct": round(open_distance_pct, 6),
+        "current_vs_open_pct": round(open_distance_pct, 6),
+        "stop_atr_multiple": round(stop_atr_multiple, 6) if stop_atr_multiple is not None else None,
+        "vol_warning": vol_warning,
+        "invalidated": bool(invalid_reasons),
+        "invalid_reason": "; ".join(invalid_reasons) if invalid_reasons else None,
+        "outcome": None,
+        "outcome_resolved_at": None,
+        "resolution_price": None,
+        "mfe": None,
+        "mae": None,
+        "ml_shadow": {
+            "probability_win": None,
+            "decision": "SHADOW_NOT_READY",
+        },
+    }
+
+
+def _setup_created_time(setup):
+    raw = setup.get("created_at") or setup.get("timestamp")
+    if not raw:
+        return None
+    try:
+        ts = datetime.fromisoformat(str(raw))
+        if ts.tzinfo is None:
+            ts = ts.replace(tzinfo=CHICAGO_TZ)
+        return ts.astimezone(CHICAGO_TZ)
+    except (TypeError, ValueError):
+        return None
+
+
+def resolve_previous_setups(state, intraday):
+    """Resolve unresolved historical short setups using bars after entry creation.
+
+    Conservative same-bar handling: if target and stop are both touched in one
+    bar, mark AMBIGUOUS rather than inventing an execution order.
+    """
+    setups = state.setdefault("setups", [])
+    resolved_count = 0
+    if intraday is None or intraday.empty:
+        return 0
+    df = intraday.copy()
+    df.index = chicago_index(df)
+    df = df.sort_index()
+
+    for setup in setups:
+        if setup.get("outcome") not in (None, "PENDING"):
+            continue
+        if setup.get("invalidated"):
+            setup["outcome"] = "NO_ENTRY"
+            setup["outcome_resolved_at"] = datetime.now(CHICAGO_TZ).isoformat()
+            resolved_count += 1
+            continue
+        created = _setup_created_time(setup)
+        if created is None:
+            continue
+        entry = _safe_float(setup.get("entry"), np.nan)
+        stop = _safe_float(setup.get("stop"), np.nan)
+        target = _safe_float(setup.get("target"), np.nan)
+        if not np.isfinite(entry) or not np.isfinite(stop) or not np.isfinite(target):
+            continue
+
+        future = df.loc[df.index > created]
+        if future.empty:
+            continue
+
+        entered = False
+        entry_time = None
+        max_fav = 0.0
+        max_adv = 0.0
+        outcome = None
+        resolution_time = None
+        resolution_price = None
+
+        for ts, bar in future.iterrows():
+            high = _safe_float(bar.get("High"), np.nan)
+            low = _safe_float(bar.get("Low"), np.nan)
+            close = _safe_float(bar.get("Close"), np.nan)
+            if not np.isfinite(high) or not np.isfinite(low):
+                continue
+
+            if not entered:
+                if low <= entry <= high:
+                    entered = True
+                    entry_time = ts
+                elif high < entry:
+                    # Short limit has not filled; continue waiting.
+                    continue
+
+            if entered:
+                max_fav = max(max_fav, entry - low)
+                max_adv = max(max_adv, high - entry)
+                hit_target = low <= target
+                hit_stop = high >= stop
+                if hit_target and hit_stop:
+                    outcome = "AMBIGUOUS"
+                    resolution_time = ts
+                    resolution_price = close
+                    break
+                if hit_target:
+                    outcome = "WIN"
+                    resolution_time = ts
+                    resolution_price = target
+                    break
+                if hit_stop:
+                    outcome = "LOSS"
+                    resolution_time = ts
+                    resolution_price = stop
+                    break
+
+        if outcome is None:
+            # Keep an unfilled setup pending. An entered setup with no exit yet
+            # remains pending until a later scheduled resolution run.
+            continue
+
+        setup["entry_filled"] = entered
+        setup["entry_time"] = entry_time.isoformat() if entry_time is not None else None
+        setup["outcome"] = outcome
+        setup["outcome_resolved_at"] = resolution_time.isoformat()
+        setup["resolution_price"] = round(float(resolution_price), 4) if resolution_price is not None else None
+        setup["mfe"] = round(float(max_fav), 4)
+        setup["mae"] = round(float(max_adv), 4)
+        if outcome == "WIN":
+            setup["realized_r"] = 1.0
+        elif outcome == "LOSS":
+            setup["realized_r"] = -1.0
+        elif outcome == "AMBIGUOUS":
+            setup["realized_r"] = 0.0
+        resolved_count += 1
+    return resolved_count
+
+
+def _completed_setups(state):
+    return [
+        s for s in state.get("setups", [])
+        if s.get("outcome") in {"WIN", "LOSS", "AMBIGUOUS", "NO_ENTRY", "EXPIRED_AFTER_ENTRY"}
+    ]
+
+
+def _profile_stats(setups):
+    stats = {}
+    for name in PROFILES:
+        rows = [s for s in setups if s.get("profile") == name and s.get("outcome") in {"WIN", "LOSS"}]
+        if not rows:
+            stats[name] = {"count": 0, "win_rate": None, "expected_r": None}
+            continue
+        rs = [float(s.get("realized_r", 1.0 if s.get("outcome") == "WIN" else -1.0)) for s in rows]
+        stats[name] = {
+            "count": len(rows),
+            "win_rate": round(sum(r > 0 for r in rs) / len(rs), 6),
+            "expected_r": round(float(np.mean(rs)), 6),
+        }
+    return stats
+
+
+def maybe_learn(state):
+    """Apply only bounded profile changes after enough completed observations."""
+    completed = _completed_setups(state)
+    stats = _profile_stats(completed)
+    current = state.get("active_profile", DEFAULT_PROFILE)
+    report = {
+        "version": 5,
+        "learning_applied": False,
+        "active_profile": current,
+        "previous_profile": current,
+        "new_profile": current,
+        "completed_setups": len(completed),
+        "eligible": len(completed) >= MIN_LEARNING_SETUPS,
+        "profile_stats": stats,
+        "reason": "insufficient completed setups" if len(completed) < MIN_LEARNING_SETUPS else "no bounded improvement qualified",
+    }
+    if len(completed) < MIN_LEARNING_SETUPS:
+        return report
+
+    current_rows = [s for s in completed if s.get("profile") == current and s.get("outcome") in {"WIN", "LOSS"}]
+    current_r = float(np.mean([s.get("realized_r", 0.0) for s in current_rows])) if current_rows else None
+    candidates = []
+    for name, st in stats.items():
+        if st["count"] >= LEARNING_CHECKPOINT and st["expected_r"] is not None:
+            candidates.append((st["expected_r"], name, st["count"]))
+    if not candidates or current_r is None:
+        return report
+    best_r, best_name, _ = max(candidates)
+    if best_name != current and best_r - current_r >= MIN_EXPECTED_R_IMPROVEMENT:
+        recent = completed[-LEARNING_CHECKPOINT:]
+        recent_current = [s for s in recent if s.get("profile") == current and s.get("outcome") in {"WIN", "LOSS"}]
+        recent_candidate = [s for s in recent if s.get("profile") == best_name and s.get("outcome") in {"WIN", "LOSS"}]
+        recent_current_r = float(np.mean([s.get("realized_r", 0.0) for s in recent_current])) if recent_current else None
+        recent_best_r = float(np.mean([s.get("realized_r", 0.0) for s in recent_candidate])) if recent_candidate else None
+        if recent_current_r is not None and recent_best_r is not None and recent_best_r - recent_current_r >= MIN_RECENT_EXPECTED_R_IMPROVEMENT:
+            state["active_profile"] = best_name
+            state["last_learning_update"] = datetime.now(CHICAGO_TZ).isoformat()
+            update = {"timestamp": state["last_learning_update"], "previous_profile": current, "new_profile": best_name, "reason": "bounded expected-R improvement"}
+            state.setdefault("learning_updates", []).append(update)
+            report.update({"learning_applied": True, "new_profile": best_name, "reason": "bounded expected-R improvement"})
+    return report
+
+
+def _feature_row(setup):
+    return [_safe_float(setup.get(k), 0.0) for k in ML_FEATURES]
+
+
+def ml_shadow_report(state):
+    rows = [s for s in _completed_setups(state) if s.get("outcome") in {"WIN", "LOSS"}]
+    wins = sum(s.get("outcome") == "WIN" for s in rows)
+    losses = sum(s.get("outcome") == "LOSS" for s in rows)
+    report = {
+        "version": 5,
+        "shadow_only": ML_SHADOW_ONLY,
+        "samples": len(rows),
+        "wins": wins,
+        "losses": losses,
+        "ready": False,
+        "model": None,
+        "brier_score": None,
+        "log_loss": None,
+        "accuracy": None,
+    }
+    if len(rows) < ML_MIN_SAMPLES or min(wins, losses) < ML_MIN_CLASS_COUNT:
+        report["reason"] = "minimum sample/class guardrail not met"
+        return report
+    try:
+        X = np.asarray([_feature_row(s) for s in rows], dtype=float)
+        y = np.asarray([1 if s.get("outcome") == "WIN" else 0 for s in rows], dtype=int)
+        split = max(ML_MIN_TRAIN_SAMPLES, len(rows) - ML_TEST_WINDOW)
+        if split >= len(rows):
+            report["reason"] = "insufficient walk-forward test window"
+            return report
+        model = Pipeline([("scaler", StandardScaler()), ("clf", LogisticRegression(max_iter=2000, random_state=42))])
+        model.fit(X[:split], y[:split])
+        proba = model.predict_proba(X[split:])[:, 1]
+        pred = (proba >= 0.5).astype(int)
+        report.update({
+            "ready": True,
+            "model": "LogisticRegression",
+            "brier_score": round(float(brier_score_loss(y[split:], proba)), 6),
+            "log_loss": round(float(log_loss(y[split:], np.column_stack([1-proba, proba]), labels=[0,1])), 6),
+            "accuracy": round(float(accuracy_score(y[split:], pred)), 6),
+            "test_samples": int(len(y[split:])),
+        })
+    except Exception as exc:
+        report["reason"] = f"ML shadow evaluation failed: {exc}"
+    return report
+
+
+def add_ml_prediction(state, setup):
+    """Fit a shadow-only model on prior resolved setups and score this setup."""
+    rows = [s for s in _completed_setups(state) if s.get("outcome") in {"WIN", "LOSS"}]
+    wins = sum(s.get("outcome") == "WIN" for s in rows)
+    losses = sum(s.get("outcome") == "LOSS" for s in rows)
+    training_report = {
+        "samples": len(rows), "wins": wins, "losses": losses,
+        "ready": False, "model": None, "reason": None,
+    }
+    if len(rows) < ML_MIN_SAMPLES or min(wins, losses) < ML_MIN_CLASS_COUNT:
+        training_report["reason"] = "minimum sample/class guardrail not met"
+        return training_report
+    try:
+        X = np.asarray([_feature_row(s) for s in rows], dtype=float)
+        y = np.asarray([1 if s.get("outcome") == "WIN" else 0 for s in rows], dtype=int)
+        model = Pipeline([("scaler", StandardScaler()), ("clf", LogisticRegression(max_iter=2000, random_state=42))])
+        model.fit(X, y)
+        probability = float(model.predict_proba(np.asarray([_feature_row(setup)], dtype=float))[0, 1])
+        setup.setdefault("ml_shadow", {})["probability_win"] = round(probability, 6)
+        setup["ml_shadow"]["decision"] = "WATCH" if probability >= ML_CONFIDENCE_THRESHOLD else "LOW_CONFIDENCE"
+        training_report.update({"ready": True, "model": "LogisticRegression"})
+    except Exception as exc:
+        training_report["reason"] = f"ML prediction failed: {exc}"
+    return training_report
 
 def format_message(setup, report):
     lines = [
