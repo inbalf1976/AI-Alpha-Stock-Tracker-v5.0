@@ -1,4 +1,4 @@
-name: Anti-Hunt Morning Filter
+name: Anti-Hunt Morning Filter V5
 
 on:
   schedule:
@@ -18,7 +18,6 @@ jobs:
   anti-hunt-filter:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     permissions:
       contents: write
 
@@ -34,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install "yfinance>=0.2.40,<0.3" "pandas>=2.0,<3" "requests>=2.31,<3" "scikit-learn>=1.3,<2"
+          python -m pip install "yfinance>=0.2.40,<0.3" "pandas>=2.0,<3" "numpy>=1.24,<3" "requests>=2.31,<3" "scikit-learn>=1.3,<2"
 
       - name: Run anti-hunt filter
         env:
@@ -44,26 +43,26 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "=============================================="
-            echo "MANUAL TEST RUN"
+            echo "V5 MANUAL TEST RUN"
             echo "=============================================="
             python anti_hunt_filter.py --manual
           elif [ "${{ github.event.schedule }}" = "15 13 * * 1-5" ]; then
             echo "=============================================="
-            echo "OUTCOME RESOLUTION / LEARNING RUN"
+            echo "V5 OUTCOME RESOLUTION / LEARNING RUN"
             echo "=============================================="
             python anti_hunt_filter.py --resolve
           else
             echo "=============================================="
-            echo "SCHEDULED SIGNAL RUN"
+            echo "V5 SCHEDULED SIGNAL RUN"
             echo "=============================================="
             python anti_hunt_filter.py
           fi
 
-      - name: Upload setup and learning snapshots
+      - name: Upload V5 snapshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: anti-hunt-snapshot-${{ github.run_id }}
+          name: anti-hunt-v5-snapshot-${{ github.run_id }}
           path: |
             setup.json
             learning_state.json
@@ -77,13 +76,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git add learning_state.json learning_report.json ml_report.json setup.json
-
           if git diff --cached --quiet; then
             echo "No state changes to commit."
           else
-            git commit -m "chore: update anti-hunt learning state"
+            git commit -m "chore: update anti-hunt V5 learning state"
             git push origin HEAD:${{ github.ref_name }}
           fi
 
@@ -93,4 +90,8 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          curl -s -X POST             "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"             -d chat_id="${TELEGRAM_CHAT_ID}"             --data-urlencode             "text=⚠️ Anti-hunt workflow FAILED (run ${{ github.run_id }}): ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -s -X POST \
+            "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            --data-urlencode \
+            "text=⚠️ Anti-hunt V5 workflow FAILED (run ${{ github.run_id }}): ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
