@@ -1,0 +1,54 @@
+name: Anti-Hunt Backtest (manual, idempotent)
+on:
+  workflow_dispatch:   # manual trigger only — run this from the Actions tab
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    - name: Install packages
+      run: pip install "yfinance>=0.2.40,<0.3" "pandas>=2.0,<3" "numpy>=1.24,<3"
+    - name: Run anti-hunt backtest
+      # Idempotent — safe to re-run, dedupes on timestamp_ct.
+      # Backfilled setups are tagged source: "backtest" and are excluded
+      # from the live bounded profile-switch decision (see maybe_learn()
+      # in anti_hunt_filter.py); they only bootstrap the shadow ML model.
+      run: python anti_hunt_backtest.py
+    - name: Upload backtest summary
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: anti-hunt-backtest-summary-${{ github.run_id }}
+        path: anti_hunt_backtest_results.json
+        retention-days: 30
+        if-no-files-found: ignore
+    - name: Commit updated learning_state.json
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add -f learning_state.json anti_hunt_backtest_results.json || true
+        if git diff --staged --quiet; then
+          echo "Nothing to commit."
+        else
+          git commit -m "Backfill anti-hunt backtest setups [skip ci]"
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push failed (attempt $attempt) — fetching + merging (prefer local) and retrying..."
+            git fetch origin main
+            git merge -X ours origin/main -m "merge: resolve concurrent state update [skip ci]"
+          done
+          echo "::error::git push failed after 3 attempts."
+          exit 1
+        fi
