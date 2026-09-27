@@ -656,6 +656,25 @@ def spike_watch_context(intraday, daily, hourly, now_ct, macro=None):
     # exists to catch (an institutional move against the daily model's bias).
     trade_setup = spike_directional_setup(direction, latest) if stage in {"SPIKE_CONFIRMED", "SPIKE_WATCH"} else None
 
+    # Entry-quality filter, verified against the real 92-signal dataset
+    # (2026-09-27 research review): filtered signals (score>=8, volume_ratio
+    # in [2,10], atr_expansion_ratio in [1.2,1.4]) had ~2x the avg MFE of
+    # rejected signals, which had zero wins. Informational flag only — does
+    # not suppress the alert or trade_setup, since n=16 filtered signals is
+    # still thin by this project's own N>=30 discipline.
+    high_quality = (
+        score >= 8
+        and 2.0 <= volume_ratio <= 10.0
+        and 1.2 <= atr_expansion_ratio <= 1.4
+    )
+
+    # Day-of-week context, same verification pass: Wednesday was the only
+    # positive-expectancy day (n=29, trailing +4.55/trade); Monday+Friday
+    # combined bled -2.21/trade (n=21) vs +0.82/trade every other day (n=71).
+    # Soft flag only, not a block — n=6 Mondays is too thin for a hard rule.
+    weekday = now_ct.weekday()  # Monday=0 ... Sunday=6
+    dow_note = "WEAK_DAY" if weekday in (0, 4) else ("STRONG_DAY" if weekday == 2 else "NORMAL_DAY")
+
     return {"enabled": True, "qualified": stage in {"SPIKE_CONFIRMED", "SPIKE_WATCH"},
             "score": score, "up_score": up_score, "down_score": down_score, "max_score": 10,
             "stage": stage, "direction": direction, "checks": checks,
@@ -667,7 +686,9 @@ def spike_watch_context(intraday, daily, hourly, now_ct, macro=None):
             "momentum_prev_4bar_pct": round(mom_prev, 4), "atr_expansion_ratio": round(atr_expansion_ratio, 4),
             "trend_16bar_pct": round(trend_16, 4), "trend_1h_pct": round(trend_1h, 4),
             "recovery_position": round(recovery_position, 4), "threshold": SPIKE_SCORE_THRESHOLD,
-            "macro_context": macro, "trade_setup": trade_setup, "version": SPIKE_WATCH_VERSION + 1}
+            "macro_context": macro, "trade_setup": trade_setup,
+            "high_quality": high_quality, "dow_note": dow_note,
+            "version": SPIKE_WATCH_VERSION + 1}
 
 
 def format_spike_watch_message(spike, now_ct):
@@ -733,6 +754,17 @@ def format_spike_watch_message(spike, now_ct):
         f"ℹ️ {setup_reason}",
     ])
     if trade_setup:
+        quality_note = (
+            "✅ HIGH-QUALITY setup (score/volume/ATR in the historically best band)"
+            if spike.get("high_quality") else
+            "▫️ Standard setup — does not meet the high-quality filter (score>=8, vol 2-10x, ATR 1.2-1.4x)"
+        )
+        dow_note = spike.get("dow_note", "NORMAL_DAY")
+        dow_line = {
+            "WEAK_DAY": "⚠️ Monday/Friday — historically the weakest days for this setup (trailing -2.21/trade combined)",
+            "STRONG_DAY": "✅ Wednesday — historically the strongest day for this setup (trailing +4.55/trade)",
+            "NORMAL_DAY": None,
+        }.get(dow_note)
         lines.extend([
             "━━━━━━━━━━━━━━━━━━━━",
             "🎯 <b>ANTI-HUNT TRADE LEVELS</b>",
@@ -740,7 +772,10 @@ def format_spike_watch_message(spike, now_ct):
             f"🛑 STOP: <code>{trade_setup['stop']}</code>",
             f"🎯 TARGET: <code>{trade_setup['target']}</code>",
             f"Risk: <code>{trade_setup['risk']}</code> | Reward: <code>{trade_setup['reward']}</code> | R:R <code>{trade_setup['rr']}</code>",
+            quality_note,
         ])
+        if dow_line:
+            lines.append(dow_line)
     else:
         lines.append("🔻 No trade levels yet — spike not confirmed/in-watch.")
     lines.extend([
