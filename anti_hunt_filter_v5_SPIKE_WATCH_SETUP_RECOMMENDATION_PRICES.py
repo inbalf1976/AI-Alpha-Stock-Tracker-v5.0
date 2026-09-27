@@ -1059,8 +1059,15 @@ def _profile_stats(setups):
 
 
 def maybe_learn(state):
-    """Apply only bounded profile changes after enough completed observations."""
-    completed = _completed_setups(state)
+    """Apply only bounded profile changes after enough completed observations.
+
+    Deliberately filters out source=="backtest" setups here: backtest data is
+    still allowed to bootstrap the shadow ML model faster (see
+    ml_shadow_report, which calls _completed_setups directly, unfiltered),
+    but a live profile switch must be earned by real forward-confirmed
+    setups only — same discipline as everywhere else in this project.
+    """
+    completed = [s for s in _completed_setups(state) if s.get("source") != "backtest"]
     stats = _profile_stats(completed)
     current = state.get("active_profile", DEFAULT_PROFILE)
     report = {
