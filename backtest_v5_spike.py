@@ -54,8 +54,8 @@ MIN_BARS = int(os.environ.get("SPIKE_MIN_BARS", "35"))
 
 # Directional spike setup geometry requested for V5.
 # Example: UP entry 683 -> stop 678 -> target 715.
-SPIKE_STOP_DISTANCE = float(os.environ.get("SPIKE_STOP_DISTANCE", "5.0"))
-SPIKE_TARGET_DISTANCE = float(os.environ.get("SPIKE_TARGET_DISTANCE", "32.0"))
+SPIKE_STOP_DISTANCE = float(os.environ.get("SPIKE_STOP_DISTANCE", "8.0"))
+SPIKE_TARGET_DISTANCE = float(os.environ.get("SPIKE_TARGET_DISTANCE", "8.0"))
 
 OUTPUT_JSON = os.environ.get("BACKTEST_OUTPUT", "backtest_v5_spike_report.json")
 OUTPUT_CSV = os.environ.get("BACKTEST_CSV", "backtest_v5_spike_trades.csv")
