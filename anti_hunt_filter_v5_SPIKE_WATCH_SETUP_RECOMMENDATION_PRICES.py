@@ -57,8 +57,8 @@ SPIKE_ATR_EXPANSION_THRESHOLD = 1.10
 # backtest_v5_spike.py's directional_setup(), so the live alert and its
 # backtest stay consistent. Duplicated there rather than imported so the
 # backtest script keeps working standalone — change both together.
-SPIKE_TRADE_STOP_DISTANCE = 5.0
-SPIKE_TRADE_TARGET_DISTANCE = 32.0
+SPIKE_TRADE_STOP_DISTANCE = 8.0
+SPIKE_TRADE_TARGET_DISTANCE = 8.0
 
 PROFILES = {
     "BASE": {"entry_mult": 0.994, "stop_mult": 1.012, "target_mult": 0.960},
