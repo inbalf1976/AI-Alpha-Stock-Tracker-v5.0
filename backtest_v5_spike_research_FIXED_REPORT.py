@@ -42,11 +42,11 @@ PERIOD = os.environ.get("BACKTEST_PERIOD", "60d")
 HORIZON_BARS = int(os.environ.get("SPIKE_HORIZON_BARS", "32"))
 MIN_BARS = int(os.environ.get("SPIKE_MIN_BARS", "35"))
 EPISODE_GAP_BARS = int(os.environ.get("SPIKE_EPISODE_GAP_BARS", "4"))
-TARGETS = [float(x) for x in os.environ.get("SPIKE_TARGETS", "5,8,10,12,16,20,24,28,32").split(",")]
-STOPS = [float(x) for x in os.environ.get("SPIKE_STOPS", "3,4,5,6,8,10").split(",")]
+TARGETS = [float(x) for x in os.environ.get("SPIKE_TARGETS", "3,4,5,6,8,10,12,16,20").split(",")]
+STOPS = [float(x) for x in os.environ.get("SPIKE_STOPS", "5,6,8,10,12,15,20").split(",")]
 DELAY_BARS = [int(x) for x in os.environ.get("SPIKE_DELAY_BARS", "0,1,2,4").split(",")]
-ANALYSIS_STOP_DISTANCE = float(os.environ.get("ANALYSIS_STOP_DISTANCE", "5"))
-ANALYSIS_TARGET_DISTANCE = float(os.environ.get("ANALYSIS_TARGET_DISTANCE", "16"))
+ANALYSIS_STOP_DISTANCE = float(os.environ.get("ANALYSIS_STOP_DISTANCE", "8"))
+ANALYSIS_TARGET_DISTANCE = float(os.environ.get("ANALYSIS_TARGET_DISTANCE", "8"))
 OUT_JSON = os.environ.get("RESEARCH_JSON", "backtest_v5_spike_research_report.json")
 OUT_TRADES = os.environ.get("RESEARCH_CSV", "backtest_v5_spike_research_trades.csv")
 
