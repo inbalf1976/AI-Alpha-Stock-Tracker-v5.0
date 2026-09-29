@@ -124,7 +124,20 @@ jobs:
             echo "No state changes to commit."
           else
             git commit -m "chore: update anti-hunt V5 learning state"
-            git push origin HEAD:${{ github.ref_name }}
+            # Same retry-with-merge as wheat_monitor_github.yml: if another
+            # workflow pushed to the branch meanwhile, fetch + merge
+            # (prefer this run's own state files on conflict) and retry.
+            for attempt in 1 2 3; do
+              if git push origin HEAD:${{ github.ref_name }}; then
+                echo "Push succeeded on attempt $attempt."
+                exit 0
+              fi
+              echo "Push failed (attempt $attempt) - fetching + merging (prefer local) and retrying..."
+              git fetch origin ${{ github.ref_name }}
+              git merge -X ours origin/${{ github.ref_name }} -m "merge: resolve concurrent state update [skip ci]"
+            done
+            echo "::error::git push failed after 3 attempts - anti-hunt state did NOT reach the repo this run."
+            exit 1
           fi
 
       - name: Notify on failure
