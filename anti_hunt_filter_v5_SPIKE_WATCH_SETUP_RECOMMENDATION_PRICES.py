@@ -1288,9 +1288,13 @@ def main():
     print(f"Resolved {resolved} previous setup(s).")
 
     # Premarket / early-session spike warning. This path intentionally does
-    # not create a trade setup or learning sample.
+    # not create a trade setup or learning sample. Excludes resolve_only:
+    # the 13:15 CT resolve/learning run is also outside in_trade_window
+    # (WINDOW_CLOSE=12:30), so without this exclusion it fires a spike alert
+    # instead of just resolving previous setups and learning — this was the
+    # root cause of an unexpected ~02:14 alert traced back on 2026-09-29.
     in_trade_window = WINDOW_OPEN <= now_ct.time() <= WINDOW_CLOSE and now_ct.time() <= ENTRY_CUTOFF
-    if not manual and not in_trade_window:
+    if not manual and not resolve_only and not in_trade_window:
         if spike.get("qualified"):
             last_key = state.get("last_spike_watch_key")
             current_key = f"{now_ct.date().isoformat()}:{spike.get('stage')}:{spike.get('score')}"
