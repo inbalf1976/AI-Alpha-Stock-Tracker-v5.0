@@ -15,6 +15,15 @@ on:
     - cron: '15 13 * * 1-5'
       timezone: 'America/Chicago'
   workflow_dispatch:
+    inputs:
+      run_mode:
+        description: 'manual = test run (bypasses time rules). scheduled = normal signal run. resolve = outcome resolution only.'
+        type: choice
+        options:
+          - manual
+          - scheduled
+          - resolve
+        default: manual
 
 concurrency:
   group: anti-hunt-filter
@@ -87,7 +96,13 @@ jobs:
           echo "SCHEDULE: ${{ github.event.schedule }}"
           echo "=============================================="
 
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.run_mode }}" = "scheduled" ]; then
+            echo "V5 SCHEDULED SIGNAL RUN (external trigger)"
+            python "$V5_FILE"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.run_mode }}" = "resolve" ]; then
+            echo "V5 OUTCOME RESOLUTION / LEARNING RUN (external trigger)"
+            python "$V5_FILE" --resolve
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "V5 MANUAL TEST RUN"
             python "$V5_FILE" --manual
           elif [ "${{ github.event.schedule }}" = "15 13 * * 1-5" ]; then
