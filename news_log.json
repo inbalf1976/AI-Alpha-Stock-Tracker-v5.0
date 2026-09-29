@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-09-29T02:37:25.233634+00:00",
+    "total_scanned": 224,
+    "flagged_count": 159,
+    "flagged_headlines": [
+      {
+        "title": "Dollar pinned at two-month high as bond rout extends, Fed rate hike bets rise",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-weaken-as-dollar-holds-near-twomonth-high-yen-slips-4919323",
+        "source": "Investing.com Forex",
+        "published": "2026-09-28 20:07:07",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Loonie weakens as wider yield gap and softer oil weigh on loonie",
+        "link": "https://www.investing.com/news/forex-news/loonie-weakens-as-wider-yield-gap-and-softer-oil-weigh-on-loonie-4920618",
+        "source": "Investing.com Forex",
+        "published": "2026-09-28 13:58:08",
+        "matched_keywords": [
+          "oil",
+          "yield"
+        ]
+      },
+      {
+        "title": "U.S. debt sell-off extends on $106 crude oil and hawkish central bank outlooks",
+        "link": "https://www.investing.com/news/forex-news/german-yields-pause-traders-weigh-sticky-energy-inflation-in-data-packed-week-4919522",
+        "source": "Investing.com Forex",
+        "published": "2026-09-28 12:45:46",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Bond rout in shorter-term maturities eases up, but U.S. yields end week with gains",
+        "link": "https://www.investing.com/news/forex-news/us-10year-yield-climbs-for-6-straight-week-as-bond-rout-deepens-4916837",
+        "source": "Investing.com Forex",
+        "published": "2026-09-25 21:26:50",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Oil extends gains as U.S.-Iran stalemate overshadows Saudi flows",
+        "link": "https://www.investing.com/news/commodities-news/oil-extends-gains-as-usiran-stalemate-overshadows-saudi-flows-4921487",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-29 01:40:50",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold steadies near seven-week low after 4% plunge as Fed hike bets rise",
+        "link": "https://www.investing.com/news/commodities-news/gold-steadies-near-sevenweek-low-after-4-plunge-as-fed-hike-bets-rise-4921480",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-29 01:21:33",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil prices rise for second session on continued Middle East supply concern",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-rise-for-second-session-on-continued-middle-east-supply-concern-4921465",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-29 00:36:47",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US, Iran separately talk with mediators in latest bid to end war",
+        "link": "https://www.investing.com/news/commodities-news/us-iran-set-to-hold-separate-talks-with-mediators-on-monday-or-tuesday-official-says-4920603",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-28 22:42:50",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Oil prices rise after Trump rejects Iran deal, but settle well below session highs",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-rise-as-iran-us-remain-at-odds-over-hormuz-reopening-4919238",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-28 21:29:08",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold slips 4% to fall below $4,200 on firmer dollar, bond rout, and Fed hike bets",
+        "link": "https://www.investing.com/news/commodities-news/gold-falls-below-4300-as-oil-fed-hike-bets-keep-pressure-on-bullion-4919230",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-28 20:50:22",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Trump unveils $15 billion planned Iowa steel project",
+        "link": "https://www.investing.com/news/commodities-news/trump-to-unveil-planned-15-billion-iowa-steel-project-4920589",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-28 20:42:33",
+        "matched_keywords": [
+          "ils"
+        ]
+      },
+      {
+        "title": "Trump says US will win Iran war ’very soon’",
+        "link": "https://www.investing.com/news/commodities-news/trump-says-us-will-win-iran-war-very-soon-4921027",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-28 20:31:19",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260925a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 25 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests public comment on two proposals related to establishing a regulatory framework for Board-supervised payment stablecoin issuers under the GENIUS Act",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Sandy Spring Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by a strengthening U.S. dollar, rising Fed rate hike expectations, and escalating geopolitical tensions in the Middle East supporting oil prices. Meanwhile, the Strait of Hormuz remains heavily trafficked despite unverified covert mine-laying reports and increased speedboat activity, with Saudi crude exports actually quadrupling.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalation of Middle East conflict impacting broader commodity supply chains and shipping routes.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-09-29T02:17:35.632515+00:00",
     "total_scanned": 224,
     "flagged_count": 159,
@@ -31498,157 +31658,6 @@
       "usd_ils_impact": "BEARISH",
       "usd_ils_impact_reason": "Recent weakness in the U.S. dollar following the Fed holding rates steady puts downward pressure on the USD/ILS exchange rate.",
       "key_risk": "Escalating bond market volatility and rising long-term borrowing costs spilling over into broader liquidity and credit strains."
-    }
-  },
-  {
-    "timestamp": "2026-07-31T02:16:06.407428+00:00",
-    "total_scanned": 223,
-    "flagged_count": 173,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Minutes of the Federal Open Market Committee, June 16-17, 2026",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260708a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 8 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to amend its requirements for banks to maintain anti-money laundering programs",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260707a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 7 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Long-term U.S. borrowing costs hit 19-year high as Fed ambiguity rattles bonds",
-        "link": "https://www.investing.com/news/forex-news/euro-yields-firm-as-middle-east-war-and-fed-ambiguity-stoke-inflation-fears-4822455",
-        "source": "Investing.com Forex",
-        "published": "2026-07-30 12:24:42",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Dollar sees worst day in about four weeks as Fed holds rates steady",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-aussie-slides-on-soft-cpi-won-firms-ahead-of-fed-decision-4818595",
-        "source": "Investing.com Forex",
-        "published": "2026-07-29 21:43:52",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Dollar may weaken if Fed holds rates steady, ING says",
-        "link": "https://www.investing.com/news/forex-news/dollar-may-weaken-if-fed-holds-rates-steady-ing-says-93CH-4820808",
-        "source": "Investing.com Forex",
-        "published": "2026-07-29 14:29:33",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "U.S. Treasuries  pressured as Middle East escalation and hawkish Fed bets weigh",
-        "link": "https://www.investing.com/news/forex-news/eurozone-borrowing-costs-rise-as-middle-east-escalation-and-hawkish-fed-bets-weigh-4818640",
-        "source": "Investing.com Forex",
-        "published": "2026-07-29 12:09:49",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound flat as traders await Fed rate decision",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-flat-as-traders-await-fed-rate-decision-4819493",
-        "source": "Investing.com Forex",
-        "published": "2026-07-29 10:51:49",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "U.S. economy slowed to 1.5% growth rate in Q2; June core inflation at 3.3%",
-        "link": "https://www.cnbc.com/2026/07/30/us-economy-slowed-to-1point5percent-growth-rate-in-q2-june-core-inflation-at-3point3percent.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 30 Jul 2026 15:04:43 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "What a divided Fed means for investors",
-        "link": "https://www.cnbc.com/2026/07/29/fed-meeting-interest-rates-warsh-stocks-bonds.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 29 Jul 2026 23:36:34 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "U.S. monetary policy remains a dominant market driver as a divided Federal Reserve holds interest rates steady amid slowing Q2 growth (1.5%) and persistent core inflation (3.3%). This policy ambiguity has rattled fixed-income markets, pushing long-term borrowing costs to 19-year highs and triggering volatility in the U.S. dollar alongside escalating Middle East geopolitical tensions.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "While macroeconomic headwinds and currency fluctuations impact global commodity flows, domestic monetary policy and Fed rate decisions have no direct, immediate bearing on global wheat supply-demand fundamentals.",
-      "usd_ils_impact": "BULLISH",
-      "usd_ils_impact_reason": "Escalating Middle East geopolitical tensions increase safe-haven demand for the U.S. dollar against regional currencies like the Israeli Shekel, outweighing recent dollar softness driven by Fed rate decisions.",
-      "key_risk": "Further escalation of Middle East geopolitical tensions triggering severe supply disruptions and flight-to-safety volatility."
     }
   }
 ]
