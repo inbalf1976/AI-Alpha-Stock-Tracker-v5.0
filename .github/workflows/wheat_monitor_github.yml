@@ -1,7 +1,8 @@
 name: Wheat Monitor PRO - Ultimate Edition
 on:
   schedule:
-    - cron: '53 23 * * 0,1,2,3,4'  # 23:53 UTC Sun-Thu = 02:53 Israel time Mon-Fri (IDT UTC+3)
+    - cron: '5 3 * * 1-5'
+      timezone: 'Asia/Jerusalem'   # UPDATED 2026-09-30: 03:05 Israel time Mon-Fri (was 23:53 UTC = 02:53 IL). Retimed to catch the first minutes of Plus500's 03:00 session; timezone key follows Israel DST automatically. The external cron-job.org trigger (run_job=monitor) fires at the same 03:05.
     # UPDATED 2026-08-25: retimed from ~01:00 IL to ~03:00 IL after the
     # user confirmed Plus500's actual trading day starts at 03:00 IL
     # (Session 1: 03:00-15:45, then closed 15:45-16:30, then Session 2:
@@ -71,7 +72,7 @@ jobs:
       cancel-in-progress: false
     permissions:
       contents: write
-    if: contains(fromJSON('["53 23 * * 0,1,2,3,4"]'), github.event.schedule) || (github.event_name == 'workflow_dispatch' && (inputs.run_job == 'all' || inputs.run_job == 'monitor'))
+    if: contains(fromJSON('["5 3 * * 1-5"]'), github.event.schedule) || (github.event_name == 'workflow_dispatch' && (inputs.run_job == 'all' || inputs.run_job == 'monitor'))
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
