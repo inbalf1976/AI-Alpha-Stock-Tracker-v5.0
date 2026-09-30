@@ -42,6 +42,14 @@ on:
     - cron: '35 8 * * *'          # news scan #2 — mid-session
     - cron: '20 13 * * *'         # news scan #3 — see comment block above
   workflow_dispatch:         # manual trigger kept for testing
+    inputs:
+      run_job:
+        description: 'all = run every job (old manual behavior). monitor = daily monitor only, behaves like the scheduled run (for external timers).'
+        type: choice
+        options:
+          - all
+          - monitor
+        default: all
 jobs:
   monitor:
     runs-on: ubuntu-latest
@@ -63,7 +71,7 @@ jobs:
       cancel-in-progress: false
     permissions:
       contents: write
-    if: contains(fromJSON('["53 23 * * 0,1,2,3,4"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
+    if: contains(fromJSON('["53 23 * * 0,1,2,3,4"]'), github.event.schedule) || (github.event_name == 'workflow_dispatch' && (inputs.run_job == 'all' || inputs.run_job == 'monitor'))
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -80,6 +88,7 @@ jobs:
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        EXTERNAL_SCHEDULED: ${{ inputs.run_job == 'monitor' }}
       run: python wheat_monitor_pro.py
     - name: Score past predictions
       run: python score_predictions.py
@@ -169,7 +178,7 @@ jobs:
     # This job now only runs the backtest itself — never touches
     # wheat_monitor_pro.py, so it can never send a monitor alert — on a
     # cron that actually lands on IL Saturday (UTC Friday 22:30).
-    if: github.event.schedule == '30 22 * * 5' || github.event_name == 'workflow_dispatch'
+    if: github.event.schedule == '30 22 * * 5' || (github.event_name == 'workflow_dispatch' && inputs.run_job == 'all')
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -227,7 +236,7 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: write
-    if: github.event.schedule == '0 0 * * 6' || github.event_name == 'workflow_dispatch'
+    if: github.event.schedule == '0 0 * * 6' || (github.event_name == 'workflow_dispatch' && inputs.run_job == 'all')
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -294,7 +303,7 @@ jobs:
     permissions:
       contents: write
     # UPDATED 2026-08-08: matches the new synchronized cron strings above.
-    if: contains(fromJSON('["28 23 * * *", "35 8 * * *", "20 13 * * *"]'), github.event.schedule) || github.event_name == 'workflow_dispatch'
+    if: contains(fromJSON('["28 23 * * *", "35 8 * * *", "20 13 * * *"]'), github.event.schedule) || (github.event_name == 'workflow_dispatch' && inputs.run_job == 'all')
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
