@@ -1571,7 +1571,13 @@ def should_send(state):
     below for the current target). Manual always sends."""
     force  = os.getenv('FORCE_ALERT', '').lower() in ('true', '1', 'yes')
     event  = os.getenv('GITHUB_EVENT_NAME', '')
-    manual = force or 'workflow_dispatch' in event
+    # EXTERNAL_SCHEDULED (set by the workflow only for an external timer
+    # such as cron-job.org calling workflow_dispatch with run_job=monitor):
+    # treat that run like the real scheduled run - trading-day check, hour
+    # window and same-day duplicate guard all apply. A human Run-workflow
+    # click never sets it, so manual runs behave exactly as before.
+    external = os.getenv('EXTERNAL_SCHEDULED', '').lower() in ('true', '1', 'yes')
+    manual = force or ('workflow_dispatch' in event and not external)
 
     if manual:
         # UPDATED 2026-07-31: distinguish a genuine manual test run from
@@ -2098,6 +2104,7 @@ def main():
     is_human_manual = (
         os.getenv('GITHUB_EVENT_NAME', '') == 'workflow_dispatch'
         and not os.getenv('PRICE_MOVE_REASON')
+        and os.getenv('EXTERNAL_SCHEDULED', '').lower() not in ('true', '1', 'yes')
     )
 
     if send:
