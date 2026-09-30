@@ -1,5 +1,175 @@
 [
   {
+    "timestamp": "2026-09-30T02:13:17.480013+00:00",
+    "total_scanned": 227,
+    "flagged_count": 162,
+    "flagged_headlines": [
+      {
+        "title": "Wells Fargo revises dollar, yen, euro estimates amid rate hike outlook",
+        "link": "https://www.investing.com/news/forex-news/wells-fargo-revises-dollar-yen-euro-estimates-amid-rate-hike-outlook-4923047",
+        "source": "Investing.com Forex",
+        "published": "2026-09-29 14:44:38",
+        "matched_keywords": [
+          "rate hike"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields ease while Aussie yields retreat  after 2011-era peak run up",
+        "link": "https://www.investing.com/news/forex-news/us-treasury-yields-hold-while-aussie-yields-retreat--after-2011era-peak-run-up-4921704",
+        "source": "Investing.com Forex",
+        "published": "2026-09-29 12:32:33",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as oil-fuelled dollar demand builds",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-oilfuelled-dollar-demand-builds-4921804",
+        "source": "Investing.com Forex",
+        "published": "2026-09-29 08:50:08",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Dollar pinned at two-month high as bond rout extends, Fed rate hike bets rise",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-weaken-as-dollar-holds-near-twomonth-high-yen-slips-4919323",
+        "source": "Investing.com Forex",
+        "published": "2026-09-28 20:07:07",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Loonie weakens as wider yield gap and softer oil weigh on loonie",
+        "link": "https://www.investing.com/news/forex-news/loonie-weakens-as-wider-yield-gap-and-softer-oil-weigh-on-loonie-4920618",
+        "source": "Investing.com Forex",
+        "published": "2026-09-28 13:58:08",
+        "matched_keywords": [
+          "oil",
+          "yield"
+        ]
+      },
+      {
+        "title": "U.S. debt sell-off extends on $106 crude oil and hawkish central bank outlooks",
+        "link": "https://www.investing.com/news/forex-news/german-yields-pause-traders-weigh-sticky-energy-inflation-in-data-packed-week-4919522",
+        "source": "Investing.com Forex",
+        "published": "2026-09-28 12:45:46",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil climbs after Trump denies he is willing to ease sanctions on Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-climbs-after-trump-denies-he-is-willing-to-ease-sanctions-on-iran-4923992",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-30 01:42:54",
+        "matched_keywords": [
+          "sanction",
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices edge higher after sharp drop as Middle East supply recovers",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-edge-higher-after-sharp-drop-as-middle-east-supply-recovers-4923978",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-30 01:33:35",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold steadies after 1.6% gain as oil drop offsets elevated Treasury yields",
+        "link": "https://www.investing.com/news/commodities-news/gold-steadies-after-16-gain-as-oil-drop-offsets-elevated-treasury-yields-4923962",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-30 01:14:49",
+        "matched_keywords": [
+          "oil",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Qatari mediators press peace deal between US and Iran",
+        "link": "https://www.investing.com/news/commodities-news/trump-denies-offering-iran-sanctions-relief-tehran-says-ready-for-talks-4921647",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-29 22:24:27",
+        "matched_keywords": [
+          "peace deal"
+        ]
+      },
+      {
+        "title": "Gold brushes off firmer dollar, rebounds amid let up in oil prices and yields",
+        "link": "https://www.investing.com/news/commodities-news/gold-steadies-near-sevenweek-low-after-4-plunge-as-fed-hike-bets-rise-4921480",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-29 21:31:14",
+        "matched_keywords": [
+          "oil",
+          "yield"
+        ]
+      },
+      {
+        "title": "Oil slips as Middle East flows improve, U.S. to release more crude from reserves",
+        "link": "https://www.investing.com/news/commodities-news/oil-extends-gains-as-usiran-stalemate-overshadows-saudi-flows-4921487",
+        "source": "Investing.com Commodities",
+        "published": "2026-09-29 19:51:23",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Hollywood’s big debt deal hits a wall of higher yields as Paramount finances Warner Bros. buyout",
+        "link": "https://www.marketwatch.com/story/hollywoods-big-debt-deal-hits-a-wall-of-higher-yields-as-paramount-finances-warner-bros-buyout-6ee6e3b8?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 29 Sep 2026 21:56:00 GMT",
+        "matched_keywords": [
+          "war",
+          "yield"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260925a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 25 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests public comment on two proposals related to establishing a regulatory framework for Board-supervised payment stablecoin issuers under the GENIUS Act",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by an ongoing bond market sell-off, rising Federal Reserve rate hike expectations, and a strengthening U.S. dollar amid elevated crude oil prices near $106. Meanwhile, Strait of Hormuz crude flows remain resilient despite Iranian pressure and heavy GPS jamming.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "A strengthening U.S. dollar driven by rising Treasury yields and hawkish Fed rate hike expectations typically exerts upward pressure on the USD/ILS exchange rate."
+      },
+      "key_risk": "Prolonged U.S. Treasury yield surge and expanding bond market rout tightening global financial conditions.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-09-29T18:41:52.815616+00:00",
     "total_scanned": 228,
     "flagged_count": 160,
@@ -31523,161 +31693,6 @@
       "usd_ils_impact": "NEUTRAL",
       "usd_ils_impact_reason": "Mixed Federal Reserve signals and broader macroeconomic growth pressures create offsetting forces for the USD against the ILS.",
       "key_risk": "Escalating global trade retaliation and tariff policies threatening international supply chains and commodity flows."
-    }
-  },
-  {
-    "timestamp": "2026-07-31T13:52:17.587351+00:00",
-    "total_scanned": 223,
-    "flagged_count": 167,
-    "flagged_headlines": [
-      {
-        "title": "Dollar rebounds but posts monthly loss as softer inflation clouds Fed outlook",
-        "link": "https://www.investing.com/news/forex-news/dollar-set-for-july-losses-yen-falls-after-reported-intervention-boj-hold-4826760",
-        "source": "Investing.com Forex",
-        "published": "2026-07-31 13:44:53",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "US Treasury informed banks that it may intervene in yen, source says",
-        "link": "https://www.investing.com/news/forex-news/us-treasury-informed-banks-that-it-may-intervene-in-yen-source-says-4828547",
-        "source": "Investing.com Forex",
-        "published": "2026-07-31 13:42:56",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "U.S. yields push higher to cap turbulent July on Middle East war, Fed confusion",
-        "link": "https://www.investing.com/news/forex-news/eurozone-yields-consolidate-as-monthend-buying-caps-sharp-july-rate-selloff-4826916",
-        "source": "Investing.com Forex",
-        "published": "2026-07-31 12:40:15",
-        "matched_keywords": [
-          "fed",
-          "war",
-          "yield"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound slips as dollar steadies after post-FOMC rout",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-dollar-steadies-after-postfomc-rout-4827252",
-        "source": "Investing.com Forex",
-        "published": "2026-07-31 09:48:09",
-        "matched_keywords": [
-          "fomc"
-        ]
-      },
-      {
-        "title": "Long-term U.S. borrowing costs hit 19-year high as Fed ambiguity rattles bonds",
-        "link": "https://www.investing.com/news/forex-news/euro-yields-firm-as-middle-east-war-and-fed-ambiguity-stoke-inflation-fears-4822455",
-        "source": "Investing.com Forex",
-        "published": "2026-07-30 12:24:42",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Exclusive-Russian grain lobby says Kyiv’s attacks threaten Black Sea exports and global food security",
-        "link": "https://www.investing.com/news/commodities-news/exclusiverussian-grain-lobby-says-kyivs-attacks-threaten-black-sea-exports-and-global-food-security-4828555",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-31 13:44:56",
-        "matched_keywords": [
-          "grain",
-          "black sea"
-        ]
-      },
-      {
-        "title": "Oil advance as Hormuz tanker traffic improves despite ongoing U.S.-Iran conflict",
-        "link": "https://www.investing.com/news/commodities-news/oil-set-for-20-monthly-jump-as-usiran-conflict-widens-inventories-drop-4826597",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-31 12:23:49",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Dubai crude premium rises as trading picks up on Friday",
-        "link": "https://www.investing.com/news/commodities-news/dubai-crude-premium-rises-as-trading-picks-up-on-friday-93CH-4827946",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-31 12:10:29",
-        "matched_keywords": [
-          "crude"
-        ]
-      },
-      {
-        "title": "Oil falls more than $1 on greater flows despite US-Iran war",
-        "link": "https://www.investing.com/news/commodities-news/oil-falls-more-than-1-on-greater-flows-despite-usiran-war-4826705",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-31 03:06:26",
-        "matched_keywords": [
-          "oil",
-          "war"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "Global markets are navigating a rebounding US dollar alongside surging long-term Treasury yields driven by Fed policy ambiguity and persistent Middle East geopolitical tensions. Concurrently, supply chain risks in the Black Sea and fluctuating crude prices are dictating volatility across agricultural and energy commodities.",
-      "wheat_impact": "BULLISH",
-      "reason": "Ongoing Middle East conflict and rising US yields structurally support safe-haven demand, strengthening the dollar against the shekel.",
-      "usd_ils_impact": "BULLISH",
-      "key_risk": "Escalation of geopolitical conflicts impacting critical maritime supply routes like the Black Sea and the Strait of Hormuz."
     }
   }
 ]
