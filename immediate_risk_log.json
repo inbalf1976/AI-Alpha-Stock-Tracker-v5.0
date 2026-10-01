@@ -5,11 +5,11 @@
     "reason": "Ongoing attacks on oil tankers and shipping disruptions in the Strait of Hormuz pose active threats to vital regional commodity and energy transit lanes.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 688.25,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 676.75,
+    "pct_change": -1.671,
+    "scored_at": "2026-10-01T15:38:03.958751+00:00"
   },
   {
     "alert_number": 75,
