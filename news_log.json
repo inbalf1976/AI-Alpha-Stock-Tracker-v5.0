@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-10-03T02:07:59.826054+00:00",
+    "total_scanned": 228,
+    "flagged_count": 161,
+    "flagged_headlines": [
+      {
+        "title": "Falling wages, soaring energy prices and inflation: It’s beginning to look a lot like the 1970s",
+        "link": "https://www.marketwatch.com/story/falling-wages-soaring-energy-prices-and-inflation-its-beginning-to-look-a-lot-like-the-1970s-d645cbca?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 02 Oct 2026 21:54:00 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 30 Sep 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260925a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 25 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests public comment on two proposals related to establishing a regulatory framework for Board-supervised payment stablecoin issuers under the GENIUS Act",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Sandy Spring Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by BancFirst Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260922a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 22 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. 10-year yield drops after September non-farm payrolls miss forecasts",
+        "link": "https://www.investing.com/news/forex-news/french-debt-set-for-5th-weekly-rise-at-2002-peaks-bunds-at-over-1week-lows-4929025",
+        "source": "Investing.com Forex",
+        "published": "2026-10-02 12:44:26",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Canadian dollar weakens as U.S. dollar strength, yield gap keeps pressure",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-weakens-as-us-dollar-strength-yield-gap-keeps-pressure-4928043",
+        "source": "Investing.com Forex",
+        "published": "2026-10-01 17:46:09",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Global debt rout escalates as U.S. and European yields surge to multi-decade highs",
+        "link": "https://www.investing.com/news/forex-news/uk-30year-gilt-yields-rise-to-1998-highs-french-budget-due-4926457",
+        "source": "Investing.com Forex",
+        "published": "2026-10-01 12:11:00",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as global bond rout lifts dollar, gilt yields hit 6%",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-global-bond-rout-lifts-dollar-gilt-yields-hit-6-4926602",
+        "source": "Investing.com Forex",
+        "published": "2026-10-01 08:58:09",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "U.S. dollar sees best month since June on hawkish Fed, U.S. Treasury bond rout",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-yen-rebounds-dollar-stays-near-twomonth-high-4924061",
+        "source": "Investing.com Forex",
+        "published": "2026-09-30 21:04:47",
+        "matched_keywords": [
+          "fed",
+          "treasury"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are grappling with escalating bond yields, a strengthening U.S. dollar, and ongoing geopolitical tensions, including confirmed tanker strikes in the Strait of Hormuz. Meanwhile, macroeconomic concerns are mounting as inflation and soaring energy prices draw comparisons to the stagflationary 1970s.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "Global bond market routs and a hawkish Fed narrative are driving strong U.S. dollar momentum against most major and regional currencies."
+      },
+      "key_risk": "Escalating geopolitical conflict and kinetic attacks in the Strait of Hormuz threatening critical energy and maritime trade flows.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Multiple tankers have been struck by Iran in the Strait of Hormuz over a multi-day period, elevating maritime security risks in a critical global chokepoint.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-02T18:31:52.909611+00:00",
     "total_scanned": 226,
     "flagged_count": 161,
@@ -31592,162 +31753,6 @@
       "usd_ils_impact": "NEUTRAL",
       "usd_ils_impact_reason": "While Middle East conflicts provide geopolitical tension impacting regional currencies, broad USD direction remains primarily tied to Fed policy and Treasury interventions rather than direct ILS drivers in the current news flow.",
       "key_risk": "Persistent energy-driven supply shocks fueling inflation, which could force a more aggressive Fed reaction despite ongoing economic uncertainties.",
-      "headline_overstated": false,
-      "headline_vs_article_note": ""
-    }
-  },
-  {
-    "timestamp": "2026-08-02T13:09:35.853928+00:00",
-    "total_scanned": 221,
-    "flagged_count": 160,
-    "flagged_headlines": [
-      {
-        "title": "How Apple’s cheap MacBook Neo sparked a war in budget laptops",
-        "link": "https://www.marketwatch.com/story/how-apples-cheap-macbook-neo-sparked-a-war-in-budget-laptops-8fbaf839?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 02 Aug 2026 13:00:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Investors are rotating into financial stocks. The Fed’s next move could determine how far the rally runs.",
-        "link": "https://www.marketwatch.com/story/investors-are-rotating-into-financial-stocks-the-feds-next-move-could-determine-how-far-the-rally-runs-662c63df?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 02 Aug 2026 12:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "If Social Security’s funding crisis is the elephant in the room, this is the mouse everyone has overlooked. You have been warned.",
-        "link": "https://www.marketwatch.com/story/if-social-securitys-funding-crisis-is-the-elephant-in-the-room-this-is-the-mouse-everyone-has-overlooked-you-have-been-warned-b95c450d?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sat, 01 Aug 2026 21:15:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "US Treasury intervenes to support yen through purchases - FT",
-        "link": "https://www.investing.com/news/forex-news/us-treasury-intervenes-to-support-yen-through-purchases--ft-4829482",
-        "source": "Investing.com Forex",
-        "published": "2026-08-01 01:35:20",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "Dollar falls over 1% for July as U.S. data, Fed paint a muddy picture on inflation",
-        "link": "https://www.investing.com/news/forex-news/dollar-set-for-july-losses-yen-falls-after-reported-intervention-boj-hold-4826760",
-        "source": "Investing.com Forex",
-        "published": "2026-07-31 21:13:37",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "US Treasury informed banks that it may intervene in yen, source says",
-        "link": "https://www.investing.com/news/forex-news/us-treasury-informed-banks-that-it-may-intervene-in-yen-source-says-4828547",
-        "source": "Investing.com Forex",
-        "published": "2026-07-31 13:42:56",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "U.S. yields push higher to cap turbulent July on Middle East war, Fed confusion",
-        "link": "https://www.investing.com/news/forex-news/eurozone-yields-consolidate-as-monthend-buying-caps-sharp-july-rate-selloff-4826916",
-        "source": "Investing.com Forex",
-        "published": "2026-07-31 12:40:15",
-        "matched_keywords": [
-          "fed",
-          "war",
-          "yield"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "Financial markets are navigating a complex mix of geopolitical risks from the Middle East, a paused Federal Reserve holding rates at 3.50%-3.75% with a notable 3-vote dissent, and currency interventions by the US Treasury to support the yen. Meanwhile, the US dollar suffered a monthly loss over 1% for July as mixed inflation data and shifting Treasury yields kept investors rotating into specific sectors like financials.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "Recent macroeconomic drivers center on Fed policy, currency interventions, and Middle Eastern geopolitical friction, with no direct supply or demand shocks specific to grain markets reported.",
-      "usd_ils_impact": "BULLISH",
-      "usd_ils_impact_reason": "Persisting conflict in the Middle East and general US dollar volatility support safe-haven demand, which typically strengthens the dollar against regional pairs like the Israeli Shekel (ILS).",
-      "key_risk": "Escalation of Middle Eastern geopolitical conflict driving further energy supply shocks and complicating the Federal Reserve's path on inflation and interest rates.",
       "headline_overstated": false,
       "headline_vs_article_note": ""
     }
