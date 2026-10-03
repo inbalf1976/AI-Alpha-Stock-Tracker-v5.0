@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-10-03T13:39:41.382809+00:00",
+    "total_scanned": 225,
+    "flagged_count": 156,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 30 Sep 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260925a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 25 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests public comment on two proposals related to establishing a regulatory framework for Board-supervised payment stablecoin issuers under the GENIUS Act",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Sandy Spring Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by BancFirst Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260922a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 22 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Fed’s preferred gauge showed core inflation at 3.0% in August, much lighter than expected",
+        "link": "https://www.cnbc.com/2026/09/30/feds-preferred-gauge-showed-core-inflation-at-3point0percent-in-august-much-lighter-than-expected.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 30 Sep 2026 15:14:57 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "The Fed's main inflation measure will be released Wednesday. Here's what to expect",
+        "link": "https://www.cnbc.com/2026/09/29/the-feds-main-inflation-measure-will-be-released-wednesday-heres-what-to-expect.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 29 Sep 2026 20:51:43 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Beyond the gas pump: How much oil do we really consume?",
+        "link": "https://www.investing.com/news/commodities-news/beyond-the-gas-pump-how-much-oil-do-we-really-consume-4930832",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-03 10:51:54",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil set for weekly loss on supply recovery, G7’s release of emergency stocks",
+        "link": "https://www.investing.com/news/commodities-news/oil-holds-gains-as-us-weighs-more-middle-east-military-presence-4928800",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-02 20:56:20",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold set for fifth negative week in six amid surging dollar, Treasury bond rout",
+        "link": "https://www.investing.com/news/commodities-news/gold-steadies-as-stronger-dollar-higher-yields-weigh-us-jobs-data-awaited-4928890",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-02 20:04:44",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "London Gas Oil clings to support in strong downtrend: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-tests-1400-support-in-distribution-range-live-93CH-4921028",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-02 19:19:02",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Macro markets are driven by persistent inflation concerns reflected in the PCE index coming in at 3.0% core for August, leading to hawkish Fed expectations and a surging US dollar. Meanwhile, oil prices face downward pressure from supply recoveries and emergency stock releases, even amidst ongoing maritime security incidents in the Strait of Hormuz.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Persistent high inflation prompting further Federal Reserve rate hikes and a strengthening US dollar pressuring commodities.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Ongoing maritime strikes and attacks on tankers transiting the Strait of Hormuz present active risks to regional energy and shipping chokepoints.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-03T02:07:59.826054+00:00",
     "total_scanned": 228,
     "flagged_count": 161,
@@ -31600,159 +31759,6 @@
         "reason": "Escalating Middle East conflicts and broader U.S. dollar weakness against major currencies could keep upward pressure on the USD/ILS exchange rate as regional risk premiums persist."
       },
       "key_risk": "Persistent inflationary pressures coupled with geopolitical supply shocks in the Middle East complicating the Federal Reserve's rate path.",
-      "headline_overstated": false,
-      "headline_vs_article_note": ""
-    }
-  },
-  {
-    "timestamp": "2026-08-02T19:16:19.328374+00:00",
-    "total_scanned": 218,
-    "flagged_count": 158,
-    "flagged_headlines": [
-      {
-        "title": "If Social Security’s funding crisis is the elephant in the room, this is the mouse everyone has overlooked. You have been warned.",
-        "link": "https://www.marketwatch.com/story/if-social-securitys-funding-crisis-is-the-elephant-in-the-room-this-is-the-mouse-everyone-has-overlooked-you-have-been-warned-b95c450d?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 02 Aug 2026 13:30:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "How Apple’s cheap MacBook Neo sparked a war in budget laptops",
-        "link": "https://www.marketwatch.com/story/how-apples-cheap-macbook-neo-sparked-a-war-in-budget-laptops-8fbaf839?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 02 Aug 2026 13:00:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Investors are rotating into financial stocks. The Fed’s next move could determine how far the rally runs.",
-        "link": "https://www.marketwatch.com/story/investors-are-rotating-into-financial-stocks-the-feds-next-move-could-determine-how-far-the-rally-runs-662c63df?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 02 Aug 2026 12:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "OPEC+ members agree to September quota hike",
-        "link": "https://www.investing.com/news/commodities-news/opec-members-agree-to-september-quota-hike-4829688",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-02 11:47:06",
-        "matched_keywords": [
-          "opec"
-        ]
-      },
-      {
-        "title": "OPEC+ set for September quota increase followed by pause, sources say",
-        "link": "https://www.investing.com/news/commodities-news/opec-set-for-september-quota-increase-followed-by-pause-sources-say-4829678",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-02 08:00:26",
-        "matched_keywords": [
-          "opec"
-        ]
-      },
-      {
-        "title": "Chicago wheat posts first monthly gain in three months",
-        "link": "https://www.investing.com/news/commodities-news/chicago-wheat-posts-first-monthly-gain-in-three-months-93CH-4829289",
-        "source": "Investing.com Commodities",
-        "published": "2026-07-31 21:10:17",
-        "matched_keywords": [
-          "wheat"
-        ]
-      },
-      {
-        "title": "US Treasury intervenes to support yen through purchases - FT",
-        "link": "https://www.investing.com/news/forex-news/us-treasury-intervenes-to-support-yen-through-purchases--ft-4829482",
-        "source": "Investing.com Forex",
-        "published": "2026-08-01 01:35:20",
-        "matched_keywords": [
-          "treasury"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "Financial markets are digesting a mixed macroeconomic backdrop highlighted by the Federal Reserve's decision to hold interest rates steady at 3.50%-3.75% with a notable three-member dissent favoring a hike, alongside persistent supply-driven inflation and geopolitical headwinds. Meanwhile, the U.S. Treasury has intervened to support the Japanese yen, and OPEC+ is moving forward with a September quota increase.",
-      "wheat_impact": "BULLISH",
-      "wheat_impact_reason": "Chicago wheat recently posted its first monthly gain in three months, signaling potential bottoming and shifting supply-demand dynamics.",
-      "usd_ils_impact": "NEUTRAL",
-      "usd_ils_impact_reason": "While Middle East conflicts provide geopolitical tension impacting regional currencies, broad USD direction remains primarily tied to Fed policy and Treasury interventions rather than direct ILS drivers in the current news flow.",
-      "key_risk": "Persistent energy-driven supply shocks fueling inflation, which could force a more aggressive Fed reaction despite ongoing economic uncertainties.",
       "headline_overstated": false,
       "headline_vs_article_note": ""
     }
