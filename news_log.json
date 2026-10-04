@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-10-04T17:39:55.887883+00:00",
+    "total_scanned": 219,
+    "flagged_count": 154,
+    "flagged_headlines": [
+      {
+        "title": "Fed minutes coming this week could give markets important clues about future rate hikes",
+        "link": "https://www.marketwatch.com/story/fed-minutes-coming-this-week-could-give-markets-important-clues-about-future-rate-hikes-31bfba5b?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 04 Oct 2026 12:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Falling wages, soaring energy prices and inflation: It’s beginning to look a lot like the 1970s",
+        "link": "https://www.marketwatch.com/story/falling-wages-soaring-energy-prices-and-inflation-its-beginning-to-look-a-lot-like-the-1970s-d645cbca?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 03 Oct 2026 23:58:00 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Iran’s rial hits fresh low as $2 billion currency intervention fails to stem slide",
+        "link": "https://www.investing.com/news/forex-news/irans-rial-hits-fresh-low-as-2-billion-currency-intervention-fails-to-stem-slide-4930880",
+        "source": "Investing.com Forex",
+        "published": "2026-10-03 20:13:19",
+        "matched_keywords": [
+          "ils"
+        ]
+      },
+      {
+        "title": "U.S. 10-year yield drops after September non-farm payrolls miss forecasts",
+        "link": "https://www.investing.com/news/forex-news/french-debt-set-for-5th-weekly-rise-at-2002-peaks-bunds-at-over-1week-lows-4929025",
+        "source": "Investing.com Forex",
+        "published": "2026-10-02 12:44:26",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Canadian dollar weakens as U.S. dollar strength, yield gap keeps pressure",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-weakens-as-us-dollar-strength-yield-gap-keeps-pressure-4928043",
+        "source": "Investing.com Forex",
+        "published": "2026-10-01 17:46:09",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Global debt rout escalates as U.S. and European yields surge to multi-decade highs",
+        "link": "https://www.investing.com/news/forex-news/uk-30year-gilt-yields-rise-to-1998-highs-french-budget-due-4926457",
+        "source": "Investing.com Forex",
+        "published": "2026-10-01 12:11:00",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Fed’s preferred gauge showed core inflation at 3.0% in August, much lighter than expected",
+        "link": "https://www.cnbc.com/2026/09/30/feds-preferred-gauge-showed-core-inflation-at-3point0percent-in-august-much-lighter-than-expected.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 30 Sep 2026 15:14:57 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "The Fed's main inflation measure will be released Wednesday. Here's what to expect",
+        "link": "https://www.cnbc.com/2026/09/29/the-feds-main-inflation-measure-will-be-released-wednesday-heres-what-to-expect.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 29 Sep 2026 20:51:43 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Merz unveils fresh military aid in Kyiv, says Germany won’t be intimidated",
+        "link": "https://www.investing.com/news/commodities-news/germanys-merz-arrives-in-kyiv-to-the-sound-of-sirens-and-explosions-4930915",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-04 16:12:23",
+        "matched_keywords": [
+          "ils"
+        ]
+      },
+      {
+        "title": "OPEC+ holds output targets steady as Middle East conflict tightens supply",
+        "link": "https://www.investing.com/news/commodities-news/opec-set-to-hold-november-oil-quotas-steady-as-middle-east-conflict-hits-output-4930914",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-04 12:38:26",
+        "matched_keywords": [
+          "opec"
+        ]
+      },
+      {
+        "title": "OPEC+ agrees to keep November oil output targets steady",
+        "link": "https://www.investing.com/news/commodities-news/opec-agrees-in-principle-to-keep-november-oil-output-targets-steady-sources-say-4930923",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-04 12:12:28",
+        "matched_keywords": [
+          "opec",
+          "oil"
+        ]
+      },
+      {
+        "title": "Yemen’s Houthis say they attacked Aramco facility in Riyadh with missiles, drones",
+        "link": "https://www.investing.com/news/commodities-news/yemens-houthis-say-they-attacked-aramco-facility-in-riyadh-with-missiles-drones-4930877",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-04 01:12:30",
+        "matched_keywords": [
+          "missile"
+        ]
+      },
+      {
+        "title": "Iraq’s state tanker firm moves crude through Hormuz strait",
+        "link": "https://www.investing.com/news/commodities-news/iraqs-state-tanker-firm-moves-crude-through-hormuz-strait-93CH-4930883",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-03 20:38:15",
+        "matched_keywords": [
+          "crude",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Beyond the gas pump: How much oil do we really consume?",
+        "link": "https://www.investing.com/news/commodities-news/beyond-the-gas-pump-how-much-oil-do-we-really-consume-4930832",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-03 10:51:54",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets face escalating stress from soaring energy prices and surging multi-decade bond yields, while Middle East conflict tightens oil supply and disrupts tanker traffic in the Strait of Hormuz. Meanwhile, the Fed's preferred inflation gauge showed core PCE at 3.0% in August, bolstering expectations that the central bank may pause rate hikes in October.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating Middle East conflict disrupting critical energy supply chains and shipping routes.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active military attacks on merchant vessels and oil infrastructure in the Strait of Hormuz and surrounding regions are disrupting maritime trade and tanker loadings.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-04T14:20:19.402346+00:00",
     "total_scanned": 220,
     "flagged_count": 155,
@@ -31606,160 +31768,5 @@
       }
     ],
     "llm_analysis": null
-  },
-  {
-    "timestamp": "2026-08-03T19:43:21.098932+00:00",
-    "total_scanned": 223,
-    "flagged_count": 159,
-    "flagged_headlines": [
-      {
-        "title": "Oil prices slide after massive July gains as Trump calls off attack on Iran",
-        "link": "https://www.investing.com/news/commodities-news/oil-drops-to-3wk-low-as-trump-calls-off-iran-strike-announces-fresh-talks-4829733",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-03 19:33:50",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Northwest European gasoline margins drop over $5 on crude decline",
-        "link": "https://www.investing.com/news/commodities-news/northwest-european-gasoline-margins-drop-over-5-on-crude-decline-93CH-4832052",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-03 17:46:55",
-        "matched_keywords": [
-          "crude"
-        ]
-      },
-      {
-        "title": "Venezuela oil exports fall 25% in July on lower India demand",
-        "link": "https://www.investing.com/news/commodities-news/venezuela-oil-exports-fall-25-in-july-on-lower-india-demand-93CH-4832020",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-03 17:07:45",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Nigeria’s NNPC offers September crude cargoes amid stable prices",
-        "link": "https://www.investing.com/news/commodities-news/nigerias-nnpc-offers-september-crude-cargoes-amid-stable-prices-93CH-4831961",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-03 16:25:26",
-        "matched_keywords": [
-          "crude"
-        ]
-      },
-      {
-        "title": "Sanctioned Georgia refinery to complete shift from Russian oil by September",
-        "link": "https://www.investing.com/news/commodities-news/sanctioned-georgia-refinery-to-complete-shift-from-russian-oil-by-september-93CH-4831593",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-03 14:08:57",
-        "matched_keywords": [
-          "sanction",
-          "oil"
-        ]
-      },
-      {
-        "title": "Dollar slips as U.S.-Japan yen intervention, easing oil fears weigh",
-        "link": "https://www.investing.com/news/forex-news/yen-extends-rally-on-prospects-of-further-usjapan-fx-intervention-4829743",
-        "source": "Investing.com Forex",
-        "published": "2026-08-03 14:03:20",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Manufacturing survey shows inflation worries 'worse than pandemic era,' adding to Fed pressure",
-        "link": "https://www.cnbc.com/2026/08/03/manufacturing-survey-shows-inflation-worries-adding-to-pressure-on-fed.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 03 Aug 2026 16:54:19 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "Crude oil prices retreated sharply following geopolitical de-escalation in the Middle East and easing supply disruption fears, pressuring energy-linked currencies and petroleum product margins. Meanwhile, the Federal Reserve faces mounting policy pressure from persistent manufacturing inflation concerns, alongside ongoing domestic regulatory updates for community and mutual banks.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "The provided news flow focuses entirely on energy markets, macroeconomic monetary policy, and banking regulations without any direct drivers for agricultural commodities.",
-      "usd_ils_impact": "BEARISH",
-      "usd_ils_impact_reason": "Geopolitical de-escalation with Iran and sliding global oil prices reduce regional conflict risk premiums, typically strengthening local Middle Eastern currencies like the Israeli Shekel against a slipping U.S. dollar.",
-      "key_risk": "Renewed geopolitical escalation in the Middle East or unexpected supply disruptions that could abruptly reverse the recent drop in crude prices.",
-      "headline_overstated": false,
-      "headline_vs_article_note": ""
-    }
   }
 ]
