@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-10-05T02:09:34.588164+00:00",
+    "total_scanned": 220,
+    "flagged_count": 162,
+    "flagged_headlines": [
+      {
+        "title": "Fed minutes coming this week could give markets important clues about future rate hikes",
+        "link": "https://www.marketwatch.com/story/fed-minutes-coming-this-week-could-give-markets-important-clues-about-future-rate-hikes-31bfba5b?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 04 Oct 2026 12:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Falling wages, soaring energy prices and inflation: It’s beginning to look a lot like the 1970s",
+        "link": "https://www.marketwatch.com/story/falling-wages-soaring-energy-prices-and-inflation-its-beginning-to-look-a-lot-like-the-1970s-d645cbca?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 03 Oct 2026 23:58:00 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Iran’s rial hits fresh low as $2 billion currency intervention fails to stem slide",
+        "link": "https://www.investing.com/news/forex-news/irans-rial-hits-fresh-low-as-2-billion-currency-intervention-fails-to-stem-slide-4930880",
+        "source": "Investing.com Forex",
+        "published": "2026-10-03 20:13:19",
+        "matched_keywords": [
+          "ils"
+        ]
+      },
+      {
+        "title": "U.S. 10-year yield drops after September non-farm payrolls miss forecasts",
+        "link": "https://www.investing.com/news/forex-news/french-debt-set-for-5th-weekly-rise-at-2002-peaks-bunds-at-over-1week-lows-4929025",
+        "source": "Investing.com Forex",
+        "published": "2026-10-02 12:44:26",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Canadian dollar weakens as U.S. dollar strength, yield gap keeps pressure",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-weakens-as-us-dollar-strength-yield-gap-keeps-pressure-4928043",
+        "source": "Investing.com Forex",
+        "published": "2026-10-01 17:46:09",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Global debt rout escalates as U.S. and European yields surge to multi-decade highs",
+        "link": "https://www.investing.com/news/forex-news/uk-30year-gilt-yields-rise-to-1998-highs-french-budget-due-4926457",
+        "source": "Investing.com Forex",
+        "published": "2026-10-01 12:11:00",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 30 Sep 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260925a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 25 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests public comment on two proposals related to establishing a regulatory framework for Board-supervised payment stablecoin issuers under the GENIUS Act",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Sandy Spring Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by BancFirst Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260922a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 22 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets face tightening financial conditions as U.S. and European bond yields surge to multi-decade highs amid persistent inflation fears and potential Federal Reserve rate hikes. Meanwhile, escalating geopolitical tensions in the Middle East have disrupted maritime traffic in the Strait of Hormuz, with multiple merchant vessels struck and Iranian crude loadings dropping to zero.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalation of Middle Eastern maritime conflicts severely impacting global energy and shipping supply chains.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active attacks on commercial shipping vessels in the Strait of Hormuz and a sudden drop of Iranian crude loadings to zero represent an active, unfolding disruption to maritime chokepoints.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-04T17:39:55.887883+00:00",
     "total_scanned": 219,
     "flagged_count": 154,
@@ -31617,153 +31775,6 @@
         "matched_keywords": [
           "fed",
           "war"
-        ]
-      }
-    ],
-    "llm_analysis": null
-  },
-  {
-    "timestamp": "2026-08-04T05:53:43.889709+00:00",
-    "total_scanned": 228,
-    "flagged_count": 162,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Oil rises after steep losses as Trump, Iran send mixed signals on talks",
-        "link": "https://www.investing.com/news/commodities-news/oil-holds-losses-as-trump-touts-iran-talks-tehran-denies-negotiations-4832658",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-04 04:42:20",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Shipping traffic at key Gulf waterways little changed on uncertain peace talks",
-        "link": "https://www.investing.com/news/commodities-news/shipping-traffic-at-key-gulf-waterways-little-changed-on-uncertain-peace-talks-4832728",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-04 02:24:53",
-        "matched_keywords": [
-          "ppi",
-          "shipping"
-        ]
-      },
-      {
-        "title": "Oil ticks up after selloff as talks to end US-Iran war remain uncertain",
-        "link": "https://www.investing.com/news/commodities-news/oil-ticks-up-after-selloff-as-talks-to-end-usiran-war-remain-uncertain-4832678",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-04 01:07:04",
-        "matched_keywords": [
-          "oil",
-          "war"
-        ]
-      },
-      {
-        "title": "Gold steadies as traders assess Fed outlook, Middle East risks",
-        "link": "https://www.investing.com/news/commodities-news/gold-steadies-as-traders-assess-fed-outlook-middle-east-risks-4832673",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-04 01:04:33",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Gold slightly higher as slide in oil prices offset by clouded Fed rate outlook",
-        "link": "https://www.investing.com/news/commodities-news/gold-climbs-as-trump-delays-iran-strike-softer-oil-eases-inflation-concerns-4829739",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-03 21:16:29",
-        "matched_keywords": [
-          "fed",
-          "oil"
-        ]
-      },
-      {
-        "title": "US oil exports in July fall to lowest level in eight months, data shows",
-        "link": "https://www.investing.com/news/commodities-news/us-oil-exports-in-july-fall-to-lowest-level-in-eight-months-data-shows-4832367",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-03 20:55:10",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil prices slide after massive July gains as Trump calls off attack on Iran",
-        "link": "https://www.investing.com/news/commodities-news/oil-drops-to-3wk-low-as-trump-calls-off-iran-strike-announces-fresh-talks-4829733",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-03 19:33:50",
-        "matched_keywords": [
-          "oil"
         ]
       }
     ],
