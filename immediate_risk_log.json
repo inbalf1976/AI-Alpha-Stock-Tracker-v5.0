@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 81,
+    "alert_timestamp": "2026-10-05T21:19:20.252065+00:00",
+    "reason": "Multiple merchant vessels and crude tankers have been physically struck or disabled in the Strait of Hormuz and Bab-el-Mandeb, with Iranian officials explicitly tying the closure of the chokepoint to unfulfilled political conditions.",
+    "predicted_direction": "BULLISH",
+    "price_at_alert": 691.5,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 80,
     "alert_timestamp": "2026-10-05T02:09:34.588164+00:00",
     "reason": "Active attacks on commercial shipping vessels in the Strait of Hormuz and a sudden drop of Iranian crude loadings to zero represent an active, unfolding disruption to maritime chokepoints.",
