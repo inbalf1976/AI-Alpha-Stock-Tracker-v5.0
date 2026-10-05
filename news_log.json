@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-10-05T17:21:59.466501+00:00",
+    "total_scanned": 221,
+    "flagged_count": 159,
+    "flagged_headlines": [
+      {
+        "title": "As Iran war drives up gasoline prices in US, Trump blames Ukraine, Democrats",
+        "link": "https://www.investing.com/news/commodities-news/as-iran-war-drives-up-gasoline-prices-in-us-trump-blames-ukraine-democrats-4932639",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-05 17:07:02",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Oil market turmoil could last for years, executives say",
+        "link": "https://www.investing.com/news/commodities-news/replenishing-crude-and-fuel-stocks-could-take-two-years-saudi-aramco-ceo-says-4931614",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-05 15:42:44",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Euronext wheat hits three-week high on weak euro and Saudi deal",
+        "link": "https://www.investing.com/news/commodities-news/euronext-wheat-hits-threeweek-high-on-weak-euro-and-saudi-deal-93CH-4932532",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-05 15:29:10",
+        "matched_keywords": [
+          "wheat"
+        ]
+      },
+      {
+        "title": "Middle East oil exports top pre-war levels for part of September but tanker attacks increase",
+        "link": "https://www.investing.com/news/commodities-news/middle-east-crude-oil-exports-exceed-prewar-levels-but-tanker-attacks-increase-4930981",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-05 14:01:05",
+        "matched_keywords": [
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "Gold prices steady after weekly slide as weak jobs data ease Fed hike bets",
+        "link": "https://www.investing.com/news/commodities-news/gold-edges-higher-after-weekly-slide-as-weak-jobs-data-ease-fed-hike-bets-4930980",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-05 13:38:48",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil prices choppy as Middle East exports recover, G7 taps emergency stocks",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-as-middle-east-exports-recoverg7-taps-emergency-stocks-4930986",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-05 13:37:35",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 30 Sep 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260925a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 25 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board requests public comment on two proposals related to establishing a regulatory framework for Board-supervised payment stablecoin issuers under the GENIUS Act",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of Sandy Spring Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260924a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 24 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by BancFirst Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260922a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Tue, 22 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Geopolitical conflict in the Middle East continues to heavily disrupt energy markets, with ongoing tanker attacks in the Strait of Hormuz constraining crude outflows and driving up gasoline prices. Meanwhile, Euronext wheat hit a three-week high supported by a weak euro and a Saudi deal, while global financial markets digest weak US jobs data that have eased Federal Reserve rate hike expectations.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "WEAKENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": {
+        "direction": "BEARISH",
+        "reason": "Weaker US jobs data and easing Fed rate hike expectations weigh on the US dollar, potentially causing downward pressure on the USD/ILS exchange rate."
+      },
+      "key_risk": "Escalating kinetic conflict and tanker attacks in the Strait of Hormuz triggering prolonged energy market turmoil and broader macroeconomic shocks.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Multiple merchant vessels have been struck and disabled in the Strait of Hormuz, with crude outflows falling significantly and Iran enforcing strict closure conditions.",
+      "wheat_impact": "BULLISH"
+    }
+  },
+  {
     "timestamp": "2026-10-05T02:09:34.588164+00:00",
     "total_scanned": 220,
     "flagged_count": 162,
@@ -31626,155 +31787,6 @@
         "published": "Thu, 9 Jul 2026 15:00:00 GMT",
         "matched_keywords": [
           "fed"
-        ]
-      }
-    ],
-    "llm_analysis": null
-  },
-  {
-    "timestamp": "2026-08-04T06:18:00.340897+00:00",
-    "total_scanned": 226,
-    "flagged_count": 162,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve announces the leadership and objectives of its task forces to advance the conduct of monetary policy",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with TS Banking Group, Inc. and TS Contrarian Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 9 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Manufacturing survey shows inflation worries 'worse than pandemic era,' adding to Fed pressure",
-        "link": "https://www.cnbc.com/2026/08/03/manufacturing-survey-shows-inflation-worries-adding-to-pressure-on-fed.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 03 Aug 2026 16:54:19 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "As Warsh’s Fed faces pressure to act on inflation, these indicators show it’s at its lowest in years",
-        "link": "https://www.cnbc.com/2026/07/31/these-fed-alternative-indicators-show-inflation-is-at-lowest-in-years.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 31 Jul 2026 16:51:30 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation",
-          "war"
-        ]
-      },
-      {
-        "title": "U.S. economy slowed to 1.5% growth rate in Q2; June core inflation at 3.3%",
-        "link": "https://www.cnbc.com/2026/07/30/us-economy-slowed-to-1point5percent-growth-rate-in-q2-june-core-inflation-at-3point3percent.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 30 Jul 2026 15:04:43 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "What a divided Fed means for investors",
-        "link": "https://www.cnbc.com/2026/07/29/fed-meeting-interest-rates-warsh-stocks-bonds.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 29 Jul 2026 23:36:34 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Singapore tightens monetary policy in surprise move as rising oil prices rekindle inflation risk",
-        "link": "https://www.cnbc.com/2026/07/27/singapore-mas-july-monetary-policy-middle-east-oil-prices-inflation-.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 27 Jul 2026 14:22:15 GMT",
-        "matched_keywords": [
-          "inflation",
-          "oil"
-        ]
-      },
-      {
-        "title": "Trump's new global tariff draws rebukes from trade partners over forced labor justification",
-        "link": "https://www.cnbc.com/2026/07/24/trump-global-tariffs-trade-imbalance-forced-labor.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 24 Jul 2026 12:09:09 GMT",
-        "matched_keywords": [
-          "tariff"
-        ]
-      },
-      {
-        "title": "Kevin Warsh has homed in on three key phrases. How Fed watchers interpret them",
-        "link": "https://www.cnbc.com/2026/07/22/kevin-warsh-has-homed-in-on-three-key-phrases-how-fed-watchers-interpret-them.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 22 Jul 2026 16:57:55 GMT",
-        "matched_keywords": [
-          "fed",
-          "war"
         ]
       }
     ],

@@ -17,11 +17,11 @@
     "reason": "Ongoing Houthi attacks on Aramco facilities and strikes on tankers transiting the Strait of Hormuz present an active, escalating disruption to regional transit and energy infrastructure.",
     "predicted_direction": "BULLISH",
     "price_at_alert": 683.0,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "HIT",
+    "price_at_scoring": 690.5,
+    "pct_change": 1.098,
+    "scored_at": "2026-10-05T17:22:08.163354+00:00"
   },
   {
     "alert_number": 78,
