@@ -17,11 +17,11 @@
     "reason": "Active attacks on commercial shipping vessels in the Strait of Hormuz and a sudden drop of Iranian crude loadings to zero represent an active, unfolding disruption to maritime chokepoints.",
     "predicted_direction": "BEARISH",
     "price_at_alert": 688.75,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "FLAT",
+    "price_at_scoring": 690.75,
+    "pct_change": 0.29,
+    "scored_at": "2026-10-06T03:09:38.798089+00:00"
   },
   {
     "alert_number": 79,
