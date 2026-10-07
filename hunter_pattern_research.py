@@ -40,6 +40,15 @@ EXT_HORIZON_BARS = 24
 IL_WINDOW = (9, 15)        # bar start hours 09:00-14:59 Israel  (~09:30-14:30)
 TZ_IL, TZ_CT = "Asia/Jerusalem", "America/Chicago"
 
+# data-cleaning (added 2026-10-07): Yahoo's hourly ZW=F shows weeks where consecutive
+# bars jump 2.5-4% (looks like two contracts alternating around rolls). Those weeks
+# are flagged 'Bad' and excluded from events, levels, touches and the null model.
+CLEAN = os.getenv("CLEAN", "1") not in ("0", "false", "False")
+GLITCH_GAP_PCT = float(os.getenv("GLITCH_GAP_PCT", "1.2"))      # bar-to-bar jump that counts as a flag
+GLITCH_MIN_FLAGS = int(os.getenv("GLITCH_MIN_FLAGS", "3"))      # flags within 4 days -> glitch window
+GLITCH_SINGLE_PCT = float(os.getenv("GLITCH_SINGLE_PCT", "3.5"))  # one jump this big is also treated as a glitch
+GLITCH_MARGIN_DAYS = int(os.getenv("GLITCH_MARGIN_DAYS", "3"))  # whole trade dates around a window
+
 
 # ---------- helpers ----------
 def wilson(k, n, z=1.96):
@@ -70,7 +79,7 @@ def trade_date(idx):
     return (idx.tz_convert(TZ_CT) + pd.Timedelta(hours=5)).date
 
 
-def build_levels(daily):
+def build_levels(daily, bad_dates=frozenset()):
     """per trade date -> {name: price}; prior-day and prior-week highs/lows."""
     d = daily.copy()
     d.index = pd.to_datetime(d.index).tz_localize(None).normalize()
@@ -80,13 +89,18 @@ def build_levels(daily):
     wk = {k: (float(r.WH), float(r.WL)) for k, r in zip(g.index, g.itertuples())}
     levels = {}
     dates = list(d.index)
+    bad_weeks = set()
+    for bd in bad_dates:
+        c = pd.Timestamp(bd).isocalendar()
+        bad_weeks.add((c.year, c.week))
     for i, dt in enumerate(dates):
         lv = {}
-        if i > 0:
+        # prior day is only valid if no contaminated date lies between it and today
+        if i > 0 and not any(dates[i - 1].date() < bd < dt.date() for bd in bad_dates):
             lv["PDH"], lv["PDL"] = float(d["High"].iloc[i - 1]), float(d["Low"].iloc[i - 1])
         pw = (dt - timedelta(days=7)).isocalendar()
         key = (pw.year, pw.week)
-        if key in wk:
+        if key in wk and key not in bad_weeks:
             lv["PWH"], lv["PWL"] = wk[key]
         levels[dt.date()] = lv
     return levels
@@ -103,8 +117,12 @@ def find_events(df, levels):
     The start is refined to the true turning bar (lowest low before an UP extreme,
     highest high before a DOWN extreme), so time-of-day stats are not shifted early."""
     o, h, l = df["Open"].values, df["High"].values, df["Low"].values
+    bad = bad_array(df)
     n, ev, i = len(df), [], 0
     while i < n - MOVE_HOURS:
+        if bad[i:i + MOVE_HOURS + 2].any():
+            i += 1
+            continue
         w = slice(i + 1, i + 1 + MOVE_HOURS)
         up = (h[w].max() - o[i]) / o[i] * 100
         dn = (o[i] - l[w].min()) / o[i] * 100
@@ -157,6 +175,8 @@ def test_events(df, levels):
     fwd_up = np.array([(hh[i + 1:i + 1 + MOVE_HOURS].max() - oo[i]) / oo[i] * 100 for i in range(n)])
     fwd_dn = np.array([(oo[i] - ll[i + 1:i + 1 + MOVE_HOURS].min()) / oo[i] * 100 for i in range(n)])
     big = np.maximum(fwd_up, fwd_dn)
+    bad_ = bad_array(df)
+    clean_win = np.array([not bad_[i:i + MOVE_HOURS + 2].any() for i in range(n)])
 
     def baseline(mask, label):
         pool = [i for i in np.where(mask)[0] if i not in used]
@@ -171,8 +191,8 @@ def test_events(df, levels):
         return rate(r, len(samp))
 
     out["C_extreme_near_level"] = rate(hit, len(ev))
-    out["C_baseline_any_window"] = baseline(big >= 0, "any")
-    out["C_baseline_almost_moves"] = baseline((big >= MOVE_PCT * 0.5) & (big < MOVE_PCT), "almost")
+    out["C_baseline_any_window"] = baseline(clean_win, "any")
+    out["C_baseline_almost_moves"] = baseline(clean_win & (big >= MOVE_PCT * 0.5) & (big < MOVE_PCT), "almost")
     return out
 
 
@@ -201,7 +221,10 @@ def find_touches(df, levels):
     tdates = trade_date(df.index)
     o, h, l = df["Open"].values, df["High"].values, df["Low"].values
     seen, touches = set(), []
+    bad = bad_array(df)
     for t in range(1, len(df)):
+        if bad[max(0, t - 1):t + EXT_HORIZON_BARS + 1].any():
+            continue
         td = tdates[t]
         lv = dict(levels.get(td, {}))
         lv.update(round_levels(o[t]))
@@ -268,8 +291,59 @@ def summarize_touches(tc):
     return out
 
 
+# ---------- data cleaning ----------
+def bad_array(df):
+    return df["Bad"].values.astype(bool) if "Bad" in df.columns else np.zeros(len(df), dtype=bool)
+
+
+def detect_glitch_windows(h):
+    """returns [(first_flag, last_flag, n_flags, biggest_gap_pct, margin_days)]"""
+    prev_c = h["Close"].shift(1)
+    gap = (h["Open"] - prev_c).abs() / prev_c * 100
+    hrs = h.index.to_series().diff().dt.total_seconds() / 3600
+    fl = gap[(gap >= GLITCH_GAP_PCT) & (hrs <= 4)]
+    groups, cur = [], []
+    for t in fl.index:
+        if cur and (t - cur[-1]) > pd.Timedelta(days=4):
+            groups.append(cur)
+            cur = []
+        cur.append(t)
+    if cur:
+        groups.append(cur)
+    wins = []
+    for g in groups:
+        big = float(max(fl.loc[x] for x in g))
+        if len(g) >= GLITCH_MIN_FLAGS:
+            wins.append((g[0], g[-1], len(g), round(big, 2), GLITCH_MARGIN_DAYS))
+        elif big >= GLITCH_SINGLE_PCT:
+            wins.append((g[0], g[-1], len(g), round(big, 2), 1))
+    return wins
+
+
+def mark_bad(h):
+    h = h.copy()
+    h["Bad"] = False
+    wins = detect_glitch_windows(h)
+    td = pd.to_datetime(pd.Series(list(trade_date(h.index)), index=h.index))
+    for a, b, n_flags, big, margin in wins:
+        lo = pd.Timestamp(trade_date(pd.DatetimeIndex([a]))[0]) - pd.Timedelta(days=margin)
+        hi = pd.Timestamp(trade_date(pd.DatetimeIndex([b]))[0]) + pd.Timedelta(days=margin)
+        h.loc[((td >= lo) & (td <= hi)).values, "Bad"] = True
+    return h, wins
+
+
+def bad_dates_of(h):
+    b = bad_array(h)
+    return set(np.array(trade_date(h.index), dtype=object)[b]) if b.any() else set()
+
+
+def levels_for(h):
+    return build_levels(daily_from_hourly(h), bad_dates_of(h))
+
+
 # ---------- null model: same volatility, no structure ----------
 def daily_from_hourly(h):
+    h = h[~bad_array(h)] if "Bad" in h.columns else h
     g = h.groupby(list(trade_date(h.index))).agg(High=("High", "max"), Low=("Low", "min"))
     g.index = pd.to_datetime(g.index)
     return g
@@ -285,18 +359,21 @@ def bootstrap_null(h, seed, block=24):
     ret = np.log(c / o)
     up = (h["High"].values - np.maximum(o, c)) / o
     dn = (np.minimum(o, c) - h["Low"].values) / o
-    starts = rng.integers(0, n - block, size=n // block + 1)
+    bad = bad_array(h)
+    valid = np.array([i for i in range(n - block) if not bad[i:i + block].any()])
+    starts = rng.choice(valid, size=n // block + 1)
     idx = np.concatenate([np.arange(s0, s0 + block) for s0 in starts])[:n]
     C = o[0] * np.exp(np.cumsum(ret[idx]))
     O = np.r_[o[0], C[:-1]]
     H = np.maximum(O, C) * (1 + up[idx])
     L = np.minimum(O, C) * (1 - dn[idx])
     df = pd.DataFrame({"Open": O, "High": H, "Low": L, "Close": C, "Volume": h["Volume"].values[idx]}, index=h.index)
+    df["Bad"] = False
     return add_mfi(df)
 
 
 def analyze(h):
-    levels = build_levels(daily_from_hourly(h))
+    levels = levels_for(h)
     return {"events": test_events(h, levels), "touches": summarize_touches(find_touches(h, levels))}
 
 
@@ -343,7 +420,17 @@ def fetch():
     h.index = h.index.tz_localize("UTC") if h.index.tz is None else h.index
     h = h[["Open", "High", "Low", "Close", "Volume"]].dropna(subset=["Open", "High", "Low", "Close"])
     h["Volume"] = h["Volume"].fillna(0)
-    return add_mfi(h)
+    h = add_mfi(h)
+    h["Bad"] = False
+    if CLEAN:
+        h, wins = mark_bad(h)
+        print(f"CLEANING ON: {len(wins)} glitch windows, {int(h['Bad'].sum())} of {len(h)} bars excluded "
+              f"({h['Bad'].mean() * 100:.1f}%)")
+        for a, b, n_flags, big, margin in wins:
+            print(f"   glitch {str(a)[:16]} -> {str(b)[:16]}  flags={n_flags}  biggest={big}%  margin=+/-{margin}d")
+    else:
+        print("CLEANING OFF (CLEAN=0): raw Yahoo bars, as in the earlier runs")
+    return h
 
 
 def main():
@@ -353,7 +440,7 @@ def main():
     reps = int(os.getenv("NULL_REPS", "20"))
     nulls = [headline(analyze(bootstrap_null(h, seed))) for seed in range(reps)]
     comp = compare(headline(real), nulls)
-    rep = {"data": {"hourly_bars": len(h), "from": str(h.index.min()), "to": str(h.index.max())},
+    rep = {"data": {"hourly_bars": len(h), "bad_bars_excluded": int(bad_array(h).sum()), "from": str(h.index.min()), "to": str(h.index.max())},
            "REAL_vs_NULL (EDGE_SIGNAL=true only when the null mean is outside the real 95% interval; 8 rate metrics, so ~1 false alarm is expected by chance)": comp,
            "events_detail": real["events"], "touches_detail": real["touches"]}
     txt = json.dumps(rep, indent=2, default=str)
