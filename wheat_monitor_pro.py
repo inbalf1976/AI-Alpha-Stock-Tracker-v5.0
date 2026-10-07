@@ -1666,10 +1666,30 @@ def send_telegram(message):
         return False
 
 
+# UPDATED 2026-10-07: 2026-10-06's alert went out with the weekly stop only 0.14c from the
+# price (a plan one tick from being stopped out) and nothing said so. Plain-text warning only;
+# no change to any signal, tier or logging.
+NEAR_STOP_WARN_PCT = 0.3
+
+
+def weekly_stop_warning(weekly, price, threshold_pct=NEAR_STOP_WARN_PCT):
+    try:
+        stop = weekly.get('stop')
+        if not stop or not price:
+            return ''
+        dist = abs(price - stop)
+        if dist / price * 100 <= threshold_pct:
+            return (f"\n⚠️ Price {price:.2f}c is only {dist:.2f}c from the weekly stop {stop:.2f}c - "
+                    f"this weekly setup is nearly invalidated.\n")
+    except Exception:
+        pass
+    return ''
+
+
 # ── PERFORMANCE LOG ───────────────────────────────────────────────────────────
 
 def log_prediction(direction, price, confidence, tier, seasonal_phase,
-                    stop_price=None, target_price=None):
+                    stop_price=None, target_price=None, setup_direction=None):
     """
     UPDATED 2026-09-03, real fix: previously only logged entry_price and
     left it to score_predictions.py to invent its own synthetic stop/
@@ -1701,6 +1721,10 @@ def log_prediction(direction, price, confidence, tier, seasonal_phase,
         'seasonal_phase': seasonal_phase,
         'stop_price':     stop_price,
         'target_price':   target_price,
+        # UPDATED 2026-10-07: side of the weekly plan the stop/target belong to (weekly['final_call']).
+        # `direction` stays the daily ensemble call. score_predictions.py scores the stop/target walk
+        # with setup_direction and the daily call separately with `direction`.
+        'setup_direction': setup_direction,
         'validated':      False,
         'outcome':        None,
         'exit_reason':    None,
@@ -2043,6 +2067,8 @@ def main():
             f"Agreement: {pred['agreement']} | Trend: {trend_data['trend']}\n"
         )
 
+        message += weekly_stop_warning(weekly, current_price)
+
         use_weekly = True
 
     except Exception as e:
@@ -2130,7 +2156,8 @@ def main():
                   "(avoids inflating win/loss stats with clustered manual re-checks).")
         elif tier > 0:
             log_prediction(direction, current_price, pred['confidence'], tier, s_phase['phase'],
-                           stop_price=weekly.get('stop'), target_price=weekly.get('target'))
+                           stop_price=weekly.get('stop'), target_price=weekly.get('target'),
+                           setup_direction=weekly.get('final_call'))
         else:
             print("   Tier 0 — alert sent for visibility, NOT logged as a tracked prediction.")
     else:
