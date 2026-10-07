@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-10-07T02:31:31.973390+00:00",
+    "total_scanned": 227,
+    "flagged_count": 157,
+    "flagged_headlines": [
+      {
+        "title": "Dollar slips as euro rebounds after France’s Le Pen unveils budget proposals",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-climbs-euro-nears-17month-low-4933337",
+        "source": "Investing.com Forex",
+        "published": "2026-10-06 21:06:19",
+        "matched_keywords": [
+          "ils"
+        ]
+      },
+      {
+        "title": "Loonie slips as early gains fade, oil weakness keeps pressure on Canadian dollar",
+        "link": "https://www.investing.com/news/forex-news/loonie-slips-as-early-gains-fade-oil-weakness-keeps-pressure-on-canadian-dollar-4932479",
+        "source": "Investing.com Forex",
+        "published": "2026-10-05 14:30:09",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold holds gains as oil flows recover, Treasury yields ease",
+        "link": "https://www.investing.com/news/commodities-news/gold-holds-gains-as-oil-flows-recover-treasury-yields-ease-4935492",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-07 01:00:12",
+        "matched_keywords": [
+          "oil",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Oil prices rise as storms and air strikes threaten supply",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-rise-as-storms-and-air-strikes-threaten-supply-4935487",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-07 00:54:39",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices rise as M.East supply jitters persist",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-rise-as-meast-supply-jitters-persist-4935465",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-07 00:17:23",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US judge authorizes fund to subpoena New York Fed for documents related to Radiant World",
+        "link": "https://www.investing.com/news/commodities-news/us-judge-authorizes-fund-to-subpoena-new-york-fed-for-documents-related-to-radiant-world-4935428",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-06 23:36:24",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil prices stable as market weighs supply risks, rising Middle East exports",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-stable-as-market-weighs-supply-risks-rising-middle-east-exports-4935024",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-06 22:06:22",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold up slightly as dollar eases and bonds catch a bid, but gains capped by oil",
+        "link": "https://www.investing.com/news/commodities-news/gold-holds-near-4140-as-dollar-yields-offset-lower-fed-hike-expectations-4933176",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-06 21:27:45",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices turn higher as improving Mideast flows countered by Hormuz attacks",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-edge-lower-as-markets-weigh-aramco-price-cuts-meast-supplies-4933124",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-06 19:56:59",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Trump says his administration is thinking about suspending federal gas tax",
+        "link": "https://www.investing.com/news/commodities-news/trump-says-his-administration-is-thinking-about-suspending-federal-gas-tax-4935121",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-06 19:30:12",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 30 Sep 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Crude oil prices and gold hold gains amid escalating Middle East supply jitters, Hormuz chokepoint attacks, and declining crude outflows. Meanwhile, the US dollar slips as the euro rebounds following French budget proposals and Treasury yields ease.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "WEAKENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "NEUTRAL",
+      "key_risk": "Further escalation in the Strait of Hormuz threatening broader energy and maritime trade corridors.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BULLISH"
+    }
+  },
+  {
     "timestamp": "2026-10-06T18:56:46.658934+00:00",
     "total_scanned": 226,
     "flagged_count": 156,
@@ -31660,165 +31820,5 @@
       }
     ],
     "llm_analysis": null
-  },
-  {
-    "timestamp": "2026-08-05T08:36:46.028100+00:00",
-    "total_scanned": 227,
-    "flagged_count": 167,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "German yields drop to 3-week lows as easing oil cools inflation bets",
-        "link": "https://www.investing.com/news/forex-news/german-yields-drop-to-3week-lows-as-easing-oil-cools-inflation-bets-4836423",
-        "source": "Investing.com Forex",
-        "published": "2026-08-05 07:48:05",
-        "matched_keywords": [
-          "inflation",
-          "oil",
-          "yield"
-        ]
-      },
-      {
-        "title": "Canadian dollar weakens as oil prices fall on trade data",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-weakens-as-oil-prices-fall-on-trade-data-93CH-4835463",
-        "source": "Investing.com Forex",
-        "published": "2026-08-04 17:48:27",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "South African rand strengthens as oil prices decline",
-        "link": "https://www.investing.com/news/forex-news/south-african-rand-strengthens-as-oil-prices-decline-93CH-4835129",
-        "source": "Investing.com Forex",
-        "published": "2026-08-04 15:47:50",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Bessent’s call to upsize Fed foreign lending facility may not be risk-free",
-        "link": "https://www.investing.com/news/forex-news/bessents-call-to-upsize-fed-foreign-lending-facility-may-not-be-riskfree-4834725",
-        "source": "Investing.com Forex",
-        "published": "2026-08-04 13:54:38",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "U.S. Treasuries consolidate as oil retreat offers relief ahead of jobs slate",
-        "link": "https://www.investing.com/news/forex-news/eurozone-yields-pause-after-sharp-july-selloff-4832872",
-        "source": "Investing.com Forex",
-        "published": "2026-08-04 12:36:46",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Yemen’s Houthis say they attacked Saudi oil tanker in Red Sea",
-        "link": "https://www.investing.com/news/commodities-news/yemens-houthis-say-they-attacked-saudi-oil-tanker-in-red-sea-4836522",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-05 07:30:08",
-        "matched_keywords": [
-          "oil",
-          "red sea"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "Global markets are reacting to a combination of steady U.S. monetary policy—highlighted by a hawkish dissent at the FOMC holding rates at 3.5%–3.75%—and easing energy prices driven by geopolitical supply developments and trade data. Lower oil prices are cooling short-term inflation expectations, boosting sovereign bonds, and influencing currency movements across commodity-linked economies.",
-      "wheat_impact": {
-        "direction": "NEUTRAL",
-        "reason": "Lower crude oil prices and stable macroeconomic conditions exert minimal direct influence on near-term wheat fundamentals, which remain anchored by weather and supply-demand reports."
-      },
-      "usd_ils_impact": {
-        "direction": "BULLISH",
-        "reason": "Ongoing Middle East conflict risks, such as Houthi attacks on tanker routes, continue to support safe-haven demand for the US dollar relative to regional exposures."
-      },
-      "key_risk": "Escalation of geopolitical conflict in the Red Sea disrupting vital energy and commodity shipping corridors.",
-      "headline_overstated": false,
-      "headline_vs_article_note": ""
-    }
   }
 ]
