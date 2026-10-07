@@ -110,22 +110,43 @@ def score_one_prediction(entry, price_df):
     real_target = entry.get('target_price')
     using_real_setup = real_stop is not None and real_target is not None
 
+    # UPDATED 2026-10-07, real fix: the stored stop/target belong to the WEEKLY plan
+    # (weekly['final_call']), but `direction` is the DAILY ensemble call. When the two
+    # disagreed (5 rows on 2026-09-09..16, and again on 2026-10-06) the daily direction was
+    # applied to levels laid out for the opposite side, so both levels counted as hit on the
+    # first bar and the row was logged as an instant "same_bar_ambiguous" LOSS - with a
+    # positive pnl. The trade side is now taken from the levels themselves (and from
+    # setup_direction when it was logged). If the levels are unusable or contradict the
+    # declared side, fall back to the legacy synthetic definition and say so in scoring_method.
+    # The daily direction is still scored on its own in score_daily_direction().
+    trade_dir = direction
+    setup_unusable = False
+    if using_real_setup:
+        geo = ('UP' if real_target > entry_price > real_stop else
+               'DOWN' if real_target < entry_price < real_stop else None)
+        declared = entry.get('setup_direction')
+        trade_dir = declared if declared in ('UP', 'DOWN') else geo
+        if geo is None or trade_dir != geo:
+            using_real_setup = False
+            setup_unusable = True
+            trade_dir = direction
+
     if using_real_setup:
         stop_price = real_stop
         target_price = real_target
         scoring_method = 'real_setup'
     else:
-        if direction == 'UP':
+        if trade_dir == 'UP':
             stop_price   = entry_price * (1 - STOP_PCT)
             target_price = entry_price * (1 + TARGET_PCT)
         else:  # DOWN
             stop_price   = entry_price * (1 + STOP_PCT)
             target_price = entry_price * (1 - TARGET_PCT)
-        scoring_method = 'legacy_synthetic'
+        scoring_method = 'legacy_synthetic_setup_unusable' if setup_unusable else 'legacy_synthetic'
 
     # Walk bars in order, check which was hit first using daily High/Low
     for _, bar in future_bars.iterrows():
-        if direction == 'UP':
+        if trade_dir == 'UP':
             hit_target = bar['High'] >= target_price
             hit_stop   = bar['Low']  <= stop_price
         else:
@@ -134,13 +155,13 @@ def score_one_prediction(entry, price_df):
 
         if hit_target and hit_stop:
             # Ambiguous same-bar hit — conservative: count as loss
-            pnl = -(entry_price - stop_price) if direction == 'UP' else -(stop_price - entry_price)
+            pnl = -(entry_price - stop_price) if trade_dir == 'UP' else -(stop_price - entry_price)
             return 'LOSS', 'same_bar_ambiguous_conservative_loss', round(pnl, 2), scoring_method
         if hit_target:
-            pnl = (target_price - entry_price) if direction == 'UP' else (entry_price - target_price)
+            pnl = (target_price - entry_price) if trade_dir == 'UP' else (entry_price - target_price)
             return 'WIN', 'target_hit', round(pnl, 2), scoring_method
         if hit_stop:
-            pnl = -(entry_price - stop_price) if direction == 'UP' else -(stop_price - entry_price)
+            pnl = -(entry_price - stop_price) if trade_dir == 'UP' else -(stop_price - entry_price)
             return 'LOSS', 'stop_hit', round(pnl, 2), scoring_method
 
     # Neither hit within the window — did we run out of available bars,
@@ -148,11 +169,11 @@ def score_one_prediction(entry, price_df):
     # elapsed, score by final direction; otherwise leave unscored.
     if age_days >= MAX_LOOKFORWARD_DAYS or len(future_bars) >= MAX_LOOKFORWARD_DAYS:
         final_price = float(future_bars['Close'].iloc[-1])
-        if direction == 'UP':
+        if trade_dir == 'UP':
             won = final_price > entry_price
         else:
             won = final_price < entry_price
-        pnl = (final_price - entry_price) if direction == 'UP' else (entry_price - final_price)
+        pnl = (final_price - entry_price) if trade_dir == 'UP' else (entry_price - final_price)
         return ('WIN' if won else 'LOSS'), 'window_expired_no_stop_target_hit', round(pnl, 2), scoring_method
 
     return None, None, None, None  # still open, not enough time elapsed yet
