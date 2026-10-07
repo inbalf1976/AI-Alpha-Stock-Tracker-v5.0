@@ -1,0 +1,36 @@
+name: Repair Prediction Log (one-off, read-only)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install yfinance pandas
+
+      - name: Re-score rows hit by the direction/levels mismatch (writes a COPY only)
+        run: python repair_prediction_log.py
+
+      - name: Upload corrected copy
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prediction-log-repaired
+          path: prediction_log.repaired.json
+          if-no-files-found: ignore
