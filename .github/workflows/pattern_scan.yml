@@ -1,423 +1,48 @@
+name: Pattern Scan (research, read-only)
 
-0s
-14s
-6s
-Run python hunter_pattern_research.py
-  python hunter_pattern_research.py
-  shell: /usr/bin/bash -e {0}
-  env:
-    pythonLocation: /opt/hostedtoolcache/Python/3.11.16/x64
-    PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib/pkgconfig
-    Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
-    Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
-    Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
-    LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib
-    MOVE_PCT: 2.5
-    PASS_PCT: 1.0
-CLEANING ON: 9 glitch windows, 1786 of 11146 bars excluded (16.0%)
-   glitch 2024-06-03 05:00 -> 2024-06-25 13:00  flags=99  biggest=3.96%  margin=+/-3d
-   glitch 2024-08-01 05:00 -> 2024-08-01 07:00  flags=2  biggest=4.61%  margin=+/-1d
-   glitch 2024-08-27 01:00 -> 2024-08-28 14:00  flags=4  biggest=5.49%  margin=+/-3d
-   glitch 2024-11-01 04:00 -> 2024-11-27 12:00  flags=111  biggest=3.95%  margin=+/-3d
-   glitch 2025-02-02 21:00 -> 2025-02-05 10:00  flags=16  biggest=2.25%  margin=+/-3d
-   glitch 2025-04-01 07:00 -> 2025-04-15 14:00  flags=72  biggest=2.87%  margin=+/-3d
-   glitch 2025-06-01 23:00 -> 2025-06-03 07:00  flags=7  biggest=2.76%  margin=+/-3d
-   glitch 2025-08-01 04:00 -> 2025-08-01 09:00  flags=3  biggest=3.86%  margin=+/-3d
-   glitch 2025-11-13 06:00 -> 2025-11-26 09:00  flags=65  biggest=3.15%  margin=+/-3d
-hourly bars: 11146  2024-05-15 00:00:00-04:00 -> 2026-10-07 02:00:00-04:00
-{
-  "data": {
-    "hourly_bars": 11146,
-    "bad_bars_excluded": 1786,
-    "from": "2024-05-15 00:00:00-04:00",
-    "to": "2026-10-07 02:00:00-04:00"
-  },
-  "REAL_vs_NULL (EDGE_SIGNAL=true only when the null mean is outside the real 95% interval; 8 rate metrics, so ~1 false alarm is expected by chance)": {
-    "events_per_year": {
-      "real": 66.0,
-      "null_mean": 70.875,
-      "null_sd": 4.642
-    },
-    "A_share_in_window": {
-      "real": 0.523,
-      "null_mean": 0.337,
-      "null_sd": 0.041,
-      "real_n": 132,
-      "real_ci95": [
-        0.438,
-        0.606
-      ],
-      "EDGE_SIGNAL": true
-    },
-    "C_near_level": {
-      "real": 0.227,
-      "null_mean": 0.231,
-      "null_sd": 0.042,
-      "real_n": 132,
-      "real_ci95": [
-        0.164,
-        0.306
-      ],
-      "EDGE_SIGNAL": false
-    },
-    "touch_pass_rate": {
-      "real": 0.501,
-      "null_mean": 0.492,
-      "null_sd": 0.022,
-      "real_n": 393,
-      "real_ci95": [
-        0.452,
-        0.55
-      ],
-      "EDGE_SIGNAL": false
-    },
-    "pass_rate_in_window": {
-      "real": 0.529,
-      "null_mean": 0.477,
-      "null_sd": 0.045,
-      "real_n": 136,
-      "real_ci95": [
-        0.446,
-        0.611
-      ],
-      "EDGE_SIGNAL": false
-    },
-    "reject_after_sweep": {
-      "real": 0.672,
-      "null_mean": 0.699,
-      "null_sd": 0.028,
-      "real_n": 235,
-      "real_ci95": [
-        0.61,
-        0.729
-      ],
-      "EDGE_SIGNAL": false
-    },
-    "reject_without_sweep": {
-      "real": 0.241,
-      "null_mean": 0.059,
-      "null_sd": 0.021,
-      "real_n": 158,
-      "real_ci95": [
-        0.181,
-        0.313
-      ],
-      "EDGE_SIGNAL": true
-    },
-    "median_extension_after_pass_pct": {
-      "real": 2.59,
-      "null_mean": 2.578,
-      "null_sd": 0.098
-    }
-  },
-  "events_detail": {
-    "threshold_pct": 2.5,
-    "window_hours": 6,
-    "n_events": 132,
-    "direction": {
-      "UP": 68,
-      "DOWN": 64
-    },
-    "start_hour_IL": {
-      "3": 2,
-      "9": 4,
-      "10": 8,
-      "11": 16,
-      "12": 10,
-      "13": 13,
-      "14": 17,
-      "15": 13,
-      "16": 24,
-      "17": 18,
-      "18": 6,
-      "19": 1
-    },
-    "start_weekday": {
-      "Fri": 30,
-      "Wed": 29,
-      "Tue": 27,
-      "Thu": 23,
-      "Mon": 23
-    },
-    "A_share_in_window": {
-      "k": 69,
-      "n": 132,
-      "rate": 0.523,
-      "ci95": [
-        0.438,
-        0.606
-      ]
-    },
-    "A_share_of_all_bars_in_window": 0.327,
-    "B_median_move_pct": 3.04,
-    "C_extreme_near_level": {
-      "k": 30,
-      "n": 132,
-      "rate": 0.227,
-      "ci95": [
-        0.164,
-        0.306
-      ]
-    },
-    "C_baseline_any_window": {
-      "k": 658,
-      "n": 2000,
-      "rate": 0.329,
-      "ci95": [
-        0.309,
-        0.35
-      ]
-    },
-    "C_baseline_almost_moves": {
-      "k": 526,
-      "n": 2000,
-      "rate": 0.263,
-      "ci95": [
-        0.244,
-        0.283
-      ]
-    }
-  },
-  "touches_detail": {
-    "n_touches": 948,
-    "decided": 393,
-    "none": 555,
-    "overall_pass_rate": {
-      "k": 197,
-      "n": 393,
-      "rate": 0.501,
-      "ci95": [
-        0.452,
-        0.55
-      ]
-    },
-    "by_level": {
-      "PDH": {
-        "k": 45,
-        "n": 93,
-        "rate": 0.484,
-        "ci95": [
-          0.385,
-          0.584
-        ]
-      },
-      "PDL": {
-        "k": 42,
-        "n": 85,
-        "rate": 0.494,
-        "ci95": [
-          0.39,
-          0.598
-        ]
-      },
-      "PWH": {
-        "k": 27,
-        "n": 49,
-        "rate": 0.551,
-        "ci95": [
-          0.413,
-          0.681
-        ]
-      },
-      "PWL": {
-        "k": 24,
-        "n": 44,
-        "rate": 0.545,
-        "ci95": [
-          0.401,
-          0.683
-        ]
-      },
-      "R50_dn": {
-        "k": 28,
-        "n": 57,
-        "rate": 0.491,
-        "ci95": [
-          0.366,
-          0.617
-        ]
-      },
-      "R50_up": {
-        "k": 31,
-        "n": 65,
-        "rate": 0.477,
-        "ci95": [
-          0.36,
-          0.596
-        ]
-      }
-    },
-    "by_side": {
-      "R": {
-        "k": 93,
-        "n": 202,
-        "rate": 0.46,
-        "ci95": [
-          0.393,
-          0.529
-        ]
-      },
-      "S": {
-        "k": 104,
-        "n": 191,
-        "rate": 0.545,
-        "ci95": [
-          0.474,
-          0.614
-        ]
-      }
-    },
-    "by_weekday": {
-      "Fri": {
-        "k": 50,
-        "n": 92,
-        "rate": 0.543,
-        "ci95": [
-          0.442,
-          0.641
-        ]
-      },
-      "Mon": {
-        "k": 37,
-        "n": 79,
-        "rate": 0.468,
-        "ci95": [
-          0.362,
-          0.577
-        ]
-      },
-      "Thu": {
-        "k": 28,
-        "n": 65,
-        "rate": 0.431,
-        "ci95": [
-          0.318,
-          0.552
-        ]
-      },
-      "Tue": {
-        "k": 33,
-        "n": 67,
-        "rate": 0.493,
-        "ci95": [
-          0.377,
-          0.609
-        ]
-      },
-      "Wed": {
-        "k": 49,
-        "n": 90,
-        "rate": 0.544,
-        "ci95": [
-          0.442,
-          0.643
-        ]
-      }
-    },
-    "in_IL_window": {
-      "in": {
-        "k": 72,
-        "n": 136,
-        "rate": 0.529,
-        "ci95": [
-          0.446,
-          0.611
-        ]
-      },
-      "out": {
-        "k": 125,
-        "n": 257,
-        "rate": 0.486,
-        "ci95": [
-          0.426,
-          0.547
-        ]
-      }
-    },
-    "by_MFI": {
-      "mfi<30": {
-        "k": 45,
-        "n": 90,
-        "rate": 0.5,
-        "ci95": [
-          0.399,
-          0.601
-        ]
-      },
-      "30-70": {
-        "k": 95,
-        "n": 185,
-        "rate": 0.514,
-        "ci95": [
-          0.442,
-          0.585
-        ]
-      },
-      "mfi>70": {
-        "k": 57,
-        "n": 118,
-        "rate": 0.483,
-        "ci95": [
-          0.395,
-          0.572
-        ]
-      }
-    },
-    "REJECT_rate_after_sweep": {
-      "k": 158,
-      "n": 235,
-      "rate": 0.672,
-      "ci95": [
-        0.61,
-        0.729
-      ]
-    },
-    "REJECT_rate_without_sweep": {
-      "k": 38,
-      "n": 158,
-      "rate": 0.241,
-      "ci95": [
-        0.181,
-        0.313
-      ]
-    },
-    "after_PASS_extension_pct": {
-      "n": 197,
-      "p25": 1.92,
-      "median": 2.59,
-      "p75": 3.62
-    }
-  }
-}
+on:
+  workflow_dispatch:
+    inputs:
+      move_pct:
+        description: "Rapid-move size in percent"
+        required: false
+        default: "2.5"
+      horizon:
+        description: "Hours the move may take"
+        required: false
+        default: "6"
 
-Wrote hunter_research_report.json (nothing else was changed).
-1s
-Run actions/upload-artifact@v4
-  with:
-    name: hunter-research-report
-    path: hunter_research_report.json
-    if-no-files-found: ignore
-    compression-level: 6
-    overwrite: false
-    include-hidden-files: false
-  env:
-    pythonLocation: /opt/hostedtoolcache/Python/3.11.16/x64
-    PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib/pkgconfig
-    Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
-    Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
-    Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
-    LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib
-(node:2159) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
-(Use `node --trace-deprecation ...` to show where the warning was created)
-With the provided path, there will be 1 file uploaded
-Artifact name is valid!
-Root directory input is valid!
-Beginning upload of artifact content to blob storage
-(node:2159) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
-Uploaded bytes 1594
-Finished uploading artifact content to blob storage!
-SHA256 digest of uploaded artifact zip is e480e8d4d862a010c9f01c6c480447cf516d464c0961b122f6c8f3c1be3ae40b
-Finalizing artifact upload
-Artifact hunter-research-report.zip successfully finalized. Artifact ID 11465488894
-Artifact hunter-research-report has been successfully uploaded! Final size is 1594 bytes. Artifact ID is 11465488894
-Artifact download URL: https://github.com/inbalf1976/AI-Alpha-Stock-Tracker-v5.0/actions/runs/37584291362/artifacts/11465488894
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install yfinance pandas numpy scikit-learn
+
+      - name: Run pattern scan
+        env:
+          MOVE_PCT: ${{ inputs.move_pct || '2.5' }}
+          HORIZON: ${{ inputs.horizon || '6' }}
+        run: python pattern_scan.py
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pattern-scan-report
+          path: pattern_scan_report.json
+          if-no-files-found: ignore
