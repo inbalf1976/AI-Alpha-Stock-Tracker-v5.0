@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-10-07T19:23:35.679492+00:00",
+    "total_scanned": 230,
+    "flagged_count": 156,
+    "flagged_headlines": [
+      {
+        "title": "Dollar rises as Fed minutes reinforce higher-for-longer rate outlook",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-holds-gains-yen-weakens-near-158-4935567",
+        "source": "Investing.com Forex",
+        "published": "2026-10-07 18:43:34",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Global yield sell-off resumes as U.S. 30-year yield touches 24-year highs",
+        "link": "https://www.investing.com/news/forex-news/french-bond-yields-resume-upward-marchfollowing-brief-relief-rally-4935716",
+        "source": "Investing.com Forex",
+        "published": "2026-10-07 12:09:33",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar slips as euro rebounds after France’s Le Pen unveils budget proposals",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-climbs-euro-nears-17month-low-4933337",
+        "source": "Investing.com Forex",
+        "published": "2026-10-06 21:06:19",
+        "matched_keywords": [
+          "ils"
+        ]
+      },
+      {
+        "title": "Gold down as Fed minutes showed policymakers see another rate hike by year end",
+        "link": "https://www.investing.com/news/commodities-news/gold-holds-gains-as-oil-flows-recover-treasury-yields-ease-4935492",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-07 18:37:57",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Attacks on tankers in Hormuz hit highest of any week since start of Iran war, sources say",
+        "link": "https://www.investing.com/news/commodities-news/attacks-on-tankers-in-hormuz-hit-highest-of-any-week-since-start-of-iran-war-sources-say-4937056",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-07 15:25:02",
+        "matched_keywords": [
+          "war",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Oil prices rise amid concerns over Mideast, U.S. supply disruptions",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-rise-as-meast-supply-jitters-persist-4935465",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-07 13:09:02",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "EU energy task force to meet on G7 oil stock release plan",
+        "link": "https://www.investing.com/news/commodities-news/eu-energy-task-force-to-meet-on-g7-oil-stock-release-plan-93CH-4936748",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-07 13:02:08",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Poland ready to release oil stocks pending group agreement",
+        "link": "https://www.investing.com/news/commodities-news/poland-ready-to-release-oil-stocks-pending-group-agreement-93CH-4936086",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-07 10:22:34",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Fed’s minutes show no appetite for a series of interest-rate hikes",
+        "link": "https://www.marketwatch.com/story/fed-minutes-show-no-appetite-for-a-series-of-interest-rate-hikes-8b1c6436?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 07 Oct 2026 18:28:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Should I put my nest egg in a 30-year Treasury bond?",
+        "link": "https://www.marketwatch.com/story/should-i-put-my-nest-egg-in-a-30-year-treasury-bond-89db6e09?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 07 Oct 2026 14:34:00 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by shifting Federal Reserve rate expectations and escalating Middle East tensions, with U.S. Treasury yields hitting multi-year highs and the dollar fluctuating on foreign political developments. In the commodities space, gold prices retreated on rate-hike fears, while oil markets reacted to tanker attacks and tightening maritime conditions in the Strait of Hormuz.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating military conflicts and tanker attacks in the Strait of Hormuz threatening broader energy and supply chain disruptions.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-07T15:45:46.217047+00:00",
     "total_scanned": 230,
     "flagged_count": 154,
@@ -31670,164 +31830,6 @@
       "usd_ils_impact": "BULLISH",
       "usd_ils_impact_reason": "Escalating geopolitical tensions involving Iran and Middle East supply routes continue to drive energy volatility, generally strengthening the dollar while pressuring regional currencies.",
       "key_risk": "Accelerating inflation and geopolitical energy shocks forcing an aggressive monetary policy tightening cycle by the Federal Reserve.",
-      "headline_overstated": false,
-      "headline_vs_article_note": ""
-    }
-  },
-  {
-    "timestamp": "2026-08-05T16:00:17.314980+00:00",
-    "total_scanned": 225,
-    "flagged_count": 159,
-    "flagged_headlines": [
-      {
-        "title": "Europe is blowing up riverbeds as an extreme drought wreaks havoc on its economy",
-        "link": "https://www.cnbc.com/2026/08/05/drought-rhine-danube-water-levels-economy.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 05 Aug 2026 07:15:17 GMT",
-        "matched_keywords": [
-          "drought"
-        ]
-      },
-      {
-        "title": "Manufacturing survey shows inflation worries 'worse than pandemic era,' adding to Fed pressure",
-        "link": "https://www.cnbc.com/2026/08/03/manufacturing-survey-shows-inflation-worries-adding-to-pressure-on-fed.html",
-        "source": "CNBC Economy",
-        "published": "Tue, 04 Aug 2026 14:42:39 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "As Warsh’s Fed faces pressure to act on inflation, these indicators show it’s at its lowest in years",
-        "link": "https://www.cnbc.com/2026/07/31/these-fed-alternative-indicators-show-inflation-is-at-lowest-in-years.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 31 Jul 2026 16:51:30 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation",
-          "war"
-        ]
-      },
-      {
-        "title": "U.S. economy slowed to 1.5% growth rate in Q2; June core inflation at 3.3%",
-        "link": "https://www.cnbc.com/2026/07/30/us-economy-slowed-to-1point5percent-growth-rate-in-q2-june-core-inflation-at-3point3percent.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 30 Jul 2026 15:04:43 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "What a divided Fed means for investors",
-        "link": "https://www.cnbc.com/2026/07/29/fed-meeting-interest-rates-warsh-stocks-bonds.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 29 Jul 2026 23:36:34 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Singapore tightens monetary policy in surprise move as rising oil prices rekindle inflation risk",
-        "link": "https://www.cnbc.com/2026/07/27/singapore-mas-july-monetary-policy-middle-east-oil-prices-inflation-.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 27 Jul 2026 14:22:15 GMT",
-        "matched_keywords": [
-          "inflation",
-          "oil"
-        ]
-      },
-      {
-        "title": "Trump's new global tariff draws rebukes from trade partners over forced labor justification",
-        "link": "https://www.cnbc.com/2026/07/24/trump-global-tariffs-trade-imbalance-forced-labor.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 24 Jul 2026 12:09:09 GMT",
-        "matched_keywords": [
-          "tariff"
-        ]
-      },
-      {
-        "title": "Kevin Warsh has homed in on three key phrases. How Fed watchers interpret them",
-        "link": "https://www.cnbc.com/2026/07/22/kevin-warsh-has-homed-in-on-three-key-phrases-how-fed-watchers-interpret-them.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 22 Jul 2026 16:57:55 GMT",
-        "matched_keywords": [
-          "fed",
-          "war"
-        ]
-      },
-      {
-        "title": "Treasuries mixed as oil drop eases inflation anxieties ahead of U.S. labor slate",
-        "link": "https://www.investing.com/news/forex-news/german-yields-drop-to-3week-lows-as-easing-oil-cools-inflation-bets-4836423",
-        "source": "Investing.com Forex",
-        "published": "2026-08-05 12:10:31",
-        "matched_keywords": [
-          "inflation",
-          "oil"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound holds above $1.34 as dollar stays firm on Fed hike risk",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-holds-above-134-as-dollar-stays-firm-on-fed-hike-risk-4836614",
-        "source": "Investing.com Forex",
-        "published": "2026-08-05 08:27:50",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Canadian dollar weakens as oil prices fall on trade data",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-weakens-as-oil-prices-fall-on-trade-data-93CH-4835463",
-        "source": "Investing.com Forex",
-        "published": "2026-08-04 17:48:27",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "South African rand strengthens as oil prices decline",
-        "link": "https://www.investing.com/news/forex-news/south-african-rand-strengthens-as-oil-prices-decline-93CH-4835129",
-        "source": "Investing.com Forex",
-        "published": "2026-08-04 15:47:50",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Bessent’s call to upsize Fed foreign lending facility may not be risk-free",
-        "link": "https://www.investing.com/news/forex-news/bessents-call-to-upsize-fed-foreign-lending-facility-may-not-be-riskfree-4834725",
-        "source": "Investing.com Forex",
-        "published": "2026-08-04 13:54:38",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Oil trims gains amid hopes for Mideast peace deal, Houthi attack on Saudi tanker",
-        "link": "https://www.investing.com/news/commodities-news/oil-slips-for-third-day-as-hormuz-deal-hopes-ease-supply-concerns-4836315",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-05 13:57:06",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Russian fuel prices added 0.5% to inflation in June and July",
-        "link": "https://www.investing.com/news/commodities-news/russian-fuel-prices-added-05-to-inflation-in-june-and-july-93CH-4837892",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-05 13:33:04",
-        "matched_keywords": [
-          "inflation"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "Global markets are balancing between sticky inflationary pressures driven by Middle East geopolitical risks and tariff policies, and severe climate-induced supply chain disruptions like the European droughts. Central banks face complex decisions, with the Fed leaning hawkish under Chairman Kevin Warsh amid rising manufacturing prices, while regional monetary authorities like Singapore tighten policy.",
-      "wheat_impact": "BULLISH",
-      "wheat_impact_reason": "Severe European droughts lowering the Rhine and Danube river levels are severely disrupting grain shipments and agricultural logistics out of key export regions.",
-      "usd_ils_impact": "BEARISH",
-      "usd_ils_impact_reason": "Recent easing in Middle East tensions and temporary drops in energy prices have helped relieve conflict-driven pressures, supporting the Israeli shekel.",
-      "key_risk": "Escalation of Middle Eastern geopolitical conflict triggering renewed oil price shocks and persistent supply chain bottlenecks.",
       "headline_overstated": false,
       "headline_vs_article_note": ""
     }
