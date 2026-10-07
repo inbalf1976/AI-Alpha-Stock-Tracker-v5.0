@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 pattern_scan.py  --  READ-ONLY research (created 2026-10-07)
 
