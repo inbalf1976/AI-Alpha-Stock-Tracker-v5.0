@@ -1,0 +1,48 @@
+name: Hunter Pattern Research (read-only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      move_pct:
+        description: "Rapid-move threshold in percent (e.g. 1.5 or 2.5)"
+        required: false
+        default: "1.5"
+      pass_pct:
+        description: "Percent beyond a level that counts as PASS / REJECT"
+        required: false
+        default: "0.5"
+
+permissions:
+  contents: read
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install yfinance pandas numpy
+
+      - name: Run research
+        env:
+          MOVE_PCT: ${{ inputs.move_pct || '1.5' }}
+          PASS_PCT: ${{ inputs.pass_pct || '0.5' }}
+        run: python hunter_pattern_research.py
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hunter-research-report
+          path: hunter_research_report.json
+          if-no-files-found: ignore
