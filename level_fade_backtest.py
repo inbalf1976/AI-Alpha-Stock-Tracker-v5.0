@@ -55,7 +55,10 @@ def list_touches(df, levels):
     ct_hour = df.index.tz_convert(hp.TZ_CT).hour
     o, h, l = df["Open"].values, df["High"].values, df["Low"].values
     seen, out = set(), []
+    bad = hp.bad_array(df)
     for t in range(1, len(df) - 1):
+        if bad[max(0, t - 1):t + HOLD_BARS + 2].any():
+            continue
         td = tdates[t]
         lv = dict(levels.get(td, {}))
         lv.update(hp.round_levels(o[t]))
@@ -136,7 +139,7 @@ def split_mask(ts_list, cut):
 
 
 def run(df):
-    levels = hp.build_levels(hp.daily_from_hourly(df))
+    levels = hp.levels_for(df)
     touches = list_touches(df, levels)
     return grid(df, touches), touches
 
