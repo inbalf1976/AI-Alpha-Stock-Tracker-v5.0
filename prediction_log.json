@@ -1542,13 +1542,15 @@
     "stop_price": 744.9,
     "target_price": 722.97,
     "validated": true,
-    "outcome": "LOSS",
-    "exit_reason": "same_bar_ambiguous_conservative_loss",
-    "pnl_cents": 9.4,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 12.53,
     "scoring_method": "real_setup",
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-09-10"
+    "direction_check_date": "2026-09-10",
+    "setup_direction": "DOWN",
+    "rescored_2026_10_07": true
   },
   {
     "timestamp": "2026-09-11T04:32:49.166891+03:00",
@@ -1560,13 +1562,15 @@
     "stop_price": 748.64,
     "target_price": 723.81,
     "validated": true,
-    "outcome": "LOSS",
-    "exit_reason": "same_bar_ambiguous_conservative_loss",
-    "pnl_cents": 13.14,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 11.69,
     "scoring_method": "real_setup",
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-09-13"
+    "direction_check_date": "2026-09-13",
+    "setup_direction": "DOWN",
+    "rescored_2026_10_07": true
   },
   {
     "timestamp": "2026-09-14T04:47:19.107112+03:00",
@@ -1578,13 +1582,15 @@
     "stop_price": 736.6,
     "target_price": 713.62,
     "validated": true,
-    "outcome": "LOSS",
-    "exit_reason": "same_bar_ambiguous_conservative_loss",
-    "pnl_cents": 9.85,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 13.13,
     "scoring_method": "real_setup",
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-09-15"
+    "direction_check_date": "2026-09-15",
+    "setup_direction": "DOWN",
+    "rescored_2026_10_07": true
   },
   {
     "timestamp": "2026-09-15T04:57:23.007075+03:00",
@@ -1596,13 +1602,15 @@
     "stop_price": 736.6,
     "target_price": 713.62,
     "validated": true,
-    "outcome": "LOSS",
-    "exit_reason": "same_bar_ambiguous_conservative_loss",
-    "pnl_cents": 20.6,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 2.38,
     "scoring_method": "real_setup",
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-09-16"
+    "direction_check_date": "2026-09-16",
+    "setup_direction": "DOWN",
+    "rescored_2026_10_07": true
   },
   {
     "timestamp": "2026-09-16T04:47:55.861198+03:00",
@@ -1614,13 +1622,15 @@
     "stop_price": 736.68,
     "target_price": 715.26,
     "validated": true,
-    "outcome": "LOSS",
-    "exit_reason": "same_bar_ambiguous_conservative_loss",
-    "pnl_cents": 9.18,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 12.24,
     "scoring_method": "real_setup",
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-09-17"
+    "direction_check_date": "2026-09-17",
+    "setup_direction": "DOWN",
+    "rescored_2026_10_07": true
   },
   {
     "timestamp": "2026-10-06T03:06:33.084081+03:00",
