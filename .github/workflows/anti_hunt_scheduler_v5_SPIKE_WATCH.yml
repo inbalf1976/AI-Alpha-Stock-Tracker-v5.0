@@ -24,6 +24,10 @@ on:
           - scheduled
           - resolve
         default: manual
+      force_stale:
+        description: 'manual runs only: send even if the last 15m bar is older than 45 min (adds --force-stale)'
+        type: boolean
+        default: false
 
 concurrency:
   group: anti-hunt-filter
@@ -104,7 +108,11 @@ jobs:
             python "$V5_FILE" --resolve
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "V5 MANUAL TEST RUN"
-            python "$V5_FILE" --manual
+            if [ "${{ inputs.force_stale }}" = "true" ]; then
+              python "$V5_FILE" --manual --force-stale
+            else
+              python "$V5_FILE" --manual
+            fi
           elif [ "${{ github.event.schedule }}" = "15 13 * * 1-5" ]; then
             echo "V5 OUTCOME RESOLUTION / LEARNING RUN"
             python "$V5_FILE" --resolve
