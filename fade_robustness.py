@@ -73,7 +73,7 @@ def per_day(d, cost=COST_PCT, reps=4000, seed=1):
 
 
 def analyse(h):
-    levels = hp.build_levels(hp.daily_from_hourly(h))
+    levels = hp.levels_for(h)
     touches = lf.list_touches(h, levels)
     jumps = find_roll_jumps(h)
     bad_days = set()
