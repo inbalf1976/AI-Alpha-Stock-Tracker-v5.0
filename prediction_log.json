@@ -1662,7 +1662,10 @@
     "validated": false,
     "outcome": null,
     "exit_reason": null,
-    "pnl_cents": null
+    "pnl_cents": null,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-10-08"
   },
   {
     "timestamp": "2026-10-07T18:45:43.934464+03:00",
@@ -1677,6 +1680,9 @@
     "validated": false,
     "outcome": null,
     "exit_reason": null,
-    "pnl_cents": null
+    "pnl_cents": null,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-10-08"
   }
 ]
