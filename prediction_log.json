@@ -1641,13 +1641,14 @@
     "seasonal_phase": "NEUTRAL",
     "stop_price": 691.64,
     "target_price": 671.47,
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null,
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -0.14,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-10-07"
+    "direction_check_date": "2026-10-07",
+    "scoring_method": "real_setup"
   },
   {
     "timestamp": "2026-10-07T03:06:19.215378+03:00",
