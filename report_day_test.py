@@ -7,12 +7,13 @@ Question: are USDA WASDE days really bigger movers than normal days, at the rele
 
 Method (cleaned hourly ZW=F bars, same cleaning as the other research scripts):
   * release bar    = the hourly bar that starts at 12:00 ET on a WASDE date
-  * release window = 12:00-16:00 ET (4 bars)
-  * day range      = high-low of the ET calendar day
+  * release window = 12:00-14:20 ET (bars 12, 13, 14) - the CBOT day session ends 14:20 ET, there is no 15:00 bar
+  * day range      = high-low from 00:00 to 14:59 ET of that day (overnight + day session; the evening session that
+                     starts at 20:00 ET belongs to the next trade date and is left out)
   * each is compared with the SAME measure on all other weekdays (same hour / same window),
     p-value = share of 10,000 random draws of that many normal days that average at least as large
   * dates whose day contains contaminated (glitch-cleaned) bars are skipped and listed
-  * continuation check: does the move after the first release hour (13:00-16:00 ET)
+  * continuation check: does the move after the first release hour (13:00-14:20 ET)
     go the same way as the release hour?
 
 WASDE dates used (12:00 ET). 2024: FX Blue list + CME article. 2026: USDA site.
@@ -56,20 +57,20 @@ def build(h):
 
 
 def per_day(d):
-    """one row per ET date with release-hour, 12-16 window and day measures."""
+    """one row per ET date with release-hour, 12:00-14:20 window and day-session measures."""
     rows = []
     for dt, g in d.groupby("date"):
         if g["bad"].any() or pd.Timestamp(dt).weekday() > 4:
             continue
-        gi = g.set_index("hour")
-        if not all(x in gi.index for x in (12, 13, 14, 15)) or gi.index.duplicated().any():
+        gs = g[g["hour"] <= 14]                       # overnight + day session of this trade date
+        gi = gs.set_index("hour")
+        if gi.index.duplicated().any() or not all(x in gi.index for x in (12, 13, 14)):
             continue
-        o12, c15 = gi.loc[12, "o"], gi.loc[15, "c"]
-        o13 = gi.loc[13, "o"]
+        o12, c14, o13 = gi.loc[12, "o"], gi.loc[14, "c"], gi.loc[13, "o"]
         rows.append({"date": dt, "rel_abs": abs(gi.loc[12, "ret"]), "rel_ret": gi.loc[12, "ret"],
-                     "rel_rng": gi.loc[12, "rng"], "win_abs": abs((c15 / o12 - 1) * 100),
-                     "after_ret": (c15 / o13 - 1) * 100,
-                     "day_rng": (g["h"].max() - g["l"].min()) / g["o"].iloc[0] * 100})
+                     "rel_rng": gi.loc[12, "rng"], "win_abs": abs((c14 / o12 - 1) * 100),
+                     "after_ret": (c14 / o13 - 1) * 100,
+                     "day_rng": (gs["h"].max() - gs["l"].min()) / gs["o"].iloc[0] * 100})
     return pd.DataFrame(rows)
 
 
@@ -85,6 +86,8 @@ def compare(rep, base, col):
 def main():
     h = hp.fetch()
     days = per_day(build(h))
+    if days.empty:
+        raise SystemExit('No usable days: no ET hours 12, 13 and 14 found together. Check the bar timestamps.')
     wd = [pd.Timestamp(x).date() for x in WASDE]
     rep = days[days["date"].isin(wd)].copy()
     base = days[~days["date"].isin(wd)].copy()
@@ -95,7 +98,7 @@ def main():
     if len(rep) >= 5:
         out["release_hour_abs_move_pct"] = compare(rep, base, "rel_abs")
         out["release_hour_range_pct"] = compare(rep, base, "rel_rng")
-        out["window_12_to_16ET_abs_move_pct"] = compare(rep, base, "win_abs")
+        out["window_12_to_1420ET_abs_move_pct"] = compare(rep, base, "win_abs")
         out["whole_day_range_pct"] = compare(rep, base, "day_rng")
         r = rep[(rep.rel_ret.abs() > 0.05) & (rep.after_ret.abs() > 0.05)]
         same = int((np.sign(r.rel_ret) == np.sign(r.after_ret)).sum())
@@ -110,7 +113,7 @@ def main():
         out["verdict_rule"] = "report days differ only if p < 0.01 AND ratio >= 1.3"
         out["verdicts"] = {k: ("MORE VOLATILE on report days" if (out[k]["p_value"] < 0.01 and out[k]["ratio"] >= 1.3)
                                else "no clear difference")
-                           for k in ("release_hour_abs_move_pct", "window_12_to_16ET_abs_move_pct", "whole_day_range_pct")}
+                           for k in ("release_hour_abs_move_pct", "window_12_to_1420ET_abs_move_pct", "whole_day_range_pct")}
     txt = json.dumps(out, indent=2, default=str)
     print(txt)
     open("report_day_report.json", "w").write(txt)
