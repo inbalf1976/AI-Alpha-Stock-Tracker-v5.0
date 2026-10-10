@@ -1137,7 +1137,18 @@ class EnsemblePredictor:
         ml_feat = self._build_ml_features(df)
         n       = len(y)
         ml_feat = ml_feat.iloc[-n:]
-        X_ml    = self.scaler_ml.fit_transform(ml_feat.fillna(0))
+        # UPDATED 2026-10-10, real fix: a row of ml_feat holds day i's OWN return and indicators,
+        # but the old label y for that row was "did day i close above day i-1" - the same number.
+        # RF/XGB therefore learned to read the answer (100% in-sample accuracy even on random
+        # prices) and, used live, just repeated the direction of the day that had already happened
+        # with near-0/near-1 probabilities. Correct pairing for "predict the NEXT day": features
+        # of day t -> direction of day t+1. The last row has no next day yet, so it is dropped
+        # from training only (predict() still uses the latest row). The LSTM windows end at day
+        # i-1 and were already correct, so y is left as is for the LSTM.
+        close_ml = df['Close'].reindex(ml_feat.index)
+        y_ml     = (close_ml.shift(-1) > close_ml).astype(int).values[:-1]
+        ml_feat  = ml_feat.iloc[:-1]
+        X_ml     = self.scaler_ml.fit_transform(ml_feat.fillna(0))
 
         # Train LSTM
         self.lstm_model = Sequential([
@@ -1158,13 +1169,13 @@ class EnsemblePredictor:
             n_estimators=150, max_depth=8, min_samples_split=5,
             random_state=seed, n_jobs=-1
         )
-        self.rf_model.fit(X_ml, y)
+        self.rf_model.fit(X_ml, y_ml)
 
         self.xgb_model = xgb.XGBClassifier(
             n_estimators=150, max_depth=5, learning_rate=0.08,
             random_state=seed, use_label_encoder=False, eval_metric='logloss'
         )
-        self.xgb_model.fit(X_ml, y, verbose=False)
+        self.xgb_model.fit(X_ml, y_ml, verbose=False)
 
         print("   ✓ All models trained")
 
