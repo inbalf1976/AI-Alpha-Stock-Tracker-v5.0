@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-10-10T14:40:32.231691+00:00",
+    "total_scanned": 226,
+    "flagged_count": 165,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 30 Sep 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260925a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 25 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Americans' debt problems are flashing a warning not seen since the Great Recession",
+        "link": "https://www.cnbc.com/2026/10/09/american-debt-delinquency.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 09 Oct 2026 19:18:24 GMT",
+        "matched_keywords": [
+          "war",
+          "recession"
+        ]
+      },
+      {
+        "title": "Treasury's Bessent hires Trump's controversial former Fed board pick, Judy Shelton, as advisor",
+        "link": "https://www.cnbc.com/2026/10/09/judy-shelton-scott-bessent-treasury.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 09 Oct 2026 13:09:19 GMT",
+        "matched_keywords": [
+          "fed",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Inflation on many everyday items was entirely due to tariffs, NY Fed says",
+        "link": "https://www.cnbc.com/2026/10/08/inflation-tariffs-trump-fed-consumer-goods.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 08 Oct 2026 17:31:03 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "tariff"
+        ]
+      },
+      {
+        "title": "Inflation fears on the rise as one-year outlook in Fed survey hits highest level since May 2023",
+        "link": "https://www.cnbc.com/2026/10/07/inflation-fears-on-the-rise-as-one-year-outlook-in-fed-survey-hits-highest-since-may-2023.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 07 Oct 2026 18:44:36 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "India’s central bank hikes rates for the first time since 2023 as inflation risks build",
+        "link": "https://www.cnbc.com/2026/10/07/india-rbi-interest-rates-inflation.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 07 Oct 2026 11:55:36 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Trade deficit hits $105.6 billion, widest since just before Trump tariffs enacted last year",
+        "link": "https://www.cnbc.com/2026/10/06/trade-deficit-hits-105point6-billion-widest-since-just-before-trump-tariffs-enacted-last-year.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 06 Oct 2026 15:52:22 GMT",
+        "matched_keywords": [
+          "tariff"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are grappling with rising inflation expectations, aggressive central bank tightening (including India's first rate hike since 2023), and severe debt stress among U.S. consumers reaching levels unseen since the Great Recession. Meanwhile, ongoing maritime attacks near the Strait of Hormuz and the Red Sea continue to disrupt energy and shipping flows, amplifying trade deficits and supply chain frictions.",
+      "physical_supply_disruption_confirmed": true,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "confirmed_physical_disruption",
+      "usd_ils_impact": "BULLISH: Persistent geopolitical conflict, regional maritime disruptions in the Middle East, and safe-haven dollar demand strengthen the USD relative to the ILS.",
+      "key_risk": "Escalating maritime attacks in the Strait of Hormuz and Red Sea region threatening vital energy and commodity transit corridors.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Multiple tankers have been struck by projectiles near the Strait of Hormuz and Red Sea shipping corridors over a 10-day span, causing sharp fluctuations in maritime traffic and vessel scarcity.",
+      "wheat_impact": "NEUTRAL"
+    }
+  },
+  {
     "timestamp": "2026-10-10T02:29:06.327994+00:00",
     "total_scanned": 229,
     "flagged_count": 166,
@@ -31689,162 +31851,6 @@
         "reason": "Broader dollar firmness driven by safe-haven demand and shifting U.S. yield dynamics supports strength in the USD against the ILS."
       },
       "key_risk": "Escalating climate and drought disruptions to key agricultural transportation arteries and supply chains.",
-      "headline_overstated": false,
-      "headline_vs_article_note": ""
-    }
-  },
-  {
-    "timestamp": "2026-08-07T10:37:24.725074+00:00",
-    "total_scanned": 223,
-    "flagged_count": 158,
-    "flagged_headlines": [
-      {
-        "title": "There are good reasons why higher bond yields are here to stay, this strategist says",
-        "link": "https://www.marketwatch.com/story/there-are-good-reasons-why-higher-bond-yields-are-here-to-stay-this-strategist-says-2a89d5ae?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Fri, 07 Aug 2026 10:02:00 GMT",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Europe is blowing up riverbeds as an extreme drought wreaks havoc on its economy",
-        "link": "https://www.cnbc.com/2026/08/05/drought-rhine-danube-water-levels-economy.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 05 Aug 2026 07:15:17 GMT",
-        "matched_keywords": [
-          "drought"
-        ]
-      },
-      {
-        "title": "Manufacturing survey shows inflation worries 'worse than pandemic era,' adding to Fed pressure",
-        "link": "https://www.cnbc.com/2026/08/03/manufacturing-survey-shows-inflation-worries-adding-to-pressure-on-fed.html",
-        "source": "CNBC Economy",
-        "published": "Tue, 04 Aug 2026 14:42:39 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "As Warsh’s Fed faces pressure to act on inflation, these indicators show it’s at its lowest in years",
-        "link": "https://www.cnbc.com/2026/07/31/these-fed-alternative-indicators-show-inflation-is-at-lowest-in-years.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 31 Jul 2026 16:51:30 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation",
-          "war"
-        ]
-      },
-      {
-        "title": "U.S. economy slowed to 1.5% growth rate in Q2; June core inflation at 3.3%",
-        "link": "https://www.cnbc.com/2026/07/30/us-economy-slowed-to-1point5percent-growth-rate-in-q2-june-core-inflation-at-3point3percent.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 30 Jul 2026 15:04:43 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "What a divided Fed means for investors",
-        "link": "https://www.cnbc.com/2026/07/29/fed-meeting-interest-rates-warsh-stocks-bonds.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 29 Jul 2026 23:36:34 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "Markets are navigating persistent concerns over higher bond yields and sticky inflation pressures, compounded by slowing U.S. economic growth and severe climate disruptions like European droughts impacting river transport. Meanwhile, the Federal Reserve continues its active regulatory and monetary policy management amidst a backdrop of divided policy views.",
-      "wheat_impact": "BULLISH",
-      "wheat_impact_reason": "Extreme droughts wreaking havoc on European riverbeds threaten regional crop yields and vital agricultural logistics, posing upside risks to global grain prices.",
-      "usd_ils_impact": "NEUTRAL",
-      "usd_ils_impact_reason": "The mixed macroeconomic backdrop of sticky domestic inflation, slowing U.S. growth, and structural global yield dynamics provides no clear directional catalyst for the USD/ILS exchange rate.",
-      "key_risk": "Accelerating inflation pressures coupled with slowing economic growth (stagflationary risks) and severe climate-induced supply chain disruptions.",
       "headline_overstated": false,
       "headline_vs_article_note": ""
     }
