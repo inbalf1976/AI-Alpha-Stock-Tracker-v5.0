@@ -14,10 +14,7 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.19,
-    "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-06-22"
+    "pnl_cents": -9.19
   },
   {
     "timestamp": "2026-06-19T11:54:41.925669",
@@ -29,10 +26,7 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 15.14,
-    "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-06-22"
+    "pnl_cents": 15.14
   },
   {
     "timestamp": "2026-06-22T04:32:24.415898+03:00",
@@ -47,7 +41,9 @@
     "pnl_cents": -9.26,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-06-23"
+    "direction_check_date": "2026-06-22",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-06-23T02:17:54.652235+03:00",
@@ -62,7 +58,9 @@
     "pnl_cents": -9.11,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-06-24"
+    "direction_check_date": "2026-06-23",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-06-24T02:07:12.082631+03:00",
@@ -77,7 +75,9 @@
     "pnl_cents": -8.97,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-06-25"
+    "direction_check_date": "2026-06-24",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-06-25T02:03:04.698122+03:00",
@@ -91,8 +91,10 @@
     "exit_reason": "stop_hit",
     "pnl_cents": -8.94,
     "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-06-26"
+    "direction_correct": true,
+    "direction_check_date": "2026-06-25",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-06-26T02:16:09.012943+03:00",
@@ -107,7 +109,9 @@
     "pnl_cents": -9.02,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-06-29"
+    "direction_check_date": "2026-06-26",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-06-30T01:54:31.000213+03:00",
@@ -122,7 +126,9 @@
     "pnl_cents": 14.45,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-01"
+    "direction_check_date": "2026-06-30",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-01T02:09:29.748609+03:00",
@@ -137,7 +143,9 @@
     "pnl_cents": 14.69,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-02"
+    "direction_check_date": "2026-07-01",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-02T02:12:26.244369+03:00",
@@ -151,8 +159,10 @@
     "exit_reason": "stop_hit",
     "pnl_cents": -9.01,
     "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-07-06"
+    "direction_correct": false,
+    "direction_check_date": "2026-07-02",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-03T02:02:39.610233+03:00",
@@ -164,10 +174,7 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.0,
-    "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-07-06"
+    "pnl_cents": -9.0
   },
   {
     "timestamp": "2026-07-06T14:21:27.676684+03:00",
@@ -182,7 +189,9 @@
     "pnl_cents": -8.86,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-07"
+    "direction_check_date": "2026-07-06",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-06T21:54:54.748080+03:00",
@@ -196,8 +205,10 @@
     "exit_reason": "stop_hit",
     "pnl_cents": -9.21,
     "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-07-07"
+    "direction_correct": false,
+    "direction_check_date": "2026-07-06",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-07T02:04:52.643620+03:00",
@@ -211,8 +222,10 @@
     "exit_reason": "stop_hit",
     "pnl_cents": -9.21,
     "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-07-08"
+    "direction_correct": true,
+    "direction_check_date": "2026-07-07",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-07T14:01:16.904256+03:00",
@@ -242,7 +255,9 @@
     "pnl_cents": -9.27,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-09"
+    "direction_check_date": "2026-07-08",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-09T02:03:43.523894+03:00",
@@ -257,7 +272,9 @@
     "pnl_cents": -9.09,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-10"
+    "direction_check_date": "2026-07-09",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-09T10:09:00.683461+03:00",
@@ -272,7 +289,9 @@
     "pnl_cents": -9.07,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-10"
+    "direction_check_date": "2026-07-09",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-09T10:48:08.717934+03:00",
@@ -287,7 +306,9 @@
     "pnl_cents": -9.08,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-10"
+    "direction_check_date": "2026-07-09",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-09T14:45:58.864799+03:00",
@@ -302,7 +323,9 @@
     "pnl_cents": -9.11,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-10"
+    "direction_check_date": "2026-07-09",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-09T21:49:28.462727+03:00",
@@ -317,7 +340,9 @@
     "pnl_cents": -9.29,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-10"
+    "direction_check_date": "2026-07-09",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-10T02:10:21.604662+03:00",
@@ -332,7 +357,9 @@
     "pnl_cents": 15.48,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-13"
+    "direction_check_date": "2026-07-10",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-10T04:14:11.123153+03:00",
@@ -347,7 +374,9 @@
     "pnl_cents": 15.44,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-13"
+    "direction_check_date": "2026-07-10",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-10T04:23:35.635334+03:00",
@@ -377,7 +406,9 @@
     "pnl_cents": 15.43,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-13"
+    "direction_check_date": "2026-07-10",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-10T05:03:17.671414+03:00",
@@ -407,7 +438,9 @@
     "pnl_cents": 15.39,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-13"
+    "direction_check_date": "2026-07-10",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-11T09:06:03.053039+03:00",
@@ -419,10 +452,7 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 15.8,
-    "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-07-13"
+    "pnl_cents": 15.8
   },
   {
     "timestamp": "2026-07-13T02:13:15.581921+03:00",
@@ -437,7 +467,9 @@
     "pnl_cents": -9.6,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-14"
+    "direction_check_date": "2026-07-13",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-14T01:54:18.838037+03:00",
@@ -452,7 +484,9 @@
     "pnl_cents": 15.88,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-15"
+    "direction_check_date": "2026-07-14",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-15T01:56:08.991137+03:00",
@@ -467,7 +501,9 @@
     "pnl_cents": -9.66,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-16"
+    "direction_check_date": "2026-07-15",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-16T01:57:06.871406+03:00",
@@ -481,8 +517,10 @@
     "exit_reason": "stop_hit",
     "pnl_cents": -10.17,
     "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-07-17"
+    "direction_correct": true,
+    "direction_check_date": "2026-07-16",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-17T01:55:33.712456+03:00",
@@ -496,8 +534,10 @@
     "exit_reason": "target_hit",
     "pnl_cents": 16.86,
     "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-07-20"
+    "direction_correct": true,
+    "direction_check_date": "2026-07-17",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-17T10:40:09.198313+03:00",
@@ -512,7 +552,9 @@
     "pnl_cents": 16.74,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-20"
+    "direction_check_date": "2026-07-17",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-17T11:29:49.382919+03:00",
@@ -527,7 +569,9 @@
     "pnl_cents": 16.79,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-20"
+    "direction_check_date": "2026-07-17",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-18T09:45:02.655861+03:00",
@@ -539,10 +583,7 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 17.07,
-    "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-07-20"
+    "pnl_cents": 17.07
   },
   {
     "timestamp": "2026-07-21T01:57:47.797377+03:00",
@@ -557,7 +598,9 @@
     "pnl_cents": 16.82,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-22"
+    "direction_check_date": "2026-07-21",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-22T01:53:55.597432+03:00",
@@ -572,7 +615,9 @@
     "pnl_cents": -10.18,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-23"
+    "direction_check_date": "2026-07-22",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-23T01:59:44.950743+03:00",
@@ -587,7 +632,9 @@
     "pnl_cents": 17.66,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-24"
+    "direction_check_date": "2026-07-23",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-23T14:26:15.417230+03:00",
@@ -602,7 +649,9 @@
     "pnl_cents": 17.7,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-24"
+    "direction_check_date": "2026-07-23",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-23T16:18:10.139493+03:00",
@@ -617,7 +666,9 @@
     "pnl_cents": 17.68,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-24"
+    "direction_check_date": "2026-07-23",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-23T19:43:21.590734+03:00",
@@ -632,7 +683,9 @@
     "pnl_cents": -10.49,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-24"
+    "direction_check_date": "2026-07-23",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-24T01:53:47.147273+03:00",
@@ -647,7 +700,9 @@
     "pnl_cents": -10.42,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-27"
+    "direction_check_date": "2026-07-24",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-24T11:09:43.899469+03:00",
@@ -662,7 +717,9 @@
     "pnl_cents": -10.54,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-27"
+    "direction_check_date": "2026-07-24",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-24T11:39:49.081311+03:00",
@@ -677,7 +734,9 @@
     "pnl_cents": -10.58,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-27"
+    "direction_check_date": "2026-07-24",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-27T00:07:35.211344+03:00",
@@ -692,7 +751,9 @@
     "pnl_cents": 16.95,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-28"
+    "direction_check_date": "2026-07-27",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-28T01:58:26.857810+03:00",
@@ -707,7 +768,9 @@
     "pnl_cents": -9.87,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-07-29"
+    "direction_check_date": "2026-07-28",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-29T01:55:56.170688+03:00",
@@ -722,7 +785,9 @@
     "pnl_cents": -9.97,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-07-30"
+    "direction_check_date": "2026-07-29",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-30T01:58:21.237165+03:00",
@@ -736,8 +801,10 @@
     "exit_reason": "target_hit",
     "pnl_cents": 16.5,
     "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-07-31"
+    "direction_correct": false,
+    "direction_check_date": "2026-07-30",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-07-31T02:03:15.475212+03:00",
@@ -752,7 +819,9 @@
     "pnl_cents": 16.59,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-08-03"
+    "direction_check_date": "2026-07-31",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-07-31T16:53:34.884041+03:00",
@@ -766,8 +835,10 @@
     "exit_reason": "stop_hit",
     "pnl_cents": -9.64,
     "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-08-03"
+    "direction_correct": true,
+    "direction_check_date": "2026-07-31",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-08-06T01:56:30.981125+03:00",
@@ -782,7 +853,9 @@
     "pnl_cents": -9.66,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-08-07"
+    "direction_check_date": "2026-08-06",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-08-09T01:21:01.090313+03:00",
@@ -794,10 +867,7 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -9.6,
-    "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-08-10"
+    "pnl_cents": -9.6
   },
   {
     "timestamp": "2026-08-13T01:33:26.996541+03:00",
@@ -811,8 +881,10 @@
     "exit_reason": "stop_hit",
     "pnl_cents": -9.79,
     "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-08-14"
+    "direction_correct": true,
+    "direction_check_date": "2026-08-13",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-08-14T02:35:56.318670+03:00",
@@ -827,7 +899,9 @@
     "pnl_cents": -10.03,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-08-17"
+    "direction_check_date": "2026-08-14",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-08-16T01:13:35.267324+03:00",
@@ -839,10 +913,7 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -10.12,
-    "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-08-17"
+    "pnl_cents": -10.12
   },
   {
     "timestamp": "2026-08-16T11:59:38.565723+03:00",
@@ -854,10 +925,7 @@
     "validated": true,
     "outcome": "WIN",
     "exit_reason": "target_hit",
-    "pnl_cents": 17.24,
-    "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-08-17"
+    "pnl_cents": 17.24
   },
   {
     "timestamp": "2026-08-18T00:29:15.539658+03:00",
@@ -872,7 +940,9 @@
     "pnl_cents": -10.34,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-08-19"
+    "direction_check_date": "2026-08-18",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-08-18T01:16:43.642840+03:00",
@@ -902,7 +972,9 @@
     "pnl_cents": -9.9,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-08-20"
+    "direction_check_date": "2026-08-19",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-08-19T02:05:25.319578+03:00",
@@ -977,7 +1049,9 @@
     "pnl_cents": -10.19,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-08-21"
+    "direction_check_date": "2026-08-20",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-08-20T02:18:37.648465+03:00",
@@ -1006,8 +1080,10 @@
     "exit_reason": "stop_hit",
     "pnl_cents": -10.28,
     "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-08-21"
+    "direction_correct": false,
+    "direction_check_date": "2026-08-20",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-08-20T17:02:51.010212+03:00",
@@ -1021,8 +1097,10 @@
     "exit_reason": "stop_hit",
     "pnl_cents": -10.35,
     "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-08-21"
+    "direction_correct": false,
+    "direction_check_date": "2026-08-20",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-08-21T09:52:55.343319+03:00",
@@ -1037,7 +1115,9 @@
     "pnl_cents": -10.26,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-08-24"
+    "direction_check_date": "2026-08-21",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-08-21T17:41:25.918603+03:00",
@@ -1052,7 +1132,9 @@
     "pnl_cents": -10.25,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-08-24"
+    "direction_check_date": "2026-08-21",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-08-24T01:01:40.229462+03:00",
@@ -1066,8 +1148,10 @@
     "exit_reason": "target_hit",
     "pnl_cents": 17.04,
     "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-08-25"
+    "direction_correct": false,
+    "direction_check_date": "2026-08-24",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-08-25T00:51:52.987188+03:00",
@@ -1082,7 +1166,9 @@
     "pnl_cents": 17.06,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-08-26"
+    "direction_check_date": "2026-08-25",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-08-25T01:07:49.604315+03:00",
@@ -1112,7 +1198,9 @@
     "pnl_cents": -10.41,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-08-26"
+    "direction_check_date": "2026-08-25",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-08-26T01:04:44.378831+03:00",
@@ -1127,7 +1215,9 @@
     "pnl_cents": 17.61,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-08-27"
+    "direction_check_date": "2026-08-26",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-08-26T12:14:29.148053+03:00",
@@ -1142,7 +1232,9 @@
     "pnl_cents": 17.86,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-08-27"
+    "direction_check_date": "2026-08-26",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-08-26T21:35:36.256233+03:00",
@@ -1156,8 +1248,10 @@
     "exit_reason": "stop_hit",
     "pnl_cents": -11.22,
     "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-08-27"
+    "direction_correct": true,
+    "direction_check_date": "2026-08-26",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-08-28T23:20:39.818237+03:00",
@@ -1171,8 +1265,10 @@
     "exit_reason": "stop_hit",
     "pnl_cents": -11.75,
     "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-08-31"
+    "direction_correct": true,
+    "direction_check_date": "2026-08-28",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-08-29T02:06:28.275880+03:00",
@@ -1184,10 +1280,7 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -11.75,
-    "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-08-31"
+    "pnl_cents": -11.75
   },
   {
     "timestamp": "2026-08-29T07:13:24.544840+03:00",
@@ -1244,10 +1337,7 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -11.76,
-    "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-08-31"
+    "pnl_cents": -11.76
   },
   {
     "timestamp": "2026-08-30T16:59:41.594657+03:00",
@@ -1259,10 +1349,7 @@
     "validated": true,
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
-    "pnl_cents": -11.5,
-    "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-08-31"
+    "pnl_cents": -11.5
   },
   {
     "timestamp": "2026-08-31T04:42:49.180508+03:00",
@@ -1277,7 +1364,9 @@
     "pnl_cents": -11.61,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-09-01"
+    "direction_check_date": "2026-08-31",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-08-31T19:22:22.066453+03:00",
@@ -1291,8 +1380,10 @@
     "exit_reason": "target_hit",
     "pnl_cents": 18.95,
     "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-09-01"
+    "direction_correct": false,
+    "direction_check_date": "2026-08-31",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-09-02T04:30:10.829258+03:00",
@@ -1308,7 +1399,9 @@
     "scoring_method": "legacy_synthetic",
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-09-04"
+    "direction_check_date": "2026-09-02",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-09-02T15:57:39.605785+03:00",
@@ -1324,7 +1417,9 @@
     "scoring_method": "legacy_synthetic",
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-09-04"
+    "direction_check_date": "2026-09-02",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-09-02T20:13:54.320094+03:00",
@@ -1340,7 +1435,9 @@
     "scoring_method": "legacy_synthetic",
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-09-04"
+    "direction_check_date": "2026-09-02",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-09-03T04:16:07.502595+03:00",
@@ -1353,10 +1450,12 @@
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
     "pnl_cents": -11.58,
+    "scoring_method": "legacy_synthetic",
     "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-09-04",
-    "scoring_method": "legacy_synthetic"
+    "direction_correct": true,
+    "direction_check_date": "2026-09-03",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-09-03T04:33:35.041863+03:00",
@@ -1369,10 +1468,10 @@
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
     "pnl_cents": -11.57,
+    "scoring_method": "legacy_synthetic",
     "direction_scored": true,
     "direction_correct": null,
-    "direction_check_date": null,
-    "scoring_method": "legacy_synthetic"
+    "direction_check_date": null
   },
   {
     "timestamp": "2026-09-03T16:00:08.822571+03:00",
@@ -1387,10 +1486,12 @@
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
     "pnl_cents": -9.94,
+    "scoring_method": "real_setup",
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-09-04",
-    "scoring_method": "real_setup"
+    "direction_check_date": "2026-09-03",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-09-04T04:07:53.219657+03:00",
@@ -1407,8 +1508,10 @@
     "pnl_cents": -2.44,
     "scoring_method": "real_setup",
     "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-09-07"
+    "direction_correct": true,
+    "direction_check_date": "2026-09-04",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-09-04T04:27:17.211965+03:00",
@@ -1425,8 +1528,10 @@
     "pnl_cents": -1.19,
     "scoring_method": "real_setup",
     "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-09-07"
+    "direction_correct": true,
+    "direction_check_date": "2026-09-04",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-09-05T04:10:21.440332+03:00",
@@ -1441,10 +1546,7 @@
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
     "pnl_cents": -19.94,
-    "scoring_method": "real_setup",
-    "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-09-07"
+    "scoring_method": "real_setup"
   },
   {
     "timestamp": "2026-09-05T15:01:12.544469+03:00",
@@ -1459,10 +1561,7 @@
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
     "pnl_cents": -18.69,
-    "scoring_method": "real_setup",
-    "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-09-07"
+    "scoring_method": "real_setup"
   },
   {
     "timestamp": "2026-09-08T04:30:59.479487+03:00",
@@ -1477,10 +1576,12 @@
     "outcome": "WIN",
     "exit_reason": "target_hit",
     "pnl_cents": 13.33,
+    "scoring_method": "real_setup",
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-09-09",
-    "scoring_method": "real_setup"
+    "direction_check_date": "2026-09-08",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-09-08T16:45:11.791036+03:00",
@@ -1493,10 +1594,12 @@
     "outcome": "WIN",
     "exit_reason": "target_hit",
     "pnl_cents": 18.63,
+    "scoring_method": "legacy_synthetic",
     "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-09-09",
-    "scoring_method": "legacy_synthetic"
+    "direction_correct": false,
+    "direction_check_date": "2026-09-08",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-09-08T20:18:30.919802+03:00",
@@ -1509,10 +1612,12 @@
     "outcome": "WIN",
     "exit_reason": "target_hit",
     "pnl_cents": 18.57,
+    "scoring_method": "legacy_synthetic",
     "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-09-09",
-    "scoring_method": "legacy_synthetic"
+    "direction_correct": false,
+    "direction_check_date": "2026-09-08",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-09-09T04:39:27.376610+03:00",
@@ -1527,10 +1632,12 @@
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
     "pnl_cents": -7.08,
+    "scoring_method": "real_setup",
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-09-10",
-    "scoring_method": "real_setup"
+    "direction_check_date": "2026-09-09",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-09-09T17:15:24.688518+03:00",
@@ -1546,11 +1653,13 @@
     "exit_reason": "target_hit",
     "pnl_cents": 12.53,
     "scoring_method": "real_setup",
-    "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-09-10",
     "setup_direction": "DOWN",
-    "rescored_2026_10_07": true
+    "rescored_2026_10_07": true,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-09-09",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-09-11T04:32:49.166891+03:00",
@@ -1566,11 +1675,13 @@
     "exit_reason": "target_hit",
     "pnl_cents": 11.69,
     "scoring_method": "real_setup",
+    "setup_direction": "DOWN",
+    "rescored_2026_10_07": true,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-09-13",
-    "setup_direction": "DOWN",
-    "rescored_2026_10_07": true
+    "direction_check_date": "2026-09-11",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-09-14T04:47:19.107112+03:00",
@@ -1586,11 +1697,13 @@
     "exit_reason": "target_hit",
     "pnl_cents": 13.13,
     "scoring_method": "real_setup",
-    "direction_scored": true,
-    "direction_correct": true,
-    "direction_check_date": "2026-09-15",
     "setup_direction": "DOWN",
-    "rescored_2026_10_07": true
+    "rescored_2026_10_07": true,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-09-14",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-09-15T04:57:23.007075+03:00",
@@ -1606,11 +1719,13 @@
     "exit_reason": "target_hit",
     "pnl_cents": 2.38,
     "scoring_method": "real_setup",
+    "setup_direction": "DOWN",
+    "rescored_2026_10_07": true,
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-09-16",
-    "setup_direction": "DOWN",
-    "rescored_2026_10_07": true
+    "direction_check_date": "2026-09-15",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-09-16T04:47:55.861198+03:00",
@@ -1626,11 +1741,13 @@
     "exit_reason": "target_hit",
     "pnl_cents": 12.24,
     "scoring_method": "real_setup",
-    "direction_scored": true,
-    "direction_correct": false,
-    "direction_check_date": "2026-09-17",
     "setup_direction": "DOWN",
-    "rescored_2026_10_07": true
+    "rescored_2026_10_07": true,
+    "direction_scored": true,
+    "direction_correct": true,
+    "direction_check_date": "2026-09-16",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-10-06T03:06:33.084081+03:00",
@@ -1645,10 +1762,12 @@
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
     "pnl_cents": -0.14,
+    "scoring_method": "real_setup",
     "direction_scored": true,
     "direction_correct": true,
-    "direction_check_date": "2026-10-07",
-    "scoring_method": "real_setup"
+    "direction_check_date": "2026-10-06",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": true
   },
   {
     "timestamp": "2026-10-07T03:06:19.215378+03:00",
@@ -1663,10 +1782,12 @@
     "outcome": "LOSS",
     "exit_reason": "stop_hit",
     "pnl_cents": -8.4,
+    "scoring_method": "real_setup",
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-10-08",
-    "scoring_method": "real_setup"
+    "direction_check_date": "2026-10-07",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-10-07T18:45:43.934464+03:00",
@@ -1684,6 +1805,8 @@
     "pnl_cents": null,
     "direction_scored": true,
     "direction_correct": false,
-    "direction_check_date": "2026-10-08"
+    "direction_check_date": "2026-10-07",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   }
 ]
