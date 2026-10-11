@@ -199,7 +199,7 @@ def score_daily_direction(log, price_df):
         every run, independent of the frozen setup, see
         wheat_monitor_pro.py's `direction` variable and its
         "Daily direction (today)" print line — actually right, checked
-        against the next real trading day's Close? This is DIRECTION
+        against the SAME day's close vs that day's open (changed 2026-10-10)? This is DIRECTION
         accuracy, a completely different, much simpler question with
         no stop-loss involved at all.
 
@@ -242,27 +242,37 @@ def score_daily_direction(log, price_df):
         seen_keys.add(key)
 
         entry_date = datetime.fromisoformat(entry['timestamp']).date()
-        future = price_df[price_df.index.date > entry_date]
-        if future.empty:
-            continue  # too soon — next trading day hasn't happened yet, try again next run
+        # UPDATED 2026-10-10 (agreed with the user): the daily direction is a call about THE SAME
+        # trading day the alert is sent on (03:05 IL on date D predicts day D's close vs day D's
+        # start), so it is scored against day D's own bar: Close vs Open. It is scored only once a
+        # LATER bar exists, i.e. day D has really finished. (Before, it was checked against the
+        # next day's close vs the 03:05 price - a different day and a different reference.)
+        day_bars = price_df[price_df.index.date == entry_date]
+        later    = price_df[price_df.index.date > entry_date]
+        if day_bars.empty or later.empty:
+            continue  # day D not finished / not available yet, try again next run
 
-        next_bar = future.iloc[0]
-        next_close = float(next_bar['Close'])
-        next_date = future.index[0].date().isoformat()
+        bar    = day_bars.iloc[-1]
+        d_open = float(bar['Open'])
+        d_close = float(bar['Close'])
 
-        correct = (next_close > entry['entry_price']) if entry['direction'] == 'UP' \
-            else (next_close < entry['entry_price'])
+        correct = (d_close > d_open) if entry['direction'] == 'UP' else (d_close < d_open)
 
         entry['direction_scored'] = True
         entry['direction_correct'] = correct
-        entry['direction_check_date'] = next_date
+        entry['direction_check_date'] = entry_date.isoformat()
+        entry['direction_basis'] = 'same_day_close_vs_open'
+        # for reference only: close vs the 03:05 price the user actually enters at
+        entry['direction_correct_vs_entry'] = (d_close > entry['entry_price']) if entry['direction'] == 'UP' \
+            else (d_close < entry['entry_price'])
         newly_scored += 1
 
     return newly_scored
 
 
 def print_direction_accuracy_summary(log):
-    scored = [e for e in log if e.get('direction_scored') and e.get('direction_correct') is not None]
+    scored = [e for e in log if e.get('direction_scored') and e.get('direction_correct') is not None
+              and e.get('direction_basis') == 'same_day_close_vs_open']   # old-basis rows are not mixed in
     print(f"\n--- DAILY DIRECTION accuracy — separate metric, see score_daily_direction() docstring (n={len(scored)}) ---")
     if not scored:
         print("(No entries scored yet.)")
