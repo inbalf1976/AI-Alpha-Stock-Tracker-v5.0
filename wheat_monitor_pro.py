@@ -1123,8 +1123,11 @@ class EnsemblePredictor:
         print("   Training LSTM + RF + XGB...")
 
         # Labels: did price go up next day?
+        # UPDATED 2026-10-10 (agreed with the user): the daily direction is now "does today's
+        # trading day CLOSE above where it STARTED (its own Open)?" - the same start-of-day
+        # reference the weekly setup entry uses - instead of close vs the previous close.
         y = np.array([
-            1 if df['Close'].iloc[i] > df['Close'].iloc[i-1] else 0
+            1 if df['Close'].iloc[i] > df['Open'].iloc[i] else 0
             for i in range(self.seq_len, len(df))
         ])
 
@@ -1145,8 +1148,9 @@ class EnsemblePredictor:
         # of day t -> direction of day t+1. The last row has no next day yet, so it is dropped
         # from training only (predict() still uses the latest row). The LSTM windows end at day
         # i-1 and were already correct, so y is left as is for the LSTM.
-        close_ml = df['Close'].reindex(ml_feat.index)
-        y_ml     = (close_ml.shift(-1) > close_ml).astype(int).values[:-1]
+        # (y is already "close above that same day's open", so the label for features of day t
+        #  is simply y of day t+1 = y[1:].)
+        y_ml     = y[1:]
         ml_feat  = ml_feat.iloc[:-1]
         X_ml     = self.scaler_ml.fit_transform(ml_feat.fillna(0))
 
@@ -2036,7 +2040,7 @@ def main():
 
         print(f"  Weekly range: {weekly['range_low']:.0f} - {weekly['range_high']:.0f}c")
         print(f"  Weekly FINAL CALL: {weekly['final_call']} (frozen — only changes on break)")
-        print(f"  Daily direction (today): {direction}")
+        print(f"  Daily closing direction (today's close vs start of day): {direction}")
         print(f"  Monthly bias: {monthly['bias'] if monthly else 'N/A'}")
 
         # NOTE (2026-07-14): the old "weekly bias overrides daily ensemble
@@ -2049,7 +2053,7 @@ def main():
         # lines (WEEKLY FINAL CALL vs daily direction) instead.
 
         status_word = "out range" if out_of_range else "in range"
-        status_line = f"current price {current_price:.0f}c \"{status_word}\" direction {direction}"
+        status_line = f"current price {current_price:.0f}c \"{status_word}\" daily closing direction {direction}"
         if break_outcome:
             status_line += f" — weekly setup just closed as {break_outcome}, new setup generated"
 
@@ -2094,7 +2098,7 @@ def main():
         message = (
             f"WHEAT MONITOR v4.0\n"
             f"------------------------------\n"
-            f"{direction} ({pred['confidence']:.1%})\n"
+            f"daily closing direction: {direction} ({pred['confidence']:.1%})\n"
             f"Price: {current_price:.2f}c\n\n"
             f"SEASONAL: {s_phase['phase']} ({s_phase['confidence']:.0%})\n"
             f"WASDE: {wasde['signal']} | Weather: {weather['signal']}\n"
