@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-10-11T02:01:04.601037+00:00",
+    "total_scanned": 220,
+    "flagged_count": 159,
+    "flagged_headlines": [
+      {
+        "title": "Should I put my nest egg in a 30-year Treasury bond?",
+        "link": "https://www.marketwatch.com/story/should-i-put-my-nest-egg-in-a-30-year-treasury-bond-89db6e09?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 10 Oct 2026 19:44:00 GMT",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Dollar gains for fourth straight week on Fed rate outlook",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-muted-dollar-heads-for-fourth-straight-week-of-gains-4940141",
+        "source": "Investing.com Forex",
+        "published": "2026-10-09 20:30:15",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound edges up as dollar dips on Treasury pause",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-edges-up-as-dollar-dips-on-treasury-pause-4940524",
+        "source": "Investing.com Forex",
+        "published": "2026-10-09 09:46:00",
+        "matched_keywords": [
+          "treasury"
+        ]
+      },
+      {
+        "title": "Canadian dollar gains as oil rally, narrower yield gap support loonie",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-gains-as-oil-rally-narrower-yield-gap-support-loonie-4939654",
+        "source": "Investing.com Forex",
+        "published": "2026-10-08 19:22:09",
+        "matched_keywords": [
+          "oil",
+          "yield"
+        ]
+      },
+      {
+        "title": "Zelenskiy says letting Russia sell diesel to US is ’investment in war’",
+        "link": "https://www.investing.com/news/commodities-news/zelenskiy-says-letting-russia-sell-diesel-to-us-is-investment-in-war-4941715",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-09 20:48:36",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Gold prices hit one-week high, investors eye Fed rate trajectory",
+        "link": "https://www.investing.com/news/commodities-news/gold-rises-on-softer-dollar-easing-yields-fed-outlook-in-focus-4940135",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-09 20:34:53",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil prices dip after Trump rules out pre-midterms Iran attack, easing supply fears",
+        "link": "https://www.investing.com/news/commodities-news/oil-falls-slightly-after-trump-says-no-iran-attack-before-midterms-4940011",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-09 20:32:13",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Saudi Aramco reportedly restores full crude oil supply to Europe for November",
+        "link": "https://www.investing.com/news/commodities-news/saudi-aramco-reportedly-restores-full-crude-oil-supply-to-europe-for-november-4941614",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-09 19:25:17",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "US plans Alaska offshore oil lease sale for March 2027",
+        "link": "https://www.investing.com/news/commodities-news/us-plans-alaska-offshore-oil-lease-sale-for-march-2027-93CH-4941611",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-09 19:19:46",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Financial markets are driven by strong U.S. dollar momentum and shifting Federal Reserve rate expectations, while geopolitical tensions in the Middle East cause active tanker disruptions near the Strait of Hormuz and Red Sea. Meanwhile, energy markets react to shifting crude supply announcements and political commentary regarding Russian diesel exports.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "NEUTRAL",
+      "key_risk": "Escalating maritime attacks and declining tanker transits through the Strait of Hormuz threatening broader energy and supply chain stability.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Multiple recent attacks on tankers and sharply falling transit volumes in the Strait of Hormuz represent an active, developing disruption to key maritime trade routes.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-10T17:54:30.793617+00:00",
     "total_scanned": 226,
     "flagged_count": 163,
@@ -31702,159 +31861,6 @@
       "usd_ils_impact": "BULLISH",
       "usd_ils_impact_reason": "Ongoing Middle East conflict and elevated geopolitical uncertainty continue to weigh on regional currencies, supporting safe-haven demand for the USD against the ILS.",
       "key_risk": "Persistent inflation driven by supply and energy shocks combined with central bank policy division.",
-      "headline_overstated": false,
-      "headline_vs_article_note": ""
-    }
-  },
-  {
-    "timestamp": "2026-08-07T19:02:26.579122+00:00",
-    "total_scanned": 227,
-    "flagged_count": 166,
-    "flagged_headlines": [
-      {
-        "title": "US sanctions Dubai crypto exchange for aiding Iran’s IRGC, following a Reuters report",
-        "link": "https://www.investing.com/news/forex-news/us-sanctions-dubai-crypto-exchange-for-aiding-irans-irgc-following-a-reuters-report-4847273",
-        "source": "Investing.com Forex",
-        "published": "2026-08-07 17:49:10",
-        "matched_keywords": [
-          "sanction"
-        ]
-      },
-      {
-        "title": "Dollar slumps as traders pare Fed rate hike bets on unexpected U.S. job losses",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-rangebound-dollar-firms-amid-iran-peace-uncertainty-us-jobs-caution-4845065",
-        "source": "Investing.com Forex",
-        "published": "2026-08-07 12:49:33",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "Dollar firms on safe haven boost, rising yields; yen hits 158 after intervention",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-dollar-near-7wk-low-with-iran-talks-us-jobs-data-in-focus-4839999",
-        "source": "Investing.com Forex",
-        "published": "2026-08-06 18:39:23",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "Treasuries edge upward as traders weigh energy risks and divided Fed hike bets",
-        "link": "https://www.investing.com/news/forex-news/german-yields-hold-steady-at-3week-lows-as-easing-oil-cools-ecb-hike-bets-4840076",
-        "source": "Investing.com Forex",
-        "published": "2026-08-06 12:01:08",
-        "matched_keywords": [
-          "fed",
-          "war"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "I’m an unemployed software developer who is skeptical of AI. Can I still find a job in tech?",
-        "link": "https://www.marketwatch.com/story/im-an-unemployed-software-developer-who-is-skeptical-of-ai-can-i-still-find-a-job-in-tech-4413875e?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Fri, 07 Aug 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Citi raises third-quarter Brent crude forecast to $80 per barrel",
-        "link": "https://www.investing.com/news/commodities-news/citi-raises-thirdquarter-brent-crude-forecast-to-80-per-barrel-93CH-4847206",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-07 16:27:35",
-        "matched_keywords": [
-          "crude"
-        ]
-      }
-    ],
-    "llm_analysis": {
-      "summary": "Global markets are navigating shifting monetary policy expectations following weak U.S. labor data and ongoing energy risk reassessments, highlighted by Citi raising its Q3 Brent crude forecast to $80. Concurrently, the Federal Reserve continues active regulatory oversight, approving multiple bank mergers and proposing updates to insider lending rules.",
-      "wheat_impact": "NEUTRAL with a 1-sentence reason: The current macroeconomic news flow is dominated by USD volatility, energy price revisions, and banking sector updates, leaving agricultural and wheat fundamentals unaffected.",
-      "usd_ils_impact": "BULLISH with a 1-sentence reason: Safe-haven demand driven by rising geopolitical and energy risks tends to support the greenback against regional currencies like the Israeli Shekel.",
-      "key_risk": "Escalating energy market volatility driven by geopolitical tensions and shifting central bank rate expectations.",
       "headline_overstated": false,
       "headline_vs_article_note": ""
     }
