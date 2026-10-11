@@ -648,7 +648,7 @@ class WeeklyRangeEngine:
             )
 
         final_call_block = f"WEEKLY FINAL CALL: {weekly_final_call}\n" + ("=" * 30) + "\n\n"
-        daily_direction_line = f"daily direction: {daily_direction}\n\n" if daily_direction else ""
+        daily_direction_line = f"daily closing direction (vs start of day): {daily_direction}\n\n" if daily_direction else ""
         tier_top_line = f"Tier: {tier}\n\n"
         status_block = f"\nstatus- {status_line}\n" if status_line else ""
 
