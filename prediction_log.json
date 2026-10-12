@@ -1799,14 +1799,15 @@
     "stop_price": 696.54,
     "target_price": 677.19,
     "setup_direction": "DOWN",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null,
+    "validated": true,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 11.06,
     "direction_scored": true,
     "direction_correct": false,
     "direction_check_date": "2026-10-07",
     "direction_basis": "same_day_close_vs_open",
-    "direction_correct_vs_entry": false
+    "direction_correct_vs_entry": false,
+    "scoring_method": "real_setup"
   }
 ]
