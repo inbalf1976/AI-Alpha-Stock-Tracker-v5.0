@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-10-12T21:46:42.569072+00:00",
+    "total_scanned": 221,
+    "flagged_count": 163,
+    "flagged_headlines": [
+      {
+        "title": "Trump’s ‘energy ceasefire’ collides with real-world problems of dwindling fuel supplies",
+        "link": "https://www.marketwatch.com/story/trumps-energy-ceasefire-collides-with-real-world-problems-of-dwindling-fuel-supplies-8ba3993b?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 12 Oct 2026 18:36:00 GMT",
+        "matched_keywords": [
+          "ceasefire"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 30 Sep 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260925a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 25 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil gains as deadly attack on Saudi airport outweighs Trump’s Russia diesel deal",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-dip-after-trump-announces-russiaukraine-energy-ceasefire-4942934",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-12 20:53:16",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices rise on Saudi Arabia attacks, overshadowing Trump’s diesel deal",
+        "link": "https://www.investing.com/news/commodities-news/oil-climbs-as-mideast-conflict-tanker-attacks-persist-4942900",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-12 19:24:57",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "London Gas Oil nears H&S breakdown at $1,360: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-tests-200sma-support-after-double-top-live-93CH-4943301",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-12 19:18:07",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI tests $94.33 resistance in weak-trend trap: Live",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-stuck-in-tight-range-near-91-live-levels-93CH-4943297",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-12 19:18:06",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Brent Oil stalls below $107-108 resistance: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/brent-oil-stuck-in-1025010600-range-live-levels-93CH-4943298",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-12 19:18:03",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Crude oil prices and refined product benchmarks surged following kinetic attacks on Saudi infrastructure and tanker strikes in the Strait of Hormuz, compounding ongoing physical supply tightness. Meanwhile, Federal Reserve developments—including the release of the September FOMC minutes and survey data—focus broader macroeconomic attention on monetary policy and financial system regulation.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "NEUTRAL",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "Heightened geopolitical risk and military conflict in the Middle East generally drive safe-haven flows and local currency pressure, supporting USD/ILS."
+      },
+      "key_risk": "Escalation of military conflict in the Middle East threatening critical energy and maritime transit corridors, leading to sustained high energy and shipping input costs.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Recent drone and projectile attacks on oil tankers and infrastructure in the Persian Gulf and Saudi Arabia represent an active disruption to regional maritime transit and energy logistics.",
+      "wheat_impact": "NEUTRAL"
+    }
+  },
+  {
     "timestamp": "2026-10-12T18:10:22.296887+00:00",
     "total_scanned": 219,
     "flagged_count": 159,
@@ -31720,166 +31881,6 @@
       "reason": "Escalating geopolitical tensions in the Middle East and Red Sea, combined with a hawkish US Federal Reserve leaning toward rate hikes, strengthen the US dollar against emerging market and regional currencies.",
       "usd_ils_impact": "BULLISH",
       "key_risk": "A potential Fed interest rate hike in September amidst persistent inflation and intensifying geopolitical supply shocks.",
-      "headline_overstated": false,
-      "headline_vs_article_note": ""
-    }
-  },
-  {
-    "timestamp": "2026-08-08T18:42:15.537017+00:00",
-    "total_scanned": 226,
-    "flagged_count": 169,
-    "flagged_headlines": [
-      {
-        "title": "Europe is blowing up riverbeds as an extreme drought wreaks havoc on its economy",
-        "link": "https://www.cnbc.com/2026/08/05/drought-rhine-danube-water-levels-economy.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 05 Aug 2026 07:15:17 GMT",
-        "matched_keywords": [
-          "drought"
-        ]
-      },
-      {
-        "title": "Manufacturing survey shows inflation worries 'worse than pandemic era,' adding to Fed pressure",
-        "link": "https://www.cnbc.com/2026/08/03/manufacturing-survey-shows-inflation-worries-adding-to-pressure-on-fed.html",
-        "source": "CNBC Economy",
-        "published": "Tue, 04 Aug 2026 14:42:39 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "As Warsh’s Fed faces pressure to act on inflation, these indicators show it’s at its lowest in years",
-        "link": "https://www.cnbc.com/2026/07/31/these-fed-alternative-indicators-show-inflation-is-at-lowest-in-years.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 31 Jul 2026 16:51:30 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation",
-          "war"
-        ]
-      },
-      {
-        "title": "U.S. economy slowed to 1.5% growth rate in Q2; June core inflation at 3.3%",
-        "link": "https://www.cnbc.com/2026/07/30/us-economy-slowed-to-1point5percent-growth-rate-in-q2-june-core-inflation-at-3point3percent.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 30 Jul 2026 15:04:43 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "What a divided Fed means for investors",
-        "link": "https://www.cnbc.com/2026/07/29/fed-meeting-interest-rates-warsh-stocks-bonds.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 29 Jul 2026 23:36:34 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Dollar falls as Fed rate hike bets ease; yen set to hold intervention gains",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-rangebound-dollar-firms-amid-iran-peace-uncertainty-us-jobs-caution-4845065",
-        "source": "Investing.com Forex",
-        "published": "2026-08-07 19:34:05",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "US sanctions Dubai crypto exchange for aiding Iran’s IRGC, following a Reuters report",
-        "link": "https://www.investing.com/news/forex-news/us-sanctions-dubai-crypto-exchange-for-aiding-irans-irgc-following-a-reuters-report-4847273",
-        "source": "Investing.com Forex",
-        "published": "2026-08-07 17:49:10",
-        "matched_keywords": [
-          "sanction"
-        ]
-      },
-      {
-        "title": "Dollar firms on safe haven boost, rising yields; yen hits 158 after intervention",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-dollar-near-7wk-low-with-iran-talks-us-jobs-data-in-focus-4839999",
-        "source": "Investing.com Forex",
-        "published": "2026-08-06 18:39:23",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "Treasuries edge upward as traders weigh energy risks and divided Fed hike bets",
-        "link": "https://www.investing.com/news/forex-news/german-yields-hold-steady-at-3week-lows-as-easing-oil-cools-ecb-hike-bets-4840076",
-        "source": "Investing.com Forex",
-        "published": "2026-08-06 12:01:08",
-        "matched_keywords": [
-          "fed",
-          "war"
-        ]
-      },
-      {
-        "title": "I’m an unemployed software developer who is skeptical of AI. Can I still find a job in tech?",
-        "link": "https://www.marketwatch.com/story/im-an-unemployed-software-developer-who-is-skeptical-of-ai-can-i-still-find-a-job-in-tech-4413875e?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sat, 08 Aug 2026 18:30:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Iran says deal on Strait of Hormuz is close but is not enough to open the waterway",
-        "link": "https://www.investing.com/news/commodities-news/iran-says-deal-on-strait-of-hormuz-is-close-but-will-not-open-the-waterway-by-itself-4847656",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-08 15:24:29",
-        "matched_keywords": [
-          "hormuz"
-        ]
-      },
-      {
-        "title": "Oil slides more than 8% for the week as traders hope for Hormuz reopening deal",
-        "link": "https://www.investing.com/news/commodities-news/oil-extends-sharp-gains-as-iran-seeks-to-ban-us-israeli-ships-from-hormuz-4844990",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-07 20:55:54",
-        "matched_keywords": [
-          "oil",
-          "hormuz"
-        ]
-      },
-      {
-        "title": "Brent climbs $1 on uncertainty over end to Iran war",
-        "link": "https://www.investing.com/news/commodities-news/oil-rises-on-concerns-over-strait-of-hormuz-reopening-plans-4844992",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-07 20:06:37",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Gold set for best week since late January after jobs data dents Fed rate hike bets",
-        "link": "https://www.investing.com/news/commodities-news/gold-steady-as-hormuz-tensions-cloud-fed-outlook-traders-eye-payrolls-4844993",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-07 19:56:58",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "Canada discussing trade concessions with US to avoid new tariffs, says source",
-        "link": "https://www.investing.com/news/commodities-news/canada-discussing-trade-concessions-with-us-to-avoid-new-tariffs-says-source-4847320",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-07 19:18:36",
-        "matched_keywords": [
-          "tariff"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are navigating a complex mix of geopolitical tensions in the Middle East, severe European droughts threatening major trade corridors, and a divided Federal Reserve debating future rate hikes amid persistent inflation. Meanwhile, crude oil slides on hopes of a potential Strait of Hormuz resolution, though actual maritime transit through the chokepoint remains severely constrained.",
-      "wheat_impact": "BULLISH",
-      "wheat_impact_reason": "Low water levels on the Danube and Rhine rivers are restricting grain shipments from European farmers, compounding supply chain disruptions.",
-      "usd_ils_impact": "NEUTRAL",
-      "usd_ils_impact_reason": "Shifting Fed rate hike bets and fluctuating Middle East geopolitical risks present offsetting forces for regional currency pairs.",
-      "key_risk": "Prolonged closure or severely restricted transit through the Strait of Hormuz keeping global energy and freight markets under extreme stress.",
       "headline_overstated": false,
       "headline_vs_article_note": ""
     }
