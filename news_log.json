@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-10-12T18:10:22.296887+00:00",
+    "total_scanned": 219,
+    "flagged_count": 159,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 30 Sep 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260925a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 25 Sep 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "The bull market is turning 4 years old — but yields could crash the party",
+        "link": "https://www.marketwatch.com/story/the-bull-market-is-turning-4-years-old-but-yields-could-crash-the-party-1305fe6c?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 12 Oct 2026 13:42:00 GMT",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Oil prices rise 2% as attacks on Saudi Arabia overshadow Trump’s diesel deal",
+        "link": "https://www.investing.com/news/commodities-news/oil-climbs-as-mideast-conflict-tanker-attacks-persist-4942900",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-12 15:36:58",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil climbs as Riyadh airport attack offsets Trump’s energy-ceasefire claim",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-dip-after-trump-announces-russiaukraine-energy-ceasefire-4942934",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-12 11:56:35",
+        "matched_keywords": [
+          "oil",
+          "ceasefire"
+        ]
+      },
+      {
+        "title": "European gas rises as Middle East tanker attacks and cold snap outweigh ceasefire",
+        "link": "https://www.investing.com/news/commodities-news/european-gas-rises-as-middle-east-tanker-attacks-and-cold-snap-outweigh-ceasefire-4943911",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-12 10:41:25",
+        "matched_keywords": [
+          "ceasefire"
+        ]
+      },
+      {
+        "title": "India’s retail inflation jumps to 5.54% in September, above estimates",
+        "link": "https://www.cnbc.com/2026/10/12/india-inflation-oil-energy-iran-war.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 12 Oct 2026 10:49:24 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Nobel prize in economics awarded to Robert E. Hall and Michael Woodford",
+        "link": "https://www.cnbc.com/2026/10/12/nobel-economics-prize-winner-woodford-hall.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 12 Oct 2026 14:09:02 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Geopolitical tensions in the Middle East continue to drive oil and gas prices higher following active tanker attacks in the Strait of Hormuz, while macroeconomic pressures mount with India reporting higher-than-expected retail inflation. Simultaneously, central bank updates and economic research models remain in focus as the Federal Reserve processes enforcement actions and survey data.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "NEUTRAL",
+      "weather_crop_signal": "DAMAGING",
+      "wheat_impact_category": "weather_crop_damage",
+      "usd_ils_impact": {
+        "direction": "NEUTRAL",
+        "reason": "The provided news items lack direct exchange rate drivers or monetary policy divergences specifically impacting the USD/ILS pair."
+      },
+      "key_risk": "Escalating maritime attacks in the Strait of Hormuz threatening global energy supply chains and shipping stability.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active drone and projectile strikes on oil tankers in the Strait of Hormuz are disrupting regional maritime transit and safety in real time.",
+      "wheat_impact": "BULLISH"
+    }
+  },
+  {
     "timestamp": "2026-10-12T02:31:19.100350+00:00",
     "total_scanned": 220,
     "flagged_count": 156,
@@ -31719,161 +31880,6 @@
       "usd_ils_impact": "NEUTRAL",
       "usd_ils_impact_reason": "Shifting Fed rate hike bets and fluctuating Middle East geopolitical risks present offsetting forces for regional currency pairs.",
       "key_risk": "Prolonged closure or severely restricted transit through the Strait of Hormuz keeping global energy and freight markets under extreme stress.",
-      "headline_overstated": false,
-      "headline_vs_article_note": ""
-    }
-  },
-  {
-    "timestamp": "2026-08-08T15:30:58.634935+00:00",
-    "total_scanned": 229,
-    "flagged_count": 170,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former chief lending officer of Heritage State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260716a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 16 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Dollar falls as Fed rate hike bets ease; yen set to hold intervention gains",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-rangebound-dollar-firms-amid-iran-peace-uncertainty-us-jobs-caution-4845065",
-        "source": "Investing.com Forex",
-        "published": "2026-08-07 19:34:05",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "US sanctions Dubai crypto exchange for aiding Iran’s IRGC, following a Reuters report",
-        "link": "https://www.investing.com/news/forex-news/us-sanctions-dubai-crypto-exchange-for-aiding-irans-irgc-following-a-reuters-report-4847273",
-        "source": "Investing.com Forex",
-        "published": "2026-08-07 17:49:10",
-        "matched_keywords": [
-          "sanction"
-        ]
-      },
-      {
-        "title": "Dollar firms on safe haven boost, rising yields; yen hits 158 after intervention",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-dollar-near-7wk-low-with-iran-talks-us-jobs-data-in-focus-4839999",
-        "source": "Investing.com Forex",
-        "published": "2026-08-06 18:39:23",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "Treasuries edge upward as traders weigh energy risks and divided Fed hike bets",
-        "link": "https://www.investing.com/news/forex-news/german-yields-hold-steady-at-3week-lows-as-easing-oil-cools-ecb-hike-bets-4840076",
-        "source": "Investing.com Forex",
-        "published": "2026-08-06 12:01:08",
-        "matched_keywords": [
-          "fed",
-          "war"
-        ]
-      },
-      {
-        "title": "Iran says deal on Strait of Hormuz is close but will not open the waterway by itself",
-        "link": "https://www.investing.com/news/commodities-news/iran-says-deal-on-strait-of-hormuz-is-close-but-will-not-open-the-waterway-by-itself-4847656",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-08 12:42:25",
-        "matched_keywords": [
-          "hormuz"
-        ]
-      },
-      {
-        "title": "Oil slides more than 8% for the week as traders hope for Hormuz reopening deal",
-        "link": "https://www.investing.com/news/commodities-news/oil-extends-sharp-gains-as-iran-seeks-to-ban-us-israeli-ships-from-hormuz-4844990",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-07 20:55:54",
-        "matched_keywords": [
-          "oil",
-          "hormuz"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Geopolitical friction in the Middle East continues to heavily impact energy markets, with the Strait of Hormuz remaining severely restricted despite potential talks, driving oil volatility and inflation concerns. Meanwhile, the Federal Reserve maintains a cautious stance on interest rates amid a 9-3 vote split, while the U.S. dollar reacts to shifting rate-hike expectations and safe-haven flows.",
-      "wheat_impact": "NEUTRAL with a 1-sentence reason: Grain logistics and agricultural trade flows are largely insulated from the immediate energy-focused maritime chokepoint disruptions in the Persian Gulf.",
-      "usd_ils_impact": "BULLISH with a 1-sentence reason: Ongoing Middle East geopolitical tensions and safe-haven demand typically strengthen the U.S. dollar relative to regional currencies like the Israeli Shekel.",
-      "key_risk": "A sudden escalation or permanent structural disruption in Middle Eastern shipping corridors driving a sustained secondary energy price shock.",
       "headline_overstated": false,
       "headline_vs_article_note": ""
     }
