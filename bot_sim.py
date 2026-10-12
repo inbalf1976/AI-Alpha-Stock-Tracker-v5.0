@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-bot_sim.py  --  READ-ONLY (created 2026-10-12, v2: adds variant B 'hold until stop or target' + ILS account sim)
+bot_sim.py  --  READ-ONLY (created 2026-10-12, v3: variants A close-at-next-plan, B hold, C market entry + ILS account sim)
 
 "Bot-mode" simulation: every time a weekly setup (entry / stop / target) is issued, it is pasted
 into the platform as three orders and then NOTHING is touched.
@@ -87,9 +87,38 @@ def run_plan(p, bars, optimistic, hold=False):
     return {"result": "FORCED", "pnl": sign * (p["exit_mkt"] - e) - SPREAD, "amb": False, "fill_ts": fill_ts, "exit_ts": p["end"]}
 
 
+def run_plan_market(p, bars, optimistic):
+    """Variant C: instead of a waiting order, she buys/sells AT MARKET when the setup arrives
+    (fill = Open of the first hourly bar at/after the plan's start hour; for a weekend start = the first bar when
+    the market reopens, only if that bar is within the plan's span). The plan's stop/target LEVELS stay as given.
+    Then held until stop or target is hit (no time limit); still open at the end of data = marked at last close."""
+    s, g, side = p["stop"], p["target"], p["side"]
+    seg = bars[bars.index >= p["start"].floor("h")]
+    if len(seg) == 0 or seg.index[0] > p["end"]:
+        return {"result": "NOFILL", "pnl": 0.0, "amb": False, "fill_ts": None, "exit_ts": None, "fill_px": None}
+    sign = 1 if side == "UP" else -1
+    fill_ts = seg.index[0]
+    e = float(seg["Open"].iloc[0])
+    amb = False
+    for ts, b in seg.iloc[1:].iterrows():
+        hit_stop = b["Low"] <= s if side == "UP" else b["High"] >= s
+        hit_tgt = b["High"] >= g if side == "UP" else b["Low"] <= g
+        if hit_stop and hit_tgt:
+            amb = True
+            hit_stop, hit_tgt = (False, True) if optimistic else (True, False)
+        if hit_stop:
+            px = b["Open"] if ((side == "UP" and b["Open"] < s) or (side == "DOWN" and b["Open"] > s)) else s
+            return {"result": "LOSS", "pnl": sign * (px - e) - SPREAD, "amb": amb, "fill_ts": fill_ts, "exit_ts": ts, "fill_px": e}
+        if hit_tgt:
+            px = b["Open"] if ((side == "UP" and b["Open"] > g) or (side == "DOWN" and b["Open"] < g)) else g
+            return {"result": "WIN", "pnl": sign * (px - e) - SPREAD, "amb": amb, "fill_ts": fill_ts, "exit_ts": ts, "fill_px": e}
+    lastc = float(seg["Close"].iloc[-1])
+    return {"result": "OPEN", "pnl": sign * (lastc - e) - SPREAD, "amb": False, "fill_ts": fill_ts, "exit_ts": seg.index[-1], "fill_px": e}
+
+
 def ils_sim(rows, plans, frac=None, lev=20, start=1000.0):
     """100 ILS margin per trade (frac=None) or frac of balance; trades applied in order of exit time."""
-    tr = sorted([(r["exit_ts"], r["pnl"], pl["entry"]) for r, pl in zip(rows, plans) if r["result"] in ("WIN", "LOSS", "FORCED", "OPEN")], key=lambda x: x[0])
+    tr = sorted([(r["exit_ts"], r["pnl"], r.get("fill_px", pl["entry"])) for r, pl in zip(rows, plans) if r["result"] in ("WIN", "LOSS", "FORCED", "OPEN")], key=lambda x: x[0])
     bal, peak, dd = start, start, 0.0
     for _, pnl, e in tr:
         stake = 100.0 if frac is None else bal * frac
@@ -152,9 +181,13 @@ def main():
             skipped.append({"week": p["week"], "start": str(p["start"])[:16], "why": "glitch-cleaned bars inside span"}); continue
         use.append(p)
     out = {}
+    res = {}
     for name, hold in (("A_CLOSE_AT_NEXT_PLAN", False), ("B_HOLD_UNTIL_STOP_OR_TARGET", True)):
         pe = [run_plan(p, bars, False, hold) for p in use]
         op = [run_plan(p, bars, True, hold) for p in use]
+        res[name] = (pe, op)
+    res["C_MARKET_ENTRY_THEN_HOLD"] = ([run_plan_market(p, bars, False) for p in use], [run_plan_market(p, bars, True) for p in use])
+    for name, (pe, op) in res.items():
         out[name] = {
             "PESSIMISTIC_(both-touched bar = stop first)": stats(pe),
             "OPTIMISTIC_(both-touched bar = target first)": stats(op),
@@ -164,12 +197,19 @@ def main():
                 "100_ILS_per_trade_1to20": ils_sim(pe, use),
                 "20pct_of_balance_per_trade_1to20": ils_sim(pe, use, 0.20),
             },
-            "per_plan": [{"week": p["week"], "start": str(p["start"])[:16], "side": p["side"], "result": r["result"],
-                          "pnl_c": round(r["pnl"], 2), "exit": str(r["exit_ts"])[:16] if r["exit_ts"] is not None else None}
+            "per_plan": [{"week": p["week"], "start": str(p["start"])[:16], "side": p["side"], "plan_entry": p["entry"],
+                          "market_fill": (round(r["fill_px"], 2) if r.get("fill_px") is not None else None),
+                          "result": r["result"], "pnl_c": round(r["pnl"], 2),
+                          "exit": str(r["exit_ts"])[:16] if r["exit_ts"] is not None else None}
                          for p, r in zip(use, pe)],
         }
+    bpe, cpe = res["B_HOLD_UNTIL_STOP_OR_TARGET"][0], res["C_MARKET_ENTRY_THEN_HOLD"][0]
+    extra = [c for b, c in zip(bpe, cpe) if b["result"] == "NOFILL" and c["result"] != "NOFILL"]
+    out["EXTRA_TRADES_ONLY_(plans where the waiting order never filled but market entry would have traded)"] = stats(extra)
+    out["EXTRA_TRADES_ONLY_(plans where the waiting order never filled but market entry would have traded)"]["avg_gap_c_between_plan_entry_and_market_fill"] = round(
+        stt.mean(abs(c["fill_px"] - p["entry"]) for b, c, p in zip(bpe, cpe, use) if b["result"] == "NOFILL" and c["result"] != "NOFILL"), 2) if extra else None
     rep = {
-        "assumptions": "entry/stop/target orders pasted at plan start, never touched; gap fills at open; spread 0.5c. A = unfinished plan closed at next plan's entry price. B = entry order valid until the plan ends, then stop/target kept until one is hit (positions can overlap; still open at the end of data = marked at last close)",
+        "assumptions": "entry/stop/target orders pasted at plan start, never touched; gap fills at open; spread 0.5c. A = unfinished plan closed at next plan's entry price. B = entry order valid until the plan ends, then stop/target kept until one is hit (positions can overlap; still open at the end of data = marked at last close). C = no waiting order: enter AT MARKET (open of the first hourly bar at/after the plan start) with the plan's stop/target levels, then hold",
         "plans_simulated": len(use), "plans_skipped": skipped, **out,
     }
     txt = json.dumps(rep, indent=2, default=str)
