@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-bot_sim.py  --  READ-ONLY (created 2026-10-12)
+bot_sim.py  --  READ-ONLY (created 2026-10-12, v2: adds variant B 'hold until stop or target' + ILS account sim)
 
 "Bot-mode" simulation: every time a weekly setup (entry / stop / target) is issued, it is pasted
 into the platform as three orders and then NOTHING is touched.
@@ -52,14 +52,19 @@ def load_plans():
     return plans
 
 
-def run_plan(p, bars, optimistic):
-    """returns dict(result, pnl_cents) ; result in NOFILL, WIN, LOSS, FORCED, OPEN"""
+def run_plan(p, bars, optimistic, hold=False):
+    """hold=False: position closed at next plan's entry price (variant A).
+    hold=True : entry order only valid until the plan ends; once filled, stop/target orders are
+    left alone until one is hit (no time limit); still open at the end of the data = marked at the last close (variant B)."""
     e, s, g, side = p["entry"], p["stop"], p["target"], p["side"]
-    seg = bars[(bars.index >= p["start"].floor("h")) & (bars.index <= p["end"])]
+    last = bars.index.max() if hold else p["end"]
+    seg = bars[(bars.index >= p["start"].floor("h")) & (bars.index <= last)]
     sign = 1 if side == "UP" else -1
     filled, fill_ts, amb = False, None, False
     for ts, b in seg.iterrows():
         if not filled:
+            if hold and ts > p["end"]:
+                break
             if b["Low"] <= e <= b["High"]:
                 filled, fill_ts = True, ts
             continue                      # exits are checked from the bar AFTER the fill
@@ -70,20 +75,47 @@ def run_plan(p, bars, optimistic):
             hit_stop, hit_tgt = (False, True) if optimistic else (True, False)
         if hit_stop:
             px = b["Open"] if ((side == "UP" and b["Open"] < s) or (side == "DOWN" and b["Open"] > s)) else s
-            return {"result": "LOSS", "pnl": sign * (px - e) - SPREAD, "amb": amb}
+            return {"result": "LOSS", "pnl": sign * (px - e) - SPREAD, "amb": amb, "fill_ts": fill_ts, "exit_ts": ts}
         if hit_tgt:
             px = b["Open"] if ((side == "UP" and b["Open"] > g) or (side == "DOWN" and b["Open"] < g)) else g
-            return {"result": "WIN", "pnl": sign * (px - e) - SPREAD, "amb": amb}
+            return {"result": "WIN", "pnl": sign * (px - e) - SPREAD, "amb": amb, "fill_ts": fill_ts, "exit_ts": ts}
     if not filled:
-        return {"result": "NOFILL", "pnl": 0.0, "amb": False}
-    return {"result": "FORCED", "pnl": sign * (p["exit_mkt"] - e) - SPREAD, "amb": False}
+        return {"result": "NOFILL", "pnl": 0.0, "amb": False, "fill_ts": None, "exit_ts": None}
+    if hold:
+        lastc = float(seg["Close"].iloc[-1])
+        return {"result": "OPEN", "pnl": sign * (lastc - e) - SPREAD, "amb": False, "fill_ts": fill_ts, "exit_ts": seg.index[-1]}
+    return {"result": "FORCED", "pnl": sign * (p["exit_mkt"] - e) - SPREAD, "amb": False, "fill_ts": fill_ts, "exit_ts": p["end"]}
+
+
+def ils_sim(rows, plans, frac=None, lev=20, start=1000.0):
+    """100 ILS margin per trade (frac=None) or frac of balance; trades applied in order of exit time."""
+    tr = sorted([(r["exit_ts"], r["pnl"], pl["entry"]) for r, pl in zip(rows, plans) if r["result"] in ("WIN", "LOSS", "FORCED", "OPEN")], key=lambda x: x[0])
+    bal, peak, dd = start, start, 0.0
+    for _, pnl, e in tr:
+        stake = 100.0 if frac is None else bal * frac
+        bal += min(stake, bal) * lev * pnl / e
+        peak = max(peak, bal)
+        dd = max(dd, (peak - bal) / peak)
+    return {"end_balance_ils": round(bal), "worst_drop_pct": round(dd * 100)}
+
+
+def max_open(rows):
+    ev = []
+    for r in rows:
+        if r["fill_ts"] is not None:
+            ev += [(r["fill_ts"], 1), (r["exit_ts"], -1)]
+    cur = mx = 0
+    for _, d in sorted(ev, key=lambda x: (x[0], x[1])):
+        cur += d
+        mx = max(mx, cur)
+    return mx
 
 
 def stats(rows):
-    tr = [r for r in rows if r["result"] in ("WIN", "LOSS", "FORCED")]
+    tr = [r for r in rows if r["result"] in ("WIN", "LOSS", "FORCED", "OPEN")]
     w = [r["pnl"] for r in tr if r["result"] == "WIN"]
     l = [r["pnl"] for r in tr if r["result"] == "LOSS"]
-    f = [r["pnl"] for r in tr if r["result"] == "FORCED"]
+    f = [r["pnl"] for r in tr if r["result"] in ("FORCED", "OPEN")]
     cum, peak, dd, cur_l, worst_l = 0.0, 0.0, 0.0, 0, 0
     for r in tr:
         cum += r["pnl"]
@@ -94,7 +126,7 @@ def stats(rows):
     tot = sum(r["pnl"] for r in tr)
     return {
         "trades": len(tr), "no_fill": sum(r["result"] == "NOFILL" for r in rows),
-        "wins": len(w), "losses": len(l), "forced_exits": len(f),
+        "wins": len(w), "losses": len(l), "forced_or_still_open": len(f),
         "avg_win_c": round(stt.mean(w), 2) if w else None, "avg_loss_c": round(stt.mean(l), 2) if l else None,
         "avg_forced_c": round(stt.mean(f), 2) if f else None, "forced_positive": sum(x > 0 for x in f),
         "win_rate_of_all_trades": round(sum(x > 0 for x in [r["pnl"] for r in tr]) / len(tr), 3) if tr else None,
@@ -119,18 +151,26 @@ def main():
         if len(bad) and ((bad >= p["start"].floor("h")) & (bad <= p["end"])).any():
             skipped.append({"week": p["week"], "start": str(p["start"])[:16], "why": "glitch-cleaned bars inside span"}); continue
         use.append(p)
-    pess = [dict(run_plan(p, bars, False), week=p["week"], start=str(p["start"])[:16], side=p["side"]) for p in use]
-    opt = [run_plan(p, bars, True) for p in use]
-    for r, o in zip(pess, opt):
-        r["optimistic_result"], r["optimistic_pnl"] = o["result"], round(o["pnl"], 2)
-        r["pnl"] = round(r["pnl"], 2)
-    o_rows = [{"result": r["optimistic_result"], "pnl": r["optimistic_pnl"]} for r in pess]
+    out = {}
+    for name, hold in (("A_CLOSE_AT_NEXT_PLAN", False), ("B_HOLD_UNTIL_STOP_OR_TARGET", True)):
+        pe = [run_plan(p, bars, False, hold) for p in use]
+        op = [run_plan(p, bars, True, hold) for p in use]
+        out[name] = {
+            "PESSIMISTIC_(both-touched bar = stop first)": stats(pe),
+            "OPTIMISTIC_(both-touched bar = target first)": stats(op),
+            "ambiguous_bars": sum(r["amb"] for r in pe),
+            "max_positions_open_at_once": max_open(pe),
+            "ILS_1000_start_pessimistic": {
+                "100_ILS_per_trade_1to20": ils_sim(pe, use),
+                "20pct_of_balance_per_trade_1to20": ils_sim(pe, use, 0.20),
+            },
+            "per_plan": [{"week": p["week"], "start": str(p["start"])[:16], "side": p["side"], "result": r["result"],
+                          "pnl_c": round(r["pnl"], 2), "exit": str(r["exit_ts"])[:16] if r["exit_ts"] is not None else None}
+                         for p, r in zip(use, pe)],
+        }
     rep = {
-        "assumptions": "entry/stop/target orders pasted at plan start, never touched; gap fills at open; spread 0.5c; unfinished plan closed at next plan's entry price",
-        "plans_simulated": len(use), "plans_skipped": skipped,
-        "PESSIMISTIC_(both-touched bar = stop first)": stats(pess),
-        "OPTIMISTIC_(both-touched bar = target first)": stats(o_rows),
-        "ambiguous_bars": sum(r["amb"] for r in pess), "per_plan": pess,
+        "assumptions": "entry/stop/target orders pasted at plan start, never touched; gap fills at open; spread 0.5c. A = unfinished plan closed at next plan's entry price. B = entry order valid until the plan ends, then stop/target kept until one is hit (positions can overlap; still open at the end of data = marked at last close)",
+        "plans_simulated": len(use), "plans_skipped": skipped, **out,
     }
     txt = json.dumps(rep, indent=2, default=str)
     print(txt)
