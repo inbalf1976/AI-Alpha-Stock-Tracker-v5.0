@@ -75,10 +75,13 @@ def bad_hourly_dates(hourly):
         return set()
 
 
-def compute_outcomes_touch(daily, hourly, bad_dates=frozenset()):
+def compute_outcomes_touch(daily, hourly, bad_dates=frozenset(), entry_mode="close"):
+    """entry_mode 'close' = daily Close (as before); 'next_open' = Open of the first hourly bar of the next
+    session (CONTROL: removes any close-to-open gap / data-alignment effect)."""
     dd = daily.index.normalize().unique()
     hd = hourly.index.normalize().values
     hi, lo = hourly["High"].values, hourly["Low"].values
+    op = hourly["Open"].values
     up, dn, dropped = {}, {}, 0
     for i in range(len(dd) - 1 - H):
         d = dd[i]
@@ -90,6 +93,8 @@ def compute_outcomes_touch(daily, hourly, bad_dates=frozenset()):
         b = np.searchsorted(hd, np.datetime64(dd[i + H]), side="right")
         if b <= a:
             continue
+        if entry_mode == "next_open":
+            entry = float(op[a])
         up[d] = first_touch(hi[a:b], lo[a:b], entry, "UP")
         dn[d] = first_touch(hi[a:b], lo[a:b], entry, "DOWN")
     return pd.Series(up, dtype=float), pd.Series(dn, dtype=float), dropped
@@ -146,6 +151,9 @@ def main():
     bad = bad_hourly_dates(hourly)
     up, dn, dropped = compute_outcomes_touch(daily, hourly, bad)
     print(f"entries dropped for glitch/roll windows: {dropped}")
+    # CONTROL: same test, but enter at the next session's first hourly OPEN instead of the daily Close
+    c_up, c_dn, _ = compute_outcomes_touch(daily, hourly, bad, entry_mode="next_open")
+    ctrl = {"UP": disjoint(c_up), "DOWN": disjoint(c_dn)}
     o_up, o_dn = bt.compute_outcomes(daily, hourly)
     orig = {"UP": round(float(o_up.mean()), 3), "DOWN": round(float(o_dn.mean()), 3)}
     side_out = {"UP": up, "DOWN": dn}
@@ -163,6 +171,21 @@ def main():
             continue
         print(f"  always {side:<4} n/set={d['n_per_set']:<4} win {d['win']:.1%} ({d['win_min']:.1%}-{d['win_max']:.1%})  "
               f"exp {d['exp_R']:+.2f}R  after {COST:.2%} cost {d['exp_R_cost']:+.2f}R")
+
+    print("\nCONTROL (enter at next session's first hourly open; non-overlapping):")
+    for side in ("UP", "DOWN"):
+        d = ctrl[side]
+        if d["win"] is not None:
+            print(f"  always {side:<4} n/set={d['n_per_set']:<4} win {d['win']:.1%} ({d['win_min']:.1%}-{d['win_max']:.1%})  "
+                  f"exp {d['exp_R']:+.2f}R  after cost {d['exp_R_cost']:+.2f}R")
+    if head["UP"]["win"] is not None and head["DOWN"]["win"] is not None:
+        gap = head["UP"]["win"] - head["DOWN"]["win"]
+        cgap = ctrl["UP"]["win"] - ctrl["DOWN"]["win"] if ctrl["UP"]["win"] is not None and ctrl["DOWN"]["win"] is not None else None
+        print(f"  asymmetry check: UP minus DOWN win rate = {gap:+.1%} (entry at daily close)"
+              + (f" vs {cgap:+.1%} (entry at next open)." if cgap is not None else "."))
+        if abs(gap) > 0.15:
+            print("  A gap this large is more than wheat's daily drift should produce. If the control gap is much smaller, "
+                  "the close-entry result was partly a gap/alignment artifact; if similar, the asymmetry is in the price path itself.")
 
     # ---- regime split (entry-day close vs SMA50)
     reg_rows = []
@@ -233,7 +256,7 @@ def main():
               f"the holdout baseline. ~{0.025 * len(tab):.1f} would pass by chance alone. vol_* rows: volume data is unreliable.")
     json.dump({"stop_pct": S, "target_pct": T, "horizon_days": H, "cost_pct": COST, "breakeven": round(BREAKEVEN, 3),
                "split_date": str(split.date()), "original_baseline": orig, "undecided_share": und,
-               "entries_dropped_glitch": dropped, "always_side_nonoverlapping": head,
+               "entries_dropped_glitch": dropped, "always_side_nonoverlapping": head, "control_next_open": ctrl,
                "baseline_train": base_tr, "baseline_holdout": base_ho, "n_tests": int(len(tab)),
                "n_beating_same_side_baseline": int(tab.beats_same_side_baseline.sum()) if not tab.empty else 0},
               open("backtest_touch_results.json", "w"), indent=2, default=str)
