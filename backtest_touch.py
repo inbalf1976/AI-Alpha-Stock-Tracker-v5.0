@@ -110,11 +110,38 @@ def main():
 
     dates = df.index.sort_values()
     split = dates[int(len(dates) * bt.TRAIN_FRACTION)]
+
+    # same-side baselines ("always UP" / "always DOWN") for train, holdout and each calendar quarter
+    side_out = {"UP": up, "DOWN": dn}
+    base_tr, base_ho = {}, {}
+    for side, out in side_out.items():
+        al = df[df.index.isin(out.index)]
+        r = out.reindex(al.index)
+        base_tr[side] = summarize(r[al.index < split])
+        base_ho[side] = summarize(r[al.index >= split])
+    print("\nSAME-SIDE BASELINES (no condition, decided days only):")
+    for side in ("UP", "DOWN"):
+        print(f"  always {side:<4}  train win {base_tr[side]['win']:.1%} (n={base_tr[side]['n_decided']})   "
+              f"holdout win {base_ho[side]['win']:.1%} (n={base_ho[side]['n_decided']})   exp_R holdout {base_ho[side]['exp_R']}")
+
+    # by calendar quarter: how did plain "always UP" / "always DOWN" behave when the market changed?
+    quarters = []
+    for side, out in side_out.items():
+        o = out.copy()
+        o.index = pd.DatetimeIndex(o.index)
+        for q, grp in o.groupby(o.index.to_period("Q")):
+            sm = summarize(grp)
+            quarters.append(dict(quarter=str(q), side=side, **sm))
+    qtab = pd.DataFrame(quarters)
+    print("\nBY QUARTER (always-UP / always-DOWN, decided days):")
+    if not qtab.empty:
+        print(qtab[["quarter", "side", "n_decided", "win", "exp_R"]].to_string(index=False))
+
     rows = []
     for cond in CONDITIONS:
         if cond not in df.columns:
             continue
-        for side, out in (("UP", up), ("DOWN", dn)):
+        for side, out in side_out.items():
             al = df[df.index.isin(out.index)]
             r = out.reindex(al.index)
             m = al[cond] == 1
@@ -122,27 +149,36 @@ def main():
             ho = summarize(r[m & (al.index >= split)])
             if tr["n_days"] < 10:
                 continue
-            ok = (ho["ci_lo"] is not None and ho["ci_lo"] > BREAKEVEN and tr["win"] is not None and tr["win"] > BREAKEVEN)
+            b_tr, b_ho = base_tr[side]["win"], base_ho[side]["win"]
+            tr_lift = None if (tr["win"] is None or b_tr is None) else round(tr["win"] - b_tr, 3)
+            ho_lift = None if (ho["win"] is None or b_ho is None) else round(ho["win"] - b_ho, 3)
+            # a real edge must beat the SAME-SIDE baseline in train, and the holdout 95% CI-low must clear the holdout baseline
+            beats = bool(tr_lift is not None and tr_lift > 0 and ho["ci_lo"] is not None and b_ho is not None
+                         and ho["ci_lo"] > b_ho)
             rows.append(dict(condition=cond, side=side, volume_suspect=cond in VOLUME_SUSPECT,
-                             **{f"train_{k}": v for k, v in tr.items()}, **{f"hold_{k}": v for k, v in ho.items()},
-                             beats_breakeven_both=ok))
+                             **{f"train_{k}": v for k, v in tr.items()}, train_base=b_tr, train_lift=tr_lift,
+                             **{f"hold_{k}": v for k, v in ho.items()}, hold_base=b_ho, hold_lift=ho_lift,
+                             beats_same_side_baseline=beats))
     tab = pd.DataFrame(rows)
     tab.to_csv("backtest_touch_conditions.csv", index=False)
-    pd.set_option("display.width", 220)
-    cols = ["condition", "side", "train_n_decided", "train_win", "hold_n_decided", "hold_win", "hold_ci_lo", "hold_ci_hi",
-            "hold_exp_R", "beats_breakeven_both"]
+    qtab.to_csv("backtest_touch_quarters.csv", index=False)
+    pd.set_option("display.width", 240)
+    cols = ["condition", "side", "train_n_decided", "train_win", "train_lift", "hold_n_decided", "hold_win",
+            "hold_base", "hold_lift", "hold_ci_lo", "hold_ci_hi", "beats_same_side_baseline"]
     if not tab.empty:
-        print("\nCONDITIONS (decided days only; holdout = most recent %.0f%%):" % (100 * (1 - bt.TRAIN_FRACTION)))
-        print(tab.sort_values("hold_exp_R", ascending=False)[cols].head(20).to_string(index=False))
-        n_ok = int(tab.beats_breakeven_both.sum())
-        print(f"\n{n_ok} of {len(tab)} condition/side tests have train win AND holdout 95% CI-low above break-even "
-              f"({BREAKEVEN:.1%}). With {len(tab)} tests, ~{0.025 * len(tab):.1f} would pass by chance alone.")
+        print("\nCONDITIONS vs SAME-SIDE BASELINE (sorted by holdout lift; lift = condition win rate minus plain always-same-side):")
+        print(tab.sort_values("hold_lift", ascending=False)[cols].head(20).to_string(index=False))
+        n_ok = int(tab.beats_same_side_baseline.sum())
+        print(f"\n{n_ok} of {len(tab)} condition/side tests beat their same-side baseline in train AND have a holdout "
+              f"95% CI-low above the holdout baseline. With {len(tab)} tests, ~{0.025 * len(tab):.1f} would pass by chance alone.")
+        print("Volume conditions (vol_*) are flagged volume_suspect: Yahoo ZW=F volume lags, so treat them as unreliable.")
     json.dump({"stop_pct": S, "target_pct": T, "horizon_days": HORIZON_DAYS, "breakeven": round(BREAKEVEN, 3),
                "split_date": str(split.date()), "original_baseline": orig, "touch_baseline": base,
-               "undecided_share": und, "n_tests": int(len(tab)),
-               "n_beating_breakeven": int(tab.beats_breakeven_both.sum()) if not tab.empty else 0},
+               "undecided_share": und, "baseline_train": base_tr, "baseline_holdout": base_ho,
+               "n_tests": int(len(tab)),
+               "n_beating_same_side_baseline": int(tab.beats_same_side_baseline.sum()) if not tab.empty else 0},
               open("backtest_touch_results.json", "w"), indent=2, default=str)
-    print("\nSaved backtest_touch_results.json and backtest_touch_conditions.csv "
+    print("\nSaved backtest_touch_results.json, backtest_touch_conditions.csv and backtest_touch_quarters.csv "
           "(backtest_results.json / validated_conditions.json were NOT touched).")
 
 
