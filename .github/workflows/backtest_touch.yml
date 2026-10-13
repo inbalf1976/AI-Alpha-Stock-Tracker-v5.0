@@ -42,5 +42,6 @@ jobs:
           path: |
             backtest_touch_results.json
             backtest_touch_conditions.csv
+            backtest_touch_quarters.csv
           if-no-files-found: error
           retention-days: 30
