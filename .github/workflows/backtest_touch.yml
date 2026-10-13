@@ -1,0 +1,46 @@
+name: Touch-Only Backtest (read-only, does NOT touch validated_conditions.json)
+
+on:
+  workflow_dispatch:
+    inputs:
+      horizon_days:
+        description: "Trading days an outcome window stays open (1 = next day like backtest.py, 5 = weekly-style)"
+        required: false
+        default: "1"
+
+permissions:
+  contents: read
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install yfinance pandas numpy scikit-learn
+
+      - name: Run touch-only backtest
+        env:
+          HORIZON_DAYS: ${{ inputs.horizon_days || '1' }}
+          PYTHONUNBUFFERED: "1"
+        run: python backtest_touch.py
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: backtest-touch-results
+          path: |
+            backtest_touch_results.json
+            backtest_touch_conditions.csv
+          if-no-files-found: error
+          retention-days: 30
