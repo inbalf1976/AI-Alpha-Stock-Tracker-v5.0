@@ -2,6 +2,9 @@
 """
 backtest_touch.py -- touch-only re-score of backtest.py (READ-ONLY w.r.t. the live system).
 
+v4: ENTRY_MODE now defaults to next_open (the old 'enter at daily Close' mode was shown to inflate buy-side
+results ~30 points; a control run removed the buy/sell asymmetry). Alignment diagnostic added.
+
 v3 additions (vs v2):
   * NON-OVERLAPPING samples: with a H-day window, entries every day overlap, so n is inflated ~H-fold.
     Headline "always UP / always DOWN" numbers are now computed on H disjoint entry sets (one per offset)
@@ -30,6 +33,7 @@ import backtest as bt
 H = int(os.getenv("HORIZON_DAYS", "1"))
 HORIZON_DAYS = H
 COST = float(os.getenv("COST_PCT", "0.001"))
+ENTRY_MODE = os.getenv("ENTRY_MODE", "next_open")   # next_open (default, fair) | close (old method, inflated)
 S, T = bt.STOP_PCT, bt.TARGET_PCT
 BREAKEVEN = S / (S + T)
 CONDITIONS = ['above_sma20', 'above_sma50', 'trend_aligned', 'rsi_oversold', 'rsi_overbought', 'rsi_neutral',
@@ -75,7 +79,8 @@ def bad_hourly_dates(hourly):
         return set()
 
 
-def compute_outcomes_touch(daily, hourly, bad_dates=frozenset(), entry_mode="close"):
+def compute_outcomes_touch(daily, hourly, bad_dates=frozenset(), entry_mode=None):
+    entry_mode = entry_mode or ENTRY_MODE
     """entry_mode 'close' = daily Close (as before); 'next_open' = Open of the first hourly bar of the next
     session (CONTROL: removes any close-to-open gap / data-alignment effect)."""
     dd = daily.index.normalize().unique()
@@ -98,6 +103,27 @@ def compute_outcomes_touch(daily, hourly, bad_dates=frozenset(), entry_mode="clo
         up[d] = first_touch(hi[a:b], lo[a:b], entry, "UP")
         dn[d] = first_touch(hi[a:b], lo[a:b], entry, "DOWN")
     return pd.Series(up, dtype=float), pd.Series(dn, dtype=float), dropped
+
+
+def alignment_diag(daily, hourly):
+    """Why does entering at the daily Close look so different from entering at the next open? Measure it."""
+    dclose = daily["Close"].copy()
+    dclose.index = daily.index.normalize()
+    dclose = dclose[~dclose.index.duplicated(keep="last")]
+    g = hourly.groupby(hourly.index.normalize())
+    last_close, first_open = g["Close"].last(), g["Open"].first()
+    same_day = (last_close.reindex(dclose.index) / dclose - 1).dropna()
+    nxt = pd.Series(first_open.shift(-1).reindex(dclose.index).values, index=dclose.index)
+    gap = (nxt / dclose - 1).dropna()
+    def line(name, x):
+        q = x.quantile([0.05, 0.5, 0.95])
+        return (f"  {name:<44} mean {x.mean():+.3%}  median {q[0.5]:+.3%}  5%/95% {q[0.05]:+.2%}/{q[0.95]:+.2%}  "
+                f"share>0 {100 * (x > 0).mean():.0f}%")
+    print("\nALIGNMENT DIAGNOSTIC (should be ~0 mean and ~50% positive if daily and hourly data line up):")
+    print(line("last hourly close of day vs daily Close", same_day))
+    print(line("next session first hourly open vs daily Close", gap))
+    return {"same_day_mean": round(float(same_day.mean()), 5), "next_open_gap_mean": round(float(gap.mean()), 5),
+            "same_day_share_pos": round(float((same_day > 0).mean()), 3), "gap_share_pos": round(float((gap > 0).mean()), 3)}
 
 
 def wilson(k, n, z=1.96):
@@ -143,7 +169,7 @@ def disjoint(res, mask=None):
 
 def main():
     print("=" * 70)
-    print(f"TOUCH-ONLY BACKTEST v3 | stop {S:.1%} target {T:.1%} | horizon {H} trading day(s)")
+    print(f"TOUCH-ONLY BACKTEST v4 | stop {S:.1%} target {T:.1%} | horizon {H} trading day(s) | entry: {ENTRY_MODE}")
     print(f"break-even win rate: {BREAKEVEN:.1%} | assumed round-trip cost: {COST:.2%} of price (financing not modelled)")
     print("=" * 70)
     daily, hourly, corn, soy = bt.fetch_data()
@@ -151,8 +177,9 @@ def main():
     bad = bad_hourly_dates(hourly)
     up, dn, dropped = compute_outcomes_touch(daily, hourly, bad)
     print(f"entries dropped for glitch/roll windows: {dropped}")
-    # CONTROL: same test, but enter at the next session's first hourly OPEN instead of the daily Close
-    c_up, c_dn, _ = compute_outcomes_touch(daily, hourly, bad, entry_mode="next_open")
+    diag = alignment_diag(daily, hourly)
+    # COMPARISON: the old method (enter at the daily Close) - shown only to expose the inflation
+    c_up, c_dn, _ = compute_outcomes_touch(daily, hourly, bad, entry_mode="close" if ENTRY_MODE != "close" else "next_open")
     ctrl = {"UP": disjoint(c_up), "DOWN": disjoint(c_dn)}
     o_up, o_dn = bt.compute_outcomes(daily, hourly)
     orig = {"UP": round(float(o_up.mean()), 3), "DOWN": round(float(o_dn.mean()), 3)}
@@ -172,20 +199,17 @@ def main():
         print(f"  always {side:<4} n/set={d['n_per_set']:<4} win {d['win']:.1%} ({d['win_min']:.1%}-{d['win_max']:.1%})  "
               f"exp {d['exp_R']:+.2f}R  after {COST:.2%} cost {d['exp_R_cost']:+.2f}R")
 
-    print("\nCONTROL (enter at next session's first hourly open; non-overlapping):")
+    other = "daily Close (old, inflated)" if ENTRY_MODE != "close" else "next open"
+    print(f"\nCOMPARISON (entry at {other}; non-overlapping):")
     for side in ("UP", "DOWN"):
         d = ctrl[side]
         if d["win"] is not None:
             print(f"  always {side:<4} n/set={d['n_per_set']:<4} win {d['win']:.1%} ({d['win_min']:.1%}-{d['win_max']:.1%})  "
                   f"exp {d['exp_R']:+.2f}R  after cost {d['exp_R_cost']:+.2f}R")
-    if head["UP"]["win"] is not None and head["DOWN"]["win"] is not None:
-        gap = head["UP"]["win"] - head["DOWN"]["win"]
-        cgap = ctrl["UP"]["win"] - ctrl["DOWN"]["win"] if ctrl["UP"]["win"] is not None and ctrl["DOWN"]["win"] is not None else None
-        print(f"  asymmetry check: UP minus DOWN win rate = {gap:+.1%} (entry at daily close)"
-              + (f" vs {cgap:+.1%} (entry at next open)." if cgap is not None else "."))
-        if abs(gap) > 0.15:
-            print("  A gap this large is more than wheat's daily drift should produce. If the control gap is much smaller, "
-                  "the close-entry result was partly a gap/alignment artifact; if similar, the asymmetry is in the price path itself.")
+    if head["UP"]["win"] is not None and head["DOWN"]["win"] is not None and ctrl["UP"]["win"] is not None:
+        print(f"  UP-minus-DOWN win gap: {head['UP']['win'] - head['DOWN']['win']:+.1%} (entry {ENTRY_MODE}) vs "
+              f"{ctrl['UP']['win'] - ctrl['DOWN']['win']:+.1%} (comparison). A fair test on a market with little drift "
+              f"should show UP and DOWN close to each other.")
 
     # ---- regime split (entry-day close vs SMA50)
     reg_rows = []
@@ -256,7 +280,7 @@ def main():
               f"the holdout baseline. ~{0.025 * len(tab):.1f} would pass by chance alone. vol_* rows: volume data is unreliable.")
     json.dump({"stop_pct": S, "target_pct": T, "horizon_days": H, "cost_pct": COST, "breakeven": round(BREAKEVEN, 3),
                "split_date": str(split.date()), "original_baseline": orig, "undecided_share": und,
-               "entries_dropped_glitch": dropped, "always_side_nonoverlapping": head, "control_next_open": ctrl,
+               "entries_dropped_glitch": dropped, "always_side_nonoverlapping": head, "comparison_other_entry": ctrl, "entry_mode": ENTRY_MODE, "alignment": diag,
                "baseline_train": base_tr, "baseline_holdout": base_ho, "n_tests": int(len(tab)),
                "n_beating_same_side_baseline": int(tab.beats_same_side_baseline.sum()) if not tab.empty else 0},
               open("backtest_touch_results.json", "w"), indent=2, default=str)
