@@ -1,5 +1,169 @@
 [
   {
+    "timestamp": "2026-10-14T02:01:12.275014+00:00",
+    "total_scanned": 229,
+    "flagged_count": 159,
+    "flagged_headlines": [
+      {
+        "title": "The latest inflation data is expected to show price increases are accelerating",
+        "link": "https://www.cnbc.com/2026/10/13/september-consumer-price-index-inflation.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 13 Oct 2026 18:05:57 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "IMF warns bond yields could see a 'disorderly' spike as debt, inflation risks worsen",
+        "link": "https://www.cnbc.com/2026/10/13/treasury-yields-imf-debt-inflation-.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 13 Oct 2026 04:54:07 GMT",
+        "matched_keywords": [
+          "inflation",
+          "war",
+          "yield"
+        ]
+      },
+      {
+        "title": "IMF sees milder global slowdown as AI boom offsets war hit — warns resilience is nearing limits",
+        "link": "https://www.cnbc.com/2026/10/12/imf-world-bank-annual-meetings-october-bangkok-asia-.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 13 Oct 2026 04:10:49 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "India’s retail inflation jumps to 5.54% in September, above estimates",
+        "link": "https://www.cnbc.com/2026/10/12/india-inflation-oil-energy-iran-war.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 12 Oct 2026 10:49:24 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Nobel prize in economics awarded to Robert E. Hall and Michael Woodford",
+        "link": "https://www.cnbc.com/2026/10/12/nobel-economics-prize-winner-woodford-hall.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 12 Oct 2026 14:09:02 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "World Bank jobs council urges 'crisis-era' employment support measures as IMF warns of AI ‘tsunami’",
+        "link": "https://www.cnbc.com/2026/10/12/imf-world-bank-ai-jobs-inflation-.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 13 Oct 2026 13:09:55 GMT",
+        "matched_keywords": [
+          "war",
+          "warns of"
+        ]
+      },
+      {
+        "title": "Americans' debt problems are flashing a warning not seen since the Great Recession",
+        "link": "https://www.cnbc.com/2026/10/09/american-debt-delinquency.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 09 Oct 2026 19:18:24 GMT",
+        "matched_keywords": [
+          "war",
+          "recession"
+        ]
+      },
+      {
+        "title": "Treasury's Bessent hires Trump's controversial former Fed board pick, Judy Shelton, as advisor",
+        "link": "https://www.cnbc.com/2026/10/09/judy-shelton-scott-bessent-treasury.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 09 Oct 2026 13:09:19 GMT",
+        "matched_keywords": [
+          "fed",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Inflation on many everyday items was entirely due to tariffs, NY Fed says",
+        "link": "https://www.cnbc.com/2026/10/08/inflation-tariffs-trump-fed-consumer-goods.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 08 Oct 2026 17:31:03 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "tariff"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global macroeconomic pressures are intensifying as consumer price inflation accelerates in the U.S. and India, driven largely by sustained high energy costs and Middle East conflict risks. Concurrently, the IMF warns of mounting sovereign debt and potential disorderly spikes in bond yields, while physical disruptions persist in the Strait of Hormuz.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "DAMAGING",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating Middle East conflict threatening critical maritime chokepoints and driving persistent energy-led global inflation.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Multiple vessel attacks and ongoing strikes in and around the Strait of Hormuz are actively disrupting regional crude and maritime transit flows.",
+      "wheat_impact": "NEUTRAL"
+    }
+  },
+  {
     "timestamp": "2026-10-13T19:53:57.626713+00:00",
     "total_scanned": 229,
     "flagged_count": 162,
@@ -31718,164 +31882,6 @@
       "usd_ils_impact": "BULLISH",
       "usd_ils_impact_reason": "The U.S. dollar is attempting to snap a two-week losing streak as rate-hike odds moderate, while persistent geopolitical risks surrounding the Iran conflict support safe-haven demand.",
       "key_risk": "Prolonged Middle East conflict disruption in the Strait of Hormuz and Red Sea choking energy and commodity supply chains, driving up inflation.",
-      "headline_overstated": false,
-      "headline_vs_article_note": ""
-    }
-  },
-  {
-    "timestamp": "2026-08-12T16:26:26.389075+00:00",
-    "total_scanned": 226,
-    "flagged_count": 168,
-    "flagged_headlines": [
-      {
-        "title": "Sterling today: Pound gains as dollar softens on in-line U.S. CPI",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-flat-as-dollar-steadies-before-us-cpi-test-4853900",
-        "source": "Investing.com Forex",
-        "published": "2026-08-12 13:01:03",
-        "matched_keywords": [
-          "cpi"
-        ]
-      },
-      {
-        "title": "Dollar falls as tame U.S. inflation dims Fed rate-hike bets",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-dollar-tread-water-ahead-of-us-cpi-hormuz-tensions-lift-oil-4853635",
-        "source": "Investing.com Forex",
-        "published": "2026-08-12 12:48:12",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "U.S. two-year yield edges slightly as on-target CPI softens Sept rate-hike fears",
-        "link": "https://www.investing.com/news/forex-news/german-yields-hover-oneweek-highs-as-oil-spikes-for-sixth-day-us-cpi-in-focus-4853748",
-        "source": "Investing.com Forex",
-        "published": "2026-08-12 12:41:44",
-        "matched_keywords": [
-          "cpi",
-          "yield"
-        ]
-      },
-      {
-        "title": "Dollar flat a day ahead of key CPI data; yen gives up more intervention gains",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-dollar-muted-with-us-cpi-on-tap-rba-holds-rates-4850775",
-        "source": "Investing.com Forex",
-        "published": "2026-08-11 20:34:05",
-        "matched_keywords": [
-          "cpi"
-        ]
-      },
-      {
-        "title": "Treasuries extend losses as 10-Year yield nears highest level since January 2025",
-        "link": "https://www.investing.com/news/forex-news/german-yields-rebound-to-highest-since-aug-3-as-energy-spike-stokes-fear-4850909",
-        "source": "Investing.com Forex",
-        "published": "2026-08-11 12:41:34",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound drifts lower as dollar steadies before U.S. CPI",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-drifts-lower-as-dollar-steadies-before-us-cpi-4851256",
-        "source": "Investing.com Forex",
-        "published": "2026-08-11 11:08:38",
-        "matched_keywords": [
-          "cpi"
-        ]
-      },
-      {
-        "title": "US crude oil inventories jump by most since January 2023",
-        "link": "https://www.investing.com/news/commodities-news/us-crude-oil-inventories-jump-by-most-since-january-2023-93CH-4855588",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-12 15:27:19",
-        "matched_keywords": [
-          "crude",
-          "oil"
-        ]
-      },
-      {
-        "title": "US crude inventories jump 17.4 million barrels in surprise build",
-        "link": "https://www.investing.com/news/commodities-news/us-crude-inventories-jump-174-million-barrels-in-surprise-build-93CH-4855576",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-12 15:24:32",
-        "matched_keywords": [
-          "crude"
-        ]
-      },
-      {
-        "title": "Trump says US has ’total control’ over Strait of Hormuz",
-        "link": "https://www.investing.com/news/commodities-news/trump-says-us-has-total-control-over-strait-of-hormuz-4855480",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-12 14:42:37",
-        "matched_keywords": [
-          "hormuz"
-        ]
-      },
-      {
-        "title": "Oil prices choppy amid uncertainty over Hormuz deal negotiations",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-near-2week-high-as-hormuz-remains-closed-houthi-strikes-continue-4853577",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-12 14:00:52",
-        "matched_keywords": [
-          "oil",
-          "hormuz"
-        ]
-      },
-      {
-        "title": "Gold sits above $4,400 as investors digest U.S. inflation data",
-        "link": "https://www.investing.com/news/commodities-news/gold-rises-near-4400-as-hormuz-doubts-cpi-keep-fed-path-in-focus-4853602",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-12 13:32:16",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "US must return to interim deal, no ceasefire extension talks, senior Iranian source says",
-        "link": "https://www.investing.com/news/commodities-news/iran-us-not-discussing-ceasefire-extension-senior-iranian-official-says-4854595",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-12 13:06:33",
-        "matched_keywords": [
-          "ceasefire"
-        ]
-      },
-      {
-        "title": "Ukraine pounds grain terminals at Russia’s Black Sea Novorossiysk port",
-        "link": "https://www.investing.com/news/commodities-news/drones-hit-residential-buildings-in-russias-black-sea-port-of-novorossiysk-mayor-says-4853589",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-12 13:00:59",
-        "matched_keywords": [
-          "grain",
-          "black sea"
-        ]
-      },
-      {
-        "title": "Analysis-Saudi Arabia bets on defensive alliances to deter slide into war",
-        "link": "https://www.investing.com/news/commodities-news/analysissaudi-arabia-bets-on-defensive-alliances-to-deter-slide-into-war-4854888",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-12 12:36:36",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "An active fund holding a whopping 800 stocks is beating major indexes. Here’s how.",
-        "link": "https://www.marketwatch.com/story/an-active-fund-holding-a-whopping-800-stocks-is-beating-major-indexes-heres-how-6bf73062?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Wed, 12 Aug 2026 15:05:00 GMT",
-        "matched_keywords": [
-          "ppi"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Financial markets are reacting to a tame U.S. CPI print that has softened Fed rate-hike expectations and weighed on the dollar, while commodities face severe supply pressures from a massive U.S. crude inventory build and escalating kinetic disruptions in key shipping chokepoints like the Black Sea and Hormuz.",
-      "wheat_impact": "BULLISH",
-      "wheat_impact_reason": "Ukrainian strikes on Russia's Novorossiysk grain terminals threaten crucial Black Sea export infrastructure, raising supply disruption risks.",
-      "usd_ils_impact": "BULLISH",
-      "usd_ils_impact_reason": "A softer U.S. dollar driven by tamer inflation expectations generally strengthens emerging market currencies against the greenback, including the Israeli Shekel.",
-      "key_risk": "Escalating kinetic activity and maritime enforcement actions across key chokepoints (Hormuz, Bab el-Mandeb, and Black Sea) threatening global energy and agricultural flows.",
       "headline_overstated": false,
       "headline_vs_article_note": ""
     }
