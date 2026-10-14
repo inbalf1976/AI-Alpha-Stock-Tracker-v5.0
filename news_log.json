@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-10-14T18:03:39.324278+00:00",
+    "total_scanned": 229,
+    "flagged_count": 165,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 30 Sep 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound falls as hotter U.S. core inflation boosts dollar",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-edges-up-as-dollar-softens-before-us-cpi-4948452",
+        "source": "Investing.com Forex",
+        "published": "2026-10-14 13:28:09",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Dollar pops as hot inflation triggers rate hike fears",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-ahead-of-us-cpi-china-data-singapore-gdp-in-focus-4947972",
+        "source": "Investing.com Forex",
+        "published": "2026-10-14 12:51:48",
+        "matched_keywords": [
+          "rate hike",
+          "inflation"
+        ]
+      },
+      {
+        "title": "U.S. 10-year yield jumps as hot inflation re-injects rate-hike fears",
+        "link": "https://www.investing.com/news/forex-news/eurozone-debt-bourses-consolidate-as-lagarde-rejects-french-bond-backstop-4948176",
+        "source": "Investing.com Forex",
+        "published": "2026-10-14 12:40:32",
+        "matched_keywords": [
+          "inflation",
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar dips a day ahead of CPI, while euro rises and Indian rupee extends rally",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-steady-as-dollar-holds-near-18mth-high-us-cpi-awaited-4945383",
+        "source": "Investing.com Forex",
+        "published": "2026-10-13 21:04:42",
+        "matched_keywords": [
+          "cpi"
+        ]
+      },
+      {
+        "title": "U.S. dollar rises, holding near 18-month high as oil prices climb, euro weakens",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-steady-as-dollar-holds-near-18mth-high-rupee-jumps-on-rbi-measures-4943051",
+        "source": "Investing.com Forex",
+        "published": "2026-10-12 21:26:34",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US lifts sanctions on head of Venezuela legislature",
+        "link": "https://www.investing.com/news/commodities-news/us-lifts-sanctions-on-head-of-venezuela-legislature-4949651",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-14 16:31:16",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Gold dips as accelerating U.S. inflation spurs Fed rate hike bets",
+        "link": "https://www.investing.com/news/commodities-news/gold-holds-twoday-slide-as-fed-signals-one-more-hike-us-cpi-in-focus-4947854",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-14 13:37:29",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "inflation"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by surging U.S. inflation data that has re-ignited fears of Federal Reserve interest rate hikes, boosting the U.S. dollar and pushing Treasury yields higher. Simultaneously, geopolitical escalation in the Middle East has driven vessel attacks in the Strait of Hormuz to a wartime weekly high, compounding regional transport risks.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating kinetic activity and maritime attacks in the Strait of Hormuz threatening critical energy and shipping transit corridors.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Vessel attacks in the Strait of Hormuz have reached a wartime weekly high with 12 commercial vessels attacked between October 5 and 11, alongside expanding Houthi threats against regional energy infrastructure.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-14T13:59:16.705156+00:00",
     "total_scanned": 229,
     "flagged_count": 171,
@@ -31728,167 +31889,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "Ongoing tanker attacks, ship seizures, and evasive AIS-dark transits are actively disrupting traffic and forcing vessel diversions around the Cape of Good Hope in the Strait of Hormuz."
-    }
-  },
-  {
-    "timestamp": "2026-08-15T08:56:53.462954+00:00",
-    "total_scanned": 226,
-    "flagged_count": 161,
-    "flagged_headlines": [
-      {
-        "title": "Luigi Mangione pleads guilty in federal court to stalking health-insurance CEO",
-        "link": "https://www.marketwatch.com/story/luigi-mangione-pleads-guilty-to-stalking-health-insurance-ceo-in-federal-court-d941ce3f?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Fri, 14 Aug 2026 17:40:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 29 Jul 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "The Iran war risks bringing the G7's fastest-growing economy to a halt",
-        "link": "https://www.cnbc.com/2026/08/13/iran-war-g7s-fastest-growing-economy.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 13 Aug 2026 12:42:10 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Here are five key takeaways from the July CPI inflation report",
-        "link": "https://www.cnbc.com/2026/08/12/here-are-five-key-takeaways-from-the-july-cpi-inflation-report.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 12 Aug 2026 17:14:09 GMT",
-        "matched_keywords": [
-          "cpi",
-          "inflation"
-        ]
-      },
-      {
-        "title": "AI’s costly build-out complicates the Fed’s inflation fight",
-        "link": "https://www.cnbc.com/2026/08/12/ais-costly-buildout-complicates-the-feds-inflation-fight.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 13 Aug 2026 15:59:16 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "An inflation report Wednesday should be a big deal for the Fed. Here's what to expect",
-        "link": "https://www.cnbc.com/2026/08/11/an-inflation-report-wednesday-should-be-a-big-deal-for-the-fed-heres-what-to-expect.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 12 Aug 2026 14:04:06 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "Grains Soar This Week on War, Wx and WASDE: Can Markets Continue Higher? - AgWeb",
-        "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOTjRJWVFQdjQ5alFVOWd4dlNaV0NmSkhwMTV6aTJkOFZDTkd2U3lzZWMwU2diVW95T19EeGpna1VJcUV0cDlrYlg3dVRlbzczMmxVSmhmdFZIcFJNSDNpamNQM0szWGZQbkNtVnItaWd3amJTdnd3ZzZ5RWhoYU54N19IZXYxX21RZ3Ayb19FWlZRd0xrTWxIeFEtODl0TnRHX1VMTFdZUl90eVE?oc=5",
-        "source": "AgWeb Markets",
-        "published": "Fri, 14 Aug 2026 22:37:00 GMT",
-        "matched_keywords": [
-          "grain",
-          "wasde",
-          "war"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets balance benign U.S. inflation data against persistent geopolitical risks in the Middle East, where shipping disruptions around the Strait of Hormuz and Bab el-Mandeb continue to pressure energy and commodity supply chains. U.K. growth remains resilient despite energy headwinds, while the Federal Reserve weighs softening labor metrics against costly AI infrastructure spending that complicates its inflation mandate.",
-      "wheat_impact": "BULLISH",
-      "wheat_impact_reason": "Escalating geopolitical tensions, supply chain chokepoint disruptions, and weather concerns are driving grains higher across global markets.",
-      "usd_ils_impact": "NEUTRAL",
-      "usd_ils_impact_reason": "While Middle East military tensions pose ongoing regional risks, steady U.S. inflation data and shifting Fed rate expectations keep currency drivers balanced.",
-      "key_risk": "Persistent kinetic threats and tactical evasion (AIS-dark transits) around key maritime chokepoints like the Strait of Hormuz and Bab el-Mandeb threatening global energy and bulk commodity flows.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "Active maritime disruptions continue in the Strait of Hormuz and Red Sea, featuring vessels running AIS-dark for extended periods, ongoing Saudi tanker diversions around the Cape of Good Hope, and active Houthi threat environments restricting normal shipping corridors."
     }
   }
 ]
