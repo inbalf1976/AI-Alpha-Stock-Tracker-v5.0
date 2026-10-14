@@ -1,14 +1,14 @@
 {
   "stats_cutoff_date": "2026-08-23",
   "last_direction": "DOWN",
-  "last_price": 668.25,
+  "last_price": 666.5,
   "alerts_sent": 331,
   "last_model_reset": "2026-02-15T14:35:19.561201",
   "model_version": 1,
   "reset_count": 0,
   "last_alert_date": "2026-10-14",
   "daily_alert_sent": true,
-  "last_check": "2026-10-14T03:06:33.235253+03:00",
+  "last_check": "2026-10-14T06:49:39.873204+03:00",
   "alerts_today": {
     "2026-09-14_morning": "04:47",
     "2026-09-15_morning": "04:57",
