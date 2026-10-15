@@ -17,11 +17,11 @@
     "reason": "Wartime weekly high of 12 commercial vessel attacks in the Strait of Hormuz region and widening threats to energy infrastructure present an active shipping and supply chokepoint risk.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 667.75,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 672.5,
+    "pct_change": 0.711,
+    "scored_at": "2026-10-15T17:48:47.542609+00:00"
   },
   {
     "alert_number": 87,
