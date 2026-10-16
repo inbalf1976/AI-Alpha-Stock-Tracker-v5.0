@@ -1,15 +1,27 @@
 [
   {
-    "alert_number": 89,
-    "alert_timestamp": "2026-10-15T13:39:33.918840+00:00",
-    "reason": "Ongoing kinetic attacks on commercial vessels in the Strait of Hormuz are directly disrupting maritime traffic and threatening regional supply chains.",
-    "predicted_direction": "BEARISH",
-    "price_at_alert": 675.75,
+    "alert_number": 90,
+    "alert_timestamp": "2026-10-16T17:31:19.072629+00:00",
+    "reason": "Attacks on container ships in the Strait of Hormuz mark a widening of Iranian targeting into non-tanker commercial shipping.",
+    "predicted_direction": "BULLISH",
+    "price_at_alert": 658.75,
     "scored": false,
     "outcome": null,
     "price_at_scoring": null,
     "pct_change": null,
     "scored_at": null
+  },
+  {
+    "alert_number": 89,
+    "alert_timestamp": "2026-10-15T13:39:33.918840+00:00",
+    "reason": "Ongoing kinetic attacks on commercial vessels in the Strait of Hormuz are directly disrupting maritime traffic and threatening regional supply chains.",
+    "predicted_direction": "BEARISH",
+    "price_at_alert": 675.75,
+    "scored": true,
+    "outcome": "HIT",
+    "price_at_scoring": 658.75,
+    "pct_change": -2.516,
+    "scored_at": "2026-10-16T17:31:27.928330+00:00"
   },
   {
     "alert_number": 88,
