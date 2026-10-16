@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-10-16T01:31:59.701496+00:00",
+    "total_scanned": 230,
+    "flagged_count": 172,
+    "flagged_headlines": [
+      {
+        "title": "Oil edges down as investors weigh possible US sanctions on ’shadow fleet’",
+        "link": "https://www.investing.com/news/commodities-news/oil-edges-down-as-investors-weigh-possible-us-sanctions-on-shadow-fleet-4952926",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-16 01:12:55",
+        "matched_keywords": [
+          "sanction",
+          "oil"
+        ]
+      },
+      {
+        "title": "Yemen’s Houthis hit palace in Aden, coalition details attacks on Saudi infrastructure",
+        "link": "https://www.investing.com/news/commodities-news/yemens-houthis-hit-palace-in-aden-coalition-details-attacks-on-saudi-infrastructure-4952575",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-16 01:12:38",
+        "matched_keywords": [
+          "ils"
+        ]
+      },
+      {
+        "title": "Progress toward a US-Mexico tariff deal has stalled, WSJ reports",
+        "link": "https://www.investing.com/news/commodities-news/progress-toward-a-usmexico-tariff-deal-has-stalled-wsj-reports-4952880",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-16 00:36:22",
+        "matched_keywords": [
+          "tariff",
+          "war"
+        ]
+      },
+      {
+        "title": "Oil prices edge lower on improving supplies; WTI set for strong week",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-edge-lower-on-improving-supplies-wti-set-for-strong-week-4952863",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-15 23:57:39",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold prices climb as U.S. bond rally weighs on dollar, overshadows hot PPI report",
+        "link": "https://www.investing.com/news/commodities-news/gold-rebounds-after-inflationdriven-selloff-as-fed-ratehike-bets-rise-4950379",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-15 21:03:51",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "TD Cowen raises oil forecasts, sees Canadian producers gain as WCS discounts widen",
+        "link": "https://www.investing.com/news/commodities-news/td-cowen-raises-oil-forecasts-sees-canadian-producers-gain-as-wcs-discounts-widen-4952607",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-15 20:20:10",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Brent dips slightly on reports of easing U.S. sanctions; big crude draw boosts WTI",
+        "link": "https://www.investing.com/news/commodities-news/oil-edges-lower-after-hot-us-cpi-iea-meeting-in-focus-4950316",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-15 19:42:34",
+        "matched_keywords": [
+          "sanction",
+          "crude"
+        ]
+      },
+      {
+        "title": "Dollar slips as U.S. bond rally offsets hot PPI; euro sees best day in two months",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-dollar-slips-after-hot-us-cpi-yen-firmson-intervention-warnings-4950494",
+        "source": "Investing.com Forex",
+        "published": "2026-10-15 20:47:27",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Canadian dollar gains as dollar retreats, hot U.S. PPI clouds outlook",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-gains-as-dollar-retreats-hot-us-ppi-clouds-outlook-4952606",
+        "source": "Investing.com Forex",
+        "published": "2026-10-15 20:20:09",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Argentina halts local dollar bond sales as yields surge",
+        "link": "https://www.investing.com/news/forex-news/argentina-halts-local-dollar-bond-sales-as-yields-surge-93CH-4952498",
+        "source": "Investing.com Forex",
+        "published": "2026-10-15 19:30:14",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar firms to near 18-month high as hot CPI puts October Fed hike back in play",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-ahead-of-us-cpi-china-data-singapore-gdp-in-focus-4947972",
+        "source": "Investing.com Forex",
+        "published": "2026-10-14 20:04:18",
+        "matched_keywords": [
+          "fed",
+          "cpi"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound falls as hotter U.S. core inflation boosts dollar",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-edges-up-as-dollar-softens-before-us-cpi-4948452",
+        "source": "Investing.com Forex",
+        "published": "2026-10-14 13:28:09",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "U.S. 10-year yield jumps as hot inflation re-injects rate-hike fears",
+        "link": "https://www.investing.com/news/forex-news/eurozone-debt-bourses-consolidate-as-lagarde-rejects-french-bond-backstop-4948176",
+        "source": "Investing.com Forex",
+        "published": "2026-10-14 12:40:32",
+        "matched_keywords": [
+          "inflation",
+          "yield"
+        ]
+      },
+      {
+        "title": "Pepsi loses more ground in the soda wars, as KFC switches to Coke",
+        "link": "https://www.marketwatch.com/story/pepsi-loses-more-ground-in-the-soda-wars-as-kfc-switches-to-coke-49b1ef53?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 15 Oct 2026 23:29:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "‘Some people did everything right’: I lost my home in the Great Recession. I rent in my 50s. Why is that judged as failure?",
+        "link": "https://www.marketwatch.com/story/i-earn-110-000-a-year-i-lost-my-home-in-the-great-recession-im-renting-in-my-50s-why-is-that-judged-as-failure-d1371d67?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 15 Oct 2026 22:31:00 GMT",
+        "matched_keywords": [
+          "recession"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Crude oil markets face conflicting pressures from improved supplies, easing U.S. sanctions reports, and escalating Middle East tensions following attacks on shipping near the Strait of Hormuz. Meanwhile, strong U.S. PPI and CPI inflation data have triggered a jump in Treasury yields, boosting the U.S. dollar and weighing on other major currencies and commodities.",
+      "physical_supply_disruption_confirmed": true,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Further escalation of Middle East maritime attacks threatening global energy flows and broader supply chains.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Ongoing kinetic attacks on commercial vessels in the Strait of Hormuz and surrounding waterways present an active, high-severity threat to regional maritime transit and physical supply chains.",
+      "wheat_impact": "NEUTRAL"
+    }
+  },
+  {
     "timestamp": "2026-10-15T17:48:36.691159+00:00",
     "total_scanned": 230,
     "flagged_count": 166,
@@ -31729,164 +31891,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "An active blockade breach by an Iranian LPG carrier, combined with heavy dark-transit activity and high threat levels in the Strait of Hormuz, is actively disrupting regional maritime traffic."
-    }
-  },
-  {
-    "timestamp": "2026-08-17T21:20:30.454212+00:00",
-    "total_scanned": 227,
-    "flagged_count": 161,
-    "flagged_headlines": [
-      {
-        "title": "A new set of Trump tariffs for Canada could take effect Wednesday. Here’s what’s at stake.",
-        "link": "https://www.marketwatch.com/story/a-new-set-of-trump-tariffs-for-canada-could-take-effect-wednesday-heres-whats-at-stake-8aa0eeb8?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Mon, 17 Aug 2026 20:28:00 GMT",
-        "matched_keywords": [
-          "tariff"
-        ]
-      },
-      {
-        "title": "Dollar slips on pared Fed rate hike bets, but losses capped by rising oil prices",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-ticks-up-on-reduced-fed-hike-bets-yen-gains-despite-weak-japan-gdp-4862111",
-        "source": "Investing.com Forex",
-        "published": "2026-08-17 20:18:03",
-        "matched_keywords": [
-          "fed",
-          "rate hike",
-          "oil"
-        ]
-      },
-      {
-        "title": "Latin American currencies gain as Fed rate hike bets ease",
-        "link": "https://www.investing.com/news/forex-news/latin-american-currencies-gain-as-fed-rate-hike-bets-ease-93CH-4863871",
-        "source": "Investing.com Forex",
-        "published": "2026-08-17 20:02:27",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "Canadian dollar rises as inflation exceeds expectations",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-as-inflation-exceeds-expectations-93CH-4863620",
-        "source": "Investing.com Forex",
-        "published": "2026-08-17 15:26:59",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound advance as weak US retail data dims Fed hike bets",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-advance-as-weak-us-retail-data-dims-fed-hike-bets-4862294",
-        "source": "Investing.com Forex",
-        "published": "2026-08-17 07:57:18",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Dollar falls on pared rate hike bets, but on track to snap two-week losing streak",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-ticks-up-dollar-dips-after-soft-us-ppi-curbs-fed-hike-bets-4859699",
-        "source": "Investing.com Forex",
-        "published": "2026-08-14 19:50:26",
-        "matched_keywords": [
-          "rate hike"
-        ]
-      },
-      {
-        "title": "U.S. Treasuries consolidate as two-year yield lingers near multi-week lows",
-        "link": "https://www.investing.com/news/forex-news/european-debt-desks-digest-disinflation-and-persian-gulf-energy-risks-4859881",
-        "source": "Investing.com Forex",
-        "published": "2026-08-14 12:09:22",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with Iuka Bancshares, Inc. and The Iuka State Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of First Interstate Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260730a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 30 Jul 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are reacting to softer U.S. economic data and cooling Federal Reserve rate hike expectations, which are weighing on the dollar while supporting Latin American currencies and the Canadian dollar following hot inflation prints. Meanwhile, geopolitical supply risks persist in the Middle East as Iranian tankers test US blockade enforcement through ship-to-ship transfers and dark transits in the Strait of Hormuz.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "Macro drivers like a weaker U.S. dollar and Middle Eastern shipping disruptions are balanced against prevailing grain fundamentals and a lack of direct harvest or export corridor blockades.",
-      "usd_ils_impact": "BULLISH",
-      "usd_ils_impact_reason": "While the broad US dollar is slipping on pared Fed rate hike expectations, persistent regional maritime security risks and chokepoint disruptions in the Middle East provide underlying safe-haven support.",
-      "key_risk": "Escalation of sanctions enforcement breaches in the Strait of Hormuz and potential retaliatory US measures threatening regional crude flows.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "The first confirmed breach of the US blockade by an Iranian-origin tanker via ship-to-ship transfers and ongoing dark-transit activity in the Strait of Hormuz signal an active escalation in sanctions evasion and chokepoint friction."
     }
   }
 ]
