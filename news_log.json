@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-10-17T16:30:29.260751+00:00",
+    "total_scanned": 225,
+    "flagged_count": 165,
+    "flagged_headlines": [
+      {
+        "title": "‘Some people did everything right’: I lost my home in the Great Recession. I rent in my 50s. Why is that judged as failure?",
+        "link": "https://www.marketwatch.com/story/i-earn-110-000-a-year-i-lost-my-home-in-the-great-recession-im-renting-in-my-50s-why-is-that-judged-as-failure-d1371d67?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 17 Oct 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "recession"
+        ]
+      },
+      {
+        "title": "Fed interest-rate decision this month is a closer call than markets think",
+        "link": "https://www.marketwatch.com/story/fed-interest-rate-decision-this-month-is-a-closer-call-than-markets-think-f96ccf95?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 17 Oct 2026 11:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Nowhere to hide: Tech selloff hits software and chip stocks alike",
+        "link": "https://www.marketwatch.com/story/nowhere-to-hide-tech-selloff-hits-software-and-chip-stocks-alike-6d96773c?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 16 Oct 2026 21:59:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Analysis: Everyone expects the Fed to hold rates in October. Kevin Warsh could surprise us all",
+        "link": "https://www.cnbc.com/2026/10/16/kevin-warsh-fed-october-rate-hike-interest-rates-markets.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 16 Oct 2026 16:27:31 GMT",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Economists: Hot PPI shows Fed's work is not done",
+        "link": "https://www.cnbc.com/2026/10/15/pce-ppi-september-fed-reserve-rate-hike.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 15 Oct 2026 15:37:59 GMT",
+        "matched_keywords": [
+          "fed",
+          "ppi"
+        ]
+      },
+      {
+        "title": "U.S. Treasury dismisses IMF debt warning and 'messy' forecasting",
+        "link": "https://www.cnbc.com/2026/10/15/zervos-imf-us-debt-warning.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 15 Oct 2026 13:42:32 GMT",
+        "matched_keywords": [
+          "war",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Analysis: Why a $2 trillion deficit and 5% Treasury yields are becoming America's biggest economic challenge",
+        "link": "https://www.cnbc.com/2026/10/15/treasury-yields-deficit-national-debt-ai.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 16 Oct 2026 22:33:05 GMT",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "How high inflation became a 'fact of life' in the U.S.",
+        "link": "https://www.cnbc.com/2026/10/14/high-inflation-fed-expectations.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 14 Oct 2026 17:20:23 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Financial markets are grappling with persistent above-target inflation and hotter-than-expected PPI readings that complicate the Federal Reserve's rate-cut path under Chairman Kevin Warsh. Meanwhile, escalating geopolitical tensions and container ship strikes in the Strait of Hormuz are driving up long-term Treasury yields above 5% and fueling anxieties over expanding national debt deficits.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "NEUTRAL",
+      "key_risk": "Persistent high inflation and escalating Middle East conflict driving long-term Treasury yields higher and threatening broader financial instability.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active military strikes and container ship sinkings in the Strait of Hormuz are directly threatening vital energy and commercial shipping lanes.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-17T12:22:09.243933+00:00",
     "total_scanned": 230,
     "flagged_count": 164,
@@ -31733,163 +31894,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "The Strait of Hormuz is experiencing active physical disruption, including suppressed transits, dark-fleet activities, Iranian boardings of tankers, and idle export terminals."
-    }
-  },
-  {
-    "timestamp": "2026-08-18T09:56:34.932841+00:00",
-    "total_scanned": 227,
-    "flagged_count": 167,
-    "flagged_headlines": [
-      {
-        "title": "Why this popular Treasury-bond ETF is trading at its lowest since 2004",
-        "link": "https://www.marketwatch.com/story/why-this-popular-treasury-bond-etf-is-trading-at-its-lowest-since-2004-27de9a77?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Mon, 17 Aug 2026 22:33:00 GMT",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "A new set of Trump tariffs for Canada could take effect Wednesday. Here’s what’s at stake.",
-        "link": "https://www.marketwatch.com/story/a-new-set-of-trump-tariffs-for-canada-could-take-effect-wednesday-heres-whats-at-stake-8aa0eeb8?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Mon, 17 Aug 2026 20:28:00 GMT",
-        "matched_keywords": [
-          "tariff"
-        ]
-      },
-      {
-        "title": "Hormuz Strait to remain shut until U.S. meets interim deal conditions, Iran says",
-        "link": "https://www.investing.com/news/commodities-news/hormuz-strait-to-remain-shut-until-us-meets-interim-deal-conditions-iran-says-4864613",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-18 09:48:27",
-        "matched_keywords": [
-          "hormuz"
-        ]
-      },
-      {
-        "title": "Oil prices at near three-week high as US-Iran peace hopes fade",
-        "link": "https://www.investing.com/news/commodities-news/oil-climbs-as-fading-usiran-peace-hopes-raise-supply-risks-4864170",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-18 08:48:27",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil prices jump as waning U.S.-Iran peace hopes fuel supply concerns",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-creep-higher-remain-underpinned-as-iran-crisis-rages-on-4864188",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-18 08:39:35",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "European gas locks In 5-day winning streak as Strait of Hormuz freeze deepens",
-        "link": "https://www.investing.com/news/commodities-news/european-gas-locks-in-5day-winning-streak-as-strait-of-hormuz-freeze-deepens-4864493",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-18 08:29:50",
-        "matched_keywords": [
-          "hormuz"
-        ]
-      },
-      {
-        "title": "London Gas Oil nears $1,328 double top overbought: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-coils-near-1241-before-breakout-live-levels-93CH-4862236",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-18 07:11:28",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Natural Gas coils in tight range near $2.710: Hourly levels",
-        "link": "https://www.investing.com/news/commodities-news/natural-gas-bear-flag-breaks-at-2645-live-levels-93CH-4862233",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-18 07:11:14",
-        "matched_keywords": [
-          "ils",
-          "oil"
-        ]
-      },
-      {
-        "title": "Crude Oil WTI tests $84.50 resistance: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-stalls-below-vwap-at-8108-hourly-levels-93CH-4862232",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-18 07:11:13",
-        "matched_keywords": [
-          "crude",
-          "oil"
-        ]
-      },
-      {
-        "title": "Brent Oil tests $91.50-$92 resistance: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/brent-oil-trapped-at-8842-in-choppy-range-live-levels-93CH-4862231",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-18 07:11:12",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Energy markets are surging as the Strait of Hormuz remains effectively shuttered amid fading U.S.-Iran peace hopes, driving Brent crude toward $92 and European gas higher. Meanwhile, macro crosscurrents include impending Canadian tariffs and multi-decade lows for long-term Treasury-bond ETFs.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "Grain markets face no direct supply shocks from current Middle East energy and shipping disruptions.",
-      "usd_ils_impact": "BULLISH",
-      "usd_ils_impact_reason": "Escalating geopolitical tensions in the Middle East and severe energy supply concerns tend to pressure regional currencies like the Israeli Shekel.",
-      "key_risk": "Prolonged closure of the Strait of Hormuz causing sustained energy price shocks and broader supply-chain blockages.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "The Strait of Hormuz is experiencing severe operational suppression with Iranian boarding incidents, idle terminals, and significant dark-fleet tanker disruptions active right now."
     }
   }
 ]
