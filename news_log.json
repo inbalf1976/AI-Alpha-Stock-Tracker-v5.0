@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-10-18T16:36:23.429391+00:00",
+    "total_scanned": 219,
+    "flagged_count": 164,
+    "flagged_headlines": [
+      {
+        "title": "‘Some people did everything right’: I lost my home in the Great Recession. I rent in my 50s. Why is that judged as failure?",
+        "link": "https://www.marketwatch.com/story/i-earn-110-000-a-year-i-lost-my-home-in-the-great-recession-im-renting-in-my-50s-why-is-that-judged-as-failure-d1371d67?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 18 Oct 2026 16:15:00 GMT",
+        "matched_keywords": [
+          "recession"
+        ]
+      },
+      {
+        "title": "There is a silent market rotation inside the S&P 500 that’s warning of more weakness ahead",
+        "link": "https://www.marketwatch.com/story/there-is-a-silent-market-rotation-inside-the-s-p-500-thats-warning-of-more-weakness-ahead-549e7650?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 18 Oct 2026 12:00:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Fake shopping sprees and ‘happiness insurance’: The latest fintech apps reveal our financial anxieties",
+        "link": "https://www.marketwatch.com/story/fake-shopping-sprees-and-happiness-insurance-the-latest-fintech-apps-reveal-our-financial-anxieties-77770a46?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 17 Oct 2026 18:52:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Analysis: Everyone expects the Fed to hold rates in October. Kevin Warsh could surprise us all",
+        "link": "https://www.cnbc.com/2026/10/16/kevin-warsh-fed-october-rate-hike-interest-rates-markets.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 16 Oct 2026 16:27:31 GMT",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Economists: Hot PPI shows Fed's work is not done",
+        "link": "https://www.cnbc.com/2026/10/15/pce-ppi-september-fed-reserve-rate-hike.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 15 Oct 2026 15:37:59 GMT",
+        "matched_keywords": [
+          "fed",
+          "ppi"
+        ]
+      },
+      {
+        "title": "U.S. Treasury dismisses IMF debt warning and 'messy' forecasting",
+        "link": "https://www.cnbc.com/2026/10/15/zervos-imf-us-debt-warning.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 15 Oct 2026 13:42:32 GMT",
+        "matched_keywords": [
+          "war",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Analysis: Why a $2 trillion deficit and 5% Treasury yields are becoming America's biggest economic challenge",
+        "link": "https://www.cnbc.com/2026/10/15/treasury-yields-deficit-national-debt-ai.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 16 Oct 2026 22:33:05 GMT",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "How high inflation became a 'fact of life' in the U.S.",
+        "link": "https://www.cnbc.com/2026/10/14/high-inflation-fed-expectations.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 14 Oct 2026 17:20:23 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Financial markets are grappling with sticky inflation prints and rising long-term Treasury yields above 5%, while the Federal Reserve faces potential policy tightening pressures despite market consensus for a pause. Meanwhile, geopolitical conflicts in the Middle East continue to disrupt maritime shipping in the Strait of Hormuz, spreading targets beyond tankers to container ships.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating maritime attacks in the Strait of Hormuz threatening global supply chains and energy prices, coupled with persistent U.S. fiscal deficits and stubbornly high inflation driving up bond yields.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Active military strikes and disruptions are occurring in the Strait of Hormuz, with recent container ships being hit and sinking, creating immediate physical risks to key maritime shipping lanes.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-18T12:46:19.562028+00:00",
     "total_scanned": 219,
     "flagged_count": 163,
@@ -31726,171 +31887,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "Active maritime disruptions in the Strait of Hormuz are ongoing, featuring the reported boarding of a product tanker by Iranian forces, suppressed transit volumes, and dark-fleet vessels operating under false registries."
-    }
-  },
-  {
-    "timestamp": "2026-08-18T23:04:01.573960+00:00",
-    "total_scanned": 223,
-    "flagged_count": 163,
-    "flagged_headlines": [
-      {
-        "title": "Dollar mostly flat amid pared Fed rate hike bets, bond sell-off, and rising oil",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-lacks-direction-with-fed-outlook-usiran-tensions-in-focus-4864264",
-        "source": "Investing.com Forex",
-        "published": "2026-08-18 19:16:10",
-        "matched_keywords": [
-          "fed",
-          "rate hike",
-          "oil"
-        ]
-      },
-      {
-        "title": "Canadian dollar slips as investors await tariff deal with US",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-investors-await-tariff-deal-with-us-93CH-4865853",
-        "source": "Investing.com Forex",
-        "published": "2026-08-18 18:08:27",
-        "matched_keywords": [
-          "tariff"
-        ]
-      },
-      {
-        "title": "BofA sees lower EUR/USD through Q3 on Fed policy outlook",
-        "link": "https://www.investing.com/news/forex-news/bofa-sees-lower-eurusd-through-q3-on-fed-policy-outlook-93CH-4864635",
-        "source": "Investing.com Forex",
-        "published": "2026-08-18 09:55:47",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound slips as dollar firms on energy, yields",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-dollar-firms-on-energy-yields-4864498",
-        "source": "Investing.com Forex",
-        "published": "2026-08-18 08:32:48",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "Dollar slips on pared Fed rate hike bets, but losses capped by rising oil prices",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-ticks-up-on-reduced-fed-hike-bets-yen-gains-despite-weak-japan-gdp-4862111",
-        "source": "Investing.com Forex",
-        "published": "2026-08-17 20:18:03",
-        "matched_keywords": [
-          "fed",
-          "rate hike",
-          "oil"
-        ]
-      },
-      {
-        "title": "Latin American currencies gain as Fed rate hike bets ease",
-        "link": "https://www.investing.com/news/forex-news/latin-american-currencies-gain-as-fed-rate-hike-bets-ease-93CH-4863871",
-        "source": "Investing.com Forex",
-        "published": "2026-08-17 20:02:27",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "Canadian dollar rises as inflation exceeds expectations",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rises-as-inflation-exceeds-expectations-93CH-4863620",
-        "source": "Investing.com Forex",
-        "published": "2026-08-17 15:26:59",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Russia says its economy is strong. It just fired a top economist who warned otherwise",
-        "link": "https://www.cnbc.com/2026/08/18/ukraine-war-russia-economy-klepach.html",
-        "source": "CNBC Economy",
-        "published": "Tue, 18 Aug 2026 11:51:15 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "The Iran war risks bringing the G7's fastest-growing economy to a halt",
-        "link": "https://www.cnbc.com/2026/08/13/iran-war-g7s-fastest-growing-economy.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 13 Aug 2026 12:42:10 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Here are five key takeaways from the July CPI inflation report",
-        "link": "https://www.cnbc.com/2026/08/12/here-are-five-key-takeaways-from-the-july-cpi-inflation-report.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 12 Aug 2026 17:14:09 GMT",
-        "matched_keywords": [
-          "cpi",
-          "inflation"
-        ]
-      },
-      {
-        "title": "AI’s costly build-out complicates the Fed’s inflation fight",
-        "link": "https://www.cnbc.com/2026/08/12/ais-costly-buildout-complicates-the-feds-inflation-fight.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 13 Aug 2026 15:59:16 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "An inflation report Wednesday should be a big deal for the Fed. Here's what to expect",
-        "link": "https://www.cnbc.com/2026/08/11/an-inflation-report-wednesday-should-be-a-big-deal-for-the-fed-heres-what-to-expect.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 12 Aug 2026 14:04:06 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "Oil ticks up, Brent briefly hits $92 after Trump says no talks ongoing with Iran",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-creep-higher-remain-underpinned-as-iran-crisis-rages-on-4864188",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-18 20:48:20",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "US natural gas futures climb as oil prices rise",
-        "link": "https://www.investing.com/news/commodities-news/us-natural-gas-futures-climb-as-oil-prices-rise-93CH-4865986",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-18 20:09:07",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Gold falls over 1.5%, weighed down by elevated Treasury yields, higher oil prices",
-        "link": "https://www.investing.com/news/commodities-news/gold-rises-near-4450-as-fed-hike-bets-fade-dollar-weakens-risks-persist-4864147",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-18 19:52:02",
-        "matched_keywords": [
-          "oil",
-          "yield",
-          "treasury"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are driven by rising oil prices—with Brent touching $92 amid escalating tensions and tanker boardings near the Strait of Hormuz—alongside sticky inflation reports and shifting Federal Reserve rate expectations. Meanwhile, geopolitical friction, including the firing of a Russian economist over war-attrition warnings, reinforces structural energy and commodity risks.",
-      "wheat_impact": "BULLISH",
-      "wheat_impact_reason": "Surging energy and natural gas prices, driven by Middle East supply disruptions, increase agricultural input and fertilizer costs.",
-      "usd_ils_impact": "BULLISH",
-      "usd_ils_impact_reason": "Escalating regional conflict risks around the Strait of Hormuz and Iran increase geopolitical risk premiums, supporting the USD against the Israeli Shekel.",
-      "key_risk": "Active maritime disruptions and potential military escalation in the Strait of Hormuz threatening global energy and commodity flows.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "Iranian forces reportedly boarded a product tanker near Qeshm Island, Kharg Island export terminals remain largely idle, and Hormuz transit volumes are heavily suppressed with elevated dark-fleet activity."
     }
   }
 ]
