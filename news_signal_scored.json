@@ -521,7 +521,12 @@
     "signal": "BEARISH",
     "category": "speculative_tension",
     "key_phrase": "Severe military escalation in the Strait of Hormuz triggering a sustained oil supply shock and broader Middle East instability.",
-    "result": null
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.471,
+      "vol_after_pct": 2.014,
+      "checked_date": "2026-09-14"
+    }
   },
   "2026-08-09T10:30:25.411231+00:00": {
     "signal": "BULLISH",
@@ -569,6 +574,1058 @@
       "corn_baseline_pct": -2.78,
       "abnormal_pct": 2.93,
       "checked_date": "2026-07-30"
+    }
+  },
+  "2026-10-20T13:49:27.660213+00:00": {
+    "signal": "BEARISH",
+    "category": "other_fundamental",
+    "key_phrase": "Escalating maritime security threats in the Strait of Hormuz affecting regional energy and shipping flows, coupled with broadening inflation fears.",
+    "result": null
+  },
+  "2026-10-20T01:57:11.564577+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating European political unrest and debt contagion triggering severe currency instability and safe-haven liquidity squeezes.",
+    "result": null
+  },
+  "2026-10-19T19:22:37.683861+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Rising long-term Treasury yields and persistent inflation leading to potential unexpected Federal Reserve rate hikes.",
+    "result": null
+  },
+  "2026-10-19T01:26:41.246594+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating maritime security incidents and kinetic attacks in the Middle East threatening broader trade routes and energy/commodity logistics.",
+    "result": null
+  },
+  "2026-10-18T16:36:23.429391+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating maritime attacks in the Strait of Hormuz threatening global supply chains and energy prices, coupled with persistent U.S. fiscal deficits and stubbornly high inflation driving up bond yields.",
+    "result": null
+  },
+  "2026-10-18T12:46:19.562028+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation of kinetic attacks on commercial shipping in the Strait of Hormuz disrupting global energy and supply chains.",
+    "result": null
+  },
+  "2026-10-18T01:16:25.020259+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating Middle East conflict disrupting critical energy and shipping chokepoints alongside stubbornly high U.S. inflation and fiscal debt pressures.",
+    "result": null
+  },
+  "2026-10-17T16:30:29.260751+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Persistent high inflation and escalating Middle East conflict driving long-term Treasury yields higher and threatening broader financial instability.",
+    "result": null
+  },
+  "2026-10-17T12:22:09.243933+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating maritime attacks in the Strait of Hormuz spilling over into container shipping and driving up broader energy and logistics costs.",
+    "result": null
+  },
+  "2026-10-17T01:23:12.622840+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Further military escalation in the Strait of Hormuz disrupting global energy and maritime supply chains.",
+    "result": null
+  },
+  "2026-10-16T17:31:19.072629+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Expanding Middle East conflict spilling over into broader maritime shipping and commodity supply chains.",
+    "result": null
+  },
+  "2026-10-16T13:30:10.430749+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating military conflict and vessel strikes in the Strait of Hormuz threatening broader energy and commodity trade flows.",
+    "result": null
+  },
+  "2026-10-15T17:48:36.691159+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating geopolitical conflict in the Strait of Hormuz expanding beyond tankers to broader shipping lanes, coupled with aggressive monetary tightening driven by persistent inflation.",
+    "result": null
+  },
+  "2026-10-15T13:39:33.918840+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating geopolitical conflict in the Strait of Hormuz disrupting broader global trade and shipping corridors.",
+    "result": null
+  },
+  "2026-10-15T01:36:23.809266+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating maritime attacks and geopolitical conflict in the Strait of Hormuz threatening global energy supplies and shipping lanes.",
+    "result": null
+  },
+  "2026-10-14T18:03:39.324278+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating kinetic activity and maritime attacks in the Strait of Hormuz threatening critical energy and shipping transit corridors.",
+    "result": null
+  },
+  "2026-10-13T19:53:57.626713+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating Middle East military actions around the Strait of Hormuz threatening global energy supplies and broader shipping routes.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.11,
+      "vol_after_pct": 0.685,
+      "checked_date": "2026-10-20"
+    }
+  },
+  "2026-10-13T03:41:04.161404+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating military conflict and tanker attacks in the Strait of Hormuz threatening critical energy supply routes and broader maritime commerce.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.11,
+      "vol_after_pct": 0.685,
+      "checked_date": "2026-10-20"
+    }
+  },
+  "2026-10-12T18:10:22.296887+00:00": {
+    "signal": "BULLISH",
+    "category": "weather_crop_damage",
+    "key_phrase": "Escalating maritime attacks in the Strait of Hormuz threatening global energy supply chains and shipping stability.",
+    "result": {
+      "outcome": "FLAT",
+      "raw_wheat_pct": 0.15,
+      "corn_baseline_pct": -0.47,
+      "abnormal_pct": 0.61,
+      "checked_date": "2026-10-14"
+    }
+  },
+  "2026-10-12T02:31:19.100350+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Surging Treasury yields undermining equity market valuations and broader risk appetite.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.672,
+      "vol_after_pct": 0.843,
+      "checked_date": "2026-10-19"
+    }
+  },
+  "2026-10-11T18:10:10.864456+00:00": {
+    "signal": "BEARISH",
+    "category": "other_fundamental",
+    "key_phrase": "Persistent inflation risks and soaring Treasury yields sparking wider financial market volatility.",
+    "result": {
+      "outcome": "FLAT",
+      "raw_wheat_pct": -0.26,
+      "corn_baseline_pct": 0.63,
+      "abnormal_pct": -0.89,
+      "checked_date": "2026-10-13"
+    }
+  },
+  "2026-10-11T15:03:11.235999+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Rising Treasury yields disrupting broader market liquidity and equity valuations.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.874,
+      "vol_after_pct": 0.824,
+      "checked_date": "2026-10-16"
+    }
+  },
+  "2026-10-11T02:01:04.601037+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating maritime attacks and declining tanker transits through the Strait of Hormuz threatening broader energy and supply chain stability.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.874,
+      "vol_after_pct": 0.824,
+      "checked_date": "2026-10-16"
+    }
+  },
+  "2026-10-10T17:54:30.793617+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating geopolitical conflict and tanker strikes in the Middle East chokepoints threatening global energy and trade flows.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.874,
+      "vol_after_pct": 0.824,
+      "checked_date": "2026-10-16"
+    }
+  },
+  "2026-10-09T15:32:12.964048+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating military conflict in the Middle East threatening key energy and maritime chokepoints, potentially spilling over into broader supply chain disruptions.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.874,
+      "vol_after_pct": 0.824,
+      "checked_date": "2026-10-16"
+    }
+  },
+  "2026-10-09T02:59:54.871502+00:00": {
+    "signal": "BULLISH",
+    "category": "other_fundamental",
+    "key_phrase": "Potential escalation of Middle East geopolitical tensions impacting broader energy and supply chain stability.",
+    "result": {
+      "outcome": "FLAT",
+      "raw_wheat_pct": -0.26,
+      "corn_baseline_pct": 0.63,
+      "abnormal_pct": -0.89,
+      "checked_date": "2026-10-13"
+    }
+  },
+  "2026-10-08T19:19:18.525648+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating Middle East maritime and energy infrastructure attacks causing broader supply chain shocks or energy cost inflation.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.689,
+      "vol_after_pct": 0.522,
+      "checked_date": "2026-10-15"
+    }
+  },
+  "2026-10-08T15:50:00.011896+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating military conflicts and shipping attacks in the Middle East threatening broader energy supply and maritime logistics.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.689,
+      "vol_after_pct": 0.522,
+      "checked_date": "2026-10-15"
+    }
+  },
+  "2026-10-08T02:46:53.336266+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Broad USD appreciation tightening global financial conditions and weighing on commodities.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.689,
+      "vol_after_pct": 0.522,
+      "checked_date": "2026-10-15"
+    }
+  },
+  "2026-10-07T19:23:35.679492+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating military conflicts and tanker attacks in the Strait of Hormuz threatening broader energy and supply chain disruptions.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.712,
+      "vol_after_pct": 1.045,
+      "checked_date": "2026-10-14"
+    }
+  },
+  "2026-10-07T02:31:31.973390+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Further escalation in the Strait of Hormuz threatening broader energy and maritime trade corridors.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.712,
+      "vol_after_pct": 1.045,
+      "checked_date": "2026-10-14"
+    }
+  },
+  "2026-10-06T15:25:21.814598+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating maritime and geopolitical conflict in the Strait of Hormuz disrupting global energy flows and maritime insurance, alongside systemic risks from concentrated AI capital expenditure.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.685,
+      "vol_after_pct": 0.832,
+      "checked_date": "2026-10-13"
+    }
+  },
+  "2026-10-05T21:19:20.252065+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating military conflict and maritime blockades in the Strait of Hormuz threatening critical energy supply chains and global trade flows.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.517,
+      "vol_after_pct": 1.229,
+      "checked_date": "2026-10-12"
+    }
+  },
+  "2026-10-05T17:21:59.466501+00:00": {
+    "signal": "BULLISH",
+    "category": "other_fundamental",
+    "key_phrase": "Escalating kinetic conflict and tanker attacks in the Strait of Hormuz triggering prolonged energy market turmoil and broader macroeconomic shocks.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": -0.83,
+      "corn_baseline_pct": 0.96,
+      "abnormal_pct": -1.79,
+      "checked_date": "2026-10-07"
+    }
+  },
+  "2026-10-05T02:09:34.588164+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation of Middle Eastern maritime conflicts severely impacting global energy and shipping supply chains.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.517,
+      "vol_after_pct": 1.229,
+      "checked_date": "2026-10-12"
+    }
+  },
+  "2026-10-04T17:39:55.887883+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating Middle East conflict disrupting critical energy supply chains and shipping routes.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.585,
+      "vol_after_pct": 1.868,
+      "checked_date": "2026-10-09"
+    }
+  },
+  "2026-10-04T14:20:19.402346+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating geopolitical conflict and tanker attacks in the Strait of Hormuz threatening critical energy and commodity transport channels.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.585,
+      "vol_after_pct": 1.868,
+      "checked_date": "2026-10-09"
+    }
+  },
+  "2026-10-04T02:47:00.348907+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating maritime disruptions in the Red Sea and Strait of Hormuz threatening global energy and supply chain stability.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.585,
+      "vol_after_pct": 1.868,
+      "checked_date": "2026-10-09"
+    }
+  },
+  "2026-10-03T17:25:49.842233+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating maritime security incidents and attacks in the Strait of Hormuz threatening broader energy and commodity trade flows.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.585,
+      "vol_after_pct": 1.868,
+      "checked_date": "2026-10-09"
+    }
+  },
+  "2026-10-03T13:39:41.382809+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Persistent high inflation prompting further Federal Reserve rate hikes and a strengthening US dollar pressuring commodities.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.585,
+      "vol_after_pct": 1.868,
+      "checked_date": "2026-10-09"
+    }
+  },
+  "2026-10-03T02:07:59.826054+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating geopolitical conflict and kinetic attacks in the Strait of Hormuz threatening critical energy and maritime trade flows.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.585,
+      "vol_after_pct": 1.868,
+      "checked_date": "2026-10-09"
+    }
+  },
+  "2026-10-02T18:31:52.909611+00:00": {
+    "signal": "BEARISH",
+    "category": "other_fundamental",
+    "key_phrase": "Broad U.S. dollar strength continuing to weigh on commodities and persistent geopolitical escalation in the Middle East impacting energy and shipping lanes.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": 3.11,
+      "corn_baseline_pct": 2.06,
+      "abnormal_pct": 1.05,
+      "checked_date": "2026-10-06"
+    }
+  },
+  "2026-10-02T14:56:45.261037+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating global bond market rout and surging yields tightening financial conditions further.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.585,
+      "vol_after_pct": 1.868,
+      "checked_date": "2026-10-09"
+    }
+  },
+  "2026-10-02T02:21:06.524194+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating global bond yields and a surging U.S. dollar tightening global financial conditions.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.585,
+      "vol_after_pct": 1.868,
+      "checked_date": "2026-10-09"
+    }
+  },
+  "2026-10-01T18:56:13.022074+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating military conflict in the Middle East causing prolonged disruptions to critical energy and shipping transit corridors.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.55,
+      "vol_after_pct": 1.951,
+      "checked_date": "2026-10-08"
+    }
+  },
+  "2026-10-01T15:37:59.050429+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating global sovereign yield surges triggering broader liquidity strains and persistent maritime security risks in Middle Eastern chokepoints affecting oil and trade flows.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.55,
+      "vol_after_pct": 1.951,
+      "checked_date": "2026-10-08"
+    }
+  },
+  "2026-10-01T02:15:11.257211+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation of tanker attacks and shipping disruptions in the Strait of Hormuz spilling over into broader regional commodity supply chains.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.55,
+      "vol_after_pct": 1.951,
+      "checked_date": "2026-10-08"
+    }
+  },
+  "2026-09-30T02:13:17.480013+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Prolonged U.S. Treasury yield surge and expanding bond market rout tightening global financial conditions.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.281,
+      "vol_after_pct": 1.924,
+      "checked_date": "2026-10-07"
+    }
+  },
+  "2026-09-29T18:41:52.815616+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Rapidly rising U.S. Treasury yields tightening global liquidity and financial conditions.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.004,
+      "vol_after_pct": 0.727,
+      "checked_date": "2026-10-06"
+    }
+  },
+  "2026-09-29T15:03:10.991219+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation in geopolitical tensions around major energy corridors impacting broader commodity stability and currency exchange rates.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.004,
+      "vol_after_pct": 0.727,
+      "checked_date": "2026-10-06"
+    }
+  },
+  "2026-09-29T02:37:25.233634+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation of Middle East conflict impacting broader commodity supply chains and shipping routes.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.004,
+      "vol_after_pct": 0.727,
+      "checked_date": "2026-10-06"
+    }
+  },
+  "2026-09-29T02:17:35.632515+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation of the U.S.-Iran conflict leading to actual disruptions in regional shipping lanes like the Strait of Hormuz.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.004,
+      "vol_after_pct": 0.727,
+      "checked_date": "2026-10-06"
+    }
+  },
+  "2026-09-28T16:58:34.831882+00:00": {
+    "signal": "BEARISH",
+    "category": "other_fundamental",
+    "key_phrase": "Escalating energy costs feeding broader supply-chain inflation and aggressive central bank monetary tightening.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": -1.89,
+      "corn_baseline_pct": -4.25,
+      "abnormal_pct": 2.37,
+      "checked_date": "2026-09-30"
+    }
+  },
+  "2026-09-28T01:48:14.953139+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating Middle Eastern military conflicts threatening major energy supply lines and broader macroeconomic stability through surging global bond yields.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 0.723,
+      "vol_after_pct": 1.725,
+      "checked_date": "2026-10-05"
+    }
+  },
+  "2026-09-27T17:49:12.896125+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Uncontrolled escalation of sovereign debt yields and geopolitical conflict in the Middle East threatening global energy supplies and agricultural trade flows.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.237,
+      "vol_after_pct": 1.557,
+      "checked_date": "2026-10-02"
+    }
+  },
+  "2026-09-27T14:15:17.712475+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Persistent upward pressure on global borrowing costs and Treasury yields colliding with geopolitical supply chain bottlenecks.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.237,
+      "vol_after_pct": 1.557,
+      "checked_date": "2026-10-02"
+    }
+  },
+  "2026-09-27T01:35:57.350523+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Unchecked escalation in the Middle East severely impacting energy and agricultural shipping routes through key chokepoints like the Strait of Hormuz.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.237,
+      "vol_after_pct": 1.557,
+      "checked_date": "2026-10-02"
+    }
+  },
+  "2026-09-26T17:16:25.803058+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Rapidly rising global long-term bond yields and persistent geopolitical tensions threatening critical energy and supply chain corridors.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.237,
+      "vol_after_pct": 1.557,
+      "checked_date": "2026-10-02"
+    }
+  },
+  "2026-09-26T13:21:33.017374+00:00": {
+    "signal": "BULLISH",
+    "category": "confirmed_physical_disruption",
+    "key_phrase": "Escalating Middle East conflict disrupting critical energy and fertilizer shipping routes alongside surging sovereign bond yields.",
+    "result": {
+      "outcome": "FLAT",
+      "raw_wheat_pct": -1.49,
+      "corn_baseline_pct": -1.18,
+      "abnormal_pct": -0.31,
+      "checked_date": "2026-09-29"
+    }
+  },
+  "2026-09-26T01:44:46.198367+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Accelerating global bond yields triggering tighter monetary policy and potential macroeconomic slowdown while supply chain vulnerabilities persist in critical chokepoints.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.237,
+      "vol_after_pct": 1.557,
+      "checked_date": "2026-10-02"
+    }
+  },
+  "2026-09-25T14:07:53.536246+00:00": {
+    "signal": "BULLISH",
+    "category": "confirmed_physical_disruption",
+    "key_phrase": "Surging global bond yields tightening financial conditions alongside persistent chokepoint disruptions threatening commodity and energy supply chains.",
+    "result": {
+      "outcome": "FLAT",
+      "raw_wheat_pct": -1.49,
+      "corn_baseline_pct": -1.18,
+      "abnormal_pct": -0.31,
+      "checked_date": "2026-09-29"
+    }
+  },
+  "2026-09-24T13:44:50.613034+00:00": {
+    "signal": "BULLISH",
+    "category": "confirmed_physical_disruption",
+    "key_phrase": "Escalating maritime conflict and GPS jamming in the Strait of Hormuz threatening critical energy, fertilizer, and agricultural flows.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": -2.58,
+      "corn_baseline_pct": -0.85,
+      "abnormal_pct": -1.73,
+      "checked_date": "2026-09-28"
+    }
+  },
+  "2026-09-24T01:31:16.558643+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation of geopolitical tensions in the Middle East impacting global energy supplies and freight rates.",
+    "result": {
+      "outcome": "VOL_UP",
+      "vol_before_pct": 1.403,
+      "vol_after_pct": 1.787,
+      "checked_date": "2026-10-01"
+    }
+  },
+  "2026-09-23T17:52:56.074396+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Further escalation in the Middle East threatening broader energy supplies and general commodity inflation.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.392,
+      "vol_after_pct": 1.403,
+      "checked_date": "2026-09-30"
+    }
+  },
+  "2026-09-23T13:49:43.691010+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Potential escalation or sudden policy shifts regarding Middle East energy transit routes that could rapidly revive geopolitical risk premiums.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.392,
+      "vol_after_pct": 1.403,
+      "checked_date": "2026-09-30"
+    }
+  },
+  "2026-09-23T01:34:47.839182+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation of maritime attacks in the Strait of Hormuz causing broader energy supply chain shocks and sustained fuel price volatility.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.392,
+      "vol_after_pct": 1.403,
+      "checked_date": "2026-09-30"
+    }
+  },
+  "2026-09-22T17:40:14.309963+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating maritime security incidents in the Strait of Hormuz disrupting global energy and commodity logistics.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.392,
+      "vol_after_pct": 1.107,
+      "checked_date": "2026-09-29"
+    }
+  },
+  "2026-09-22T13:38:21.414378+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating Middle East conflict driving prolonged energy price shocks and tighter global financial conditions.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.392,
+      "vol_after_pct": 1.107,
+      "checked_date": "2026-09-29"
+    }
+  },
+  "2026-09-21T18:47:13.571327+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation in Middle East geopolitical tensions impacting broader commodity supply chains and energy costs.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.88,
+      "vol_after_pct": 0.82,
+      "checked_date": "2026-09-28"
+    }
+  },
+  "2026-09-21T15:18:27.074420+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Persistent hawkish Fed rate expectations bolstering the U.S. dollar and suppressing broad commodity complexes.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.88,
+      "vol_after_pct": 0.82,
+      "checked_date": "2026-09-28"
+    }
+  },
+  "2026-09-21T01:17:22.342040+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Potential re-escalation of Middle East geopolitical tensions threatening vital shipping chokepoints like the Strait of Hormuz.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.88,
+      "vol_after_pct": 0.82,
+      "checked_date": "2026-09-28"
+    }
+  },
+  "2026-09-20T16:52:52.281754+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Potential escalation in Middle East geopolitical tensions impacting broader energy and supply chain sentiment.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.764,
+      "vol_after_pct": 0.533,
+      "checked_date": "2026-09-25"
+    }
+  },
+  "2026-09-20T13:11:54.817785+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation of the U.S.-Iran conflict driving sustained high crude oil and diesel prices, exacerbating global inflationary pressures and prompting aggressive central bank tightening.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.764,
+      "vol_after_pct": 0.533,
+      "checked_date": "2026-09-25"
+    }
+  },
+  "2026-09-20T01:19:34.740477+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation or failure of diplomatic talks regarding Middle East shipping chokepoints and oil infrastructure safety.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.764,
+      "vol_after_pct": 0.533,
+      "checked_date": "2026-09-25"
+    }
+  },
+  "2026-09-19T16:33:41.284053+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating geopolitical conflict in the Middle East impacting regional energy and shipping corridors.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.764,
+      "vol_after_pct": 0.533,
+      "checked_date": "2026-09-25"
+    }
+  },
+  "2026-09-19T12:40:27.648097+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating Middle East conflict driving prolonged high energy costs and feeding persistent global inflationary pressures.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.764,
+      "vol_after_pct": 0.533,
+      "checked_date": "2026-09-25"
+    }
+  },
+  "2026-09-19T01:19:47.878695+00:00": {
+    "signal": "BULLISH",
+    "category": "other_fundamental",
+    "key_phrase": "Potential escalation of trade tensions and geopolitical friction affecting global supply chains and energy costs.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": 0.42,
+      "corn_baseline_pct": 1.75,
+      "abnormal_pct": -1.33,
+      "checked_date": "2026-09-22"
+    }
+  },
+  "2026-09-18T17:08:14.751731+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating Middle East tensions impacting global energy supplies and broader macroeconomic stability.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.764,
+      "vol_after_pct": 0.533,
+      "checked_date": "2026-09-25"
+    }
+  },
+  "2026-09-17T13:44:58.659254+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation of the U.S.-Iran conflict severely disrupting energy supplies and maritime transit through the Strait of Hormuz, maintaining upward pressure on global inflation and diesel transportation costs.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.91,
+      "vol_after_pct": 1.421,
+      "checked_date": "2026-09-24"
+    }
+  },
+  "2026-09-16T17:39:21.986578+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating Middle East military actions further destabilizing key maritime chokepoints and energy supply chains.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.98,
+      "vol_after_pct": 1.606,
+      "checked_date": "2026-09-23"
+    }
+  },
+  "2026-09-16T13:42:41.417597+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation of the U.S.-Iran conflict severely disrupting Middle East energy flows and driving up global diesel/transportation costs.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.98,
+      "vol_after_pct": 1.606,
+      "checked_date": "2026-09-23"
+    }
+  },
+  "2026-09-15T13:50:32.129740+00:00": {
+    "signal": "BEARISH",
+    "category": "other_fundamental",
+    "key_phrase": "Escalating maritime and pipeline disruptions in the Middle East driving persistent volatility in global energy costs and shipping rates.",
+    "result": {
+      "outcome": "FLAT",
+      "raw_wheat_pct": -0.21,
+      "corn_baseline_pct": -0.98,
+      "abnormal_pct": 0.77,
+      "checked_date": "2026-09-17"
+    }
+  },
+  "2026-09-14T00:26:03.146574+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Prolonged Middle East conflict severely disrupting energy and maritime logistics, combined with escalating geopolitical trade wars.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 2.142,
+      "vol_after_pct": 1.47,
+      "checked_date": "2026-09-21"
+    }
+  },
+  "2026-09-13T16:59:07.800107+00:00": {
+    "signal": "BULLISH",
+    "category": "confirmed_physical_disruption",
+    "key_phrase": "Escalating military conflict in the Middle East severely disrupting maritime trade chokepoints like the Strait of Hormuz and Bab el-Mandeb.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": 3.04,
+      "corn_baseline_pct": 5.0,
+      "abnormal_pct": -1.96,
+      "checked_date": "2026-09-15"
+    }
+  },
+  "2026-09-13T13:26:57.458130+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating military conflict and maritime chokepoint blockades in the Middle East threatening global energy and supply chain stability.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 2.397,
+      "vol_after_pct": 2.032,
+      "checked_date": "2026-09-18"
+    }
+  },
+  "2026-09-12T16:22:56.917874+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating military conflict in the Middle East threatening broader energy supplies and maritime trade through the Strait of Hormuz.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 2.397,
+      "vol_after_pct": 2.032,
+      "checked_date": "2026-09-18"
+    }
+  },
+  "2026-09-11T17:03:24.916325+00:00": {
+    "signal": "BULLISH",
+    "category": "confirmed_physical_disruption",
+    "key_phrase": "Escalating kinetic conflict in the Middle East severely choking critical energy and shipping corridors, driving up global logistics and input costs.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": 3.04,
+      "corn_baseline_pct": 5.0,
+      "abnormal_pct": -1.96,
+      "checked_date": "2026-09-15"
+    }
+  },
+  "2026-09-11T01:14:42.225448+00:00": {
+    "signal": "BULLISH",
+    "category": "other_fundamental",
+    "key_phrase": "Further military escalation in the Strait of Hormuz disrupting global energy and commodity supply chains, driving inflation higher.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": 3.04,
+      "corn_baseline_pct": 5.0,
+      "abnormal_pct": -1.96,
+      "checked_date": "2026-09-15"
+    }
+  },
+  "2026-09-11T00:34:34.357513+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Military escalation in the Strait of Hormuz disrupting global energy and maritime supply chains, compounding inflation and forcing aggressive central bank tightening.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 2.397,
+      "vol_after_pct": 2.032,
+      "checked_date": "2026-09-18"
+    }
+  },
+  "2026-09-10T17:02:30.905949+00:00": {
+    "signal": "BULLISH",
+    "category": "other_fundamental",
+    "key_phrase": "Further military escalation in the Middle East causing sustained energy shocks and forcing aggressive central bank tightening.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": -2.25,
+      "corn_baseline_pct": -0.39,
+      "abnormal_pct": -1.86,
+      "checked_date": "2026-09-14"
+    }
+  },
+  "2026-09-10T13:05:45.572799+00:00": {
+    "signal": "BULLISH",
+    "category": "other_fundamental",
+    "key_phrase": "Escalation of military conflict in the Strait of Hormuz threatening global crude supplies and driving severe energy-driven wholesale inflation.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": -2.25,
+      "corn_baseline_pct": -0.39,
+      "abnormal_pct": -1.86,
+      "checked_date": "2026-09-14"
+    }
+  },
+  "2026-09-10T02:26:39.505277+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation in the Strait of Hormuz leading to sustained energy shocks, broader supply chain disruptions, and prolonged high interest rate environments.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 2.436,
+      "vol_after_pct": 1.591,
+      "checked_date": "2026-09-17"
+    }
+  },
+  "2026-09-09T17:11:34.744225+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating military conflict in the Strait of Hormuz driving sustained high energy costs and broader macroeconomic instability.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.993,
+      "vol_after_pct": 2.167,
+      "checked_date": "2026-09-16"
+    }
+  },
+  "2026-09-09T13:07:42.916634+00:00": {
+    "signal": "BULLISH",
+    "category": "other_fundamental",
+    "key_phrase": "Spillover of Middle East hostilities into broader energy and maritime transport disruptions, pushing oil sustainably above $100 and tightening global financial conditions.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": -0.6,
+      "corn_baseline_pct": 0.49,
+      "abnormal_pct": -1.09,
+      "checked_date": "2026-09-11"
+    }
+  },
+  "2026-09-09T00:43:32.988816+00:00": {
+    "signal": "BEARISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation of Middle East conflict causing sustained disruptions to crude oil supplies and maritime chokepoints.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 1.993,
+      "vol_after_pct": 2.167,
+      "checked_date": "2026-09-16"
+    }
+  },
+  "2026-09-08T13:44:55.960179+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalating military conflict in the Strait of Hormuz and Bab el-Mandeb threatening critical regional trade and energy transit corridors.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 2.098,
+      "vol_after_pct": 2.281,
+      "checked_date": "2026-09-15"
+    }
+  },
+  "2026-09-08T13:10:26.953429+00:00": {
+    "signal": "BULLISH",
+    "category": "other_fundamental",
+    "key_phrase": "Potential escalation of retaliatory trade tariffs and active Middle East supply shocks spilling over into broader energy and agricultural freight costs.",
+    "result": {
+      "outcome": "LOSS",
+      "raw_wheat_pct": -0.96,
+      "corn_baseline_pct": 0.59,
+      "abnormal_pct": -1.55,
+      "checked_date": "2026-09-10"
+    }
+  },
+  "2026-09-08T13:02:38.126361+00:00": {
+    "signal": "BULLISH",
+    "category": "speculative_tension",
+    "key_phrase": "Escalation in the Persian Gulf disrupting vital energy and maritime trade corridors, compounding global supply-chain inflation.",
+    "result": {
+      "outcome": "VOL_FLAT_OR_DOWN",
+      "vol_before_pct": 2.098,
+      "vol_after_pct": 2.281,
+      "checked_date": "2026-09-15"
+    }
+  },
+  "2026-09-07T18:17:27.807049+00:00": {
+    "signal": "BULLISH",
+    "category": "weather_crop_damage",
+    "key_phrase": "Escalating White House pressure on the Federal Reserve leading to policy uncertainty and currency volatility, combined with supersized El Ni\u00f1o weather disruptions threatening global grain yields.",
+    "result": {
+      "outcome": "FLAT",
+      "raw_wheat_pct": -0.66,
+      "corn_baseline_pct": -0.83,
+      "abnormal_pct": 0.17,
+      "checked_date": "2026-09-09"
+    }
+  },
+  "2026-09-07T14:25:04.113232+00:00": {
+    "signal": "BULLISH",
+    "category": "weather_crop_damage",
+    "key_phrase": "Escalating geopolitical conflict in the Middle East disrupting global energy supplies and broader supply chains.",
+    "result": {
+      "outcome": "FLAT",
+      "raw_wheat_pct": -0.66,
+      "corn_baseline_pct": -0.83,
+      "abnormal_pct": 0.17,
+      "checked_date": "2026-09-09"
+    }
+  },
+  "2026-09-06T12:19:54.565837+00:00": {
+    "signal": "BULLISH",
+    "category": "weather_crop_damage",
+    "key_phrase": "The combination of direct military conflict in the Strait of Hormuz threatening global energy flows and a supersized El Nino disrupting major agricultural production regions.",
+    "result": {
+      "outcome": "FLAT",
+      "raw_wheat_pct": -0.66,
+      "corn_baseline_pct": -0.83,
+      "abnormal_pct": 0.17,
+      "checked_date": "2026-09-09"
     }
   }
 }
