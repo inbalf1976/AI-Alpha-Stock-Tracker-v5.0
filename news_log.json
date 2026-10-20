@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-10-20T13:49:27.660213+00:00",
+    "total_scanned": 216,
+    "flagged_count": 156,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 30 Sep 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Grain futures rise after hitting multi-week lows on Tuesday",
+        "link": "https://www.investing.com/news/commodities-news/grain-futures-rise-after-hitting-multiweek-lows-on-tuesday-93CH-4960207",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-20 13:09:39",
+        "matched_keywords": [
+          "grain"
+        ]
+      },
+      {
+        "title": "Saudi Aramco sells more fuel oil cargoes for November loading",
+        "link": "https://www.investing.com/news/commodities-news/saudi-aramco-sells-more-fuel-oil-cargoes-for-november-loading-93CH-4959281",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-20 09:37:02",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold dips as oil prices fuel inflation fears, Fed outlook in focus",
+        "link": "https://www.investing.com/news/commodities-news/gold-dips-as-oil-prices-fuel-inflation-fears-fed-outlook-in-focus-4958694",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-20 09:02:09",
+        "matched_keywords": [
+          "fed",
+          "inflation",
+          "oil"
+        ]
+      },
+      {
+        "title": "Credit markets have entered uncharted territory as the riskiest junk bonds send a warning to investors",
+        "link": "https://www.marketwatch.com/story/credit-markets-have-entered-uncharted-territory-as-the-riskiest-junk-bonds-send-a-warning-to-investors-816a05d5?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 20 Oct 2026 12:29:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Short-end U.S. yields edge up as investors digest French unrest",
+        "link": "https://www.investing.com/news/forex-news/french-bond-selloff-accelerates-on-unrest-cds-nears-2013-highs-4958841",
+        "source": "Investing.com Forex",
+        "published": "2026-10-20 12:13:35",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar gains as French turmoil due to violent protests drags down the euro",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-ticks-higher-yuan-hits-4yr-high-after-china-q3-gdp-beat-4956302",
+        "source": "Investing.com Forex",
+        "published": "2026-10-19 20:51:26",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are reacting to a mix of geopolitical and economic drivers, including ongoing maritime security incidents in the Strait of Hormuz, political turmoil in France boosting the US dollar, and Federal Reserve regulatory updates. Meanwhile, commodity markets see grain futures rebounding from multi-week lows as oil prices stoke inflation concerns.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": "BULLISH with a 1-sentence reason: The US dollar is strengthening against major counterparts amid European political turmoil and safe-haven demand, providing a supportive backdrop for the USD/ILS exchange rate.",
+      "key_risk": "Escalating maritime security threats in the Strait of Hormuz affecting regional energy and shipping flows, coupled with broadening inflation fears.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Ongoing maritime attacks and GPS jamming in the Strait of Hormuz and surrounding waters continue to disrupt regional shipping and physical transit flows.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-20T01:57:11.564577+00:00",
     "total_scanned": 225,
     "flagged_count": 163,
@@ -31718,166 +31877,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "Active Iranian seizures and rising dark-vessel transits in the Strait of Hormuz are critically disrupting regional maritime traffic and threatening global energy transport."
-    }
-  },
-  {
-    "timestamp": "2026-08-20T23:19:53.670117+00:00",
-    "total_scanned": 227,
-    "flagged_count": 162,
-    "flagged_headlines": [
-      {
-        "title": "Canadian dollar hits near three-month high on oil, trade hopes",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-hits-near-threemonth-high-on-oil-trade-hopes-93CH-4870446",
-        "source": "Investing.com Forex",
-        "published": "2026-08-20 20:19:50",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound rises as dollar slides on Treasury buyback signal",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-rises-as-dollar-slides-on-treasury-buyback-signal-4869066",
-        "source": "Investing.com Forex",
-        "published": "2026-08-20 09:38:56",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "U.S. yields resume ascent as long-end selling overshadows Asian and European rally",
-        "link": "https://www.investing.com/news/forex-news/global-yields-retrench-from-multidecade-peaks-after-us-treasury-buybacks-4868742",
-        "source": "Investing.com Forex",
-        "published": "2026-08-20 07:34:13",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "Dollar hits three-month low as Treasury buybacks sink yields; Fed flags inflation",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-rises-as-treasury-yields-ease-s-korean-won-hits-1yr-high-4866425",
-        "source": "Investing.com Forex",
-        "published": "2026-08-19 19:45:56",
-        "matched_keywords": [
-          "fed",
-          "inflation",
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Deutsche Bank calls Treasury buyback doubling similar to ’operation twist’",
-        "link": "https://www.investing.com/news/forex-news/deutsche-bank-calls-treasury-buyback-doubling-similar-to-operation-twist-4867804",
-        "source": "Investing.com Forex",
-        "published": "2026-08-19 14:26:58",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "Oil hits nearly one-month high as Trump ramps up economic warfare against Iran",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-steady-after-trump-announces-more-economic-sanctions-on-iran-4868505",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-20 21:29:14",
-        "matched_keywords": [
-          "oil",
-          "war"
-        ]
-      },
-      {
-        "title": "Oil settles up more than 2% after Trump threatens countries supporting Iran",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-steady-as-investors-assess-usiran-war-outlook-4868535",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-20 20:25:18",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Spot gold holds above $4.5k a day after topping the mark for first time since June",
-        "link": "https://www.investing.com/news/commodities-news/gold-holds-near-2month-high-as-treasury-buybacks-push-yields-dollar-lower-4868639",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-20 19:38:04",
-        "matched_keywords": [
-          "ppi"
-        ]
-      },
-      {
-        "title": "London Gas Oil tests $1,300 double top resistance: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-coils-near-1241-before-breakout-live-levels-93CH-4862236",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-20 19:19:17",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Crude Oil WTI nears $87.52 resistance: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-stalls-below-vwap-at-8108-hourly-levels-93CH-4862232",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-20 19:19:14",
-        "matched_keywords": [
-          "crude",
-          "oil"
-        ]
-      },
-      {
-        "title": "Brent Oil nears $94.19 resistance with RSI at 70.8: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/brent-oil-trapped-at-8842-in-choppy-range-live-levels-93CH-4862231",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-20 19:19:07",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Bessent's efforts in the Treasury market so far haven't worked. Here's what else he can try",
-        "link": "https://www.cnbc.com/2026/08/20/bessents-efforts-in-the-treasury-market-so-far-havent-worked-heres-what-else-he-can-try.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 20 Aug 2026 21:13:14 GMT",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "Bessent says Treasury buyback operation could be more than $4 billion",
-        "link": "https://www.cnbc.com/2026/08/20/bessent-says-treasury-buyback-operation-could-be-more-than-4-billion.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 20 Aug 2026 15:35:33 GMT",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "Trump bemoans Fed interest rate policy, says U.S. should be paying much less",
-        "link": "https://www.cnbc.com/2026/08/19/trump-bemoans-fed-interest-rate-policy-says-us-should-be-paying-much-less.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 19 Aug 2026 21:29:38 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Russia says its economy is strong. It just fired a top economist who warned otherwise",
-        "link": "https://www.cnbc.com/2026/08/18/ukraine-war-russia-economy-klepach.html",
-        "source": "CNBC Economy",
-        "published": "Tue, 18 Aug 2026 11:51:15 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are driven by escalating geopolitical tensions in the Middle East, particularly US economic warfare against Iran and active disruptions in the Strait of Hormuz, alongside monetary policy shifts including Treasury buyback signals and Fed inflation flags. Brent oil has surged near $94 while the US dollar hit a three-month low, lifting commodity-linked currencies like the Canadian dollar.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "Agricultural fundamentals are overshadowed by energy, FX, and Middle Eastern shipping disruptions that do not directly alter immediate global wheat supply balances.",
-      "usd_ils_impact": "BULLISH",
-      "usd_ils_impact_reason": "Geopolitical escalation and threats in the Persian Gulf heighten regional risk premiums, typically driving safe-haven demand that strengthens the dollar against regional pairs like the Israeli shekel.",
-      "key_risk": "Military escalation or formal closures in the Strait of Hormuz disrupting vital energy and maritime trade corridors.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "Iranian forces have seized a tanker near Qeshm Island while Chinese-managed tankers abort transits, and a majority of Strait of Hormuz traffic is running dark amid active naval disruptions."
     }
   }
 ]
