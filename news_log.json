@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-10-21T18:07:37.759186+00:00",
+    "total_scanned": 230,
+    "flagged_count": 166,
+    "flagged_headlines": [
+      {
+        "title": "US aims to loan about a third of heating oil reserve in bid to tame prices",
+        "link": "https://www.investing.com/news/commodities-news/exclusiveus-aims-to-loan-about-a-third-of-heating-oil-reserve-in-bid-to-tame-prices-4962259",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-21 15:13:00",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US crude oil inventories drop 3.06 million barrels",
+        "link": "https://www.investing.com/news/commodities-news/us-crude-oil-inventories-drop-306-million-barrels-93CH-4963561",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-21 14:45:26",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Saudi Arabia crude exports rise 7.9% in August to 4-month high",
+        "link": "https://www.investing.com/news/commodities-news/saudi-arabia-crude-exports-rise-79-in-august-to-4month-high-93CH-4963376",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-21 14:00:57",
+        "matched_keywords": [
+          "crude"
+        ]
+      },
+      {
+        "title": "Oil prices edge lower amid supply recovery report, ongoing Mideast tensions",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-rise-on-meast-tensions-us-inventory-draw-4961436",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-21 13:34:53",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold turns higher as oil prices dip, investors eye Fed rate outlook",
+        "link": "https://www.investing.com/news/commodities-news/gold-falls-near-4110-as-iran-peace-hopes-fade-fed-rate-outlook-clouds-demand-4961463",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-21 13:29:22",
+        "matched_keywords": [
+          "fed",
+          "oil"
+        ]
+      },
+      {
+        "title": "Ukraine’s Zelenskiy says he supports ceasefire, trilateral talks with US, Russia",
+        "link": "https://www.investing.com/news/commodities-news/ukraines-zelenskiy-says-he-supports-ceasefire-trilateral-talks-with-us-russia-4962642",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-21 11:36:36",
+        "matched_keywords": [
+          "ceasefire"
+        ]
+      },
+      {
+        "title": "Yemen’s Houthis deny launching drones towards Saudi Arabia’s Medina",
+        "link": "https://www.investing.com/news/commodities-news/yemens-houthis-deny-launching-drones-towards-saudi-medina-on-wednesday-4962170",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-21 11:30:24",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields drop on safe-haven flows; French yields hit 5% mark",
+        "link": "https://www.investing.com/news/forex-news/french-yields-hover-near-2002-highs-hotter-uk-inflation-sparks-gilt-pressure-4961706",
+        "source": "Investing.com Forex",
+        "published": "2026-10-21 12:12:00",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "India’s 10-year bond yield climbs above 7.45% to multi-year high",
+        "link": "https://www.investing.com/news/forex-news/indias-10year-bond-yield-climbs-above-745-to-multiyear-high-93CH-4962437",
+        "source": "Investing.com Forex",
+        "published": "2026-10-21 10:55:00",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar holds near 3-week low; euro and yen consolidate as markets gauge Iran war",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-as-dollar-hovers-near-3week-low-rupee-extends-rally-4961573",
+        "source": "Investing.com Forex",
+        "published": "2026-10-21 09:50:17",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound climbs on hot UK CPI as dollar weakens",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-climbs-on-hot-uk-cpi-as-dollar-weakens-4962057",
+        "source": "Investing.com Forex",
+        "published": "2026-10-21 09:09:49",
+        "matched_keywords": [
+          "cpi"
+        ]
+      },
+      {
+        "title": "Short-end U.S. yields edge up as investors digest French unrest",
+        "link": "https://www.investing.com/news/forex-news/french-bond-selloff-accelerates-on-unrest-cds-nears-2013-highs-4958841",
+        "source": "Investing.com Forex",
+        "published": "2026-10-20 12:13:35",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar gains as French turmoil due to violent protests drags down the euro",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-ticks-higher-yuan-hits-4yr-high-after-china-q3-gdp-beat-4956302",
+        "source": "Investing.com Forex",
+        "published": "2026-10-19 20:51:26",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Euro dips on French turmoil, US dollar lifted as stocks rebound",
+        "link": "https://www.investing.com/news/forex-news/dollar-firmer-euro-weakens-as-french-protests-turn-violent-4956196",
+        "source": "Investing.com Forex",
+        "published": "2026-10-19 19:24:23",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "UK inflation jumps to 3.5% — cementing rate hike expectations",
+        "link": "https://www.cnbc.com/2026/10/21/inflation-uk-cpi-interest-rates.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 21 Oct 2026 07:50:10 GMT",
+        "matched_keywords": [
+          "rate hike",
+          "inflation"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are navigating heightened geopolitical tensions in the Middle East, with Iranian threats to subsea cables and declining Hormuz transits contrasting with ongoing ceasefire discussions involving Ukraine. Meanwhile, currency and bond markets are reacting to a hot UK inflation print, safe-haven Treasury flows, and political turmoil in France weighing on the euro and lifting the US dollar.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "WEAKENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "NEUTRAL",
+      "key_risk": "Escalating maritime and infrastructure threats in the Strait of Hormuz threatening broader energy and supply chain stability.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BULLISH"
+    }
+  },
+  {
     "timestamp": "2026-10-21T14:06:27.790332+00:00",
     "total_scanned": 229,
     "flagged_count": 169,
@@ -31714,162 +31875,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "An IRGC seizure of a Liberia-flagged tanker near Qeshm Island and a separate hijacking off Somalia have been confirmed in the Strait of Hormuz corridor, representing active physical disruptions to shipping routes."
-    }
-  },
-  {
-    "timestamp": "2026-08-22T13:33:02.322370+00:00",
-    "total_scanned": 224,
-    "flagged_count": 161,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound steady as Treasury buyback keeps dollar soft",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-steady-as-treasury-buyback-keeps-dollar-soft-4871116",
-        "source": "Investing.com Forex",
-        "published": "2026-08-21 09:14:43",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "Sterling set to strengthen further on yield advantage, UBS says",
-        "link": "https://www.investing.com/news/forex-news/sterling-set-to-strengthen-further-on-yield-advantage-ubs-says-4871072",
-        "source": "Investing.com Forex",
-        "published": "2026-08-21 08:44:08",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "UBS keeps Japanese yen neutral on Fed, BOJ policy divergence",
-        "link": "https://www.investing.com/news/forex-news/ubs-keeps-japanese-yen-neutral-on-fed-boj-policy-divergence-93CH-4871055",
-        "source": "Investing.com Forex",
-        "published": "2026-08-21 08:30:44",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Why an announcement from the Treasury sparked a rally in gold and bitcoin this week",
-        "link": "https://www.marketwatch.com/story/why-an-announcement-from-the-treasury-sparked-a-rally-in-gold-and-bitcoin-this-week-d9d5972b?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sat, 22 Aug 2026 13:00:00 GMT",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "Move over, credit cards: Social-media stars are tapping magic wands to buy things",
-        "link": "https://www.marketwatch.com/story/move-over-credit-cards-social-media-stars-are-tapping-magic-wands-to-buy-things-62e475d4?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sat, 22 Aug 2026 12:30:00 GMT",
-        "matched_keywords": [
-          "ppi"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Financial markets are digesting a soft U.S. dollar supported by Treasury buybacks and steady Fed policy updates, while geopolitical tensions rise as the IRGC confirms a tanker seizure in the Strait of Hormuz. Concurrently, foreign exchange and precious metals rally amid shifting sovereign debt and yield expectations.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "While Middle East chokepoint escalations add macro risk premium, grain trade flows and direct Black Sea/global wheat routes remain unaffected by the Hormuz incidents.",
-      "usd_ils_impact": "BEARISH",
-      "usd_ils_impact_reason": "A persistently soft U.S. dollar driven by Treasury buyback dynamics pressures the USD downward against major and regional crosses alike.",
-      "key_risk": "Escalation of kinetic military actions or maritime seizures in the Strait of Hormuz threatening global energy and cargo transit.",
-      "headline_overstated": true,
-      "headline_vs_article_note": "The MarketWatch headline 'Move over, credit cards: Social-media stars are tapping magic wands to buy things' uses dramatic phrasing ('magic wands') for a story that simply discusses the unremarkable trend of content creators incorporating modern online shopping routines into their videos.",
-      "immediate_risk": true,
-      "immediate_risk_reason": "An active maritime disruption is unfolding in the Strait of Hormuz following a confirmed IRGC tanker seizure, alongside the boarding of an OFAC-sanctioned vessel off Somalia and active small-craft swarms in the corridor.",
-      "immediate_risk_reason_note": ""
     }
   }
 ]
