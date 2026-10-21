@@ -344,11 +344,11 @@ class WeeklyRangeEngine:
         if bias == 'UP':
             entry  = current_price
             stop   = round(range_low - (range_half * 0.10), 2)
-            target = round(range_high, 2)
+            target = round(entry + (range_high - entry) * 0.5, 2)  # 2026-10-21: take-profit at 50% of the way (exit_test: 78% win, +2.84c/trade)
         elif bias == 'DOWN':
             entry  = current_price
             stop   = round(range_high + (range_half * 0.10), 2)
-            target = round(range_low, 2)
+            target = round(entry - (entry - range_low) * 0.5, 2)  # 2026-10-21: take-profit at 50% of the way (exit_test: 78% win, +2.84c/trade)
         else:
             entry  = current_price
             stop   = round(range_low * 0.99, 2)
