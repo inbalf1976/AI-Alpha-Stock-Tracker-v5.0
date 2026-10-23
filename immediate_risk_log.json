@@ -5,11 +5,11 @@
     "reason": "Escalating military threats by the IRGC targeting subsea communications and maritime chokepoints in the Strait of Hormuz, alongside diplomatic evacuation orders in Saudi Arabia, present an active threat to regional logistics.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 629.75,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "FLAT",
+    "price_at_scoring": 630.0,
+    "pct_change": 0.04,
+    "scored_at": "2026-10-23T01:41:37.490575+00:00"
   },
   {
     "alert_number": 93,
