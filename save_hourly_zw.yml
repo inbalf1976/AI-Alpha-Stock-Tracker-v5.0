@@ -1,0 +1,32 @@
+name: Save hourly ZW
+
+on:
+  schedule:
+    - cron: '0 10 23 * *'   # 23rd of every month, 10:00 UTC (13:00 Israel summer time)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install
+        run: pip install yfinance pandas
+
+      - name: Download and merge hourly bars
+        run: python save_hourly_zw.py
+
+      - name: Commit only if the archive changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add zw_hourly_archive.csv
+          git diff --cached --quiet || (git commit -m "hourly ZW archive update" && git pull --rebase && git push)
