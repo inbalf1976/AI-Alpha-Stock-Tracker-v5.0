@@ -1,0 +1,96 @@
+name: Save hourly ZW
+
+on:
+  schedule:
+    - cron: '0 10 23 * *'   # 23rd of every month, 10:00 UTC (13:00 Israel summer time)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install
+        run: pip install yfinance pandas
+
+      - name: Download hourly bars and merge into zw_hourly_archive.csv
+        run: |
+          python - <<'PYEOF'
+          from pathlib import Path
+          import pandas as pd
+
+          TICKER = "ZW=F"
+          ARCHIVE = Path("zw_hourly_archive.csv")
+          COLS = ["Open", "High", "Low", "Close", "Volume"]
+
+
+          def fetch() -> pd.DataFrame:
+              import yfinance as yf
+              df = yf.download(TICKER, period="730d", interval="1h",
+                               auto_adjust=False, progress=False)
+              return df
+
+
+          def normalize(df: pd.DataFrame) -> pd.DataFrame:
+              if df is None or len(df) == 0:
+                  return pd.DataFrame(columns=COLS)
+              if isinstance(df.columns, pd.MultiIndex):          # newer yfinance returns (field, ticker)
+                  df.columns = df.columns.get_level_values(0)
+              df = df[[c for c in COLS if c in df.columns]].copy()
+              idx = pd.to_datetime(df.index)
+              idx = idx.tz_localize("UTC") if idx.tz is None else idx.tz_convert("UTC")
+              df.index = idx
+              df.index.name = "Datetime_UTC"
+              df = df.dropna(subset=["Open", "High", "Low", "Close"])
+              return df
+
+
+          def merge(old: pd.DataFrame, new: pd.DataFrame) -> pd.DataFrame:
+              both = pd.concat([old, new])
+              both = both[~both.index.duplicated(keep="last")]   # newer download wins on overlap
+              return both.sort_index()
+
+
+          def load_archive() -> pd.DataFrame:
+              if not ARCHIVE.exists():
+                  return pd.DataFrame(columns=COLS)
+              old = pd.read_csv(ARCHIVE, index_col=0)
+              old.index = pd.to_datetime(old.index, utc=True)
+              old.index.name = "Datetime_UTC"
+              return old
+
+
+          def main():
+              old = load_archive()
+              new = normalize(fetch())
+              if new.empty:
+                  print("Yahoo returned no data - archive left unchanged.")
+                  return
+              out = merge(old, new)
+              out.to_csv(ARCHIVE)
+              added = len(out) - len(old)
+              print(f"Archive: {len(old)} -> {len(out)} bars (+{added})")
+              print(f"Range: {out.index.min()}  to  {out.index.max()}")
+              gap = out.index.to_series().diff().dt.days
+              if (gap > 5).any():
+                  print("WARNING: gaps over 5 days in the archive, e.g.:",
+                        list(out.index[gap > 5][:3]))
+
+
+          main()
+          PYEOF
+
+      - name: Commit only if the archive changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add zw_hourly_archive.csv
+          git diff --cached --quiet || (git commit -m "hourly ZW archive update" && git pull --rebase && git push)
