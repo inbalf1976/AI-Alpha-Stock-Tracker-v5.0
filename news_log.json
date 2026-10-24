@@ -1,5 +1,168 @@
 [
   {
+    "timestamp": "2026-10-24T16:42:17.259938+00:00",
+    "total_scanned": 225,
+    "flagged_count": 159,
+    "flagged_headlines": [
+      {
+        "title": "Investors’ recent money moves show a preference for lowering risks over boosting rewards",
+        "link": "https://www.marketwatch.com/story/investors-recent-money-moves-show-a-preference-for-quality-over-momentum-within-the-s-p-500-ed6b5149?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 24 Oct 2026 13:37:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Treasury yields set for third weekly drop as AI worries fuel haven bid",
+        "link": "https://www.investing.com/news/forex-news/german-yields-hit-2month-lows-as-french-debt-costs-spike-4968247",
+        "source": "Investing.com Forex",
+        "published": "2026-10-23 12:33:14",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "India 40-year bond yield hits highest level since 2018",
+        "link": "https://www.investing.com/news/forex-news/india-40year-bond-yield-hits-highest-level-since-2018-93CH-4968714",
+        "source": "Investing.com Forex",
+        "published": "2026-10-23 10:11:18",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields crater, 10-yr closes at one-month low on safe-haven demand",
+        "link": "https://www.investing.com/news/forex-news/french-yields-breach-5-amid-paris-budget-paralysis-and-nationwide-unrest-4964673",
+        "source": "Investing.com Forex",
+        "published": "2026-10-22 21:35:49",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Canadian dollar strengthens as oil prices, BoC rate hike bets support loonie",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-strengthens-as-oil-prices-boc-rate-hike-bets-support-loonie-4967236",
+        "source": "Investing.com Forex",
+        "published": "2026-10-22 19:30:10",
+        "matched_keywords": [
+          "rate hike",
+          "oil"
+        ]
+      },
+      {
+        "title": "Iran has ramped up efforts to target US personnel, intelligence memo warns",
+        "link": "https://www.investing.com/news/commodities-news/iran-has-ramped-up-efforts-to-target-us-personnel-intelligence-memo-warns-4970887",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-24 16:06:41",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Oil prices hovers near Iran high amid Mideast supply jitters",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-cool-from-5month-highs-as-trump-invokes-defense-production-act-4967880",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-23 21:54:13",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices jump $3 on Houthi attacks, oil spill, highest settlement since April",
+        "link": "https://www.investing.com/news/commodities-news/oil-little-changed-as-supply-concern-lingers-amid-houthi-attacks-on-saudi-arabia-4967907",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-23 19:42:21",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "India’s crude oil imports climb 16% in September",
+        "link": "https://www.investing.com/news/commodities-news/indias-crude-oil-imports-climb-16-in-september-93CH-4970245",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-23 19:24:14",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "USDA Admits Corn Data Error in September Report, But Controversial 181.2-Bu. Yield Forecast Stands - AgWeb",
+        "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPSFVxR3VqWFpyLU1QMVlzWGtkb01mNEpIb29RRFVJZG11SzJxUlpvMUVFNjV2Z0lmaHJFeU5RV1EtTndMaFBnSk9YTndDN2sxZTlBNDVLRUpRYlFUZmpWMjV4QkZXbGltdUdOMVJzb0V4ZnZHenBJZGNkaHk4WGxmMmI2NG1Rc1Z1TjZlb3oxOEFCQXdKc1ZoV2xDTkx0eEZjMzRQZUIyUmplTUZ2R2JybmZHUjgxMWU1OUhv?oc=5",
+        "source": "AgWeb Markets",
+        "published": "Fri, 23 Oct 2026 20:51:00 GMT",
+        "matched_keywords": [
+          "usda",
+          "yield"
+        ]
+      },
+      {
+        "title": "Soybeans Up Friday, Corn and Wheat Falter: What Bottoms the Grain Markets? - AgWeb",
+        "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOX1ZLd2QxZlJBYzhTZjhjUEpNVVYzSEhNUlpOeGU4NzNtOGplQlVMSjlMTm91NzBMX3dqR0l6ai03NXQzOEpReG41QkFDRVNhRW1GUEFWZ05kQXY3NlNyeGxORHk5R0lpeE1mOXRkcEo2RGpseDFrZnR0RHZFOXVRR0xCVUt4VTM0SUVrNmFhQ2hYWmRsV3dWTHln?oc=5",
+        "source": "AgWeb Markets",
+        "published": "Fri, 23 Oct 2026 22:28:00 GMT",
+        "matched_keywords": [
+          "wheat",
+          "grain"
+        ]
+      },
+      {
+        "title": "If Your Corn Yields Are Rising But Soybeans Are Stuck, The Problem Could Be SCN - AgWeb",
+        "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxNQkFiYnZkeGVmX2E5WVMtQnZoS0tTcU5mblMyZFdGcFI1aFJmWHJyUTBrUmtrTlh2Mm15a0tZTmJnU1FXQ1paNEI2VHJ6VzFQOGlrT28tU0xFc2stSnVYMWYyM19oUl9EU01FRy1RZTM1NTBobmpuV2ZBeUxaZlRLbjFxMUptckdlNXdZSE5xZ1drUEhpa1BJVklBajdBQQ?oc=5",
+        "source": "AgWeb Markets",
+        "published": "Fri, 23 Oct 2026 18:50:00 GMT",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Markets are currently driven by safe-haven demand, with investors reducing risk amid geopolitical tensions and AI worries, sending Treasury yields lower. Simultaneously, Middle East supply jitters and Houthi attacks have pushed oil prices higher, while agricultural markets grapple with mixed yield data and ongoing quality concerns.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "WEAKENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": "NEUTRAL",
+      "key_risk": "Escalating Middle East conflict threatening broader crude oil and maritime supply chains.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BULLISH"
+    }
+  },
+  {
     "timestamp": "2026-10-24T12:54:14.456749+00:00",
     "total_scanned": 226,
     "flagged_count": 158,
@@ -31775,161 +31938,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "An active, full-scale trade war has erupted between the U.S. and Canada following the implementation of 50% U.S. tariffs on $20 billion of Canadian imports and retaliatory measures announced by Ottawa."
-    }
-  },
-  {
-    "timestamp": "2026-08-24T21:50:41.724200+00:00",
-    "total_scanned": 224,
-    "flagged_count": 164,
-    "flagged_headlines": [
-      {
-        "title": "Ford’s $3 billion Canadian bet is getting caught in trade-war crosshairs",
-        "link": "https://www.marketwatch.com/story/u-s-automakers-and-home-builders-are-among-the-big-losers-as-trump-launches-a-trade-war-against-canada-063c1d4c?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Mon, 24 Aug 2026 20:22:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Bessent’s sweeping sanctions against Iran send oil prices to their biggest drop in 3 weeks, while fueling hopes of de-escalation",
-        "link": "https://www.marketwatch.com/story/oil-trades-lower-even-as-bessent-promises-economic-d-day-announcement-on-iran-a90d862e?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Mon, 24 Aug 2026 19:40:00 GMT",
-        "matched_keywords": [
-          "sanction",
-          "oil",
-          "escalation"
-        ]
-      },
-      {
-        "title": "Trump’s trade war with Canada could lead the U.S. back to quantitative easing",
-        "link": "https://www.marketwatch.com/story/trumps-canada-trade-war-could-lead-the-u-s-back-to-quantitative-easing-eef9be8b?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Mon, 24 Aug 2026 19:03:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize rules for mutual banking organizations",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board requests comment on a proposal to modernize its rule governing the extension of credit to bank \"insiders\"—bank executives, board members and major shareholders who could potentially influence a bank's lending decisions",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260731b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 31 Jul 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound slips as dollar policy jitters, Iran sanctions weigh",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-dollar-policy-jitters-iran-sanctions-weigh-4872845",
-        "source": "Investing.com Forex",
-        "published": "2026-08-24 08:39:58",
-        "matched_keywords": [
-          "sanction"
-        ]
-      },
-      {
-        "title": "Why does the USD outlook depend on UST and Fed policy credibility?",
-        "link": "https://www.investing.com/news/forex-news/why-does-the-usd-outlook-depend-on-ust-and-fed-policy-credibility-4872435",
-        "source": "Investing.com Forex",
-        "published": "2026-08-23 09:15:22",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Geopolitical tensions spiked as Treasury Secretary Scott Bessent announced sweeping sanctions against Iran ('Operation Economic Outcast'), triggering a drop in oil prices amid hopes of compliance, while escalating trade disputes between the U.S. and Canada weighed on markets. Concurrently, maritime intelligence highlights persistent dark-vessel activity and covert loading events in the Strait of Hormuz, influencing broader foreign exchange and commodity sentiment.",
-      "wheat_impact": "NEUTRAL",
-      "usd_ils_impact": "BULLISH",
-      "key_risk": "Escalation of U.S.-Canada trade tensions leading to broader macroeconomic disruption and quantitative easing pressures.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": false,
-      "immediate_risk_reason": ""
     }
   }
 ]
