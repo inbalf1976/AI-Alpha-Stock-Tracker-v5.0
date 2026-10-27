@@ -1,29 +1,40 @@
 {
   "iso_year": 2026,
   "iso_week": 44,
-  "frozen_at": "2026-10-26T03:06:36.856995+02:00",
+  "frozen_at": "2026-10-27T03:06:48.852700+02:00",
+  "broken_and_regenerated": true,
   "weekly": {
-    "range_low": 616.45,
-    "range_high": 630.95,
-    "range_width_pct": 2.33,
-    "bias": "UP",
-    "bias_pct": 100.0,
-    "confidence": 0.48,
-    "key_level": 665.77,
+    "range_low": 606.16,
+    "range_high": 619.23,
+    "range_width_pct": 2.13,
+    "bias": "DOWN",
+    "bias_pct": 25.0,
+    "confidence": 0.52,
+    "key_level": 665.36,
     "key_level_label": "SMA20 (nearest support)",
-    "entry": 622.25,
-    "stop": 615.73,
-    "target": 626.6,
+    "entry": 614.0,
+    "stop": 619.88,
+    "target": 610.08,
     "rr": 0.67,
     "week_num": 44,
     "next_week_label": "Week 44 (starting Mon Oct 26)",
     "month_label": "Winter demand",
-    "hist_up_pct": 100.0,
-    "hist_avg_return": 1.44,
-    "sample_count": 3,
-    "sample_confidence_note": "LOW CONFIDENCE \u2014 only 3 years of data",
-    "current_price": 622.25,
-    "final_call": "UP",
-    "history": []
+    "hist_up_pct": 75.0,
+    "hist_avg_return": 1.08,
+    "sample_count": 4,
+    "sample_confidence_note": "moderate confidence \u2014 4 years of data",
+    "current_price": 614.0,
+    "final_call": "DOWN",
+    "history": [
+      {
+        "closed_at": "2026-10-27T03:06:48.852693+02:00",
+        "entry": 622.25,
+        "stop": 615.73,
+        "target": 626.6,
+        "final_call": "UP",
+        "outcome": "LOSS",
+        "price_at_close": 614.0
+      }
+    ]
   }
 }
