@@ -1,8 +1,8 @@
 name: Wheat Monitor PRO - Ultimate Edition
 on:
   schedule:
-    - cron: '5 3 * * 1-5'
-      timezone: 'Asia/Jerusalem'   # UPDATED 2026-09-30: 03:05 Israel time Mon-Fri (was 23:53 UTC = 02:53 IL). Retimed to catch the first minutes of Plus500's 03:00 session; timezone key follows Israel DST automatically. The external cron-job.org trigger (run_job=monitor) fires at the same 03:05.
+    - cron: '5 19 * * 0-4'
+      timezone: 'America/Chicago'   # UPDATED 2026-10-27: anchored to the US clock, not Israel's. Plus500's session opens with the CME Globex evening session at 19:00 Chicago time (= 03:00 Israel time normally, but 02:00 Israel time in the weeks when Israel and the US are on different clock offsets, e.g. Oct 25-31). Sun-Thu 19:05 Chicago = Mon-Fri morning in Israel. Replaces '5 3 * * 1-5' Asia/Jerusalem (03:05 IL), which fired one hour after the open that week. The external cron-job.org trigger (run_job=monitor) must use the same schedule: 19:05, Sun-Thu, timezone America/Chicago.
     # UPDATED 2026-08-25: retimed from ~01:00 IL to ~03:00 IL after the
     # user confirmed Plus500's actual trading day starts at 03:00 IL
     # (Session 1: 03:00-15:45, then closed 15:45-16:30, then Session 2:
@@ -72,7 +72,7 @@ jobs:
       cancel-in-progress: false
     permissions:
       contents: write
-    if: contains(fromJSON('["5 3 * * 1-5"]'), github.event.schedule) || (github.event_name == 'workflow_dispatch' && (inputs.run_job == 'all' || inputs.run_job == 'monitor'))
+    if: contains(fromJSON('["5 19 * * 0-4"]'), github.event.schedule) || (github.event_name == 'workflow_dispatch' && (inputs.run_job == 'all' || inputs.run_job == 'monitor'))
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
