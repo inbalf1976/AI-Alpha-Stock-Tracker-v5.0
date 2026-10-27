@@ -1,5 +1,170 @@
 [
   {
+    "timestamp": "2026-10-27T02:12:34.672652+00:00",
+    "total_scanned": 228,
+    "flagged_count": 162,
+    "flagged_headlines": [
+      {
+        "title": "Over 40% of Americans are heading toward retirement ‘blind’ — with no plan",
+        "link": "https://www.marketwatch.com/story/over-40-of-americans-are-heading-toward-retirement-blind-with-no-plan-e49b502f?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 26 Oct 2026 21:55:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "With the Anthropic IPO, the devil is in the details",
+        "link": "https://www.marketwatch.com/story/with-the-anthropic-ipo-the-devil-is-in-the-details-239d571d?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Mon, 26 Oct 2026 20:50:00 GMT",
+        "matched_keywords": [
+          "ils"
+        ]
+      },
+      {
+        "title": "UK inflation jumps to 3.5% — cementing rate hike expectations",
+        "link": "https://www.cnbc.com/2026/10/21/inflation-uk-cpi-interest-rates.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 21 Oct 2026 07:50:10 GMT",
+        "matched_keywords": [
+          "rate hike",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Housing is flashing warning signs just as the Fed weighs more interest rate hikes",
+        "link": "https://www.cnbc.com/2026/10/20/housing-mortgage-rates-real-estate-federal-reserve.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 21 Oct 2026 11:20:58 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "war"
+        ]
+      },
+      {
+        "title": "Analysis: Everyone expects the Fed to hold rates in October. Kevin Warsh could surprise us all",
+        "link": "https://www.cnbc.com/2026/10/16/kevin-warsh-fed-october-rate-hike-interest-rates-markets.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 16 Oct 2026 16:27:31 GMT",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Economists: Hot PPI shows Fed's work is not done",
+        "link": "https://www.cnbc.com/2026/10/15/pce-ppi-september-fed-reserve-rate-hike.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 15 Oct 2026 15:37:59 GMT",
+        "matched_keywords": [
+          "fed",
+          "ppi"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 30 Sep 2026 13:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global central banks face persistent inflation pressures, with U.K. inflation jumping to 3.5% and hot U.S. PPI data cementing expectations for further Federal Reserve rate hikes. Meanwhile, housing markets show severe strain amid rising mortgage rates, and Strait of Hormuz maritime flows show fluctuating crude transits and technical anomalies.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "Stronger-than-expected U.S. inflation metrics and persistent Federal Reserve rate-hike expectations support U.S. dollar strength against major currencies."
+      },
+      "key_risk": "Persistent high inflation forcing aggressive central bank monetary tightening, leading to broader economic slowdowns and financial market volatility.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-26T19:24:25.616510+00:00",
     "total_scanned": 224,
     "flagged_count": 159,
@@ -31803,163 +31968,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "The Liberia-flagged tanker METRO VENETIAN was struck by an unknown projectile 9nm off Oman while transiting the Strait of Hormuz, disabling its engine room and highlighting active physical threats to maritime transit."
-    }
-  },
-  {
-    "timestamp": "2026-08-26T09:13:15.087438+00:00",
-    "total_scanned": 228,
-    "flagged_count": 165,
-    "flagged_headlines": [
-      {
-        "title": "Oil prices extend slide as Iran and Oman eye temporary Hormuz deal",
-        "link": "https://www.marketwatch.com/story/oil-prices-extend-slide-as-iran-and-oman-eye-temporary-hormuz-deal-a86a86bf?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Wed, 26 Aug 2026 08:54:00 GMT",
-        "matched_keywords": [
-          "oil",
-          "hormuz"
-        ]
-      },
-      {
-        "title": "Are older Americans spoiling the economy for everyone else?",
-        "link": "https://www.marketwatch.com/story/are-older-americans-spoiling-the-economy-for-everyone-else-064b5820?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Wed, 26 Aug 2026 01:41:00 GMT",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "China needs U.S. dollars but is building a hedge against Washington’s sanctions",
-        "link": "https://www.cnbc.com/2026/08/25/china-iran-us-sanctions-banks-cips.html",
-        "source": "CNBC Economy",
-        "published": "Tue, 25 Aug 2026 16:00:40 GMT",
-        "matched_keywords": [
-          "sanction"
-        ]
-      },
-      {
-        "title": "Bessent could tap near $1 trillion Treasury General Account to fund bond buybacks, sources said",
-        "link": "https://www.cnbc.com/2026/08/24/bessent-1-trillion-treasury-general-account-bond-buybacks.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 24 Aug 2026 13:17:35 GMT",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "'They asked too much': Canadian dollar slides as Ottawa and Washington head for all-out trade war",
-        "link": "https://www.cnbc.com/2026/08/24/canada-us-trade-war-deal.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 24 Aug 2026 13:35:08 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Singapore inflation hits highest in nearly two years, but undershoots expectations",
-        "link": "https://www.cnbc.com/2026/08/24/singapore-inflation-budget-iran-war.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 24 Aug 2026 05:24:43 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Bessent's bond gambit aimed at calming markets is instead stirring inflation worries",
-        "link": "https://www.cnbc.com/2026/08/21/bessents-bond-gambit-aimed-at-calming-markets-is-instead-stirring-inflation-worries-.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 21 Aug 2026 17:51:10 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Bessent's efforts in the Treasury market so far haven't worked. Here's what else he can try",
-        "link": "https://www.cnbc.com/2026/08/20/bessents-efforts-in-the-treasury-market-so-far-havent-worked-heres-what-else-he-can-try.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 21 Aug 2026 12:43:04 GMT",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "Bessent says Treasury buyback operation could be more than $4 billion",
-        "link": "https://www.cnbc.com/2026/08/20/bessent-says-treasury-buyback-operation-could-be-more-than-4-billion.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 20 Aug 2026 15:35:33 GMT",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "European gas Slumps 3% as Middle East ceasefire hopes unwind supply risk premium",
-        "link": "https://www.investing.com/news/commodities-news/european-gas-slumps-3-as-middle-east-ceasefire-hopes-unwind-supply-risk-premium-4876517",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-26 08:43:37",
-        "matched_keywords": [
-          "ceasefire"
-        ]
-      },
-      {
-        "title": "Oil prices slide over 2% amid hopes for progress in Mideast diplomacy",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-extend-losses-after-iran-resumes-hormuz-talks-with-oman-4876083",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-26 08:32:40",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "London Gas Oil breaks cloud support at $1,184: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-overbought-at-1280-live-levels-93CH-4872746",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-26 07:12:21",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Brent Oil clings to $85.16 support on 5h chart: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/brent-oil-slips-below-91-with-doubletop-breakdown-live-levels-93CH-4872744",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-26 07:11:40",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Crude Oil WTI hits 200 SMA/VWAP support at $80.37: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-consolidates-near-highs-at-8511-hourly-levels-93CH-4872742",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-26 07:11:39",
-        "matched_keywords": [
-          "crude",
-          "oil"
-        ]
-      },
-      {
-        "title": "Gold tests $4,692 as bull flag meets MACD warning: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/gold-hits-4703-deep-in-overbought-territory-live-levels-93CH-4872739",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-26 07:11:19",
-        "matched_keywords": [
-          "war"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are reacting to easing Middle East geopolitical tensions—which are driving down oil and European gas prices—alongside escalating U.S.-Canada trade frictions and Treasury debt management maneuvers by Secretary Scott Bessent that have stoked inflation anxiety.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "While higher energy costs and adverse weather continue to pose structural agricultural risks, current market drivers are dominated by crude oil sell-offs, currency fluctuations, and macro bond policy rather than direct grain shocks.",
-      "usd_ils_impact": "BULLISH",
-      "usd_ils_impact_reason": "The broad weakening of the U.S. dollar amid rising domestic inflation expectations and Treasury interventions tends to provide relative support or mixed stability for cross-rates, though easing Mideast risk premiums temper safe-haven dollar demand.",
-      "key_risk": "Escalation of the sudden U.S.-Canada trade war and its downstream effects on cross-border supply chains and North American economic growth.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "The Liberia-flagged Aframax tanker METRO VENETIAN was struck by an unknown projectile off Oman while carrying jet fuel, and nearly half of recent Strait of Hormuz transits are operating with AIS dark, underscoring active physical security threats to regional energy shipping."
     }
   }
 ]
