@@ -1,16 +1,15 @@
 {
   "stats_cutoff_date": "2026-08-23",
   "last_direction": "DOWN",
-  "last_price": 599.5,
-  "alerts_sent": 343,
+  "last_price": 601.25,
+  "alerts_sent": 344,
   "last_model_reset": "2026-02-15T14:35:19.561201",
   "model_version": 1,
   "reset_count": 0,
-  "last_alert_date": "2026-10-28",
+  "last_alert_date": "2026-10-29",
   "daily_alert_sent": true,
-  "last_check": "2026-10-28T17:24:59.737701+02:00",
+  "last_check": "2026-10-29T03:06:35.759810+02:00",
   "alerts_today": {
-    "2026-09-28_morning": "05:02",
     "2026-09-29_morning": "05:49",
     "2026-09-30_morning": "05:30",
     "2026-10-01_morning": "03:06",
@@ -32,7 +31,8 @@
     "2026-10-23_morning": "03:06",
     "2026-10-26_morning": "03:06",
     "2026-10-27_morning": "03:06",
-    "2026-10-28_morning": "03:06"
+    "2026-10-28_morning": "03:06",
+    "2026-10-29_morning": "03:06"
   },
   "last_session": "afternoon",
   "last_confidence": 0.9467848169677314
