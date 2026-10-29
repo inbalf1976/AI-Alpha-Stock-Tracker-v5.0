@@ -1,5 +1,170 @@
 [
   {
+    "timestamp": "2026-10-29T02:34:24.972865+00:00",
+    "total_scanned": 227,
+    "flagged_count": 173,
+    "flagged_headlines": [
+      {
+        "title": "Canadian dollar holds gains after Bank of Canada delivers rate hike",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-holds-gains-after-bank-of-canada-delivers-rate-hike-4980887",
+        "source": "Investing.com Forex",
+        "published": "2026-10-28 21:02:08",
+        "matched_keywords": [
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Treasury yields nudge toward one-week highs; Fed decision, Big Tech earnings loom",
+        "link": "https://www.investing.com/news/forex-news/eurozone-yields-push-higher-as-french-spread-relief-fades-fed-ecb-eyed-4977652",
+        "source": "Investing.com Forex",
+        "published": "2026-10-28 12:45:27",
+        "matched_keywords": [
+          "fed",
+          "war",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Dollar hits 2-week high a day ahead of Fed decision, euro slips on French worries",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-holds-firm-yen-retreats-ahead-of-fed-decision-4974116",
+        "source": "Investing.com Forex",
+        "published": "2026-10-27 20:56:26",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar slips as investors await Bank of Canada, Fed rate decisions",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-investors-await-bank-of-canada-fed-rate-decisions-4975641",
+        "source": "Investing.com Forex",
+        "published": "2026-10-27 13:00:12",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields hover near multi-week lows ahead of Fed decision",
+        "link": "https://www.investing.com/news/forex-news/french-yields-edge-higher-as-moodys-relief-fades-israeli-election-in-focus-4974352",
+        "source": "Investing.com Forex",
+        "published": "2026-10-27 12:29:50",
+        "matched_keywords": [
+          "fed",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound dips on firm dollar as Fed, budget loom",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-dips-on-firm-dollar-as-fed-budget-loom-4974676",
+        "source": "Investing.com Forex",
+        "published": "2026-10-27 10:00:11",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil prices fall as peace hopes offset fears of growing Middle East conflict",
+        "link": "https://www.investing.com/news/commodities-news/us-oil-prices-fall-as-investors-gauge-risks-to-mideast-supply-4981268",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-29 02:12:23",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold slips after Fed holds rates, PCE inflation data in focus",
+        "link": "https://www.investing.com/news/commodities-news/gold-slips-after-fed-holds-rates-pce-inflation-data-in-focus-4981309",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-29 01:21:15",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Oil dips as traders weigh Iran diplomacy against renewed strike risks",
+        "link": "https://www.investing.com/news/commodities-news/oil-dips-as-traders-weigh-iran-diplomacy-against-renewed-strike-risks-4981275",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-29 00:37:50",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices rise as Houthi attack on Saudi refinery stokes supply disruption fears",
+        "link": "https://www.investing.com/news/commodities-news/oil-rebounds-as-houthi-attacks-on-saudi-arabia-overshadow-diplomatic-efforts-4977356",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-28 21:38:42",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Iran sees only unacceptable ideas in latest mediation to end war, official says",
+        "link": "https://www.investing.com/news/commodities-news/iran-sees-only-unacceptable-ideas-in-latest-mediation-to-end-war-official-says-4979005",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-28 20:43:38",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Gold rises as dollar weakens after Fed holds rates steady as largely expected",
+        "link": "https://www.investing.com/news/commodities-news/gold-steadies-above-4000-as-traders-await-fed-decision-pce-data-4977316",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-28 20:02:20",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Crude Oil WTI tests $103.50 double top resistance: Live levels",
+        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-consolidates-below-10350-resistance-live-levels-93CH-4971501",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-28 19:18:33",
+        "matched_keywords": [
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 28 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by central bank rate decisions, notably from the Fed and Bank of Canada, alongside fluctuating oil prices influenced by ongoing Middle East tensions and maritime security reports showing dark fleet operations. Currency markets show the US dollar strengthening to multi-week highs ahead of key economic data and Fed announcements.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalation of Middle East conflict impacting major energy supply routes and driving broader macroeconomic volatility.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-28T18:56:20.680925+00:00",
     "total_scanned": 227,
     "flagged_count": 155,
@@ -31821,174 +31986,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "An unidentified tanker was struck by a projectile in the Strait of Hormuz causing a fire, and multiple vessels are operating dark or facing active maritime security threats in the vital chokepoint."
-    }
-  },
-  {
-    "timestamp": "2026-08-28T19:00:36.293555+00:00",
-    "total_scanned": 225,
-    "flagged_count": 170,
-    "flagged_headlines": [
-      {
-        "title": "The biggest risk to retirement plans may no longer be a stock market crash or inflation",
-        "link": "https://www.marketwatch.com/story/your-portfolio-can-recover-from-a-bear-market-but-can-it-survive-you-living-to-110-cc6d344c?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Fri, 28 Aug 2026 16:46:00 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Dollar steadies after Warsh warns Fed may not be done fighting inflation",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-dollar-muted-ahead-of-warsh-speech-won-hits-13mth-high-post-bok-hike-4880492",
-        "source": "Investing.com Forex",
-        "published": "2026-08-28 14:32:06",
-        "matched_keywords": [
-          "fed",
-          "inflation",
-          "war"
-        ]
-      },
-      {
-        "title": "U.S. Treasury yields rise amid Fed chief Warsh’s Jackson Hole opening remarks",
-        "link": "https://www.investing.com/news/stock-market-news/german-10year-yield-touches-highest-level-since-2011-on-inflation-threats-4880683",
-        "source": "Investing.com Forex",
-        "published": "2026-08-28 14:21:45",
-        "matched_keywords": [
-          "fed",
-          "war",
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Aussie dollar set for strong week as hot inflation boosts RBA hike bets",
-        "link": "https://www.investing.com/news/forex-news/aussie-dollar-set-for-strong-week-as-hot-inflation-boosts-rba-hike-bets-4880527",
-        "source": "Investing.com Forex",
-        "published": "2026-08-28 06:01:58",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Dollar flat as traders await Fed chair Warsh’s Jackson Hole speech for rate cues",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-dollar-holds-gains-ahead-of-jackson-hole-won-rises-on-bok-hike-4878318",
-        "source": "Investing.com Forex",
-        "published": "2026-08-27 19:09:56",
-        "matched_keywords": [
-          "fed",
-          "war"
-        ]
-      },
-      {
-        "title": "Canadian dollar falls as traders weigh Fed outlook and U.S. dollar strength",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-falls-as-traders-weigh-fed-outlook-and-us-dollar-strength-4879654",
-        "source": "Investing.com Forex",
-        "published": "2026-08-27 13:58:09",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "U.S. yields tick higher as energy drop pauses amid Fed uncertainty",
-        "link": "https://www.investing.com/news/forex-news/euro-yields-bounce-off-2week-lows-as-schnabel-warnings-dampen-rally-4878481",
-        "source": "Investing.com Forex",
-        "published": "2026-08-27 11:35:16",
-        "matched_keywords": [
-          "fed",
-          "yield"
-        ]
-      },
-      {
-        "title": "Canadian dollar weakens as trade tensions and U.S. inflation weigh",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-weakens-as-trade-tensions-and-us-inflation-weigh-4877935",
-        "source": "Investing.com Forex",
-        "published": "2026-08-26 20:48:08",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Dollar rises as PCE, GDP data keeps traders on edge about Fed rate outlook",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-ahead-of-us-pce-inflation-aussie-dollar-gains-on-hot-cpi-4876252",
-        "source": "Investing.com Forex",
-        "published": "2026-08-26 19:48:27",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Treasury yields muted after headline PCE ticks up ahead of Jackson Hole",
-        "link": "https://www.investing.com/news/forex-news/euro-yields-slide-as-crude-tumble-overshadows-hawkish-ecb-warnings-4876453",
-        "source": "Investing.com Forex",
-        "published": "2026-08-26 12:54:45",
-        "matched_keywords": [
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Trump to meet refiners, fuel retailers as Iran war boosts gas prices ahead of midterms, sources say",
-        "link": "https://www.investing.com/news/commodities-news/trump-to-meet-refiners-fuel-retailers-as-iran-war-pressures-gas-prices-ahead-of-midterms-sources-say-4880014",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-28 16:26:01",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Oil slides on clues about Fed policy, rumors of Hormuz deal",
-        "link": "https://www.investing.com/news/commodities-news/oil-on-track-for-weekly-loss-even-as-iran-tensions-simmer-4880409",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-28 16:25:41",
-        "matched_keywords": [
-          "fed",
-          "oil",
-          "hormuz"
-        ]
-      },
-      {
-        "title": "Gold falls after Warsh flags persistent inflation, tighter Fed policy",
-        "link": "https://www.investing.com/news/commodities-news/gold-dips-ahead-of-warshs-jackson-hole-speech-set-for-weekly-fall-4880473",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-28 14:13:34",
-        "matched_keywords": [
-          "fed",
-          "inflation",
-          "war"
-        ]
-      },
-      {
-        "title": "Senior Ukrainian official expects ’technical talks’ on Russia’s war soon",
-        "link": "https://www.investing.com/news/commodities-news/senior-ukrainian-official-expects-technical-talks-on-russias-war-soon-4881510",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-28 14:06:37",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Oil prices slip with Venezuela supply reports, Hormuz deal in focus",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-edge-lower-with-venezuela-supply-reports-hormuz-deal-in-focus-4880410",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-28 12:14:55",
-        "matched_keywords": [
-          "oil",
-          "hormuz"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are driven by hawkish Federal Reserve signals from Jackson Hole—highlighted by comments from Fed chief Warsh pointing to persistent inflation and tighter monetary policy—which are lifting the U.S. dollar and Treasury yields while weighing on gold and oil. Concurrently, energy and commodity markets remain sensitive to Middle East tensions following reports of a tanker strike and dark-fleet transit anomalies in the Strait of Hormuz.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "Macroeconomic drivers such as Fed policy and energy price fluctuations are dominating market sentiment with no direct wheat-specific supply shocks reported.",
-      "usd_ils_impact": "BULLISH",
-      "usd_ils_impact_reason": "A strengthening U.S. dollar driven by hawkish Fed rate expectations and rising Treasury yields typically exerts upward pressure on the USD/ILS exchange rate.",
-      "key_risk": "Escalating military friction and transit security disruptions in the Strait of Hormuz threatening global energy supplies.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "An unidentified tanker was struck by a projectile in the Strait of Hormuz, accompanied by ongoing high-risk dark-fleet transits and lingering naval tensions in a critical energy chokepoint."
     }
   }
 ]
