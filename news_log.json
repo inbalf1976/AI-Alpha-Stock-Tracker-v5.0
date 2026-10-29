@@ -1,5 +1,168 @@
 [
   {
+    "timestamp": "2026-10-29T15:29:55.512770+00:00",
+    "total_scanned": 228,
+    "flagged_count": 173,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 28 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Consumer spending flattens out after U.S. inflation surge",
+        "link": "https://www.marketwatch.com/story/consumer-spending-flattens-out-after-inflation-surge-e7761d25?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 29 Oct 2026 15:04:00 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Inflation surges, PCE shows. Fed pause on rate hikes unlikely to last with prices still rising.",
+        "link": "https://www.marketwatch.com/story/inflation-surges-pce-shows-fed-pause-on-rate-hikes-unlikely-to-last-long-with-prices-still-rising-79128886?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 29 Oct 2026 14:38:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Dollar edges higher as strong U.S. growth data offsets Fed uncertainty",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-steadies-after-fed-hold-pce-eyed-4981446",
+        "source": "Investing.com Forex",
+        "published": "2026-10-29 12:52:36",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. yields steady on PCE lands in-line; Europe awaits ECb",
+        "link": "https://www.investing.com/news/forex-news/bund-yields-slip-ahead-of-ecb-feds-hold-keeps-us-yields-steepening-4981797",
+        "source": "Investing.com Forex",
+        "published": "2026-10-29 12:49:12",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Canadian dollar holds gains after Bank of Canada delivers rate hike",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-holds-gains-after-bank-of-canada-delivers-rate-hike-4980887",
+        "source": "Investing.com Forex",
+        "published": "2026-10-28 21:02:08",
+        "matched_keywords": [
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Treasury yields nudge toward one-week highs; Fed decision, Big Tech earnings loom",
+        "link": "https://www.investing.com/news/forex-news/eurozone-yields-push-higher-as-french-spread-relief-fades-fed-ecb-eyed-4977652",
+        "source": "Investing.com Forex",
+        "published": "2026-10-28 12:45:27",
+        "matched_keywords": [
+          "fed",
+          "war",
+          "yield",
+          "treasury"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "U.S. inflation data shows price pressures persisting, dampening expectations for a near-term Federal Reserve rate pause and supporting the U.S. dollar. Meanwhile, maritime chokepoints like the Strait of Hormuz and Red Sea maintain steady operations despite ongoing geopolitical tensions and heavy reliance on dark fleet tankers.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Persistent U.S. inflation leading to higher-for-longer interest rates and a stronger dollar, which pressures commodities.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-29T02:34:24.972865+00:00",
     "total_scanned": 227,
     "flagged_count": 173,
@@ -31827,165 +31990,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "An unidentified tanker was struck by a projectile in the Strait of Hormuz, and multiple sanctioned, dark-fleet vessels continue navigating the heavily restricted chokepoint amid an ongoing naval standoff."
-    }
-  },
-  {
-    "timestamp": "2026-08-28T20:20:40.921747+00:00",
-    "total_scanned": 225,
-    "flagged_count": 167,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Kevin Warsh gets what every Fed chair hopes for: a bond market that trusts his word",
-        "link": "https://www.marketwatch.com/story/kevin-warsh-gets-what-every-fed-chair-hopes-for-a-bond-market-that-trust-his-words-5103dad5?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Fri, 28 Aug 2026 20:10:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "war"
-        ]
-      },
-      {
-        "title": "The biggest risk to retirement plans may no longer be a stock market crash or inflation",
-        "link": "https://www.marketwatch.com/story/your-portfolio-can-recover-from-a-bear-market-but-can-it-survive-you-living-to-110-cc6d344c?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Fri, 28 Aug 2026 16:46:00 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Fed Chairman Warsh expresses concern about inflation, advocates for 'quieter' central bank",
-        "link": "https://www.cnbc.com/2026/08/28/kevin-warsh-jackson-hole-federal-reserve-inflation.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 28 Aug 2026 16:11:51 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation",
-          "war"
-        ]
-      },
-      {
-        "title": "Fed's Hammack says 'now is the time to act' on raising interest rates",
-        "link": "https://www.cnbc.com/2026/08/27/feds-hammack-says-now-is-the-time-to-act-on-raising-interest-rates.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 27 Aug 2026 17:31:09 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Fed’s preferred inflation gauge shows core prices rose 3.3% annually in July",
-        "link": "https://www.cnbc.com/2026/08/26/feds-preferred-inflation-gauge-shows-core-prices-rose-3point3percent-annually-in-july.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 26 Aug 2026 13:35:50 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "China needs U.S. dollars but is building a hedge against Washington’s sanctions",
-        "link": "https://www.cnbc.com/2026/08/25/china-iran-us-sanctions-banks-cips.html",
-        "source": "CNBC Economy",
-        "published": "Tue, 25 Aug 2026 16:00:40 GMT",
-        "matched_keywords": [
-          "sanction"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Federal Reserve Chairman Kevin Warsh signaled potential interest rate hikes at Jackson Hole in response to stubbornly high inflation, while US sanctions pressure on Iran and ongoing tanker incidents in the Strait of Hormuz heighten geopolitical supply risks.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "Agricultural fundamentals and wheat-specific supply-demand news are absent from the current macro and chokepoint data.",
-      "usd_ils_impact": "BULLISH",
-      "usd_ils_impact_reason": "Hawkish Fed commentary driving US Treasury yields higher alongside escalating Middle East tensions typically strengthens the US dollar against emerging market and regional currencies like the Israeli shekel.",
-      "key_risk": "Escalation in the Strait of Hormuz threatening global energy flows and broader geopolitical stability.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "An unidentified tanker was struck by a projectile in the Strait of Hormuz causing a fire, and multiple vessels are operating dark or facing active maritime security threats in the vital chokepoint."
     }
   }
 ]
