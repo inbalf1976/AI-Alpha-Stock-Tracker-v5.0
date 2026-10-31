@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-10-31T14:42:23.617481+00:00",
+    "total_scanned": 225,
+    "flagged_count": 156,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261029a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 29 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 28 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar rises for October as rate hike bets remain elevated, euro and yen slip",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-retreats-yen-steadies-ahead-of-boj-decision-4985749",
+        "source": "Investing.com Forex",
+        "published": "2026-10-30 20:44:36",
+        "matched_keywords": [
+          "rate hike"
+        ]
+      },
+      {
+        "title": "UBS sees Bank of England rate hikes supporting pound vs franc",
+        "link": "https://www.investing.com/news/forex-news/ubs-sees-bank-of-england-rate-hikes-supporting-pound-vs-franc-93CH-4986322",
+        "source": "Investing.com Forex",
+        "published": "2026-10-30 09:25:39",
+        "matched_keywords": [
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Dollar dips and euro rises after Fed, ECB rate decisions; pound extends gains",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-steadies-after-fed-hold-pce-eyed-4981446",
+        "source": "Investing.com Forex",
+        "published": "2026-10-29 18:45:17",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Trump touted a record Venezuela oil deal. Now reality is setting in",
+        "link": "https://www.investing.com/news/commodities-news/trump-touted-a-record-venezuela-oil-deal-now-reality-is-setting-in-4986582",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-30 22:13:05",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil soars in Oct on supply disruption fears, Exxon and Chevron post bumper profits",
+        "link": "https://www.investing.com/news/commodities-news/oil-rises-on-prospects-of-fresh-us-military-action-against-iran-4985693",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-30 22:06:22",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil jumps 2%, settles at 6-month highs on fears of escalation in Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-rises-on-supply-concerns-as-houthis-attack-saudi-arabia-4985735",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-30 19:30:24",
+        "matched_keywords": [
+          "oil",
+          "escalation"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by shifting Federal Reserve rate expectations supporting the US dollar, alongside rising oil prices fueled by Middle East supply disruption fears. Meanwhile, maritime data shows significant dark activity and GPS jamming in the Strait of Hormuz, maintaining heightened geopolitical risk premiums in energy and shipping.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating geopolitical tensions and dark vessel activity in the Strait of Hormuz threatening critical energy and maritime supply chains.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-10-31T02:33:16.468911+00:00",
     "total_scanned": 228,
     "flagged_count": 165,
@@ -31845,159 +32004,5 @@
       "immediate_risk": true,
       "immediate_risk_reason": "The ongoing Iranian blockade in the Strait of Hormuz is actively halting crude exports and forcing vessels into dark or constrained transits."
     }
-  },
-  {
-    "timestamp": "2026-08-30T13:59:44.072606+00:00",
-    "total_scanned": 222,
-    "flagged_count": 174,
-    "flagged_headlines": [
-      {
-        "title": "Oil prices slide for the week even as U.S. and Iran mark six months of conflict",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-edge-lower-with-venezuela-supply-reports-hormuz-deal-in-focus-4880410",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-28 20:57:35",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil settles lower on clues about Fed policy, rumors of Hormuz deal",
-        "link": "https://www.investing.com/news/commodities-news/oil-on-track-for-weekly-loss-even-as-iran-tensions-simmer-4880409",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-28 20:24:55",
-        "matched_keywords": [
-          "fed",
-          "oil",
-          "hormuz"
-        ]
-      },
-      {
-        "title": "Gold prices shed about 3% on hawkish Warsh at Jackson Hole, set for weekly decline",
-        "link": "https://www.investing.com/news/commodities-news/gold-dips-ahead-of-warshs-jackson-hole-speech-set-for-weekly-fall-4880473",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-28 20:02:45",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Crude Oil WTI trapped in $82.50-$84.50 chop: Hourly levels",
-        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-consolidates-near-highs-at-8511-hourly-levels-93CH-4872742",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-28 19:28:29",
-        "matched_keywords": [
-          "crude",
-          "oil"
-        ]
-      },
-      {
-        "title": "London Gas Oil breaks resistance at $1,273: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-overbought-at-1280-live-levels-93CH-4872746",
-        "source": "Investing.com Commodities",
-        "published": "2026-08-28 19:27:05",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Party balloons could become a ‘luxury’ as the Iran war spurs a helium shortage",
-        "link": "https://www.marketwatch.com/story/party-balloons-could-become-a-luxury-as-the-iran-war-spurs-a-helium-shortage-89e3f86e?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 30 Aug 2026 12:30:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "AI isn’t eating software after all — and the sector’s ‘epic’ rally could run through October",
-        "link": "https://www.marketwatch.com/story/ai-isnt-eating-software-after-all-and-the-sectors-epic-rally-could-run-through-october-a4610583?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 30 Aug 2026 12:00:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "US Treasury’s Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil",
-        "link": "https://www.investing.com/news/forex-news/us-treasurys-bessent-faces-g20-diplomacy-test-amid-tariffs-iran-war-bond-turmoil-4882036",
-        "source": "Investing.com Forex",
-        "published": "2026-08-30 10:06:32",
-        "matched_keywords": [
-          "tariff",
-          "oil",
-          "war",
-          "treasury"
-        ]
-      },
-      {
-        "title": "U.S. Treasury yields rise, 2-yr soars as Sept hike back in play after Warsh speech",
-        "link": "https://www.investing.com/news/stock-market-news/german-10year-yield-touches-highest-level-since-2011-on-inflation-threats-4880683",
-        "source": "Investing.com Forex",
-        "published": "2026-08-28 21:17:57",
-        "matched_keywords": [
-          "war",
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Canadian dollar slips as trade tensions, Fed outlook keep loonie under pressure",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-trade-tensions-fed-outlook-keep-loonie-under-pressure-4881822",
-        "source": "Investing.com Forex",
-        "published": "2026-08-28 20:44:08",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Dollar firms on hawkish Warsh at Jackson Hole, heads for weekly gain of nearly 1%",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-dollar-muted-ahead-of-warsh-speech-won-hits-13mth-high-post-bok-hike-4880492",
-        "source": "Investing.com Forex",
-        "published": "2026-08-28 19:42:07",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Aussie dollar set for strong week as hot inflation boosts RBA hike bets",
-        "link": "https://www.investing.com/news/forex-news/aussie-dollar-set-for-strong-week-as-hot-inflation-boosts-rba-hike-bets-4880527",
-        "source": "Investing.com Forex",
-        "published": "2026-08-28 06:01:58",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Dollar flat as traders await Fed chair Warsh’s Jackson Hole speech for rate cues",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-dollar-holds-gains-ahead-of-jackson-hole-won-rises-on-bok-hike-4878318",
-        "source": "Investing.com Forex",
-        "published": "2026-08-27 19:09:56",
-        "matched_keywords": [
-          "fed",
-          "war"
-        ]
-      },
-      {
-        "title": "Canadian dollar falls as traders weigh Fed outlook and U.S. dollar strength",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-falls-as-traders-weigh-fed-outlook-and-us-dollar-strength-4879654",
-        "source": "Investing.com Forex",
-        "published": "2026-08-27 13:58:09",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "U.S. yields tick higher as energy drop pauses amid Fed uncertainty",
-        "link": "https://www.investing.com/news/forex-news/euro-yields-bounce-off-2week-lows-as-schnabel-warnings-dampen-rally-4878481",
-        "source": "Investing.com Forex",
-        "published": "2026-08-27 11:35:16",
-        "matched_keywords": [
-          "fed",
-          "yield"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": null
   }
 ]
