@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-11-01T02:22:54.299940+00:00",
+    "total_scanned": 222,
+    "flagged_count": 162,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261029a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 29 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 28 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "We’re in our 70s. Should we pay off our 2.5% mortgage — or put the money in a high-yield savings account?",
+        "link": "https://www.marketwatch.com/story/we-are-in-our-70s-should-we-pay-off-our-2-5-mortgage-or-build-up-our-savings-5a35e9c1?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sat, 31 Oct 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "OPEC+ set to hold December oil output steady, Reuters reports",
+        "link": "https://www.investing.com/news/commodities-news/opec-set-to-hold-december-oil-output-steady-4989332",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-31 20:44:25",
+        "matched_keywords": [
+          "opec",
+          "oil"
+        ]
+      },
+      {
+        "title": "OPEC+ set to keep production targets unchanged in December, source says",
+        "link": "https://www.investing.com/news/commodities-news/opec-set-to-keep-production-targets-unchanged-in-december-source-says-4989301",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-31 16:42:19",
+        "matched_keywords": [
+          "opec"
+        ]
+      },
+      {
+        "title": "Trump touted a record Venezuela oil deal. Now reality is setting in",
+        "link": "https://www.investing.com/news/commodities-news/trump-touted-a-record-venezuela-oil-deal-now-reality-is-setting-in-4986582",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-30 22:13:05",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil soars in Oct on supply disruption fears, Exxon and Chevron post bumper profits",
+        "link": "https://www.investing.com/news/commodities-news/oil-rises-on-prospects-of-fresh-us-military-action-against-iran-4985693",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-30 22:06:22",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil jumps 2%, settles at 6-month highs on fears of escalation in Iran",
+        "link": "https://www.investing.com/news/commodities-news/oil-rises-on-supply-concerns-as-houthis-attack-saudi-arabia-4985735",
+        "source": "Investing.com Commodities",
+        "published": "2026-10-30 19:30:24",
+        "matched_keywords": [
+          "oil",
+          "escalation"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Energy markets remain dominated by expectations of steady OPEC+ production policies in December and ongoing geopolitical supply disruption fears, particularly around Iran and the Middle East. Concurrently, the Federal Reserve continues to navigate monetary policy adjustments, regulatory actions, and consumer financial tracking.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "NEUTRAL",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "NEUTRAL with no direct currency drivers or regional conflict escalations mentioned in the provided data impacting the Shekel.",
+      "key_risk": "Potential escalation of geopolitical tensions in the Middle East impacting critical maritime chokepoints like the Strait of Hormuz.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "NEUTRAL"
+    }
+  },
+  {
     "timestamp": "2026-10-31T17:49:02.620923+00:00",
     "total_scanned": 228,
     "flagged_count": 164,
@@ -31838,171 +31998,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "U.S. and Iran have exchanged direct fire for the first time in a month, pushing global oil prices above $91 a barrel and escalating geopolitical risks in the Middle East."
-    }
-  },
-  {
-    "timestamp": "2026-08-31T01:25:28.841440+00:00",
-    "total_scanned": 221,
-    "flagged_count": 174,
-    "flagged_headlines": [
-      {
-        "title": "Fed Chairman Warsh expresses concern about inflation, advocates for 'quieter' central bank",
-        "link": "https://www.cnbc.com/2026/08/28/kevin-warsh-jackson-hole-federal-reserve-inflation.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 28 Aug 2026 16:11:51 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation",
-          "war"
-        ]
-      },
-      {
-        "title": "Fed's Hammack says 'now is the time to act' on raising interest rates",
-        "link": "https://www.cnbc.com/2026/08/27/feds-hammack-says-now-is-the-time-to-act-on-raising-interest-rates.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 27 Aug 2026 17:31:09 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Fed’s preferred inflation gauge shows core prices rose 3.3% annually in July",
-        "link": "https://www.cnbc.com/2026/08/26/feds-preferred-inflation-gauge-shows-core-prices-rose-3point3percent-annually-in-july.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 26 Aug 2026 13:35:50 GMT",
-        "matched_keywords": [
-          "fed",
-          "inflation"
-        ]
-      },
-      {
-        "title": "China needs U.S. dollars but is building a hedge against Washington’s sanctions",
-        "link": "https://www.cnbc.com/2026/08/25/china-iran-us-sanctions-banks-cips.html",
-        "source": "CNBC Economy",
-        "published": "Tue, 25 Aug 2026 16:00:40 GMT",
-        "matched_keywords": [
-          "sanction"
-        ]
-      },
-      {
-        "title": "Bessent could tap near $1 trillion Treasury General Account to fund bond buybacks, sources said",
-        "link": "https://www.cnbc.com/2026/08/24/bessent-1-trillion-treasury-general-account-bond-buybacks.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 24 Aug 2026 13:17:35 GMT",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "'They asked too much': Canadian dollar slides as Ottawa and Washington head for all-out trade war",
-        "link": "https://www.cnbc.com/2026/08/24/canada-us-trade-war-deal.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 24 Aug 2026 13:35:08 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Singapore inflation hits highest in nearly two years, but undershoots expectations",
-        "link": "https://www.cnbc.com/2026/08/24/singapore-inflation-budget-iran-war.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 24 Aug 2026 05:24:43 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "US Treasury’s Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil",
-        "link": "https://www.investing.com/news/forex-news/us-treasurys-bessent-faces-g20-diplomacy-test-amid-tariffs-iran-war-bond-turmoil-4882036",
-        "source": "Investing.com Forex",
-        "published": "2026-08-30 17:18:58",
-        "matched_keywords": [
-          "tariff",
-          "oil",
-          "war",
-          "treasury"
-        ]
-      },
-      {
-        "title": "U.S. Treasury yields rise, 2-yr soars as Sept hike back in play after Warsh speech",
-        "link": "https://www.investing.com/news/stock-market-news/german-10year-yield-touches-highest-level-since-2011-on-inflation-threats-4880683",
-        "source": "Investing.com Forex",
-        "published": "2026-08-28 21:17:57",
-        "matched_keywords": [
-          "war",
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Canadian dollar slips as trade tensions, Fed outlook keep loonie under pressure",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-slips-as-trade-tensions-fed-outlook-keep-loonie-under-pressure-4881822",
-        "source": "Investing.com Forex",
-        "published": "2026-08-28 20:44:08",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Dollar firms on hawkish Warsh at Jackson Hole, heads for weekly gain of nearly 1%",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-dollar-muted-ahead-of-warsh-speech-won-hits-13mth-high-post-bok-hike-4880492",
-        "source": "Investing.com Forex",
-        "published": "2026-08-28 19:42:07",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Aussie dollar set for strong week as hot inflation boosts RBA hike bets",
-        "link": "https://www.investing.com/news/forex-news/aussie-dollar-set-for-strong-week-as-hot-inflation-boosts-rba-hike-bets-4880527",
-        "source": "Investing.com Forex",
-        "published": "2026-08-28 06:01:58",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Dollar flat as traders await Fed chair Warsh’s Jackson Hole speech for rate cues",
-        "link": "https://www.investing.com/news/forex-news/asia-fx-mixed-dollar-holds-gains-ahead-of-jackson-hole-won-rises-on-bok-hike-4878318",
-        "source": "Investing.com Forex",
-        "published": "2026-08-27 19:09:56",
-        "matched_keywords": [
-          "fed",
-          "war"
-        ]
-      },
-      {
-        "title": "Canadian dollar falls as traders weigh Fed outlook and U.S. dollar strength",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-falls-as-traders-weigh-fed-outlook-and-us-dollar-strength-4879654",
-        "source": "Investing.com Forex",
-        "published": "2026-08-27 13:58:09",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "U.S. yields tick higher as energy drop pauses amid Fed uncertainty",
-        "link": "https://www.investing.com/news/forex-news/euro-yields-bounce-off-2week-lows-as-schnabel-warnings-dampen-rally-4878481",
-        "source": "Investing.com Forex",
-        "published": "2026-08-27 11:35:16",
-        "matched_keywords": [
-          "fed",
-          "yield"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are reacting to hawkish signals from Fed officials, notably Chairman Kevin Warsh at Jackson Hole, which have driven up bond yields and fueled expectations of near-term rate hikes. Concurrently, escalating trade tensions between the U.S. and Canada, alongside ongoing Middle East supply disruptions via the Strait of Hormuz blockade, are heightening macroeconomic and commodity volatility.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "While escalating global trade protectionism and energy costs could influence agricultural input prices, there are no direct supply shocks or chokepoint blockades specifically threatening global wheat trade lines today.",
-      "usd_ils_impact": "BULLISH",
-      "usd_ils_impact_reason": "Aggressive Fed rate-hike signaling and surging U.S. Treasury yields are strengthening the greenback globally, creating upward pressure on the USD/ILS exchange rate.",
-      "key_risk": "Aggressive monetary tightening combined with escalating U.S.-Canada trade wars and ongoing Middle East energy supply disruptions.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "The ongoing Iran-led blockade at the Strait of Hormuz has completely halted Iranian crude exports, maintaining an active disruption in a vital global energy chokepoint."
     }
   }
 ]
