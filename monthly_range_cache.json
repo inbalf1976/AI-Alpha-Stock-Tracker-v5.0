@@ -1,12 +1,11 @@
 {
-  "month_key": "2026-10",
-  "frozen_at": "2026-10-28T17:24:59.183532+02:00",
-  "regenerated_after_breach": true,
+  "month_key": "2026-11",
+  "frozen_at": "2026-11-02T03:06:46.196500+02:00",
   "monthly": {
-    "monthly_low": 589.25,
-    "monthly_high": 618.72,
+    "monthly_low": 629.14,
+    "monthly_high": 621.83,
     "bias": "DOWN",
-    "avg_return": -1.81,
-    "month_label": "October"
+    "avg_return": -2.2,
+    "month_label": "November"
   }
 }
