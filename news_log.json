@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-11-02T02:37:52.933158+00:00",
+    "total_scanned": 226,
+    "flagged_count": 164,
+    "flagged_headlines": [
+      {
+        "title": "Dollar rises for October as rate hike bets remain elevated, euro and yen slip",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-retreats-yen-steadies-ahead-of-boj-decision-4985749",
+        "source": "Investing.com Forex",
+        "published": "2026-10-30 20:44:36",
+        "matched_keywords": [
+          "rate hike"
+        ]
+      },
+      {
+        "title": "UBS sees Bank of England rate hikes supporting pound vs franc",
+        "link": "https://www.investing.com/news/forex-news/ubs-sees-bank-of-england-rate-hikes-supporting-pound-vs-franc-93CH-4986322",
+        "source": "Investing.com Forex",
+        "published": "2026-10-30 09:25:39",
+        "matched_keywords": [
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Dollar dips and euro rises after Fed, ECB rate decisions; pound extends gains",
+        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-steadies-after-fed-hold-pce-eyed-4981446",
+        "source": "Investing.com Forex",
+        "published": "2026-10-29 18:45:17",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil falls as Trump favours Iran diplomacy before midterm elections",
+        "link": "https://www.investing.com/news/commodities-news/oil-falls-as-trump-favours-iran-diplomacy-before-midterm-elections-4989799",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-02 01:27:37",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold rebounds toward $3,900 as dip buyers emerge, Iran risks persist",
+        "link": "https://www.investing.com/news/commodities-news/gold-rebounds-toward-3900-as-dip-buyers-emerge-iran-risks-persist-4989797",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-02 01:05:53",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Oil slips more than 1% as talks continue on ending Iran war",
+        "link": "https://www.investing.com/news/commodities-news/oil-slips-more-than-1-as-talks-continue-on-ending-iran-war-4989784",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-02 00:30:20",
+        "matched_keywords": [
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "OPEC+ keeps December oil output targets steady ahead of tougher call for 2027",
+        "link": "https://www.investing.com/news/commodities-news/opec-set-to-keep-oil-output-targets-steady-sources-say-4989496",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-01 13:36:20",
+        "matched_keywords": [
+          "opec",
+          "oil"
+        ]
+      },
+      {
+        "title": "OPEC+ holds December oil output target",
+        "link": "https://www.investing.com/news/commodities-news/opec-set-to-hold-december-oil-output-steady-4989332",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-01 12:41:40",
+        "matched_keywords": [
+          "opec",
+          "oil"
+        ]
+      },
+      {
+        "title": "Iranian negotiators in Doha to continue talks to end the US-Iran war, official says",
+        "link": "https://www.investing.com/news/commodities-news/iranian-negotiators-in-doha-to-continue-talks-to-end-the-usiran-war-official-says-4989743",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-01 12:30:24",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261029a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 29 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 28 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by shifting central bank rate expectations (with the Fed and ECB cutting rates while the dollar shows resilience) alongside ongoing diplomatic talks regarding the US-Iran conflict. In commodities, crude oil prices are under downward pressure as negotiations continue and OPEC+ maintains its output targets, while gold attempts a rebound amidst lingering geopolitical risks.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "WEAKENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "NEUTRAL",
+      "key_risk": "Potential escalation or sudden collapse of US-Iran diplomatic talks impacting Middle Eastern maritime transit and energy markets.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BULLISH"
+    }
+  },
+  {
     "timestamp": "2026-11-01T18:27:50.765208+00:00",
     "total_scanned": 226,
     "flagged_count": 161,
@@ -31829,169 +31990,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "Active disruptions in the Strait of Hormuz—highlighted by a projectile strike on a tanker near Khasab, extensive dark fleet activity, and growing vessel backlogs off Kharg Island—are actively restricting maritime energy logistics."
-    }
-  },
-  {
-    "timestamp": "2026-09-01T01:54:23.321812+00:00",
-    "total_scanned": 228,
-    "flagged_count": 179,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Banco Santander, S.A. and Santander Holdings USA, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "23 best-performing stocks of August, as the software industry continues its recovery",
-        "link": "https://www.marketwatch.com/story/22-best-performing-stocks-of-august-as-the-software-industry-continues-its-recovery-88e432bf?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Mon, 31 Aug 2026 21:16:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "This maneuver is boosting oil shipments through the Strait of Hormuz",
-        "link": "https://www.marketwatch.com/story/this-maneuver-is-boosting-oil-shipments-through-the-strait-of-hormuz-070d8fa3?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Mon, 31 Aug 2026 20:56:00 GMT",
-        "matched_keywords": [
-          "oil",
-          "hormuz"
-        ]
-      },
-      {
-        "title": "With Warsh running the Fed, should bond investors be worried?",
-        "link": "https://www.marketwatch.com/story/should-bond-investors-worry-with-warsh-running-the-fed-0a99c5ac?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Mon, 31 Aug 2026 20:55:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "war"
-        ]
-      },
-      {
-        "title": "Canadian dollar rebounds from two-week low as oil prices rise, BoC decision looms",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rebounds-from-twoweek-low-as-oil-prices-rise-boc-decision-looms-4883302",
-        "source": "Investing.com Forex",
-        "published": "2026-08-31 21:14:09",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "US Treasury’s Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil",
-        "link": "https://www.investing.com/news/forex-news/us-treasurys-bessent-faces-g20-diplomacy-test-amid-tariffs-iran-war-bond-turmoil-4882036",
-        "source": "Investing.com Forex",
-        "published": "2026-08-31 14:49:44",
-        "matched_keywords": [
-          "tariff",
-          "oil",
-          "war",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Treasury yields advance as Warsh’s hawkish stance and oil spike fuel Sept hike",
-        "link": "https://www.investing.com/news/forex-news/german-yields-hit-multiyear-highs-after-warshs-hawkish-tone-4882236",
-        "source": "Investing.com Forex",
-        "published": "2026-08-31 11:47:50",
-        "matched_keywords": [
-          "oil",
-          "war",
-          "yield",
-          "treasury"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are digesting shifting monetary policy expectations with Kevin Warsh leading the Fed alongside rising Treasury yields and an oil price spike fueled by Middle East tensions. Meanwhile, maritime data confirms normal transit flow through the Strait of Hormuz despite ongoing attempts by tankers to mask origins using ship-to-ship transfers and false flags.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "Agricultural fundamentals are unmentioned in the current macro and energy-dominated news flow.",
-      "usd_ils_impact": "NEUTRAL",
-      "usd_ils_impact_reason": "Regional geopolitical friction is balanced against broad dollar strength driven by potential Federal Reserve hawkishness.",
-      "key_risk": "Escalation in the Middle East driving sustained oil price spikes and forcing aggressive Fed tightening.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": false,
-      "immediate_risk_reason": ""
     }
   }
 ]
