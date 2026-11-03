@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-11-03T03:58:04.462896+00:00",
+    "total_scanned": 227,
+    "flagged_count": 163,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261029a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 29 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 28 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Australia hikes rates to 18-year high to fight inflation",
+        "link": "https://www.cnbc.com/2026/11/03/australia-hikes-rates-18-year-high-finflation.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 03 Nov 2026 03:46:20 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Third-quarter U.S. GDP increases a better-than-expected 3.4% as September inflation accelerates",
+        "link": "https://www.cnbc.com/2026/10/29/pce-inflation-report-september-2026-.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 29 Oct 2026 18:06:31 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Analysis: Kevin Warsh is keeping Wall Street guessing. It may be his most powerful tool",
+        "link": "https://www.cnbc.com/2026/10/29/kevin-warsh-fed-october-rate-decision-december-hike.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 29 Oct 2026 17:32:34 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Here are five key takeaways from the Fed rate decision and Warsh news conference",
+        "link": "https://www.cnbc.com/2026/10/28/fed-rate-decision-warsh-takeaways.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 28 Oct 2026 21:31:46 GMT",
+        "matched_keywords": [
+          "fed",
+          "war"
+        ]
+      },
+      {
+        "title": "Bessent says 'not necessarily' a mistake if the Fed hikes again",
+        "link": "https://www.cnbc.com/2026/10/28/scott-bessent-interview.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 28 Oct 2026 21:06:37 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil rises after reported U.S. strike on Iran’s Qeshm Island",
+        "link": "https://www.investing.com/news/commodities-news/oil-rises-after-reported-us-strike-on-irans-qeshm-island-4993349",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-03 01:33:13",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are navigating strong U.S. economic data (3.4% Q3 GDP) alongside persistent inflationary pressures that have forced central banks like Australia's to hike rates to an 18-year high and kept the Federal Reserve leaning hawkish under Chairman Kevin Warsh. Simultaneously, escalating Middle East conflict marked by renewed tanker attacks and limpet mines in the Strait of Hormuz continues to disrupt energy supplies and spike maritime GPS jamming.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH - Strong U.S. Q3 GDP growth and a hawkish Fed posture keep Treasury yields elevated and support the dollar against major currencies.",
+      "key_risk": "Escalation of military conflict in the Strait of Hormuz threatening critical energy shipping lanes and driving persistent global fuel inflation.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Ongoing military strikes and limpet-mine attacks on commercial tankers in and around the Strait of Hormuz are actively disrupting maritime transit and spiking regional GPS jamming.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-02T22:22:18.779124+00:00",
     "total_scanned": 227,
     "flagged_count": 162,
@@ -31828,169 +31987,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "Two Saudi-crude VLCC tankers were struck by unknown projectiles in the Strait of Hormuz, triggering US retaliatory airstrikes on IRGC sites and a near-complete collapse of inbound vessel transits amid severe AIS jamming."
-    }
-  },
-  {
-    "timestamp": "2026-09-02T01:09:12.976991+00:00",
-    "total_scanned": 230,
-    "flagged_count": 170,
-    "flagged_headlines": [
-      {
-        "title": "Oil climbs for 3rd straight day, Brent tops $96 on renewed US-Iran fighting",
-        "link": "https://www.investing.com/news/commodities-news/oil-climbs-for-3rd-straight-day-brent-tops-96-on-renewed-usiran-fighting-4885235",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-02 01:03:24",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil up nearly 1% as US and Iran trade fresh strikes",
-        "link": "https://www.investing.com/news/commodities-news/oil-up-nearly-1-as-us-and-iran-trade-fresh-strikes-4885234",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-02 01:01:07",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil jumps, WTI at $90 for first time since June on U.S.-Iran military escalation",
-        "link": "https://www.investing.com/news/commodities-news/oil-extends-gains-as-trump-threatens-further-iran-strikes-4883412",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-01 21:37:27",
-        "matched_keywords": [
-          "oil",
-          "escalation"
-        ]
-      },
-      {
-        "title": "Gold falls over 2% as dollar gets a boost from spiking oil prices, rising yields",
-        "link": "https://www.investing.com/news/commodities-news/gold-steadies-after-twoday-drop-as-iran-strikes-revive-inflation-risks-4883434",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-01 21:02:38",
-        "matched_keywords": [
-          "oil",
-          "yield"
-        ]
-      },
-      {
-        "title": "Oil prices settle up more than $4 a barrel on renewed US-Iran fighting",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-settle-up-more-than-4-a-barrel-on-renewed-usiran-fighting-4884526",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-01 19:48:32",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "West African crude demand weakens as differentials rise",
-        "link": "https://www.investing.com/news/commodities-news/west-african-crude-demand-weakens-as-differentials-rise-93CH-4884511",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-01 19:25:17",
-        "matched_keywords": [
-          "crude"
-        ]
-      },
-      {
-        "title": "Dollar rises on safe haven boost amid U.S.-Iran escalation, bond sell-off",
-        "link": "https://www.investing.com/news/forex-news/asian-currencies-steady-as-yen-hovers-near-160-bessent-backs-boj-hikes-4883482",
-        "source": "Investing.com Forex",
-        "published": "2026-09-01 20:19:18",
-        "matched_keywords": [
-          "escalation"
-        ]
-      },
-      {
-        "title": "Global bond sell-off worsens as U.S. 2-year yield touches highest level since 2025",
-        "link": "https://www.investing.com/news/forex-news/global-bond-rout-deepens-as-middle-east-escalation-and-inflation-shock-push-yields-4883611",
-        "source": "Investing.com Forex",
-        "published": "2026-09-01 11:45:35",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "Iran says it has enough foreign currency despite US sanctions",
-        "link": "https://www.investing.com/news/forex-news/iran-says-it-has-enough-foreign-currency-despite-us-sanctions-4883541",
-        "source": "Investing.com Forex",
-        "published": "2026-09-01 06:54:27",
-        "matched_keywords": [
-          "sanction"
-        ]
-      },
-      {
-        "title": "Canadian dollar rebounds from two-week low as oil prices rise, BoC decision looms",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-rebounds-from-twoweek-low-as-oil-prices-rise-boc-decision-looms-4883302",
-        "source": "Investing.com Forex",
-        "published": "2026-08-31 21:14:09",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "US Treasury’s Bessent faces G20 diplomacy test amid tariffs, Iran war, bond turmoil",
-        "link": "https://www.investing.com/news/forex-news/us-treasurys-bessent-faces-g20-diplomacy-test-amid-tariffs-iran-war-bond-turmoil-4882036",
-        "source": "Investing.com Forex",
-        "published": "2026-08-31 14:49:44",
-        "matched_keywords": [
-          "tariff",
-          "oil",
-          "war",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Treasury yields advance as Warsh’s hawkish stance and oil spike fuel Sept hike",
-        "link": "https://www.investing.com/news/forex-news/german-yields-hit-multiyear-highs-after-warshs-hawkish-tone-4882236",
-        "source": "Investing.com Forex",
-        "published": "2026-08-31 11:47:50",
-        "matched_keywords": [
-          "oil",
-          "war",
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are reacting strongly to military escalation between the U.S. and Iran, driving oil prices up (Brent topping $96, WTI hitting $90) and triggering a broader bond sell-off and stronger U.S. dollar. Maritime intelligence confirms active disruptions and vessel targeting in the Strait of Hormuz, fueling inflation fears and hawkish central bank expectations.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_reason": "While surging energy costs impact fertilizer and transport inputs, there is no direct news indicating an immediate disruption to global wheat supply or logistics.",
-      "usd_ils_impact": "BULLISH",
-      "usd_ils_impact_reason": "The U.S. dollar is surging broadly due to safe-haven demand and a spiking oil-driven bond sell-off, which typically strengthens the greenback against emerging market and regional currencies like the Israeli Shekel.",
-      "key_risk": "Further military escalation in the Strait of Hormuz causing severe petroleum supply shocks and compounding the global bond market sell-off.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "Active military escalation between the U.S. and Iran has directly impacted the Strait of Hormuz, resulting in vessel projectile strikes, rising anchorage backlogs off Kharg Island, and extensive use of dark-fleet maneuvers."
     }
   }
 ]
