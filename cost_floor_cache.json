@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-11-02T01:06:46.163520",
-  "floor_cents": 635.4624374648716,
+  "timestamp": "2026-11-05T07:52:18.927200",
+  "floor_cents": 625.3958401911077,
   "source": "USDA NASS LIVE",
   "components": {
     "base_cost": 6.3,
-    "fertilizer_adj": -0.0694,
-    "fuel_adj": 0.2343,
-    "total_adjustment": 0.0087,
-    "final_cost": 6.35,
+    "fertilizer_adj": -0.0637,
+    "fuel_adj": 0.0877,
+    "total_adjustment": -0.0073,
+    "final_cost": 6.25,
     "is_live": true
   }
 }
