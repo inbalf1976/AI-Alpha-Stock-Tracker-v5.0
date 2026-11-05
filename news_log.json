@@ -1,5 +1,141 @@
 [
   {
+    "timestamp": "2026-11-05T03:34:59.735766+00:00",
+    "total_scanned": 40,
+    "flagged_count": 12,
+    "flagged_headlines": [
+      {
+        "title": "McDonald’s tests new value menu as fast-food discount wars heat up",
+        "link": "https://www.marketwatch.com/story/mcdonalds-tests-new-value-menu-as-fast-food-discount-wars-heat-up-bfc57caf?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 05 Nov 2026 01:01:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "As Vistra and other energy stocks slide, some analysts warn of an ‘excessive knee-jerk’ reaction",
+        "link": "https://www.marketwatch.com/story/as-vistra-and-other-energy-stocks-slide-some-analysts-warn-of-an-excessive-knee-jerk-reaction-aece0737?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Thu, 05 Nov 2026 00:38:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Oil falls for a fourth day on expectations for lower risk of Iran war escalation",
+        "link": "https://www.investing.com/news/commodities-news/oil-falls-for-a-fourth-day-on-expectations-for-lower-risk-of-iran-war-escalation-5002042",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-05 02:24:24",
+        "matched_keywords": [
+          "oil",
+          "war",
+          "escalation"
+        ]
+      },
+      {
+        "title": "Gold extends rally above $4,100 as dollar, Treasury yields fall after U.S. vote",
+        "link": "https://www.investing.com/news/commodities-news/gold-extends-rally-above-4100-as-dollar-treasury-yields-fall-after-us-vote-5002012",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-05 02:03:19",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "US slaps sanctions on Indian, Turkish firms and people for aiding Iran",
+        "link": "https://www.investing.com/news/commodities-news/us-slaps-sanctions-on-indian-turkish-firms-and-people-for-aiding-iran-5000921",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-05 01:06:18",
+        "matched_keywords": [
+          "sanction"
+        ]
+      },
+      {
+        "title": "Oil holds steep losses after U.S. election fuels Iran peace hopes",
+        "link": "https://www.investing.com/news/commodities-news/oil-holds-steep-losses-after-us-election-fuels-iran-peace-hopes-5001939",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-05 00:56:32",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil falls over 8% as traders weigh impact on Iran war of Democratic midterms sweep",
+        "link": "https://www.investing.com/news/commodities-news/oil-edges-higher-as-mixed-usiran-signals-temper-peace-hopes-4997079",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-04 22:34:29",
+        "matched_keywords": [
+          "oil",
+          "war"
+        ]
+      },
+      {
+        "title": "Northwest European diesel margins fall over 4% on oil price drop",
+        "link": "https://www.investing.com/news/commodities-news/northwest-european-diesel-margins-fall-over-4-on-oil-price-drop-93CH-5001084",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-04 19:36:39",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Treasury yields edge up as Election Day meets JOLTS, refunding",
+        "link": "https://www.investing.com/news/forex-news/german-yields-hover-near-august-lows-on-tech-rout-4993710",
+        "source": "Investing.com Forex",
+        "published": "2026-11-03 13:24:00",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Euro zone inflation hits 4% for first time in three years as interest rate hike looms",
+        "link": "https://www.cnbc.com/2026/11/04/euro-zone-cpi-inflation-october-ecb-rate-hike.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 04 Nov 2026 10:47:30 GMT",
+        "matched_keywords": [
+          "rate hike",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Australia hikes rates to 18-year high to fight inflation",
+        "link": "https://www.cnbc.com/2026/11/03/australia-hikes-rates-18-year-high-finflation.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 03 Nov 2026 03:46:20 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Third-quarter U.S. GDP increases a better-than-expected 3.4% as September inflation accelerates",
+        "link": "https://www.cnbc.com/2026/10/29/pce-inflation-report-september-2026-.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 29 Oct 2026 18:06:31 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are reacting to a combination of easing geopolitical risk premiums—following political shifts reducing the perceived threat of Iran war escalation—and aggressively tightening monetary policy, with Australia hiking rates and euro zone inflation hitting 4%. Meanwhile, crude oil prices have dropped significantly, pulling down diesel margins and prompting energy stock volatility, while safe-haven assets like gold rally.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "NEUTRAL",
+      "key_risk": "Prolonged high interest rates and tightening central bank policy triggering broader macroeconomic slowdowns and currency volatility.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-04T20:27:52.212526+00:00",
     "total_scanned": 225,
     "flagged_count": 155,
@@ -31853,161 +31989,5 @@
     ],
     "maritime_context_included": true,
     "llm_analysis": null
-  },
-  {
-    "timestamp": "2026-09-04T01:07:55.410111+00:00",
-    "total_scanned": 229,
-    "flagged_count": 171,
-    "flagged_headlines": [
-      {
-        "title": "Snowflake has a secret weapon that’s powering its stock toward a huge gain",
-        "link": "https://www.marketwatch.com/story/shares-in-snowflake-are-surging-heres-what-wall-street-analysts-are-saying-0b6343c0?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Fri, 04 Sep 2026 00:35:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Adobe just announced its next CEO. Here’s why its stock is dropping.",
-        "link": "https://www.marketwatch.com/story/adobe-just-announced-its-next-ceo-heres-why-its-stock-is-dropping-bad9ed8a?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Fri, 04 Sep 2026 00:25:00 GMT",
-        "matched_keywords": [
-          "ppi"
-        ]
-      },
-      {
-        "title": "Yen soars to one-month high against dollar amid intervention, rate hike chatter",
-        "link": "https://www.investing.com/news/forex-news/asian-currencies-rise-as-yen-surges-toward-158-intervention-risk-returns-4886966",
-        "source": "Investing.com Forex",
-        "published": "2026-09-03 18:53:09",
-        "matched_keywords": [
-          "rate hike"
-        ]
-      },
-      {
-        "title": "U.S. bond market extends global rally, Fed’s Waller provides some relief",
-        "link": "https://www.investing.com/news/forex-news/global-bond-rout-takes-a-breath-as-european-and-aussie-yieldsease-from-peaks-4887089",
-        "source": "Investing.com Forex",
-        "published": "2026-09-03 17:50:16",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Canadian dollar hits one-week high as BoC inflation warnings bolster loonie",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-hits-oneweek-high-as-boc-inflation-warnings-bolster-loonie-4888261",
-        "source": "Investing.com Forex",
-        "published": "2026-09-03 15:20:08",
-        "matched_keywords": [
-          "inflation",
-          "war"
-        ]
-      },
-      {
-        "title": "Japan’s currency diplomat warns of ongoing yen market concerns",
-        "link": "https://www.investing.com/news/forex-news/japans-currency-diplomat-warns-of-ongoing-yen-market-concerns-93CH-4887606",
-        "source": "Investing.com Forex",
-        "published": "2026-09-03 11:33:01",
-        "matched_keywords": [
-          "war",
-          "warns of"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound firms as dollar softens on Fed rate-hike doubts",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-firms-as-dollar-softens-on-fed-ratehike-doubts-4887211",
-        "source": "Investing.com Forex",
-        "published": "2026-09-03 09:04:25",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Dollar lower as oil, yields lose steam; eyes on loonie, kiwi after rate decisions",
-        "link": "https://www.investing.com/news/forex-news/asian-currencies-weaken-as-dollar-gains-kiwi-tumbles-on-rbnz-outlook-4885309",
-        "source": "Investing.com Forex",
-        "published": "2026-09-02 20:04:18",
-        "matched_keywords": [
-          "oil",
-          "yield"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are reacting to a softer U.S. dollar, rising foreign currencies like the yen and loonie on rate-hike chatter, and a severe escalation in the Strait of Hormuz where U.S. strikes on Iranian tankers have collapsed shipping transit volumes.",
-      "wheat_impact": "NEUTRAL",
-      "usd_ils_impact": "BEARISH",
-      "key_risk": "Military escalation in the Strait of Hormuz causing severe disruptions to global energy supplies and maritime trade.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "U.S. military strikes on Iranian government tankers and subsequent Iranian retaliation have caused transit volumes in the Strait of Hormuz to collapse to just 8 vessels, with widespread AIS-dark activity."
-    }
   }
 ]
