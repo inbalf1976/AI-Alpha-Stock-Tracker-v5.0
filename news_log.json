@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-11-08T15:32:27.047498+00:00",
+    "total_scanned": 215,
+    "flagged_count": 154,
+    "flagged_headlines": [
+      {
+        "title": "This market signal called the tech selloff. Now it’s sending another warning.",
+        "link": "https://www.marketwatch.com/story/this-market-signal-called-the-tech-selloff-now-its-sending-another-warning-f7f8eb9b?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 08 Nov 2026 12:00:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement action with Allegiant United Holdings, LLC, Nano Financial Holdings, Inc., and Nano Banc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261105a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 5 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261029a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 29 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 28 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Bank of England hikes interest rate for the first time since Iran war, warns inflation will near 5%",
+        "link": "https://www.cnbc.com/2026/11/05/interest-rates-inflation-uk.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 05 Nov 2026 16:01:47 GMT",
+        "matched_keywords": [
+          "inflation",
+          "war"
+        ]
+      },
+      {
+        "title": "Euro zone inflation hits 4% for first time in three years as interest rate hike looms",
+        "link": "https://www.cnbc.com/2026/11/04/euro-zone-cpi-inflation-october-ecb-rate-hike.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 04 Nov 2026 10:47:30 GMT",
+        "matched_keywords": [
+          "rate hike",
+          "inflation"
+        ]
+      },
+      {
+        "title": "US Treasury sanctions Canadian money services firms over Iran-related transactions",
+        "link": "https://www.investing.com/news/forex-news/us-treasury-sanctions-canadian-money-services-firms-over-iranrelated-transactions-5009126",
+        "source": "Investing.com Forex",
+        "published": "2026-11-06 22:48:20",
+        "matched_keywords": [
+          "sanction",
+          "treasury"
+        ]
+      },
+      {
+        "title": "U.S. Treasuries fall as blowout payrolls lift yields across the curve",
+        "link": "https://www.investing.com/news/forex-news/jgb-yields-plunge-to-july-lows-as-wall-st-tech-tout-sparks-haven-rush-5006590",
+        "source": "Investing.com Forex",
+        "published": "2026-11-06 13:49:15",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar little changed as oil prices bounce, payrolls eyed",
+        "link": "https://www.investing.com/news/forex-news/dollar-edges-lower-as-us-election-outcome-cheers-global-markets-5001958",
+        "source": "Investing.com Forex",
+        "published": "2026-11-05 20:18:28",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global central banks are tightening monetary policy as inflation pressures mount, driven by prolonged energy shocks from the ongoing Iran war. Meanwhile, US employment data shows strong growth, lifting Treasury yields and supporting broader macroeconomic tightening cycles.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "NEUTRAL",
+      "key_risk": "Escalating Middle East conflict pushing global energy prices and inflation higher, triggering aggressive central bank rate hikes.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-08T02:35:11.808401+00:00",
     "total_scanned": 217,
     "flagged_count": 153,
@@ -31871,167 +32032,6 @@
       "headline_vs_article_note": "The UN headline warns of a 'supersized El Niño set to hit global economy and markets' through February 2027, while the article details ongoing and expected regional weather anomalies rather than an immediate economic crash.",
       "immediate_risk": false,
       "immediate_risk_reason": ""
-    }
-  },
-  {
-    "timestamp": "2026-09-07T14:25:04.113232+00:00",
-    "total_scanned": 219,
-    "flagged_count": 161,
-    "flagged_headlines": [
-      {
-        "title": "Oil prices climb after reports of Saudi Aramco refinery being hit by Houthi rebels",
-        "link": "https://www.marketwatch.com/story/oil-prices-hit-near-seven-week-highs-before-edging-lower-as-iran-plans-to-increase-control-of-hormuz-5070167c?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Mon, 07 Sep 2026 11:54:00 GMT",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Trump turns up the heat on Warsh as Fed rate hike looms",
-        "link": "https://www.cnbc.com/2026/09/05/trump-warsh-fed-september-rate-hike.html",
-        "source": "CNBC Economy",
-        "published": "Sat, 05 Sep 2026 19:12:53 GMT",
-        "matched_keywords": [
-          "fed",
-          "rate hike",
-          "war"
-        ]
-      },
-      {
-        "title": "Fed Governor Waller indicates he will support holding rates steady at September meeting",
-        "link": "https://www.cnbc.com/2026/09/03/fed-governor-waller-indicates-he-will-support-holding-rates-steady-at-september-meeting.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 03 Sep 2026 14:06:52 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "'Danger zone of extreme weather': UN warns of supersized El Niño set to hit global economy and markets",
-        "link": "https://www.cnbc.com/2026/09/03/supersized-el-nino-un-economy.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 03 Sep 2026 12:25:53 GMT",
-        "matched_keywords": [
-          "war",
-          "warns of"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound edges up as dollar stays soft on Fed rate-hike bets",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-edges-up-as-dollar-stays-soft-on-fed-ratehike-bets-4890558",
-        "source": "Investing.com Forex",
-        "published": "2026-09-07 09:09:45",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "European bond yields tick up, snapping two-day rally",
-        "link": "https://www.investing.com/news/forex-news/european-bond-yields-tick-up-snapping-twoday-rally-4890484",
-        "source": "Investing.com Forex",
-        "published": "2026-09-07 07:44:25",
-        "matched_keywords": [
-          "ppi",
-          "yield"
-        ]
-      },
-      {
-        "title": "Dollar firms as jobs data boosts Fed rate hike bets, yen eases after huge rally",
-        "link": "https://www.investing.com/news/forex-news/asian-currencies-rise-as-yen-set-for-best-week-since-july-fed-bets-fade-4888814",
-        "source": "Investing.com Forex",
-        "published": "2026-09-04 19:44:21",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "U.S. 10-year Treasury yield spikes following blockbuster NFP report",
-        "link": "https://www.investing.com/news/forex-news/global-bond-rout-pauses-for-second-day-as-feds-waller-sparks-ratehold-hopes-4888831",
-        "source": "Investing.com Forex",
-        "published": "2026-09-04 12:46:20",
-        "matched_keywords": [
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Gold edges down as strong payrolls revive Fed hike bets",
-        "link": "https://www.investing.com/news/commodities-news/gold-holds-near-4400-as-strong-payrolls-iran-tensions-lift-fed-hike-bets-4890334",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-07 13:55:13",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Oil ticks higher after fresh U.S.-Iran attacks in Strait of Hormuz",
-        "link": "https://www.investing.com/news/commodities-news/oil-extends-sharp-weekly-gains-after-usiran-tanker-attacks-in-hormuz-4890339",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-07 13:51:54",
-        "matched_keywords": [
-          "oil",
-          "hormuz"
-        ]
-      },
-      {
-        "title": "Oil prices hold near six-week highs on US-Iran attacks",
-        "link": "https://www.investing.com/news/commodities-news/oil-extends-gains-after-us-and-iran-strike-ships-4890330",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-07 13:48:29",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "UAE says its energy exports will not be ’held hostage’ by Iran war",
-        "link": "https://www.investing.com/news/commodities-news/uae-says-its-energy-exports-will-not-be-held-hostage-by-iran-war-4890634",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-07 13:12:34",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Geopolitical tensions in the Middle East, including attacks near the Strait of Hormuz and strikes on energy infrastructure, are supporting oil prices and driving safe-haven flows. Meanwhile, markets are intensely focused on a looming Federal Reserve rate decision amid an unprecedented political pressure campaign from the Trump administration, while the UN warns of a supersized El Niño event threatening global agricultural yields.",
-      "wheat_impact": "BULLISH",
-      "wheat_impact_category": "weather_crop_damage",
-      "usd_ils_impact": "BULLISH",
-      "key_risk": "Escalating geopolitical conflict in the Middle East disrupting global energy supplies and broader supply chains.",
-      "headline_overstated": true,
-      "headline_vs_article_note": "The UN warning headline declares a 'supersized El Niño set to hit global economy and markets' as a present reality, whereas the article text describes it as an intensifying event projected to persist until February 2027.",
-      "immediate_risk": true,
-      "immediate_risk_reason": "Active military engagements and attacks involving the U.S. and Iran in and around the Strait of Hormuz pose a continuous threat to maritime trade and energy flows."
     }
   }
 ]
