@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-11-09T02:48:37.932585+00:00",
+    "total_scanned": 216,
+    "flagged_count": 154,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces termination of enforcement action with Allegiant United Holdings, LLC, Nano Financial Holdings, Inc., and Nano Banc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261105a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 5 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261029a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 29 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 28 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 9 Oct 2026 14:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 8 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 7 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 5 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 2 Oct 2026 20:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil falls as Trump says new Iran attacks ’unlikely’",
+        "link": "https://www.investing.com/news/commodities-news/oil-falls-on-open-as-trump-says-fresh-iran-attacks-unlikely-5010359",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-09 02:00:40",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold rebounds above $4,100 as traders await U.S. inflation data after jobs beat",
+        "link": "https://www.investing.com/news/commodities-news/gold-rebounds-above-4100-as-traders-await-us-inflation-data-after-jobs-beat-5010397",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-09 01:16:44",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Oil prices dip as Trump says new Iran attacks ‘unlikely’ if talks progress",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-dip-as-trump-says-new-iran-attacks-unlikely-if-talks-progress-5010370",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-09 00:25:21",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US Treasury sanctions Canadian money services firms over Iran-related transactions",
+        "link": "https://www.investing.com/news/forex-news/us-treasury-sanctions-canadian-money-services-firms-over-iranrelated-transactions-5009126",
+        "source": "Investing.com Forex",
+        "published": "2026-11-06 22:48:20",
+        "matched_keywords": [
+          "sanction",
+          "treasury"
+        ]
+      },
+      {
+        "title": "U.S. Treasuries fall as blowout payrolls lift yields across the curve",
+        "link": "https://www.investing.com/news/forex-news/jgb-yields-plunge-to-july-lows-as-wall-st-tech-tout-sparks-haven-rush-5006590",
+        "source": "Investing.com Forex",
+        "published": "2026-11-06 13:49:15",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "Dollar little changed as oil prices bounce, payrolls eyed",
+        "link": "https://www.investing.com/news/forex-news/dollar-edges-lower-as-us-election-outcome-cheers-global-markets-5001958",
+        "source": "Investing.com Forex",
+        "published": "2026-11-05 20:18:28",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Markets are digesting a strong U.S. jobs report that pushed Treasury yields higher and lifted the U.S. dollar, while oil prices dipped on easing concerns over potential Iranian attacks. Meanwhile, Strait of Hormuz shipping data highlights ongoing maritime security anomalies, including dark transits and GPS jamming.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalation of Middle East tensions and continued maritime disruptions in the Strait of Hormuz impacting broader energy and supply chain costs.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Ongoing physical security incidents and vessel attacks in the Strait of Hormuz, combined with high volumes of AIS-dark transits and GPS jamming, create active operational risks for regional maritime transit.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-08T18:24:33.057423+00:00",
     "total_scanned": 215,
     "flagged_count": 151,
@@ -31874,161 +32033,6 @@
       "wheat_impact_category": "other_fundamental",
       "usd_ils_impact": "BULLISH",
       "key_risk": "Escalating Middle East conflict disrupting critical energy and maritime supply routes.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": false,
-      "immediate_risk_reason": ""
-    }
-  },
-  {
-    "timestamp": "2026-09-08T01:16:03.275576+00:00",
-    "total_scanned": 220,
-    "flagged_count": 166,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Oil prices climb after reports of Saudi Aramco refinery being hit by Houthi rebels",
-        "link": "https://www.marketwatch.com/story/oil-prices-hit-near-seven-week-highs-before-edging-lower-as-iran-plans-to-increase-control-of-hormuz-5070167c?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Tue, 08 Sep 2026 00:23:00 GMT",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Chip stock investors beware — these charts could warn of further weakness ahead",
-        "link": "https://www.marketwatch.com/story/chip-stock-investors-beware-these-charts-could-warn-of-further-weakness-ahead-1bd890cc?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Mon, 07 Sep 2026 16:00:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Brent Oil stalls at resistance with RSI at 72: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/brent-oil-overbought-at-97-rsi-74-hourly-levels-93CH-4890477",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-07 19:12:24",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Crude Oil WTI tests $93.64 resistance with overbought RSI: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-doubletop-at-9364-resistance-live-levels-93CH-4890479",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-07 19:12:24",
-        "matched_keywords": [
-          "crude",
-          "oil"
-        ]
-      },
-      {
-        "title": "London Gas Oil spikes 12% above 50-MA, overbought: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-stretched-10-above-50ma-live-levels-93CH-4890480",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-07 19:12:09",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil prices rise to six-week highs on worsening Middle East conflict",
-        "link": "https://www.investing.com/news/commodities-news/oil-extends-gains-after-us-and-iran-strike-ships-4890330",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-07 18:00:49",
-        "matched_keywords": [
-          "oil"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Oil prices have climbed to six-week highs, driven by escalating Middle East conflicts including reported strikes on Saudi Aramco refineries and technical overbought conditions in crude and gas oil. Meanwhile, the Federal Reserve continues to process routine bank enforcement actions and regulatory approvals alongside ongoing FOMC minutes review.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_category": "speculative_tension",
-      "usd_ils_impact": "BULLISH",
-      "key_risk": "Escalating Middle East military engagements potentially disrupting broader energy and regional trade flows.",
       "headline_overstated": false,
       "headline_vs_article_note": "",
       "immediate_risk": false,
