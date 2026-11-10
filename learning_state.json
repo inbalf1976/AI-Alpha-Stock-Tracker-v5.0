@@ -13938,11 +13938,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "LOSS",
+      "outcome_resolved_at": "2026-11-10T11:00:00-06:00",
+      "resolution_price": 596.75,
+      "mfe": 1.0,
+      "mae": 13.5,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -14110,7 +14110,10 @@
         "high_quality": false,
         "dow_note": "WEAK_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-09T09:15:00-06:00",
+      "realized_r": -1.0
     },
     {
       "outcome_version": 5,
@@ -14135,11 +14138,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "LOSS",
+      "outcome_resolved_at": "2026-11-10T11:00:00-06:00",
+      "resolution_price": 596.75,
+      "mfe": 1.0,
+      "mae": 13.5,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -14299,7 +14302,10 @@
         "high_quality": false,
         "dow_note": "WEAK_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-10T07:30:00-06:00",
+      "realized_r": -1.0
     },
     {
       "outcome_version": 5,
@@ -14324,11 +14330,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "LOSS",
+      "outcome_resolved_at": "2026-11-10T11:00:00-06:00",
+      "resolution_price": 598.0,
+      "mfe": 1.5,
+      "mae": 12.25,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -14496,7 +14502,10 @@
         "high_quality": false,
         "dow_note": "NORMAL_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-10T09:00:00-06:00",
+      "realized_r": -1.0
     },
     {
       "outcome_version": 5,

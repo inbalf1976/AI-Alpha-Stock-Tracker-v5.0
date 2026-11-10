@@ -4,13 +4,13 @@
   "active_profile": "BASE",
   "previous_profile": "BASE",
   "new_profile": "BASE",
-  "completed_setups": 14,
+  "completed_setups": 17,
   "eligible": false,
   "profile_stats": {
     "BASE": {
-      "count": 14,
-      "win_rate": 0.285714,
-      "expected_r": -0.428571
+      "count": 17,
+      "win_rate": 0.235294,
+      "expected_r": -0.529412
     },
     "ENTRY_993": {
       "count": 0,
