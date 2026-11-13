@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 100,
+    "alert_timestamp": "2026-11-13T03:28:54.483477+00:00",
+    "reason": "Active military attacks on Saudi energy sites and severe disruptions in the Strait of Hormuz (with a surge in dark vessel crossings) are actively threatening vital energy and maritime trade corridors.",
+    "predicted_direction": "BEARISH",
+    "price_at_alert": 589.75,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 99,
     "alert_timestamp": "2026-11-11T20:14:34.898676+00:00",
     "reason": "Ongoing attacks on shipping navigation systems near Oman and active tanker leaks pose immediate threats to maritime chokepoints in the Strait of Hormuz.",
