@@ -1,8 +1,8 @@
 {
   "version": 5,
   "shadow_only": true,
-  "samples": 21,
-  "wins": 4,
+  "samples": 24,
+  "wins": 7,
   "losses": 17,
   "ready": false,
   "model": null,
