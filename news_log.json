@@ -1,5 +1,168 @@
 [
   {
+    "timestamp": "2026-11-15T02:53:31.147877+00:00",
+    "total_scanned": 219,
+    "flagged_count": 158,
+    "flagged_headlines": [
+      {
+        "title": "AI risks are the biggest threat to the financial system, Fed survey finds",
+        "link": "https://www.cnbc.com/2026/11/13/ai-risks-financial-system-federal-reserve.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 13 Nov 2026 21:18:30 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Consumer prices rose 0.4% in October, more than expected, complicating Fed's inflation fight",
+        "link": "https://www.cnbc.com/2026/11/10/cpi-inflation-report-october-2026.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 10 Nov 2026 23:53:58 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "A key report for where inflation stood in October comes out Tuesday. Here's what to expect",
+        "link": "https://www.cnbc.com/2026/11/09/october-cpi-report-2026-inflation.html",
+        "source": "CNBC Economy",
+        "published": "Mon, 09 Nov 2026 21:03:55 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "U.S. dollar surges to biggest weekly gain since September on Fed hike certainty",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-yen-intervention-in-focus-as-rate-hike-bets-put-dollar-near-19mth-high-5024024",
+        "source": "Investing.com Forex",
+        "published": "2026-11-13 20:41:10",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Canadian dollar holds near one-month low as U.S. producer inflation keeps Fed bets",
+        "link": "https://www.investing.com/news/forex-news/canadian-dollar-holds-near-onemonth-low-as-us-producer-inflation-keeps-fed-bets-5025909",
+        "source": "Investing.com Forex",
+        "published": "2026-11-13 14:38:09",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Treasury yields log steepest weekly spikes since April 2025 on hawkish Fed signals",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-hit-multiweek-highs-as-hawkish-fed-shatters-global-bond-rally-5024281",
+        "source": "Investing.com Forex",
+        "published": "2026-11-13 13:39:09",
+        "matched_keywords": [
+          "fed",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound steady as hawkish Fed keeps dollar bid",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-steady-as-hawkish-fed-keeps-dollar-bid-5024553",
+        "source": "Investing.com Forex",
+        "published": "2026-11-13 09:08:09",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Treasury yields hold near 2-week highs as traders await next signal",
+        "link": "https://www.investing.com/news/forex-news/eurozone-yields-hold-near-1week-highs-investors-weigh-hawkish-fed-bets-5020470",
+        "source": "Investing.com Forex",
+        "published": "2026-11-12 13:01:31",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Iran’s navy says three tankers on fire after hitting mines in Hormuz",
+        "link": "https://www.investing.com/news/commodities-news/irans-navy-says-three-tankers-on-fire-after-hitting-mines-in-hormuz-5027556",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-14 23:00:24",
+        "matched_keywords": [
+          "hormuz"
+        ]
+      },
+      {
+        "title": "Oil prices fall over 2% for the week amid easing fears of fresh U.S.-Iran fighting",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-hold-gains-as-trump-sidelines-vance-from-iran-diplomacy-5023781",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-13 22:43:45",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Spot gold posts worst week since March amid jump in Fed rate hike expectations",
+        "link": "https://www.investing.com/news/commodities-news/gold-languishes-near-13month-low-as-96-oil-fuels-bets-on-bigger-fed-hikes-5023860",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-13 22:14:06",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Tin backwardation widens on LME as exchange stocks fall 60% since June",
+        "link": "https://www.investing.com/news/commodities-news/tin-backwardation-widens-on-lme-as-exchange-stocks-fall-60-since-june-93CH-5026445",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-13 20:32:22",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces pricing, effective January 1, 2027, for payment services the Federal Reserve Banks provide to banks and credit unions, and changes to streamline and adjust their check services",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces revised tentative schedule of Federal Open Market Committee meetings in 2027",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 17:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Hotter-than-expected October inflation data (0.4% increase) has driven a significant spike in U.S. Treasury yields and pushed the U.S. dollar to its biggest weekly gain since September as markets price in a hawkish Fed response. Meanwhile, a Federal Reserve survey highlights artificial intelligence risks as the top threat to the financial system, and maritime tracking reveals persistent dark activity in the Strait of Hormuz amid ongoing Middle East tensions.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Persistent inflation forcing a more aggressive Federal Reserve rate-hike path, driving dollar strength and tightening global financial conditions.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Tanker attacks and extensive 'dark' vessel tracking in the Strait of Hormuz present active and escalating maritime transit risks.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-14T18:46:15.265387+00:00",
     "total_scanned": 222,
     "flagged_count": 159,
@@ -31956,167 +32119,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "Active U.S. military strikes on IRGC-linked oil tankers and Iranian missile attacks in the Strait of Hormuz and surrounding waters represent an active, escalating disruption to critical maritime chokepoints."
-    }
-  },
-  {
-    "timestamp": "2026-09-10T17:02:30.905949+00:00",
-    "total_scanned": 225,
-    "flagged_count": 168,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by Coastal Bend Bancshares, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of the application by FS Bancorp, Inc.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Tue, 4 Aug 2026 20:30:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Treasury yields surge toward the danger zone for stocks, as inflation pressures heat up",
-        "link": "https://www.marketwatch.com/story/treasury-yields-surge-toward-the-danger-zone-for-stocks-as-inflation-pressures-heat-up-fe0f9aa6?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Thu, 10 Sep 2026 16:20:00 GMT",
-        "matched_keywords": [
-          "inflation",
-          "war",
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Now’s your chance to make money during the best bond market for yields in decades — if you get over Treasury jitters",
-        "link": "https://www.marketwatch.com/story/nows-your-chance-to-make-money-during-the-best-bond-market-for-yields-in-decades-if-you-get-over-treasury-jitters-4209f805?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Thu, 10 Sep 2026 15:25:00 GMT",
-        "matched_keywords": [
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "The likelihood of a Fed interest rate hike next week just got a lot higher",
-        "link": "https://www.cnbc.com/2026/09/10/the-likelihood-of-a-fed-interest-rate-hike-next-week-just-got-a-lot-higher.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 10 Sep 2026 16:55:17 GMT",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "U.S. reveals import ban on slew of Canadian goods as trade war escalates",
-        "link": "https://www.cnbc.com/2026/09/09/us-canada-trade-war-import-ban.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 09 Sep 2026 16:17:46 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Canada's retaliatory tariffs worth CA$27.6 billion take effect as trade rift with U.S. deepens",
-        "link": "https://www.cnbc.com/2026/09/08/canada-retaliatory-tariffs.html",
-        "source": "CNBC Economy",
-        "published": "Tue, 08 Sep 2026 17:11:11 GMT",
-        "matched_keywords": [
-          "tariff"
-        ]
-      },
-      {
-        "title": "Trump turns up the heat on Warsh as Fed rate hike looms",
-        "link": "https://www.cnbc.com/2026/09/05/trump-warsh-fed-september-rate-hike.html",
-        "source": "CNBC Economy",
-        "published": "Sat, 05 Sep 2026 19:12:53 GMT",
-        "matched_keywords": [
-          "fed",
-          "rate hike",
-          "war"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets face intense friction as a live military escalation in the Strait of Hormuz drives Brent crude past $100 and fuels inflation fears, prompting aggressive White House pressure against an expected Federal Reserve rate hike. Simultaneously, a deepening U.S.-Canada trade war and mutual retaliatory tariffs are disrupting cross-border supply chains.",
-      "wheat_impact": "BULLISH",
-      "wheat_impact_category": "other_fundamental",
-      "usd_ils_impact": "BULLISH",
-      "key_risk": "Further military escalation in the Middle East causing sustained energy shocks and forcing aggressive central bank tightening.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "U.S. forces have actively struck IRGC-linked oil tankers and Iran has launched missile strikes near Iraq and Jordan, severely threatening transit through the Strait of Hormuz chokepoint."
     }
   }
 ]
