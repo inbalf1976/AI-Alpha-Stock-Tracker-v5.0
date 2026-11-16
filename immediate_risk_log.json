@@ -5,11 +5,11 @@
     "reason": "Tanker attacks and extensive 'dark' vessel tracking in the Strait of Hormuz present active and escalating maritime transit risks.",
     "predicted_direction": "BEARISH",
     "price_at_alert": 593.25,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "HIT",
+    "price_at_scoring": 588.5,
+    "pct_change": -0.801,
+    "scored_at": "2026-11-16T02:54:19.981497+00:00"
   },
   {
     "alert_number": 100,
