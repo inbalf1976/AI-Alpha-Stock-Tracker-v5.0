@@ -1809,5 +1809,20 @@
     "direction_basis": "same_day_close_vs_open",
     "direction_correct_vs_entry": false,
     "scoring_method": "real_setup"
+  },
+  {
+    "timestamp": "2026-11-16T03:07:01.369394+02:00",
+    "direction": "UP",
+    "entry_price": 593.25,
+    "confidence": 0.6,
+    "tier": 2,
+    "seasonal_phase": "BULLISH",
+    "stop_price": 586.57,
+    "target_price": 597.7,
+    "setup_direction": "UP",
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
   }
 ]
