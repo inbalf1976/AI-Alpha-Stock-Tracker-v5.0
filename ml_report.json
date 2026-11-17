@@ -1,9 +1,9 @@
 {
   "version": 5,
   "shadow_only": true,
-  "samples": 36,
+  "samples": 40,
   "wins": 7,
-  "losses": 29,
+  "losses": 33,
   "ready": false,
   "model": null,
   "brier_score": null,
