@@ -1823,7 +1823,12 @@
     "validated": false,
     "outcome": null,
     "exit_reason": null,
-    "pnl_cents": null
+    "pnl_cents": null,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-11-16",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-11-17T03:07:17.974277+02:00",
