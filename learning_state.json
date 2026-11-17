@@ -11204,11 +11204,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "LOSS",
+      "outcome_resolved_at": "2026-11-17T03:15:00-06:00",
+      "resolution_price": 607.5,
+      "mfe": 8.25,
+      "mae": 12.0,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -11376,7 +11376,10 @@
         "high_quality": false,
         "dow_note": "NORMAL_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-16T10:30:00-06:00",
+      "realized_r": -1.0
     },
     {
       "outcome_version": 5,
@@ -11985,11 +11988,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "LOSS",
+      "outcome_resolved_at": "2026-11-17T03:30:00-06:00",
+      "resolution_price": 609.25,
+      "mfe": 10.0,
+      "mae": 11.25,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -12157,7 +12160,10 @@
         "high_quality": false,
         "dow_note": "WEAK_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-16T10:30:00-06:00",
+      "realized_r": -1.0
     },
     {
       "outcome_version": 5,
@@ -12182,11 +12188,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "LOSS",
+      "outcome_resolved_at": "2026-11-17T03:30:00-06:00",
+      "resolution_price": 609.25,
+      "mfe": 10.0,
+      "mae": 11.25,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -12354,7 +12360,10 @@
         "high_quality": false,
         "dow_note": "WEAK_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-16T10:30:00-06:00",
+      "realized_r": -1.0
     },
     {
       "outcome_version": 5,
@@ -13165,11 +13174,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "LOSS",
+      "outcome_resolved_at": "2026-11-17T03:15:00-06:00",
+      "resolution_price": 607.75,
+      "mfe": 8.5,
+      "mae": 11.75,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -13337,7 +13346,10 @@
         "high_quality": false,
         "dow_note": "NORMAL_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-16T10:30:00-06:00",
+      "realized_r": -1.0
     },
     {
       "outcome_version": 5,
@@ -13362,11 +13374,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "LOSS",
+      "outcome_resolved_at": "2026-11-17T03:15:00-06:00",
+      "resolution_price": 607.75,
+      "mfe": 8.5,
+      "mae": 11.75,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -13534,7 +13546,10 @@
         "high_quality": false,
         "dow_note": "NORMAL_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-16T10:30:00-06:00",
+      "realized_r": -1.0
     },
     {
       "outcome_version": 5,
@@ -14751,11 +14766,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "LOSS",
+      "outcome_resolved_at": "2026-11-17T02:15:00-06:00",
+      "resolution_price": 605.0,
+      "mfe": 5.75,
+      "mae": 10.75,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -14923,7 +14938,10 @@
         "high_quality": false,
         "dow_note": "STRONG_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-16T10:30:00-06:00",
+      "realized_r": -1.0
     },
     {
       "outcome_version": 5,
@@ -14948,11 +14966,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "LOSS",
+      "outcome_resolved_at": "2026-11-17T02:15:00-06:00",
+      "resolution_price": 605.0,
+      "mfe": 5.75,
+      "mae": 10.75,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -15112,7 +15130,10 @@
         "high_quality": false,
         "dow_note": "STRONG_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-16T10:30:00-06:00",
+      "realized_r": -1.0
     },
     {
       "outcome_version": 5,
@@ -15137,11 +15158,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "LOSS",
+      "outcome_resolved_at": "2026-11-17T03:15:00-06:00",
+      "resolution_price": 608.0,
+      "mfe": 8.75,
+      "mae": 11.5,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -15309,7 +15330,10 @@
         "high_quality": false,
         "dow_note": "NORMAL_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-16T10:30:00-06:00",
+      "realized_r": -1.0
     },
     {
       "outcome_version": 5,
@@ -15334,11 +15358,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "LOSS",
+      "outcome_resolved_at": "2026-11-17T03:15:00-06:00",
+      "resolution_price": 608.0,
+      "mfe": 8.75,
+      "mae": 11.5,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -15506,7 +15530,10 @@
         "high_quality": false,
         "dow_note": "NORMAL_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-16T10:30:00-06:00",
+      "realized_r": -1.0
     },
     {
       "outcome_version": 5,
@@ -16297,5 +16324,5 @@
   ],
   "last_learning_update": null,
   "learning_updates": [],
-  "last_spike_watch_key": "2026-11-16:SPIKE_WATCH:5"
+  "last_spike_watch_key": "2026-11-17:SPIKE_CONFIRMED:6"
 }
