@@ -4,13 +4,13 @@
   "active_profile": "BASE",
   "previous_profile": "BASE",
   "new_profile": "BASE",
-  "completed_setups": 27,
-  "eligible": false,
+  "completed_setups": 36,
+  "eligible": true,
   "profile_stats": {
     "BASE": {
-      "count": 27,
-      "win_rate": 0.259259,
-      "expected_r": -0.481481
+      "count": 36,
+      "win_rate": 0.194444,
+      "expected_r": -0.611111
     },
     "ENTRY_993": {
       "count": 0,
@@ -33,5 +33,5 @@
       "expected_r": null
     }
   },
-  "reason": "insufficient completed setups"
+  "reason": "no bounded improvement qualified"
 }
