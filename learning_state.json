@@ -9622,11 +9622,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "WIN",
+      "outcome_resolved_at": "2026-11-18T10:15:00-06:00",
+      "resolution_price": 589.75,
+      "mfe": 22.25,
+      "mae": 2.5,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -9794,7 +9794,10 @@
         "high_quality": false,
         "dow_note": "NORMAL_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-17T06:45:00-06:00",
+      "realized_r": 1.0
     },
     {
       "outcome_version": 5,
@@ -9819,11 +9822,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "WIN",
+      "outcome_resolved_at": "2026-11-18T10:15:00-06:00",
+      "resolution_price": 589.75,
+      "mfe": 22.25,
+      "mae": 2.5,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -9991,7 +9994,10 @@
         "high_quality": false,
         "dow_note": "NORMAL_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-17T06:45:00-06:00",
+      "realized_r": 1.0
     },
     {
       "outcome_version": 5,
@@ -10016,11 +10022,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "WIN",
+      "outcome_resolved_at": "2026-11-18T10:15:00-06:00",
+      "resolution_price": 589.75,
+      "mfe": 22.25,
+      "mae": 2.5,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -10188,7 +10194,10 @@
         "high_quality": false,
         "dow_note": "NORMAL_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-17T06:45:00-06:00",
+      "realized_r": 1.0
     },
     {
       "outcome_version": 5,
@@ -10213,11 +10222,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "WIN",
+      "outcome_resolved_at": "2026-11-18T10:30:00-06:00",
+      "resolution_price": 587.25,
+      "mfe": 20.75,
+      "mae": 5.0,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -10385,7 +10394,10 @@
         "high_quality": false,
         "dow_note": "STRONG_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-17T03:15:00-06:00",
+      "realized_r": 1.0
     },
     {
       "outcome_version": 5,
@@ -10410,11 +10422,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "WIN",
+      "outcome_resolved_at": "2026-11-18T10:30:00-06:00",
+      "resolution_price": 587.25,
+      "mfe": 20.75,
+      "mae": 5.0,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -10582,7 +10594,10 @@
         "high_quality": false,
         "dow_note": "STRONG_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-17T03:15:00-06:00",
+      "realized_r": 1.0
     },
     {
       "outcome_version": 5,
@@ -10607,11 +10622,11 @@
       "vol_warning": false,
       "invalidated": false,
       "invalid_reason": null,
-      "outcome": null,
-      "outcome_resolved_at": null,
-      "resolution_price": null,
-      "mfe": null,
-      "mae": null,
+      "outcome": "WIN",
+      "outcome_resolved_at": "2026-11-18T10:30:00-06:00",
+      "resolution_price": 587.25,
+      "mfe": 20.75,
+      "mae": 5.0,
       "ml_shadow": {
         "probability_win": null,
         "decision": "SHADOW_NOT_READY",
@@ -10779,7 +10794,10 @@
         "high_quality": false,
         "dow_note": "STRONG_DAY",
         "version": 3
-      }
+      },
+      "entry_filled": true,
+      "entry_time": "2026-11-17T03:15:00-06:00",
+      "realized_r": 1.0
     },
     {
       "outcome_version": 5,
