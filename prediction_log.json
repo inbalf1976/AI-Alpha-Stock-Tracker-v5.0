@@ -1865,5 +1865,20 @@
     "outcome": null,
     "exit_reason": null,
     "pnl_cents": null
+  },
+  {
+    "timestamp": "2026-11-18T19:30:57.025771+02:00",
+    "direction": "UP",
+    "entry_price": 572.25,
+    "confidence": 0.6,
+    "tier": 2,
+    "seasonal_phase": "BULLISH",
+    "stop_price": 578.39,
+    "target_price": 568.16,
+    "setup_direction": "DOWN",
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
   }
 ]
