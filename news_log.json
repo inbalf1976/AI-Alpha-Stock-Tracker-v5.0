@@ -1,5 +1,171 @@
 [
   {
+    "timestamp": "2026-11-18T21:28:23.652199+00:00",
+    "total_scanned": 225,
+    "flagged_count": 159,
+    "flagged_headlines": [
+      {
+        "title": "‘Nvidia’s turmoil has me spooked’: Should I sell my stocks and buy real estate — or ride out the storm?",
+        "link": "https://www.marketwatch.com/story/nvidia-spooked-me-should-i-sell-my-stocks-or-ride-out-the-market-turmoil-560583c6?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 18 Nov 2026 21:00:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Fed minutes show growing unease about the outlook for inflation",
+        "link": "https://www.marketwatch.com/story/fed-minutes-show-growing-unease-about-the-outlook-for-inflation-59e3c13d?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 18 Nov 2026 20:51:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "My husband is happily retired at 64 and thinks I should keep working. Is he being fair?",
+        "link": "https://www.marketwatch.com/story/my-husband-is-happily-retired-at-64-and-thinks-i-should-keep-working-is-he-being-fair-325c5f38?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 18 Nov 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "Record diesel prices drive UK inflation to 1-year high of 3.6%",
+        "link": "https://www.cnbc.com/2026/11/18/uk-inflation-cpi-fuel-prices.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 18 Nov 2026 07:57:37 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "St. Louis Fed's Musalem says four more rate hikes may be needed in coming months",
+        "link": "https://www.cnbc.com/2026/11/17/alberto-musalem-fed-interest-rates.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 17 Nov 2026 13:40:54 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Analysis: The Fed's chairman sees an AI revolution coming. Now he has to figure out what it means",
+        "link": "https://www.cnbc.com/2026/11/16/kevin-warsh-fed-ai-jobs-productivity-interest-rateshtml.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 17 Nov 2026 15:35:13 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "AI risks are the biggest threat to the financial system, Fed survey finds",
+        "link": "https://www.cnbc.com/2026/11/13/ai-risks-financial-system-federal-reserve.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 13 Nov 2026 21:18:30 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Dollar on 7th daily advance as Fed minutes reinforce rate hike bets",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-as-dollar-holds-near-19mth-high-on-fed-hike-bets-5034711",
+        "source": "Investing.com Forex",
+        "published": "2026-11-18 19:23:10",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields retreat to near one-week lows ahead of Fed minutes",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-anchor-near-1month-highs-as-traders-brace-for-sticky-inflation-print-5034892",
+        "source": "Investing.com Forex",
+        "published": "2026-11-18 13:06:03",
+        "matched_keywords": [
+          "fed",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as U.S. rate bets outweigh UK CPI rise to 3.6%",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-us-rate-bets-outweigh-uk-cpi-rise-to-36-5035366",
+        "source": "Investing.com Forex",
+        "published": "2026-11-18 10:38:12",
+        "matched_keywords": [
+          "cpi"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields catch their breath near one-month highs",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-hold-near-1month-peaks-on-relentless-us-treasury-pull-5031817",
+        "source": "Investing.com Forex",
+        "published": "2026-11-17 13:37:22",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "ICE canola futures fall as vegoils and crude oil weaken",
+        "link": "https://www.investing.com/news/commodities-news/ice-canola-futures-fall-as-vegoils-and-crude-oil-weaken-93CH-5036925",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-18 20:21:02",
+        "matched_keywords": [
+          "ils",
+          "crude",
+          "oil"
+        ]
+      },
+      {
+        "title": "Chicago wheat futures fall to lowest level since January",
+        "link": "https://www.investing.com/news/commodities-news/chicago-wheat-futures-fall-to-lowest-level-since-january-93CH-5036912",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-18 20:08:10",
+        "matched_keywords": [
+          "wheat"
+        ]
+      },
+      {
+        "title": "Oil prices settle lower as traders weigh surplus supply outlook",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-as-higher-us-crude-stocks-temper-supply-risks-5034544",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-18 20:00:39",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Gold extends losses as Fed minutes fuel bets on larger December rate hike",
+        "link": "https://www.investing.com/news/commodities-news/gold-falls-toward-3800-as-fed-hawks-reinforce-ratehike-outlook-5034463",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-18 19:20:05",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are being driven by mounting Federal Reserve hawkishness and rate hike expectations, an ongoing energy and maritime security crisis in the Middle East, and increasing financial system anxiety surrounding artificial intelligence valuations and infrastructure. Meanwhile, U.K. inflation reached a one-year high of 3.6% driven by surging diesel and motor fuel costs.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating Middle East maritime conflict threatening global energy supplies and stoking persistent inflationary pressures.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "Ongoing military conflict in the Strait of Hormuz has led to multiple attacks on commercial tankers, crew abandonments, and vessels transiting with AIS turned off, severely disrupting critical energy shipping lanes.",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-18T17:31:02.860244+00:00",
     "total_scanned": 217,
     "flagged_count": 144,
@@ -31994,165 +32160,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "Ongoing kinetic attacks and vessel strikes in the Strait of Hormuz and Red Sea—including a bunkering tanker hit with a fatality and Houthi port advances—are severely disrupting maritime transit and oil flows."
-    }
-  },
-  {
-    "timestamp": "2026-09-14T00:26:03.146574+00:00",
-    "total_scanned": 216,
-    "flagged_count": 170,
-    "flagged_headlines": [
-      {
-        "title": "Fed rate hikes won’t bring down gas prices. Why the bond market is pushing for them anyway.",
-        "link": "https://www.marketwatch.com/story/fed-rate-hikes-wont-bring-down-gas-prices-why-the-bond-market-is-pushing-for-them-anyway-98f2c7e3?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 13 Sep 2026 19:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "‘I still don’t have my MRI’: My health insurer canceled my plan without warning. Is that legal?",
-        "link": "https://www.marketwatch.com/story/i-still-dont-have-my-mri-my-health-insurer-canceled-my-plan-without-warning-is-that-legal-02143710?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 13 Sep 2026 16:30:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Minutes of the Federal Open Market Committee, July 28–29, 2026",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260819a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 19 Aug 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 13 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Inflation is outpacing wage growth again, squeezing Americans’ paychecks",
-        "link": "https://www.cnbc.com/2026/09/12/inflation-is-outpacing-wage-growth-again-squeezing-americans-paychecks.html",
-        "source": "CNBC Economy",
-        "published": "Sat, 12 Sep 2026 12:49:15 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Consumer outlook plunges in September as inflation outlook worsens",
-        "link": "https://www.cnbc.com/2026/09/11/consumer-outlook-plunges-in-september-as-inflation-outlook-worsens.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 11 Sep 2026 16:53:23 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Inflation persisted in August, potentially locking in a Fed interest rate hike",
-        "link": "https://www.cnbc.com/2026/09/11/cpi-inflation-report-august-2026.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 11 Sep 2026 13:46:36 GMT",
-        "matched_keywords": [
-          "fed",
-          "rate hike",
-          "inflation"
-        ]
-      },
-      {
-        "title": "Friday's CPI inflation report is even more important than usual. Here's what to expect",
-        "link": "https://www.cnbc.com/2026/09/10/fridays-cpi-inflation-report-is-even-more-important-than-usual-heres-what-to-expect.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 10 Sep 2026 19:18:05 GMT",
-        "matched_keywords": [
-          "cpi",
-          "inflation"
-        ]
-      },
-      {
-        "title": "The likelihood of a Fed interest rate hike next week just got a lot higher",
-        "link": "https://www.cnbc.com/2026/09/10/the-likelihood-of-a-fed-interest-rate-hike-next-week-just-got-a-lot-higher.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 10 Sep 2026 16:55:17 GMT",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "U.S. reveals import ban on slew of Canadian goods as trade war escalates",
-        "link": "https://www.cnbc.com/2026/09/09/us-canada-trade-war-import-ban.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 09 Sep 2026 16:17:46 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Stagflationary pressures are mounting as U.S. inflation outpaces wage growth and crude oil tops $100 a barrel amid Middle East conflicts, driving expectations of a Federal Reserve rate hike. Simultaneously, escalating trade hostilities between the U.S. and Canada and severe maritime disruptions in the Strait of Hormuz and Red Sea continue to tighten global supply chains.",
-      "wheat_impact": "BULLISH",
-      "wheat_impact_category": "speculative_tension",
-      "usd_ils_impact": "BULLISH",
-      "key_risk": "Prolonged Middle East conflict severely disrupting energy and maritime logistics, combined with escalating geopolitical trade wars.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "Active military conflicts in the Middle East have severely constricted Strait of Hormuz transit volumes to just 10 vessels in 24 hours, alongside a bunkering tanker strike and Houthi advances threatening the Bab el-Mandeb chokepoint."
     }
   }
 ]
