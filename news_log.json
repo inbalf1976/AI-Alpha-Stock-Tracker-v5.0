@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-11-18T17:31:02.860244+00:00",
+    "total_scanned": 217,
+    "flagged_count": 144,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve Board announces pricing, effective January 1, 2027, for payment services the Federal Reserve Banks provide to banks and credit unions, and changes to streamline and adjust their check services",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces revised tentative schedule of Federal Open Market Committee meetings in 2027",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 17:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of two applications by Mutual Federal Bancorp, MHC, and MFB Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261109a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 9 Nov 2026 21:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement action with Allegiant United Holdings, LLC, Nano Financial Holdings, Inc., and Nano Banc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261105a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 5 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261029a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 29 Oct 2026 20:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve issues FOMC statement",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 28 Oct 2026 18:00:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "fomc"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 16 Oct 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields retreat to near one-week lows ahead of Fed minutes",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-anchor-near-1month-highs-as-traders-brace-for-sticky-inflation-print-5034892",
+        "source": "Investing.com Forex",
+        "published": "2026-11-18 13:06:03",
+        "matched_keywords": [
+          "fed",
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Dollar holds near 19-mth high in 7th daily advance on Fed hike bets",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-subdued-as-dollar-holds-near-19mth-high-on-fed-hike-bets-5034711",
+        "source": "Investing.com Forex",
+        "published": "2026-11-18 10:39:00",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Sterling today: Pound slips as U.S. rate bets outweigh UK CPI rise to 3.6%",
+        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-us-rate-bets-outweigh-uk-cpi-rise-to-36-5035366",
+        "source": "Investing.com Forex",
+        "published": "2026-11-18 10:38:12",
+        "matched_keywords": [
+          "cpi"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields catch their breath near one-month highs",
+        "link": "https://www.investing.com/news/forex-news/euro-yields-hold-near-1month-peaks-on-relentless-us-treasury-pull-5031817",
+        "source": "Investing.com Forex",
+        "published": "2026-11-17 13:37:22",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "‘Nvidia’s turmoil has me spooked’: Has the time come to sell my stocks and buy real estate?",
+        "link": "https://www.marketwatch.com/story/nvidia-spooked-me-should-i-sell-my-stocks-or-ride-out-the-market-turmoil-560583c6?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 18 Nov 2026 17:15:00 GMT",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "OPEC speaks up for fossil fuels at COP31 climate talks",
+        "link": "https://www.investing.com/news/commodities-news/opec-speaks-up-for-fossil-fuels-at-cop31-climate-talks-5036493",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-18 17:00:28",
+        "matched_keywords": [
+          "opec"
+        ]
+      },
+      {
+        "title": "Oil slides on surplus outlook as Hormuz risk premium fades",
+        "link": "https://www.investing.com/news/commodities-news/oil-slides-on-surplus-outlook-as-hormuz-risk-premium-fades-93CH-5036691",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-18 16:51:36",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are driven by strong U.S. dollar momentum fueled by expectations of Federal Reserve rate hikes, alongside escalating maritime security incidents in the Strait of Hormuz where tanker attacks and dark-AIS transits continue. Meanwhile, OPEC remains vocal in defense of fossil fuels at COP31, and falling oil prices reflect a surplus outlook as geopolitical risk premiums fade outside of immediate chokepoints.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating maritime attrition and security threats in the Strait of Hormuz disrupting broader global energy and trade flows.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-18T04:36:25.226407+00:00",
     "total_scanned": 227,
     "flagged_count": 153,
@@ -31991,164 +32153,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "Active military conflicts in the Middle East have severely constricted Strait of Hormuz transit volumes to just 10 vessels in 24 hours, alongside a bunkering tanker strike and Houthi advances threatening the Bab el-Mandeb chokepoint."
-    }
-  },
-  {
-    "timestamp": "2026-09-13T16:59:07.800107+00:00",
-    "total_scanned": 216,
-    "flagged_count": 168,
-    "flagged_headlines": [
-      {
-        "title": "‘I still don’t have my MRI’: My health insurer canceled my plan without warning. Is that legal?",
-        "link": "https://www.marketwatch.com/story/i-still-dont-have-my-mri-my-health-insurer-canceled-my-plan-without-warning-is-that-legal-02143710?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 13 Sep 2026 16:30:00 GMT",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "Corporate profit forecasts are topping expectations to an unusual degree. AI is a big reason why.",
-        "link": "https://www.marketwatch.com/story/corporate-profit-forecasts-are-topping-expectations-to-an-unusual-degree-ai-is-a-big-reason-why-50245409?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Sun, 13 Sep 2026 14:00:00 GMT",
-        "matched_keywords": [
-          "ppi"
-        ]
-      },
-      {
-        "title": "EUR/USD could retest 1.17 after Fed decision - Citi says",
-        "link": "https://www.investing.com/news/forex-news/eurusd-could-retest-117-after-fed-decision--citi-says-4898692",
-        "source": "Investing.com Forex",
-        "published": "2026-09-12 22:52:48",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Dollar up on Fed rate hike bets, yen set for first two-week win streak since May",
-        "link": "https://www.investing.com/news/forex-news/asian-currencies-weaken-as-yen-slips-dollar-holds-near-weekly-high-4897219",
-        "source": "Investing.com Forex",
-        "published": "2026-09-11 19:17:21",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "U.S. 10-year yield briefly breaks 5% for first time since 2024 after Aug CPI",
-        "link": "https://www.investing.com/news/forex-news/european-debt-extended-in-5week-decline-on-rate-hikes-and-surging-oil-prices-4897325",
-        "source": "Investing.com Forex",
-        "published": "2026-09-11 13:03:28",
-        "matched_keywords": [
-          "cpi",
-          "yield"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound steady as UK GDP beats, dollar firms on CPI bets",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-steady-as-uk-gdp-beats-dollar-firms-on-cpi-bets-4897403",
-        "source": "Investing.com Forex",
-        "published": "2026-09-11 09:09:22",
-        "matched_keywords": [
-          "cpi"
-        ]
-      },
-      {
-        "title": "Fed tightening bets boost dollar, euro slips after ECB hike while yen halts rally",
-        "link": "https://www.investing.com/news/forex-news/asian-currencies-steady-as-riskoff-tone-weighs-yen-holds-near-highs-4894923",
-        "source": "Investing.com Forex",
-        "published": "2026-09-10 18:43:26",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Canadian dollar edges lower as oil stays above $100, US inflation data in focus",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-edges-lower-as-oil-stays-above-100-us-inflation-data-in-focus-4896604",
-        "source": "Investing.com Forex",
-        "published": "2026-09-10 17:24:08",
-        "matched_keywords": [
-          "inflation",
-          "oil"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound pares gains as dollar firms on U.S. inflation data",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-rises-as-boe-rate-hike-bets-build-4895211",
-        "source": "Investing.com Forex",
-        "published": "2026-09-10 13:22:11",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Global bond yields rise as ECB hikes and hot U.S PPI fuels higher rate bets",
-        "link": "https://www.investing.com/news/forex-news/euro-zone-yields-hold-near-multiyear-peaks-as-ecb-rate-decision-looms-4894939",
-        "source": "Investing.com Forex",
-        "published": "2026-09-10 12:48:51",
-        "matched_keywords": [
-          "ppi",
-          "yield"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are driven by strong corporate profit forecasts buoyed by AI, aggressive Federal Reserve rate-hike expectations pushing the 10-year yield above 5%, and severe maritime transport disruptions in the Strait of Hormuz and Red Sea following recent attacks and port seizures.",
-      "wheat_impact": "BULLISH",
-      "wheat_impact_category": "confirmed_physical_disruption",
-      "usd_ils_impact": "BULLISH",
-      "key_risk": "Escalating military conflict in the Middle East severely disrupting maritime trade chokepoints like the Strait of Hormuz and Bab el-Mandeb.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "Active military disruptions and vessel attacks are severely constraining traffic in the Strait of Hormuz and Houthi forces have seized Mocha in the Red Sea, causing unprecedented logistical bottlenecks."
     }
   }
 ]
