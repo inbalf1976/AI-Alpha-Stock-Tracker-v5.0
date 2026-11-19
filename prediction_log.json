@@ -1841,15 +1841,16 @@
     "stop_price": 581.6,
     "target_price": 591.85,
     "setup_direction": "UP",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null,
+    "validated": true,
+    "outcome": "WIN",
+    "exit_reason": "target_hit",
+    "pnl_cents": 4.1,
     "direction_scored": true,
     "direction_correct": true,
     "direction_check_date": "2026-11-17",
     "direction_basis": "same_day_close_vs_open",
-    "direction_correct_vs_entry": true
+    "direction_correct_vs_entry": true,
+    "scoring_method": "real_setup"
   },
   {
     "timestamp": "2026-11-18T03:06:48.638056+02:00",
