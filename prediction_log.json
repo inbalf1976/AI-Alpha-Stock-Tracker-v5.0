@@ -1862,15 +1862,16 @@
     "stop_price": 588.74,
     "target_price": 599.17,
     "setup_direction": "UP",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null,
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "same_bar_ambiguous_conservative_loss",
+    "pnl_cents": -6.26,
     "direction_scored": true,
     "direction_correct": false,
     "direction_check_date": "2026-11-18",
     "direction_basis": "same_day_close_vs_open",
-    "direction_correct_vs_entry": false
+    "direction_correct_vs_entry": false,
+    "scoring_method": "real_setup"
   },
   {
     "timestamp": "2026-11-18T19:30:57.025771+02:00",
@@ -1882,14 +1883,30 @@
     "stop_price": 578.39,
     "target_price": 568.16,
     "setup_direction": "DOWN",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null,
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -6.14,
     "direction_scored": true,
     "direction_correct": false,
     "direction_check_date": "2026-11-18",
     "direction_basis": "same_day_close_vs_open",
-    "direction_correct_vs_entry": false
+    "direction_correct_vs_entry": false,
+    "scoring_method": "real_setup"
+  },
+  {
+    "timestamp": "2026-11-20T03:06:49.908519+02:00",
+    "direction": "UP",
+    "entry_price": 595.25,
+    "confidence": 0.6,
+    "tier": 2,
+    "seasonal_phase": "BULLISH",
+    "stop_price": 587.95,
+    "target_price": 600.12,
+    "setup_direction": "UP",
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
   }
 ]
