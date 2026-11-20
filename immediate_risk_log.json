@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 105,
+    "alert_timestamp": "2026-11-20T17:13:09.962340+00:00",
+    "reason": "Ongoing attacks on commercial vessels in the Strait of Hormuz—including a recent tanker strike near Khasab and darkened AIS transits—pose an active threat to regional maritime shipping and energy transit.",
+    "predicted_direction": "BEARISH",
+    "price_at_alert": 592.75,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 104,
     "alert_timestamp": "2026-11-19T21:40:14.485374+00:00",
     "reason": "Ongoing military attacks on commercial tankers in the Strait of Hormuz and partial dark-vessel operations for regional LNG exports present an active maritime security threat.",
