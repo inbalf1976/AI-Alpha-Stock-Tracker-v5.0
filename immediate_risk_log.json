@@ -17,11 +17,11 @@
     "reason": "Ongoing military attacks on commercial tankers in the Strait of Hormuz and partial dark-vessel operations for regional LNG exports present an active maritime security threat.",
     "predicted_direction": "BEARISH",
     "price_at_alert": 595.25,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "HIT",
+    "price_at_scoring": 593.0,
+    "pct_change": -0.378,
+    "scored_at": "2026-11-21T04:07:27.689147+00:00"
   },
   {
     "alert_number": 103,
