@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-11-22T16:37:29.541156+00:00",
+    "total_scanned": 220,
+    "flagged_count": 153,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve announces College Fed Challenge winners",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 21:15:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results from survey of senior financial officers at banks about their strategies and practices for managing reserve balances",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of First Security Bancorp",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261119a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 19 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, October 27-28, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261118a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 18 Nov 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces pricing, effective January 1, 2027, for payment services the Federal Reserve Banks provide to banks and credit unions, and changes to streamline and adjust their check services",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces revised tentative schedule of Federal Open Market Committee meetings in 2027",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 17:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of two applications by Mutual Federal Bancorp, MHC, and MFB Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261109a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 9 Nov 2026 21:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement action with Allegiant United Holdings, LLC, Nano Financial Holdings, Inc., and Nano Banc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261105a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 5 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "My husband is happily retired at 64 and thinks I should keep working. Is he being fair?",
+        "link": "https://www.marketwatch.com/story/my-husband-is-happily-retired-at-64-and-thinks-i-should-keep-working-is-he-being-fair-325c5f38?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Sun, 22 Nov 2026 01:15:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields and global bond yields plunge as traders flee AI rout",
+        "link": "https://www.investing.com/news/forex-news/global-bond-yields-plunge-as-ai-rout-triggers-flight-to-safety-5040733",
+        "source": "Investing.com Forex",
+        "published": "2026-11-20 22:34:35",
+        "matched_keywords": [
+          "yield",
+          "treasury"
+        ]
+      },
+      {
+        "title": "Dollar set for 4-week win streak; yen jumps on safe-haven bid, hot inflation data",
+        "link": "https://www.investing.com/news/forex-news/asia-fx-struggles-as-dollar-holds-near-19mth-high-aussie-hits-11month-low-5040667",
+        "source": "Investing.com Forex",
+        "published": "2026-11-20 21:44:47",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "UBS sees sterling rebound later in 2027 as Fed rate cuts approach",
+        "link": "https://www.investing.com/news/forex-news/ubs-sees-sterling-rebound-later-in-2027-as-fed-rate-cuts-approach-5041141",
+        "source": "Investing.com Forex",
+        "published": "2026-11-20 10:34:23",
+        "matched_keywords": [
+          "fed",
+          "rate cut"
+        ]
+      },
+      {
+        "title": "Dollar sits at over 19-month high on surge in Fed rate hike expectations",
+        "link": "https://www.investing.com/news/forex-news/dollar-hits-fresh-19mth-peak-on-hawkish-fed-aussie-slides-after-weak-jobs-data-5037703",
+        "source": "Investing.com Forex",
+        "published": "2026-11-19 20:49:01",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Japan core inflation soars to highest this year as energy subsidy expiry pushes up consumer prices",
+        "link": "https://www.cnbc.com/2026/11/20/japan-inflation-cpi-october.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 20 Nov 2026 01:49:03 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets face divergent monetary policy expectations as the Federal Reserve weighs rate adjustments alongside plunging bond yields driven by an AI-related risk-off shift. Meanwhile, Japan's core inflation rises to a new yearly high due to expiring energy subsidies and yen weakness, likely paving the way for a December BOJ rate hike. In maritime trade, Strait of Hormuz transits show ongoing tensions with idle berths and dark sanctioned tanker activity, though no confirmed physical closure of the main commercial grain corridors has occurred.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating maritime and energy tensions in the Middle East disrupting global shipping lanes and driving up input costs.",
+      "headline_overstated": true,
+      "headline_vs_article_note": "The CNBC headline 'Japan core inflation soars to highest this year' uses slightly dramatic framing for an inflation print that came in slightly below consensus expectations (2.2% vs 2.3% expected).",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-22T03:19:49.793535+00:00",
     "total_scanned": 219,
     "flagged_count": 157,
@@ -31994,168 +32154,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "Ongoing military conflict between the U.S. and Iran is physically disrupting energy transport through the Strait of Hormuz—with multiple tankers operating dark and pipelines closed—driving global crude and diesel prices to extreme highs."
-    }
-  },
-  {
-    "timestamp": "2026-09-17T01:33:07.488344+00:00",
-    "total_scanned": 227,
-    "flagged_count": 172,
-    "flagged_headlines": [
-      {
-        "title": "As Fed rolls out its first interest-rate hike in 3 years, market braces for more increases",
-        "link": "https://www.marketwatch.com/story/warshs-fed-rolls-out-first-interest-rate-hike-in-3-years-with-one-more-increase-expected-cde3060d?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Wed, 16 Sep 2026 22:25:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "Fed rate hike fails to calm troubled markets as Dow falls 600 points. Expect more sharp swings in stocks and bonds.",
-        "link": "https://www.marketwatch.com/story/fed-rate-hike-fails-to-calm-troubled-markets-as-dow-falls-600-points-expect-more-sharp-swings-in-stocks-and-bonds-5ffb55fe?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Wed, 16 Sep 2026 21:40:00 GMT",
-        "matched_keywords": [
-          "ils",
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "Here’s a sneaky way to play the Fed’s rate increase",
-        "link": "https://www.marketwatch.com/story/heres-a-sneaky-way-to-play-the-feds-rate-increase-6deb072f?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Wed, 16 Sep 2026 20:38:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Oil prices extend losses as fears of Middle East supply disruptions ease",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-extend-losses-as-fears-of-middle-east-supply-disruptions-ease-4904737",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-17 01:06:48",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil halts surge after key Saudi pipeline said to restart at half capacity in days",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-dip-as-us-inventory-build-offsets-meast-supply-jitters-4902840",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-16 21:38:44",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil slips as Saudi Arabia offers more crude via Oman",
-        "link": "https://www.investing.com/news/commodities-news/oil-falls-as-us-crude-inventories-rise-despite-saudi-supply-concerns-4902799",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-16 20:36:33",
-        "matched_keywords": [
-          "crude",
-          "oil"
-        ]
-      },
-      {
-        "title": "Crude Oil WTI stalls at $102.42 with bearish reversal forming: Live",
-        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-stalls-near-10446-highs-on-fading-momentum-live-93CH-4898875",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-16 19:18:36",
-        "matched_keywords": [
-          "crude",
-          "oil"
-        ]
-      },
-      {
-        "title": "Natural Gas coils under $2.90 cloud resistance: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/natural-gas-tests-2899-resistance-cluster-hourly-levels-93CH-4898874",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-16 19:18:18",
-        "matched_keywords": [
-          "ils",
-          "oil"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are adjusting to the Federal Reserve's first interest rate hike in three years alongside aggressive economic tightening projections, triggering a sharp equity selloff and volatility. Concurrently, crude oil prices are retreating as Middle East supply disruption fears ease due to Saudi pipeline restorations and alternative supply offerings, despite ongoing maritime security incidents in the Strait of Hormuz.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_category": "other_fundamental",
-      "usd_ils_impact": "BULLISH",
-      "key_risk": "Escalating Middle East maritime attacks and chokepoint disruptions impacting regional stability and broader energy markets.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": false,
-      "immediate_risk_reason": ""
     }
   }
 ]
