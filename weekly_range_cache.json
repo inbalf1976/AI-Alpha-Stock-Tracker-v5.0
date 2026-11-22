@@ -1,29 +1,29 @@
 {
   "iso_year": 2026,
   "iso_week": 47,
-  "frozen_at": "2026-11-21T18:22:38.778424+02:00",
+  "frozen_at": "2026-11-22T18:37:26.958118+02:00",
   "broken_and_regenerated": true,
   "weekly": {
-    "range_low": 582.32,
-    "range_high": 598.46,
-    "range_width_pct": 2.73,
+    "range_low": 564.53,
+    "range_high": 580.73,
+    "range_width_pct": 2.82,
     "bias": "DOWN",
-    "bias_pct": 75.0,
-    "confidence": 0.52,
-    "key_level": 594.51,
+    "bias_pct": 50.0,
+    "confidence": 0.4,
+    "key_level": 595.4,
     "key_level_label": "SMA20 (nearest support)",
-    "entry": 592.0,
-    "stop": 599.26,
-    "target": 587.16,
+    "entry": 574.25,
+    "stop": 581.54,
+    "target": 569.39,
     "rr": 0.67,
     "week_num": 47,
     "next_week_label": "Week 47 (starting Mon Nov 16)",
     "month_label": "Pre-winter rally",
-    "hist_up_pct": 25.0,
-    "hist_avg_return": -1.23,
+    "hist_up_pct": 50.0,
+    "hist_avg_return": -0.47,
     "sample_count": 4,
     "sample_confidence_note": "moderate confidence \u2014 4 years of data",
-    "current_price": 592.0,
+    "current_price": 574.25,
     "final_call": "DOWN",
     "history": [
       {
@@ -79,6 +79,15 @@
         "final_call": "UP",
         "outcome": "LOSS",
         "price_at_close": 592.0
+      },
+      {
+        "closed_at": "2026-11-22T18:37:26.958109+02:00",
+        "entry": 592.0,
+        "stop": 599.26,
+        "target": 587.16,
+        "final_call": "DOWN",
+        "outcome": "WIN",
+        "price_at_close": 574.25
       }
     ]
   }
