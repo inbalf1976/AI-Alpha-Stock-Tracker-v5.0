@@ -1907,7 +1907,12 @@
     "validated": false,
     "outcome": null,
     "exit_reason": null,
-    "pnl_cents": null
+    "pnl_cents": null,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-11-20",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-11-20T06:07:04.305103+02:00",
@@ -1922,7 +1927,12 @@
     "validated": false,
     "outcome": null,
     "exit_reason": null,
-    "pnl_cents": null
+    "pnl_cents": null,
+    "direction_scored": true,
+    "direction_correct": false,
+    "direction_check_date": "2026-11-20",
+    "direction_basis": "same_day_close_vs_open",
+    "direction_correct_vs_entry": false
   },
   {
     "timestamp": "2026-11-21T06:07:21.322889+02:00",
