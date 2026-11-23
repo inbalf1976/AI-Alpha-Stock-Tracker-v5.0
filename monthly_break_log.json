@@ -348,5 +348,12 @@
     "price_at_break": 590.0,
     "old_range": "640-598",
     "reason": "price 590c broke below monthly low 640c"
+  },
+  {
+    "month_key": "2026-11",
+    "broken_at": "2026-11-23T22:31:22.438709+02:00",
+    "price_at_break": 594.5,
+    "old_range": "640-610",
+    "reason": "price 594c broke below monthly low 640c"
   }
 ]
