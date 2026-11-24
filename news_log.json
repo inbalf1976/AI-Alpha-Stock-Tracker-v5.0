@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-11-24T07:01:11.385039+00:00",
+    "total_scanned": 210,
+    "flagged_count": 145,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve announces College Fed Challenge winners",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 21:15:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results from survey of senior financial officers at banks about their strategies and practices for managing reserve balances",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of First Security Bancorp",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261119a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 19 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, October 27-28, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261118a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 18 Nov 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces pricing, effective January 1, 2027, for payment services the Federal Reserve Banks provide to banks and credit unions, and changes to streamline and adjust their check services",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces revised tentative schedule of Federal Open Market Committee meetings in 2027",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 17:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of two applications by Mutual Federal Bancorp, MHC, and MFB Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261109a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 9 Nov 2026 21:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement action with Allegiant United Holdings, LLC, Nano Financial Holdings, Inc., and Nano Banc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261105a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 5 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Japan core inflation soars to highest this year as energy subsidy expiry pushes up consumer prices",
+        "link": "https://www.cnbc.com/2026/11/20/japan-inflation-cpi-october.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 20 Nov 2026 01:49:03 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Record diesel prices drive UK inflation to 1-year high of 3.6%",
+        "link": "https://www.cnbc.com/2026/11/18/uk-inflation-cpi-fuel-prices.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 18 Nov 2026 07:57:37 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "St. Louis Fed's Musalem says four more rate hikes may be needed in coming months",
+        "link": "https://www.cnbc.com/2026/11/17/alberto-musalem-fed-interest-rates.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 17 Nov 2026 13:40:54 GMT",
+        "matched_keywords": [
+          "fed",
+          "rate hike"
+        ]
+      },
+      {
+        "title": "Peterson: The Fed's chairman sees an AI revolution coming. Now he has to figure out what it means",
+        "link": "https://www.cnbc.com/2026/11/16/kevin-warsh-fed-ai-jobs-productivity-interest-rateshtml.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 20 Nov 2026 21:07:08 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "AI risks are the biggest threat to the financial system, Fed survey finds",
+        "link": "https://www.cnbc.com/2026/11/13/ai-risks-financial-system-federal-reserve.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 13 Nov 2026 21:18:30 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil prices near three-month lows as rising supply offsets Hormuz threat",
+        "link": "https://www.investing.com/news/commodities-news/oil-holds-near-threemonth-low-as-rising-supply-offsets-hormuz-threat-5046916",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-24 05:18:38",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are grappling with rising inflation pressures driven by energy costs, with the U.K. and Japan seeing notable increases fueled by geopolitical conflicts and supply disruptions in the Middle East. Meanwhile, Federal Reserve officials indicate a hawkish stance with potential rate hikes as artificial intelligence and robust demand continue to influence economic activity. Despite ongoing geopolitical tensions and a U.S. blockade in the Strait of Hormuz, physical oil and commodity prices remain near multi-month lows as rising supply offsets immediate threat perceptions.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Escalating geopolitical tensions in the Middle East threatening global energy supplies and pushing central banks toward aggressive monetary tightening.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-24T01:03:25.213168+00:00",
     "total_scanned": 229,
     "flagged_count": 156,
@@ -31974,169 +32133,6 @@
       "wheat_impact_category": "other_fundamental",
       "usd_ils_impact": "NEUTRAL",
       "key_risk": "Potential escalation of trade tensions and geopolitical friction affecting global supply chains and energy costs.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": false,
-      "immediate_risk_reason": "",
-      "wheat_impact": "BULLISH"
-    }
-  },
-  {
-    "timestamp": "2026-09-18T17:08:14.751731+00:00",
-    "total_scanned": 227,
-    "flagged_count": 169,
-    "flagged_headlines": [
-      {
-        "title": "What’s really driving inflation and rising interest rates",
-        "link": "https://www.marketwatch.com/story/whats-really-driving-inflation-and-rising-interest-rates-59a9cd51?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Fri, 18 Sep 2026 16:50:00 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Why investors’ best move in reaction to Fed’s rate hike is doing nothing at all",
-        "link": "https://www.marketwatch.com/story/why-investors-best-move-in-reaction-to-feds-rate-hike-is-doing-nothing-at-all-6ff56b4c?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Fri, 18 Sep 2026 16:39:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "These fast-growing ETFs aim for yields as high as 17.5%. But here’s the catch.",
-        "link": "https://www.marketwatch.com/story/these-fast-growing-etfs-aim-for-yields-as-high-as-17-5-but-heres-the-catch-6f0a3d43?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Fri, 18 Sep 2026 16:11:00 GMT",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "A happier retirement contains these 3 elements",
-        "link": "https://www.marketwatch.com/story/a-happier-retirement-contains-these-3-elements-9aa99c9a?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Fri, 18 Sep 2026 15:35:00 GMT",
-        "matched_keywords": [
-          "ppi"
-        ]
-      },
-      {
-        "title": "U.S. Treasury curve flattens as long-end yields ease off multi-year peaks",
-        "link": "https://www.investing.com/news/forex-news/euro-zone-yields-head-for-weekly-decline-as-postfed-rally-soothes-duration-fears-4906685",
-        "source": "Investing.com Forex",
-        "published": "2026-09-18 12:16:35",
-        "matched_keywords": [
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Dollar halts six-day rally after Fed hike, sterling slips after BoE stands pat",
-        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-holds-sevenweek-high-yen-steadies-4904802",
-        "source": "Investing.com Forex",
-        "published": "2026-09-17 19:24:32",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Angola to ship fewer crude oil cargoes in November",
-        "link": "https://www.investing.com/news/commodities-news/angola-to-ship-fewer-crude-oil-cargoes-in-november-93CH-4907677",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 16:11:52",
-        "matched_keywords": [
-          "crude",
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil pares losses as market weighs Saudi supply concerns, Middle East tensions",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-1-on-hopes-of-limited-supply-disruptions-4906600",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 14:30:34",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Gold pares back gains as oil prices trim losses",
-        "link": "https://www.investing.com/news/commodities-news/gold-rises-as-lower-oil-treasury-yields-ease-inflation-pressure-4906609",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 14:08:47",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil trims losses as investors assess outlook for Mideast crude supply flows",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-for-3rd-day-as-supply-concerns-ease-diplomacy-in-focus-4906634",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 13:44:41",
-        "matched_keywords": [
-          "crude",
-          "oil"
-        ]
-      },
-      {
-        "title": "Naphtha prices in Asia drop for third day amid oil weakness",
-        "link": "https://www.investing.com/news/commodities-news/naphtha-prices-in-asia-drop-for-third-day-amid-oil-weakness-93CH-4907338",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 12:44:59",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "What Fed rate hikes mean for gold prices in 2027, according to Goldman",
-        "link": "https://www.investing.com/news/commodities-news/what-fed-rate-hikes-mean-for-gold-prices-in-2027-according-to-goldman-4907014",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 10:34:41",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "Why Japan’s markets flipped the usual script after central bank rate hike",
-        "link": "https://www.cnbc.com/2026/09/18/japan-rate-hike-stocks-rise-bond-yields-yen-fall.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 18 Sep 2026 07:40:29 GMT",
-        "matched_keywords": [
-          "rate hike"
-        ]
-      },
-      {
-        "title": "Bank of England defies Fed’s rate-hike lead, leaving rates unchanged",
-        "link": "https://www.cnbc.com/2026/09/17/bank-of-england-interest-rate-decision-fed-rate-hike-uk-inflation.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 17 Sep 2026 12:27:10 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Consumers hit by one-two punch of oil and rates from Iran war. The estimated bill is $1,700 per household",
-        "link": "https://www.cnbc.com/2026/09/16/oil-prices-treasury-yields-consumers-iran.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 16 Sep 2026 17:32:22 GMT",
-        "matched_keywords": [
-          "oil",
-          "war"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are navigating divergent central bank policies as the Fed's rate hike contrasts with steady rates from the BOE and unique moves in Japan, while oil markets fluctuate amid Middle East tensions and supply adjustments. Simultaneously, the U.S. Treasury curve is flattening, and the dollar's recent rally has paused.",
-      "physical_supply_disruption_confirmed": false,
-      "usd_strength_signal": "WEAKENING",
-      "weather_crop_signal": "NEUTRAL",
-      "wheat_impact_category": "speculative_tension",
-      "usd_ils_impact": "NEUTRAL",
-      "key_risk": "Escalating Middle East tensions impacting global energy supplies and broader macroeconomic stability.",
       "headline_overstated": false,
       "headline_vs_article_note": "",
       "immediate_risk": false,
