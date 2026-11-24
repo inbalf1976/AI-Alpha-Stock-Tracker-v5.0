@@ -1987,5 +1987,20 @@
     "direction_check_date": "2026-11-23",
     "direction_basis": "same_day_close_vs_open",
     "direction_correct_vs_entry": true
+  },
+  {
+    "timestamp": "2026-11-25T01:07:23.264121+02:00",
+    "direction": "UP",
+    "entry_price": 588.75,
+    "confidence": 0.5674597537762683,
+    "tier": 2,
+    "seasonal_phase": "NEUTRAL",
+    "stop_price": 588.9,
+    "target_price": 600.31,
+    "setup_direction": "UP",
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
   }
 ]
