@@ -1,5 +1,163 @@
 [
   {
+    "timestamp": "2026-11-24T01:03:25.213168+00:00",
+    "total_scanned": 229,
+    "flagged_count": 156,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve announces College Fed Challenge winners",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 21:15:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results from survey of senior financial officers at banks about their strategies and practices for managing reserve balances",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of First Security Bancorp",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261119a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 19 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, October 27-28, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261118a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 18 Nov 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces pricing, effective January 1, 2027, for payment services the Federal Reserve Banks provide to banks and credit unions, and changes to streamline and adjust their check services",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces revised tentative schedule of Federal Open Market Committee meetings in 2027",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 17:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of two applications by Mutual Federal Bancorp, MHC, and MFB Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261109a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 9 Nov 2026 21:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces termination of enforcement action with Allegiant United Holdings, LLC, Nano Financial Holdings, Inc., and Nano Banc",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261105a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 5 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Oil prices steady after logging deep losses on supply glut fears",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-steady-after-logging-deep-losses-on-supply-glut-fears-5046712",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-23 23:54:33",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil prices extend losses, Brent hits near 13-week low while WTI slips below $80",
+        "link": "https://www.investing.com/news/commodities-news/oil-falls-as-robust-gulf-exports-offset-iran-escalation-supply-glut-risks-5044220",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-23 22:59:45",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "JD Vance’s ties to prized Venezuelan oil contract under investigation by US Senate panel",
+        "link": "https://www.investing.com/news/commodities-news/exclusivejd-vances-ties-to-prized-venezuelan-oil-contract-under-investigation-by-us-senate-panel-5046313",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-23 22:42:58",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil slumps to 3-month low on increased Middle East flows, Libyan pipeline restart",
+        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-amid-equity-selloff-though-iran-war-attacks-limit-losses-5044242",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-23 20:24:40",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil falls on fading geopolitical premium as stocks, gold and copper rebound",
+        "link": "https://www.investing.com/news/commodities-news/oil-falls-on-fading-geopolitical-premium-as-stocks-gold-and-copper-rebound-93CH-5046013",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-23 15:47:14",
+        "matched_keywords": [
+          "oil",
+          "geopolitical"
+        ]
+      },
+      {
+        "title": "Deutsche Bank sees oil surplus returning, Brent at $70 or below",
+        "link": "https://www.investing.com/news/commodities-news/deutsche-bank-sees-oil-surplus-returning-brent-at-70-or-below-93CH-5045588",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-23 13:20:17",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Crude oil prices extended deep losses to a near 13-week low, driven by growing supply glut fears, increased Middle East flows, and a Libyan pipeline restart, alongside a Deutsche Bank forecast that an oil surplus is returning. Meanwhile, maritime data shows ongoing tensions and idle berths in the Strait of Hormuz, and Federal Reserve updates highlighted routine banking and scheduling disclosures.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "NEUTRAL",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": "NEUTRAL",
+      "key_risk": "Persistent oil supply gluts driving broader macroeconomic and commodity market volatility.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "NEUTRAL"
+    }
+  },
+  {
     "timestamp": "2026-11-23T20:31:25.281714+00:00",
     "total_scanned": 224,
     "flagged_count": 154,
@@ -31984,164 +32142,6 @@
       "immediate_risk": false,
       "immediate_risk_reason": "",
       "wheat_impact": "BULLISH"
-    }
-  },
-  {
-    "timestamp": "2026-09-18T13:07:47.940119+00:00",
-    "total_scanned": 224,
-    "flagged_count": 169,
-    "flagged_headlines": [
-      {
-        "title": "Naphtha prices in Asia drop for third day amid oil weakness",
-        "link": "https://www.investing.com/news/commodities-news/naphtha-prices-in-asia-drop-for-third-day-amid-oil-weakness-93CH-4907338",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 12:44:59",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil prices edge lower on easing fears over Saudi supply disruption",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-1-on-hopes-of-limited-supply-disruptions-4906600",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 12:36:30",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "What Fed rate hikes mean for gold prices in 2027, according to Goldman",
-        "link": "https://www.investing.com/news/commodities-news/what-fed-rate-hikes-mean-for-gold-prices-in-2027-according-to-goldman-4907014",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 10:34:41",
-        "matched_keywords": [
-          "fed",
-          "rate hike"
-        ]
-      },
-      {
-        "title": "Gold prices on pace for weekly gain as oil prices dip",
-        "link": "https://www.investing.com/news/commodities-news/gold-rises-as-lower-oil-treasury-yields-ease-inflation-pressure-4906609",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 08:56:58",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil extends declines amid easing supply concerns, ongoing diplomatic efforts",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-for-3rd-day-as-supply-concerns-ease-diplomacy-in-focus-4906634",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 08:39:49",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "London Gas Oil clings to $1,460 support in tight range: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-surges-near-1524-resistance-live-levels-93CH-4898872",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 07:12:26",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "U.S. Treasury curve flattens as long-end yields ease off multi-year peaks",
-        "link": "https://www.investing.com/news/forex-news/euro-zone-yields-head-for-weekly-decline-as-postfed-rally-soothes-duration-fears-4906685",
-        "source": "Investing.com Forex",
-        "published": "2026-09-18 12:16:35",
-        "matched_keywords": [
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Dollar halts six-day rally after Fed hike, sterling slips after BoE stands pat",
-        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-holds-sevenweek-high-yen-steadies-4904802",
-        "source": "Investing.com Forex",
-        "published": "2026-09-17 19:24:32",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are navigating easing crude oil and naphtha prices as geopolitical supply fears subside, alongside shifting monetary policy expectations following recent Federal Reserve and macroeconomic updates. Meanwhile, maritime tracking data in the Strait of Hormuz shows persistent dark-fleet traffic and tanker movements, highlighting ongoing regional supply-chain shadows despite relaxed headline tensions.",
-      "wheat_impact": "NEUTRAL",
-      "wheat_impact_category": "other_fundamental",
-      "usd_ils_impact": "Key driver is shifting US Treasury yields and Fed policy rather than regional MENA maritime transits.",
-      "key_risk": "Escalation in dark-fleet tanker transits and covert sanctions evasion in the Strait of Hormuz disrupting broader energy and maritime logistics.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": false,
-      "immediate_risk_reason": ""
     }
   }
 ]
