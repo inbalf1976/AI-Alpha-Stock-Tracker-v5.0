@@ -1904,15 +1904,16 @@
     "stop_price": 587.95,
     "target_price": 600.12,
     "setup_direction": "UP",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null,
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -7.3,
     "direction_scored": true,
     "direction_correct": false,
     "direction_check_date": "2026-11-20",
     "direction_basis": "same_day_close_vs_open",
-    "direction_correct_vs_entry": false
+    "direction_correct_vs_entry": false,
+    "scoring_method": "real_setup"
   },
   {
     "timestamp": "2026-11-20T06:07:04.305103+02:00",
@@ -1924,15 +1925,16 @@
     "stop_price": 587.95,
     "target_price": 600.12,
     "setup_direction": "UP",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null,
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -5.05,
     "direction_scored": true,
     "direction_correct": false,
     "direction_check_date": "2026-11-20",
     "direction_basis": "same_day_close_vs_open",
-    "direction_correct_vs_entry": false
+    "direction_correct_vs_entry": false,
+    "scoring_method": "real_setup"
   },
   {
     "timestamp": "2026-11-21T06:07:21.322889+02:00",
@@ -1944,10 +1946,11 @@
     "stop_price": 587.95,
     "target_price": 600.12,
     "setup_direction": "UP",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -5.05,
+    "scoring_method": "real_setup"
   },
   {
     "timestamp": "2026-11-22T18:37:27.341444+02:00",
@@ -1959,10 +1962,11 @@
     "stop_price": 581.54,
     "target_price": 569.39,
     "setup_direction": "DOWN",
-    "validated": false,
-    "outcome": null,
-    "exit_reason": null,
-    "pnl_cents": null
+    "validated": true,
+    "outcome": "LOSS",
+    "exit_reason": "stop_hit",
+    "pnl_cents": -7.29,
+    "scoring_method": "real_setup"
   },
   {
     "timestamp": "2026-11-23T03:06:34.214717+02:00",
