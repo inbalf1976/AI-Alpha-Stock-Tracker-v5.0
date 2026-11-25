@@ -1,5 +1,162 @@
 [
   {
+    "timestamp": "2026-11-25T05:32:56.572102+00:00",
+    "total_scanned": 227,
+    "flagged_count": 160,
+    "flagged_headlines": [
+      {
+        "title": "My husband secretly sends his ex-wife $1,500 a month after she lost her job. We have $2.4 million saved. Has he lied by omission?",
+        "link": "https://www.marketwatch.com/story/my-husband-secretly-sends-his-ex-wife-1-500-a-month-after-she-lost-her-job-we-have-2-4-million-saved-has-he-lied-by-omission-ede1972a?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 25 Nov 2026 00:05:00 GMT",
+        "matched_keywords": [
+          "secretly"
+        ]
+      },
+      {
+        "title": "Micron’s stock falls as an analyst warns about a future supply glut",
+        "link": "https://www.marketwatch.com/story/microns-stock-falls-as-an-analyst-warns-about-a-future-supply-glut-f7fbeefb?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Tue, 24 Nov 2026 21:22:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces College Fed Challenge winners",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 21:15:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results from survey of senior financial officers at banks about their strategies and practices for managing reserve balances",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of First Security Bancorp",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261119a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 19 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, October 27-28, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261118a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 18 Nov 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces pricing, effective January 1, 2027, for payment services the Federal Reserve Banks provide to banks and credit unions, and changes to streamline and adjust their check services",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces revised tentative schedule of Federal Open Market Committee meetings in 2027",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 17:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of United Community Bank",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces approval of two applications by Mutual Federal Bancorp, MHC, and MFB Bancorp, Inc.",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261109a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Mon, 9 Nov 2026 21:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Global yields fall as safe-haven bid meets looming U.S. PCE test",
+        "link": "https://www.investing.com/news/forex-news/global-yields-fall-as-safehaven-bid-meets-looming-us-pce-test-5047210",
+        "source": "Investing.com Forex",
+        "published": "2026-11-24 13:00:01",
+        "matched_keywords": [
+          "yield"
+        ]
+      },
+      {
+        "title": "European gas bucks energy sell-off as lingering cold snap offsets crude slump",
+        "link": "https://www.investing.com/news/forex-news/european-gas-bucks-energy-selloff-as-lingering-cold-snap-offsets-crude-slump-5047347",
+        "source": "Investing.com Forex",
+        "published": "2026-11-24 09:48:07",
+        "matched_keywords": [
+          "crude"
+        ]
+      },
+      {
+        "title": "Prolonged AI rout threatens USD safe-haven status, strategist warns",
+        "link": "https://www.investing.com/news/forex-news/prolonged-ai-rout-threatens-usd-safehaven-status-strategist-warns-93CH-5047441",
+        "source": "Investing.com Forex",
+        "published": "2026-11-24 09:45:36",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Consumer confidence shoots up after Democrats' midterm victories — though inflation worries persist",
+        "link": "https://www.cnbc.com/2026/11/24/consumer-confidence-november-election-midterm.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 24 Nov 2026 18:34:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Why France is at risk of recession — and what could keep it out of one",
+        "link": "https://www.cnbc.com/2026/11/24/france-recession-risk-pmi.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 24 Nov 2026 11:15:30 GMT",
+        "matched_keywords": [
+          "recession"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets face cross-currents as rising U.S. consumer confidence and expected Federal Reserve tightening weigh against falling global yields and lingering European recession risks, particularly in France. Meanwhile, shipping intelligence in the Strait of Hormuz shows localized dark transits and sanctioned tanker spoofing, though no broad wheat supply disruptions are confirmed.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "speculative_tension",
+      "usd_ils_impact": "NEUTRAL",
+      "key_risk": "Escalating Middle East maritime choke point tensions and potential French political and fiscal instability spilling over into broader European economic health.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-24T23:07:25.700619+00:00",
     "total_scanned": 228,
     "flagged_count": 157,
@@ -31970,169 +32127,6 @@
       "immediate_risk": false,
       "immediate_risk_reason": "",
       "wheat_impact": "BULLISH"
-    }
-  },
-  {
-    "timestamp": "2026-09-19T16:33:41.284053+00:00",
-    "total_scanned": 50,
-    "flagged_count": 24,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board announces termination of enforcement action with SNB Bancshares and Bank of Eufaula",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Flames, smoke seen near Riyadh airport after Saudi warning of aerial attack threat",
-        "link": "https://www.investing.com/news/commodities-news/smoke-visible-near-riyadh-airport-after-saudi-arabia-issues-allclear-4908080",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-19 12:36:23",
-        "matched_keywords": [
-          "war"
-        ]
-      },
-      {
-        "title": "US Treasury’s Bessent to discuss AI, rare earths with China’s He, source says",
-        "link": "https://www.investing.com/news/commodities-news/us-treasurys-bessent-plans-to-discuss-ai-and-rare-earths-with-chinas-he-source-says-4907786",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-19 02:12:26",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "Analysis-Russia sanctions bill gives Trump sweeping new tariff powers",
-        "link": "https://www.investing.com/news/commodities-news/analysisrussia-sanctions-bill-gives-trump-sweeping-new-tariff-powers-4907872",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-19 00:18:31",
-        "matched_keywords": [
-          "tariff",
-          "sanction"
-        ]
-      },
-      {
-        "title": "Oil prices snap two-week winning streak on easing Middle East supply fears",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-for-3rd-day-as-supply-concerns-ease-diplomacy-in-focus-4906634",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 21:13:14",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Gold heads for slight weekly gain as decline in oil prices offset Fed rate hike",
-        "link": "https://www.investing.com/news/commodities-news/gold-rises-as-lower-oil-treasury-yields-ease-inflation-pressure-4906609",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 20:41:57",
-        "matched_keywords": [
-          "fed",
-          "rate hike",
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil slides after China asks Iran to limit Houthi attacks on Saudi oil facilities",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-1-on-hopes-of-limited-supply-disruptions-4906600",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 20:00:29",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Crude Oil WTI clings to $99.50 support amid breakdown risk: Live",
-        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-stalls-near-10446-highs-on-fading-momentum-live-93CH-4898875",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 19:18:46",
-        "matched_keywords": [
-          "crude",
-          "oil"
-        ]
-      },
-      {
-        "title": "London Gas Oil stuck in $1,475-$1,515 range: Live levels",
-        "link": "https://www.investing.com/news/commodities-news/london-gas-oil-surges-near-1524-resistance-live-levels-93CH-4898872",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 19:18:40",
-        "matched_keywords": [
-          "oil"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets digest the Federal Reserve's latest rate decisions and economic projections alongside geopolitical tensions in the Middle East, where oil prices have retreated. Meanwhile, diplomatic talks between the US and China focus on trade and rare earths, while supply tracking shows steady operations at key regional oil terminals despite recent aerial threats.",
-      "physical_supply_disruption_confirmed": false,
-      "usd_strength_signal": "STRENGTHENING",
-      "weather_crop_signal": "NEUTRAL",
-      "wheat_impact_category": "speculative_tension",
-      "usd_ils_impact": "NEUTRAL",
-      "key_risk": "Escalating geopolitical conflict in the Middle East impacting regional energy and shipping corridors.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": false,
-      "immediate_risk_reason": "",
-      "wheat_impact": "BEARISH"
     }
   }
 ]
