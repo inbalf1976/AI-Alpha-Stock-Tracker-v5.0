@@ -1,5 +1,167 @@
 [
   {
+    "timestamp": "2026-11-25T22:39:11.686357+00:00",
+    "total_scanned": 219,
+    "flagged_count": 153,
+    "flagged_headlines": [
+      {
+        "title": "How to spot ‘bogus boutiques’ and other Black Friday shopping scams",
+        "link": "https://www.marketwatch.com/story/how-to-spot-bogus-boutiques-and-other-black-friday-shopping-scams-86cc182d?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 25 Nov 2026 21:29:00 GMT",
+        "matched_keywords": [
+          "ppi"
+        ]
+      },
+      {
+        "title": "The Fed says inflation hasn’t gotten any better ahead of its key December vote to raise rates",
+        "link": "https://www.marketwatch.com/story/the-fed-says-inflation-hasnt-gotten-any-better-ahead-of-its-key-december-vote-to-raise-rates-65024d33?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Wed, 25 Nov 2026 19:39:00 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces College Fed Challenge winners",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 21:15:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results from survey of senior financial officers at banks about their strategies and practices for managing reserve balances",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of First Security Bancorp",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261119a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 19 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, October 27-28, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261118a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 18 Nov 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces pricing, effective January 1, 2027, for payment services the Federal Reserve Banks provide to banks and credit unions, and changes to streamline and adjust their check services",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces revised tentative schedule of Federal Open Market Committee meetings in 2027",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 17:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "US proposes surprise new tariffs on Brazil imports, including 10% duty on aircraft",
+        "link": "https://www.investing.com/news/commodities-news/us-proposes-higher-tariffs-on-brazil-imports-including-10-duty-on-aircraft-5050713",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-25 21:12:18",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Trump set to add new sweeping tariffs, undeterred by midterms defeat",
+        "link": "https://www.investing.com/news/commodities-news/trump-administration-set-to-unveil-new-tariffs-after-probeon-excess-factory-capacity-sources-say-5048724",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-25 17:12:34",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "EIA says US crude stocks rise 1.1M barrels to 418.9M barrels",
+        "link": "https://www.investing.com/news/commodities-news/eia-says-us-crude-stocks-rise-11m-barrels-to-4189m-barrels-93CH-5051205",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-25 16:10:53",
+        "matched_keywords": [
+          "crude"
+        ]
+      },
+      {
+        "title": "Oil turns higher as Hormuz disruption fears outweigh improving supply outlook",
+        "link": "https://www.investing.com/news/commodities-news/oil-mixed-as-hormuz-attacks-mount-supply-surplus-and-weak-fuel-margins-weigh-5049487",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-25 15:05:38",
+        "matched_keywords": [
+          "oil",
+          "hormuz"
+        ]
+      },
+      {
+        "title": "CBOT wheat edges lower as dollar strength weighs on US exports",
+        "link": "https://www.investing.com/news/commodities-news/cbot-wheat-edges-lower-as-dollar-strength-weighs-on-us-exports-93CH-5050968",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-25 14:30:05",
+        "matched_keywords": [
+          "wheat"
+        ]
+      },
+      {
+        "title": "US to cap India tariff at 17% if trade deal is reached, USTR says",
+        "link": "https://www.investing.com/news/forex-news/us-to-cap-india-tariff-at-17-if-trade-deal-is-reached-ustr-says-5051317",
+        "source": "Investing.com Forex",
+        "published": "2026-11-25 18:30:39",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Global yields fall as safe-haven bid meets looming U.S. PCE test",
+        "link": "https://www.investing.com/news/forex-news/global-yields-fall-as-safehaven-bid-meets-looming-us-pce-test-5047210",
+        "source": "Investing.com Forex",
+        "published": "2026-11-24 13:00:01",
+        "matched_keywords": [
+          "yield"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets navigate aggressive US tariff proposals, persistent hawkish Federal Reserve messaging on inflation and interest rates, and safe-haven demand. Meanwhile, crude oil prices find support from Middle East geopolitical tensions despite a rise in US stockpiles, and a strong US dollar continues to pressure agricultural exports like CBOT wheat.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": {
+        "direction": "BULLISH",
+        "reason": "Global safe-haven bids and ongoing geopolitical risks in the Middle East tend to support USD strength relative to regional currencies like the Israeli Shekel."
+      },
+      "key_risk": "Escalating trade tensions and tariff retaliation risks colliding with a persistently hawkish Federal Reserve ahead of its December rate decision.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-25T18:50:11.575111+00:00",
     "total_scanned": 228,
     "flagged_count": 165,
@@ -31959,169 +32121,6 @@
       "immediate_risk": false,
       "immediate_risk_reason": "",
       "wheat_impact": "BULLISH"
-    }
-  },
-  {
-    "timestamp": "2026-09-20T13:11:54.817785+00:00",
-    "total_scanned": 215,
-    "flagged_count": 158,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board announces termination of enforcement action with SNB Bancshares and Bank of Eufaula",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Consumer sentiment is in the dumps despite a solid economy. Goldman Sachs blames 'lower happiness'",
-        "link": "https://www.cnbc.com/2026/09/19/goldman-sachs-happiness-struggling-consumer-sentiment.html",
-        "source": "CNBC Economy",
-        "published": "Sat, 19 Sep 2026 12:50:49 GMT",
-        "matched_keywords": [
-          "ppi"
-        ]
-      },
-      {
-        "title": "Why Japan’s markets flipped the usual script after central bank rate hike",
-        "link": "https://www.cnbc.com/2026/09/18/japan-rate-hike-stocks-rise-bond-yields-yen-fall.html",
-        "source": "CNBC Economy",
-        "published": "Fri, 18 Sep 2026 07:40:29 GMT",
-        "matched_keywords": [
-          "rate hike"
-        ]
-      },
-      {
-        "title": "Bank of England defies Fed’s rate-hike lead, leaving rates unchanged",
-        "link": "https://www.cnbc.com/2026/09/17/bank-of-england-interest-rate-decision-fed-rate-hike-uk-inflation.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 17 Sep 2026 12:27:10 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Consumers hit by one-two punch of oil and rates from Iran war. The estimated bill is $1,700 per household",
-        "link": "https://www.cnbc.com/2026/09/16/oil-prices-treasury-yields-consumers-iran.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 16 Sep 2026 17:32:22 GMT",
-        "matched_keywords": [
-          "oil",
-          "war"
-        ]
-      },
-      {
-        "title": "UK inflation jumps to 3.1% as energy costs soar",
-        "link": "https://www.cnbc.com/2026/09/16/uk-august-inflation-energy-gasoline.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 17 Sep 2026 07:36:04 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Counting the votes: Warsh faces a tough battle as the Fed girds for expected interest rate hike",
-        "link": "https://www.cnbc.com/2026/09/14/counting-the-votes-warsh-faces-tough-battle-as-fed-girds-for-expected-rate-hike.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 14 Sep 2026 19:47:42 GMT",
-        "matched_keywords": [
-          "fed",
-          "rate hike",
-          "war"
-        ]
-      },
-      {
-        "title": "U.S. Treasury curve flattens as long-end yields ease off multi-year peaks",
-        "link": "https://www.investing.com/news/forex-news/euro-zone-yields-head-for-weekly-decline-as-postfed-rally-soothes-duration-fears-4906685",
-        "source": "Investing.com Forex",
-        "published": "2026-09-18 12:16:35",
-        "matched_keywords": [
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Dollar halts six-day rally after Fed hike, sterling slips after BoE stands pat",
-        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-holds-sevenweek-high-yen-steadies-4904802",
-        "source": "Investing.com Forex",
-        "published": "2026-09-17 19:24:32",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global central banks are diverging in their monetary policies as the Federal Reserve implements a quarter-point rate hike amid persistent inflation driven by energy shocks from the U.S.-Iran conflict. Meanwhile, consumer sentiment remains severely depressed despite a solid economy, increasingly weighed down by rising energy and borrowing costs, lower societal happiness, and declining trust in public institutions.",
-      "physical_supply_disruption_confirmed": false,
-      "usd_strength_signal": "STRENGTHENING",
-      "weather_crop_signal": "NEUTRAL",
-      "wheat_impact_category": "speculative_tension",
-      "usd_ils_impact": "BULLISH",
-      "key_risk": "Escalation of the U.S.-Iran conflict driving sustained high crude oil and diesel prices, exacerbating global inflationary pressures and prompting aggressive central bank tightening.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": false,
-      "immediate_risk_reason": "",
-      "wheat_impact": "BEARISH"
     }
   }
 ]

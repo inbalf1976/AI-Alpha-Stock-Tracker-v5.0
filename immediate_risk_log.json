@@ -5,11 +5,11 @@
     "reason": "US forces disabled a vessel off Chabahar and maritime intelligence confirms tanker blockades and staging activity in the Strait of Hormuz.",
     "predicted_direction": "NEUTRAL",
     "price_at_alert": 588.75,
-    "scored": false,
-    "outcome": null,
-    "price_at_scoring": null,
-    "pct_change": null,
-    "scored_at": null
+    "scored": true,
+    "outcome": "UNSCOREABLE (no clear predicted direction)",
+    "price_at_scoring": 586.5,
+    "pct_change": -0.382,
+    "scored_at": "2026-11-25T22:39:22.823924+00:00"
   },
   {
     "alert_number": 105,
