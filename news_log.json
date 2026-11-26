@@ -1,5 +1,166 @@
 [
   {
+    "timestamp": "2026-11-26T05:14:59.922384+00:00",
+    "total_scanned": 228,
+    "flagged_count": 156,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve announces College Fed Challenge winners",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 21:15:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results from survey of senior financial officers at banks about their strategies and practices for managing reserve balances",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of First Security Bancorp",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261119a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 19 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, October 27-28, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261118a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 18 Nov 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces pricing, effective January 1, 2027, for payment services the Federal Reserve Banks provide to banks and credit unions, and changes to streamline and adjust their check services",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces revised tentative schedule of Federal Open Market Committee meetings in 2027",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 17:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Liesman: Why Greenspan could bet on productivity — and Warsh needs to hike",
+        "link": "https://www.cnbc.com/2026/11/25/kevin-warsh-greenspan-fed-rates-ai-inflation.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 25 Nov 2026 21:56:43 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Fed’s preferred inflation gauge accelerated to 3.8% in October, raising the 2027 stakes for the central bank",
+        "link": "https://www.cnbc.com/2026/11/25/pce-inflation-report-october-2026.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 25 Nov 2026 14:18:45 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Consumer confidence shoots up after Democrats' midterm victories — though inflation worries persist",
+        "link": "https://www.cnbc.com/2026/11/24/consumer-confidence-november-election-midterm.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 24 Nov 2026 18:34:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Why France is at risk of recession — and what could keep it out of one",
+        "link": "https://www.cnbc.com/2026/11/24/france-recession-risk-pmi.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 24 Nov 2026 11:15:30 GMT",
+        "matched_keywords": [
+          "recession"
+        ]
+      },
+      {
+        "title": "Japan core inflation soars to highest this year as energy subsidy expiry pushes up consumer prices",
+        "link": "https://www.cnbc.com/2026/11/20/japan-inflation-cpi-october.html",
+        "source": "CNBC Economy",
+        "published": "Fri, 20 Nov 2026 01:49:03 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "US to cap India tariff at 17% if trade deal is reached, USTR says",
+        "link": "https://www.investing.com/news/forex-news/us-to-cap-india-tariff-at-17-if-trade-deal-is-reached-ustr-says-5051317",
+        "source": "Investing.com Forex",
+        "published": "2026-11-25 18:30:39",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Gold eases as U.S. inflation data reinforces Fed rate-hike bets",
+        "link": "https://www.investing.com/news/commodities-news/gold-eases-as-us-inflation-data-reinforces-fed-ratehike-bets-5051964",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-26 03:20:43",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Oil rises on supply concerns as Iran claims mine strikes on ships",
+        "link": "https://www.investing.com/news/commodities-news/oil-rises-on-supply-concerns-as-iran-claims-mine-strikes-on-ships-5051949",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-26 03:12:18",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil little changed as Hormuz attacks threaten rebound in Gulf crude shipments",
+        "link": "https://www.investing.com/news/commodities-news/oil-steadies-as-hormuz-attacks-threaten-supply-recovery-inventory-build-weighs-5051937",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-26 03:00:27",
+        "matched_keywords": [
+          "crude",
+          "oil",
+          "hormuz"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are reacting to persistent inflation pressures, with U.S. core PCE rising to 3.8% and prompting expectations for further Federal Reserve rate hikes, while geopolitical tensions in the Middle East drive oil prices higher. Concurrently, international central banks like the BOJ face pressures to hike rates amid imported energy inflation, and political uncertainty in France weighs on European economic sentiment.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": "BULLISH with a 1-sentence reason. Higher U.S. inflation data and firm expectations for Federal Reserve rate hikes continue to support a strong U.S. dollar against global currencies.",
+      "key_risk": "Persistent high inflation forcing aggressive central bank monetary tightening, combined with ongoing Middle East shipping and energy supply uncertainties.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-25T22:39:11.686357+00:00",
     "total_scanned": 219,
     "flagged_count": 153,
@@ -31951,171 +32112,6 @@
         "reason": "Regional Middle East tensions show signs of diplomatic easing and stable crude flows, providing a steady baseline without immediate escalatory currency shocks."
       },
       "key_risk": "Potential re-escalation of Middle East geopolitical tensions threatening vital shipping chokepoints like the Strait of Hormuz.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": false,
-      "immediate_risk_reason": "",
-      "wheat_impact": "BULLISH"
-    }
-  },
-  {
-    "timestamp": "2026-09-20T16:52:52.281754+00:00",
-    "total_scanned": 213,
-    "flagged_count": 157,
-    "flagged_headlines": [
-      {
-        "title": "U.S. Treasury curve flattens as long-end yields ease off multi-year peaks",
-        "link": "https://www.investing.com/news/forex-news/euro-zone-yields-head-for-weekly-decline-as-postfed-rally-soothes-duration-fears-4906685",
-        "source": "Investing.com Forex",
-        "published": "2026-09-18 12:16:35",
-        "matched_keywords": [
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Dollar halts six-day rally after Fed hike, sterling slips after BoE stands pat",
-        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-holds-sevenweek-high-yen-steadies-4904802",
-        "source": "Investing.com Forex",
-        "published": "2026-09-17 19:24:32",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Iran warns against new escalation by US and allies",
-        "link": "https://www.investing.com/news/commodities-news/iran-warns-against-new-escalation-by-us-and-allies-4908175",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-20 15:06:39",
-        "matched_keywords": [
-          "war",
-          "escalation"
-        ]
-      },
-      {
-        "title": "US Treasury’s Bessent to discuss AI, rare earths with China’s He, source says",
-        "link": "https://www.investing.com/news/commodities-news/us-treasurys-bessent-plans-to-discuss-ai-and-rare-earths-with-chinas-he-source-says-4907786",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-19 02:12:26",
-        "matched_keywords": [
-          "treasury"
-        ]
-      },
-      {
-        "title": "Analysis-Russia sanctions bill gives Trump sweeping new tariff powers",
-        "link": "https://www.investing.com/news/commodities-news/analysisrussia-sanctions-bill-gives-trump-sweeping-new-tariff-powers-4907872",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-19 00:18:31",
-        "matched_keywords": [
-          "tariff",
-          "sanction"
-        ]
-      },
-      {
-        "title": "Oil prices snap two-week winning streak on easing Middle East supply fears",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-for-3rd-day-as-supply-concerns-ease-diplomacy-in-focus-4906634",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 21:13:14",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Gold heads for slight weekly gain as decline in oil prices offset Fed rate hike",
-        "link": "https://www.investing.com/news/commodities-news/gold-rises-as-lower-oil-treasury-yields-ease-inflation-pressure-4906609",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 20:41:57",
-        "matched_keywords": [
-          "fed",
-          "rate hike",
-          "oil"
-        ]
-      },
-      {
-        "title": "Oil slides after China asks Iran to limit Houthi attacks on Saudi oil facilities",
-        "link": "https://www.investing.com/news/commodities-news/oil-prices-fall-1-on-hopes-of-limited-supply-disruptions-4906600",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 20:00:29",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "Crude Oil WTI clings to $99.50 support amid breakdown risk: Live",
-        "link": "https://www.investing.com/news/commodities-news/crude-oil-wti-stalls-near-10446-highs-on-fading-momentum-live-93CH-4898875",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-18 19:18:46",
-        "matched_keywords": [
-          "crude",
-          "oil"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces termination of enforcement action with SNB Bancshares and Bank of Eufaula",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets digested the Federal Reserve's recent rate decision and accompanying economic projections, which caused the US dollar to halt its six-day rally and Treasury yield curves to flatten. Concurrently, crude oil prices slid due to easing Middle East supply fears, despite ongoing diplomatic tensions and active Strait of Hormuz tracking.",
-      "physical_supply_disruption_confirmed": false,
-      "usd_strength_signal": "WEAKENING",
-      "weather_crop_signal": "NEUTRAL",
-      "wheat_impact_category": "speculative_tension",
-      "usd_ils_impact": "NEUTRAL",
-      "key_risk": "Potential escalation in Middle East geopolitical tensions impacting broader energy and supply chain sentiment.",
       "headline_overstated": false,
       "headline_vs_article_note": "",
       "immediate_risk": false,
