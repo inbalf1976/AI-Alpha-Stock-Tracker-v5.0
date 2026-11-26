@@ -2021,5 +2021,20 @@
     "direction_scored": true,
     "direction_correct": null,
     "direction_check_date": null
+  },
+  {
+    "timestamp": "2026-11-26T03:06:56.252598+02:00",
+    "direction": "UP",
+    "entry_price": 586.5,
+    "confidence": 0.5069509432280361,
+    "tier": 2,
+    "seasonal_phase": "NEUTRAL",
+    "stop_price": 589.53,
+    "target_price": 578.23,
+    "setup_direction": "DOWN",
+    "validated": false,
+    "outcome": null,
+    "exit_reason": null,
+    "pnl_cents": null
   }
 ]
