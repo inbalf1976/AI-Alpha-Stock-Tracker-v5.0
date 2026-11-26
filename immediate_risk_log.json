@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 107,
+    "alert_timestamp": "2026-11-26T18:37:36.977952+00:00",
+    "reason": "Ongoing attacks on grain ships near Odesa ports and continued maritime chokepoint tensions in the Strait of Hormuz present active risks to regional shipping.",
+    "predicted_direction": "BEARISH",
+    "price_at_alert": 565.5,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 106,
     "alert_timestamp": "2026-11-24T19:42:05.162916+00:00",
     "reason": "US forces disabled a vessel off Chabahar and maritime intelligence confirms tanker blockades and staging activity in the Strait of Hormuz.",
