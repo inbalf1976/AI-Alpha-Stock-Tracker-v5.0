@@ -1,5 +1,164 @@
 [
   {
+    "timestamp": "2026-11-27T18:26:22.253591+00:00",
+    "total_scanned": 220,
+    "flagged_count": 158,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve announces College Fed Challenge winners",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 21:15:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results from survey of senior financial officers at banks about their strategies and practices for managing reserve balances",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of First Security Bancorp",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261119a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 19 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, October 27-28, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261118a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 18 Nov 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces pricing, effective January 1, 2027, for payment services the Federal Reserve Banks provide to banks and credit unions, and changes to streamline and adjust their check services",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces revised tentative schedule of Federal Open Market Committee meetings in 2027",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 17:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "U.S. tariff-hike threats pile pressure on partners to sign trade deals",
+        "link": "https://www.cnbc.com/2026/11/26/us-tariffs-hike-trade-agreement.html",
+        "source": "CNBC Economy",
+        "published": "Thu, 26 Nov 2026 12:46:55 GMT",
+        "matched_keywords": [
+          "tariff"
+        ]
+      },
+      {
+        "title": "Liesman: Why Greenspan could bet on productivity — and Warsh needs to hike",
+        "link": "https://www.cnbc.com/2026/11/25/kevin-warsh-greenspan-fed-rates-ai-inflation.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 25 Nov 2026 21:56:43 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "Fed’s preferred inflation gauge accelerated to 3.8% in October, raising the 2027 stakes for the central bank",
+        "link": "https://www.cnbc.com/2026/11/25/pce-inflation-report-october-2026.html",
+        "source": "CNBC Economy",
+        "published": "Wed, 25 Nov 2026 14:18:45 GMT",
+        "matched_keywords": [
+          "fed",
+          "inflation"
+        ]
+      },
+      {
+        "title": "Consumer confidence shoots up after Democrats' midterm victories — though inflation worries persist",
+        "link": "https://www.cnbc.com/2026/11/24/consumer-confidence-november-election-midterm.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 24 Nov 2026 18:34:43 GMT",
+        "matched_keywords": [
+          "inflation"
+        ]
+      },
+      {
+        "title": "Why France is at risk of recession — and what could keep it out of one",
+        "link": "https://www.cnbc.com/2026/11/24/france-recession-risk-pmi.html",
+        "source": "CNBC Economy",
+        "published": "Tue, 24 Nov 2026 11:15:30 GMT",
+        "matched_keywords": [
+          "recession"
+        ]
+      },
+      {
+        "title": "US disables ship trying to leave Iran, as Tehran vows to confront blockade",
+        "link": "https://www.investing.com/news/commodities-news/us-disables-ship-trying-to-leave-iran-as-tehran-vows-to-confront-blockade-5053767",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-27 18:07:02",
+        "matched_keywords": [
+          "blockade"
+        ]
+      },
+      {
+        "title": "Exclusive-French sugar groups offer drought-hit farmers aid to secure plantings",
+        "link": "https://www.investing.com/news/commodities-news/exclusivefrench-sugar-groups-offer-droughthit-farmers-aid-to-secure-plantings-5053546",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-27 18:00:24",
+        "matched_keywords": [
+          "drought"
+        ]
+      },
+      {
+        "title": "Iraq in talks with OPEC for higher oil quota, minister says before OPEC+ meeting",
+        "link": "https://www.investing.com/news/commodities-news/iraq-in-talks-with-opec-for-higher-oil-quota-minister-says-before-opec-meeting-5053712",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-27 16:42:25",
+        "matched_keywords": [
+          "opec",
+          "oil"
+        ]
+      },
+      {
+        "title": "Oil on track for first weekly gain in November on supply fears",
+        "link": "https://www.investing.com/news/commodities-news/brent-trades-near-months-high-as-mideast-conflict-threatens-supply-5052810",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-27 15:54:56",
+        "matched_keywords": [
+          "oil"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Global markets are reacting to a hotter-than-expected October PCE inflation reading (3.8%) and strong GDP growth, cementing expectations for a Federal Reserve rate hike in December while fueling ongoing tariff escalations by the U.S. Meanwhile, geopolitical supply risks persist in the Middle East with maritime disruptions in the Strait of Hormuz, and European agricultural sectors face localized weather and fiscal strains.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "DAMAGING",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": "BULLISH",
+      "key_risk": "Persistent high inflation prompting more aggressive Federal Reserve monetary tightening alongside escalating global trade tariffs.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": true,
+      "immediate_risk_reason": "U.S. forces have disabled a ship trying to leave Iran while Tehran vows to confront the maritime blockade, creating an active and escalating chokepoint disruption in the Middle East.",
+      "wheat_impact": "NEUTRAL"
+    }
+  },
+  {
     "timestamp": "2026-11-27T05:13:14.272259+00:00",
     "total_scanned": 220,
     "flagged_count": 152,
@@ -31939,168 +32098,6 @@
       "immediate_risk": false,
       "immediate_risk_reason": "",
       "wheat_impact": "BEARISH"
-    }
-  },
-  {
-    "timestamp": "2026-09-22T01:40:17.675292+00:00",
-    "total_scanned": 226,
-    "flagged_count": 167,
-    "flagged_headlines": [
-      {
-        "title": "Federal Reserve Board announces termination of enforcement action with SNB Bancshares and Bank of Eufaula",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Consumer sentiment is in the dumps despite a solid economy. Goldman Sachs blames 'lower happiness'",
-        "link": "https://www.cnbc.com/2026/09/19/goldman-sachs-happiness-struggling-consumer-sentiment.html",
-        "source": "CNBC Economy",
-        "published": "Sat, 19 Sep 2026 12:50:49 GMT",
-        "matched_keywords": [
-          "ppi"
-        ]
-      },
-      {
-        "title": "Why Japan’s markets flipped the usual script after central bank rate hike",
-        "link": "https://www.cnbc.com/2026/09/18/japan-rate-hike-stocks-rise-bond-yields-yen-fall.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 21 Sep 2026 01:02:25 GMT",
-        "matched_keywords": [
-          "rate hike"
-        ]
-      },
-      {
-        "title": "Bank of England defies Fed’s rate-hike lead, leaving rates unchanged",
-        "link": "https://www.cnbc.com/2026/09/17/bank-of-england-interest-rate-decision-fed-rate-hike-uk-inflation.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 17 Sep 2026 12:27:10 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Consumers hit by one-two punch of oil and rates from Iran war. The estimated bill is $1,700 per household",
-        "link": "https://www.cnbc.com/2026/09/16/oil-prices-treasury-yields-consumers-iran.html",
-        "source": "CNBC Economy",
-        "published": "Wed, 16 Sep 2026 17:32:22 GMT",
-        "matched_keywords": [
-          "oil",
-          "war"
-        ]
-      },
-      {
-        "title": "UK inflation jumps to 3.1% as energy costs soar",
-        "link": "https://www.cnbc.com/2026/09/16/uk-august-inflation-energy-gasoline.html",
-        "source": "CNBC Economy",
-        "published": "Thu, 17 Sep 2026 07:36:04 GMT",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Counting the votes: Warsh faces a tough battle as the Fed girds for expected interest rate hike",
-        "link": "https://www.cnbc.com/2026/09/14/counting-the-votes-warsh-faces-tough-battle-as-fed-girds-for-expected-rate-hike.html",
-        "source": "CNBC Economy",
-        "published": "Mon, 14 Sep 2026 19:47:42 GMT",
-        "matched_keywords": [
-          "fed",
-          "rate hike",
-          "war"
-        ]
-      },
-      {
-        "title": "Grain and Livestock Rally on China Hopes: What's Expected From the Summit for Agriculture? - AgWeb",
-        "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPRDEzYWF5WEFtdFg5YlFSMUR4cW9USklRQzJidDRyNlpubnNwTlpYSFhHQmM0cFV1VlhFYUgyaFZjYUd5WG5QSThTSDEzdXNhcmxDTkNzWUJ5LUUwa2FMS05IMHBjVUtiV0xObUNBa0NsRndDTE50RFpvNGNxbWRza3o2dHRhSkRMVnJjeWg1dDhqZ1JMdzRBSlN6VVNTRWtJRlFtOUtMT3FWVDBsYVVtTkpoZGtvVlhw?oc=5",
-        "source": "AgWeb Markets",
-        "published": "Mon, 21 Sep 2026 22:51:00 GMT",
-        "matched_keywords": [
-          "grain"
-        ]
-      },
-      {
-        "title": "\"Ring of Fire\" Pattern Fuels Historic September Rain, Stalls Harvest Across Corn Belt - AgWeb",
-        "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQWmk3Zm5FVXRDd2E4WW04dXhybkRDNG5aUFJ6dFpkVkFuZUZHYk5yTUg4NFE3MVlQUkpoX3dTVEJ3bUVwUTlRTGEyMUx1MWhGR3lJUVpsUGw5WXUzMTJjbldfWjFjNDNoNEFCS1V5RzFqaDdSbjBKOWdsa0JkRWVNdkM3a3NWZVZRQ0hHaEI4X2RscE5aOXNSYTlSaFR1UWFZQUVHY1FRc0JPNzNyTWFMTU5n?oc=5",
-        "source": "AgWeb Markets",
-        "published": "Mon, 21 Sep 2026 15:48:00 GMT",
-        "matched_keywords": [
-          "harvest"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets navigate diverging monetary policies as the Federal Reserve implements a rate hike amid persistent inflationary pressures from the Iran conflict, while the BOJ and Bank of England chart independent paths. Meanwhile, agricultural supply chains face headwinds from adverse 'Ring of Fire' weather patterns disrupting Corn Belt harvests, compounded by elevated energy and transport costs.",
-      "physical_supply_disruption_confirmed": false,
-      "usd_strength_signal": "STRENGTHENING",
-      "weather_crop_signal": "DAMAGING",
-      "wheat_impact_category": "weather_crop_damage",
-      "usd_ils_impact": "BULLISH",
-      "key_risk": "Escalation of energy shocks and broader geopolitical conflict spilling over into agricultural logistics and input costs.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": false,
-      "immediate_risk_reason": "",
-      "wheat_impact": "NEUTRAL"
     }
   }
 ]

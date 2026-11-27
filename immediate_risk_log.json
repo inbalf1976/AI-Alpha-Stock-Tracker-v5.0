@@ -1,5 +1,17 @@
 [
   {
+    "alert_number": 108,
+    "alert_timestamp": "2026-11-27T18:26:22.253591+00:00",
+    "reason": "U.S. forces have disabled a ship trying to leave Iran while Tehran vows to confront the maritime blockade, creating an active and escalating chokepoint disruption in the Middle East.",
+    "predicted_direction": "NEUTRAL",
+    "price_at_alert": 591.0,
+    "scored": false,
+    "outcome": null,
+    "price_at_scoring": null,
+    "pct_change": null,
+    "scored_at": null
+  },
+  {
     "alert_number": 107,
     "alert_timestamp": "2026-11-26T18:37:36.977952+00:00",
     "reason": "Ongoing attacks on grain ships near Odesa ports and continued maritime chokepoint tensions in the Strait of Hormuz present active risks to regional shipping.",
