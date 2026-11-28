@@ -1,5 +1,165 @@
 [
   {
+    "timestamp": "2026-11-28T04:48:14.629042+00:00",
+    "total_scanned": 223,
+    "flagged_count": 161,
+    "flagged_headlines": [
+      {
+        "title": "Federal Reserve announces College Fed Challenge winners",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120b.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 21:15:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board releases results from survey of senior financial officers at banks about their strategies and practices for managing reserve balances",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261120a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Fri, 20 Nov 2026 15:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board issues enforcement action with former employee of First Security Bancorp",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261119a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 19 Nov 2026 16:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Minutes of the Federal Open Market Committee, October 27-28, 2026",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261118a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Wed, 18 Nov 2026 19:00:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve Board announces pricing, effective January 1, 2027, for payment services the Federal Reserve Banks provide to banks and credit unions, and changes to streamline and adjust their check services",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 18:30:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "Federal Reserve announces revised tentative schedule of Federal Open Market Committee meetings in 2027",
+        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261112a.htm",
+        "source": "Fed Reserve Press Releases",
+        "published": "Thu, 12 Nov 2026 17:45:00 GMT",
+        "matched_keywords": [
+          "fed"
+        ]
+      },
+      {
+        "title": "The warnings behind this week’s stock-market rally",
+        "link": "https://www.marketwatch.com/story/the-warnings-behind-this-weeks-stock-market-rally-86e5319c?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 27 Nov 2026 18:40:00 GMT",
+        "matched_keywords": [
+          "war"
+        ]
+      },
+      {
+        "title": "My husband secretly sends his ex-wife $1,500 a month after she lost her job. We have $2.4 million saved. Has he lied by omission?",
+        "link": "https://www.marketwatch.com/story/my-husband-secretly-sends-his-ex-wife-1-500-a-month-after-she-lost-her-job-we-have-2-4-million-saved-has-he-lied-by-omission-ede1972a?mod=mw_rss_topstories",
+        "source": "MarketWatch Top Stories",
+        "published": "Fri, 27 Nov 2026 15:30:00 GMT",
+        "matched_keywords": [
+          "secretly"
+        ]
+      },
+      {
+        "title": "Oil notches first weekly gain in November on supply fears",
+        "link": "https://www.investing.com/news/commodities-news/brent-trades-near-months-high-as-mideast-conflict-threatens-supply-5052810",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-27 20:18:20",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "US disables ship trying to leave Iran, as Tehran vows to confront blockade",
+        "link": "https://www.investing.com/news/commodities-news/us-disables-ship-trying-to-leave-iran-as-tehran-vows-to-confront-blockade-5053767",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-27 20:12:22",
+        "matched_keywords": [
+          "blockade"
+        ]
+      },
+      {
+        "title": "Oil trades lower as Middle East strikes collide with rising Gulf flows",
+        "link": "https://www.investing.com/news/commodities-news/oil-heads-for-first-weekly-gain-in-november-as-gulf-attacks-threaten-supply-recove-5052813",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-27 18:28:24",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "Exclusive-French sugar groups offer drought-hit farmers aid to secure plantings",
+        "link": "https://www.investing.com/news/commodities-news/exclusivefrench-sugar-groups-offer-droughthit-farmers-aid-to-secure-plantings-5053546",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-27 18:00:24",
+        "matched_keywords": [
+          "drought"
+        ]
+      },
+      {
+        "title": "Iraq in talks with OPEC for higher oil quota, minister says before OPEC+ meeting",
+        "link": "https://www.investing.com/news/commodities-news/iraq-in-talks-with-opec-for-higher-oil-quota-minister-says-before-opec-meeting-5053712",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-27 16:42:25",
+        "matched_keywords": [
+          "opec",
+          "oil"
+        ]
+      },
+      {
+        "title": "2027 oil price forecast: Where BofA thinks Brent is headed next",
+        "link": "https://www.investing.com/news/commodities-news/2027-oil-price-forecast-where-bofa-thinks-brent-is-headed-next-5053427",
+        "source": "Investing.com Commodities",
+        "published": "2026-11-27 12:45:58",
+        "matched_keywords": [
+          "oil"
+        ]
+      },
+      {
+        "title": "U.S. Treasury yields rally, snapping eight-day rally as bond bulls pause",
+        "link": "https://www.investing.com/news/forex-news/global-bonds-cap-strong-weekly-rally-after-aidriven-flight-to-safety-5053055",
+        "source": "Investing.com Forex",
+        "published": "2026-11-27 21:25:54",
+        "matched_keywords": [
+          "ppi",
+          "yield",
+          "treasury"
+        ]
+      }
+    ],
+    "maritime_context_included": true,
+    "llm_analysis": {
+      "summary": "Crude oil notched its first weekly gain in November amid escalating supply fears and Middle East maritime tensions, while U.S. Treasury yields paused after an eight-day rally. In agricultural news, French sugar groups offered drought-hit farmers aid to secure future plantings.",
+      "physical_supply_disruption_confirmed": false,
+      "usd_strength_signal": "STRENGTHENING",
+      "weather_crop_signal": "NEUTRAL",
+      "wheat_impact_category": "other_fundamental",
+      "usd_ils_impact": "NEUTRAL with no specific news items detailing exchange rate drivers between the US Dollar and Israeli New Shekel.",
+      "key_risk": "Escalating maritime tensions and dark transits in the Strait of Hormuz threatening broader energy and supply chain stability.",
+      "headline_overstated": false,
+      "headline_vs_article_note": "",
+      "immediate_risk": false,
+      "immediate_risk_reason": "",
+      "wheat_impact": "BEARISH"
+    }
+  },
+  {
     "timestamp": "2026-11-27T22:07:13.000011+00:00",
     "total_scanned": 222,
     "flagged_count": 162,
@@ -31929,170 +32089,6 @@
       "headline_vs_article_note": "",
       "immediate_risk": true,
       "immediate_risk_reason": "Recent drone strikes and projectile attacks on commercial vessels (such as the LPG carrier AL MARYAH and crude tanker LR STEPHANIE) within the Strait of Hormuz represent an active, unfolding maritime security threat.",
-      "wheat_impact": "BEARISH"
-    }
-  },
-  {
-    "timestamp": "2026-09-22T17:40:14.309963+00:00",
-    "total_scanned": 224,
-    "flagged_count": 170,
-    "flagged_headlines": [
-      {
-        "title": "Tax-free bond yields are in a sweet spot. Get in before it’s too late.",
-        "link": "https://www.marketwatch.com/story/tax-free-bond-yields-are-in-a-sweet-spot-get-in-before-its-too-late-94b8adac?mod=mw_rss_topstories",
-        "source": "MarketWatch Top Stories",
-        "published": "Tue, 22 Sep 2026 15:39:00 GMT",
-        "matched_keywords": [
-          "yield"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces termination of enforcement action with SNB Bancshares and Bank of Eufaula",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 18 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve issues FOMC statement",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Wed, 16 Sep 2026 18:00:00 GMT",
-        "matched_keywords": [
-          "fed",
-          "fomc"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Fri, 4 Sep 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 27 Aug 2026 15:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-        "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
-        "source": "Fed Reserve Press Releases",
-        "published": "Thu, 20 Aug 2026 20:00:00 GMT",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Treasury curve flattens as easing oil input costs and UN diplomacy offer respite",
-        "link": "https://www.investing.com/news/forex-news/euro-area-debt-bourses-face-risk-drag-from-paris-debt-trajectory-4910015",
-        "source": "Investing.com Forex",
-        "published": "2026-09-22 12:15:26",
-        "matched_keywords": [
-          "oil",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Dollar holds on hawkish Fed pricing while yen languishes despite Tokyo support",
-        "link": "https://www.investing.com/news/forex-news/asian-currencies-mixed-as-dollar-steadies-yen-pressured-by-policy-gap-4909848",
-        "source": "Investing.com Forex",
-        "published": "2026-09-22 09:38:24",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Sterling today: Pound slips as hawkish Fed talk lifts dollar broadly",
-        "link": "https://www.investing.com/news/forex-news/sterling-today-pound-slips-as-hawkish-fed-talk-lifts-dollar-broadly-4910096",
-        "source": "Investing.com Forex",
-        "published": "2026-09-22 09:01:07",
-        "matched_keywords": [
-          "fed"
-        ]
-      },
-      {
-        "title": "Canadian dollar under pressure as oil retreats and US rate outlook supports greenb",
-        "link": "https://www.investing.com/news/forex-news/canadian-dollar-under-pressure-as-oil-retreats-and-us-rate-outlook-supports-greenb-4909475",
-        "source": "Investing.com Forex",
-        "published": "2026-09-21 17:16:09",
-        "matched_keywords": [
-          "oil"
-        ]
-      },
-      {
-        "title": "U.S. Treasury yields ease on crude pull-back ;  rate hike bets stay",
-        "link": "https://www.investing.com/news/forex-news/euro-zone-yields-ease-as-markets-await-of-ecbs-lagarde-speech-4908370",
-        "source": "Investing.com Forex",
-        "published": "2026-09-21 12:07:57",
-        "matched_keywords": [
-          "rate hike",
-          "crude",
-          "yield",
-          "treasury"
-        ]
-      },
-      {
-        "title": "Goldman sees Hungary inflation target cut as positive for forint",
-        "link": "https://www.investing.com/news/forex-news/goldman-sees-hungary-inflation-target-cut-as-positive-for-forint-93CH-4908570",
-        "source": "Investing.com Forex",
-        "published": "2026-09-21 10:09:50",
-        "matched_keywords": [
-          "inflation"
-        ]
-      },
-      {
-        "title": "Oil dips below $100 as Iran reportedly offers to reopen Hormuz amid diplomacy push",
-        "link": "https://www.investing.com/news/commodities-news/oil-edges-higher-as-markets-eye-usiran-talks-saudi-flows-4909809",
-        "source": "Investing.com Commodities",
-        "published": "2026-09-22 14:19:06",
-        "matched_keywords": [
-          "oil",
-          "hormuz"
-        ]
-      }
-    ],
-    "maritime_context_included": true,
-    "llm_analysis": {
-      "summary": "Global markets are reacting to a hawkish Federal Reserve stance and easing oil input costs, with crude dipping below $100 amid diplomacy efforts and reported Strait of Hormuz transits despite recent tanker incidents. Meanwhile, the U.S. Treasury curve is flattening, the dollar holds firm on rate expectations, and safe-haven demand remains supported.",
-      "physical_supply_disruption_confirmed": false,
-      "usd_strength_signal": "STRENGTHENING",
-      "weather_crop_signal": "NEUTRAL",
-      "wheat_impact_category": "speculative_tension",
-      "usd_ils_impact": "NEUTRAL",
-      "key_risk": "Escalating maritime security incidents in the Strait of Hormuz disrupting global energy and commodity logistics.",
-      "headline_overstated": false,
-      "headline_vs_article_note": "",
-      "immediate_risk": true,
-      "immediate_risk_reason": "Recent drone strikes and projectiles hitting commercial tankers in the Strait of Hormuz pose an active, developing threat to vital chokepoint transit and regional maritime security.",
       "wheat_impact": "BEARISH"
     }
   }
